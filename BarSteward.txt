@@ -1,0 +1,33 @@
+## Title: Bar Steward
+## Description: Data broker style bar for easy display of in-game metrics
+## Author: Flat Badger
+## APIVersion: 101033
+## AddOnVersion: 100
+## Version: 1.0.0
+## SavedVariables: BarStewardSavedVars
+## DependsOn: LibSavedVars>=60007 LibAddonMenu-2.0>=33
+
+# DISCLAIMER:
+#
+# This Add-on is not created by, affiliated with or sponsored by ZeniMax
+# Media Inc. or its affiliates. The Elder Scrolls® and related logos are
+# registered trademarks or trademarks of ZeniMax Media Inc. in the United
+# States and/or other countries. All rights reserved.
+#
+# You can read the full terms at:
+# https://account.elderscrollsonline.com/add-on-terms
+
+languages/en.lua
+languages/$(language).lua
+
+data/defaults.lua
+data/sounds.lua
+misc/utility.lua
+data/bardata.lua
+
+settings/settings.lua
+
+ui/widget.lua
+ui/bar.lua
+
+BarSteward.lua
