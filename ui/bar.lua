@@ -113,10 +113,10 @@ local function HideWhen(metadata, value)
     end
 end
 
-function baseBar:DoUpdate(metadata)
+function baseBar:DoUpdate(metadata, ...)
     -- update the widget and capture the raw value for use in HideWhen
     -- get the widget's current (new) value
-    local value = metadata.update(metadata.widget)
+    local value = metadata.update(metadata.widget, ...)
 
     -- check if it needs to be hidden
     if (metadata.hideWhenEqual or metadata.hideWhenGreaterThan or metadata.hideWhenLessThan) then
@@ -141,6 +141,17 @@ function baseBar:DoUpdate(metadata)
         if (current and compareTo) then
             if (current > compareTo) then
                 sound = BS.SoundLookup[BS.Vars.Controls[metadata.id].SoundWhenOverSound]
+            else
+                BS.SoundLastPlayed[metadata.id] = nil
+            end
+        end
+    elseif (BS.Vars.Controls[metadata.id].SoundWhenUnder) then
+        local compareTo = tonumber(BS.Vars.Controls[metadata.id].SoundWhenUnderValue)
+        local current = tonumber(value)
+
+        if (current and compareTo) then
+            if (current < compareTo) then
+                sound = BS.SoundLookup[BS.Vars.Controls[metadata.id].SoundWhenUnderSound]
             else
                 BS.SoundLastPlayed[metadata.id] = nil
             end
@@ -272,13 +283,19 @@ function baseBar:AddWidgets(widgets)
             end
 
             for _, event in ipairs(events) do
-                EVENT_MANAGER:RegisterForEvent(
+                BS.RegisterForEvent(
                     BS.Name,
                     event,
-                    function()
-                        self:DoUpdate(metadata)
+                    function(_, ...)
+                        self:DoUpdate(metadata, ...)
                     end
                 )
+            end
+
+            if (metadata.filter) then
+                for event, filterInfo in pairs(metadata.filter) do
+                    EVENT_MANAGER:AddFilterForEvent(BS.Name, event, filterInfo[1], filterInfo[2])
+                end
             end
         end
 

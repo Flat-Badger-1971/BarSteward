@@ -1,5 +1,20 @@
 local BS = _G.BarSteward
 
+BS.mundusstones = {
+    [13940] = true,
+    [13943] = true,
+    [13974] = true,
+    [13975] = true,
+    [13976] = true,
+    [13977] = true,
+    [13978] = true,
+    [13979] = true,
+    [13980] = true,
+    [13981] = true,
+    [13982] = true,
+    [13984] = true,
+    [13985] = true
+}
 --[[
     {
         name = [string] "widget name",
@@ -10,7 +25,6 @@ local BS = _G.BarSteward
         icon = [string/function] path to the eso texture file
     }
 ]]
-
 BS.widgets = {
     [1] = {
         name = "time",
@@ -81,7 +95,7 @@ BS.widgets = {
 
             return value
         end,
-        event = _G.EVENT_CURRENCY_UPDATE,
+        event = _G.EVENT_QUEST_COMPLETE_DIALOG,
         tooltip = GetString(_G.BARSTEWARD_EVENT_TICKETS),
         icon = "/esoui/art/currency/currency_eventticket.dds"
     },
@@ -101,7 +115,7 @@ BS.widgets = {
             widget:SetValue(GetCurrencyAmount(_G.CURT_ENDEAVOR_SEALS, _G.CURRENCY_LOCATION_ACCOUNT))
             return widget:GetValue()
         end,
-        event = _G.EVENT_CURRENCY_UPDATE,
+        event = _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED,
         tooltip = GetString(_G.SI_CROWN_STORE_MENU_SEALS_STORE_LABEL),
         icon = "/esoui/art/market/keyboard/tabicon_sealsstore_up.dds"
     },
@@ -117,29 +131,33 @@ BS.widgets = {
     },
     [9] = {
         name = "transmuteCrystals",
-        update = function(widget)
-            local crystals = GetCurrencyAmount(_G.CURT_CHAOTIC_CREATIA, _G.CURRENCY_LOCATION_ACCOUNT)
-            local value = crystals .. "/1000"
-            local pc = BS.ToPercent(crystals, 1000)
+        update = function(widget, _, currencyType)
+            if (currencyType == nil or currencyType == _G.CURT_CHAOTIC_CREATIA) then
+                local crystals = GetCurrencyAmount(_G.CURT_CHAOTIC_CREATIA, _G.CURRENCY_LOCATION_ACCOUNT)
+                local value = crystals .. "/1000"
+                local pc = BS.ToPercent(crystals, 1000)
 
-            if (BS.Vars.Controls[9].ShowPercent) then
-                value = pc .. "%"
+                if (BS.Vars.Controls[9].ShowPercent) then
+                    value = pc .. "%"
+                end
+
+                widget:SetValue(value)
+                return value
             end
-
-            widget:SetValue(value)
-            return value
         end,
-        event = _G.EVENT_CURRENCY_UPDATE,
+        event = _G.EVENT_QUEST_COMPLETE_DIALOG,
         tooltip = GetString(_G.BARSTEWARD_TRANSMUTE_CRYSTALS),
         icon = "/esoui/art/currency/icon_seedcrystal.dds"
     },
     [10] = {
         name = "undauntedKeys",
-        update = function(widget)
-            widget:SetValue(GetCurrencyAmount(_G.CURT_UNDAUNTED_KEYS, _G.CURRENCY_LOCATION_ACCOUNT))
-            return widget:GetValue()
+        update = function(widget, _, currencyType)
+            if (currencyType == nil or currencyType == _G.CURT_UNDAUNTED_KEYS) then
+                widget:SetValue(GetCurrencyAmount(_G.CURT_UNDAUNTED_KEYS, _G.CURRENCY_LOCATION_ACCOUNT))
+                return widget:GetValue()
+            end
         end,
-        event = _G.EVENT_CURRENCY_UPDATE,
+        event = _G.EVENT_QUEST_COMPLETE_DIALOG,
         tooltip = GetString(_G.BARSTEWARD_UNDAUNTED_KEYS),
         icon = "/esoui/art/icons/quest_key_002.dds"
     },
@@ -211,7 +229,7 @@ BS.widgets = {
 
             return pcUsed
         end,
-        event = _G.EVENT_CLOSE_BANKW,
+        event = _G.EVENT_CLOSE_BANK,
         tooltip = GetString(_G.SI_INTERACT_OPTION_BANK),
         icon = "/esoui/art/tooltips/icon_bank.dds"
     },
@@ -360,6 +378,178 @@ BS.widgets = {
         event = _G.EVENT_EXPERIENCE_UPDATE,
         icon = "/esoui/art/champion/champion_points_magicka_icon-hud.dds",
         tooltip = GetString(_G.SI_STAT_GAMEPAD_CHAMPION_POINTS_LABEL),
+        hideWhenEqual = 0
+    },
+    [24] = {
+        -- v1.0.1
+        name = "mundusstone",
+        update = function(widget, ...)
+            local mundusId = nil
+
+            if (... == nil) then
+                for buffNum = 1, GetNumBuffs("player") do
+                    local id = select(11, GetUnitBuffInfo("player", buffNum))
+
+                    if (BS.mundusstones[id]) then
+                        mundusId = id
+                        break
+                    end
+                end
+            else
+                local changeType = select(1, ...)
+                local abilityId = select(15, ...)
+
+                if (changeType == _G.EFFECT_RESULT_GAINED and BS.mundusstones[abilityId]) then
+                    mundusId = abilityId
+                end
+            end
+
+            if (mundusId ~= nil) then
+                local icon = GetAbilityIcon(mundusId)
+                local name = GetAbilityName(mundusId)
+
+                widget:SetIcon(icon)
+                widget:SetValue(name)
+
+                return name
+            end
+
+            return ""
+        end,
+        event = _G.EVENT_EFFECT_CHANGED,
+        filter = {[_G.EVENT_EFFECT_CHANGED] = {_G.REGISTER_FILTER_UNIT_TAG, "player"}},
+        icon = "/esoui/art/icons/ability_mundusstones_002.dds",
+        tooltip = GetString(_G.SI_CONFIRM_MUNDUS_STONE_TITLE),
+        hideWhenEqual = ""
+    },
+    [25] = {
+        -- v1.0.1
+        name = "durability",
+        update = function(widget, _, _, _, _, updateReason)
+            -- find item with lowest durability
+            if (updateReason == nil or updateReason == _G.INVENTORY_UPDATE_REASON_DURABILITY_CHANGE) then
+                local lowest = 100
+                local lowestType = _G.ITEMTYPE_ARMOR
+
+                for slot = 0, GetBagSize(_G.BAG_WORN) do
+                    local itemName = GetItemName(_G.BAG_WORN, slot)
+                    local condition = GetItemCondition(_G.BAG_WORN, slot)
+
+                    if (lowest > condition and itemName ~= "") then
+                        lowest = condition
+                        lowestType = GetItemType(_G.BAG_WORN, slot)
+                    end
+                end
+
+                widget:SetValue(lowest .. "%")
+
+                if (lowest >= 75) then
+                    widget:SetColour(0, 1, 0, 1)
+                elseif (lowest >= 15) then
+                    widget:SetColour(1, 1, 0, 1)
+                else
+                    widget:SetColour(1, 0, 0, 1)
+                end
+
+                if (lowest <= 15) then
+                    if (lowestType == _G.ITEMTYPE_WEAPON) then
+                        widget:SetIcon("/esoui/art/hud/broken_weapon.dds")
+                    else
+                        widget:SetIcon("/esoui/art/hud/broken_armor.dds")
+                    end
+                else
+                    widget:SetIcon("/esoui/art/inventory/inventory_tabicon_armor_up.dds")
+                end
+
+                return lowest
+            end
+        end,
+        event = _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
+        icon = "/esoui/art/inventory/inventory_tabicon_armor_up.dds",
+        tooltip = GetString(_G.BARSTEWARD_DURABILITY)
+    },
+    [26] = {
+        -- v1.0.1
+        name = "dailyEndeavourProgress",
+        update = function(widget)
+            return BS.GetTimedActivityProgress(_G.TIMED_ACTIVITY_TYPE_DAILY, widget)
+        end,
+        event = _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED,
+        icon = "/esoui/art/journal/u26_progress_digsite_checked_incomplete.dds",
+        tooltip = GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS)
+    },
+    [27] = {
+        -- v1.0.1
+        name = "weekyEndeavourProgress",
+        update = function(widget)
+            return BS.GetTimedActivityProgress(_G.TIMED_ACTIVITY_TYPE_WEEKLY, widget)
+        end,
+        event = _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED,
+        icon = "/esoui/art/journal/u26_progress_digsite_checked_complete.dds",
+        tooltip = GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS)
+    },
+    [28] = {
+        -- v1.0.1
+        name = "repairKitCount",
+        update = function(widget)
+            local count = 0
+
+            for slot = 0, GetBagSize(_G.BAG_BACKPACK) do
+                if (IsItemRepairKit(_G.BAG_BACKPACK, slot)) then
+                    count = count + GetSlotStackSize(_G.BAG_BACKPACK, slot)
+                end
+            end
+
+            if (count < 6) then
+                widget:SetColour(1, 0, 0, 1)
+            elseif (count < 11) then
+                widget:SetColour(1, 1, 0, 1)
+            else
+                widget:SetColour(0, 1, 0, 1)
+            end
+
+            widget:SetValue(count)
+
+            return count
+        end,
+        event = _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
+        icon = "/esoui/art/inventory/inventory_tabicon_repair_up.dds",
+        tooltip = GetString(_G.SI_HOOK_POINT_STORE_REPAIR_KIT_HEADER):gsub(":", "")
+    },
+    [29] = {
+        -- v1.0.1
+        name = "stolenItemCount",
+        update = function(widget)
+            local count = 0
+
+            for _, bag in ipairs({_G.BAG_WORN, _G.BAG_BACKPACK, _G.BAG_BANK, _G.BAG_SUBSCRIBER_BANK}) do
+                for slot = 0, GetBagSize(bag) do
+                    if (IsItemStolen(bag, slot)) then
+                        count = count + GetSlotStackSize(bag, slot)
+                    end
+                end
+            end
+
+            widget:SetValue(count)
+
+            return count
+        end,
+        event = _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
+        icon = "/esoui/art/inventory/inventory_stolenitem_icon.dds",
+        tooltip = GetString(_G.BARSTEWARD_STOLEN),
+        hideWhenEqual = 0
+    },
+    [30] = {
+        -- v1.0.2
+        name = "recallcooldown",
+        update = function(widget)
+            local cooldownTime = GetRecallCooldown() / 1000
+            widget:SetValue(BS.SecondsToTime(cooldownTime, true, true))
+            return cooldownTime
+        end,
+        timer = 1000,
+        icon = "/esoui/art/zonestories/completiontypeicon_wayshrine.dds",
+        tooltip = GetString(_G.BARSTEWARD_RECALL),
         hideWhenEqual = 0
     }
 }

@@ -25,7 +25,7 @@ function BS.GetResearchTimer(craftType)
     return maxTimer
 end
 
-function BS.SecondsToTime(seconds, hideDays)
+function BS.SecondsToTime(seconds, hideDays, hideHours)
     local time = ""
     local days = math.floor(seconds / 86400)
     local remaining = seconds
@@ -50,9 +50,11 @@ function BS.SecondsToTime(seconds, hideDays)
         time = string.format("%02d", days) .. ":"
     end
 
-    time =
-        time ..
-        string.format("%02d", hours) .. ":" .. string.format("%02d", minutes) .. ":" .. string.format("%02d", remaining)
+    if (not hideHours) then
+        time = time .. string.format("%02d", hours) .. ":"
+    end
+
+    time = time .. string.format("%02d", minutes) .. ":" .. string.format("%02d", remaining)
 
     return time
 end
@@ -134,4 +136,103 @@ function BS.ToPercent(qty, total)
     pc = math.floor(pc * 100)
 
     return pc
+end
+
+-- from LibEventHandler
+-- avoids requiring the library (addon is already released)
+-- needed to allow multiple functions to be registered against an event
+local eventFunctions = {}
+
+local function callEventFunctions(event, ...)
+    if (#eventFunctions[event] == 0) then
+        return
+    end
+
+    for i = 1, #eventFunctions[event] do
+        eventFunctions[event][i](event, ...)
+    end
+end
+
+local function registerForEvent(event, func)
+    if (event == nil or func == nil) then
+        return
+    end
+
+    if (not eventFunctions[event]) then
+        eventFunctions[event] = {}
+    end
+
+    if (#eventFunctions[event] ~= 0) then
+        local numOfFuncs = #eventFunctions[event]
+
+        for i = 1, numOfFuncs do
+            if (eventFunctions[event][i] == func) then
+                return false
+            end
+        end
+
+        eventFunctions[event][numOfFuncs + 1] = func
+
+        return false
+    else
+        eventFunctions[event][1] = func
+
+        return true
+    end
+end
+
+function BS.RegisterForEvent(namespace, event, func)
+    local needsRegistration = registerForEvent(event, func)
+
+    if needsRegistration then
+        EVENT_MANAGER:RegisterForEvent(namespace, event, callEventFunctions)
+    end
+end
+
+function BS.GetTimedActivityProgress(activityType, widget)
+    local complete = 0
+    local maxComplete = GetTimedActivityTypeLimit(activityType)
+    local tasks = {}
+
+    for idx = 1, 30 do
+        local name = GetTimedActivityName(idx)
+        if (name == "") then
+            break
+        end
+
+        if (GetTimedActivityType(idx) == activityType) then
+            local max = GetTimedActivityMaxProgress(idx)
+            local progress = GetTimedActivityProgress(idx)
+            local ttext = name .. "  (" .. progress .. "/" .. max .. ")" 
+
+            if (progress > 0 and progress < max) then
+                ttext = "|cffff00" .. ttext .. "|r"
+            end
+
+            if (max == progress) then
+                complete = complete + 1
+                ttext = "|c00ff00" .. ttext .. "|r"
+            end
+
+            table.insert(tasks, ttext)
+        end
+    end
+
+    widget:SetValue(complete .. "/" .. maxComplete)
+
+    if (#tasks > 0) then
+        local tooltipText = ""
+
+        for _, t in ipairs(tasks) do
+            if (tooltipText ~= "") then
+                tooltipText = tooltipText .. string.char(10)
+            end
+
+            tooltipText = tooltipText ..t
+        end
+
+        widget.tooltip = tooltipText
+    end
+
+    return complete
 end

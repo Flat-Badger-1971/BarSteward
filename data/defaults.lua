@@ -74,7 +74,14 @@ _G.BarSteward = {
                 Autohide = true,
                 SoundWhenEquals = false,
                 SoundWhenEqualsSound = "Daily Login Reward Claim Fanfare"
-            } -- champion points
+            }, -- champion points
+            [24] = {Bar = 0, Order = 24, Autohide = true}, -- mundus stone
+            [25] = {Bar = 0, Order = 25, SoundWhenUnder = false, SoundWhenUnderSound = "Duel Forfeit"}, -- durability
+            [26] = {Bar = 0, Order = 26}, -- daily endeavour progress
+            [27] = {Bar = 0, Order = 27}, -- weekly endeavour progress
+            [28] = {Bar = 0, Order = 28, SoundWhenUnder = false, SoundWhenUnderSound = "Duel Forfeit"}, -- repair kit count
+            [29] = {Bar = 0, Order = 29, Autohide = true}, -- stolen item count
+            [30] = {Bar = 0, Order = 30, Autohide = true} -- recall cooldown
         },
         TimeFormat24 = "HH:m:s",
         TimeFormat12 = "hh:m:s",

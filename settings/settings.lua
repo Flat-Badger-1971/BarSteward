@@ -503,6 +503,56 @@ local function GetWidgetSettings()
             }
         end
 
+        -- Sound when under
+        if (BS.Defaults.Controls[k].SoundWhenUnder ~= nil) then
+            widgetControls[#widgetControls + 1] = {
+                type = "checkbox",
+                name = GetString(_G.BARSTEWARD_SOUND_VALUE_BELOW),
+                getFunc = function()
+                    return BS.Vars.Controls[k].SoundWhenUnder
+                end,
+                setFunc = function(value)
+                    BS.Vars.Controls[k].SoundWhenUnder = value
+                    CALLBACK_MANAGER:FireCallbacks("LAM-RefreshPanel", BS.OptionsPanel)
+                end,
+                width = "full",
+                default = BS.Defaults.Controls[k].SoundWhenUnder
+            }
+
+            widgetControls[#widgetControls + 1] = {
+                type = "editbox",
+                name = GetString(_G.BARSTEWARD_VALUE),
+                getFunc = function()
+                    return BS.Vars.Controls[k].SoundWhenUnderValue
+                end,
+                setFunc = function(value)
+                    BS.Vars.Controls[k].SoundWhenUnderValue = value
+                end,
+                width = "full",
+                disabled = function()
+                    return not BS.Vars.Controls[k].SoundWhenUnder
+                end,
+                default = nil
+            }
+
+            widgetControls[#widgetControls + 1] = {
+                type = "dropdown",
+                name = GetString(_G.BARSTEWARD_SOUND),
+                choices = soundChoices,
+                getFunc = function()
+                    return BS.Vars.Controls[k].SoundWhenUnderSound
+                end,
+                setFunc = function(value)
+                    BS.Vars.Controls[k].SoundWhenUnderSound = value
+                    PlaySound(BS.SoundLookup[value])
+                end,
+                disabled = function()
+                    return not BS.Vars.Controls[k].SoundWhenUnder
+                end,
+                default = nil
+            }
+        end
+
         -- time
         if (k == 1) then
             widgetControls[#widgetControls + 1] = {

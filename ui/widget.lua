@@ -44,6 +44,8 @@ function baseWidget:Initialise(widgetSettings)
     self.value:SetDimensions(widgetSettings.valueWidth or 50, widgetSettings.iconHeight or 32)
     self.value:SetVerticalAlignment(TEXT_ALIGN_CENTER)
 
+    self.tooltip = widgetSettings.tooltip
+
     if (widgetSettings.tooltip) then
         local anchorControl = self.value
 
@@ -51,14 +53,19 @@ function baseWidget:Initialise(widgetSettings)
             anchorControl = self.icon
         end
 
+        local function getTooltip()
+            return self.tooltip
+        end
+
         self.value:SetMouseEnabled(true)
         self.value:SetHandler(
             "OnMouseEnter",
             function()
+                local tooltip = getTooltip()
                 ZO_Tooltips_ShowTextTooltip(
                     anchorControl,
                     widgetSettings.tooltipAnchor or BOTTOM,
-                    widgetSettings.tooltip
+                    tooltip
                 )
             end
         )
@@ -84,6 +91,10 @@ function baseWidget:SetValue(value)
     local textWidth = self.value:GetStringWidth(value)
 
     self.value:SetWidth(textWidth)
+end
+
+function baseWidget:SetIcon(value)
+    self.icon:SetTexture(value)
 end
 
 function baseWidget:GetValue()
@@ -121,6 +132,10 @@ end
 
 function baseWidget:SetColour(...)
     self.value:SetColor(...)
+end
+
+function baseWidget:SetTooltip(tooltip)
+    self.tooltip = tooltip
 end
 
 function BS.CreateWidget(...)
