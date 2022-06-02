@@ -205,19 +205,18 @@ function BS.GetTimedActivityProgress(activityType, widget)
             local max = GetTimedActivityMaxProgress(idx)
             local progress = GetTimedActivityProgress(idx)
             local ttext = name .. "  (" .. progress .. "/" .. max .. ")" 
+            local colour = "|cb4b4b4"
 
             if (progress > 0 and progress < max and complete ~= maxComplete) then
-                ttext = "|cffff00" .. ttext .. "|r"
-            end
-
-            if (complete == maxComplete and max ~= progress) then
-                ttext = "|cb4b4b4" .. ttext .. "|r"
-            end
-
-            if (max == progress) then
+                colour = "|cffff00"
+            elseif (complete == maxComplete and max ~= progress) then
+                colour = "|cb4b4b4"
+            elseif (max == progress) then
                 complete = complete + 1
-                ttext = "|c00ff00" .. ttext .. "|r"
+                colour = "|c00ff00"
             end
+
+            ttext = colour .. ttext .. "|r"
 
             table.insert(tasks, ttext)
         end
