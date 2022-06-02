@@ -196,6 +196,7 @@ function BS.GetTimedActivityProgress(activityType, widget)
 
     for idx = 1, 30 do
         local name = GetTimedActivityName(idx)
+
         if (name == "") then
             break
         end
@@ -205,8 +206,12 @@ function BS.GetTimedActivityProgress(activityType, widget)
             local progress = GetTimedActivityProgress(idx)
             local ttext = name .. "  (" .. progress .. "/" .. max .. ")" 
 
-            if (progress > 0 and progress < max) then
+            if (progress > 0 and progress < max and complete ~= maxComplete) then
                 ttext = "|cffff00" .. ttext .. "|r"
+            end
+
+            if (complete == maxComplete and max ~= progress) then
+                ttext = "|cb4b4b4" .. ttext .. "|r"
             end
 
             if (max == progress) then
