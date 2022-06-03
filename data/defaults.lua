@@ -24,7 +24,7 @@ _G.BarSteward = {
                 SoundWhenEquals = false,
                 SoundWhenEqualsSound = "Daily Login Reward Claim Fanfare"
             }, -- time
-            [2] = {Bar = 1, Order = 2, SoundWhenEquals = false}, -- alliance points
+            [2] = {Bar = 1, Order = 2, SoundWhenEquals = false, PvPOnly = false}, -- alliance points
             [3] = {Bar = 0, Order = 3}, -- crown gems
             [4] = {Bar = 0, Order = 4}, -- crowns
             [5] = {
@@ -47,7 +47,8 @@ _G.BarSteward = {
                 Bar = 1,
                 Order = 8,
                 SoundWhenEquals = false,
-                SoundWhenEqualsSound = "Daily Login Reward Claim Fanfare"
+                SoundWhenEqualsSound = "Daily Login Reward Claim Fanfare",
+                PvPOnly = false
             }, -- tel var stones
             [9] = {Bar = 0, Order = 9, ShowPercent = false}, -- transmute crystals
             [10] = {

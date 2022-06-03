@@ -378,11 +378,35 @@ local function GetWidgetSettings()
                 end,
                 setFunc = function(value)
                     BS.Vars.Controls[k].Autohide = value
-                    BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref, true)
+                    local widget = _G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref
+                    local bar = widget.control:GetParent().ref
+                    local metadata = BS.widgets[k]
+                    metadata.widget = widget
+                    bar:DoUpdate(metadata)
                 end,
                 width = "full",
-                requiresReload = true,
                 default = BS.Defaults.Controls[k].Autohide
+            }
+        end
+
+        -- PvP only
+        if (BS.Defaults.Controls[k].PvPOnly ~= nil) then
+            widgetControls[#widgetControls + 1] = {
+                type = "checkbox",
+                name = GetString(_G.BARSTEWARD_PVP_ONLY),
+                getFunc = function()
+                    return BS.Vars.Controls[k].PvPOnly
+                end,
+                setFunc = function(value)
+                    BS.Vars.Controls[k].PvPOnly = value
+                    local widget = _G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref
+                    local bar = widget.control:GetParent().ref
+                    local metadata = BS.widgets[k]
+                    metadata.widget = widget
+                    bar:DoUpdate(metadata)
+                end,
+                width = "full",
+                default = BS.Defaults.Controls[k].PvPOnly
             }
         end
 
@@ -396,7 +420,7 @@ local function GetWidgetSettings()
                 end,
                 setFunc = function(value)
                     BS.Vars.Controls[k].ShowPercent = value
-                    BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref, true)
+                    BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
                 end,
                 width = "full",
                 default = BS.Defaults.Controls[k].ShowPercent

@@ -50,9 +50,19 @@ BS.widgets = {
             widget:SetValue(GetCurrencyAmount(_G.CURT_ALLIANCE_POINTS, _G.CURRENCY_LOCATION_CHARACTER))
             return widget:GetValue()
         end,
-        event = _G.EVENT_ALLIANCE_POINT_UPDATE,
+        event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_ALLIANCE_POINT_UPDATE},
         tooltip = GetString(_G.SI_GAMEPAD_INVENTORY_ALLIANCE_POINTS),
-        icon = "/esoui/art/currency/alliancepoints_64.dds"
+        icon = "/esoui/art/currency/alliancepoints_64.dds",
+        hideWhenTrue = function()
+            if (BS.Vars.Controls[2].PvPOnly == true) then
+                local mapContentType = GetMapContentType()
+	            local isPvP = (mapContentType == _G.MAP_CONTENT_AVA or mapContentType == _G.MAP_CONTENT_BATTLEGROUND)
+
+                return not isPvP
+            end
+
+            return false
+        end
     },
     [3] = {
         name = "crownGems",
@@ -125,9 +135,19 @@ BS.widgets = {
             widget:SetValue(GetCurrencyAmount(_G.CURT_TELVAR_STONES, _G.CURRENCY_LOCATION_CHARACTER))
             return widget:GetValue()
         end,
-        event = _G.EVENT_TELVAR_STONE_UPDATE,
+        event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_TELVAR_STONE_UPDATE},
         tooltip = GetString(_G.SI_GAMEPAD_INVENTORY_TELVAR_STONES),
-        icon = "/esoui/art/currency/currency_telvar_64.dds"
+        icon = "/esoui/art/currency/currency_telvar_64.dds",
+        hideWhenTrue = function()
+            if (BS.Vars.Controls[8].PvPOnly == true) then
+                local mapContentType = GetMapContentType()
+	            local isPvP = (mapContentType == _G.MAP_CONTENT_AVA or mapContentType == _G.MAP_CONTENT_BATTLEGROUND)
+
+                return not isPvP
+            end
+
+            return false
+        end
     },
     [9] = {
         name = "transmuteCrystals",
@@ -305,12 +325,16 @@ BS.widgets = {
     },
     [20] = {
         name = "itemRepairCost",
-        update = function(widget)
-            local repairCost = GetRepairAllCost()
-            widget:SetValue(repairCost)
-            return repairCost
+        update = function(widget, _, _, _, _, updateReason)
+            if (updateReason == nil or updateReason == _G.INVENTORY_UPDATE_REASON_DURABILITY_CHANGE) then
+                local repairCost = GetRepairAllCost()
+                widget:SetValue(repairCost)
+                return repairCost
+            end
+
+            return widget:GetValue()
         end,
-        timer = 5000,
+        event = _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
         icon = "/esoui/art/ava/ava_resourcestatus_tabicon_defense_inactive.dds",
         tooltip = GetString(_G.BARSTEWARD_REPAIR_COST),
         hideWhenEqual = 0
@@ -386,7 +410,8 @@ BS.widgets = {
         update = function(widget, ...)
             local mundusId = nil
 
-            if (... == nil) then
+            if (... == "initial") then
+                d("init")
                 for buffNum = 1, GetNumBuffs("player") do
                     local id = select(11, GetUnitBuffInfo("player", buffNum))
 

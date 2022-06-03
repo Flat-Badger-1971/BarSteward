@@ -22,6 +22,7 @@ function BS.GetResearchTimer(craftType)
     if (maxResearch > 0) then
         maxTimer = 0
     end
+
     return maxTimer
 end
 
@@ -204,7 +205,7 @@ function BS.GetTimedActivityProgress(activityType, widget)
         if (GetTimedActivityType(idx) == activityType) then
             local max = GetTimedActivityMaxProgress(idx)
             local progress = GetTimedActivityProgress(idx)
-            local ttext = name .. "  (" .. progress .. "/" .. max .. ")" 
+            local ttext = name .. "  (" .. progress .. "/" .. max .. ")"
             local colour = "|cb4b4b4"
 
             if (progress > 0 and progress < max and complete ~= maxComplete) then

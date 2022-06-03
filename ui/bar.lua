@@ -20,6 +20,7 @@ function baseBar:Initialise(barSettings)
     self.defaultHeight = barSettings.iconHeight or 32
 
     self.bar = WINDOW_MANAGER:CreateTopLevelWindow(barName)
+    self.bar.ref = self
     self.bar:SetScale(barSettings.scale)
 
     local valueSide = BS.Vars.Bars[barSettings.index].ValueSide
@@ -79,8 +80,17 @@ local function SetHiddenWidget(widget, hidden)
     end
 end
 
-local function HideWhen(metadata, value)
+local function HideWhen(metadata, value, whenTrueOnly)
     local hideValue
+
+    if (metadata.hideWhenTrue) then
+        hideValue = metadata.hideWhenTrue()
+        SetHiddenWidget(metadata.widget, hideValue)
+    end
+
+    if (whenTrueOnly == true) then
+        return
+    end
 
     if (metadata.hideWhenEqual) then
         if (type(metadata.hideWhenEqual) == "function") then
@@ -123,6 +133,11 @@ function baseBar:DoUpdate(metadata, ...)
         if (BS.Vars.Controls[metadata.id].Autohide) then
             HideWhen(metadata, value)
         end
+    end
+
+    -- check for hide when true
+    if (metadata.hideWhenTrue) then
+        HideWhen(metadata, value, true)
     end
 
     -- check if a sound needs to be played
@@ -177,6 +192,12 @@ function baseBar:DoUpdate(metadata, ...)
         end
     end
 
+    if (... ~= "initial") then
+        self:ResizeBar()
+    end
+end
+
+function baseBar:ResizeBar()
     if (self.orientation == "horizontal") then
         local width = self:GetCalculatedWidth()
         self.bar:SetWidth(width)
@@ -194,8 +215,8 @@ function baseBar:GetCalculatedWidth()
     local width = 0
 
     for _, widget in pairs(self.widgets) do
-        if (widget:IsHidden() == false) then
-            width = width + widget:GetWidth()
+        if (widget.widget:IsHidden() == false) then
+            width = width + widget.widget:GetWidth()
         end
     end
 
@@ -207,8 +228,8 @@ function baseBar:GetCalculatedHeight()
     local widgetCount = 0
 
     for _, widget in pairs(self.widgets) do
-        if (widget:IsHidden() == false) then
-            height = height + widget:GetHeight()
+        if (widget.widget:IsHidden() == false) then
+            height = height + widget.widget:GetHeight()
             widgetCount = widgetCount + 1
         end
     end
@@ -217,12 +238,11 @@ function baseBar:GetCalculatedHeight()
 end
 
 function baseBar:GetMaxWidgetWidth()
-    local maxWidth = 0
+    local maxWidth = 20
     local width
 
     for _, widget in pairs(self.widgets) do
-        width = widget:GetWidth()
-
+        width = widget.widget:GetWidth()
         if (width > maxWidth) then
             maxWidth = width
         end
@@ -270,8 +290,6 @@ function baseBar:AddWidgets(widgets)
             }
         )
 
-        self.widgets[idx] = metadata.widget
-
         -- register widgets that need to watch for events
         if (metadata.event) then
             local events
@@ -310,14 +328,6 @@ function baseBar:AddWidgets(widgets)
             )
         end
 
-        --delay updates until all widgets have been drawn
-        zo_callLater(
-            function()
-                self:DoUpdate(metadata)
-            end,
-            200
-        )
-
         if (self.orientation == "horizontal") then
             if (firstWidget) then
                 metadata.widget:SetAnchor(LEFT, self.bar, LEFT)
@@ -344,7 +354,19 @@ function baseBar:AddWidgets(widgets)
 
         previousWidget = metadata.widget
         firstWidget = false
+        self.widgets[idx] = metadata
     end
+
+    for _, widget in ipairs(self.widgets) do
+        self:DoUpdate(widget, "initial")
+    end
+
+    zo_callLater(
+        function()
+            self:ResizeBar()
+        end,
+        200
+    )
 end
 
 function baseBar:SetAnchor(...)
