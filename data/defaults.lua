@@ -82,7 +82,8 @@ _G.BarSteward = {
             [27] = {Bar = 0, Order = 27}, -- weekly endeavour progress
             [28] = {Bar = 0, Order = 28, SoundWhenUnder = false, SoundWhenUnderSound = "Duel Forfeit"}, -- repair kit count
             [29] = {Bar = 0, Order = 29, Autohide = true}, -- stolen item count
-            [30] = {Bar = 0, Order = 30, Autohide = true} -- recall cooldown
+            [30] = {Bar = 0, Order = 30, Autohide = true}, -- recall cooldown
+            [31] = {Bar = 1, Order = 31, SoundWhenOver = false, SoundWhenOverSound = "Dual Forfeit"}, -- fence/launder transactions
         },
         TimeFormat24 = "HH:m:s",
         TimeFormat12 = "hh:m:s",

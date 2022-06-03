@@ -411,7 +411,6 @@ BS.widgets = {
             local mundusId = nil
 
             if (... == "initial") then
-                d("init")
                 for buffNum = 1, GetNumBuffs("player") do
                     local id = select(11, GetUnitBuffInfo("player", buffNum))
 
@@ -453,40 +452,7 @@ BS.widgets = {
         update = function(widget, _, _, _, _, updateReason)
             -- find item with lowest durability
             if (updateReason == nil or updateReason == _G.INVENTORY_UPDATE_REASON_DURABILITY_CHANGE) then
-                local lowest = 100
-                local lowestType = _G.ITEMTYPE_ARMOR
-
-                for slot = 0, GetBagSize(_G.BAG_WORN) do
-                    local itemName = GetItemName(_G.BAG_WORN, slot)
-                    local condition = GetItemCondition(_G.BAG_WORN, slot)
-
-                    if (lowest > condition and itemName ~= "") then
-                        lowest = condition
-                        lowestType = GetItemType(_G.BAG_WORN, slot)
-                    end
-                end
-
-                widget:SetValue(lowest .. "%")
-
-                if (lowest >= 75) then
-                    widget:SetColour(0, 1, 0, 1)
-                elseif (lowest >= 15) then
-                    widget:SetColour(1, 1, 0, 1)
-                else
-                    widget:SetColour(1, 0, 0, 1)
-                end
-
-                if (lowest <= 15) then
-                    if (lowestType == _G.ITEMTYPE_WEAPON) then
-                        widget:SetIcon("/esoui/art/hud/broken_weapon.dds")
-                    else
-                        widget:SetIcon("/esoui/art/hud/broken_armor.dds")
-                    end
-                else
-                    widget:SetIcon("/esoui/art/inventory/inventory_tabicon_armor_up.dds")
-                end
-
-                return lowest
+                return BS.GetDurability(widget)
             end
         end,
         event = _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
@@ -576,5 +542,28 @@ BS.widgets = {
         icon = "/esoui/art/zonestories/completiontypeicon_wayshrine.dds",
         tooltip = GetString(_G.BARSTEWARD_RECALL),
         hideWhenEqual = 0
+    },
+    [31] = {
+        -- v1.0.2
+        name = "fenceSlots",
+        update = function(widget)
+            local max, used = GetFenceLaunderTransactionInfo()
+            local pcUsed = math.floor(used / max) * 100
+
+            if (pcUsed >= 85 and pcUsed < 95) then
+                widget:SetColour(1, 1, 0, 1)
+            elseif (pcUsed >= 95) then
+                widget:SetColour(1, 0, 0, 1)
+            else
+                widget:SetColour(0, 1, 0, 1)
+            end
+
+            widget:SetValue(used .. "/" .. max)
+
+            return used
+        end,
+        event = _G.EVENT_CLOSE_STORE,
+        icon = "/esoui/art/vendor/vendor_tabicon_fence_up.dds",
+        tooltip = GetString(_G.BARSTEWARD_FENCE)
     }
 }

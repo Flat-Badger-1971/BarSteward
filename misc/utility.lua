@@ -233,11 +233,74 @@ function BS.GetTimedActivityProgress(activityType, widget)
                 tooltipText = tooltipText .. string.char(10)
             end
 
-            tooltipText = tooltipText ..t
+            tooltipText = tooltipText .. t
         end
 
         widget.tooltip = tooltipText
     end
 
     return complete
+end
+
+function BS.GetDurability(widget)
+    local lowest = 100
+    local lowestType = _G.ITEMTYPE_ARMOR
+    local items = {}
+
+    for slot = 0, GetBagSize(_G.BAG_WORN) do
+        local itemName = GetItemName(_G.BAG_WORN, slot)
+        local condition = GetItemCondition(_G.BAG_WORN, slot)
+        local colour = "|c00ff00"
+
+        if (itemName ~= "") then
+            if (condition <= 75 and condition >= 15) then
+                colour = "|cffff00"
+            elseif (condition < 15) then
+                colour = "|cff0000"
+            end
+
+            table.insert(items, colour .. itemName .. " - " .. condition .. "%|r")
+
+            if (lowest > condition) then
+                lowest = condition
+                lowestType = GetItemType(_G.BAG_WORN, slot)
+            end
+        end
+    end
+
+    widget:SetValue(lowest .. "%")
+
+    if (lowest >= 75) then
+        widget:SetColour(0, 1, 0, 1)
+    elseif (lowest >= 15) then
+        widget:SetColour(1, 1, 0, 1)
+    else
+        widget:SetColour(1, 0, 0, 1)
+    end
+
+    if (lowest <= 15) then
+        if (lowestType == _G.ITEMTYPE_WEAPON) then
+            widget:SetIcon("/esoui/art/hud/broken_weapon.dds")
+        else
+            widget:SetIcon("/esoui/art/hud/broken_armor.dds")
+        end
+    else
+        widget:SetIcon("/esoui/art/inventory/inventory_tabicon_armor_up.dds")
+    end
+
+    if (#items > 0) then
+        local tooltipText = ""
+
+        for _, i in ipairs(items) do
+            if (tooltipText ~= "") then
+                tooltipText = tooltipText .. string.char(10)
+            end
+
+            tooltipText = tooltipText .. i
+        end
+
+        widget.tooltip = tooltipText
+    end
+
+    return lowest
 end
