@@ -41,7 +41,9 @@ local function Initialise()
 
             for _, bar in ipairs(BS.Bars) do
                 _G[bar]:SetMovable(value)
+                _G[bar].ref.handle:SetHidden(not value)
             end
+
         end,
         width = "full",
         default = BS.Defaults.Movable

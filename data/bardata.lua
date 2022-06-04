@@ -779,6 +779,13 @@ BS.widgets = {
         end,
         event = _G.EVENT_PLAYER_ACTIVATED,
         icon = "",
-        tooltip = GetString(_G.SI_COLLECTIBLERESTRICTIONTYPE2)
+        tooltip = GetString(_G.SI_COLLECTIBLERESTRICTIONTYPE2),
+        onClick = function()
+            if (not IsInGamepadPreferredMode()) then
+                SCENE_MANAGER:Show("campaignOverview")
+            else
+                SCENE_MANAGER:Show("gamepad_campaign_root")
+            end
+        end
     }
 }

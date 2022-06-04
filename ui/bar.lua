@@ -40,23 +40,22 @@ function baseBar:Initialise(barSettings)
     end
 
     -- save the bar position after it's moved
-    self.bar:SetHandler(
-        "OnMouseUp",
-        function()
-            local anchor = BS.GetAnchorFromText(BS.Vars.Bars[barSettings.index].Anchor)
-            local xPos, yPos
+    local onMouseUp = function()
+        local anchor = BS.GetAnchorFromText(BS.Vars.Bars[barSettings.index].Anchor)
+        local xPos, yPos
 
-            if (anchor == CENTER) then
-                xPos, yPos = self.bar:GetCenter()
-            elseif (anchor == LEFT) then
-                xPos, yPos = self.bar:GetLeft(), self.bar:GetTop()
-            elseif (anchor == RIGHT) then
-                xPos, yPos = self.bar:GetRight(), self.bar:GetTop()
-            end
-
-            BS.Vars.Bars[barSettings.index].Position = {X = xPos, Y = yPos}
+        if (anchor == CENTER) then
+            xPos, yPos = self.bar:GetCenter()
+        elseif (anchor == LEFT) then
+            xPos, yPos = self.bar:GetLeft(), self.bar:GetTop()
+        elseif (anchor == RIGHT) then
+            xPos, yPos = self.bar:GetRight(), self.bar:GetTop()
         end
-    )
+
+        BS.Vars.Bars[barSettings.index].Position = {X = xPos, Y = yPos}
+    end
+
+    self.bar:SetHandler("OnMouseUp", onMouseUp)
 
     self.bar.background = WINDOW_MANAGER:CreateControl(barName .. "_background", self.bar, CT_BACKDROP)
     self.bar.background:SetAnchorFill(self.bar)
@@ -64,9 +63,32 @@ function baseBar:Initialise(barSettings)
     self.bar.background:SetEdgeColor(0, 0, 0, 0)
     self.bar.background:SetHidden(not settings.Backdrop.Show)
 
+    self.handle = WINDOW_MANAGER:CreateControl(barName .. "_handle", self.bar, CT_CONTROL)
+    self.handle:SetDimensions(16, 32)
+    self.handle:SetAnchor(TOPRIGHT, self.bar, TOPLEFT)
+    self.handle:SetMouseEnabled(true)
+    self.handle:SetHandler(
+        "OnMouseDown",
+        function()
+            self.bar:StartMoving()
+        end
+    )
+    self.handle:SetHandler("OnMouseUp", onMouseUp)
+    self.handle:SetHidden(not BS.Vars.Movable)
+
+    self.handle.background = WINDOW_MANAGER:CreateControl(barName .. "handle_background", self.handle, CT_BACKDROP)
+    self.handle.background:SetAnchorFill(self.handle)
+    self.handle.background:SetCenterColor(unpack(settings.Backdrop.Colour))
+    self.handle.background:SetEdgeColor(0, 0, 0, 0)
+    self.handle.background:SetHidden(not settings.Backdrop.Show)
+
+    self.handle.icon = WINDOW_MANAGER:CreateControl(barName .. "_handle_icon", self.handle.background, CT_TEXTURE)
+    self.handle.icon:SetTexture("/esoui/art/dye/dye_amorslot_highlight.dds")
+    self.handle.icon:SetDimensions(6, 32)
+    self.handle.icon:SetAnchor(CENTER)
+
     -- prevent the bar from displaying when not in hud or hudui modes
     self.bar.fragment = ZO_HUDFadeSceneFragment:New(self.bar)
-
     SCENE_MANAGER:GetScene("hud"):AddFragment(self.bar.fragment)
     SCENE_MANAGER:GetScene("hudui"):AddFragment(self.bar.fragment)
 end
