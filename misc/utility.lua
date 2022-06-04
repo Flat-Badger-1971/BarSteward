@@ -304,3 +304,60 @@ function BS.GetDurability(widget)
 
     return lowest
 end
+
+function BS.GetAnchorFromText(text, adjust)
+    if (text == GetString(_G.BARSTEWARD_LEFT)) then
+        if (adjust) then
+            return TOPLEFT
+        end
+
+        return LEFT
+    end
+
+    if (text == GetString(_G.BARSTEWARD_RIGHT)) then
+        if (adjust) then
+            return TOPRIGHT
+        end
+
+        return RIGHT
+    end
+
+    if (text == GetString(_G.BARSTEWARD_TOP)) then
+        return TOP
+    end
+
+    if (text == GetString(_G.BARSTEWARD_BOTTOM)) then
+        return BOTTOM
+    end
+
+    return CENTER
+end
+
+function BS.AddSeparators(number)
+    local grouping = tonumber(GetString(_G.BARSTEWARD_NUMBER_GROUPING))
+    local separator = GetString(_G.BARSTEWARD_NUMBER_SEPARATOR)
+
+    if type(number) ~= "number" or number < 0 or number == 0 or not number then
+        return number
+    else
+        local t = {}
+        local int = math.floor(number)
+
+        if int == 0 then
+            t[#t + 1] = 0
+        else
+            local digits = math.log10(int)
+            local segments = math.floor(digits / grouping)
+            local groups = 10 ^ grouping
+            t[#t + 1] = math.floor(int / groups ^ segments)
+            for i = segments - 1, 0, -1 do
+                t[#t + 1] = separator
+                t[#t + 1] = ("%0" .. grouping .. "d"):format(math.floor(int / groups ^ i) % groups)
+            end
+        end
+
+        local s = table.concat(t)
+
+        return s
+    end
+end

@@ -25,17 +25,14 @@ function baseBar:Initialise(barSettings)
 
     local valueSide = BS.Vars.Bars[barSettings.index].ValueSide
 
-    if (valueSide == GetString(_G.BARSTEWARD_LEFT)) then
-        self.valueSide = LEFT
-    end
-    if (valueSide == GetString(_G.BARSTEWARD_RIGHT)) then
-        self.valueSide = RIGHT
-    end
+    self.valueSide = BS.GetAnchorFromText(valueSide)
 
     local x = BS.Vars.Bars[barSettings.index].Position.X
     local y = BS.Vars.Bars[barSettings.index].Position.Y
 
-    self.bar:SetAnchor(CENTER, GuiRoot, TOPLEFT, x, y)
+    local barAnchor = BS.GetAnchorFromText(BS.Vars.Bars[barSettings.index].Anchor, true)
+
+    self.bar:SetAnchor(barAnchor, GuiRoot, TOPLEFT, x, y)
     self.bar:SetMouseEnabled(true)
 
     if (BS.Vars.Movable) then
@@ -46,8 +43,18 @@ function baseBar:Initialise(barSettings)
     self.bar:SetHandler(
         "OnMouseUp",
         function()
-            local centreX, centreY = self.bar:GetCenter()
-            BS.Vars.Bars[barSettings.index].Position = {X = centreX, Y = centreY}
+            local anchor = BS.GetAnchorFromText(BS.Vars.Bars[barSettings.index].Anchor)
+            local xPos, yPos
+
+            if (anchor == CENTER) then
+                xPos, yPos = self.bar:GetCenter()
+            elseif (anchor == LEFT) then
+                xPos, yPos = self.bar:GetLeft(), self.bar:GetTop()
+            elseif (anchor == RIGHT) then
+                xPos, yPos = self.bar:GetRight(), self.bar:GetTop()
+            end
+
+            BS.Vars.Bars[barSettings.index].Position = {X = xPos, Y = yPos}
         end
     )
 
@@ -255,21 +262,7 @@ function baseBar:AddWidgets(widgets)
     local tooltipAnchorTrans = BS.Vars.Bars[self.index].TooltipAnchor
     local tooltipAnchor
 
-    if (tooltipAnchorTrans == GetString(_G.BARSTEWARD_LEFT)) then
-        tooltipAnchor = LEFT
-    end
-
-    if (tooltipAnchorTrans == GetString(_G.BARSTEWARD_RIGHT)) then
-        tooltipAnchor = RIGHT
-    end
-
-    if (tooltipAnchorTrans == GetString(_G.BARSTEWARD_TOP)) then
-        tooltipAnchor = TOP
-    end
-
-    if (tooltipAnchorTrans == GetString(_G.BARSTEWARD_BOTTOM)) then
-        tooltipAnchor = BOTTOM
-    end
+    tooltipAnchor = BS.GetAnchorFromText(tooltipAnchorTrans)
 
     local firstWidget = true
     local previousWidget
@@ -282,11 +275,13 @@ function baseBar:AddWidgets(widgets)
             BS.CreateWidget(
             {
                 icon = metadata.icon,
+                minWidthChars = metadata.minWidthChars,
                 name = metadata.name,
                 parent = self.bar,
                 tooltip = metadata.tooltip,
                 tooltipAnchor = tooltipAnchor,
-                valueSide = self.valueSide
+                valueSide = self.valueSide,
+                onClick = metadata.onClick
             }
         )
 
@@ -336,14 +331,12 @@ function baseBar:AddWidgets(widgets)
             end
         else
             if (firstWidget) then
-                --metadata.widget:SetAnchor(TOPLEFT, self.bar, TOPLEFT)
                 metadata.widget:SetAnchor(
                     self.valueSide == LEFT and TOPRIGHT or TOPLEFT,
                     self.bar,
                     self.valueSide == LEFT and TOPRIGHT or TOPLEFT
                 )
             else
-                --metadata.widget:SetAnchor(TOPLEFT, previousWidget.control, BOTTOMLEFT)
                 metadata.widget:SetAnchor(
                     self.valueSide == LEFT and TOPRIGHT or TOPLEFT,
                     previousWidget.control,

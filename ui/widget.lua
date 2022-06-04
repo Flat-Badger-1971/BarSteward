@@ -13,7 +13,7 @@ function baseWidget:Initialise(widgetSettings)
     local name = BS.Name .. "_Widget_" .. widgetSettings.name
 
     self.name = widgetSettings.name
-
+    self.minWidthChars = widgetSettings.minWidthChars
     self.control = WINDOW_MANAGER:CreateControl(name, widgetSettings.parent, CT_CONTROL)
     self.control:SetResizeToFitDescendents(true)
     self.control.ref = self
@@ -57,23 +57,29 @@ function baseWidget:Initialise(widgetSettings)
             return self.tooltip
         end
 
-        self.value:SetMouseEnabled(true)
-        self.value:SetHandler(
+        self.control:SetMouseEnabled(true)
+        self.control:SetHandler(
             "OnMouseEnter",
             function()
                 local tooltip = getTooltip()
-                ZO_Tooltips_ShowTextTooltip(
-                    anchorControl,
-                    widgetSettings.tooltipAnchor or BOTTOM,
-                    tooltip
-                )
+                ZO_Tooltips_ShowTextTooltip(anchorControl, widgetSettings.tooltipAnchor or BOTTOM, tooltip)
             end
         )
 
-        self.value:SetHandler(
+        self.control:SetHandler(
             "OnMouseExit",
             function()
                 ZO_Tooltips_HideTextTooltip()
+            end
+        )
+    end
+
+    if (widgetSettings.onClick ~= nil) then
+        self.control:SetMouseEnabled(true)
+        self.control:SetHandler(
+            "OnMouseDown",
+            function()
+                widgetSettings.onClick()
             end
         )
     end
@@ -89,6 +95,14 @@ function baseWidget:SetValue(value)
     self.value:SetText(value)
 
     local textWidth = self.value:GetStringWidth(value)
+
+    if (self.minWidthChars ~= nil) then
+        local minWidth = self.value:GetStringWidth(self.minWidthChars)
+
+        if (minWidth > textWidth) then
+            textWidth = minWidth
+        end
+    end
 
     self.value:SetWidth(textWidth)
 end

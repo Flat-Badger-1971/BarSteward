@@ -1,9 +1,24 @@
+[color=#ff9900][b]Version: 1.0.3 ---------------[/b][/color]
+Current Zone added
+Player Name aded
+Player Race added
+Player Class added
+Player Alliance added
+Fixed mundus stone issue
+OnClick handlers added to some widgets
+Minimum width set for FPS and Latency
+Added Bar Anchor setting
+Added number separator option
+Craft/Mount timers go red when zero
+Tooltip hover now includes the icon
+
 [color=#ff9900][b]Version: 1.0.2 ---------------[/b][/color]
 Added Wayshrine cooldown timer
 Added Endeavour descriptions to the tooltip
 Added PvP only option to Alliance Points and Tel Var Stones
 Added used Fence/Launder transactions
 Durability breakdown added to tooltip
+Code improvements
 
 [color=#ff9900][b]Version: 1.0.1 ---------------[/b][/color]
 Mundus Stone added
@@ -13,4 +28,4 @@ Repair Kit Count added
 Stolen Item Count added
 
 [color=#ff9900][b]Version: 1.0.0 ---------------[/b][/color]
-Initial Release
+Initial Release.

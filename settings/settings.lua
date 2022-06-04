@@ -194,6 +194,23 @@ local function GetBarSettings()
                 end,
                 requiresReload = true,
                 default = BS.Defaults.Bars[1].ValueSide
+            },
+            [6] = {
+                type = "dropdown",
+                name = GetString(_G.BARSTEWARD_BAR_ANCHOR),
+                choices = {
+                    GetString(_G.BARSTEWARD_LEFT),
+                    GetString(_G.BARSTEWARD_RIGHT),
+                    GetString(_G.BARSTEWARD_MIDDLE)
+                },
+                getFunc = function()
+                    return BS.Vars.Bars[idx].Anchor or GetString(_G.BARSTEWARD_MIDDLE)
+                end,
+                setFunc = function(value)
+                    BS.Vars.Bars[idx].Anchor = value
+                end,
+                requiresReload = true,
+                default = BS.Defaults.Bars[1].Anchor
             }
         }
 
@@ -420,10 +437,31 @@ local function GetWidgetSettings()
                 end,
                 setFunc = function(value)
                     BS.Vars.Controls[k].ShowPercent = value
-                    BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
+                    if (BS.Vars.Controls[k].Bar ~= 0) then
+                        BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
+                    end
                 end,
                 width = "full",
                 default = BS.Defaults.Controls[k].ShowPercent
+            }
+        end
+
+        -- Use separators
+        if (BS.Defaults.Controls[k].UseSeparators ~= nil) then
+            widgetControls[#widgetControls + 1] = {
+                type = "checkbox",
+                name = GetString(_G.BARSTEWARD_ADD_SEPARATORS),
+                getFunc = function()
+                    return BS.Vars.Controls[k].UseSeparators
+                end,
+                setFunc = function(value)
+                    BS.Vars.Controls[k].UseSeparators = value
+                    if (BS.Vars.Controls[k].Bar ~= 0) then
+                        BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
+                    end
+                end,
+                width = "full",
+                default = BS.Defaults.Controls[k].UseSeparators
             }
         end
 

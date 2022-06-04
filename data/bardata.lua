@@ -15,14 +15,19 @@ BS.mundusstones = {
     [13984] = true,
     [13985] = true
 }
+
 --[[
     {
         name = [string] "widget name",
         update = [function] function that takes widget as an argument and sets the widget value / colour. Must return the raw value,
-        time = [number] [optional] the time interval in ms before the update function is called again,
+        timer = [number] [optional] the time interval in ms before the update function is called again,
         event = [string/table] [optional] the event or array of events that will trigger the update function,
+        filter = [table] table of filters to apply to an event. Key is the event, value is another table indicating the filter and value
         tooltip = [string] [optional] the tooltip text that will display when the user hovers over the value,
-        icon = [string/function] path to the eso texture file
+        icon = [string/function] path to the eso texture file,
+        hideWhenTrue = [function] this boolean result of this functions determines if the widget should be hidden or not,
+        minWidthChars = [string] string to use to set the minimum width of the widget value,
+        onClick = [function] function to call when the widget is clicked
     }
 ]]
 BS.widgets = {
@@ -47,7 +52,13 @@ BS.widgets = {
     [2] = {
         name = "alliancePoints",
         update = function(widget)
-            widget:SetValue(GetCurrencyAmount(_G.CURT_ALLIANCE_POINTS, _G.CURRENCY_LOCATION_CHARACTER))
+            local points = GetCurrencyAmount(_G.CURT_ALLIANCE_POINTS, _G.CURRENCY_LOCATION_CHARACTER)
+
+            if (BS.Vars.Controls[2].UseSeparators == true) then
+                points = BS.AddSeparators(points)
+            end
+
+            widget:SetValue(points)
             return widget:GetValue()
         end,
         event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_ALLIANCE_POINT_UPDATE},
@@ -56,7 +67,7 @@ BS.widgets = {
         hideWhenTrue = function()
             if (BS.Vars.Controls[2].PvPOnly == true) then
                 local mapContentType = GetMapContentType()
-	            local isPvP = (mapContentType == _G.MAP_CONTENT_AVA or mapContentType == _G.MAP_CONTENT_BATTLEGROUND)
+                local isPvP = (mapContentType == _G.MAP_CONTENT_AVA or mapContentType == _G.MAP_CONTENT_BATTLEGROUND)
 
                 return not isPvP
             end
@@ -67,22 +78,45 @@ BS.widgets = {
     [3] = {
         name = "crownGems",
         update = function(widget)
-            widget:SetValue(GetCurrencyAmount(_G.CURT_CROWN_GEMS, _G.CURRENCY_LOCATION_ACCOUNT))
+            local gems = GetCurrencyAmount(_G.CURT_CROWN_GEMS, _G.CURRENCY_LOCATION_ACCOUNT)
+
+            if (BS.Vars.Controls[3].UseSeparators == true) then
+                gems = BS.AddSeparators(gems)
+            end
+
+            widget:SetValue(gems)
             return widget:GetValue()
         end,
         event = _G.EVENT_CROWN_GEM_UPDATE,
         tooltip = GetString(_G.BARSTEWARD_CROWN_GEMS),
-        icon = "/esoui/art/currency/currency_crown_gems.dds"
+        icon = "/esoui/art/currency/currency_crown_gems.dds",
+        onClick = function()
+            if (not IsInGamepadPreferredMode()) then
+                SCENE_MANAGER:Show("market")
+            else
+                SCENE_MANAGER:Show("gamepad_market")
+            end
+        end
     },
     [4] = {
         name = "crowns",
         update = function(widget)
-            widget:SetValue(GetCurrencyAmount(_G.CURT_CROWNS, _G.CURRENCY_LOCATION_ACCOUNT))
+            local crowns = GetCurrencyAmount(_G.CURT_CROWNS, _G.CURRENCY_LOCATION_ACCOUNT)
+
+            if (BS.Vars.Controls[4].UseSeparators == true) then
+                crowns = BS.AddSeparators(crowns)
+            end
+            widget:SetValue(crowns)
             return widget:GetValue()
         end,
         event = _G.EVENT_CROWN_UPDATE,
         tooltip = GetString(_G.BARSTEWARD_CROWNS),
-        icon = "/esoui/art/currency/currency_crowns_32.dds"
+        icon = "/esoui/art/currency/currency_crowns_32.dds",
+        onClick = function()
+            if (not IsInGamepadPreferredMode()) then
+                SCENE_MANAGER:Show("market")
+            end
+        end
     },
     [5] = {
         name = "eventTickets",
@@ -112,7 +146,13 @@ BS.widgets = {
     [6] = {
         name = "gold",
         update = function(widget)
-            widget:SetValue(GetCurrencyAmount(_G.CURT_MONEY, _G.CURRENCY_LOCATION_CHARACTER))
+            local gold = GetCurrencyAmount(_G.CURT_MONEY, _G.CURRENCY_LOCATION_CHARACTER)
+
+            if (BS.Vars.Controls[6].UseSeparators == true) then
+                gold = BS.AddSeparators(gold)
+            end
+
+            widget:SetValue(gold)
             return widget:GetValue()
         end,
         event = _G.EVENT_MONEY_UPDATE,
@@ -122,17 +162,34 @@ BS.widgets = {
     [7] = {
         name = "sealsOfEndeavour",
         update = function(widget)
-            widget:SetValue(GetCurrencyAmount(_G.CURT_ENDEAVOR_SEALS, _G.CURRENCY_LOCATION_ACCOUNT))
+            local seals = GetCurrencyAmount(_G.CURT_ENDEAVOR_SEALS, _G.CURRENCY_LOCATION_ACCOUNT)
+
+            if (BS.Vars.Controls[7].UseSeparators == true) then
+                seals = BS.AddSeparators(seals)
+            end
+            widget:SetValue(seals)
             return widget:GetValue()
         end,
         event = _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED,
         tooltip = GetString(_G.SI_CROWN_STORE_MENU_SEALS_STORE_LABEL),
-        icon = "/esoui/art/market/keyboard/tabicon_sealsstore_up.dds"
+        icon = "/esoui/art/market/keyboard/tabicon_sealsstore_up.dds",
+        onClick = function()
+            if (not IsInGamepadPreferredMode()) then
+                SCENE_MANAGER:Show("endeavorSealStoreSceneKeyboard")
+            else
+                SCENE_MANAGER:Show("gamepad_endeavor_seal_market_pre_scene")
+            end
+        end
     },
     [8] = {
         name = "telVarStones",
         update = function(widget)
-            widget:SetValue(GetCurrencyAmount(_G.CURT_TELVAR_STONES, _G.CURRENCY_LOCATION_CHARACTER))
+            local stones = GetCurrencyAmount(_G.CURT_TELVAR_STONES, _G.CURRENCY_LOCATION_CHARACTER)
+
+            if (BS.Vars.Controls[8].UseSeparators == true) then
+                stones = BS.AddSeparators(stones)
+            end
+            widget:SetValue(stones)
             return widget:GetValue()
         end,
         event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_TELVAR_STONE_UPDATE},
@@ -141,7 +198,7 @@ BS.widgets = {
         hideWhenTrue = function()
             if (BS.Vars.Controls[8].PvPOnly == true) then
                 local mapContentType = GetMapContentType()
-	            local isPvP = (mapContentType == _G.MAP_CONTENT_AVA or mapContentType == _G.MAP_CONTENT_BATTLEGROUND)
+                local isPvP = (mapContentType == _G.MAP_CONTENT_AVA or mapContentType == _G.MAP_CONTENT_BATTLEGROUND)
 
                 return not isPvP
             end
@@ -217,7 +274,14 @@ BS.widgets = {
         end,
         event = _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
         tooltip = GetString(_G.SI_GAMEPAD_MAIL_INBOX_INVENTORY),
-        icon = "/esoui/art/tooltips/icon_bag.dds"
+        icon = "/esoui/art/tooltips/icon_bag.dds",
+        onClick = function()
+            if (not IsInGamepadPreferredMode()) then
+                SCENE_MANAGER:Show("inventory")
+            else
+                SCENE_MANAGER:Show("gamepad_inventory_root")
+            end
+        end
     },
     [13] = {
         name = "bankSpace",
@@ -262,7 +326,8 @@ BS.widgets = {
         end,
         timer = 1000,
         icon = "/esoui/art/champion/actionbar/champion_bar_combat_selection.dds",
-        tooltip = GetString(_G.BARSTEWARD_FPS)
+        tooltip = GetString(_G.BARSTEWARD_FPS),
+        minWidthChars = "888"
     },
     [15] = {
         name = "latency",
@@ -273,12 +338,20 @@ BS.widgets = {
         end,
         timer = 1000,
         icon = "/esoui/art/ava/overview_icon_underdog_score.dds",
-        tooltip = GetString(_G.BARSTEWARD_LATENCY)
+        tooltip = GetString(_G.BARSTEWARD_LATENCY),
+        minWidthChars = "8888"
     },
     [16] = {
         name = "blacksmithing",
         update = function(widget)
             local timeRemaining = BS.GetResearchTimer(_G.CRAFTING_TYPE_BLACKSMITHING)
+
+            if (timeRemaining == 0) then
+                widget:SetColour(1, 0, 0, 1)
+            else
+                widget:SetColour(0.9, 0.9, 0.9, 1)
+            end
+
             widget:SetValue(BS.SecondsToTime(timeRemaining))
             return timeRemaining
         end,
@@ -291,6 +364,13 @@ BS.widgets = {
         name = "woodworking",
         update = function(widget)
             local timeRemaining = BS.GetResearchTimer(_G.CRAFTING_TYPE_WOODWORKING)
+
+            if (timeRemaining == 0) then
+                widget:SetColour(1, 0, 0, 1)
+            else
+                widget:SetColour(0.9, 0.9, 0.9, 1)
+            end
+
             widget:SetValue(BS.SecondsToTime(timeRemaining))
             return timeRemaining
         end,
@@ -303,6 +383,13 @@ BS.widgets = {
         name = "clothing",
         update = function(widget)
             local timeRemaining = BS.GetResearchTimer(_G.CRAFTING_TYPE_CLOTHIER)
+
+            if (timeRemaining == 0) then
+                widget:SetColour(1, 0, 0, 1)
+            else
+                widget:SetColour(0.9, 0.9, 0.9, 1)
+            end
+
             widget:SetValue(BS.SecondsToTime(timeRemaining))
             return timeRemaining
         end,
@@ -315,6 +402,13 @@ BS.widgets = {
         name = "jewelcrafting",
         update = function(widget)
             local timeRemaining = BS.GetResearchTimer(_G.CRAFTING_TYPE_JEWELRYCRAFTING)
+
+            if (timeRemaining == 0) then
+                widget:SetColour(1, 0, 0, 1)
+            else
+                widget:SetColour(0.9, 0.9, 0.9, 1)
+            end
+
             widget:SetValue(BS.SecondsToTime(timeRemaining))
             return timeRemaining
         end,
@@ -328,6 +422,11 @@ BS.widgets = {
         update = function(widget, _, _, _, _, updateReason)
             if (updateReason == nil or updateReason == _G.INVENTORY_UPDATE_REASON_DURABILITY_CHANGE) then
                 local repairCost = GetRepairAllCost()
+
+                if (BS.Vars.Controls[20].UseSeparators == true) then
+                    repairCost = BS.AddSeparators(repairCost)
+                end
+
                 widget:SetValue(repairCost)
                 return repairCost
             end
@@ -337,7 +436,14 @@ BS.widgets = {
         event = _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
         icon = "/esoui/art/ava/ava_resourcestatus_tabicon_defense_inactive.dds",
         tooltip = GetString(_G.BARSTEWARD_REPAIR_COST),
-        hideWhenEqual = 0
+        hideWhenEqual = 0,
+        onClick = function()
+            if (not IsInGamepadPreferredMode()) then
+                SCENE_MANAGER:Show("inventory")
+            else
+                SCENE_MANAGER:Show("gamepad_inventory_root")
+            end
+        end
     },
     [21] = {
         name = "mountTraining",
@@ -348,6 +454,12 @@ BS.widgets = {
 
             if (remaining ~= nil and total ~= nil) then
                 time = BS.SecondsToTime(remaining / 1000, true)
+            end
+
+            if (remaining == 0) then
+                widget:SetColour(1, 0, 0, 1)
+            else
+                widget:SetColour(0.9, 0.9, 0.9, 1)
             end
 
             widget:SetValue(time)
@@ -395,6 +507,10 @@ BS.widgets = {
             local xp, xplvl = GetPlayerChampionXP(), GetNumChampionXPInChampionPoint(earned)
             local pc = math.floor((xp / xplvl) * 100)
 
+            if (BS.Vars.Controls[23].UseSeparators == true) then
+                earned = BS.AddSeparators(earned)
+            end
+
             widget:SetValue(earned .. " " .. "(" .. pc .. "%)")
 
             return earned
@@ -402,29 +518,27 @@ BS.widgets = {
         event = _G.EVENT_EXPERIENCE_UPDATE,
         icon = "/esoui/art/champion/champion_points_magicka_icon-hud.dds",
         tooltip = GetString(_G.SI_STAT_GAMEPAD_CHAMPION_POINTS_LABEL),
-        hideWhenEqual = 0
+        hideWhenEqual = 0,
+        onClick = function()
+            if (not IsInGamepadPreferredMode()) then
+                SCENE_MANAGER:Show("championPerks")
+            else
+                SCENE_MANAGER:Show("gamepad_championPerks_root")
+            end
+        end
     },
     [24] = {
         -- v1.0.1
         name = "mundusstone",
-        update = function(widget, ...)
+        update = function(widget)
             local mundusId = nil
 
-            if (... == "initial") then
-                for buffNum = 1, GetNumBuffs("player") do
-                    local id = select(11, GetUnitBuffInfo("player", buffNum))
+            for buffNum = 1, GetNumBuffs("player") do
+                local id = select(11, GetUnitBuffInfo("player", buffNum))
 
-                    if (BS.mundusstones[id]) then
-                        mundusId = id
-                        break
-                    end
-                end
-            else
-                local changeType = select(1, ...)
-                local abilityId = select(15, ...)
-
-                if (changeType == _G.EFFECT_RESULT_GAINED and BS.mundusstones[abilityId]) then
-                    mundusId = abilityId
+                if (BS.mundusstones[id]) then
+                    mundusId = id
+                    break
                 end
             end
 
@@ -457,7 +571,14 @@ BS.widgets = {
         end,
         event = _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
         icon = "/esoui/art/inventory/inventory_tabicon_armor_up.dds",
-        tooltip = GetString(_G.BARSTEWARD_DURABILITY)
+        tooltip = GetString(_G.BARSTEWARD_DURABILITY),
+        onClick = function()
+            if (not IsInGamepadPreferredMode()) then
+                SCENE_MANAGER:Show("inventory")
+            else
+                SCENE_MANAGER:Show("gamepad_inventory_root")
+            end
+        end
     },
     [26] = {
         -- v1.0.1
@@ -467,7 +588,14 @@ BS.widgets = {
         end,
         event = _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED,
         icon = "/esoui/art/journal/u26_progress_digsite_checked_incomplete.dds",
-        tooltip = GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS)
+        tooltip = GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS),
+        onClick = function()
+            if (not IsInGamepadPreferredMode()) then
+                SCENE_MANAGER:Show("groupMenuKeyboard")
+            else
+                SCENE_MANAGER:Show("gamepad_groupList")
+            end
+        end
     },
     [27] = {
         -- v1.0.1
@@ -477,7 +605,10 @@ BS.widgets = {
         end,
         event = _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED,
         icon = "/esoui/art/journal/u26_progress_digsite_checked_complete.dds",
-        tooltip = GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS)
+        tooltip = GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS),
+        onClick = function()
+            SCENE_MANAGER:Show("groupMenuKeyboard")
+        end
     },
     [28] = {
         -- v1.0.1
@@ -565,5 +696,79 @@ BS.widgets = {
         event = _G.EVENT_CLOSE_STORE,
         icon = "/esoui/art/vendor/vendor_tabicon_fence_up.dds",
         tooltip = GetString(_G.BARSTEWARD_FENCE)
+    },
+    [32] = {
+        -- v1.0.3
+        name = "currentZone",
+        update = function(widget)
+            widget:SetValue(GetUnitZone("player"))
+            return widget:GetValue()
+        end,
+        event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_ZONE_CHANGED},
+        icon = "/esoui/art/tradinghouse/gamepad/gp_tradinghouse_trophy_treasure_map.dds",
+        tooltip = GetString(_G.SI_ANTIQUITY_SCRYABLE_CURRENT_ZONE_SUBCATEGORY),
+        onClick = function()
+            if (not IsInGamepadPreferredMode()) then
+                SCENE_MANAGER:Show("worldMap")
+            else
+                SCENE_MANAGER:Show("gamepad_worldMap")
+            end
+        end
+    },
+    [33] = {
+        -- v1.0.3
+        name = "playerName",
+        update = function(widget)
+            widget:SetValue(GetUnitName("player"))
+            return widget:GetValue()
+        end,
+        event = _G.EVENT_PLAYER_ACTIVATED,
+        icon = "/esoui/art/charactercreate/charactercreate_faceicon_up.dds",
+        tooltip = GetString(_G.SI_CUSTOMER_SERVICE_ASK_FOR_HELP_PLAYER_NAME)
+    },
+    [34] = {
+        -- v1.0.3
+        name = "playerRace",
+        update = function(widget)
+            widget:SetValue(GetUnitRace("player"))
+            return widget:GetValue()
+        end,
+        event = _G.EVENT_PLAYER_ACTIVATED,
+        icon = "/esoui/art/charactercreate/charactercreate_raceicon_up.dds",
+        tooltip = GetString(_G.SI_COLLECTIBLERESTRICTIONTYPE1)
+    },
+    [35] = {
+        -- v1.0.3
+        name = "playerClass",
+        update = function(widget)
+            local classId = GetUnitClassId("player")
+            local icon = GetClassIcon(classId)
+
+            widget:SetValue(GetUnitClass("player"))
+            widget:SetIcon(icon)
+
+            return widget:GetValue()
+        end,
+        event = _G.EVENT_PLAYER_ACTIVATED,
+        icon = "/esoui/art/charactercreate/charactercreate_classicon_up.dds",
+        tooltip = GetString(_G.SI_COLLECTIBLERESTRICTIONTYPE3)
+    },
+    [36] = {
+        -- v1.0.3
+        name = "playerAlliance",
+        update = function(widget)
+            local alliance = GetUnitAlliance("player")
+            local icon = ZO_GetAllianceIcon(alliance)
+            local colour = GetAllianceColor(alliance)
+
+            widget:SetValue(GetAllianceName(alliance))
+            widget:SetColour(colour.r, colour.g, colour.b, colour.a)
+            widget:SetIcon(icon)
+
+            return widget:GetValue()
+        end,
+        event = _G.EVENT_PLAYER_ACTIVATED,
+        icon = "",
+        tooltip = GetString(_G.SI_COLLECTIBLERESTRICTIONTYPE2)
     }
 }
