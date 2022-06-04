@@ -152,6 +152,10 @@ function baseWidget:SetTooltip(tooltip)
     self.tooltip = tooltip
 end
 
+function baseWidget:SetTextureCoords(...)
+    self.icon:SetTextureCoords(...)
+end
+
 function BS.CreateWidget(...)
     local widget = baseWidget:New(...)
     return widget

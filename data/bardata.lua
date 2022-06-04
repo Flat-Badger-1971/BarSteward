@@ -761,9 +761,19 @@ BS.widgets = {
             local icon = ZO_GetAllianceIcon(alliance)
             local colour = GetAllianceColor(alliance)
 
-            widget:SetValue(GetAllianceName(alliance))
+            if (string.find(icon, "daggerfall")) then
+                icon = "/esoui/art/scoredisplay/blueflag.dds"
+            elseif (string.find(icon, "aldmeri")) then
+                icon = "/esoui/art/scoredisplay/yellowflag.dds"
+            else
+                icon = "/esoui/art/scoredisplay/redflag.dds"
+            end
+
+            widget:SetValue(" " .. GetAllianceName(alliance))
             widget:SetColour(colour.r, colour.g, colour.b, colour.a)
             widget:SetIcon(icon)
+            widget:SetTextureCoords(0, 1, 0, 0.6)
+            widget.icon:SetWidth(27)
 
             return widget:GetValue()
         end,
