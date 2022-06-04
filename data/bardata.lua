@@ -586,7 +586,7 @@ BS.widgets = {
         update = function(widget)
             return BS.GetTimedActivityProgress(_G.TIMED_ACTIVITY_TYPE_DAILY, widget)
         end,
-        event = _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED,
+        event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED},
         icon = "/esoui/art/journal/u26_progress_digsite_checked_incomplete.dds",
         tooltip = GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS),
         onClick = function()
@@ -603,7 +603,7 @@ BS.widgets = {
         update = function(widget)
             return BS.GetTimedActivityProgress(_G.TIMED_ACTIVITY_TYPE_WEEKLY, widget)
         end,
-        event = _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED,
+        event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED},
         icon = "/esoui/art/journal/u26_progress_digsite_checked_complete.dds",
         tooltip = GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS),
         onClick = function()
