@@ -526,7 +526,7 @@ BS.widgets = {
             local earned = GetPlayerChampionPointsEarned()
             local xp, xplvl = GetPlayerChampionXP(), GetNumChampionXPInChampionPoint(earned)
             local pc = math.floor((xp / xplvl) * 100)
-            local disciplineType = GetChampionPointPoolForRank(earned)
+            local disciplineType = GetChampionPointPoolForRank(earned + 1)
             local disciplineData = CHAMPION_DATA_MANAGER:FindChampionDisciplineDataByType(disciplineType)
             local icon = disciplineData:GetHUDIcon()
 
