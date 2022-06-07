@@ -2,8 +2,8 @@
 ## Description: Data broker style bar for easy display of in-game metrics
 ## Author: Flat Badger
 ## APIVersion: 101034
-## AddOnVersion: 103
-## Version: 1.0.3
+## AddOnVersion: 104
+## Version: 1.0.4
 ## SavedVariables: BarStewardSavedVars
 ## DependsOn: LibSavedVars>=60007 LibAddonMenu-2.0>=33
 
@@ -29,5 +29,7 @@ settings/settings.lua
 
 ui/widget.lua
 ui/bar.lua
+ui/controls.lua
+ui/alignment.lua
 
 BarSteward.lua

@@ -352,7 +352,7 @@ BS.widgets = {
                 widget:SetColour(0.9, 0.9, 0.9, 1)
             end
 
-            widget:SetValue(BS.SecondsToTime(timeRemaining))
+            widget:SetValue(BS.SecondsToTime(timeRemaining, false, false, BS.Vars.Controls[16].HideSeconds))
             return timeRemaining
         end,
         timer = 1000,
@@ -371,7 +371,7 @@ BS.widgets = {
                 widget:SetColour(0.9, 0.9, 0.9, 1)
             end
 
-            widget:SetValue(BS.SecondsToTime(timeRemaining))
+            widget:SetValue(BS.SecondsToTime(timeRemaining, false, false, BS.Vars.Controls[17].HideSeconds))
             return timeRemaining
         end,
         timer = 1000,
@@ -390,7 +390,7 @@ BS.widgets = {
                 widget:SetColour(0.9, 0.9, 0.9, 1)
             end
 
-            widget:SetValue(BS.SecondsToTime(timeRemaining))
+            widget:SetValue(BS.SecondsToTime(timeRemaining, false, false, BS.Vars.Controls[18].HideSeconds))
             return timeRemaining
         end,
         timer = 1000,
@@ -409,7 +409,7 @@ BS.widgets = {
                 widget:SetColour(0.9, 0.9, 0.9, 1)
             end
 
-            widget:SetValue(BS.SecondsToTime(timeRemaining))
+            widget:SetValue(BS.SecondsToTime(timeRemaining, false, false, BS.Vars.Controls[19].HideSeconds))
             return timeRemaining
         end,
         timer = 1000,
@@ -453,7 +453,7 @@ BS.widgets = {
             local time = "X"
 
             if (remaining ~= nil and total ~= nil) then
-                time = BS.SecondsToTime(remaining / 1000, true)
+                time = BS.SecondsToTime(remaining / 1000, true, false, BS.Vars.Controls[21].HideSeconds)
             end
 
             if (remaining == 0) then
@@ -506,12 +506,16 @@ BS.widgets = {
             local earned = GetPlayerChampionPointsEarned()
             local xp, xplvl = GetPlayerChampionXP(), GetNumChampionXPInChampionPoint(earned)
             local pc = math.floor((xp / xplvl) * 100)
+            local disciplineType = GetChampionPointPoolForRank(earned)
+            local disciplineData = CHAMPION_DATA_MANAGER:FindChampionDisciplineDataByType(disciplineType)
+            local icon = disciplineData:GetHUDIcon()
 
             if (BS.Vars.Controls[23].UseSeparators == true) then
                 earned = BS.AddSeparators(earned)
             end
 
             widget:SetValue(earned .. " " .. "(" .. pc .. "%)")
+            widget:SetIcon(icon)
 
             return earned
         end,

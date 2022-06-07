@@ -66,6 +66,7 @@ function baseBar:Initialise(barSettings)
     self.handle = WINDOW_MANAGER:CreateControl(barName .. "_handle", self.bar, CT_CONTROL)
     self.handle:SetDimensions(16, 32)
     self.handle:SetAnchor(TOPRIGHT, self.bar, TOPLEFT)
+    self.handle.anchor = LEFT
     self.handle:SetMouseEnabled(true)
     self.handle:SetHandler(
         "OnMouseDown",
@@ -73,7 +74,30 @@ function baseBar:Initialise(barSettings)
             self.bar:StartMoving()
         end
     )
-    self.handle:SetHandler("OnMouseUp", onMouseUp)
+
+    local adjustHandle = function()
+        -- adjust the position of the handle if it's close the left edge of the screen
+        if (self.handle:GetLeft() < 80 and self.handle.anchor ~= RIGHT) then
+            self.handle:ClearAnchors()
+            self.handle:SetAnchor(TOPLEFT, self.bar, TOPRIGHT)
+            self.handle.anchor = RIGHT
+        elseif (self.handle.anchor ~= LEFT and self.handle:GetLeft() >= 80) then
+            self.handle:ClearAnchors()
+            self.handle:SetAnchor(TOPRIGHT, self.bar, TOPLEFT)
+            self.handle.anchor = LEFT
+        end
+    end
+
+    adjustHandle()
+
+    self.handle:SetHandler(
+        "OnMouseUp",
+        function()
+            adjustHandle()
+            onMouseUp()
+        end
+    )
+
     self.handle:SetHidden(not BS.Vars.Movable)
 
     self.handle.background = WINDOW_MANAGER:CreateControl(barName .. "handle_background", self.handle, CT_BACKDROP)
@@ -86,6 +110,12 @@ function baseBar:Initialise(barSettings)
     self.handle.icon:SetTexture("/esoui/art/dye/dye_amorslot_highlight.dds")
     self.handle.icon:SetDimensions(6, 32)
     self.handle.icon:SetAnchor(CENTER)
+
+    if (BS.Vars.Bars[self.index].NudgeCompass == true) then
+        -- something is making the compass jump back to its original position
+        -- this puts it back again, but it's nasty - what's causing the move in the first place?
+        EVENT_MANAGER:RegisterForUpdate(BS.Name, 500, function() BS.NudgeCompass() end)
+    end
 
     -- prevent the bar from displaying when not in hud or hudui modes
     self.bar.fragment = ZO_HUDFadeSceneFragment:New(self.bar)
@@ -319,7 +349,6 @@ function baseBar:AddWidgets(widgets)
 
             for _, event in ipairs(events) do
                 BS.RegisterForEvent(
-                    BS.Name,
                     event,
                     function(_, ...)
                         self:DoUpdate(metadata, ...)

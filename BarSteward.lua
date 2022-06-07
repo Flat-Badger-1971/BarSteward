@@ -68,10 +68,13 @@ local function Initialise()
 
     -- create bars
     local bars = BS.Vars.Bars
+    local alignBars = {}
 
     for idx, barData in pairs(bars) do
         local widgets = {}
         local orderedWidgets = {}
+
+        table.insert(alignBars, barData.Name)
 
         -- get the widgets for this bar
         for id, info in ipairs(BS.Vars.Controls) do
@@ -103,14 +106,16 @@ local function Initialise()
                 {
                     index = idx,
                     position = barData.Orientation == GetString(_G.BARSTEWARD_HORIZONTAL) and TOP or LEFT,
-                    scale = GuiRoot:GetScale(),
-                    settings = BS.Vars.Bars[idx]
+                    scale = barData.Scale or GuiRoot:GetScale(),
+                    settings = BS.Vars.Bars[idx],
                 }
             )
 
             bar:AddWidgets(orderedWidgets)
         end
     end
+
+    BS.CreateAlignmentFrame(alignBars)
 
     -- utiltity
     if (_G.SLASH_COMMANDS["/rl"] == nil) then

@@ -43,10 +43,26 @@ local function Initialise()
                 _G[bar]:SetMovable(value)
                 _G[bar].ref.handle:SetHidden(not value)
             end
-
         end,
         width = "full",
         default = BS.Defaults.Movable
+    }
+    BS.options[3] = {
+        type = "divider",
+        alpha = 0
+    }
+    BS.options[4] = {
+        type = "button",
+        name = GetString(_G.BARSTEWARD_ALIGN_BARS),
+        func = function()
+            SCENE_MANAGER:Show("hud")
+            BS.frame:SetHidden(false)
+        end,
+        width = "full"
+    }
+    BS.options[5] = {
+        type = "divider",
+        alpha = 0
     }
 end
 
@@ -213,6 +229,51 @@ local function GetBarSettings()
                 end,
                 requiresReload = true,
                 default = BS.Defaults.Bars[1].Anchor
+            },
+            [7] = {
+                type = "slider",
+                name = GetString(_G.BARSTEWARD_SCALE),
+                getFunc = function()
+                    return BS.Vars.Bars[idx].Scale or 1
+                end,
+                setFunc = function(value)
+                    BS.Vars.Bars[idx].Scale = value
+                    _G[BS.Name .. "_bar_" .. idx]:SetScale(value)
+                end,
+                min = 0.4,
+                max = 2,
+                step = 0.1,
+                decimals = 1,
+                width = "full",
+                default = BS.Defaults.Bars[1].Scale
+            },
+            [8] = {
+                type = "divider",
+                alpha = 0
+            },
+            [9] = {
+                type = "button",
+                name = GetString(_G.BARSTEWARD_ALIGN),
+                func = function()
+                    local bar = _G[BS.Name .. "_bar_" .. idx]
+                    local _, posY = bar:GetCenter()
+                    local guiHeight = GuiRoot:GetHeight() / 2
+                    local centre
+
+                    if (posY > guiHeight) then
+                        centre = posY - guiHeight
+                    else
+                        centre = (guiHeight - posY) * -1
+                    end
+
+                    _G[BS.Name .. "_bar_" .. idx]:SetAnchor(CENTER, GuiRoot, CENTER, 0, centre)
+                    local xPos, yPos = bar:GetCenter()
+
+                    BS.Vars.Bars[idx].Anchor = GetString(_G.BARSTEWARD_MIDDLE)
+                    BS.Vars.Bars[idx].Position = {X = xPos, Y = yPos}
+                    CALLBACK_MANAGER:FireCallbacks("LAM-RefreshPanel", BS.OptionsPanel)
+                end,
+                width = "full"
             }
         }
 
@@ -225,9 +286,23 @@ local function GetBarSettings()
                 end,
                 width = "full"
             }
+        else
+            controls[#controls + 1] = {
+                type = "checkbox",
+                name = GetString(_G.BARSTEWARD_NUDGE),
+                getFunc = function()
+                    return BS.Vars.Bars[idx].NudgeCompass
+                end,
+                setFunc = function(value)
+                    BS.Vars.Bars[idx].NudgeCompass = value
+                end,
+                width = "full",
+                requiresReload = true,
+                default = BS.Defaults.Bars[1].NudgeCompass
+            }
         end
 
-        BS.options[3 + idx] = {
+        BS.options[#BS.options + 1] = {
             type = "submenu",
             name = data.Name,
             controls = controls,
@@ -464,6 +539,25 @@ local function GetWidgetSettings()
                 end,
                 width = "full",
                 default = BS.Defaults.Controls[k].UseSeparators
+            }
+        end
+
+        -- Hide seconds
+        if (BS.Defaults.Controls[k].HideSeconds ~= nil) then
+            widgetControls[#widgetControls + 1] = {
+                type = "checkbox",
+                name = GetString(_G.BARSTEWARD_HIDE_SECONDS),
+                getFunc = function()
+                    return BS.Vars.Controls[k].HideSeconds
+                end,
+                setFunc = function(value)
+                    BS.Vars.Controls[k].HideSeconds = value
+                    if (BS.Vars.Controls[k].Bar ~= 0) then
+                        BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
+                    end
+                end,
+                width = "full",
+                default = BS.Defaults.Controls[k].HideSeconds
             }
         end
 

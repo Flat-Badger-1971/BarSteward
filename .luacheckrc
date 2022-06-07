@@ -9,6 +9,11 @@ read_globals = {
             FireCallbacks = {read_only = true}
         }
     },
+    ["CHAMPION_DATA_MANAGER"] = {
+        fields = {
+            FindChampionDisciplineDataByType = {read_only = true}
+        }
+    },
     ["EVENT_MANAGER"] = {
         fields = {
             AddFilterForEvent = {read_only = true},
@@ -30,13 +35,32 @@ read_globals = {
     ["WINDOW_MANAGER"] = {
         fields = {
             CreateTopLevelWindow = {read_only = true},
-            CreateControl = {read_only = true}
+            CreateControl = {read_only = true},
+            CreateControlFromVirtual = {read_only = true}
+        }
+    },
+    ["ZO_ComboBox"] = {
+        fields = {
+            CreateItemEntry = {read_only = true}
+        }
+    },
+    ["ZO_CompassFrame"] = {
+        fields = {
+            GetTop = {read_only = true},
+            ClearAnchors = {read_only = true},
+            SetAnchor = {read_only = true}
         }
     },
     ["ZO_Object"] = {
         fields = {
             New = {read_only = true},
             Subclass = {read_only = true}
+        }
+    },
+    ["ZO_TargetUnitFramereticleover"] = {
+        fields = {
+            ClearAnchors = {read_only = true},
+            SetAnchor = {read_only = true}
         }
     },
     -- events
@@ -110,6 +134,7 @@ read_globals = {
     "GetAllianceColor",
     "GetAllianceName",
     "GetAnimationManager",
+    "GetChampionPointPoolForRank",
     "GetClassIcon",
     "GetCollectibleCooldownAndDuration",
     "GetCollectibleInfo",

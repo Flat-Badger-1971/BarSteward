@@ -26,7 +26,7 @@ function BS.GetResearchTimer(craftType)
     return maxTimer
 end
 
-function BS.SecondsToTime(seconds, hideDays, hideHours)
+function BS.SecondsToTime(seconds, hideDays, hideHours, hideSeconds)
     local time = ""
     local days = math.floor(seconds / 86400)
     local remaining = seconds
@@ -55,7 +55,11 @@ function BS.SecondsToTime(seconds, hideDays, hideHours)
         time = time .. string.format("%02d", hours) .. ":"
     end
 
-    time = time .. string.format("%02d", minutes) .. ":" .. string.format("%02d", remaining)
+    time = time .. string.format("%02d", minutes)
+
+    if (not hideSeconds) then
+        time = time .. ":" .. string.format("%02d", remaining)
+    end
 
     return time
 end
@@ -182,11 +186,45 @@ local function registerForEvent(event, func)
     end
 end
 
-function BS.RegisterForEvent(namespace, event, func)
+function BS.RegisterForEvent(event, func)
     local needsRegistration = registerForEvent(event, func)
 
     if needsRegistration then
-        EVENT_MANAGER:RegisterForEvent(namespace, event, callEventFunctions)
+        EVENT_MANAGER:RegisterForEvent(BS.Name, event, callEventFunctions)
+    end
+end
+
+local function unregisterForEvent(event, func)
+    if (event == nil or func == nil) then
+        return
+    end
+
+    if #eventFunctions[event] ~= 0 then
+        local numOfFuncs = #eventFunctions[event]
+        for i = 1, numOfFuncs, 1 do
+            if eventFunctions[event][i] == func then
+                eventFunctions[event][i] = eventFunctions[event][numOfFuncs]
+                eventFunctions[event][numOfFuncs] = nil
+
+                numOfFuncs = numOfFuncs - 1
+                if numOfFuncs == 0 then
+                    return true
+                end
+                return false
+            end
+        end
+
+        return false
+    else
+        return false
+    end
+end
+
+function BS.UnregisterForEvent(event, func)
+    local needsUnregistration = unregisterForEvent(event, func)
+
+    if needsUnregistration then
+        EVENT_MANAGER:UnregisterForEvent(BS.Name, event)
     end
 end
 
@@ -359,5 +397,29 @@ function BS.AddSeparators(number)
         local s = table.concat(t)
 
         return s
+    end
+end
+
+-- based on Wykkyd toolbar
+function BS.NudgeCompass()
+    local bar1Top = _G[BS.Name .. "_bar_1"]:GetTop()
+
+    if (bar1Top <= 80) then
+        if (ZO_CompassFrame:GetTop() ~= bar1Top + 70) then
+            ZO_CompassFrame:ClearAnchors()
+            ZO_CompassFrame:SetAnchor(TOP, GuiRoot, TOP, 0, bar1Top + 70)
+            ZO_TargetUnitFramereticleover:ClearAnchors()
+            ZO_TargetUnitFramereticleover:SetAnchor(TOP, GuiRoot, TOP, 0, bar1Top + 118)
+        end
+    elseif (bar1Top <= 100) then
+        ZO_TargetUnitFramereticleover:ClearAnchors()
+        ZO_TargetUnitFramereticleover:SetAnchor(TOP, GuiRoot, TOP, 0, bar1Top + 50)
+    else
+        if ZO_CompassFrame:GetTop() ~= 40 then
+            ZO_CompassFrame:ClearAnchors()
+            ZO_CompassFrame:SetAnchor(TOP, GuiRoot, TOP, 0, 40)
+            ZO_TargetUnitFramereticleover:ClearAnchors()
+            ZO_TargetUnitFramereticleover:SetAnchor(TOP, GuiRoot, TOP, 0, 88)
+        end
     end
 end
