@@ -423,3 +423,24 @@ function BS.NudgeCompass()
         end
     end
 end
+
+-- trait research
+function BS.IsTraitResearchComplete(craftingType)
+    local complete = true
+
+    for researchLineIndex = 1, GetNumSmithingResearchLines(craftingType) do
+		local _, _, numTraits = GetSmithingResearchLineInfo(craftingType, researchLineIndex)
+
+		for traitIndex = 1, numTraits do
+
+			local _, _, known = GetSmithingResearchLineTraitInfo(craftingType, researchLineIndex, traitIndex)
+
+			if (not known) then
+                return false
+            end
+		end
+
+	end
+
+    return complete
+end

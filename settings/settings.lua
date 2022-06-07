@@ -483,6 +483,27 @@ local function GetWidgetSettings()
             }
         end
 
+        -- Hide when complete
+        if (BS.Defaults.Controls[k].HideWhenComplete ~= nil) then
+            widgetControls[3] = {
+                type = "checkbox",
+                name = GetString(_G.BARSTEWARD_HIDE_WHEN_COMPLETE),
+                getFunc = function()
+                    return BS.Vars.Controls[k].HideWhenComplete
+                end,
+                setFunc = function(value)
+                    BS.Vars.Controls[k].HideWhenComplete = value
+                    local widget = _G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref
+                    local bar = widget.control:GetParent().ref
+                    local metadata = BS.widgets[k]
+                    metadata.widget = widget
+                    bar:DoUpdate(metadata)
+                end,
+                width = "full",
+                default = BS.Defaults.Controls[k].HideWhenComplete
+            }
+        end
+
         -- PvP only
         if (BS.Defaults.Controls[k].PvPOnly ~= nil) then
             widgetControls[#widgetControls + 1] = {

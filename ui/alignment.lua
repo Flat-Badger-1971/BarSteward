@@ -71,8 +71,16 @@ function BS.CreateAlignmentFrame(alignBars)
     frame.alignRel:SetText(GetString(_G.BARSTEWARD_ALIGN_RELATIVE))
     frame.alignRel:SetDimensions(350)
 
+    local relOptions = {}
+
+    for _, bar in ipairs(alignBars) do
+        table.insert(relOptions, bar)
+    end
+
+    table.insert(relOptions, GetString(_G.BARSTEWARD_SCREEN))
+
     frame.relativeBarValue =
-        BS.CreateComboBox(name .. "_relativeBarValue", frame, 200, 32, alignBars, alignBars[2] or alignBars[1])
+        BS.CreateComboBox(name .. "_relativeBarValue", frame, 200, 32, relOptions, relOptions[2] or relOptions[1])
     frame.relativeBarValue:SetAnchor(TOPLEFT, frame.alignRel, BOTTOMLEFT, 0, 10)
 
     frame.relAnchor = WINDOW_MANAGER:CreateControl(name .. "_rel_anchor", frame, CT_LABEL)
@@ -82,16 +90,8 @@ function BS.CreateAlignmentFrame(alignBars)
     frame.relAnchor:SetText(GetString(_G.BARSTEWARD_ALIGN_BAR_ANCHOR))
     frame.relAnchor:SetDimensions(350)
 
-    local relOptions = {}
-
-    for idx, bar in pairs(anchorOptions) do
-        relOptions[idx] = bar
-    end
-
-    table.insert(relOptions, GetString(_G.BARSTEWARD_SCREEN))
-
     frame.relativeBarAnchorValue =
-        BS.CreateComboBox(name .. "_relativeBarAnchorValue", frame, 200, 32, relOptions, relOptions[3])
+        BS.CreateComboBox(name .. "_relativeBarAnchorValue", frame, 200, 32, anchorOptions, anchorOptions[3])
     frame.relativeBarAnchorValue:SetAnchor(TOPLEFT, frame.relAnchor, BOTTOMLEFT, 0, 10)
 
     frame.button = BS.CreateButton(name .. "_button", frame, 100, 32)

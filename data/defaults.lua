@@ -67,12 +67,12 @@ _G.BarSteward = {
             [13] = {Bar = 1, Order = 13, ShowPercent = true, SoundWhenOver = false, SoundWhenOverSound = "Duel Forfeit"}, -- bank space
             [14] = {Bar = 0, Order = 14}, -- fps
             [15] = {Bar = 1, Order = 15}, -- latency
-            [16] = {Bar = 1, Order = 16, Autohide = true, HideSeconds = false}, -- blacksmithing
-            [17] = {Bar = 1, Order = 17, Autohide = true, HideSeconds = false}, -- woodowrking
-            [18] = {Bar = 1, Order = 18, Autohide = true, HideSeconds = false}, -- clothing
-            [19] = {Bar = 1, Order = 19, Autohide = true, HideSeconds = false}, -- jewel crafting
+            [16] = {Bar = 1, Order = 16, Autohide = true, HideSeconds = false, HideWhenComplete = false}, -- blacksmithing
+            [17] = {Bar = 1, Order = 17, Autohide = true, HideSeconds = false, HideWhenComplete = false}, -- woodowrking
+            [18] = {Bar = 1, Order = 18, Autohide = true, HideSeconds = false, HideWhenComplete = false}, -- clothing
+            [19] = {Bar = 1, Order = 19, Autohide = true, HideSeconds = false, HideWhenComplete = false}, -- jewel crafting
             [20] = {Bar = 1, Order = 20, Autohide = true, UseSeparators = false}, -- item repair cost
-            [21] = {Bar = 1, Order = 21, Autohide = true, HideSeconds = false}, -- mount training
+            [21] = {Bar = 1, Order = 21, Autohide = true, HideSeconds = false, HideWhenComplete = false}, -- mount training
             [22] = {Bar = 1, Order = 22, Autohide = true}, -- companion rapport
             [23] = {
                 Bar = 1,

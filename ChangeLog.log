@@ -4,7 +4,9 @@ Champion points icon now reflects the discipline being worked for
 Bar mover handle now switches side when close to the left edge of the screen
 Added compass bar movement (experimental)
 Option to hide seconds on the timers
-Centre align option for bars
+Added alignment tool
+Option to hide mount training when there's none left
+Option to hide craft training when there's none left to do
 
 [color=#ff9900][b]Version: 1.0.3 ---------------[/b][/color]
 Current Zone added

@@ -139,15 +139,23 @@ local function SetHiddenWidget(widget, hidden)
     end
 end
 
-local function HideWhen(metadata, value, whenTrueOnly)
+local function HideWhen(metadata, value)
     local hideValue
+
+    if (metadata.complete and value == "hide it!") then
+        SetHiddenWidget(metadata.widget, true)
+
+        return
+    end
 
     if (metadata.hideWhenTrue) then
         hideValue = metadata.hideWhenTrue()
         SetHiddenWidget(metadata.widget, hideValue)
-    end
 
-    if (whenTrueOnly == true) then
+        if (hideValue == true) then
+            return
+        end
+
         return
     end
 
@@ -194,9 +202,18 @@ function baseBar:DoUpdate(metadata, ...)
         end
     end
 
+    -- check for hide on completion
+    if (metadata.complete) then
+        if (BS.Vars.Controls[metadata.id].HideWhenComplete) then
+            if (metadata.complete() == true) then
+                HideWhen(metadata, "hide it!")
+            end
+        end
+    end
+
     -- check for hide when true
     if (metadata.hideWhenTrue) then
-        HideWhen(metadata, value, true)
+        HideWhen(metadata, value)
     end
 
     -- check if a sound needs to be played

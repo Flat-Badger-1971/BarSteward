@@ -27,9 +27,11 @@ BS.mundusstones = {
         icon = [string/function] path to the eso texture file,
         hideWhenTrue = [function] this boolean result of this functions determines if the widget should be hidden or not,
         minWidthChars = [string] string to use to set the minimum width of the widget value,
-        onClick = [function] function to call when the widget is clicked
+        onClick = [function] function to call when the widget is clicked,
+        complete = [function] return true to indicate completion
     }
 ]]
+
 BS.widgets = {
     [1] = {
         name = "time",
@@ -358,7 +360,10 @@ BS.widgets = {
         timer = 1000,
         icon = "/esoui/art/icons/servicemappins/servicepin_smithy.dds",
         tooltip = GetString(_G.SI_TRADESKILLTYPE1),
-        hideWhenEqual = 0
+        hideWhenEqual = 0,
+        complete = function()
+            return BS.IsTraitResearchComplete(_G.CRAFTING_TYPE_BLACKSMITHING)
+        end
     },
     [17] = {
         name = "woodworking",
@@ -377,7 +382,10 @@ BS.widgets = {
         timer = 1000,
         icon = "/esoui/art/icons/servicemappins/servicepin_woodworking.dds",
         tooltip = GetString(_G.SI_TRADESKILLTYPE6),
-        hideWhenEqual = 0
+        hideWhenEqual = 0,
+        complete = function()
+            return BS.IsTraitResearchComplete(_G.CRAFTING_TYPE_WOODWORKING)
+        end
     },
     [18] = {
         name = "clothing",
@@ -396,7 +404,10 @@ BS.widgets = {
         timer = 1000,
         icon = "/esoui/art/icons/servicemappins/servicepin_outfitter.dds",
         tooltip = GetString(_G.SI_TRADESKILLTYPE2),
-        hideWhenEqual = 0
+        hideWhenEqual = 0,
+        complete = function()
+            return BS.IsTraitResearchComplete(_G.CRAFTING_TYPE_CLOTHIER)
+        end
     },
     [19] = {
         name = "jewelcrafting",
@@ -415,7 +426,10 @@ BS.widgets = {
         timer = 1000,
         icon = "/esoui/art/icons/icon_jewelrycrafting_symbol.dds",
         tooltip = GetString(_G.SI_TRADESKILLTYPE7),
-        hideWhenEqual = 0
+        hideWhenEqual = 0,
+        complete = function()
+            return BS.IsTraitResearchComplete(_G.CRAFTING_TYPE_JEWELRYCRAFTING)
+        end
     },
     [20] = {
         name = "itemRepairCost",
@@ -468,7 +482,13 @@ BS.widgets = {
         timer = 1000,
         icon = "/esoui/art/mounts/tabicon_mounts_up.dds",
         tooltip = GetString(_G.BARSTEWARD_MOUNT_TRAINING),
-        hideWhenEqual = 0
+        hideWhenEqual = 0,
+        complete = function()
+            local inventoryBonus, maxInventoryBonus, staminaBonus, maxStaminaBonus, speedBonus, maxSpeedBonus = GetRidingStats()
+            local maxed = inventoryBonus == maxInventoryBonus and staminaBonus == maxStaminaBonus and speedBonus == maxSpeedBonus
+
+            return maxed
+        end
     },
     [22] = {
         name = "rapport",
