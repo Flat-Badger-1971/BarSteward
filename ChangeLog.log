@@ -1,9 +1,12 @@
+[color=#ff9900][b]Version: 1.0.5 ---------------[/b][/color]
+Main bar compass nudge option added
+Missing Mundus Stone now shows a red 'None'
+
 [color=#ff9900][b]Version: 1.0.4 ---------------[/b][/color]
 Added Bar scaling
 Champion points icon now reflects the discipline being worked for
 Bar mover handle now switches side when close to the left edge of the screen
-Added compass bar movement (experimental)
-Option to hide seconds on the timersw
+Option to hide seconds on the timers
 Added alignment tool
 Option to hide mount training when there's none left
 Option to hide craft training when there's none left to do

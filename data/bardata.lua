@@ -31,7 +31,6 @@ BS.mundusstones = {
         complete = [function] return true to indicate completion
     }
 ]]
-
 BS.widgets = {
     [1] = {
         name = "time",
@@ -45,6 +44,7 @@ BS.widgets = {
             local time = BS.FormatTime(format)
 
             widget:SetValue(time)
+            widget:SetColour(unpack(BS.Vars.Controls[1].Colour or BS.Vars.DefaultColour))
             return widget:GetValue()
         end,
         timer = 1000,
@@ -61,6 +61,8 @@ BS.widgets = {
             end
 
             widget:SetValue(points)
+            widget:SetColour(unpack(BS.Vars.Controls[2].Colour or BS.Vars.DefaultColour))
+
             return widget:GetValue()
         end,
         event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_ALLIANCE_POINT_UPDATE},
@@ -87,6 +89,8 @@ BS.widgets = {
             end
 
             widget:SetValue(gems)
+            widget:SetColour(unpack(BS.Vars.Controls[3].Colour or BS.Vars.DefaultColour))
+
             return widget:GetValue()
         end,
         event = _G.EVENT_CROWN_GEM_UPDATE,
@@ -108,7 +112,10 @@ BS.widgets = {
             if (BS.Vars.Controls[4].UseSeparators == true) then
                 crowns = BS.AddSeparators(crowns)
             end
+
             widget:SetValue(crowns)
+            widget:SetColour(unpack(BS.Vars.Controls[4].Colour or BS.Vars.DefaultColour))
+
             return widget:GetValue()
         end,
         event = _G.EVENT_CROWN_UPDATE,
@@ -133,11 +140,13 @@ BS.widgets = {
 
             widget:SetValue(value)
 
-            if (tickets > 8) then
-                widget:SetColour(0.8, 0, 0, 1)
-            else
-                widget:SetColour(0.9, 0.9, 0.9, 1)
+            local colour = BS.Vars.Controls[5].Colour or BS.Vars.DefaultColour
+
+            if (tickets > BS.Vars.Controls[5].DangerValue) then
+                colour = BS.Vars.Controls[5].DangerColour or BS.Vars.DefaultDangerColour
             end
+
+            widget:SetColour(unpack(colour))
 
             return value
         end,
@@ -155,6 +164,8 @@ BS.widgets = {
             end
 
             widget:SetValue(gold)
+            widget:SetColour(unpack(BS.Vars.Controls[6].Colour or BS.Vars.DefaultColour))
+
             return widget:GetValue()
         end,
         event = _G.EVENT_MONEY_UPDATE,
@@ -169,7 +180,10 @@ BS.widgets = {
             if (BS.Vars.Controls[7].UseSeparators == true) then
                 seals = BS.AddSeparators(seals)
             end
+
             widget:SetValue(seals)
+            widget:SetColour(unpack(BS.Vars.Controls[7].Colour or BS.Vars.DefaultColour))
+
             return widget:GetValue()
         end,
         event = _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED,
@@ -191,7 +205,10 @@ BS.widgets = {
             if (BS.Vars.Controls[8].UseSeparators == true) then
                 stones = BS.AddSeparators(stones)
             end
+
             widget:SetValue(stones)
+            widget:SetColour(unpack(BS.Vars.Controls[8].Colour or BS.Vars.DefaultColour))
+
             return widget:GetValue()
         end,
         event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_TELVAR_STONE_UPDATE},
@@ -221,6 +238,8 @@ BS.widgets = {
                 end
 
                 widget:SetValue(value)
+                widget:SetColour(unpack(BS.Vars.Controls[9].Colour or BS.Vars.DefaultColour))
+
                 return value
             end
         end,
@@ -233,6 +252,8 @@ BS.widgets = {
         update = function(widget, _, currencyType)
             if (currencyType == nil or currencyType == _G.CURT_UNDAUNTED_KEYS) then
                 widget:SetValue(GetCurrencyAmount(_G.CURT_UNDAUNTED_KEYS, _G.CURRENCY_LOCATION_ACCOUNT))
+                widget:SetColour(unpack(BS.Vars.Controls[10].Colour or BS.Vars.DefaultColour))
+
                 return widget:GetValue()
             end
         end,
@@ -244,6 +265,8 @@ BS.widgets = {
         name = "writVouchers",
         update = function(widget)
             widget:SetValue(GetCurrencyAmount(_G.CURT_WRIT_VOUCHERS, _G.CURRENCY_LOCATION_CHARACTER))
+            widget:SetColour(unpack(BS.Vars.Controls[11].Colour or BS.Vars.DefaultColour))
+
             return widget:GetValue()
         end,
         event = _G.EVENT_WRIT_VOUCHER_UPDATE,
@@ -258,13 +281,15 @@ BS.widgets = {
             local value = bagUsed .. "/" .. bagSize
             local pcUsed = math.floor((bagUsed / bagSize) * 100)
 
-            if (pcUsed >= 85 and pcUsed < 95) then
-                widget:SetColour(1, 1, 0, 1)
-            elseif (pcUsed >= 95) then
-                widget:SetColour(1, 0, 0, 1)
-            else
-                widget:SetColour(0, 1, 0, 1)
+            local colour = BS.Vars.Controls[12].OkColour or BS.Vars.DefaultOkColour
+
+            if (pcUsed >= BS.Vars.Controls[12].WarningValue and pcUsed < BS.Vars.Controls[12].DangerValue) then
+                colour = BS.Vars.Controls[12].WarningColour or BS.Vars.DefaultWarningColour
+            elseif (pcUsed >= BS.Vars.Controls[12].DangerValue) then
+                colour = BS.Vars.Controls[12].DangerColour or BS.Vars.DefaultDangerColour
             end
+
+            widget:SetColour(unpack(colour))
 
             if (BS.Vars.Controls[12].ShowPercent) then
                 value = pcUsed .. "%"
@@ -299,13 +324,15 @@ BS.widgets = {
             local value = bagUsed .. "/" .. bagSize
             local pcUsed = math.floor((bagUsed / bagSize) * 100)
 
-            if (pcUsed >= 85 and pcUsed < 95) then
-                widget:SetColour(1, 1, 0, 1)
-            elseif (pcUsed >= 95) then
-                widget:SetColour(1, 0, 0, 1)
-            else
-                widget:SetColour(0, 1, 0, 1)
+            local colour = BS.Vars.Controls[13].OkColour or BS.Vars.DefaultOkColour
+
+            if (pcUsed >= BS.Vars.Controls[13].WarningValue and pcUsed < BS.Vars.Controls[13].DangerValue) then
+                colour = BS.Vars.Controls[13].WarningColour or BS.Vars.DefaultWarningColour
+            elseif (pcUsed >= BS.Vars.Controls[13].DangerValue) then
+                colour = BS.Vars.Controls[13].DangerColour or BS.Vars.DefaultDangerColour
             end
+
+            widget:SetColour(unpack(colour))
 
             if (BS.Vars.Controls[13].ShowPercent) then
                 value = pcUsed .. "%"
@@ -323,7 +350,10 @@ BS.widgets = {
         name = "fps",
         update = function(widget)
             local framerate = GetFramerate()
+
             widget:SetValue(math.floor(framerate))
+            widget:SetColour(unpack(BS.Vars.Controls[14].Colour or BS.Vars.DefaultColour))
+
             return widget:GetValue()
         end,
         timer = 1000,
@@ -335,7 +365,10 @@ BS.widgets = {
         name = "latency",
         update = function(widget)
             local latency = GetLatency()
+
             widget:SetValue(math.floor(latency))
+            widget:SetColour(unpack(BS.Vars.Controls[15].Colour or BS.Vars.DefaultColour))
+
             return widget:GetValue()
         end,
         timer = 1000,
@@ -348,12 +381,13 @@ BS.widgets = {
         update = function(widget)
             local timeRemaining = BS.GetResearchTimer(_G.CRAFTING_TYPE_BLACKSMITHING)
 
+            local colour = BS.Vars.Controls[16].Colour or BS.Vars.DefaultColour
+
             if (timeRemaining == 0) then
-                widget:SetColour(1, 0, 0, 1)
-            else
-                widget:SetColour(0.9, 0.9, 0.9, 1)
+                colour = BS.Vars.Controls[16].DangerColour or BS.Vars.DefaultDangerColour
             end
 
+            widget:SetColour(unpack(colour))
             widget:SetValue(BS.SecondsToTime(timeRemaining, false, false, BS.Vars.Controls[16].HideSeconds))
             return timeRemaining
         end,
@@ -370,12 +404,13 @@ BS.widgets = {
         update = function(widget)
             local timeRemaining = BS.GetResearchTimer(_G.CRAFTING_TYPE_WOODWORKING)
 
+            local colour = BS.Vars.Controls[17].Colour or BS.Vars.DefaultColour
+
             if (timeRemaining == 0) then
-                widget:SetColour(1, 0, 0, 1)
-            else
-                widget:SetColour(0.9, 0.9, 0.9, 1)
+                colour = BS.Vars.Controls[17].DangerColour or BS.Vars.DefaultDangerColour
             end
 
+            widget:SetColour(unpack(colour))
             widget:SetValue(BS.SecondsToTime(timeRemaining, false, false, BS.Vars.Controls[17].HideSeconds))
             return timeRemaining
         end,
@@ -392,12 +427,13 @@ BS.widgets = {
         update = function(widget)
             local timeRemaining = BS.GetResearchTimer(_G.CRAFTING_TYPE_CLOTHIER)
 
+            local colour = BS.Vars.Controls[18].Colour or BS.Vars.DefaultColour
+
             if (timeRemaining == 0) then
-                widget:SetColour(1, 0, 0, 1)
-            else
-                widget:SetColour(0.9, 0.9, 0.9, 1)
+                colour = BS.Vars.Controls[18].DangerColour or BS.Vars.DefaultDangerColour
             end
 
+            widget:SetColour(unpack(colour))
             widget:SetValue(BS.SecondsToTime(timeRemaining, false, false, BS.Vars.Controls[18].HideSeconds))
             return timeRemaining
         end,
@@ -414,12 +450,13 @@ BS.widgets = {
         update = function(widget)
             local timeRemaining = BS.GetResearchTimer(_G.CRAFTING_TYPE_JEWELRYCRAFTING)
 
+            local colour = BS.Vars.Controls[19].Colour or BS.Vars.DefaultColour
+
             if (timeRemaining == 0) then
-                widget:SetColour(1, 0, 0, 1)
-            else
-                widget:SetColour(0.9, 0.9, 0.9, 1)
+                colour = BS.Vars.Controls[19].DangerColour or BS.Vars.DefaultDangerColour
             end
 
+            widget:SetColour(unpack(colour))
             widget:SetValue(BS.SecondsToTime(timeRemaining, false, false, BS.Vars.Controls[19].HideSeconds))
             return timeRemaining
         end,
@@ -442,6 +479,8 @@ BS.widgets = {
                 end
 
                 widget:SetValue(repairCost)
+                widget:SetColour(unpack(BS.Vars.Controls[20].Colour or BS.Vars.DefaultColour))
+
                 return repairCost
             end
 
@@ -470,12 +509,13 @@ BS.widgets = {
                 time = BS.SecondsToTime(remaining / 1000, true, false, BS.Vars.Controls[21].HideSeconds)
             end
 
+            local colour = BS.Vars.Controls[21].Colour or BS.Vars.DefaultColour
+
             if (remaining == 0) then
-                widget:SetColour(1, 0, 0, 1)
-            else
-                widget:SetColour(0.9, 0.9, 0.9, 1)
+                colour = BS.Vars.Controls[21].DangerColour or BS.Vars.DefaultDangerColour
             end
 
+            widget:SetColour(unpack(colour))
             widget:SetValue(time)
             return remaining
         end,
@@ -484,8 +524,10 @@ BS.widgets = {
         tooltip = GetString(_G.BARSTEWARD_MOUNT_TRAINING),
         hideWhenEqual = 0,
         complete = function()
-            local inventoryBonus, maxInventoryBonus, staminaBonus, maxStaminaBonus, speedBonus, maxSpeedBonus = GetRidingStats()
-            local maxed = inventoryBonus == maxInventoryBonus and staminaBonus == maxStaminaBonus and speedBonus == maxSpeedBonus
+            local inventoryBonus, maxInventoryBonus, staminaBonus, maxStaminaBonus, speedBonus, maxSpeedBonus =
+                GetRidingStats()
+            local maxed =
+                inventoryBonus == maxInventoryBonus and staminaBonus == maxStaminaBonus and speedBonus == maxSpeedBonus
 
             return maxed
         end
@@ -535,6 +577,7 @@ BS.widgets = {
             end
 
             widget:SetValue(earned .. " " .. "(" .. pc .. "%)")
+            widget:SetColour(unpack(BS.Vars.Controls[23].Colour or BS.Vars.DefaultColour))
             widget:SetIcon(icon)
 
             return earned
@@ -572,8 +615,12 @@ BS.widgets = {
 
                 widget:SetIcon(icon)
                 widget:SetValue(name)
+                widget:SetColour(unpack(BS.Vars.Controls[24].Colour or BS.Vars.DefaultColour))
 
                 return name
+            else
+                widget:SetValue(GetString(_G.SI_CRAFTING_INVALID_ITEM_STYLE))
+                widget:SetColour(unpack(BS.Vars.Controls[15].DangerColour or BS.Vars.DefaultDangerColour))
             end
 
             return ""
@@ -646,14 +693,15 @@ BS.widgets = {
                 end
             end
 
-            if (count < 6) then
-                widget:SetColour(1, 0, 0, 1)
-            elseif (count < 11) then
-                widget:SetColour(1, 1, 0, 1)
-            else
-                widget:SetColour(0, 1, 0, 1)
+            local colour = BS.Vars.Controls[28].OkColour or BS.Vars.DefaultOkColour
+
+            if (count < BS.Vars.Controls[28].DangerValue) then
+                colour = BS.Vars.Controls[28].DangerColour or BS.Vars.DefaultDangerColour
+            elseif (count < BS.Vars.Controls[28].WarningValue) then
+                colour = BS.Vars.Controls[28].WarningColour or BS.Vars.DefaultWarningColour
             end
 
+            widget:SetColour(unpack(colour))
             widget:SetValue(count)
 
             return count
@@ -677,6 +725,7 @@ BS.widgets = {
             end
 
             widget:SetValue(count)
+            widget:SetColour(unpack(BS.Vars.Controls[29].Colour or BS.Vars.DefaultColour))
 
             return count
         end,
@@ -690,7 +739,10 @@ BS.widgets = {
         name = "recallcooldown",
         update = function(widget)
             local cooldownTime = GetRecallCooldown() / 1000
+
             widget:SetValue(BS.SecondsToTime(cooldownTime, true, true))
+            widget:SetColour(unpack(BS.Vars.Controls[30].Colour or BS.Vars.DefaultColour))
+
             return cooldownTime
         end,
         timer = 1000,
@@ -704,15 +756,15 @@ BS.widgets = {
         update = function(widget)
             local max, used = GetFenceLaunderTransactionInfo()
             local pcUsed = math.floor(used / max) * 100
+            local colour = BS.Vars.Controls[31].OkColour or BS.Vars.DefaultOkColour
 
-            if (pcUsed >= 85 and pcUsed < 95) then
-                widget:SetColour(1, 1, 0, 1)
-            elseif (pcUsed >= 95) then
-                widget:SetColour(1, 0, 0, 1)
-            else
-                widget:SetColour(0, 1, 0, 1)
+            if (pcUsed >= BS.Vars.Controls[31].WarningValue and pcUsed < BS.Vars.Controls[31].DangerValue) then
+                colour = BS.Vars.Controls[31].WarningColour or BS.Vars.DefaultWarningColour
+            elseif (pcUsed >= BS.Vars.Controls[31].DangerValue) then
+                colour = BS.Vars.Controls[31].DangerColour or BS.Vars.DefaultDangerColour
             end
 
+            widget:SetColour(unpack(colour))
             widget:SetValue(used .. "/" .. max)
 
             return used
@@ -726,6 +778,8 @@ BS.widgets = {
         name = "currentZone",
         update = function(widget)
             widget:SetValue(GetUnitZone("player"))
+            widget:SetColour(unpack(BS.Vars.Controls[32].Colour or BS.Vars.DefaultColour))
+
             return widget:GetValue()
         end,
         event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_ZONE_CHANGED},
@@ -744,6 +798,8 @@ BS.widgets = {
         name = "playerName",
         update = function(widget)
             widget:SetValue(GetUnitName("player"))
+            widget:SetColour(unpack(BS.Vars.Controls[33].Colour or BS.Vars.DefaultColour))
+
             return widget:GetValue()
         end,
         event = _G.EVENT_PLAYER_ACTIVATED,
@@ -755,6 +811,8 @@ BS.widgets = {
         name = "playerRace",
         update = function(widget)
             widget:SetValue(GetUnitRace("player"))
+            widget:SetColour(unpack(BS.Vars.Controls[34].Colour or BS.Vars.DefaultColour))
+
             return widget:GetValue()
         end,
         event = _G.EVENT_PLAYER_ACTIVATED,
@@ -769,6 +827,7 @@ BS.widgets = {
             local icon = GetClassIcon(classId)
 
             widget:SetValue(GetUnitClass("player"))
+            widget:SetColour(unpack(BS.Vars.Controls[35].Colour or BS.Vars.DefaultColour))
             widget:SetIcon(icon)
 
             return widget:GetValue()

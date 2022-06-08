@@ -33,7 +33,7 @@ function baseWidget:Initialise(widgetSettings)
 
     self.value = WINDOW_MANAGER:CreateControl(name .. "_value", self.control, CT_LABEL)
     self.value:SetFont("ZoFontGame")
-    self.value:SetColor(0.9, 0.9, 0.9, 1)
+    self.value:SetColor(unpack(BS.Vars.DefaultColour))
     self.value:SetAnchor(
         widgetSettings.valueSide == LEFT and RIGHT or LEFT,
         self.icon,

@@ -228,6 +228,14 @@ function BS.UnregisterForEvent(event, func)
     end
 end
 
+local function ARGBConvert(argb)
+    local r = string.format("%02x", math.floor(argb[1] * 255))
+    local g = string.format("%02x", math.floor(argb[2] * 255))
+    local b = string.format("%02x", math.floor(argb[3] * 255))
+
+    return "!c" .. r .. g .. b
+end
+
 function BS.GetTimedActivityProgress(activityType, widget)
     local complete = 0
     local maxComplete = GetTimedActivityTypeLimit(activityType)
@@ -262,6 +270,7 @@ function BS.GetTimedActivityProgress(activityType, widget)
     end
 
     widget:SetValue(complete .. "/" .. maxComplete)
+    widget:SetColour(unpack(BS.Vars.Controls[26].Colour or BS.Vars.DefaultColour))
 
     if (#tasks > 0) then
         local tooltipText = ""
@@ -288,13 +297,13 @@ function BS.GetDurability(widget)
     for slot = 0, GetBagSize(_G.BAG_WORN) do
         local itemName = GetItemName(_G.BAG_WORN, slot)
         local condition = GetItemCondition(_G.BAG_WORN, slot)
-        local colour = "|c00ff00"
+        local colour = ARGBConvert(BS.Vars.Controls[25].OkColour or BS.Vars.DefaultOkColour)
 
         if (itemName ~= "") then
-            if (condition <= 75 and condition >= 15) then
-                colour = "|cffff00"
-            elseif (condition < 15) then
-                colour = "|cff0000"
+            if (condition <= BS.Vars.Controls[25].OkValue and condition >= BS.Vars.Controls[25].DangerValue) then
+                colour = ARGBConvert(BS.Vars.Controls[25].WarningColour or BS.Vars.DefaultWarningColour)
+            elseif (condition < BS.Vars.Controls[25].DangerValue) then
+                colour = ARGBConvert(BS.Vars.Controls[25].DangerColour or BS.Vars.DefaultDangerColour)
             end
 
             table.insert(items, colour .. itemName .. " - " .. condition .. "%|r")
@@ -308,15 +317,19 @@ function BS.GetDurability(widget)
 
     widget:SetValue(lowest .. "%")
 
-    if (lowest >= 75) then
-        widget:SetColour(0, 1, 0, 1)
-    elseif (lowest >= 15) then
-        widget:SetColour(1, 1, 0, 1)
+    local colour
+
+    if (lowest >= BS.Vars.Controls[25].OkValue) then
+        colour = BS.Vars.Controls[25].OkColour or BS.Vars.DefaultOkColour
+    elseif (BS.Vars.Controls[25].DangerValue) then
+        colour = BS.Vars.Controls[25].WarningColour or BS.Vars.DefaultWarningColour
     else
-        widget:SetColour(1, 0, 0, 1)
+        colour = BS.Vars.Controls[25].DangerColour or BS.Vars.DefaultDangerColour
     end
 
-    if (lowest <= 15) then
+    widget:SetColour(unpack(colour))
+
+    if (lowest <= BS.Vars.Controls[25].DangerValue) then
         if (lowestType == _G.ITEMTYPE_WEAPON) then
             widget:SetIcon("/esoui/art/hud/broken_weapon.dds")
         else
@@ -429,18 +442,27 @@ function BS.IsTraitResearchComplete(craftingType)
     local complete = true
 
     for researchLineIndex = 1, GetNumSmithingResearchLines(craftingType) do
-		local _, _, numTraits = GetSmithingResearchLineInfo(craftingType, researchLineIndex)
+        local _, _, numTraits = GetSmithingResearchLineInfo(craftingType, researchLineIndex)
 
-		for traitIndex = 1, numTraits do
+        for traitIndex = 1, numTraits do
+            local _, _, known = GetSmithingResearchLineTraitInfo(craftingType, researchLineIndex, traitIndex)
 
-			local _, _, known = GetSmithingResearchLineTraitInfo(craftingType, researchLineIndex, traitIndex)
-
-			if (not known) then
+            if (not known) then
                 return false
             end
-		end
-
-	end
+        end
+    end
 
     return complete
+end
+
+function BS.Split(s)
+    local delimiter = ","
+    local result = {}
+
+    for match in (s .. delimiter):gmatch("(.-)" .. delimiter) do
+        table.insert(result, match)
+    end
+
+    return result
 end

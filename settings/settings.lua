@@ -286,20 +286,22 @@ local function GetBarSettings()
                 end,
                 width = "full"
             }
-        -- else
-        --     controls[#controls + 1] = {
-        --         type = "checkbox",
-        --         name = GetString(_G.BARSTEWARD_NUDGE),
-        --         getFunc = function()
-        --             return BS.Vars.Bars[idx].NudgeCompass
-        --         end,
-        --         setFunc = function(value)
-        --             BS.Vars.Bars[idx].NudgeCompass = value
-        --         end,
-        --         width = "full",
-        --         requiresReload = true,
-        --         default = BS.Defaults.Bars[1].NudgeCompass
-        --     }
+        else
+            if (not _G.BUI) then
+                controls[#controls + 1] = {
+                    type = "checkbox",
+                    name = GetString(_G.BARSTEWARD_NUDGE),
+                    getFunc = function()
+                        return BS.Vars.Bars[idx].NudgeCompass
+                    end,
+                    setFunc = function(value)
+                        BS.Vars.Bars[idx].NudgeCompass = value
+                    end,
+                    width = "full",
+                    requiresReload = true,
+                    default = BS.Defaults.Bars[1].NudgeCompass
+                }
+            end
         end
 
         BS.options[#BS.options + 1] = {
@@ -383,6 +385,21 @@ local twentyFourFormats = {
     "HH.m",
     "H.m"
 }
+
+local function getCV(index)
+    local var = BS.Vars.Controls[index].ColourValues
+    local lookup = {}
+
+    if (var ~= nil) then
+        for _, val in ipairs(BS.Split(var)) do
+            lookup[val] = true
+        end
+
+        return lookup
+    end
+
+    return nil
+end
 
 local function GetWidgetSettings()
     local widgets = BS.Vars.Controls
@@ -799,6 +816,146 @@ local function GetWidgetSettings()
                 end,
                 default = BS.Defaults.TimeFormat24
             }
+        end
+
+        -- colour / value options
+        local cv = getCV(k)
+
+        if (cv) then
+            if (cv.c) then
+                widgetControls[#widgetControls + 1] = {
+                    type = "colorpicker",
+                    name = GetString(_G.BARSTEWARD_DEFAULT_COLOUR),
+                    getFunc = function()
+                        return unpack(BS.Vars.Controls[k].Colour or BS.Vars.DefaultColour)
+                    end,
+                    setFunc = function(r, g, b, a)
+                        BS.Vars.Controls[k].Colour = {r, g, b, a}
+                        BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
+                    end,
+                    width = "full",
+                    default = unpack(BS.Vars.DefaultColour)
+                }
+            end
+
+            if (cv.okc) then
+                widgetControls[#widgetControls + 1] = {
+                    type = "colorpicker",
+                    name = GetString(_G.BARSTEWARD_OK_COLOUR),
+                    getFunc = function()
+                        return unpack(BS.Vars.Controls[k].OkColour or BS.Vars.DefaultOkColour)
+                    end,
+                    setFunc = function(r, g, b, a)
+                        BS.Vars.Controls[k].OkColour = {r, g, b, a}
+                        BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
+                    end,
+                    width = "full",
+                    default = unpack(BS.Vars.DefaultOkColour)
+                }
+            end
+
+            if (cv.wc) then
+                widgetControls[#widgetControls + 1] = {
+                    type = "colorpicker",
+                    name = GetString(_G.BARSTEWARD_WARNING_COLOUR),
+                    getFunc = function()
+                        return unpack(BS.Vars.Controls[k].WarningColour or BS.Vars.DefaultWarningColour)
+                    end,
+                    setFunc = function(r, g, b, a)
+                        BS.Vars.Controls[k].WarningColour = {r, g, b, a}
+                        BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
+                    end,
+                    width = "full",
+                    default = unpack(BS.Vars.DefaultWarningColour)
+                }
+            end
+
+            if (cv.dc) then
+                widgetControls[#widgetControls + 1] = {
+                    type = "colorpicker",
+                    name = GetString(_G.BARSTEWARD_DANGER_COLOUR),
+                    getFunc = function()
+                        return unpack(BS.Vars.Controls[k].DangerColour or BS.Vars.DefaultDangerColour)
+                    end,
+                    setFunc = function(r, g, b, a)
+                        BS.Vars.Controls[k].DangerColour = {r, g, b, a}
+                        BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
+                    end,
+                    width = "full",
+                    default = unpack(BS.Vars.DefaultDangerColour)
+                }
+            end
+
+            local units = BS.Vars.Controls[k].Units
+
+            if (cv.okv) then
+                widgetControls[#widgetControls + 1] = {
+                    type = "editbox",
+                    name = GetString(_G.BARSTEWARD_OK_VALUE) .. (units and (" (" .. units .. ")") or ""),
+                    getFunc = function()
+                        return BS.Vars.Controls[k].OkValue or ""
+                    end,
+                    setFunc = function(value)
+                        if (value == nil or value == "") then
+                            BS.Vars.Controls[k].OkValue = BS.Default.Controls[k].OkValue
+                        else
+                            BS.Vars.Controls[k].OkValue = tonumber(value)
+                        end
+
+                        BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
+                    end,
+                    textType = _G.TEXT_TYPE_NUMERIC,
+                    isMultiLine = false,
+                    width = "half",
+                    default = nil
+                }
+            end
+
+            if (cv.wv) then
+                widgetControls[#widgetControls + 1] = {
+                    type = "editbox",
+                    name = GetString(_G.BARSTEWARD_WARNING_VALUE) .. (units and (" (" .. units .. ")") or ""),
+                    getFunc = function()
+                        return BS.Vars.Controls[k].WarningValue or ""
+                    end,
+                    setFunc = function(value)
+                        if (value == nil or value == "") then
+                            BS.Vars.Controls[k].WarningValue = BS.Default.Controls[k].WarningValue
+                        else
+                            BS.Vars.Controls[k].WarningValue = tonumber(value)
+                        end
+
+                        BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
+                    end,
+                    textType = _G.TEXT_TYPE_NUMERIC,
+                    isMultiLine = false,
+                    width = "half",
+                    default = nil
+                }
+            end
+
+            if (cv.dv) then
+                widgetControls[#widgetControls + 1] = {
+                    type = "editbox",
+                    name = GetString(_G.BARSTEWARD_DANGER_VALUE) .. (units and (" (" .. units .. ")") or ""),
+                    getFunc = function()
+                        return BS.Vars.Controls[k].DangerValue or ""
+                    end,
+                    setFunc = function(value)
+                        if (value == nil or value == "") then
+                            BS.Vars.Controls[k].DangerValue = BS.Default.Controls[k].DangerValue
+                        else
+                            BS.Vars.Controls[k].DangerValue = tonumber(value)
+                        end
+
+                        BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
+                    end,
+                    textType = _G.TEXT_TYPE_NUMERIC,
+                    isMultiLine = false,
+                    width = "half",
+                    default = nil
+                }
+            end
         end
 
         controls[k] = {

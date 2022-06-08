@@ -60,9 +60,10 @@ local function Initialise()
 
     -- saved variables
     BS.Vars =
-        _G.LibSavedVars
-            :NewAccountWide("BarStewardSavedVars", "Account", BS.Defaults)
-            :AddCharacterSettingsToggle("BarStewardSavedVars", "Characters")
+        _G.LibSavedVars:NewAccountWide("BarStewardSavedVars", "Account", BS.Defaults):AddCharacterSettingsToggle(
+        "BarStewardSavedVars",
+        "Characters"
+    )
 
     BS.RegisterSettings()
 
@@ -107,11 +108,26 @@ local function Initialise()
                     index = idx,
                     position = barData.Orientation == GetString(_G.BARSTEWARD_HORIZONTAL) and TOP or LEFT,
                     scale = barData.Scale or GuiRoot:GetScale(),
-                    settings = BS.Vars.Bars[idx],
+                    settings = BS.Vars.Bars[idx]
                 }
             )
 
             bar:AddWidgets(orderedWidgets)
+        end
+
+        -- ignore this if Bandits UI is loaded
+        if (BS.Vars.Bars[idx].NudgeCompass and not _G.BUI) then
+            -- from Bandits UI
+            -- stop the game move the compass back to its original position
+            local block = {ZO_CompassFrame_Keyboard_Template = true, ZO_CompassFrame_Gamepad_Template = true}
+            local ZO_ApplyTemplateToControl = _G.ApplyTemplateToControl
+            _G.ApplyTemplateToControl = function(control, templateName)
+                if block[templateName] then
+                    return
+                else
+                    ZO_ApplyTemplateToControl(control, templateName)
+                end
+            end
         end
     end
 
