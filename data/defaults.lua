@@ -201,6 +201,14 @@ BS.Defaults = {
         [BS.W_PLAYER_NAME] = {Bar = 0, Order = 33, ColourValues = "c"},
         [BS.W_RACE] = {Bar = 0, Order = 34, ColourValues = "c"},
         [BS.W_CLASS] = {Bar = 0, Order = 35, ColourValues = "c"},
-        [BS.W_ALLIANCE] = {Bar = 0, Order = 36}
+        [BS.W_ALLIANCE] = {Bar = 0, Order = 36},
+        [BS.W_LEADS] = {
+            Bar = 1,
+            Order = 37,
+            ColourValues = "dv,dc",
+            DangerValue = 300,
+            Units = GetString(_G.BARSTEWARD_SECONDS),
+            Autohide = true
+        }
     }
 }

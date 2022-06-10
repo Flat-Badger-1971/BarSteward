@@ -27,12 +27,12 @@ data/sounds.lua
 misc/utility.lua
 
 data/widgets/client.lua
+data/widgets/activities.lua
 data/widgets/character.lua
 data/widgets/companions.lua
 data/widgets/crafting.lua
 data/widgets/currency.lua
 data/widgets/inventory.lua
-data/widgets/quests.lua
 data/widgets/riding.lua
 
 settings/settings.lua
