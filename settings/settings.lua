@@ -7,7 +7,7 @@ local panel = {
     name = "Bar Steward",
     displayName = "Bar Steward",
     author = "Flat Badger",
-    version = "1.0.0",
+    version = "1.1.0",
     registerForDefaults = true,
     slashCommand = "/bs"
 }
@@ -746,6 +746,30 @@ local function GetWidgetSettings()
                     return not BS.Vars.Controls[k].SoundWhenUnder
                 end,
                 default = nil
+            }
+        end
+
+        -- custom option
+        local copts = BS.widgets[k].customOptions
+        if (copts) then
+
+            widgetControls[#widgetControls + 1] = {
+                type = "dropdown",
+                name = copts.name,
+                choices = copts.choices,
+                getFunc = function()
+                    return BS.Vars.Controls[k][copts.varName] or copts.default
+                end,
+                setFunc = function(value)
+                    BS.Vars.Controls[k][copts.varName] = value
+                    if (copts.refresh) then
+                        if (BS.Vars.Controls[k].Bar ~= 0) then
+                            BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
+                        end
+                    end
+                end,
+                width = "full",
+                default = copts.default
             }
         end
 

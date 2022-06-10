@@ -11,6 +11,7 @@ read_globals = {
     },
     ["CHAMPION_DATA_MANAGER"] = {
         fields = {
+            FindChampionDisciplineDataById = {read_only = true},
             FindChampionDisciplineDataByType = {read_only = true}
         }
     },
@@ -134,6 +135,8 @@ read_globals = {
     "GetAllianceColor",
     "GetAllianceName",
     "GetAnimationManager",
+    "GetChampionDisciplineId",
+    "GetChampionDisciplineName",
     "GetChampionPointPoolForRank",
     "GetClassIcon",
     "GetCollectibleCooldownAndDuration",
@@ -160,6 +163,7 @@ read_globals = {
     "GetMaxSimultaneousSmithingResearch",
     "GetMinimumRapport",
     "GetNumBuffs",
+    "GetNumChampionDisciplines",
     "GetNumChampionXPInChampionPoint",
     "GetNumExperiencePointsInCompanionLevel",
     "GetNumSmithingResearchLines",
@@ -236,7 +240,10 @@ read_globals = {
     "ZO_Tooltips_ShowTextTooltip",
     -- Zenimax functions
     "zo_callLater",
+    "zo_iconFormat",
     "zo_roundToNearest",
     "zo_strformat",
-    "zo_strsplit"
+    "zo_strsplit",
+    -- luacheck misses this one for some reason
+    "math.log10"
 }

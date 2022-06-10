@@ -194,20 +194,22 @@ function baseBar:DoUpdate(metadata, ...)
     -- update the widget and capture the raw value for use in HideWhen
     -- get the widget's current (new) value
     local value = metadata.update(metadata.widget, ...)
-
-    -- check if it needs to be hidden
-    if (metadata.hideWhenEqual or metadata.hideWhenGreaterThan or metadata.hideWhenLessThan) then
-        if (BS.Vars.Controls[metadata.id].Autohide) then
-            HideWhen(metadata, value)
-        end
-    end
+    local hidecheck = false
 
     -- check for hide on completion
     if (metadata.complete) then
         if (BS.Vars.Controls[metadata.id].HideWhenComplete) then
+            hidecheck = true
             if (metadata.complete() == true) then
                 HideWhen(metadata, "hide it!")
             end
+        end
+    end
+
+    -- check if it needs to be hidden
+    if (metadata.hideWhenEqual or metadata.hideWhenGreaterThan or metadata.hideWhenLessThan) then
+        if (BS.Vars.Controls[metadata.id].Autohide and not hidecheck) then
+            HideWhen(metadata, value)
         end
     end
 

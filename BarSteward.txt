@@ -2,8 +2,8 @@
 ## Description: Data broker style bar for easy display of in-game metrics
 ## Author: Flat Badger
 ## APIVersion: 101034
-## AddOnVersion: 105
-## Version: 1.0.5
+## AddOnVersion: 110
+## Version: 1.1.0
 ## SavedVariables: BarStewardSavedVars
 ## DependsOn: LibSavedVars>=60007 LibAddonMenu-2.0>=33
 ## OptionalDependsOn: BanditsUserInterface
@@ -21,10 +21,19 @@
 languages/en.lua
 languages/$(language).lua
 
+data/constants.lua
 data/defaults.lua
 data/sounds.lua
 misc/utility.lua
-data/bardata.lua
+
+data/widgets/client.lua
+data/widgets/character.lua
+data/widgets/companions.lua
+data/widgets/crafting.lua
+data/widgets/currency.lua
+data/widgets/inventory.lua
+data/widgets/quests.lua
+data/widgets/riding.lua
 
 settings/settings.lua
 

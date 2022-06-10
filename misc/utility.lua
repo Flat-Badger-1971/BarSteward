@@ -1,31 +1,5 @@
 local BS = _G.BarSteward
 
--- based on code from AI Research Timer
-function BS.GetResearchTimer(craftType)
-    local maxTimer = 2000000
-    local maxResearch = GetMaxSimultaneousSmithingResearch(craftType)
-    local maxLines = GetNumSmithingResearchLines(craftType)
-
-    for i = 1, maxLines do
-        local _, _, numTraits = GetSmithingResearchLineInfo(craftType, i)
-
-        for j = 1, numTraits do
-            local duration, timeRemaining = GetSmithingResearchLineTraitTimes(craftType, i, j)
-
-            if (duration ~= nil and timeRemaining ~= nil) then
-                maxResearch = maxResearch - 1
-                maxTimer = math.min(maxTimer, timeRemaining)
-            end
-        end
-    end
-
-    if (maxResearch > 0) then
-        maxTimer = 0
-    end
-
-    return maxTimer
-end
-
 function BS.SecondsToTime(seconds, hideDays, hideHours, hideSeconds)
     local time = ""
     local days = math.floor(seconds / 86400)
@@ -228,132 +202,12 @@ function BS.UnregisterForEvent(event, func)
     end
 end
 
-local function ARGBConvert(argb)
+function BS.ARGBConvert(argb)
     local r = string.format("%02x", math.floor(argb[1] * 255))
     local g = string.format("%02x", math.floor(argb[2] * 255))
     local b = string.format("%02x", math.floor(argb[3] * 255))
 
-    return "!c" .. r .. g .. b
-end
-
-function BS.GetTimedActivityProgress(activityType, widget)
-    local complete = 0
-    local maxComplete = GetTimedActivityTypeLimit(activityType)
-    local tasks = {}
-
-    for idx = 1, 30 do
-        local name = GetTimedActivityName(idx)
-
-        if (name == "") then
-            break
-        end
-
-        if (GetTimedActivityType(idx) == activityType) then
-            local max = GetTimedActivityMaxProgress(idx)
-            local progress = GetTimedActivityProgress(idx)
-            local ttext = name .. "  (" .. progress .. "/" .. max .. ")"
-            local colour = "|cb4b4b4"
-
-            if (progress > 0 and progress < max and complete ~= maxComplete) then
-                colour = "|cffff00"
-            elseif (complete == maxComplete and max ~= progress) then
-                colour = "|cb4b4b4"
-            elseif (max == progress) then
-                complete = complete + 1
-                colour = "|c00ff00"
-            end
-
-            ttext = colour .. ttext .. "|r"
-
-            table.insert(tasks, ttext)
-        end
-    end
-
-    widget:SetValue(complete .. "/" .. maxComplete)
-    widget:SetColour(unpack(BS.Vars.Controls[26].Colour or BS.Vars.DefaultColour))
-
-    if (#tasks > 0) then
-        local tooltipText = ""
-
-        for _, t in ipairs(tasks) do
-            if (tooltipText ~= "") then
-                tooltipText = tooltipText .. string.char(10)
-            end
-
-            tooltipText = tooltipText .. t
-        end
-
-        widget.tooltip = tooltipText
-    end
-
-    return complete
-end
-
-function BS.GetDurability(widget)
-    local lowest = 100
-    local lowestType = _G.ITEMTYPE_ARMOR
-    local items = {}
-
-    for slot = 0, GetBagSize(_G.BAG_WORN) do
-        local itemName = GetItemName(_G.BAG_WORN, slot)
-        local condition = GetItemCondition(_G.BAG_WORN, slot)
-        local colour = ARGBConvert(BS.Vars.Controls[25].OkColour or BS.Vars.DefaultOkColour)
-
-        if (itemName ~= "") then
-            if (condition <= BS.Vars.Controls[25].OkValue and condition >= BS.Vars.Controls[25].DangerValue) then
-                colour = ARGBConvert(BS.Vars.Controls[25].WarningColour or BS.Vars.DefaultWarningColour)
-            elseif (condition < BS.Vars.Controls[25].DangerValue) then
-                colour = ARGBConvert(BS.Vars.Controls[25].DangerColour or BS.Vars.DefaultDangerColour)
-            end
-
-            table.insert(items, colour .. itemName .. " - " .. condition .. "%|r")
-
-            if (lowest > condition) then
-                lowest = condition
-                lowestType = GetItemType(_G.BAG_WORN, slot)
-            end
-        end
-    end
-
-    widget:SetValue(lowest .. "%")
-
-    local colour
-
-    if (lowest >= BS.Vars.Controls[25].OkValue) then
-        colour = BS.Vars.Controls[25].OkColour or BS.Vars.DefaultOkColour
-    elseif (BS.Vars.Controls[25].DangerValue) then
-        colour = BS.Vars.Controls[25].WarningColour or BS.Vars.DefaultWarningColour
-    else
-        colour = BS.Vars.Controls[25].DangerColour or BS.Vars.DefaultDangerColour
-    end
-
-    widget:SetColour(unpack(colour))
-
-    if (lowest <= BS.Vars.Controls[25].DangerValue) then
-        if (lowestType == _G.ITEMTYPE_WEAPON) then
-            widget:SetIcon("/esoui/art/hud/broken_weapon.dds")
-        else
-            widget:SetIcon("/esoui/art/hud/broken_armor.dds")
-        end
-    else
-        widget:SetIcon("/esoui/art/inventory/inventory_tabicon_armor_up.dds")
-    end
-
-    if (#items > 0) then
-        local tooltipText = ""
-
-        for _, i in ipairs(items) do
-            if (tooltipText ~= "") then
-                tooltipText = tooltipText .. string.char(10)
-            end
-
-            tooltipText = tooltipText .. i
-        end
-
-        widget.tooltip = tooltipText
-    end
-
-    return lowest
+    return "|c" .. r .. g .. b
 end
 
 function BS.GetAnchorFromText(text, adjust)

@@ -1,6 +1,15 @@
+[color=#ff9900][b]Version: 1.1.0 ---------------[/b][/color]
+Champion point tooltip now updates when points are spent
+Version number updated in settings
+Code refactor
+Added option to show gold in bags, bank or combined
+
 [color=#ff9900][b]Version: 1.0.5 ---------------[/b][/color]
 Main bar compass nudge option added
 Missing Mundus Stone now shows a red 'None'
+Added configurable colours and values for warning/danger levels
+Added unspent point breakdown to champion points tooltip
+Fixed broken rapport icon
 
 [color=#ff9900][b]Version: 1.0.4 ---------------[/b][/color]
 Added Bar scaling
