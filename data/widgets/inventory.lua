@@ -27,7 +27,7 @@ BS.widgets[BS.W_BAG_SPACE] = {
         return pcUsed
     end,
     event = _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
-    tooltip = GetString(_G.SI_GAMEPAD_MAIL_INBOX_INVENTORY),
+    tooltip = GetString(_G.SI_GAMEPAD_MAIL_INBOX_INVENTORY):gsub(":",""),
     icon = "/esoui/art/tooltips/icon_bag.dds",
     onClick = function()
         if (not IsInGamepadPreferredMode()) then
@@ -71,7 +71,7 @@ BS.widgets[BS.W_BANK_SPACE] = {
         return pcUsed
     end,
     event = _G.EVENT_CLOSE_BANK,
-    tooltip = GetString(_G.SI_INTERACT_OPTION_BANK),
+    tooltip = GetString(_G.BARSTEWARD_BANK),
     icon = "/esoui/art/tooltips/icon_bank.dds"
 }
 
@@ -117,7 +117,7 @@ BS.widgets[BS.W_DURABILITY] = {
             local items = {}
 
             for slot = 0, GetBagSize(_G.BAG_WORN) do
-                local itemName = GetItemName(_G.BAG_WORN, slot)
+                local itemName = ZO_CachedStrFormat("<<C:1>>", GetItemName(_G.BAG_WORN, slot))
                 local condition = GetItemCondition(_G.BAG_WORN, slot)
                 local colour = BS.ARGBConvert(BS.Vars.Controls[BS.W_DURABILITY].OkColour or BS.Vars.DefaultOkColour)
 

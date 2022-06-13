@@ -7,7 +7,7 @@ local panel = {
     name = "Bar Steward",
     displayName = "Bar Steward",
     author = "Flat Badger",
-    version = "1.1.0",
+    version = "1.1.2",
     registerForDefaults = true,
     slashCommand = "/bs"
 }
@@ -404,7 +404,7 @@ end
 local function GetWidgetSettings()
     local widgets = BS.Vars.Controls
     local bars = BS.Vars.Bars
-    local none = GetString(_G.SI_DAMAGETYPE0)
+    local none = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_DAMAGETYPE0))
     local controls = {}
     local barNames = {}
 
@@ -438,7 +438,7 @@ local function GetWidgetSettings()
                 name = GetString(_G.BARSTEWARD_BAR),
                 choices = barNames,
                 getFunc = function()
-                    local barName = GetString(_G.SI_DAMAGETYPE0)
+                    local barName = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_DAMAGETYPE0))
 
                     if (v.Bar ~= 0) then
                         barName = BS.Vars.Bars[v.Bar].Name
@@ -984,7 +984,7 @@ local function GetWidgetSettings()
 
         controls[k] = {
             type = "submenu",
-            name = BS.widgets[k].tooltip,
+            name = BS.widgets[k].tooltip:gsub(":",""),
             controls = widgetControls,
             reference = "BarStewardWidgets" .. k
         }

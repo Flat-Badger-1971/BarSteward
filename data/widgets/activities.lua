@@ -27,7 +27,22 @@ local function getTimedActivityProgress(activityType, widget)
                 colour = "|c00ff00"
             end
 
-            ttext = colour .. ttext .. "|r"
+            -- get reward info
+            local numRewards = GetNumTimedActivityRewards(idx)
+            local reward = ""
+
+            for rewardIndex = 1, numRewards do
+                local rewardId, quantity = GetTimedActivityRewardInfo(idx, rewardIndex)
+                local rewardData = REWARDS_MANAGER:GetInfoForReward(rewardId, quantity)
+
+                if (reward ~= "") then
+                    reward = reward .. ", "
+                end
+
+                reward = reward .. zo_iconFormat(rewardData.lootIcon, 16, 16) .. quantity
+            end
+
+            ttext = colour .. ttext .. "|r" .. " " .. reward
 
             table.insert(tasks, ttext)
         end
@@ -150,7 +165,7 @@ BS.widgets[BS.W_LEADS] = {
             widget:SetColour(unpack(colour))
             widget:SetValue(BS.SecondsToTime(minTime, false, false, true))
 
-            local ttt = GetString(_G.SI_ANTIQUITY_SUBHEADING_ACTIVE_LEADS) .. BS.LF
+            local ttt = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ANTIQUITY_SUBHEADING_ACTIVE_LEADS)) .. BS.LF
 
             for _, lead in ipairs(leads) do
                 local nameAndZone = lead.name .. " - " .. lead.zone
@@ -173,6 +188,6 @@ BS.widgets[BS.W_LEADS] = {
     end,
     timer = 1000,
     icon = GetAntiquityLeadIcon(),
-    tooltip = GetString(_G.SI_ANTIQUITY_SUBHEADING_ACTIVE_LEADS),
+    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ANTIQUITY_SUBHEADING_ACTIVE_LEADS)),
     hideWhenEqual = 99999999
 }

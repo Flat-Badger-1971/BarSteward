@@ -24,20 +24,28 @@ read_globals = {
             UnregisterForUpdate = {read_only = true}
         }
     },
+	["REWARDS_MANAGER"] = {
+		fields = {
+			GetInfoForReward = {read_only = true}
+		}
+	},
     ["SCENE_MANAGER"] = {
         fields = {
             GetCurrentScene = {read_only = true},
             GetScene = {read_only = true},
-            GetSceneGroup = { read_only = true },
-            RegisterCallback = { read_only = true },
-            Show = { read_only = true }
+            GetSceneGroup = {read_only = true},
+            IsInUIMode = {read_only = true},
+            RegisterCallback = {read_only = true},
+            SetInUIMode = {read_only = true},
+            Show = {read_only = true}
         }
     },
     ["WINDOW_MANAGER"] = {
         fields = {
             CreateTopLevelWindow = {read_only = true},
             CreateControl = {read_only = true},
-            CreateControlFromVirtual = {read_only = true}
+            CreateControlFromVirtual = {read_only = true},
+            IsSecureRenderModeEnabled = {read_only = true}
         }
     },
     ["ZO_ComboBox"] = {
@@ -65,6 +73,7 @@ read_globals = {
         }
     },
     -- events
+    "EVENT_ACHIEVEMENT_UPDATED",
     "EVENT_ACTION_LAYER_POPPED",
     "EVENT_ACTION_LAYER_PUSHED",
     "EVENT_ACTIVE_COMPANION_STATE_CHANGED",
@@ -74,6 +83,7 @@ read_globals = {
     "EVENT_COMPANION_EXPERIENCE_GAIN",
     "EVENT_COMPANION_RAPPORT_UPDATE",
     "EVENT_INVENTORY_SINGLE_SLOT_UPDATE",
+    "EVENT_NON_COMBAT_BONUS_CHANGED",
     "EVENT_PLAYER_ACTIVATED",
     "EVENT_POWER_UPDATE",
     "EVENT_UNIT_CREATED",
@@ -170,11 +180,13 @@ read_globals = {
     "GetMaxSimultaneousSmithingResearch",
     "GetMinimumRapport",
     "GetNextAntiquityId",
+    "GetNonCombatBonus",
     "GetNumBuffs",
     "GetNumChampionDisciplines",
     "GetNumChampionXPInChampionPoint",
     "GetNumExperiencePointsInCompanionLevel",
     "GetNumSmithingResearchLines",
+	"GetNumTimedActivityRewards",
     "GetPendingCompanionDefId",
     "GetPlayerChampionPointsEarned",
     "GetPlayerChampionXP",
@@ -190,6 +202,7 @@ read_globals = {
     "GetTimedActivityMaxProgress",
     "GetTimedActivityName",
     "GetTimedActivityProgress",
+	"GetTimedActivityRewardInfo",
     "GetTimedActivityType",
     "GetTimedActivityTypeLimit",
     "GetTimeString",
@@ -213,6 +226,7 @@ read_globals = {
     "IsItemStolen",
     "IsUnitGrouped",
     "IsUnitPvPFlagged",
+	"PlayEmoteByIndex",
     "PlaySound",
     "ReloadUI",
     "TriggerTutorial",
@@ -234,7 +248,9 @@ read_globals = {
         }
     },
     "ZO_min",
+	"ZO_PostHook",
     "ZO_PreHook",
+	"ZO_PreHookHandler",
     "ZO_Provisioner",
     "ZO_Dialogs_RegisterCustomDialog",
     ["ZO_SavedVars"] = {
@@ -243,6 +259,7 @@ read_globals = {
         }
     },
     "ZO_Dialogs_ShowDialog",
+	"ZO_SceneManager_ToggleHUDUIBinding",
     "ZO_SmallGroupAnchorFrame",
     "ZO_TimerBar",
     "ZO_Tooltips_HideTextTooltip",

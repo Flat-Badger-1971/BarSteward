@@ -33,7 +33,7 @@ BS.widgets[BS.W_MUNDUS_STONE] = {
 
         if (mundusId ~= nil) then
             local icon = GetAbilityIcon(mundusId)
-            local name = GetAbilityName(mundusId)
+            local name = ZO_CachedStrFormat("<<C:1>>", GetAbilityName(mundusId))
 
             widget:SetIcon(icon)
             widget:SetValue(name)
@@ -41,7 +41,7 @@ BS.widgets[BS.W_MUNDUS_STONE] = {
 
             return name
         else
-            widget:SetValue(GetString(_G.SI_CRAFTING_INVALID_ITEM_STYLE))
+            widget:SetValue(ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_CRAFTING_INVALID_ITEM_STYLE)))
             widget:SetColour(unpack(BS.Vars.Controls[BS.W_MUNDUS_STONE].DangerColour or BS.Vars.DefaultDangerColour))
         end
 
@@ -50,7 +50,7 @@ BS.widgets[BS.W_MUNDUS_STONE] = {
     event = _G.EVENT_EFFECT_CHANGED,
     filter = {[_G.EVENT_EFFECT_CHANGED] = {_G.REGISTER_FILTER_UNIT_TAG, "player"}},
     icon = "/esoui/art/icons/ability_mundusstones_002.dds",
-    tooltip = GetString(_G.SI_CONFIRM_MUNDUS_STONE_TITLE),
+    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_CONFIRM_MUNDUS_STONE_TITLE)),
     hideWhenEqual = ""
 }
 
@@ -75,14 +75,14 @@ BS.widgets[BS.W_ZONE] = {
     -- v1.0.3
     name = "currentZone",
     update = function(widget)
-        widget:SetValue(GetUnitZone("player"))
+        widget:SetValue(ZO_CachedStrFormat("<<C:1>>", GetUnitZone("player")))
         widget:SetColour(unpack(BS.Vars.Controls[BS.W_ZONE].Colour or BS.Vars.DefaultColour))
 
         return widget:GetValue()
     end,
     event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_ZONE_CHANGED},
     icon = "/esoui/art/tradinghouse/gamepad/gp_tradinghouse_trophy_treasure_map.dds",
-    tooltip = GetString(_G.SI_ANTIQUITY_SCRYABLE_CURRENT_ZONE_SUBCATEGORY),
+    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ANTIQUITY_SCRYABLE_CURRENT_ZONE_SUBCATEGORY)),
     onClick = function()
         if (not IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("worldMap")
@@ -103,21 +103,21 @@ BS.widgets[BS.W_PLAYER_NAME] = {
     end,
     event = _G.EVENT_PLAYER_ACTIVATED,
     icon = "/esoui/art/charactercreate/charactercreate_faceicon_up.dds",
-    tooltip = GetString(_G.SI_CUSTOMER_SERVICE_ASK_FOR_HELP_PLAYER_NAME)
+    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_CUSTOMER_SERVICE_ASK_FOR_HELP_PLAYER_NAME))
 }
 
 BS.widgets[BS.W_RACE] = {
     -- v1.0.3
     name = "playerRace",
     update = function(widget)
-        widget:SetValue(GetUnitRace("player"))
+        widget:SetValue(ZO_CachedStrFormat("<<C:1>>", GetUnitRace("player")))
         widget:SetColour(unpack(BS.Vars.Controls[BS.W_RACE].Colour or BS.Vars.DefaultColour))
 
         return widget:GetValue()
     end,
     event = _G.EVENT_PLAYER_ACTIVATED,
     icon = "/esoui/art/charactercreate/charactercreate_raceicon_up.dds",
-    tooltip = GetString(_G.SI_COLLECTIBLERESTRICTIONTYPE1)
+    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_COLLECTIBLERESTRICTIONTYPE1))
 }
 
 BS.widgets[BS.W_CLASS] = {
@@ -127,7 +127,7 @@ BS.widgets[BS.W_CLASS] = {
         local classId = GetUnitClassId("player")
         local icon = GetClassIcon(classId)
 
-        widget:SetValue(GetUnitClass("player"))
+        widget:SetValue(ZO_CachedStrFormat("<<C:1>>", GetUnitClass("player")))
         widget:SetColour(unpack(BS.Vars.Controls[BS.W_CLASS].Colour or BS.Vars.DefaultColour))
         widget:SetIcon(icon)
 
@@ -135,7 +135,7 @@ BS.widgets[BS.W_CLASS] = {
     end,
     event = _G.EVENT_PLAYER_ACTIVATED,
     icon = "/esoui/art/charactercreate/charactercreate_classicon_up.dds",
-    tooltip = GetString(_G.SI_COLLECTIBLERESTRICTIONTYPE3)
+    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_COLLECTIBLERESTRICTIONTYPE3))
 }
 
 BS.widgets[BS.W_ALLIANCE] = {
@@ -154,7 +154,7 @@ BS.widgets[BS.W_ALLIANCE] = {
             icon = "/esoui/art/scoredisplay/redflag.dds"
         end
 
-        widget:SetValue(" " .. GetAllianceName(alliance))
+        widget:SetValue(" " .. ZO_CachedStrFormat("<<C:1>>", GetAllianceName(alliance)))
         widget:SetColour(colour.r, colour.g, colour.b, colour.a)
         widget:SetIcon(icon)
         widget:SetTextureCoords(0, 1, 0, 0.6)
@@ -164,7 +164,7 @@ BS.widgets[BS.W_ALLIANCE] = {
     end,
     event = _G.EVENT_PLAYER_ACTIVATED,
     icon = "",
-    tooltip = GetString(_G.SI_COLLECTIBLERESTRICTIONTYPE2),
+    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_COLLECTIBLERESTRICTIONTYPE2)),
     onClick = function()
         if (not IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("campaignOverview")

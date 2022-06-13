@@ -121,11 +121,14 @@ BS.widgets[BS.W_GOLD] = {
         end
 
         local toDisplay = goldInBag
+        local separated = goldInBag .. "/" .. goldInBank --Add by P5ych3
 
         if (BS.Vars.Controls[BS.W_GOLD].GoldType == GetString(_G.BARSTEWARD_GOLD_BANK)) then
             toDisplay = goldInBank
         elseif (BS.Vars.Controls[BS.W_GOLD].GoldType == GetString(_G.BARSTEWARD_GOLD_COMBINED)) then
             toDisplay = combined
+        elseif (BS.Vars.Controls[BS.W_GOLD].GoldType == GetString(_G.BARSTEWARD_GOLD_SEPARATED)) then --Add by P5ych3
+            toDisplay = separated
         end
 
         widget:SetValue(toDisplay)
@@ -149,7 +152,8 @@ BS.widgets[BS.W_GOLD] = {
         choices = {
             GetString(_G.BARSTEWARD_GOLD_BAG),
             GetString(_G.BARSTEWARD_GOLD_BANK),
-            GetString(_G.BARSTEWARD_GOLD_COMBINED)
+            GetString(_G.BARSTEWARD_GOLD_COMBINED),
+            GetString(_G.BARSTEWARD_GOLD_SEPARATED) --Add by P5ych3
         },
         varName = "GoldType",
         refresh = true,
@@ -173,7 +177,8 @@ BS.widgets[BS.W_SEALS_OF_ENDEAVOUR] = {
     end,
     event = _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED,
     tooltip = GetString(_G.SI_CROWN_STORE_MENU_SEALS_STORE_LABEL),
-    icon = "/esoui/art/market/keyboard/tabicon_sealsstore_up.dds",
+    --icon = "/esoui/art/market/keyboard/tabicon_sealsstore_up.dds",
+    icon = "/esoui/art/currency/currency_seals_of_endeavor_64.dds",
     onClick = function()
         if (not IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("endeavorSealStoreSceneKeyboard")
