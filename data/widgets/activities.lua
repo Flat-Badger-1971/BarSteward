@@ -116,11 +116,11 @@ local difficultyColours = {
 }
 
 local function getLeadColour(lead)
-    if ((lead.difficulty or 0) == 0) then
+    if ((lead.quality or 0) == 0) then
         return BS.ARGBConvert(BS.Vars.Controls[BS.W_LEADS].Colour or BS.Vars.DefaultColour)
     end
 
-    return "|c" .. difficultyColours[lead.difficulty]
+    return "|c" .. difficultyColours[lead.quality]
 end
 
 BS.widgets[BS.W_LEADS] = {
@@ -137,7 +137,7 @@ BS.widgets[BS.W_LEADS] = {
                 local lead = {
                     name = ZO_CachedStrFormat("<<C:1>>", GetAntiquityName(antiquityId)),
                     remaining = GetAntiquityLeadTimeRemainingSeconds(antiquityId),
-                    difficulty = GetAntiquityDifficulty(antiquityId),
+                    quality = GetAntiquityQuality(antiquityId),
                     zone = ZO_CachedStrFormat("<<C:1>>", GetZoneNameById(GetAntiquityZoneId(antiquityId))),
                     id = antiquityId
                 }
@@ -184,7 +184,7 @@ BS.widgets[BS.W_LEADS] = {
 
         return minTime
     end,
-    timer = 1000,
+    --timer = 1000,
     icon = GetAntiquityLeadIcon(),
     tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ANTIQUITY_SUBHEADING_ACTIVE_LEADS)),
     hideWhenEqual = 99999999
