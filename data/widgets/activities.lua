@@ -163,7 +163,7 @@ BS.widgets[BS.W_LEADS] = {
             widget:SetColour(unpack(colour))
             widget:SetValue(BS.SecondsToTime(minTime, false, false, true))
 
-            local ttt = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ANTIQUITY_SUBHEADING_ACTIVE_LEADS)) .. BS.LF
+            local ttt = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ANTIQUITY_SUBHEADING_ACTIVE_LEADS))
 
             for _, lead in ipairs(leads) do
                 local nameAndZone = lead.name .. " - " .. lead.zone
@@ -176,7 +176,7 @@ BS.widgets[BS.W_LEADS] = {
                     end
                 end
 
-                ttt = ttt .. ttlColour .. nameAndZone .. " - " .. time .. BS.LF .. "|r"
+                ttt = ttt .. BS.LF .. ttlColour .. nameAndZone .. " - " .. time .. "|r"
             end
 
             widget.tooltip = ttt
