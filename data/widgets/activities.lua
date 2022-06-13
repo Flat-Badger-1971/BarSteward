@@ -106,12 +106,13 @@ BS.widgets[BS.W_WEEKLY_ENDEAVOURS] = {
     end
 }
 
-local qualityColours = {
-    [1] = "2dc50e",
-    [2] = "3a92ff",
-    [3] = "a02ef7",
-    [4] = "ccaa1a",
-    [5] = "e58b27"
+local difficultyColours = {
+    [_G.ANTIQUITY_DIFFICULTY_TRIVIAL] = "e6e6e6",
+    [_G.ANTIQUITY_DIFFICULTY_SIMPLE] = "2dc50e",
+    [_G.ANTIQUITY_DIFFICULTY_INTERMEDIATE] = "3a92ff",
+    [_G.ANTIQUITY_DIFFICULTY_ADVANCED] = "a02ef7",
+    [_G.ANTIQUITY_DIFFICULTY_MASTER] = "ccaa1a",
+    [_G.ANTIQUITY_DIFFICULTY_ULTIMATE] = "e58b27"
 }
 
 local function getLeadColour(lead)
@@ -119,9 +120,7 @@ local function getLeadColour(lead)
         return BS.ARGBConvert(BS.Vars.Controls[BS.W_LEADS].Colour or BS.Vars.DefaultColour)
     end
 
-    local quality = lead.difficulty > 5 and lead.quality or lead.difficulty
-
-    return "|c" .. qualityColours[quality]
+    return "|c" .. difficultyColours[lead.difficulty]
 end
 
 BS.widgets[BS.W_LEADS] = {
@@ -138,7 +137,6 @@ BS.widgets[BS.W_LEADS] = {
                 local lead = {
                     name = ZO_CachedStrFormat("<<C:1>>", GetAntiquityName(antiquityId)),
                     remaining = GetAntiquityLeadTimeRemainingSeconds(antiquityId),
-                    quality = GetAntiquityQuality(antiquityId),
                     difficulty = GetAntiquityDifficulty(antiquityId),
                     zone = ZO_CachedStrFormat("<<C:1>>", GetZoneNameById(GetAntiquityZoneId(antiquityId))),
                     id = antiquityId
