@@ -121,7 +121,7 @@ BS.Defaults = {
             ColourValues = "okc,wv,wc,dv,dc",
             DangerValue = 24,
             WarningValue = 72,
-            Units = GetString(_G.BARSTEWARD_Hours),
+            Units = GetString(_G.BARSTEWARD_HOURS),
         },
         [BS.W_WOODWORKING] = {
             Bar = 1,
@@ -131,7 +131,7 @@ BS.Defaults = {
             ColourValues = "okc,wv,wc,dv,dc",
             DangerValue = 24,
             WarningValue = 72,
-            Units = GetString(_G.BARSTEWARD_Hours),
+            Units = GetString(_G.BARSTEWARD_HOURS),
         },
         [BS.W_CLOTHING] = {
             Bar = 1,
@@ -141,7 +141,7 @@ BS.Defaults = {
             ColourValues = "okc,wv,wc,dv,dc",
             DangerValue = 24,
             WarningValue = 72,
-            Units = GetString(_G.BARSTEWARD_Hours),
+            Units = GetString(_G.BARSTEWARD_HOURS),
         },
         [BS.W_JEWELCRAFTING] = {
             Bar = 1,
@@ -151,7 +151,7 @@ BS.Defaults = {
             ColourValues = "okc,wv,wc,dv,dc",
             DangerValue = 24,
             WarningValue = 72,
-            Units = GetString(_G.BARSTEWARD_Hours),
+            Units = GetString(_G.BARSTEWARD_HOURS),
         },
         [BS.W_REPAIR_COST] = {Bar = 1, Order = 20, Autohide = true, UseSeparators = false, ColourValues = "c"},
         [BS.W_MOUNT_TRAINING] = {
@@ -162,7 +162,7 @@ BS.Defaults = {
             ColourValues = "okc,wv,wc,dv,dc",
             DangerValue = 3,
             WarningValue = 6,
-            Units = GetString(_G.BARSTEWARD_Hours),
+            Units = GetString(_G.BARSTEWARD_HOURS),
         },
         [BS.W_RAPPORT] = {Bar = 1, Order = 22, Autohide = true},
         [BS.W_CHAMPION_POINTS] = {
@@ -217,9 +217,9 @@ BS.Defaults = {
             Bar = 1,
             Order = 37,
             ColourValues = "okc,wv,wc,dv,dc",
-            DangerValue = 1,
-            WarningValue = 3,
-            Units = GetString(_G.BARSTEWARD_Hours),
+            DangerValue = 24,
+            WarningValue = 72,
+            Units = GetString(_G.BARSTEWARD_HOURS),
             Autohide = true
         }
     }
