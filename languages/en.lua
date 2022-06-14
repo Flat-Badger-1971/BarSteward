@@ -50,6 +50,7 @@ ZO_CreateStringId("BARSTEWARD_GOLD_COMBINED", "Combined")
 ZO_CreateStringId("BARSTEWARD_GOLD_SEPARATED", "Separated") --Added by P5ych3
 ZO_CreateStringId("BARSTEWARD_HIDE_SECONDS", "Hide seconds")
 ZO_CreateStringId("BARSTEWARD_HIDE_WHEN_COMPLETE", "Hide when complete")
+ZO_CreateStringId("BARSTEWARD_HOURS", "Hours")
 ZO_CreateStringId("BARSTEWARD_NUMBER_GROUPING", "3")
 ZO_CreateStringId("BARSTEWARD_NUMBER_SEPARATOR", ",")
 ZO_CreateStringId("BARSTEWARD_NUMBER_SEPARATORS", "Number separators")

@@ -8,6 +8,7 @@ local x, y = GuiRoot:GetCenter()
 local BS = _G.BarSteward
 
 BS.Defaults = {
+    Updates = {},
     DefaultColour = {0.9, 0.9, 0.9, 1},
     DefaultDangerColour = {0.8, 0, 0, 1},
     DefaultWarningColour = {1, 1, 0, 1},
@@ -115,43 +116,53 @@ BS.Defaults = {
         [BS.W_BLACKSMITHING] = {
             Bar = 1,
             Order = 16,
-            Autohide = true,
             HideSeconds = false,
             HideWhenComplete = false,
-            ColourValues = "c,dc"
+            ColourValues = "okc,wv,wc,dv,dc",
+            DangerValue = 24,
+            WarningValue = 72,
+            Units = GetString(_G.BARSTEWARD_Hours),
         },
         [BS.W_WOODWORKING] = {
             Bar = 1,
             Order = 17,
-            Autohide = true,
             HideSeconds = false,
             HideWhenComplete = false,
-            ColourValues = "c,dc"
+            ColourValues = "okc,wv,wc,dv,dc",
+            DangerValue = 24,
+            WarningValue = 72,
+            Units = GetString(_G.BARSTEWARD_Hours),
         },
         [BS.W_CLOTHING] = {
             Bar = 1,
             Order = 18,
-            Autohide = true,
             HideSeconds = false,
             HideWhenComplete = false,
-            ColourValues = "c,dc"
+            ColourValues = "okc,wv,wc,dv,dc",
+            DangerValue = 24,
+            WarningValue = 72,
+            Units = GetString(_G.BARSTEWARD_Hours),
         },
         [BS.W_JEWELCRAFTING] = {
             Bar = 1,
             Order = 19,
-            Autohide = true,
             HideSeconds = false,
             HideWhenComplete = false,
-            ColourValues = "c,dc"
+            ColourValues = "okc,wv,wc,dv,dc",
+            DangerValue = 24,
+            WarningValue = 72,
+            Units = GetString(_G.BARSTEWARD_Hours),
         },
         [BS.W_REPAIR_COST] = {Bar = 1, Order = 20, Autohide = true, UseSeparators = false, ColourValues = "c"},
         [BS.W_MOUNT_TRAINING] = {
             Bar = 1,
             Order = 21,
-            Autohide = true,
             HideSeconds = false,
             HideWhenComplete = false,
-            ColourValues = "c,dc"
+            ColourValues = "okc,wv,wc,dv,dc",
+            DangerValue = 3,
+            WarningValue = 6,
+            Units = GetString(_G.BARSTEWARD_Hours),
         },
         [BS.W_RAPPORT] = {Bar = 1, Order = 22, Autohide = true},
         [BS.W_CHAMPION_POINTS] = {
@@ -205,9 +216,10 @@ BS.Defaults = {
         [BS.W_LEADS] = {
             Bar = 1,
             Order = 37,
-            ColourValues = "dv,dc",
-            DangerValue = 300,
-            Units = GetString(_G.BARSTEWARD_SECONDS),
+            ColourValues = "okc,wv,wc,dv,dc",
+            DangerValue = 1,
+            WarningValue = 3,
+            Units = GetString(_G.BARSTEWARD_Hours),
             Autohide = true
         }
     }

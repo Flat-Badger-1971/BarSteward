@@ -65,6 +65,7 @@ local function Initialise()
         "Characters"
     )
 
+    BS.VersionCheck()
     BS.RegisterSettings()
 
     -- create bars

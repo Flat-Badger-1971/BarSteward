@@ -24,7 +24,9 @@ languages/$(language).lua
 data/constants.lua
 data/defaults.lua
 data/sounds.lua
+
 misc/utility.lua
+misc/version.lua
 
 data/widgets/client.lua
 data/widgets/activities.lua

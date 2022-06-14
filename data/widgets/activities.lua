@@ -129,7 +129,6 @@ BS.widgets[BS.W_LEADS] = {
     update = function(widget)
         local antiquityId = GetNextAntiquityId()
         local minTime = 99999999
-        local minLeadId = 0
         local leads = {}
 
         while antiquityId do
@@ -146,7 +145,6 @@ BS.widgets[BS.W_LEADS] = {
 
                 if (lead.remaining < minTime) then
                     minTime = lead.remaining
-                    minLeadId = lead.id
                 end
             end
 
@@ -154,13 +152,15 @@ BS.widgets[BS.W_LEADS] = {
         end
 
         if (#leads > 0) then
-            local colour = BS.Vars.Controls[BS.W_LEADS].Colour or BS.Vars.DefaultColour
+            local timeColour = BS.Vars.DefaultOkColour
 
-            if (minTime <= BS.Vars.Controls[BS.W_LEADS].DangerValue) then
-                colour = BS.Vars.Controls[BS.W_LEADS].DangerColour or BS.Vars.DefaultDangerColour
+            if (minTime <= (BS.Vars.Controls[BS.W_LEADS].DangerValue) * 3600) then
+                timeColour = BS.Vars.Controls[BS.W_LEADS].DangerColour or BS.Vars.DefaultDangerColour
+            elseif (minTime <= (BS.Vars.Controls[BS.W_LEADS].WarningValue * 3600)) then
+                timeColour = BS.Vars.Controls[BS.W_LEADS].WarningColour or BS.Vars.DefaultWarningColour
             end
 
-            widget:SetColour(unpack(colour))
+            widget:SetColour(unpack(timeColour))
             widget:SetValue(BS.SecondsToTime(minTime, false, false, true))
 
             local ttt = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ANTIQUITY_SUBHEADING_ACTIVE_LEADS))
@@ -170,13 +170,15 @@ BS.widgets[BS.W_LEADS] = {
                 local time = BS.SecondsToTime(lead.remaining, false, false, true)
                 local ttlColour = getLeadColour(lead)
 
-                if (lead.id == minLeadId) then
-                    if (minTime <= BS.Vars.Controls[BS.W_LEADS].DangerValue) then
-                        ttlColour = BS.ARGBConvert(BS.Vars.DefaultDangerColour)
-                    end
+                timeColour = BS.Vars.DefaultOkColour
+
+                if (lead.remaining <= (BS.Vars.Controls[BS.W_LEADS].DangerValue * 3600)) then
+                    timeColour = BS.Vars.Controls[BS.W_LEADS].DangerColour or BS.Vars.DefaultDangerColour
+                elseif (lead.remaining <= (BS.Vars.Controls[BS.W_LEADS].WarningValue * 3600)) then
+                    timeColour = BS.Vars.Controls[BS.W_LEADS].WarningColour or BS.Vars.DefaultWarningColour
                 end
 
-                ttt = ttt .. BS.LF .. ttlColour .. nameAndZone .. " - " .. time .. "|r"
+                ttt = ttt .. BS.LF .. ttlColour .. nameAndZone .. " - |r" .. BS.ARGBConvert(timeColour) .. time .. "|r"
             end
 
             widget.tooltip = ttt
@@ -184,7 +186,7 @@ BS.widgets[BS.W_LEADS] = {
 
         return minTime
     end,
-    --timer = 1000,
+    timer = 1000,
     icon = GetAntiquityLeadIcon(),
     tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ANTIQUITY_SUBHEADING_ACTIVE_LEADS)),
     hideWhenEqual = 99999999
