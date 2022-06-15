@@ -292,8 +292,8 @@ BS.widgets[BS.W_SOUL_GEMS] = {
     name = "soulGems",
     update = function(widget)
         local level = GetUnitEffectiveLevel("player")
-        local filledName, filledIcon, filledCount = GetSoulGemInfo(SOUL_GEM_TYPE_FILLED, level)
-        local emptyName, emptyIcon, emptyCount = GetSoulGemInfo(SOUL_GEM_TYPE_EMPTY, level)
+        local _, filledIcon, filledCount = GetSoulGemInfo(_G.SOUL_GEM_TYPE_FILLED, level)
+        local _, emptyIcon, emptyCount = GetSoulGemInfo(_G.SOUL_GEM_TYPE_EMPTY, level)
 
         if (BS.Vars.Controls[BS.W_SOUL_GEMS].UseSeparators == true) then
             filledCount = BS.AddSeparators(filledCount)

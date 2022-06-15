@@ -114,7 +114,13 @@ function baseBar:Initialise(barSettings)
     if (BS.Vars.Bars[self.index].NudgeCompass == true) then
         -- something is making the compass jump back to its original position
         -- this puts it back again, but it's nasty - what's causing the move in the first place?
-        EVENT_MANAGER:RegisterForUpdate(BS.Name, 500, function() BS.NudgeCompass() end)
+        EVENT_MANAGER:RegisterForUpdate(
+            BS.Name,
+            500,
+            function()
+                BS.NudgeCompass()
+            end
+        )
     end
 
     -- prevent the bar from displaying when not in hud or hudui modes
@@ -276,16 +282,21 @@ function baseBar:DoUpdate(metadata, ...)
 end
 
 function baseBar:ResizeBar()
-    if (self.orientation == "horizontal") then
-        local width = self:GetCalculatedWidth()
-        self.bar:SetWidth(width)
-        self.bar:SetHeight(self.defaultHeight)
-    else
-        local width = self:GetMaxWidgetWidth()
-        self.bar:SetWidth(width)
-        local height = self:GetCalculatedHeight()
-        self.bar:SetHeight(height)
-    end
+    zo_callLater(
+        function()
+            if (self.orientation == "horizontal") then
+                local width = self:GetCalculatedWidth()
+                self.bar:SetWidth(width)
+                self.bar:SetHeight(self.defaultHeight)
+            else
+                local width = self:GetMaxWidgetWidth()
+                self.bar:SetWidth(width)
+                local height = self:GetCalculatedHeight()
+                self.bar:SetHeight(height)
+            end
+        end,
+        500
+    )
 end
 
 -- calculate the current width of the visible widgets
