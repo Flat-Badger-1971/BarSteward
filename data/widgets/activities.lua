@@ -39,7 +39,7 @@ local function getTimedActivityProgress(activityType, widget)
                     reward = reward .. ", "
                 end
 
-                reward = reward .. zo_iconFormat(rewardData.lootIcon, 16, 16) .. quantity
+                reward = reward .. zo_iconFormat(rewardData.lootIcon or rewardData.icon, 16, 16) .. quantity
             end
 
             ttext = colour .. ttext .. "|r" .. " " .. reward
