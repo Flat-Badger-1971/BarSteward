@@ -1,10 +1,14 @@
+[color=#ff9900][b]Version: 1.1.3 ---------------[/b][/color]
+Soul Gems added
+Time format option added for timers
+
 [color=#ff9900][b]Version: 1.1.2 ---------------[/b][/color]
 Include reward detail in endeavour tooltips
 Changed Seals of Endeavour icon
 Corrected lead colours
 Changed timer config times from seconds to hours
 Added warning colours to timers.
-Fixed bug with endeavour rewarsds
+Fixed bug with endeavour rewards
 
 [color=#ff9900][b]Version: 1.1.1 ---------------[/b][/color]
 Localisation improvements

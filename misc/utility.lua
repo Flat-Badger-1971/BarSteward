@@ -1,6 +1,6 @@
 local BS = _G.BarSteward
 
-function BS.SecondsToTime(seconds, hideDays, hideHours, hideSeconds)
+function BS.SecondsToTime(seconds, hideDays, hideHours, hideSeconds, format)
     local time = ""
     local days = math.floor(seconds / 86400)
     local remaining = seconds
@@ -21,18 +21,26 @@ function BS.SecondsToTime(seconds, hideDays, hideHours, hideSeconds)
         remaining = remaining - (minutes * 60)
     end
 
-    if (not hideDays) then
-        time = string.format("%02d", days) .. ":"
-    end
+    if (format or "01:12:04:10" ~= "01:12:04:10" and format ~= "01:12:04") then
+        if (hideSeconds) then
+            time = ZO_CachedStrFormat(_G.BARSTEWARD_TIMER_FORMAT_TEXT, days, hours, minutes)
+        else
+            time = ZO_CachedStrFormat(_G.BARSTEWARD_TIMER_FORMAT_TEXT_WITH_SECONDS, days, hours, minutes, remaining)
+        end
+    else
+        if (not hideDays) then
+            time = string.format("%02d", days) .. ":"
+        end
 
-    if (not hideHours) then
-        time = time .. string.format("%02d", hours) .. ":"
-    end
+        if (not hideHours) then
+            time = time .. string.format("%02d", hours) .. ":"
+        end
 
-    time = time .. string.format("%02d", minutes)
+        time = time .. string.format("%02d", minutes)
 
-    if (not hideSeconds) then
-        time = time .. ":" .. string.format("%02d", remaining)
+        if (not hideSeconds) then
+            time = time .. ":" .. string.format("%02d", remaining)
+        end
     end
 
     return time

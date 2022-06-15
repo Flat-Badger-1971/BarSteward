@@ -122,6 +122,7 @@ BS.Defaults = {
             DangerValue = 24,
             WarningValue = 72,
             Units = GetString(_G.BARSTEWARD_HOURS),
+            Timer = true
         },
         [BS.W_WOODWORKING] = {
             Bar = 1,
@@ -132,6 +133,7 @@ BS.Defaults = {
             DangerValue = 24,
             WarningValue = 72,
             Units = GetString(_G.BARSTEWARD_HOURS),
+            Timer = true
         },
         [BS.W_CLOTHING] = {
             Bar = 1,
@@ -142,6 +144,7 @@ BS.Defaults = {
             DangerValue = 24,
             WarningValue = 72,
             Units = GetString(_G.BARSTEWARD_HOURS),
+            Timer = true
         },
         [BS.W_JEWELCRAFTING] = {
             Bar = 1,
@@ -152,6 +155,7 @@ BS.Defaults = {
             DangerValue = 24,
             WarningValue = 72,
             Units = GetString(_G.BARSTEWARD_HOURS),
+            Timer = true
         },
         [BS.W_REPAIR_COST] = {Bar = 1, Order = 20, Autohide = true, UseSeparators = false, ColourValues = "c"},
         [BS.W_MOUNT_TRAINING] = {
@@ -162,7 +166,7 @@ BS.Defaults = {
             ColourValues = "okc,wv,wc,dv,dc",
             DangerValue = 3,
             WarningValue = 6,
-            Units = GetString(_G.BARSTEWARD_HOURS),
+            Units = GetString(_G.BARSTEWARD_HOURS)
         },
         [BS.W_RAPPORT] = {Bar = 1, Order = 22, Autohide = true},
         [BS.W_CHAMPION_POINTS] = {
@@ -214,13 +218,15 @@ BS.Defaults = {
         [BS.W_CLASS] = {Bar = 0, Order = 35, ColourValues = "c"},
         [BS.W_ALLIANCE] = {Bar = 0, Order = 36},
         [BS.W_LEADS] = {
-            Bar = 1,
+            Bar = 0,
             Order = 37,
             ColourValues = "okc,wv,wc,dv,dc",
             DangerValue = 24,
             WarningValue = 72,
             Units = GetString(_G.BARSTEWARD_HOURS),
-            Autohide = true
-        }
+            Autohide = true,
+            Timer = true
+        },
+        [BS.W_SOUL_GEMS] = {Bar = 0, Order = 38, ColourValues = "c", UseSeparators = false}
     }
 }

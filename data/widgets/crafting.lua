@@ -1,7 +1,7 @@
 local BS = _G.BarSteward
 
-local -- based on code from AI Research Timer
-function getResearchTimer(craftType)
+local function -- based on code from AI Research Timer
+getResearchTimer(craftType)
     local maxTimer = 2000000
     local maxResearch = GetMaxSimultaneousSmithingResearch(craftType)
     local maxLines = GetNumSmithingResearchLines(craftType)
@@ -39,7 +39,15 @@ BS.widgets[BS.W_BLACKSMITHING] = {
         end
 
         widget:SetColour(unpack(colour))
-        widget:SetValue(BS.SecondsToTime(timeRemaining, false, false, BS.Vars.Controls[BS.W_BLACKSMITHING].HideSeconds))
+        widget:SetValue(
+            BS.SecondsToTime(
+                timeRemaining,
+                false,
+                false,
+                BS.Vars.Controls[BS.W_BLACKSMITHING].HideSeconds,
+                BS.Vars.Controls[BS.W_BLACKSMITHING].Format
+            )
+        )
         return timeRemaining
     end,
     timer = 1000,
@@ -64,7 +72,15 @@ BS.widgets[BS.W_WOODWORKING] = {
         end
 
         widget:SetColour(unpack(colour))
-        widget:SetValue(BS.SecondsToTime(timeRemaining, false, false, BS.Vars.Controls[BS.W_WOODWORKING].HideSeconds))
+        widget:SetValue(
+            BS.SecondsToTime(
+                timeRemaining,
+                false,
+                false,
+                BS.Vars.Controls[BS.W_WOODWORKING].HideSeconds,
+                BS.Vars.Controls[BS.W_WOODWORKING].Format
+            )
+        )
         return timeRemaining
     end,
     timer = 1000,
@@ -89,7 +105,15 @@ BS.widgets[BS.W_CLOTHING] = {
         end
 
         widget:SetColour(unpack(colour))
-        widget:SetValue(BS.SecondsToTime(timeRemaining, false, false, BS.Vars.Controls[BS.W_CLOTHING].HideSeconds))
+        widget:SetValue(
+            BS.SecondsToTime(
+                timeRemaining,
+                false,
+                false,
+                BS.Vars.Controls[BS.W_CLOTHING].HideSeconds,
+                BS.Vars.Controls[BS.W_CLOTHING].Format
+            )
+        )
         return timeRemaining
     end,
     timer = 1000,
@@ -114,7 +138,15 @@ BS.widgets[BS.W_JEWELCRAFTING] = {
         end
 
         widget:SetColour(unpack(colour))
-        widget:SetValue(BS.SecondsToTime(timeRemaining, false, false, BS.Vars.Controls[BS.W_JEWELCRAFTING].HideSeconds))
+        widget:SetValue(
+            BS.SecondsToTime(
+                timeRemaining,
+                false,
+                false,
+                BS.Vars.Controls[BS.W_JEWELCRAFTING].HideSeconds,
+                BS.Vars.Controls[BS.W_JEWELCRAFTING].Format
+            )
+        )
         return timeRemaining
     end,
     timer = 1000,

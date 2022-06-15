@@ -7,7 +7,7 @@ local panel = {
     name = "Bar Steward",
     displayName = "Bar Steward",
     author = "Flat Badger",
-    version = "1.1.2",
+    version = "1.1.3",
     registerForDefaults = true,
     slashCommand = "/bs"
 }
@@ -752,7 +752,6 @@ local function GetWidgetSettings()
         -- custom option
         local copts = BS.widgets[k].customOptions
         if (copts) then
-
             widgetControls[#widgetControls + 1] = {
                 type = "dropdown",
                 name = copts.name,
@@ -839,6 +838,33 @@ local function GetWidgetSettings()
                     return BS.Vars.TimeType == GetString(_G.BARSTEWARD_12)
                 end,
                 default = BS.Defaults.TimeFormat24
+            }
+        end
+
+        if (BS.Defaults.Controls[k].Timer == true) then
+            local timerFormat =
+                k == BS.W_LEADS and ZO_CachedStrFormat(_G.BARSTEWARD_TIMER_FORMAT_TEXT, 1, 12, 4) or
+                ZO_CachedStrFormat(_G.BARSTEWARD_TIMER_FORMAT_TEXT_WITH_SECONDS, 1, 12, 4, 10)
+
+            widgetControls[#widgetControls + 1] = {
+                type = "dropdown",
+                name = GetString(_G.BARSTEWARD_TIMER_FORMAT),
+                choices = {
+                    timerFormat,
+                    "01:12:04:10"
+                },
+                getFunc = function()
+                    local default = (k == BS.W_LEADS) and "01:12:04" or "01:12:04:10"
+
+                    return BS.Vars.Controls[k].Format or default
+                end,
+                setFunc = function(value)
+                    BS.Vars.Controls[k].Format = value
+                    if (BS.Vars.Controls[k].Bar ~= 0) then
+                        BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
+                    end
+                end,
+                default = k == BS.W_LEADS and "01:12:04" or "01:12:04:10"
             }
         end
 
@@ -984,7 +1010,7 @@ local function GetWidgetSettings()
 
         controls[k] = {
             type = "submenu",
-            name = BS.widgets[k].tooltip:gsub(":",""),
+            name = BS.widgets[k].tooltip:gsub(":", ""),
             controls = widgetControls,
             reference = "BarStewardWidgets" .. k
         }

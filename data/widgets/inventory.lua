@@ -10,7 +10,10 @@ BS.widgets[BS.W_BAG_SPACE] = {
 
         local colour = BS.Vars.Controls[BS.W_BAG_SPACE].OkColour or BS.Vars.DefaultOkColour
 
-        if (pcUsed >= BS.Vars.Controls[BS.W_BAG_SPACE].WarningValue and pcUsed < BS.Vars.Controls[BS.W_BAG_SPACE].DangerValue) then
+        if
+            (pcUsed >= BS.Vars.Controls[BS.W_BAG_SPACE].WarningValue and
+                pcUsed < BS.Vars.Controls[BS.W_BAG_SPACE].DangerValue)
+         then
             colour = BS.Vars.Controls[BS.W_BAG_SPACE].WarningColour or BS.Vars.DefaultWarningColour
         elseif (pcUsed >= BS.Vars.Controls[BS.W_BAG_SPACE].DangerValue) then
             colour = BS.Vars.Controls[BS.W_BAG_SPACE].DangerColour or BS.Vars.DefaultDangerColour
@@ -27,7 +30,7 @@ BS.widgets[BS.W_BAG_SPACE] = {
         return pcUsed
     end,
     event = _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
-    tooltip = GetString(_G.SI_GAMEPAD_MAIL_INBOX_INVENTORY):gsub(":",""),
+    tooltip = GetString(_G.SI_GAMEPAD_MAIL_INBOX_INVENTORY):gsub(":", ""),
     icon = "/esoui/art/tooltips/icon_bag.dds",
     onClick = function()
         if (not IsInGamepadPreferredMode()) then
@@ -54,7 +57,10 @@ BS.widgets[BS.W_BANK_SPACE] = {
 
         local colour = BS.Vars.Controls[BS.W_BANK_SPACE].OkColour or BS.Vars.DefaultOkColour
 
-        if (pcUsed >= BS.Vars.Controls[BS.W_BANK_SPACE].WarningValue and pcUsed < BS.Vars.Controls[BS.W_BANK_SPACE].DangerValue) then
+        if
+            (pcUsed >= BS.Vars.Controls[BS.W_BANK_SPACE].WarningValue and
+                pcUsed < BS.Vars.Controls[BS.W_BANK_SPACE].DangerValue)
+         then
             colour = BS.Vars.Controls[BS.W_BANK_SPACE].WarningColour or BS.Vars.DefaultWarningColour
         elseif (pcUsed >= BS.Vars.Controls[BS.W_BANK_SPACE].DangerValue) then
             colour = BS.Vars.Controls[BS.W_BANK_SPACE].DangerColour or BS.Vars.DefaultDangerColour
@@ -122,10 +128,19 @@ BS.widgets[BS.W_DURABILITY] = {
                 local colour = BS.ARGBConvert(BS.Vars.Controls[BS.W_DURABILITY].OkColour or BS.Vars.DefaultOkColour)
 
                 if (itemName ~= "") then
-                    if (condition <= BS.Vars.Controls[BS.W_DURABILITY].OkValue and condition >= BS.Vars.Controls[BS.W_DURABILITY].DangerValue) then
-                        colour = BS.ARGBConvert(BS.Vars.Controls[BS.W_DURABILITY].WarningColour or BS.Vars.DefaultWarningColour)
+                    if
+                        (condition <= BS.Vars.Controls[BS.W_DURABILITY].OkValue and
+                            condition >= BS.Vars.Controls[BS.W_DURABILITY].DangerValue)
+                     then
+                        colour =
+                            BS.ARGBConvert(
+                            BS.Vars.Controls[BS.W_DURABILITY].WarningColour or BS.Vars.DefaultWarningColour
+                        )
                     elseif (condition < BS.Vars.Controls[BS.W_DURABILITY].DangerValue) then
-                        colour = BS.ARGBConvert(BS.Vars.Controls[BS.W_DURABILITY].DangerColour or BS.Vars.DefaultDangerColour)
+                        colour =
+                            BS.ARGBConvert(
+                            BS.Vars.Controls[BS.W_DURABILITY].DangerColour or BS.Vars.DefaultDangerColour
+                        )
                     end
 
                     table.insert(items, colour .. itemName .. " - " .. condition .. "%|r")
@@ -253,7 +268,10 @@ BS.widgets[BS.W_FENCE_TRANSACTIONS] = {
         local pcUsed = math.floor(used / max) * 100
         local colour = BS.Vars.Controls[BS.W_FENCE_TRANSACTIONS].OkColour or BS.Vars.DefaultOkColour
 
-        if (pcUsed >= BS.Vars.Controls[BS.W_FENCE_TRANSACTIONS].WarningValue and pcUsed < BS.Vars.Controls[BS.W_FENCE_TRANSACTIONS].DangerValue) then
+        if
+            (pcUsed >= BS.Vars.Controls[BS.W_FENCE_TRANSACTIONS].WarningValue and
+                pcUsed < BS.Vars.Controls[BS.W_FENCE_TRANSACTIONS].DangerValue)
+         then
             colour = BS.Vars.Controls[BS.W_FENCE_TRANSACTIONS].WarningColour or BS.Vars.DefaultWarningColour
         elseif (pcUsed >= BS.Vars.Controls[BS.W_FENCE_TRANSACTIONS].DangerValue) then
             colour = BS.Vars.Controls[BS.W_FENCE_TRANSACTIONS].DangerColour or BS.Vars.DefaultDangerColour
@@ -268,3 +286,112 @@ BS.widgets[BS.W_FENCE_TRANSACTIONS] = {
     icon = "/esoui/art/vendor/vendor_tabicon_fence_up.dds",
     tooltip = GetString(_G.BARSTEWARD_FENCE)
 }
+
+BS.widgets[BS.W_SOUL_GEMS] = {
+    -- v1.1.3
+    name = "soulGems",
+    update = function(widget)
+        local level = GetUnitEffectiveLevel("player")
+        local filledName, filledIcon, filledCount = GetSoulGemInfo(SOUL_GEM_TYPE_FILLED, level)
+        local emptyName, emptyIcon, emptyCount = GetSoulGemInfo(SOUL_GEM_TYPE_EMPTY, level)
+
+        if (BS.Vars.Controls[BS.W_SOUL_GEMS].UseSeparators == true) then
+            filledCount = BS.AddSeparators(filledCount)
+            emptyCount = BS.AddSeparators(emptyCount)
+        end
+
+        local displayValue = filledCount
+        local displayIcon = filledIcon
+        local both = filledCount .. "/" .. emptyCount
+
+        if (BS.Vars.Controls[BS.W_SOUL_GEMS].GemType == GetString(_G.BARSTEWARD_EMPTY)) then
+            displayValue = emptyCount
+            displayIcon = emptyIcon
+        elseif (BS.Vars.Controls[BS.W_SOUL_GEMS].GemType == GetString(_G.BARSTEWARD_BOTH)) then
+            displayValue = both
+        end
+
+        widget:SetValue(displayValue)
+        widget:SetColour(unpack(BS.Vars.Controls[BS.W_SOUL_GEMS].Colour or BS.Vars.DefaultColour))
+        widget:SetIcon(displayIcon)
+
+        -- update the tooltip
+        local ttt = GetString(_G.BARSTEWARD_SOUL_GEMS) .. BS.LF
+        ttt = ttt .. zo_iconFormat(filledIcon, 16, 16) .. " " .. filledCount .. BS.LF
+        ttt = ttt .. zo_iconFormat(emptyIcon, 16, 16) .. " " .. emptyCount
+
+        widget.tooltip = ttt
+
+        return widget:GetValue()
+    end,
+    event = _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
+    icon = "/esoui/art/icons/soulgem_006_filled.dds",
+    tooltip = GetString(_G.BARSTEWARD_SOUL_GEMS),
+    customOptions = {
+        name = GetString(_G.BARSTEWARD_SOUL_GEMS_TYPE),
+        choices = {
+            GetString(_G.BARSTEWARD_FILLED),
+            GetString(_G.BARSTEWARD_EMPTY),
+            GetString(_G.BARSTEWARD_BOTH)
+        },
+        varName = "GemType",
+        refresh = true,
+        default = GetString(_G.BARSTEWARD_FILLED)
+    }
+}
+--[[
+    BS.widgets[BS.W_GOLD] = {
+    name = "gold",
+    update = function(widget)
+        local goldInBag = GetCurrencyAmount(_G.CURT_MONEY, _G.CURRENCY_LOCATION_CHARACTER)
+        local goldInBank = GetCurrencyAmount(_G.CURT_MONEY, _G.CURRENCY_LOCATION_BANK)
+        local combined = goldInBag + goldInBank
+
+        if (BS.Vars.Controls[BS.W_GOLD].UseSeparators == true) then
+            goldInBag = BS.AddSeparators(goldInBag)
+            goldInBank = BS.AddSeparators(goldInBank)
+            combined = BS.AddSeparators(combined)
+        end
+
+        local toDisplay = goldInBag
+        local separated = goldInBag .. "/" .. goldInBank --Add by P5ych3
+
+        if (BS.Vars.Controls[BS.W_GOLD].GoldType == GetString(_G.BARSTEWARD_GOLD_BANK)) then
+            toDisplay = goldInBank
+        elseif (BS.Vars.Controls[BS.W_GOLD].GoldType == GetString(_G.BARSTEWARD_GOLD_COMBINED)) then
+            toDisplay = combined
+        elseif (BS.Vars.Controls[BS.W_GOLD].GoldType == GetString(_G.BARSTEWARD_GOLD_SEPARATED)) then --Add by P5ych3
+            toDisplay = separated
+        end
+
+        widget:SetValue(toDisplay)
+        widget:SetColour(unpack(BS.Vars.Controls[BS.W_GOLD].Colour or BS.Vars.DefaultColour))
+
+        -- update the tooltip
+        local ttt = GetString(_G.SI_GAMEPAD_INVENTORY_AVAILABLE_FUNDS) .. BS.LF
+        ttt = ttt .. "|cffd700" .. tostring(goldInBag) .. "|r " .. GetString(_G.BARSTEWARD_GOLD_BAG) .. BS.LF
+        ttt = ttt .. "|cffd700" .. tostring(goldInBank) .. "|r " .. GetString(_G.BARSTEWARD_GOLD_BANK) .. BS.LF
+        ttt = ttt .. "|cffd700" .. tostring(combined) .. "|r " .. GetString(_G.BARSTEWARD_GOLD_COMBINED)
+
+        widget.tooltip = ttt
+
+        return widget:GetValue()
+    end,
+    event = _G.EVENT_MONEY_UPDATE,
+    tooltip = GetString(_G.SI_GAMEPAD_INVENTORY_AVAILABLE_FUNDS),
+    icon = "/esoui/art/currency/currency_gold_64.dds",
+    customOptions = {
+        name = GetString(_G.BARSTEWARD_GOLD_DISPLAY),
+        choices = {
+            GetString(_G.BARSTEWARD_GOLD_BAG),
+            GetString(_G.BARSTEWARD_GOLD_BANK),
+            GetString(_G.BARSTEWARD_GOLD_COMBINED),
+            GetString(_G.BARSTEWARD_GOLD_SEPARATED) --Add by P5ych3
+        },
+        varName = "GoldType",
+        refresh = true,
+        default = GetString(_G.BARSTEWARD_GOLD_BAG)
+    }
+}
+
+]]

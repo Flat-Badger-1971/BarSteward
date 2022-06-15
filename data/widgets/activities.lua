@@ -161,13 +161,13 @@ BS.widgets[BS.W_LEADS] = {
             end
 
             widget:SetColour(unpack(timeColour))
-            widget:SetValue(BS.SecondsToTime(minTime, false, false, true))
+            widget:SetValue(BS.SecondsToTime(minTime, false, false, true, BS.Vars.Controls[BS.W_LEADS].Format))
 
             local ttt = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ANTIQUITY_SUBHEADING_ACTIVE_LEADS))
 
             for _, lead in ipairs(leads) do
                 local nameAndZone = lead.name .. " - " .. lead.zone
-                local time = BS.SecondsToTime(lead.remaining, false, false, true)
+                local time = BS.SecondsToTime(lead.remaining, false, false, true, BS.Vars.Controls[BS.W_LEADS].Format)
                 local ttlColour = getLeadColour(lead)
 
                 timeColour = BS.Vars.DefaultOkColour
