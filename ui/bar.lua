@@ -61,67 +61,31 @@ function baseBar:Initialise(barSettings)
     self.bar.background:SetAnchorFill(self.bar)
     self.bar.background:SetCenterColor(unpack(settings.Backdrop.Colour))
     self.bar.background:SetEdgeColor(0, 0, 0, 0)
-    self.bar.background:SetHidden(not settings.Backdrop.Show)
+    self.bar.background:SetHidden(true)
 
-    self.handle = WINDOW_MANAGER:CreateControl(barName .. "_handle", self.bar, CT_CONTROL)
-    self.handle:SetDimensions(16, 32)
-    self.handle:SetAnchor(TOPRIGHT, self.bar, TOPLEFT)
-    self.handle.anchor = LEFT
-    self.handle:SetMouseEnabled(true)
-    self.handle:SetHandler(
+    self.bar.overlay = WINDOW_MANAGER:CreateControl(barName .. "_overlay", self.bar, CT_CONTROL)
+    self.bar.overlay:SetDrawTier(_G.DT_HIGH)
+    self.bar.overlay:SetAnchorFill(self.bar)
+    self.bar.overlay:SetHidden(not BS.Vars.Movable)
+    self.bar.overlay:SetMouseEnabled(true)
+    self.bar.overlay:SetHandler(
         "OnMouseDown",
         function()
             self.bar:StartMoving()
         end
     )
 
-    local adjustHandle = function()
-        -- adjust the position of the handle if it's close the left edge of the screen
-        if (self.handle:GetLeft() < 80 and self.handle.anchor ~= RIGHT) then
-            self.handle:ClearAnchors()
-            self.handle:SetAnchor(TOPLEFT, self.bar, TOPRIGHT)
-            self.handle.anchor = RIGHT
-        elseif (self.handle.anchor ~= LEFT and self.handle:GetLeft() >= 80) then
-            self.handle:ClearAnchors()
-            self.handle:SetAnchor(TOPRIGHT, self.bar, TOPLEFT)
-            self.handle.anchor = LEFT
-        end
-    end
-
-    adjustHandle()
-
-    self.handle:SetHandler(
+    self.bar.overlay:SetHandler(
         "OnMouseUp",
         function()
-            adjustHandle()
             onMouseUp()
         end
     )
 
-    self.handle:SetHidden(not BS.Vars.Movable)
-
-    self.handle.background = WINDOW_MANAGER:CreateControl(barName .. "handle_background", self.handle, CT_BACKDROP)
-    self.handle.background:SetAnchorFill(self.handle)
-    self.handle.background:SetCenterColor(unpack(settings.Backdrop.Colour))
-    self.handle.background:SetEdgeColor(0, 0, 0, 0)
-    self.handle.background:SetHidden(not settings.Backdrop.Show)
-
-    self.handle.icon = WINDOW_MANAGER:CreateControl(barName .. "_handle_icon", self.handle.background, CT_TEXTURE)
-    self.handle.icon:SetTexture("/esoui/art/dye/dye_amorslot_highlight.dds")
-    self.handle.icon:SetDimensions(6, 32)
-    self.handle.icon:SetAnchor(CENTER)
-
-    if (BS.Vars.Bars[self.index].NudgeCompass == true) then
-        -- something is making the compass jump back to its original position
-        -- this puts it back again, but it's nasty - what's causing the move in the first place?
-        EVENT_MANAGER:RegisterForUpdate(
-            BS.Name,
-            500,
-            function()
-                BS.NudgeCompass()
-            end
-        )
-    end
+    self.bar.overlay.background =
+        WINDOW_MANAGER:CreateControl(barName .. "_overlay_background", self.bar.overlay, CT_TEXTURE)
+    self.bar.overlay.background:SetAnchorFill(self.bar.overlay)
+    self.bar.overlay.background:SetTexture("/esoui/art/itemupgrade/eso_itemupgrade_wildslot.dds")
 
     -- prevent the bar from displaying when not in hud or hudui modes
     self.bar.fragment = ZO_HUDFadeSceneFragment:New(self.bar)

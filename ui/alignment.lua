@@ -174,3 +174,49 @@ function BS.SetBarOptions(bars)
     BS.frame.alignBarValue.UpdateValues(BS.frame.alignBarValue, bars, bars[1])
     BS.frame.relativeBarValue.UpdateValues(BS.frame.relativeBarValue, bars, bars[1])
 end
+
+function BS.CreateLockButton()
+    local name = BS.Name .. "_Lock_Button"
+
+    BS.lock = WINDOW_MANAGER:CreateTopLevelWindow(name)
+    BS.lock:SetDimensions(500, 150)
+    BS.lock:SetAnchor(CENTER, GuiRoot, CENTER)
+    BS.lock:SetHidden(true)
+
+    BS.lock.button = WINDOW_MANAGER:CreateControl(name .. "_icon", BS.lock, CT_BUTTON)
+    BS.lock.button:SetAnchorFill(BS.lock)
+    BS.lock.button:SetNormalTexture("/esoui/art/buttons/button_xlarge_mouseup.dds")
+    BS.lock.button:SetPressedTexture("/esoui/art/buttons/button_xlarge_mousedown.dds")
+    BS.lock.button:SetMouseOverTexture("/esoui/art/buttons/button_xlarge_mouseover.dds")
+    BS.lock.button:SetClickSound(_G.SOUNDS.MENU_BAR_CLICK)
+    BS.lock.button:SetHandler(
+        "OnClicked",
+        function()
+            BS.Vars.Movable = false
+
+            for _, bar in ipairs(BS.Bars) do
+                _G[bar]:SetMovable(false)
+                _G[bar].ref.bar.overlay:SetHidden(true)
+            end
+
+            BS.lock.fragment:SetHiddenForReason("disabled", true)
+            SCENE_MANAGER:GetScene("hud"):RemoveFragment(BS.lock.fragment)
+            SCENE_MANAGER:GetScene("hudui"):RemoveFragment(BS.lock.fragment)
+            SCENE_MANAGER:Show("hud")
+            --SetGameCameraUIMode(false)
+        end
+    )
+
+    local icon = zo_iconFormat("/esoui/art/miscellaneous/locked_up.dds", 24, 24)
+
+    BS.lock.label = WINDOW_MANAGER:CreateControl(name .. "_label", BS.lock, CT_LABEL)
+    BS.lock.label:SetFont("EsoUi/Common/Fonts/Univers67.otf|36|soft-shadow-thick")
+    BS.lock.label:SetColor(0.8, 0.8, 0.8, 1)
+    BS.lock.label:SetText(icon .. " " .. GetString(_G.BARSTEWARD_LOCK_FRAMES))
+    BS.lock.label:SetDimensions(BS.lock:GetWidth(), 50)
+    BS.lock.label:SetAnchor(CENTER, BS.lock, CENTER, 0, -30)
+    BS.lock.label:SetHorizontalAlignment(TEXT_ALIGN_CENTER)
+
+    BS.lock.fragment = ZO_HUDFadeSceneFragment:New(BS.lock)
+    BS.lock.fragment:SetHiddenForReason("disabled", true)
+end

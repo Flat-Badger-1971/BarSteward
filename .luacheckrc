@@ -231,6 +231,7 @@ read_globals = {
 	"PlayEmoteByIndex",
     "PlaySound",
     "ReloadUI",
+	"SetGameCameraUIMode",
     "TriggerTutorial",
     "UseCollectible",
     -- Zenimax objects

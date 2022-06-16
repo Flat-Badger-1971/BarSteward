@@ -133,6 +133,7 @@ local function Initialise()
     end
 
     BS.CreateAlignmentFrame(alignBars)
+    BS.CreateLockButton()
 
     -- utiltity
     if (_G.SLASH_COMMANDS["/rl"] == nil) then

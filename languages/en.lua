@@ -102,7 +102,8 @@ ZO_CreateStringId("BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS", "Weekly Endeavour Prog
 ZO_CreateStringId("BARSTEWARD_WIDGETS", "Widgets")
 ZO_CreateStringId("BARSTEWARD_WRIT_VOUCHERS", "Writ Vouchers")
 -- Other
-ZO_CreateStringId("BARSTEWARD_MOVEFRAME", "Movable Frames")
+ZO_CreateStringId("BARSTEWARD_LOCK_FRAMES", "Lock Bars")
+ZO_CreateStringId("BARSTEWARD_MOVEFRAME", "Movable Bars")
 ZO_CreateStringId("BARSTEWARD_RELOAD", "UI reload required")
 ZO_CreateStringId("BARSTEWARD_RELOAD_MSG", "The UI will now reload.")
 ZO_CreateStringId("BARSTEWARD_LIB_EVENT_HANDLER_TITLE", "Additional Library Required")
