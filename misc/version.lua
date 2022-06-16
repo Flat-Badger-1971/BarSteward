@@ -9,6 +9,10 @@ local function needsUpdate(version)
 end
 
 function BS.VersionCheck()
+    if (needsUpdate(113)) then
+        BS.Vars.Movable = false
+    end
+
     if (needsUpdate(112)) then
         -- update timer value from seconds to hours
         local value = BS.Vars.Controls[BS.W_LEADS].DangerValue
