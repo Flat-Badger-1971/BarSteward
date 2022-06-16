@@ -3,6 +3,7 @@ Soul Gems added
 Time format option added for timers
 Fixed bar sizing issue
 Reworked bar movement code
+Removed compass nudge disabling
 
 [color=#ff9900][b]Version: 1.1.2 ---------------[/b][/color]
 Include reward detail in endeavour tooltips

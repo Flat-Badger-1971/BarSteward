@@ -299,21 +299,20 @@ local function GetBarSettings()
                 width = "full"
             }
         else
-            if (not _G.BUI) then
-                controls[#controls + 1] = {
-                    type = "checkbox",
-                    name = GetString(_G.BARSTEWARD_NUDGE),
-                    getFunc = function()
-                        return BS.Vars.Bars[idx].NudgeCompass
-                    end,
-                    setFunc = function(value)
-                        BS.Vars.Bars[idx].NudgeCompass = value
-                    end,
-                    width = "full",
-                    requiresReload = true,
-                    default = BS.Defaults.Bars[1].NudgeCompass
-                }
-            end
+            controls[#controls + 1] = {
+                type = "checkbox",
+                name = GetString(_G.BARSTEWARD_NUDGE),
+                getFunc = function()
+                    return BS.Vars.Bars[idx].NudgeCompass
+                end,
+                setFunc = function(value)
+                    BS.Vars.Bars[idx].NudgeCompass = value
+                end,
+                width = "full",
+                requiresReload = true,
+                default = BS.Defaults.Bars[1].NudgeCompass,
+                warning = GetString(_G.BARSTEWARD_NUDGE_WARNING)
+            }
         end
 
         BS.options[#BS.options + 1] = {

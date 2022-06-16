@@ -41,6 +41,10 @@ function baseBar:Initialise(barSettings)
 
     -- save the bar position after it's moved
     local onMouseUp = function()
+        if (BS.Vars.Bars[self.index].NudgeCompass == true and barSettings.index == 1) then
+            BS.NudgeCompass()
+        end
+
         local anchor = BS.GetAnchorFromText(BS.Vars.Bars[barSettings.index].Anchor)
         local xPos, yPos
 
@@ -61,12 +65,12 @@ function baseBar:Initialise(barSettings)
     self.bar.background:SetAnchorFill(self.bar)
     self.bar.background:SetCenterColor(unpack(settings.Backdrop.Colour))
     self.bar.background:SetEdgeColor(0, 0, 0, 0)
-    self.bar.background:SetHidden(true)
+    self.bar.background:SetHidden(not settings.Backdrop.Show)
 
     self.bar.overlay = WINDOW_MANAGER:CreateControl(barName .. "_overlay", self.bar, CT_CONTROL)
     self.bar.overlay:SetDrawTier(_G.DT_HIGH)
     self.bar.overlay:SetAnchorFill(self.bar)
-    self.bar.overlay:SetHidden(not BS.Vars.Movable)
+    self.bar.overlay:SetHidden(true)
     self.bar.overlay:SetMouseEnabled(true)
     self.bar.overlay:SetHandler(
         "OnMouseDown",
@@ -86,6 +90,10 @@ function baseBar:Initialise(barSettings)
         WINDOW_MANAGER:CreateControl(barName .. "_overlay_background", self.bar.overlay, CT_TEXTURE)
     self.bar.overlay.background:SetAnchorFill(self.bar.overlay)
     self.bar.overlay.background:SetTexture("/esoui/art/itemupgrade/eso_itemupgrade_wildslot.dds")
+
+    if (BS.Vars.Bars[self.index].NudgeCompass == true and barSettings.index == 1) then
+        BS.NudgeCompass()
+    end
 
     -- prevent the bar from displaying when not in hud or hudui modes
     self.bar.fragment = ZO_HUDFadeSceneFragment:New(self.bar)
