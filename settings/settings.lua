@@ -48,12 +48,8 @@ local function Initialise()
                 SCENE_MANAGER:Show("hudui")
                 SetGameCameraUIMode(true)
                 BS.lock.fragment:SetHiddenForReason("disabled", false)
-                SCENE_MANAGER:GetScene("hud"):AddFragment(BS.lock.fragment)
-                SCENE_MANAGER:GetScene("hudui"):AddFragment(BS.lock.fragment)
             else
                 BS.lock.fragment:SetHiddenForReason("disabled", true)
-                SCENE_MANAGER:GetScene("hud"):RemoveFragment(BS.lock.fragment)
-                SCENE_MANAGER:GetScene("hudui"):RemoveFragment(BS.lock.fragment)
             end
         end,
         width = "full",

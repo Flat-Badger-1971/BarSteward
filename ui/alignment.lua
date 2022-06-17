@@ -200,10 +200,7 @@ function BS.CreateLockButton()
             end
 
             BS.lock.fragment:SetHiddenForReason("disabled", true)
-            SCENE_MANAGER:GetScene("hud"):RemoveFragment(BS.lock.fragment)
-            SCENE_MANAGER:GetScene("hudui"):RemoveFragment(BS.lock.fragment)
             SCENE_MANAGER:Show("hud")
-            --SetGameCameraUIMode(false)
         end
     )
 
@@ -219,4 +216,6 @@ function BS.CreateLockButton()
 
     BS.lock.fragment = ZO_HUDFadeSceneFragment:New(BS.lock)
     BS.lock.fragment:SetHiddenForReason("disabled", true)
+    SCENE_MANAGER:GetScene("hud"):AddFragment(BS.lock.fragment)
+    SCENE_MANAGER:GetScene("hudui"):AddFragment(BS.lock.fragment)
 end
