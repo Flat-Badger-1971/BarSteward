@@ -15,7 +15,7 @@ BS.widgets[BS.W_ALLIANCE_POINTS] = {
         return widget:GetValue()
     end,
     event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_ALLIANCE_POINT_UPDATE},
-    tooltip = GetString(_G.SI_GAMEPAD_INVENTORY_ALLIANCE_POINTS),
+    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_GAMEPAD_INVENTORY_ALLIANCE_POINTS)),
     icon = "/esoui/art/currency/alliancepoints_64.dds",
     hideWhenTrue = function()
         if (BS.Vars.Controls[BS.W_ALLIANCE_POINTS].PvPOnly == true) then
@@ -135,7 +135,7 @@ BS.widgets[BS.W_GOLD] = {
         widget:SetColour(unpack(BS.Vars.Controls[BS.W_GOLD].Colour or BS.Vars.DefaultColour))
 
         -- update the tooltip
-        local ttt = GetString(_G.SI_GAMEPAD_INVENTORY_AVAILABLE_FUNDS) .. BS.LF
+        local ttt = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_GAMEPAD_INVENTORY_AVAILABLE_FUNDS)) .. BS.LF
         ttt = ttt .. "|cffd700" .. tostring(goldInBag) .. "|r " .. GetString(_G.BARSTEWARD_GOLD_BAG) .. BS.LF
         ttt = ttt .. "|cffd700" .. tostring(goldInBank) .. "|r " .. GetString(_G.BARSTEWARD_GOLD_BANK) .. BS.LF
         ttt = ttt .. "|cffd700" .. tostring(combined) .. "|r " .. GetString(_G.BARSTEWARD_GOLD_COMBINED)
@@ -145,7 +145,7 @@ BS.widgets[BS.W_GOLD] = {
         return widget:GetValue()
     end,
     event = _G.EVENT_MONEY_UPDATE,
-    tooltip = GetString(_G.SI_GAMEPAD_INVENTORY_AVAILABLE_FUNDS),
+    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_GAMEPAD_INVENTORY_AVAILABLE_FUNDS)),
     icon = "/esoui/art/currency/currency_gold_64.dds",
     customOptions = {
         name = GetString(_G.BARSTEWARD_GOLD_DISPLAY),
@@ -176,7 +176,7 @@ BS.widgets[BS.W_SEALS_OF_ENDEAVOUR] = {
         return widget:GetValue()
     end,
     event = _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED,
-    tooltip = GetString(_G.SI_CROWN_STORE_MENU_SEALS_STORE_LABEL),
+    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_CROWN_STORE_MENU_SEALS_STORE_LABEL)),
     --icon = "/esoui/art/market/keyboard/tabicon_sealsstore_up.dds",
     icon = "/esoui/art/currency/currency_seals_of_endeavor_64.dds",
     onClick = function()
@@ -203,7 +203,7 @@ BS.widgets[BS.W_TAL_VAR_STONES] = {
         return widget:GetValue()
     end,
     event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_TELVAR_STONE_UPDATE},
-    tooltip = GetString(_G.SI_GAMEPAD_INVENTORY_TELVAR_STONES),
+    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_GAMEPAD_INVENTORY_TELVAR_STONES)),
     icon = "/esoui/art/currency/currency_telvar_64.dds",
     hideWhenTrue = function()
         if (BS.Vars.Controls[BS.W_TAL_VAR_STONES].PvPOnly == true) then
@@ -314,7 +314,7 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
     end,
     event = {_G.EVENT_EXPERIENCE_UPDATE, _G.EVENT_UNSPENT_CHAMPION_POINTS_CHANGED},
     icon = "/esoui/art/champion/champion_points_magicka_icon-hud.dds",
-    tooltip = GetString(_G.SI_STAT_GAMEPAD_CHAMPION_POINTS_LABEL),
+    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_STAT_GAMEPAD_CHAMPION_POINTS_LABEL)),
     hideWhenEqual = 0,
     onClick = function()
         if (not IsInGamepadPreferredMode()) then

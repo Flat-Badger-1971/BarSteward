@@ -7,7 +7,7 @@ local panel = {
     name = "Bar Steward",
     displayName = "Bar Steward",
     author = "Flat Badger",
-    version = "1.1.3",
+    version = "1.2.0",
     registerForDefaults = true,
     slashCommand = "/bs"
 }
@@ -63,12 +63,23 @@ local function Initialise()
         type = "button",
         name = GetString(_G.BARSTEWARD_ALIGN_BARS),
         func = function()
-            SCENE_MANAGER:Show("hud")
-            BS.frame:SetHidden(false)
+            SCENE_MANAGER:Show("hudui")
+            SetGameCameraUIMode(true)
+            BS.frame.fragment:SetHiddenForReason("disabled", false)
         end,
-        width = "full"
+        width = "half"
     }
     BS.options[5] = {
+        type = "button",
+        name = GetString(_G.BARSTEWARD_REORDER_WIDGETS),
+        func = function()
+            SCENE_MANAGER:Show("hudui")
+            SetGameCameraUIMode(true)
+            BS.w_order.fragment:SetHiddenForReason("disabled", false)
+        end,
+        width = "half"
+    }
+    BS.options[6] = {
         type = "divider",
         alpha = 0
     }
@@ -468,20 +479,6 @@ local function GetWidgetSettings()
                 width = "full",
                 requiresReload = true,
                 default = BS.Defaults.Controls[k].Bar
-            },
-            [2] = {
-                type = "dropdown",
-                name = GetString(_G.BARSTEWARD_POSITION),
-                choices = widgetNums,
-                getFunc = function()
-                    return BS.Vars.Controls[k].Order
-                end,
-                setFunc = function(value)
-                    BS.Vars.Controls[k].Order = value
-                end,
-                width = "full",
-                requiresReload = true,
-                default = BS.Defaults.Controls[k].Order
             }
         }
 

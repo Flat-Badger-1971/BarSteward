@@ -227,6 +227,7 @@ BS.Defaults = {
             Autohide = true,
             Timer = true
         },
-        [BS.W_SOUL_GEMS] = {Bar = 0, Order = 38, ColourValues = "c", UseSeparators = false}
+        [BS.W_SOUL_GEMS] = {Bar = 0, Order = 38, ColourValues = "c", UseSeparators = false},
+        [BS.W_FRIENDS] = {Bar = 1, Order = 39, ColourValues = "c"}
     }
 }

@@ -1,7 +1,7 @@
 local BS = _G.BarSteward
 
 -- borrowed from Bandits UI
-function BS.CreateComboBox(name, parent, width, height, choices, default)
+function BS.CreateComboBox(name, parent, width, height, choices, default, callback)
     local combo = WINDOW_MANAGER:CreateControlFromVirtual(name, parent, "ZO_ComboBox")
 
     combo:SetDimensions(width, height)
@@ -19,6 +19,10 @@ function BS.CreateComboBox(name, parent, width, height, choices, default)
                     function()
                         combo.value = value
                         self:UpdateParent()
+
+                        if (callback) then
+                            callback(value)
+                        end
                     end
                 )
                 entry.id = idx
@@ -66,11 +70,68 @@ function BS.CreateComboBox(name, parent, width, height, choices, default)
 end
 
 function BS.CreateButton(name, parent, width, height)
-	local button = WINDOW_MANAGER:CreateControlFromVirtual(name, parent, "ZO_DefaultButton")
+    local button = WINDOW_MANAGER:CreateControlFromVirtual(name, parent, "ZO_DefaultButton")
 
     button:SetDimensions(width, height)
-	button:SetFont("ZoFontGame")
+    button:SetFont("ZoFontGame")
     button:SetClickSound("Click")
 
-	return button
+    return button
+end
+
+-- based on libscroll
+local function UpdateScrollList(scrollList, dataTable)
+    local dataTableCopy = ZO_DeepTableCopy(dataTable)
+    local dataList = ZO_ScrollList_GetDataList(scrollList)
+
+    ZO_ScrollList_Clear(scrollList)
+
+    -- Add data items to the list
+    for _, dataItem in ipairs(dataTableCopy) do
+        local entry = ZO_ScrollList_CreateDataEntry(1, dataItem, dataItem.categoryId)
+        table.insert(dataList, entry)
+    end
+
+    local sortFn = scrollList.SortFunction
+
+    if (sortFn) then
+        table.sort(dataList, sortFn)
+    end
+
+    ZO_ScrollList_Commit(scrollList)
+end
+
+local function ClearList(self)
+    ZO_ScrollList_Clear(self)
+    ZO_ScrollList_Commit(self)
+end
+
+function BS.CreateScrollList(scrollData)
+    local scrollList = WINDOW_MANAGER:CreateControlFromVirtual(scrollData.name, scrollData.parent, "ZO_ScrollList")
+
+    scrollList:SetDimensions(scrollData.width, scrollData.height)
+
+    ZO_ScrollList_AddDataType(
+        scrollList,
+        1,
+        scrollData.rowTemplate,
+        scrollData.rowHeight,
+        scrollData.setupCallback,
+        scrollData.hideCallback,
+        scrollData.dataTypeSelectSound,
+        scrollData.resetControlCallback
+    )
+
+    if (scrollData.selectTemplate or scrollData.selectCallback) then
+        ZO_ScrollList_EnableSelection(scrollList, scrollData.selectTemplate, scrollData.selectCallback)
+    end
+
+    scrollList.scrollData = scrollData
+    scrollList.SortFunction = scrollData.sortFunction
+
+    -- Easy Access Functions
+    scrollList.Clear = ClearList
+    scrollList.Update = UpdateScrollList
+
+    return scrollList
 end

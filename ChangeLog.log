@@ -1,9 +1,11 @@
-[color=#ff9900][b]Version: 1.1.3 ---------------[/b][/color]
+[color=#ff9900][b]Version: 1.2.0 ---------------[/b][/color]
 Soul Gems added
+Friends added
 Time format option added for timers
 Fixed bar sizing issue
 Reworked bar movement code
 Removed compass nudge disabling
+New interface for widget ordering
 
 [color=#ff9900][b]Version: 1.1.2 ---------------[/b][/color]
 Include reward detail in endeavour tooltips

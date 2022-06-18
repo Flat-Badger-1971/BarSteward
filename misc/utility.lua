@@ -218,6 +218,10 @@ function BS.ARGBConvert(argb)
     return "|c" .. r .. g .. b
 end
 
+function BS.ARGBConvert2(argb)
+    return BS.ARGBConvert({argb.r, argb.g, argb.b})
+end
+
 function BS.GetAnchorFromText(text, adjust)
     if (text == GetString(_G.BARSTEWARD_LEFT)) then
         if (adjust) then

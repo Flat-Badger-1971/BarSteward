@@ -30,7 +30,7 @@ BS.widgets[BS.W_BAG_SPACE] = {
         return pcUsed
     end,
     event = _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
-    tooltip = GetString(_G.SI_GAMEPAD_MAIL_INBOX_INVENTORY):gsub(":", ""),
+    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_GAMEPAD_MAIL_INBOX_INVENTORY)):gsub(":", ""),
     icon = "/esoui/art/tooltips/icon_bag.dds",
     onClick = function()
         if (not IsInGamepadPreferredMode()) then
@@ -232,7 +232,7 @@ BS.widgets[BS.W_REPAIRS_KITS] = {
     end,
     event = _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
     icon = "/esoui/art/inventory/inventory_tabicon_repair_up.dds",
-    tooltip = GetString(_G.SI_HOOK_POINT_STORE_REPAIR_KIT_HEADER):gsub(":", "")
+    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_HOOK_POINT_STORE_REPAIR_KIT_HEADER)):gsub(":", "")
 }
 
 BS.widgets[BS.W_STOLEN_ITEMS] = {
@@ -288,7 +288,7 @@ BS.widgets[BS.W_FENCE_TRANSACTIONS] = {
 }
 
 BS.widgets[BS.W_SOUL_GEMS] = {
-    -- v1.1.3
+    -- v1.2.0
     name = "soulGems",
     update = function(widget)
         local level = GetUnitEffectiveLevel("player")

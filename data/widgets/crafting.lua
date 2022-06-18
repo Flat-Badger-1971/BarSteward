@@ -52,7 +52,7 @@ BS.widgets[BS.W_BLACKSMITHING] = {
     end,
     timer = 1000,
     icon = "/esoui/art/icons/servicemappins/servicepin_smithy.dds",
-    tooltip = GetString(_G.SI_TRADESKILLTYPE1),
+    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_TRADESKILLTYPE1)),
     hideWhenEqual = 0,
     complete = function()
         return BS.IsTraitResearchComplete(_G.CRAFTING_TYPE_BLACKSMITHING)
@@ -85,7 +85,7 @@ BS.widgets[BS.W_WOODWORKING] = {
     end,
     timer = 1000,
     icon = "/esoui/art/icons/servicemappins/servicepin_woodworking.dds",
-    tooltip = GetString(_G.SI_TRADESKILLTYPE6),
+    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_TRADESKILLTYPE6)),
     hideWhenEqual = 0,
     complete = function()
         return BS.IsTraitResearchComplete(_G.CRAFTING_TYPE_WOODWORKING)
@@ -118,7 +118,7 @@ BS.widgets[BS.W_CLOTHING] = {
     end,
     timer = 1000,
     icon = "/esoui/art/icons/servicemappins/servicepin_outfitter.dds",
-    tooltip = GetString(_G.SI_TRADESKILLTYPE2),
+    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_TRADESKILLTYPE2)),
     hideWhenEqual = 0,
     complete = function()
         return BS.IsTraitResearchComplete(_G.CRAFTING_TYPE_CLOTHIER)
@@ -151,7 +151,7 @@ BS.widgets[BS.W_JEWELCRAFTING] = {
     end,
     timer = 1000,
     icon = "/esoui/art/icons/icon_jewelrycrafting_symbol.dds",
-    tooltip = GetString(_G.SI_TRADESKILLTYPE7),
+    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_TRADESKILLTYPE7)),
     hideWhenEqual = 0,
     complete = function()
         return BS.IsTraitResearchComplete(_G.CRAFTING_TYPE_JEWELRYCRAFTING)

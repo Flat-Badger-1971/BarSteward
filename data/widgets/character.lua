@@ -163,7 +163,7 @@ BS.widgets[BS.W_ALLIANCE] = {
         return widget:GetValue()
     end,
     event = _G.EVENT_PLAYER_ACTIVATED,
-    icon = "",
+    icon = "/esoui/art/scoredisplay/blueflag.dds",
     tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_COLLECTIBLERESTRICTIONTYPE2)),
     onClick = function()
         if (not IsInGamepadPreferredMode()) then

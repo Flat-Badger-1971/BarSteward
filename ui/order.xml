@@ -1,0 +1,37 @@
+<GuiXml>
+    <Controls>
+        <Control name="BarSteward_Order_Template" tier="medium" resizeToFitDescendents="true" virtual="true" mouseEnabled="true">
+            <Controls>
+                <Texture name="$(parent)Border" textureFile="/esoui/art/miscellaneous/entryhighlight.dds">
+                    <AnchorFill />
+                </Texture>
+                <Texture name="$(parent)Icon">
+                    <Dimensions x="32" y="32" />
+                    <Anchor point="LEFT" />
+                </Texture>
+                <Label name="$(parent)Title" font="ZoFontGame" VerticalAlignment="CENTER">
+                    <Dimensions x="300" y="32" />
+                    <Anchor point="LEFT" relativeTo="$(parent)Icon" relativePoint="RIGHT" offsetX="10" offsetY="0" />
+                </Label>
+                <Texture name="$(parent)MoveUp" tier="HIGH" textureFile="/esoui/art/buttons/large_uparrow_up.dds" mouseEnabled="true">
+                    <Dimensions x="32" y="32" />
+                    <Anchor point="RIGHT" />
+                    <OnMouseDown>
+                        BarSteward.OrderUp(self)
+                    </OnMouseDown>
+                </Texture>
+                <Texture name="$(parent)MoveDown" tier="HIGH" textureFile="/esoui/art/buttons/large_downarrow_up.dds" mouseEnabled="true">
+                    <Dimensions x="32" y="32" />
+                    <Anchor point="RIGHT" relativeTo="$(parent)MoveUp" relativePoint="LEFT" offsetX="10" offsetY="0" />
+                    <OnMouseDown>
+                        BarSteward.OrderDown(self)
+                    </OnMouseDown>
+                </Texture>
+                <!-- <Label name="$(parent)Sequence" font="ZoFontGame">
+                    <Dimensions x="20" y="32" />
+                    <Anchor point="RIGHT" relativeTo="$(parent)MoveDown" relativePoint="LEFT" offsetX="10" offsetY="0" />
+                </Label> -->
+            </Controls>
+        </Control>
+    </Controls>
+</GuiXml>

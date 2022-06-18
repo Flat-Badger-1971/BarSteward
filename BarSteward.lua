@@ -116,8 +116,8 @@ local function Initialise()
             bar:AddWidgets(orderedWidgets)
         end
 
-        -- ignore this if Bandits UI is loaded
-        if (BS.Vars.Bars[idx].NudgeCompass and not _G.BUI) then
+        if (BS.Vars.Bars[idx].NudgeCompass) then
+            BS.NudgeCompass()
             -- from Bandits UI
             -- stop the game move the compass back to its original position
             local block = {ZO_CompassFrame_Keyboard_Template = true, ZO_CompassFrame_Gamepad_Template = true}
@@ -134,6 +134,7 @@ local function Initialise()
 
     BS.CreateAlignmentFrame(alignBars)
     BS.CreateLockButton()
+    BS.CreateWidgetOrderTool(alignBars)
 
     -- utiltity
     if (_G.SLASH_COMMANDS["/rl"] == nil) then

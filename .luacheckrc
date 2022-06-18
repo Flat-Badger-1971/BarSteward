@@ -24,6 +24,11 @@ read_globals = {
             UnregisterForUpdate = {read_only = true}
         }
     },
+	["FRIENDS_LIST_MANAGER"] = {
+		fields = {
+			GetMasterList = {read_only = true}
+		}
+	},
 	["REWARDS_MANAGER"] = {
 		fields = {
 			GetInfoForReward = {read_only = true}
@@ -72,23 +77,6 @@ read_globals = {
             SetAnchor = {read_only = true}
         }
     },
-    -- events
-    "EVENT_ACHIEVEMENT_UPDATED",
-    "EVENT_ACTION_LAYER_POPPED",
-    "EVENT_ACTION_LAYER_PUSHED",
-    "EVENT_ACTIVE_COMPANION_STATE_CHANGED",
-    "EVENT_ADD_ON_LOADED",
-    "EVENT_COMPANION_ACTIVATED",
-    "EVENT_COMPANION_DEACTIVATED",
-    "EVENT_COMPANION_EXPERIENCE_GAIN",
-    "EVENT_COMPANION_RAPPORT_UPDATE",
-    "EVENT_INVENTORY_SINGLE_SLOT_UPDATE",
-    "EVENT_NON_COMBAT_BONUS_CHANGED",
-    "EVENT_PLAYER_ACTIVATED",
-    "EVENT_POWER_UPDATE",
-    "EVENT_UNIT_CREATED",
-    "EVENT_UNIT_DESTROYED",
-    "EVENT_ZONE_CHANGED",
     -- constants
     "BOTTOM",
     "BOTTOMLEFT",
@@ -166,6 +154,7 @@ read_globals = {
     "GetFishingLureInfo",
     "GetFramerate",
     "GetFrameTimeMilliseconds",
+	"GetFriendInfo",
     "GetGameCameraInteractableActionInfo",
     "GetGameCameraPickpocketingBonusInfo",
     "GetInteractionType",
@@ -185,6 +174,7 @@ read_globals = {
     "GetNumChampionDisciplines",
     "GetNumChampionXPInChampionPoint",
     "GetNumExperiencePointsInCompanionLevel",
+	"GetNumFriends",
     "GetNumSmithingResearchLines",
 	"GetNumTimedActivityRewards",
     "GetPendingCompanionDefId",
@@ -238,8 +228,11 @@ read_globals = {
     "HUD_SCENE",
     "ZO_CachedStrFormat",
     "ZO_CreateStringId",
+	"ZO_DeepTableCopy",
+	"ZO_Dialogs_RegisterCustomDialog",
+    "ZO_Dialogs_ShowDialog",
+	"ZO_FormatUserFacingDisplayName",
     "ZO_GetAllianceIcon",
-    "ZO_strformat",
     ["ZO_HiddenReasons"] = {
         fields = {
             New = {read_only = true}
@@ -255,15 +248,22 @@ read_globals = {
     "ZO_PreHook",
 	"ZO_PreHookHandler",
     "ZO_Provisioner",
-    "ZO_Dialogs_RegisterCustomDialog",
-    ["ZO_SavedVars"] = {
+	["ZO_SavedVars"] = {
         fields = {
             NewAccountWide = {read_only = true}
         }
     },
-    "ZO_Dialogs_ShowDialog",
 	"ZO_SceneManager_ToggleHUDUIBinding",
+	"ZO_ScrollList_AddDataType",
+	"ZO_ScrollList_Clear",
+	"ZO_ScrollList_Commit",
+	"ZO_ScrollList_CreateDataEntry",
+	"ZO_ScrollList_EnableSelection",
+	"ZO_ScrollList_GetDataList",
     "ZO_SmallGroupAnchorFrame",
+	"ZO_SocialList_GetPlatformTextureFunctions",
+	"ZO_SocialList_GetRowColors",
+	"ZO_strformat",
     "ZO_TimerBar",
     "ZO_Tooltips_HideTextTooltip",
     "ZO_Tooltips_ShowTextTooltip",
@@ -272,6 +272,7 @@ read_globals = {
     "zo_iconFormat",
     "zo_roundToNearest",
     "zo_strformat",
+	"zo_strlen",
     "zo_strsplit",
     -- luacheck misses this one for some reason
     "math.log10"
