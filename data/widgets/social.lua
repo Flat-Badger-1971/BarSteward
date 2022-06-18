@@ -51,5 +51,12 @@ BS.widgets[BS.W_FRIENDS] = {
     end,
     event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_FRIEND_PLAYER_STATUS_CHANGED, _G.EVENT_PLAYER_STATUS_CHANGED},
     tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_GAMEPAD_SOCIAL_FOOTER_NUM_ONLINE)),
-    icon = "/esoui/art/chatwindow/chat_friendsonline_up.dds"
+    icon = "/esoui/art/chatwindow/chat_friendsonline_up.dds",
+    onClick = function()
+        if (not IsInGamepadPreferredMode()) then
+            SCENE_MANAGER:Show("friendsList")
+        else
+            SCENE_MANAGER:Show("gamepad_friends")
+        end
+    end
 }
