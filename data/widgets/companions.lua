@@ -20,7 +20,7 @@ BS.widgets[BS.W_RAPPORT] = {
         local level = GetActiveCompanionRapportLevel()
         local desc = GetActiveCompanionRapportLevelDescription(level)
 
-        widget.tooltip = "|cffffff" .. GetString(_G.BARSTEWARD_RAPPORT) .. "|r" .. BS.LF .. desc
+        widget.tooltip = GetString(_G.BARSTEWARD_RAPPORT) .. BS.LF .. "|cffffff" .. desc .. "|r"
 
         return rapportValue
     end,
