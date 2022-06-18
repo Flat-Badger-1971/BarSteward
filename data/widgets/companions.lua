@@ -17,6 +17,11 @@ BS.widgets[BS.W_RAPPORT] = {
         widget:SetColour(r, g, b, 1)
         widget:SetValue(rapportValue)
 
+        local level = GetActiveCompanionRapportLevel()
+        local desc = GetActiveCompanionRapportLevelDescription(level)
+
+        widget.tooltip = "|cffffff" .. GetString(_G.BARSTEWARD_RAPPORT) .. "|r" .. BS.LF .. desc
+
         return rapportValue
     end,
     event = {_G.EVENT_COMPANION_RAPPORT_UPDATE, _G.EVENT_ACTIVE_COMPANION_STATE_CHANGED},
