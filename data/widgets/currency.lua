@@ -99,7 +99,6 @@ BS.widgets[BS.W_EVENT_TICKETS] = {
 
             if (BS.Vars.Controls[BS.W_BAG_SPACE].Announce) then
                 BS.Announce(
-                    nil,
                     GetString(_G.BARSTEWARD_WARNING),
                     GetString(_G.BARSTEWARD_WARNING_EVENT_TICKETS),
                     BS.W_EVENT_TICKETS

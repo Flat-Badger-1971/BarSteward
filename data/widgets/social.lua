@@ -36,7 +36,6 @@ BS.widgets[BS.W_FRIENDS] = {
                     if (BS.Vars.Controls[BS.W_FRIENDS].Exclude) then
                         if (not BS.Vars.Controls[BS.W_FRIENDS].Exclude[playerName]) then
                             BS.Announce(
-                                nil,
                                 GetString(_G.BARSTEWARD_FRIEND_ONLINE),
                                 ZO_strformat(GetString(_G.BARSTEWARD_FRIEND_ONLINE_MESSAGE), characterName),
                                 BS.W_FRIENDS

@@ -2,7 +2,7 @@ local BS = _G.BarSteward
 
 BS.widgets[BS.W_BAG_SPACE] = {
     name = "bagSpace",
-    update = function(widget)
+    update = function(widget, _, _, _, newItem)
         local bagSize = GetBagSize(_G.BAG_BACKPACK)
         local bagUsed = GetNumBagUsedSlots(_G.BAG_BACKPACK)
         local value = bagUsed .. "/" .. bagSize
@@ -16,9 +16,8 @@ BS.widgets[BS.W_BAG_SPACE] = {
          then
             colour = BS.Vars.Controls[BS.W_BAG_SPACE].WarningColour or BS.Vars.DefaultWarningColour
 
-            if (BS.Vars.Controls[BS.W_BAG_SPACE].Announce) then
+            if (BS.Vars.Controls[BS.W_BAG_SPACE].Announce and newItem) then
                 BS.Announce(
-                    nil,
                     GetString(_G.BARSTEWARD_WARNING),
                     GetString(_G.BARSTEWARD_WARNING_BAGS),
                     BS.W_BAG_SPACE
