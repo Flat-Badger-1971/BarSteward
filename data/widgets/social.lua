@@ -2,7 +2,7 @@ local BS = _G.BarSteward
 
 BS.widgets[BS.W_FRIENDS] = {
     name = "friends",
-    update = function(widget)
+    update = function(widget, event, playerName, characterName, _, newStatus)
         local masterList = FRIENDS_LIST_MANAGER:GetMasterList()
         local online = 0
         local tt = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_SOCIAL_MENU_CONTACTS)) .. "|cffffff"
@@ -29,6 +29,23 @@ BS.widgets[BS.W_FRIENDS] = {
         widget.tooltip = tt .. "|r"
         widget:SetValue(online .. "/" .. #masterList)
         widget:SetColour(unpack(BS.Vars.Controls[BS.W_FRIENDS].Colour or BS.Vars.DefaultColour))
+
+        if (event == _G.EVENT_FRIEND_PLAYER_STATUS_CHANGED) then
+            if (newStatus == _G.PLAYER_STATUS_ONLINE) then
+                if (BS.Vars.Controls[BS.W_FRIENDS].Announce) then
+                    if (BS.Vars.Controls[BS.W_FRIENDS].Exclude) then
+                        if (not BS.Vars.Controls[BS.W_FRIENDS].Exclude[playerName]) then
+                            BS.Announce(
+                                nil,
+                                GetString(_G.BARSTEWARD_FRIEND_ONLINE),
+                                ZO_strformat(GetString(_G.BARSTEWARD_FRIEND_ONLINE_MESSAGE), characterName),
+                                BS.W_FRIENDS
+                            )
+                        end
+                    end
+                end
+            end
+        end
 
         return online
     end,

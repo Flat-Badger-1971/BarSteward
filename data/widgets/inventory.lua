@@ -15,6 +15,15 @@ BS.widgets[BS.W_BAG_SPACE] = {
                 pcUsed < BS.Vars.Controls[BS.W_BAG_SPACE].DangerValue)
          then
             colour = BS.Vars.Controls[BS.W_BAG_SPACE].WarningColour or BS.Vars.DefaultWarningColour
+
+            if (BS.Vars.Controls[BS.W_BAG_SPACE].Announce) then
+                BS.Announce(
+                    nil,
+                    GetString(_G.BARSTEWARD_WARNING),
+                    GetString(_G.BARSTEWARD_WARNING_BAGS),
+                    BS.W_BAG_SPACE
+                )
+            end
         elseif (pcUsed >= BS.Vars.Controls[BS.W_BAG_SPACE].DangerValue) then
             colour = BS.Vars.Controls[BS.W_BAG_SPACE].DangerColour or BS.Vars.DefaultDangerColour
         end
@@ -83,7 +92,7 @@ BS.widgets[BS.W_BANK_SPACE] = {
 
 BS.widgets[BS.W_REPAIR_COST] = {
     name = "itemRepairCost",
-    update = function(widget, _, _, _, _, updateReason)
+    update = function(widget, _, _, _, _, _, updateReason)
         if (updateReason == nil or updateReason == _G.INVENTORY_UPDATE_REASON_DURABILITY_CHANGE) then
             local repairCost = GetRepairAllCost()
 
@@ -115,7 +124,7 @@ BS.widgets[BS.W_REPAIR_COST] = {
 BS.widgets[BS.W_DURABILITY] = {
     -- v1.0.1
     name = "durability",
-    update = function(widget, _, _, _, _, updateReason)
+    update = function(widget, _, _, _, _, _, updateReason)
         -- find item with lowest durability
         if (updateReason == nil or updateReason == _G.INVENTORY_UPDATE_REASON_DURABILITY_CHANGE) then
             local lowest = 100

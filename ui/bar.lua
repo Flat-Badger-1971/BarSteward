@@ -352,7 +352,7 @@ function baseBar:AddWidgets(widgets)
             for _, event in ipairs(events) do
                 BS.RegisterForEvent(
                     event,
-                    function(_, ...)
+                    function(...)
                         self:DoUpdate(metadata, ...)
                     end
                 )

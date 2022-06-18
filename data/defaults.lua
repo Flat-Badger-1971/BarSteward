@@ -60,7 +60,8 @@ BS.Defaults = {
             SoundWhenEqualsSound = "Daily Login Reward Claim Fanfare",
             SoundWhenOverSound = "Duel Forfeit",
             ColourValues = "c,dv,dc",
-            DangerValue = 8
+            DangerValue = 8,
+            Announce = false
         },
         [BS.W_GOLD] = {Bar = 1, Order = 6, UseSeparators = false, ColourValues = "c"},
         [BS.W_SEALS_OF_ENDEAVOUR] = {
@@ -98,7 +99,8 @@ BS.Defaults = {
             Units = "%",
             ColourValues = "okc,wv,wc,dv,dc",
             WarningValue = 85,
-            DangerValue = 95
+            DangerValue = 95,
+            Announce = false
         },
         [BS.W_BANK_SPACE] = {
             Bar = 1,
@@ -228,6 +230,11 @@ BS.Defaults = {
             Timer = true
         },
         [BS.W_SOUL_GEMS] = {Bar = 0, Order = 38, ColourValues = "c", UseSeparators = false},
-        [BS.W_FRIENDS] = {Bar = 1, Order = 39, ColourValues = "c"}
+        [BS.W_FRIENDS] = {
+            Bar = 1,
+            Order = 39,
+            ColourValues = "c",
+            Announce = false
+        }
     }
 }

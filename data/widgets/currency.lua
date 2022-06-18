@@ -96,6 +96,15 @@ BS.widgets[BS.W_EVENT_TICKETS] = {
 
         if (tickets > BS.Vars.Controls[BS.W_EVENT_TICKETS].DangerValue) then
             colour = BS.Vars.Controls[BS.W_EVENT_TICKETS].DangerColour or BS.Vars.DefaultDangerColour
+
+            if (BS.Vars.Controls[BS.W_BAG_SPACE].Announce) then
+                BS.Announce(
+                    nil,
+                    GetString(_G.BARSTEWARD_WARNING),
+                    GetString(_G.BARSTEWARD_WARNING_EVENT_TICKETS),
+                    BS.W_EVENT_TICKETS
+                )
+            end
         end
 
         widget:SetColour(unpack(colour))
@@ -219,21 +228,19 @@ BS.widgets[BS.W_TAL_VAR_STONES] = {
 
 BS.widgets[BS.W_TRANSMUTE_CRYSTALS] = {
     name = "transmuteCrystals",
-    update = function(widget, _, currencyType)
-        if (currencyType == nil or currencyType == _G.CURT_CHAOTIC_CREATIA) then
-            local crystals = GetCurrencyAmount(_G.CURT_CHAOTIC_CREATIA, _G.CURRENCY_LOCATION_ACCOUNT)
-            local value = crystals .. "/1000"
-            local pc = BS.ToPercent(crystals, 1000)
+    update = function(widget)
+        local crystals = GetCurrencyAmount(_G.CURT_CHAOTIC_CREATIA, _G.CURRENCY_LOCATION_ACCOUNT)
+        local value = crystals .. "/1000"
+        local pc = BS.ToPercent(crystals, 1000)
 
-            if (BS.Vars.Controls[BS.W_TRANSMUTE_CRYSTALS].ShowPercent) then
-                value = pc .. "%"
-            end
-
-            widget:SetValue(value)
-            widget:SetColour(unpack(BS.Vars.Controls[BS.W_TRANSMUTE_CRYSTALS].Colour or BS.Vars.DefaultColour))
-
-            return value
+        if (BS.Vars.Controls[BS.W_TRANSMUTE_CRYSTALS].ShowPercent) then
+            value = pc .. "%"
         end
+
+        widget:SetValue(value)
+        widget:SetColour(unpack(BS.Vars.Controls[BS.W_TRANSMUTE_CRYSTALS].Colour or BS.Vars.DefaultColour))
+
+        return value
     end,
     event = _G.EVENT_QUEST_COMPLETE_DIALOG,
     tooltip = GetString(_G.BARSTEWARD_TRANSMUTE_CRYSTALS),
@@ -242,13 +249,11 @@ BS.widgets[BS.W_TRANSMUTE_CRYSTALS] = {
 
 BS.widgets[BS.W_UNDAUNTED_KEYS] = {
     name = "undauntedKeys",
-    update = function(widget, _, currencyType)
-        if (currencyType == nil or currencyType == _G.CURT_UNDAUNTED_KEYS) then
-            widget:SetValue(GetCurrencyAmount(_G.CURT_UNDAUNTED_KEYS, _G.CURRENCY_LOCATION_ACCOUNT))
-            widget:SetColour(unpack(BS.Vars.Controls[BS.W_UNDAUNTED_KEYS].Colour or BS.Vars.DefaultColour))
+    update = function(widget)
+        widget:SetValue(GetCurrencyAmount(_G.CURT_UNDAUNTED_KEYS, _G.CURRENCY_LOCATION_ACCOUNT))
+        widget:SetColour(unpack(BS.Vars.Controls[BS.W_UNDAUNTED_KEYS].Colour or BS.Vars.DefaultColour))
 
-            return widget:GetValue()
-        end
+        return widget:GetValue()
     end,
     event = _G.EVENT_QUEST_COMPLETE_DIALOG,
     tooltip = GetString(_G.BARSTEWARD_UNDAUNTED_KEYS),

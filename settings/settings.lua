@@ -753,7 +753,23 @@ local function GetWidgetSettings()
             }
         end
 
-        -- custom option
+        -- announcement
+        if (BS.Defaults.Controls[k].Announce ~= nil) then
+            widgetControls[#widgetControls + 1] = {
+                type = "checkbox",
+                name = (k == BS.W_FRIENDS) and GetString(_G.BARSTEWARD_ANNOUNCEMENT_FRIEND) or GetString(_G.BARSTEWARD_ANNOUNCEMENT),
+                getFunc = function()
+                    return BS.Vars.Controls[k].Announce
+                end,
+                setFunc = function(value)
+                    BS.Vars.Controls[k].Announce = value
+                end,
+                width = "full",
+                default = BS.Defaults.Controls[k].Announce
+            }
+        end
+
+        -- custom dropdown option
         local copts = BS.widgets[k].customOptions
         if (copts) then
             widgetControls[#widgetControls + 1] = {

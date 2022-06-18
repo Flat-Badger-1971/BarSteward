@@ -9,6 +9,12 @@ read_globals = {
             FireCallbacks = {read_only = true}
         }
     },
+	["CENTER_SCREEN_ANNOUNCE"] = {
+		fields = {
+			CreateMessageParams = {read_only = true},
+			AddMessageWithParams = {read_only = true}
+		}
+	},
     ["CHAMPION_DATA_MANAGER"] = {
         fields = {
             FindChampionDisciplineDataById = {read_only = true},
@@ -271,6 +277,7 @@ read_globals = {
     "zo_callLater",
     "zo_iconFormat",
     "zo_roundToNearest",
+	"zo_strfind",
     "zo_strformat",
 	"zo_strlen",
     "zo_strsplit",

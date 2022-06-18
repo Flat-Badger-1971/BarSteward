@@ -6,7 +6,7 @@
 ## Version: 1.2.0
 ## SavedVariables: BarStewardSavedVars
 ## DependsOn: LibSavedVars>=60007 LibAddonMenu-2.0>=33
-## OptionalDependsOn: BanditsUserInterface
+## OptionalDependsOn: BanditsUserInterface LibChatMessage>=105
 
 # DISCLAIMER:
 #

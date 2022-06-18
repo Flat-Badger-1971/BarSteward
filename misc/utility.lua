@@ -332,3 +332,16 @@ function BS.Split(s)
 
     return result
 end
+
+function BS.Announce(header, message, widgetIconNumber, lifespan, sound)
+    local messageParams = CENTER_SCREEN_ANNOUNCE:CreateMessageParams(_G.CSA_CATEGORY_LARGE_TEXT)
+    messageParams:SetSound(sound or "Justice_NowKOS")
+    messageParams:SetText(header or "Test Header", message or "Test Message")
+    messageParams:SetLifespanMS(lifespan or 6000)
+
+    if (widgetIconNumber) then
+        messageParams:SetIconData(BS.widgets[widgetIconNumber].icon , "/esoui/art/achievements/achievements_iconbg.dds")
+    end
+
+    CENTER_SCREEN_ANNOUNCE:AddMessageWithParams(messageParams)
+end

@@ -1,6 +1,8 @@
 [color=#ff9900][b]Version: 1.2.0 ---------------[/b][/color]
 Soul Gems added
 Friends added
+Centre screen announcements added for bag space, event tickets and Friends
+Slash commands added to ignore specific friend announcements (LibChatMessage required for chat confirmations)
 Time format option added for timers
 Fixed bar sizing issue
 Reworked bar movement code

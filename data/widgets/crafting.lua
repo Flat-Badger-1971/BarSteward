@@ -1,7 +1,7 @@
 local BS = _G.BarSteward
 
-local function -- based on code from AI Research Timer
-getResearchTimer(craftType)
+-- based on code from AI Research Timer
+local function getResearchTimer(craftType)
     local maxTimer = 2000000
     local maxResearch = GetMaxSimultaneousSmithingResearch(craftType)
     local maxLines = GetNumSmithingResearchLines(craftType)
