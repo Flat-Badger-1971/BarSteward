@@ -120,7 +120,7 @@ ZO_CreateStringId("BARSTEWARD_LIB_EVENT_HANDLER", "Bar Steward now requires LibE
 ZO_CreateStringId("BARSTEWARD_ANNOUNCEMENT", "Show Warning Anouncement")
 ZO_CreateStringId("BARSTEWARD_ANNOUNCEMENT_FRIEND", "Show Friend Online Anouncement")
 ZO_CreateStringId("BARSTEWARD_FRIEND_ONLINE", "Friend Online")
-ZO_CreateStringId("BARSTEWARD_FRIEND_ONLINE_MESSAGE", "<<1>> has come online")
+ZO_CreateStringId("BARSTEWARD_FRIEND_ONLINE_MESSAGE", "<<1>> (<<2>>) has come online")
 ZO_CreateStringId("BARSTEWARD_WARNING", "Warning!")
 ZO_CreateStringId("BARSTEWARD_WARNING_BAGS", "Your bags are almost full!")
 ZO_CreateStringId("BARSTEWARD_WARNING_EVENT_TICKETS", "Spend your event tickets!")

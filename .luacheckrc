@@ -273,6 +273,7 @@ read_globals = {
 	"ZO_DeepTableCopy",
 	"ZO_Dialogs_RegisterCustomDialog",
     "ZO_Dialogs_ShowDialog",
+	"ZO_FormatUserFacingCharacterName",
 	"ZO_FormatUserFacingDisplayName",
     "ZO_GetAllianceIcon",
     ["ZO_HiddenReasons"] = {
@@ -305,7 +306,6 @@ read_globals = {
     "ZO_SmallGroupAnchorFrame",
 	"ZO_SocialList_GetPlatformTextureFunctions",
 	"ZO_SocialList_GetRowColors",
-	"ZO_strformat",
     "ZO_TimerBar",
     "ZO_Tooltips_HideTextTooltip",
     "ZO_Tooltips_ShowTextTooltip",
