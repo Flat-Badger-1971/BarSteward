@@ -53,7 +53,7 @@ BS.widgets[BS.W_FRIENDS] = {
     icon = "/esoui/art/chatwindow/chat_friendsonline_up.dds",
     onClick = function()
         if (not IsInGamepadPreferredMode()) then
-            SCENE_MANAGER:Show("friendsList")
+            SYSTEMS:GetObject("mainMenu"):ToggleCategory(_G.MENU_CATEGORY_CONTACTS)
         else
             SCENE_MANAGER:Show("gamepad_friends")
         end

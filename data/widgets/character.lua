@@ -103,7 +103,14 @@ BS.widgets[BS.W_PLAYER_NAME] = {
     end,
     event = _G.EVENT_PLAYER_ACTIVATED,
     icon = "/esoui/art/charactercreate/charactercreate_faceicon_up.dds",
-    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_CUSTOMER_SERVICE_ASK_FOR_HELP_PLAYER_NAME))
+    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_CUSTOMER_SERVICE_ASK_FOR_HELP_PLAYER_NAME)),
+    onClick = function()
+        if (not IsInGamepadPreferredMode()) then
+            SYSTEMS:GetObject("mainMenu"):ToggleCategory(_G.MENU_CATEGORY_CHARACTER)
+        else
+            SCENE_MANAGER:Show("LevelUpRewardsClaimGamepad")
+        end
+    end
 }
 
 BS.widgets[BS.W_RACE] = {

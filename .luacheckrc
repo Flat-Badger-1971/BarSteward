@@ -30,9 +30,29 @@ read_globals = {
             UnregisterForUpdate = {read_only = true}
         }
     },
+	["FISHING_MANAGER"] = {
+		fields = {
+			StopInteraction = {read_only = true}
+		}
+	},
 	["FRIENDS_LIST_MANAGER"] = {
 		fields = {
 			GetMasterList = {read_only = true}
+		}
+	},
+	["GROUP_MENU_KEYBOARD"] = {
+		fields = {
+			ShowCategory = {read_only = true}
+		}
+	},
+	["MAIN_MENU_KEYBOARD"] = {
+		fields = {
+			ShowScene = {read_only = true}
+		}
+	},
+	["MAIN_MENU_GAMEPAD"] = {
+		fields = {
+			ShowScene = {read_only = true}
 		}
 	},
 	["REWARDS_MANAGER"] = {
@@ -51,6 +71,16 @@ read_globals = {
             Show = {read_only = true}
         }
     },
+	["SYSTEMS"] = {
+		fields = {
+			GetObject = {read_only = true}
+		}
+	},
+	["TIMED_ACTIVITIES_GAMEPAD"] = {
+		fields = {
+			GetCategoryData = {read_only = true}
+		}
+	},
     ["WINDOW_MANAGER"] = {
         fields = {
             CreateTopLevelWindow = {read_only = true},
@@ -59,6 +89,11 @@ read_globals = {
             IsSecureRenderModeEnabled = {read_only = true}
         }
     },
+	["ZO_ACTIVITY_FINDER_ROOT_GAMEPAD"] = {
+		fields = {
+			ShowCategory = {read_only = true}
+		}
+	},
     ["ZO_ComboBox"] = {
         fields = {
             CreateItemEntry = {read_only = true}
@@ -117,6 +152,7 @@ read_globals = {
         }
     },
     -- lua
+	"EndPendingInteraction",
     "FormatIntegerWithDigitGrouping",
     "GetBagSize",
     "GetNumBagUsedSlots",

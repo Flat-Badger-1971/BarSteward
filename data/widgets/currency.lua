@@ -185,13 +185,16 @@ BS.widgets[BS.W_SEALS_OF_ENDEAVOUR] = {
     end,
     event = _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED,
     tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_CROWN_STORE_MENU_SEALS_STORE_LABEL)),
-    --icon = "/esoui/art/market/keyboard/tabicon_sealsstore_up.dds",
     icon = "/esoui/art/currency/currency_seals_of_endeavor_64.dds",
     onClick = function()
         if (not IsInGamepadPreferredMode()) then
-            SCENE_MANAGER:Show("endeavorSealStoreSceneKeyboard")
+            SYSTEMS:GetObject("mainMenu"):ShowSceneGroup("marketSceneGroup", "endeavorSealStoreSceneKeyboard")
         else
-            SCENE_MANAGER:Show("gamepad_endeavor_seal_market_pre_scene")
+            SYSTEMS:GetObject("mainMenu"):SelectMenuEntryAndSubEntry(
+                _G.ZO_MENU_MAIN_ENTRIES.CROWN_STORE,
+                _G.ZO_MENU_CROWN_STORE_ENTRIES.ENDEAVOR_SEAL_STORE,
+                "gamepad_endeavor_seal_market_pre_scene"
+            )
         end
     end
 }
@@ -322,9 +325,9 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
     hideWhenEqual = 0,
     onClick = function()
         if (not IsInGamepadPreferredMode()) then
-            SCENE_MANAGER:Show("championPerks")
+            MAIN_MENU_KEYBOARD:ShowScene("championPerks")
         else
-            SCENE_MANAGER:Show("gamepad_championPerks_root")
+            MAIN_MENU_GAMEPAD:ShowScene("gamepad_championPerks_root")
         end
     end
 }

@@ -85,9 +85,9 @@ BS.widgets[BS.W_DAILY_ENDEAVOURS] = {
     tooltip = GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS),
     onClick = function()
         if (not IsInGamepadPreferredMode()) then
-            SCENE_MANAGER:Show("groupMenuKeyboard")
+            GROUP_MENU_KEYBOARD:ShowCategory(_G.TIMED_ACTIVITIES_FRAGMENT)
         else
-            SCENE_MANAGER:Show("gamepad_groupList")
+            ZO_ACTIVITY_FINDER_ROOT_GAMEPAD:ShowCategory(TIMED_ACTIVITIES_GAMEPAD:GetCategoryData())
         end
     end
 }
@@ -102,7 +102,11 @@ BS.widgets[BS.W_WEEKLY_ENDEAVOURS] = {
     icon = "/esoui/art/journal/u26_progress_digsite_checked_complete.dds",
     tooltip = GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS),
     onClick = function()
-        SCENE_MANAGER:Show("groupMenuKeyboard")
+        if (not IsInGamepadPreferredMode()) then
+            GROUP_MENU_KEYBOARD:ShowCategory(_G.TIMED_ACTIVITIES_FRAGMENT)
+        else
+            ZO_ACTIVITY_FINDER_ROOT_GAMEPAD:ShowCategory(TIMED_ACTIVITIES_GAMEPAD:GetCategoryData())
+        end
     end
 }
 
