@@ -148,8 +148,8 @@ local function Initialise()
             value = "@" .. value
         end
 
-        if (not exclude[value]) then
-            exclude[value] = true
+        if (not exclude[value:lower()]) then
+            exclude[value:lower()] = true
             BS.Vars.Controls[BS.W_FRIENDS].Exclude = exclude
 
             if (BS.Chat) then
@@ -173,8 +173,8 @@ local function Initialise()
             value = "@" .. value
         end
 
-        if (exclude[value]) then
-            exclude[value] = nil
+        if (exclude[value:lower()]) then
+            exclude[value:lower()] = nil
             BS.Vars.Controls[BS.W_FRIENDS].Exclude = exclude
 
             if (BS.Chat) then
