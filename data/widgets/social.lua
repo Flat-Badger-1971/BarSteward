@@ -34,15 +34,27 @@ BS.widgets[BS.W_FRIENDS] = {
             if (newStatus == _G.PLAYER_STATUS_ONLINE) then
                 if (BS.Vars.Controls[BS.W_FRIENDS].Announce) then
                     if (BS.Vars.Controls[BS.W_FRIENDS].Exclude) then
-                        local dname = ZO_FormatUserFacingDisplayName(displayName) or displayName
-                        if (not BS.Vars.Controls[BS.W_FRIENDS].Exclude[dname:lower()]) then
-                            local cname = ZO_FormatUserFacingCharacterName(characterName) or characterName
+                        local announce = true
+                        local previousTime = BS.Vars.PreviousFriendTime[displayName] or (os.time() - 3600)
+                        local debounceTime = (BS.Vars.Controls[BS.W_FRIENDS].DebounceTime or 5) * 60
 
-                            BS.Announce(
-                                GetString(_G.BARSTEWARD_FRIEND_ONLINE),
-                                zo_strformat(GetString(_G.BARSTEWARD_FRIEND_ONLINE_MESSAGE), cname, dname),
-                                BS.W_FRIENDS
-                            )
+                        if (os.time() - previousTime <= debounceTime) then
+                            announce = false
+                        end
+
+                        BS.Vars.PreviousFriendTime[displayName] = os.time()
+
+                        if (announce == true) then
+                            local dname = ZO_FormatUserFacingDisplayName(displayName) or displayName
+                            if (not BS.Vars.Controls[BS.W_FRIENDS].Exclude[dname:lower()]) then
+                                local cname = ZO_FormatUserFacingCharacterName(characterName) or characterName
+
+                                BS.Announce(
+                                    GetString(_G.BARSTEWARD_FRIEND_ONLINE),
+                                    zo_strformat(GetString(_G.BARSTEWARD_FRIEND_ONLINE_MESSAGE), cname, dname),
+                                    BS.W_FRIENDS
+                                )
+                            end
                         end
                     end
                 end
@@ -65,5 +77,22 @@ BS.widgets[BS.W_FRIENDS] = {
         else
             SCENE_MANAGER:Show("gamepad_friends")
         end
-    end
+    end,
+    customOptions = {
+        name = GetString(_G.BARSTEWARD_DEBOUNCE),
+        tooltip = GetString(_G.BARSTEWARD_DEBOUNCE_DESC),
+        choices = {
+            5,
+            10,
+            15,
+            20,
+            30,
+            40,
+            50,
+            60
+        },
+        varName = "DebounceTime",
+        refresh = false,
+        default = 5
+    }
 }

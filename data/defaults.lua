@@ -14,6 +14,7 @@ BS.Defaults = {
     DefaultWarningColour = {1, 1, 0, 1},
     DefaultOkColour = {0, 1, 0, 1},
     Movable = false,
+    PreviousFriendTime = {},
     TimeFormat12 = "hh:m:s",
     TimeFormat24 = "HH:m:s",
     TimeType = GetString(_G.BARSTEWARD_24),

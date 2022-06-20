@@ -48,6 +48,8 @@ ZO_CreateStringId("BARSTEWARD_AUTOHIDE_TOOLTIP", "Hide this widget when the valu
 ZO_CreateStringId("BARSTEWARD_BOTH", "Both")
 ZO_CreateStringId("BARSTEWARD_DANGER_VALUE", "Danger value")
 ZO_CreateStringId("BARSTEWARD_DANGER_COLOUR", "Danger")
+ZO_CreateStringId("BARSTEWARD_DEBOUNCE", "Debounce time (minutes)")
+ZO_CreateStringId("BARSTEWARD_DEBOUNCE_DESC", "Period of time to wait between consecutive character logons before showing an announcement")
 ZO_CreateStringId("BARSTEWARD_DEFAULT_COLOUR", "Default")
 ZO_CreateStringId("BARSTEWARD_EMPTY", "Empty")
 ZO_CreateStringId("BARSTEWARD_FILLED", "Filled")

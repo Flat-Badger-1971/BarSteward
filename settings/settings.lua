@@ -775,6 +775,7 @@ local function GetWidgetSettings()
             widgetControls[#widgetControls + 1] = {
                 type = "dropdown",
                 name = copts.name,
+                tooltip = copts.tooltip,
                 choices = copts.choices,
                 getFunc = function()
                     return BS.Vars.Controls[k][copts.varName] or copts.default
