@@ -82,6 +82,7 @@ BS.widgets[BS.W_FRIENDS] = {
         name = GetString(_G.BARSTEWARD_DEBOUNCE),
         tooltip = GetString(_G.BARSTEWARD_DEBOUNCE_DESC),
         choices = {
+            0,
             5,
             10,
             15,
