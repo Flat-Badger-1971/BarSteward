@@ -9,6 +9,7 @@ Reworked bar movement code
 Removed compass nudge disabling
 New interface for widget ordering
 Added rapport description to tooltip
+Correct bug causing missing settings
 
 [color=#ff9900][b]Version: 1.1.2 ---------------[/b][/color]
 Include reward detail in endeavour tooltips

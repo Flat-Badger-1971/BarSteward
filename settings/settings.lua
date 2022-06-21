@@ -484,7 +484,7 @@ local function GetWidgetSettings()
 
         -- Autohide
         if (BS.Defaults.Controls[k].Autohide ~= nil) then
-            widgetControls[3] = {
+            widgetControls[#widgetControls + 1] = {
                 type = "checkbox",
                 name = GetString(_G.BARSTEWARD_AUTOHIDE),
                 tooltip = GetString(_G.BARSTEWARD_AUTOHIDE_TOOLTIP),
@@ -506,7 +506,7 @@ local function GetWidgetSettings()
 
         -- Hide when complete
         if (BS.Defaults.Controls[k].HideWhenComplete ~= nil) then
-            widgetControls[3] = {
+            widgetControls[#widgetControls + 1] = {
                 type = "checkbox",
                 name = GetString(_G.BARSTEWARD_HIDE_WHEN_COMPLETE),
                 getFunc = function()
@@ -1026,6 +1026,20 @@ local function GetWidgetSettings()
                     width = "half",
                     default = nil
                 }
+            end
+        end
+
+        -- custom settings
+        local cset = BS.widgets[k].customSettings
+        if (cset) then
+            local csettings = cset
+
+            if (type(cset) == "function") then
+                csettings = cset()
+            end
+
+            for _, setting in pairs(csettings) do
+                widgetControls[#widgetControls + 1] = setting
             end
         end
 

@@ -136,57 +136,6 @@ local function Initialise()
     BS.CreateLockButton()
     BS.CreateWidgetOrderTool(alignBars)
 
-    -- add / remove ignore friends
-    _G.SLASH_COMMANDS["/bsexclude"] = function(value)
-        if ((value or "") == "") then
-            return
-        end
-
-        local exclude = BS.Vars.Controls[BS.W_FRIENDS].Exclude or {}
-
-        if (not zo_strfind(value, "@", 1, 2)) then
-            value = "@" .. value
-        end
-
-        if (not exclude[value:lower()]) then
-            exclude[value:lower()] = true
-            BS.Vars.Controls[BS.W_FRIENDS].Exclude = exclude
-
-            if (BS.Chat) then
-                BS.Chat:SetTagColor("dc143c"):Print(zo_strformat(GetString(_G.BARSTEWARD_EXCLUDE), value))
-            end
-        else
-            if (BS.Chat) then
-                BS.Chat:SetTagColor("dc143c"):Print(zo_strformat(GetString(_G.BARSTEWARD_EXCLUDED), value))
-            end
-        end
-    end
-
-    _G.SLASH_COMMANDS["/bsinclude"] = function(value)
-        if ((value or "") == "") then
-            return
-        end
-
-        local exclude = BS.Vars.Controls[BS.W_FRIENDS].Exclude or {}
-
-        if (not zo_strfind(value, "@", 1, 2)) then
-            value = "@" .. value
-        end
-
-        if (exclude[value:lower()]) then
-            exclude[value:lower()] = nil
-            BS.Vars.Controls[BS.W_FRIENDS].Exclude = exclude
-
-            if (BS.Chat) then
-                BS.Chat:SetTagColor("dc143c"):Print(zo_strformat(GetString(_G.BARSTEWARD_INCLUDE), value))
-            end
-        else
-            if (BS.Chat) then
-                BS.Chat:SetTagColor("dc143c"):Print(zo_strformat(GetString(_G.BARSTEWARD_INCLUDE_NOT_THERE), value))
-            end
-        end
-    end
-
     -- utiltity
     if (_G.SLASH_COMMANDS["/rl"] == nil) then
         _G.SLASH_COMMANDS["/rl"] = function()

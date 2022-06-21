@@ -13,6 +13,7 @@ BS.Defaults = {
     DefaultDangerColour = {0.8, 0, 0, 1},
     DefaultWarningColour = {1, 1, 0, 1},
     DefaultOkColour = {0, 1, 0, 1},
+    FriendAnnounce = {},
     Movable = false,
     PreviousFriendTime = {},
     TimeFormat12 = "hh:m:s",

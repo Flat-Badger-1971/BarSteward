@@ -1,33 +1,46 @@
 local BS = _G.BarSteward
 
+local function addToTooltip(friendList, textureFunctions)
+    local tt = ""
+
+    for _, friend in ipairs(friendList) do 
+        local textColour = BS.ARGBConvert2(ZO_SocialList_GetRowColors(friend, false))
+        local noChar = not friend.hasCharacter or (zo_strlen(friend.characterName) <= 0)
+
+        tt = tt .. BS.LF .. zo_iconFormat(textureFunctions.playerStatusIcon(friend.status))
+        tt = tt .. textColour
+        tt = tt .. (noChar and "" or zo_iconFormat(textureFunctions.allianceIcon(friend.alliance)))
+        tt = tt .. ZO_FormatUserFacingDisplayName(friend.displayName)
+        tt = tt .. (noChar and "" or (" - " .. friend.formattedZone)) .. "|r"
+    end
+
+    return tt
+end
+
 BS.widgets[BS.W_FRIENDS] = {
     name = "friends",
     update = function(widget, event, displayName, characterName, _, newStatus)
         local masterList = FRIENDS_LIST_MANAGER:GetMasterList()
-        local online = 0
+        local offline, online, other = {}, {}, {}
         local tt = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_SOCIAL_MENU_CONTACTS)) .. "|cffffff"
         local textureFunctions = ZO_SocialList_GetPlatformTextureFunctions()
 
         for _, friend in ipairs(masterList) do
-            local noChar = not friend.hasCharacter or (zo_strlen(friend.characterName) <= 0)
-
             if (friend.online) then
-                online = online + 1
+                table.insert(online, friend)
+            elseif (friend.status == _G.PLAYER_STATUS_OFFLINE) then
+                table.insert(offline, friend)
+            else
+                table.insert(other, friend)
             end
-
-            local textColour = ZO_SocialList_GetRowColors(friend, false)
-
-            textColour = BS.ARGBConvert2(textColour)
-
-            tt = tt .. BS.LF .. zo_iconFormat(textureFunctions.playerStatusIcon(friend.status))
-            tt = tt .. textColour
-            tt = tt .. (noChar and "" or zo_iconFormat(textureFunctions.allianceIcon(friend.alliance)))
-            tt = tt .. ZO_FormatUserFacingDisplayName(friend.displayName)
-            tt = tt .. (noChar and "" or (" - " .. friend.formattedZone)) .. "|r"
         end
 
+        tt = tt .. addToTooltip(online, textureFunctions)
+        tt = tt .. addToTooltip(offline, textureFunctions)
+        tt = tt .. addToTooltip(other, textureFunctions)
+
         widget.tooltip = tt .. "|r"
-        widget:SetValue(online .. "/" .. #masterList)
+        widget:SetValue(#online .. "/" .. #masterList)
         widget:SetColour(unpack(BS.Vars.Controls[BS.W_FRIENDS].Colour or BS.Vars.DefaultColour))
 
         if (event == _G.EVENT_FRIEND_PLAYER_STATUS_CHANGED) then
@@ -46,7 +59,7 @@ BS.widgets[BS.W_FRIENDS] = {
 
                         if (announce == true) then
                             local dname = ZO_FormatUserFacingDisplayName(displayName) or displayName
-                            if (not BS.Vars.Controls[BS.W_FRIENDS].Exclude[dname:lower()]) then
+                            if (BS.Vars.FriendAnnounce[dname]) then
                                 local cname = ZO_FormatUserFacingCharacterName(characterName) or characterName
 
                                 BS.Announce(
@@ -95,5 +108,33 @@ BS.widgets[BS.W_FRIENDS] = {
         varName = "DebounceTime",
         refresh = false,
         default = 5
-    }
+    },
+    customSettings = function()
+        local masterList = FRIENDS_LIST_MANAGER:GetMasterList()
+        local settings = {
+            [1] = {
+                type = "description",
+                title = GetString(_G.BARSTEWARD_ANNOUNCEMENT_FRIEND)
+            }
+        }
+        local idx = 2
+
+        for _, friend in ipairs(masterList) do
+            local dname = ZO_FormatUserFacingDisplayName(friend.displayName)
+            settings[idx] = {
+                type = "checkbox",
+                name = dname,
+                getFunc = function()
+                    return BS.Vars.FriendAnnounce[dname]
+                end,
+                setFunc = function(value)
+                    BS.Vars.FriendAnnounce[dname] = value
+                end
+            }
+
+            idx = idx + 1
+        end
+
+        return settings
+    end
 }
