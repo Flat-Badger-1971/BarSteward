@@ -5,6 +5,8 @@ local function getResearchTimer(craftType)
     local maxTimer = 2000000
     local maxResearch = GetMaxSimultaneousSmithingResearch(craftType)
     local maxLines = GetNumSmithingResearchLines(craftType)
+    local maxR = maxResearch
+    local inuse = 0
 
     for i = 1, maxLines do
         local _, _, numTraits = GetSmithingResearchLineInfo(craftType, i)
@@ -14,6 +16,7 @@ local function getResearchTimer(craftType)
 
             if (duration ~= nil and timeRemaining ~= nil) then
                 maxResearch = maxResearch - 1
+                inuse = inuse + 1
                 maxTimer = math.min(maxTimer, timeRemaining)
             end
         end
@@ -23,13 +26,13 @@ local function getResearchTimer(craftType)
         maxTimer = 0
     end
 
-    return maxTimer
+    return maxTimer, maxR, inuse
 end
 
 BS.widgets[BS.W_BLACKSMITHING] = {
     name = "blacksmithing",
     update = function(widget)
-        local timeRemaining = getResearchTimer(_G.CRAFTING_TYPE_BLACKSMITHING)
+        local timeRemaining, maxResearch, inUse = getResearchTimer(_G.CRAFTING_TYPE_BLACKSMITHING)
         local colour = BS.Vars.Controls[BS.W_BLACKSMITHING].OkColour or BS.Vars.DefaultOkColour
 
         if (timeRemaining < (BS.Vars.Controls[BS.W_BLACKSMITHING].DangerValue * 3600)) then
@@ -47,6 +50,7 @@ BS.widgets[BS.W_BLACKSMITHING] = {
                 BS.Vars.Controls[BS.W_BLACKSMITHING].HideSeconds,
                 BS.Vars.Controls[BS.W_BLACKSMITHING].Format
             )
+            .. " (" .. inUse .. "/" .. maxResearch .. ")"
         )
         return timeRemaining
     end,
@@ -62,7 +66,7 @@ BS.widgets[BS.W_BLACKSMITHING] = {
 BS.widgets[BS.W_WOODWORKING] = {
     name = "woodworking",
     update = function(widget)
-        local timeRemaining = getResearchTimer(_G.CRAFTING_TYPE_WOODWORKING)
+        local timeRemaining, maxResearch, inUse = getResearchTimer(_G.CRAFTING_TYPE_WOODWORKING)
         local colour = BS.Vars.Controls[BS.W_WOODWORKING].OkColour or BS.Vars.DefaultOkColour
 
         if (timeRemaining < (BS.Vars.Controls[BS.W_WOODWORKING].DangerValue * 3600)) then
@@ -79,7 +83,7 @@ BS.widgets[BS.W_WOODWORKING] = {
                 false,
                 BS.Vars.Controls[BS.W_WOODWORKING].HideSeconds,
                 BS.Vars.Controls[BS.W_WOODWORKING].Format
-            )
+            ) .. " (" .. inUse .. "/" .. maxResearch .. ")"
         )
         return timeRemaining
     end,
@@ -95,7 +99,7 @@ BS.widgets[BS.W_WOODWORKING] = {
 BS.widgets[BS.W_CLOTHING] = {
     name = "clothing",
     update = function(widget)
-        local timeRemaining = getResearchTimer(_G.CRAFTING_TYPE_CLOTHIER)
+        local timeRemaining, maxResearch, inUse = getResearchTimer(_G.CRAFTING_TYPE_CLOTHIER)
         local colour = BS.Vars.Controls[BS.W_CLOTHING].OkColour or BS.Vars.DefaultOkColour
 
         if (timeRemaining < (BS.Vars.Controls[BS.W_CLOTHING].DangerValue * 3600)) then
@@ -113,6 +117,7 @@ BS.widgets[BS.W_CLOTHING] = {
                 BS.Vars.Controls[BS.W_CLOTHING].HideSeconds,
                 BS.Vars.Controls[BS.W_CLOTHING].Format
             )
+            .. " (" .. inUse .. "/" .. maxResearch .. ")"
         )
         return timeRemaining
     end,
@@ -128,7 +133,7 @@ BS.widgets[BS.W_CLOTHING] = {
 BS.widgets[BS.W_JEWELCRAFTING] = {
     name = "jewelcrafting",
     update = function(widget)
-        local timeRemaining = getResearchTimer(_G.CRAFTING_TYPE_JEWELRYCRAFTING)
+        local timeRemaining, maxResearch, inUse = getResearchTimer(_G.CRAFTING_TYPE_JEWELRYCRAFTING)
         local colour = BS.Vars.Controls[BS.W_JEWELCRAFTING].OkColour or BS.Vars.DefaultOkColour
 
         if (timeRemaining < (BS.Vars.Controls[BS.W_JEWELCRAFTING].DangerValue * 3600)) then
@@ -146,6 +151,7 @@ BS.widgets[BS.W_JEWELCRAFTING] = {
                 BS.Vars.Controls[BS.W_JEWELCRAFTING].HideSeconds,
                 BS.Vars.Controls[BS.W_JEWELCRAFTING].Format
             )
+            .. " (" .. inUse .. "/" .. maxResearch .. ")"
         )
         return timeRemaining
     end,
