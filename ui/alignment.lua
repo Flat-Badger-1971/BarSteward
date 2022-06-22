@@ -423,3 +423,108 @@ function BS.OrderUp(control)
     setOrder(widget.order, widget.order - 1)
     BS.w_order.scrollList.Update(BS.w_order.scrollList, BS.dataItems)
 end
+
+local function setupFriendsDataRow(rowControl, data)
+    local checkBox = rowControl:GetNamedChild("Check")
+
+    ZO_CheckButton_SetLabelText(checkBox, data.name)
+
+    local function onClicked(checkButton, checked)
+        BS.Vars.FriendAnnounce[checkButton.label:GetText()] = checked
+    end
+
+    ZO_CheckButton_SetToggleFunction(checkBox, onClicked)
+end
+
+function BS.UpdateFriendsList()
+    local masterList = FRIENDS_LIST_MANAGER:GetMasterList()
+
+    BS.friendDataItems = {}
+    local itemKey = 1
+
+    for _, friend in ipairs(masterList) do
+        local dname = ZO_FormatUserFacingDisplayName(friend.displayName) or friend.displayName
+        BS.friendDataItems[itemKey] = {name = dname}
+        itemKey = itemKey + 1
+    end
+end
+
+function BS.FriendsUpdate(scrollList)
+    BS.UpdateFriendsList()
+
+    local list = scrollList or BS.w_friends_list.scrollList
+    list:Update(BS.friendDataItems)
+end
+
+local function createFriendsScrollList()
+    local scrollData = {
+        name = "BarStewardFriendsList",
+        parent = BS.w_friends_list,
+        width = 400,
+        height = 500,
+        rowHeight = 36,
+        rowTemplate = "BarSteward_Friends_Template",
+        setupCallback = setupFriendsDataRow
+    }
+    local scrollList = BS.CreateScrollList(scrollData)
+    BS.FriendsUpdate(scrollList)
+
+    return scrollList
+end
+
+function BS.CreateFriendsTool()
+    local name = BS.Name .. "_Friends_Tool"
+
+    BS.w_friends_list = WINDOW_MANAGER:CreateTopLevelWindow(name)
+    local frame = BS.w_friends_list
+
+    frame:SetDimensions(470, 900)
+    frame:SetAnchor(CENTER, GuiRoot, CENTER)
+    frame:SetHidden(true)
+
+    frame.bgc = WINDOW_MANAGER:CreateControl(name .. "_background", frame, CT_TEXTURE)
+    frame.bgc:SetAnchorFill(frame)
+    frame.bgc:SetTexture("/esoui/art/miscellaneous/centerscreen_left.dds")
+
+    frame.bge = WINDOW_MANAGER:CreateControl(name .. "_edges", frame, CT_TEXTURE)
+    frame.bge:SetDimensions(24, frame:GetHeight())
+    frame.bge:SetAnchor(TOPLEFT, frame.bgc, TOPRIGHT)
+    frame.bge:SetTexture("esoui/art/miscellaneous/centerscreen_right.dds")
+
+    local fontSize = 24
+    local fontStyle = "BOLD_FONT"
+    local fontWeight = "soft-shadow-thick"
+    local nameFont = string.format("$(%s)|$(KB_%s)|%s", fontStyle, fontSize, fontWeight)
+
+    frame.heading = WINDOW_MANAGER:CreateControl(name .. "_heading", frame, CT_LABEL)
+    frame.heading:SetFont(nameFont)
+    frame.heading:SetColor(0.9, 0.9, 0.9, 1)
+    frame.heading:SetAnchor(TOPLEFT, frame, TOPLEFT, 50, 80)
+    frame.heading:SetText(GetString(_G.BARSTEWARD_ANNOUNCEMENT_FRIEND))
+    frame.heading:SetDimensions(350, 24)
+
+    frame.divider = WINDOW_MANAGER:CreateControl(name .. "_divider", frame, CT_TEXTURE)
+    frame.divider:SetDimensions(470, 4)
+    frame.divider:SetAnchor(TOPLEFT, frame.heading, BOTTOMLEFT, -50, 10)
+    frame.divider:SetTexture("/esoui/art/campaign/campaignbrowser_divider_short.dds")
+
+    frame.scrollList = createFriendsScrollList()
+    frame.scrollList:SetAnchor(TOPLEFT, frame.divider, BOTTOMLEFT, 50, 10)
+
+    frame.button = BS.CreateButton(name .. "_button", frame, 100, 32)
+    frame.button:SetText(GetString(_G.BARSTEWARD_OK_COLOUR))
+    frame.button:SetAnchor(TOPLEFT, frame.scrollList, BOTTOMLEFT, 140, 0)
+    frame.button:SetHandler(
+        "OnClicked",
+        function()
+            frame.fragment:SetHiddenForReason("disabled", true)
+        end
+    )
+
+    frame.fragment = ZO_HUDFadeSceneFragment:New(frame)
+    frame.fragment:SetHiddenForReason("disabled", true)
+    SCENE_MANAGER:GetScene("hud"):AddFragment(frame.fragment)
+    SCENE_MANAGER:GetScene("hudui"):AddFragment(frame.fragment)
+
+    return frame
+end

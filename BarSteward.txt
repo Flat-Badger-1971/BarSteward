@@ -41,6 +41,7 @@ data/widgets/social.lua
 settings/settings.lua
 
 ui/widget.lua
+ui/friend.xml
 ui/order.xml
 ui/bar.lua
 ui/controls.lua

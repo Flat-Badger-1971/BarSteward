@@ -1,0 +1,11 @@
+<GuiXml>
+    <Controls>
+        <Control name="BarSteward_Friends_Template" tier="medium" resizeToFitDescendents="true" virtual="true" mouseEnabled="true">
+            <Controls>
+                <Button name="$(parent)Check" inherits="ZO_CheckButton">
+                    <Anchor point="LEFT"/>
+                </Button>
+            </Controls>
+        </Control>
+    </Controls>
+</GuiXml>

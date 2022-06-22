@@ -61,7 +61,7 @@ read_globals = {
 		}
 	},
     ["SCENE_MANAGER"] = {
-        fields = {
+        fields = { 
             GetCurrentScene = {read_only = true},
             GetScene = {read_only = true},
             GetSceneGroup = {read_only = true},
@@ -269,6 +269,8 @@ read_globals = {
     -- Zenimax objects
     "HUD_SCENE",
     "ZO_CachedStrFormat",
+	"ZO_CheckButton_SetLabelText",
+	"ZO_CheckButton_SetToggleFunction",
     "ZO_CreateStringId",
 	"ZO_DeepTableCopy",
 	"ZO_Dialogs_RegisterCustomDialog",

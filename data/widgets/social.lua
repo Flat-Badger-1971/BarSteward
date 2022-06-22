@@ -3,7 +3,7 @@ local BS = _G.BarSteward
 local function addToTooltip(friendList, textureFunctions)
     local tt = ""
 
-    for _, friend in ipairs(friendList) do 
+    for _, friend in ipairs(friendList) do
         local textColour = BS.ARGBConvert2(ZO_SocialList_GetRowColors(friend, false))
         local noChar = not friend.hasCharacter or (zo_strlen(friend.characterName) <= 0)
 
@@ -46,7 +46,7 @@ BS.widgets[BS.W_FRIENDS] = {
         if (event == _G.EVENT_FRIEND_PLAYER_STATUS_CHANGED) then
             if (newStatus == _G.PLAYER_STATUS_ONLINE) then
                 if (BS.Vars.Controls[BS.W_FRIENDS].Announce) then
-                    if (BS.Vars.Controls[BS.W_FRIENDS].Exclude) then
+                    if (BS.Vars.FriendAnnounce[displayName]) then
                         local announce = true
                         local previousTime = BS.Vars.PreviousFriendTime[displayName] or (os.time() - 3600)
                         local debounceTime = (BS.Vars.Controls[BS.W_FRIENDS].DebounceTime or 5) * 60
@@ -108,33 +108,5 @@ BS.widgets[BS.W_FRIENDS] = {
         varName = "DebounceTime",
         refresh = false,
         default = 5
-    },
-    customSettings = function()
-        local masterList = FRIENDS_LIST_MANAGER:GetMasterList()
-        local settings = {
-            [1] = {
-                type = "description",
-                title = GetString(_G.BARSTEWARD_ANNOUNCEMENT_FRIEND)
-            }
-        }
-        local idx = 2
-
-        for _, friend in ipairs(masterList) do
-            local dname = ZO_FormatUserFacingDisplayName(friend.displayName)
-            settings[idx] = {
-                type = "checkbox",
-                name = dname,
-                getFunc = function()
-                    return BS.Vars.FriendAnnounce[dname]
-                end,
-                setFunc = function(value)
-                    BS.Vars.FriendAnnounce[dname] = value
-                end
-            }
-
-            idx = idx + 1
-        end
-
-        return settings
-    end
+    }
 }

@@ -135,6 +135,7 @@ local function Initialise()
     BS.CreateAlignmentFrame(alignBars)
     BS.CreateLockButton()
     BS.CreateWidgetOrderTool(alignBars)
+    --BS.CreateFriendsTool()
 
     -- utiltity
     if (_G.SLASH_COMMANDS["/rl"] == nil) then
