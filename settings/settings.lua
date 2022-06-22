@@ -44,12 +44,14 @@ local function Initialise()
                 _G[bar].ref.bar.overlay:SetHidden(not value)
             end
 
+            local frame = BS.lock or BS.CreateLockButton()
+
             if (value) then
                 SCENE_MANAGER:Show("hudui")
                 SetGameCameraUIMode(true)
-                BS.lock.fragment:SetHiddenForReason("disabled", false)
+                frame.fragment:SetHiddenForReason("disabled", false)
             else
-                BS.lock.fragment:SetHiddenForReason("disabled", true)
+                frame.fragment:SetHiddenForReason("disabled", true)
             end
         end,
         width = "full",
@@ -63,9 +65,10 @@ local function Initialise()
         type = "button",
         name = GetString(_G.BARSTEWARD_ALIGN_BARS),
         func = function()
+            local frame = BS.frame or BS.CreateAlignmentFrame(BS.alignBars)
             SCENE_MANAGER:Show("hudui")
             SetGameCameraUIMode(true)
-            BS.frame.fragment:SetHiddenForReason("disabled", false)
+            frame.fragment:SetHiddenForReason("disabled", false)
         end,
         width = "half"
     }
@@ -73,9 +76,10 @@ local function Initialise()
         type = "button",
         name = GetString(_G.BARSTEWARD_REORDER_WIDGETS),
         func = function()
+            local frame = BS.w_order or BS.CreateWidgetOrderTool(BS.alignBars)
             SCENE_MANAGER:Show("hudui")
             SetGameCameraUIMode(true)
-            BS.w_order.fragment:SetHiddenForReason("disabled", false)
+            frame.fragment:SetHiddenForReason("disabled", false)
         end,
         width = "half"
     }

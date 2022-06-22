@@ -173,6 +173,8 @@ function BS.CreateAlignmentFrame(alignBars)
     frame.fragment:SetHiddenForReason("disabled", true)
     SCENE_MANAGER:GetScene("hud"):AddFragment(frame.fragment)
     SCENE_MANAGER:GetScene("hudui"):AddFragment(frame.fragment)
+
+    return frame
 end
 
 function BS.SetBarOptions(bars)
@@ -374,6 +376,8 @@ function BS.CreateWidgetOrderTool(bars)
     frame.fragment:SetHiddenForReason("disabled", true)
     SCENE_MANAGER:GetScene("hud"):AddFragment(frame.fragment)
     SCENE_MANAGER:GetScene("hudui"):AddFragment(frame.fragment)
+
+    return frame
 end
 
 local function findByName(widgetName)

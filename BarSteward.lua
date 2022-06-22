@@ -70,13 +70,13 @@ local function Initialise()
 
     -- create bars
     local bars = BS.Vars.Bars
-    local alignBars = {}
+    BS.alignBars = {}
 
     for idx, barData in pairs(bars) do
         local widgets = {}
         local orderedWidgets = {}
 
-        table.insert(alignBars, barData.Name)
+        table.insert(BS.alignBars, barData.Name)
 
         -- get the widgets for this bar
         for id, info in ipairs(BS.Vars.Controls) do
@@ -131,11 +131,6 @@ local function Initialise()
             end
         end
     end
-
-    BS.CreateAlignmentFrame(alignBars)
-    BS.CreateLockButton()
-    BS.CreateWidgetOrderTool(alignBars)
-    --BS.CreateFriendsTool()
 
     -- utiltity
     if (_G.SLASH_COMMANDS["/rl"] == nil) then
