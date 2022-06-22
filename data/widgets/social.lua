@@ -108,5 +108,18 @@ BS.widgets[BS.W_FRIENDS] = {
         varName = "DebounceTime",
         refresh = false,
         default = 5
+    },
+    customSettings = {
+        [1] = {
+            type = "button",
+            name = GetString(_G.BARSTEWARD_ANNOUNCEMENTS),
+            func = function()
+                SCENE_MANAGER:Show("hudui")
+                SetGameCameraUIMode(true)
+                local friends = BS.w_friends_list or BS.CreateFriendsTool()
+                friends.fragment:SetHiddenForReason("disabled", false)
+            end,
+            width = "half"
+        }
     }
 }

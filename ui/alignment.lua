@@ -434,6 +434,7 @@ local function setupFriendsDataRow(rowControl, data)
     end
 
     ZO_CheckButton_SetToggleFunction(checkBox, onClicked)
+    ZO_CheckButton_SetCheckState(checkBox, BS.Vars.FriendAnnounce[checkBox.label:GetText()])
 end
 
 function BS.UpdateFriendsList()
@@ -513,13 +514,33 @@ function BS.CreateFriendsTool()
 
     frame.button = BS.CreateButton(name .. "_button", frame, 100, 32)
     frame.button:SetText(GetString(_G.BARSTEWARD_OK_COLOUR))
-    frame.button:SetAnchor(TOPLEFT, frame.scrollList, BOTTOMLEFT, 140, 0)
+    frame.button:SetAnchor(TOPRIGHT, frame.scrollList, BOTTOMRIGHT, 0, 5)
     frame.button:SetHandler(
         "OnClicked",
         function()
             frame.fragment:SetHiddenForReason("disabled", true)
         end
     )
+
+    frame.selectAll = BS.CreateButton(name .. "_select_all", frame, 100, 32)
+    frame.selectAll:SetText(GetString(_G.BARSTEWARD_SELECT_ALL))
+    frame.selectAll:SetAnchor(TOPLEFT, frame.scrollList, BOTTOMLEFT, 0, 5)
+    frame.selectAll:SetHandler("OnClicked", function()
+        for _, friend in ipairs(BS.friendDataItems) do
+            BS.Vars.FriendAnnounce[friend.name] = true
+            BS.FriendsUpdate(frame.scrollList)
+        end
+    end)
+
+    frame.selectNone = BS.CreateButton(name .. "_select_none", frame, 100, 32)
+    frame.selectNone:SetText(GetString(_G.BARSTEWARD_SELECT_NONE))
+    frame.selectNone:SetAnchor(LEFT, frame.selectAll, RIGHT, 10, 0)
+    frame.selectNone:SetHandler("OnClicked", function()
+        for _, friend in ipairs(BS.friendDataItems) do
+            BS.Vars.FriendAnnounce[friend.name] = false
+            BS.FriendsUpdate(frame.scrollList)
+        end
+    end)
 
     frame.fragment = ZO_HUDFadeSceneFragment:New(frame)
     frame.fragment:SetHiddenForReason("disabled", true)

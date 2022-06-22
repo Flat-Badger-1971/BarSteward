@@ -11,6 +11,9 @@ ZO_CreateStringId("BARSTEWARD_SCREEN", "Screen")
 ZO_CreateStringId("BARSTEWARD_WIDGET_ORDERING", "Bar Steward Widget Ordering")
 ZO_CreateStringId("BARSTEWARD_REORDER", "Reorder")
 ZO_CreateStringId("BARSTEWARD_REORDER_WIDGETS", "Reorder Widgets")
+-- Friends
+ZO_CreateStringId("BARSTEWARD_SELECT_ALL", "Select All")
+ZO_CreateStringId("BARSTEWARD_SELECT_NONE", "Select None")
 -- Bar Settings
 ZO_CreateStringId("BARSTEWARD_ALIGN", "Centre Align")
 ZO_CreateStringId("BARSTEWARD_BACKDROP_COLOUR", "Backdrop Colour")

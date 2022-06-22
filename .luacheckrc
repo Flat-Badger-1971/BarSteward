@@ -61,7 +61,7 @@ read_globals = {
 		}
 	},
     ["SCENE_MANAGER"] = {
-        fields = { 
+        fields = {
             GetCurrentScene = {read_only = true},
             GetScene = {read_only = true},
             GetSceneGroup = {read_only = true},
