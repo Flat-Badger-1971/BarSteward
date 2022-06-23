@@ -49,8 +49,7 @@ BS.widgets[BS.W_BLACKSMITHING] = {
                 false,
                 BS.Vars.Controls[BS.W_BLACKSMITHING].HideSeconds,
                 BS.Vars.Controls[BS.W_BLACKSMITHING].Format
-            )
-            .. " (" .. inUse .. "/" .. maxResearch .. ")"
+            ) .. (BS.Vars.Controls[BS.W_BLACKSMITHING].ShowSlots and " (" .. inUse .. "/" .. maxResearch .. ")" or "")
         )
         return timeRemaining
     end,
@@ -60,7 +59,23 @@ BS.widgets[BS.W_BLACKSMITHING] = {
     hideWhenEqual = 0,
     complete = function()
         return BS.IsTraitResearchComplete(_G.CRAFTING_TYPE_BLACKSMITHING)
-    end
+    end,
+    customSettings = {
+        [1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_SHOW_SLOTS),
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_BLACKSMITHING].ShowSlots
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_BLACKSMITHING].ShowSlots = value
+                BS.widgets[BS.W_BLACKSMITHING].update(
+                    _G[BS.Name .. "_Widget_" .. BS.widgets[BS.W_BLACKSMITHING].name].ref
+                )
+            end,
+            width = "full"
+        }
+    }
 }
 
 BS.widgets[BS.W_WOODWORKING] = {
@@ -83,7 +98,7 @@ BS.widgets[BS.W_WOODWORKING] = {
                 false,
                 BS.Vars.Controls[BS.W_WOODWORKING].HideSeconds,
                 BS.Vars.Controls[BS.W_WOODWORKING].Format
-            ) .. " (" .. inUse .. "/" .. maxResearch .. ")"
+            ) .. (BS.Vars.Controls[BS.W_WOODWORKING].ShowSlots and " (" .. inUse .. "/" .. maxResearch .. ")" or "")
         )
         return timeRemaining
     end,
@@ -93,7 +108,21 @@ BS.widgets[BS.W_WOODWORKING] = {
     hideWhenEqual = 0,
     complete = function()
         return BS.IsTraitResearchComplete(_G.CRAFTING_TYPE_WOODWORKING)
-    end
+    end,
+    customSettings = {
+        [1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_SHOW_SLOTS),
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_WOODWORKING].ShowSlots
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_WOODWORKING].ShowSlots = value
+                BS.widgets[BS.W_WOODWORKING].update(_G[BS.Name .. "_Widget_" .. BS.widgets[BS.W_WOODWORKING].name].ref)
+            end,
+            width = "full"
+        }
+    }
 }
 
 BS.widgets[BS.W_CLOTHING] = {
@@ -116,8 +145,7 @@ BS.widgets[BS.W_CLOTHING] = {
                 false,
                 BS.Vars.Controls[BS.W_CLOTHING].HideSeconds,
                 BS.Vars.Controls[BS.W_CLOTHING].Format
-            )
-            .. " (" .. inUse .. "/" .. maxResearch .. ")"
+            ) .. (BS.Vars.Controls[BS.W_CLOTHING].ShowSlots and " (" .. inUse .. "/" .. maxResearch .. ")" or "")
         )
         return timeRemaining
     end,
@@ -127,7 +155,21 @@ BS.widgets[BS.W_CLOTHING] = {
     hideWhenEqual = 0,
     complete = function()
         return BS.IsTraitResearchComplete(_G.CRAFTING_TYPE_CLOTHIER)
-    end
+    end,
+    customSettings = {
+        [1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_SHOW_SLOTS),
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_CLOTHING].ShowSlots
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_CLOTHING].ShowSlots = value
+                BS.widgets[BS.W_CLOTHING].update(_G[BS.Name .. "_Widget_" .. BS.widgets[BS.W_CLOTHING].name].ref)
+            end,
+            width = "full"
+        }
+    }
 }
 
 BS.widgets[BS.W_JEWELCRAFTING] = {
@@ -150,8 +192,7 @@ BS.widgets[BS.W_JEWELCRAFTING] = {
                 false,
                 BS.Vars.Controls[BS.W_JEWELCRAFTING].HideSeconds,
                 BS.Vars.Controls[BS.W_JEWELCRAFTING].Format
-            )
-            .. " (" .. inUse .. "/" .. maxResearch .. ")"
+            ) .. (BS.Vars.Controls[BS.W_JEWELCRAFTING].ShowSlots and " (" .. inUse .. "/" .. maxResearch .. ")" or "")
         )
         return timeRemaining
     end,
@@ -161,5 +202,21 @@ BS.widgets[BS.W_JEWELCRAFTING] = {
     hideWhenEqual = 0,
     complete = function()
         return BS.IsTraitResearchComplete(_G.CRAFTING_TYPE_JEWELRYCRAFTING)
-    end
+    end,
+    customSettings = {
+        [1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_SHOW_SLOTS),
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_JEWELCRAFTING].ShowSlots
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_JEWELCRAFTING].ShowSlots = value
+                BS.widgets[BS.W_JEWELCRAFTING].update(
+                    _G[BS.Name .. "_Widget_" .. BS.widgets[BS.W_JEWELCRAFTING].name].ref
+                )
+            end,
+            width = "full"
+        }
+    }
 }
