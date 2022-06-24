@@ -345,3 +345,25 @@ function BS.Announce(header, message, widgetIconNumber, lifespan, sound)
 
     CENTER_SCREEN_ANNOUNCE:AddMessageWithParams(messageParams)
 end
+
+-- ensure all widget ordering is in a continuous
+-- ordered sequence within the bar
+function BS.CleanUpBarOrder(barNumber)
+    local barTable = {}
+    local controls = BS.Vars.Controls
+
+    for key, control in pairs(controls) do
+        if (control.Bar == barNumber) then
+            table.insert(barTable, {key = key, control = control})
+        end
+    end
+
+    table.sort(barTable, function(a, b) return a.control.Order < b.control.Order end)
+
+    -- resequence the controls
+    local index = 1
+    for _, controlData in pairs(barTable) do
+        controls[controlData.key].Order = index
+        index = index + 1
+    end
+end

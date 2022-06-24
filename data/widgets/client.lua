@@ -22,7 +22,6 @@ local BS = _G.BarSteward
         }
     }
 ]]
-
 BS.widgets = {
     [BS.W_TIME] = {
         name = "time",
@@ -72,5 +71,40 @@ BS.widgets = {
         icon = "/esoui/art/ava/overview_icon_underdog_score.dds",
         tooltip = GetString(_G.BARSTEWARD_LATENCY),
         minWidthChars = "8888"
+    },
+    [BS.W_MEMORY] = {
+        -- v1.2.2
+        name = "memory",
+        update = function(widget)
+            local usedKiB = collectgarbage("count")
+            local usedMiB = (usedKiB / 1024)
+            local precision = BS.Vars.Controls[BS.W_MEMORY].Precision or 1
+            local rfactor = 10 ^ precision
+            local colour = BS.Vars.DefaultOkColour
+
+            usedMiB = math.ceil(usedMiB * rfactor) / rfactor
+
+            if (usedMiB > (BS.Vars.Controls[BS.W_MEMORY].DangerValue or 99999)) then
+                colour = BS.Vars.Controls[BS.W_MEMORY].DangerColour or BS.Vars.DefaultDangerColour
+            elseif (usedMiB > (BS.Vars.Controls[BS.W_MEMORY].WarningValue or 99999)) then
+                colour = BS.Vars.Controls[BS.W_MEMORY].WarningColour or BS.Vars.DefaultWarningColour
+            end
+
+            widget:SetValue(ZO_FastFormatDecimalNumber(tostring(usedMiB)) .. " MiB")
+            widget:SetColour(unpack(colour))
+
+            return usedMiB
+        end,
+        timer = 5000,
+        icon = "/esoui/art/enchanting/enchanting_highlight.dds",
+        tooltip = GetString(_G.BARSTEWARD_MEMORY),
+        customOptions = {
+            name = GetString(_G.BARSTEWARD_DECIMAL_PLACES),
+            choices = {0, 1, 2, 3},
+            varName = "Precision",
+            refresh = true,
+            default = 1
+        },
+        minWidthChars = "888888"
     }
 }

@@ -61,7 +61,7 @@ read_globals = {
 		}
 	},
     ["SCENE_MANAGER"] = {
-        fields = { 
+        fields = {
             GetCurrentScene = {read_only = true},
             GetScene = {read_only = true},
             GetSceneGroup = {read_only = true},
@@ -182,6 +182,7 @@ read_globals = {
     "GetAntiquityName",
     "GetAntiquityQuality",
     "GetAntiquityZoneId",
+    "GetAvailableSkillPoints",
     "GetChampionDisciplineId",
     "GetChampionDisciplineName",
     "GetChampionPointPoolForRank",
@@ -217,6 +218,7 @@ read_globals = {
     "GetNumChampionXPInChampionPoint",
     "GetNumExperiencePointsInCompanionLevel",
 	"GetNumFriends",
+	"GetNumSkyshardsInZone",
     "GetNumSmithingResearchLines",
 	"GetNumTimedActivityRewards",
     "GetPendingCompanionDefId",
@@ -227,6 +229,7 @@ read_globals = {
     "GetRecipeIngredientItemInfo",
     "GetRepairAllCost",
     "GetRidingStats",
+	"GetSkyshardDiscoveryStatus",
     "GetSlotStackSize",
     "GetSmithingResearchLineInfo",
     "GetSmithingResearchLineTraitInfo",
@@ -249,7 +252,10 @@ read_globals = {
     "GetUnitPower",
     "GetUnitRace",
     "GetUnitZone",
+	"GetUnitZoneIndex",
+	"GetZoneId",
     "GetZoneNameById",
+	"GetZoneSkyshardId",
     "HasActiveCompanion",
     "HasPendingCompanion",
     "IsCollectibleBlocked",
@@ -276,6 +282,7 @@ read_globals = {
 	"ZO_DeepTableCopy",
 	"ZO_Dialogs_RegisterCustomDialog",
     "ZO_Dialogs_ShowDialog",
+	"ZO_FastFormatDecimalNumber",
 	"ZO_FormatUserFacingCharacterName",
 	"ZO_FormatUserFacingDisplayName",
     "ZO_GetAllianceIcon",

@@ -254,6 +254,9 @@ local function updateList(barName)
     end
 
     if (barIndex) then
+        --ensure the order is correct
+        BS.CleanUpBarOrder(barIndex)
+
         -- get the widgets
         local controls = BS.Vars.Controls
 

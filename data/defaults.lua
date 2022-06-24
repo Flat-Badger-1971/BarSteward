@@ -233,10 +233,21 @@ BS.Defaults = {
         },
         [BS.W_SOUL_GEMS] = {Bar = 0, Order = 38, ColourValues = "c", UseSeparators = false},
         [BS.W_FRIENDS] = {
-            Bar = 1,
+            Bar = 0,
             Order = 39,
             ColourValues = "c",
             Announce = false
-        }
+        },
+        [BS.W_MEMORY] = {
+            Bar = 0,
+            Order = 40,
+            ColourValues = "okc,wv,wc,dv,dc",
+            WarningValue = 450,
+            DangerValue = 600,
+            Precision = 1,
+            UpdateFrequency = 5
+        },
+        [BS.W_SKYSHARDS] = {Bar = 0, Order = 41, ColourValues = "c"},
+        [BS.W_SKILL_POINTS] = {Bar = 0, Order = 42, ColourValues = "c", Autohide = true, Colour = {0, 1, 0, 1}}
     }
 }

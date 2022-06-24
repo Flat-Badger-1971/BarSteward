@@ -92,6 +92,10 @@ end
 -- add functions to the widget to mimic a standard control
 -- set the widget value and adjust the value control's width accordingly
 function baseWidget:SetValue(value)
+    if (self.value:GetText() == value) then
+        return
+    end
+
     self.value:SetText(value)
 
     local textWidth = self.value:GetStringWidth(value)

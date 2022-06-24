@@ -180,3 +180,55 @@ BS.widgets[BS.W_ALLIANCE] = {
         end
     end
 }
+
+BS.widgets[BS.W_SKYSHARDS] = {
+    -- v1.2.2
+    name = "skyshards",
+    update = function(widget)
+        local zoneIndex = GetUnitZoneIndex("player")
+        local zoneId = GetZoneId(zoneIndex)
+        local inZoneSkyshards = GetNumSkyshardsInZone(zoneId)
+        local discoveredInZone = 0
+
+        for skyshard = 1, inZoneSkyshards do
+            local skyShardId = GetZoneSkyshardId(zoneId, skyshard)
+            if (skyShardId ~= 0) then
+                if (GetSkyshardDiscoveryStatus(skyShardId) == _G.SKYSHARD_DISCOVERY_STATUS_ACQUIRED) then
+                    discoveredInZone = discoveredInZone + 1
+                end
+            end
+        end
+
+        widget:SetValue(discoveredInZone .. "/" .. inZoneSkyshards)
+        widget:SetColour(unpack(BS.Vars.Controls[BS.W_SKYSHARDS].Colour or BS.Vars.DefaultColour))
+
+        return discoveredInZone
+    end,
+    event = _G.EVENT_SKYSHARDS_UPDATED,
+    icon = "/esoui/art/mappins/skyshard_complete.dds",
+    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_MAPFILTER15))
+}
+
+BS.widgets[BS.W_SKILL_POINTS] = {
+    -- v1.2.2
+    name = "skillPoints",
+    update = function(widget)
+        local unspent = GetAvailableSkillPoints()
+
+        widget:SetValue(unspent)
+        widget:SetColour(unpack(BS.Vars.Controls[BS.W_SKILL_POINTS].Colour or BS.Vars.DefaultOkColour))
+
+        return unspent
+    end,
+    event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_SKILL_POINTS_CHANGED},
+    icon = "/esoui/art/campaign/campaignbrowser_indexicon_normal_up.dds",
+    tooltip = GetString(_G.BARSTEWARD_SKILL_POINTS),
+    hideWhenEqual = 0,
+    onClick = function()
+        if (not IsInGamepadPreferredMode()) then
+            SCENE_MANAGER:Show("skills")
+        else
+            SCENE_MANAGER:Show("gamepad_skills_root")
+        end
+    end
+}

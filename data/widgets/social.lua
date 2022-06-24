@@ -18,6 +18,7 @@ local function addToTooltip(friendList, textureFunctions)
 end
 
 BS.widgets[BS.W_FRIENDS] = {
+    --v1.2.0
     name = "friends",
     update = function(widget, event, displayName, characterName, _, newStatus)
         local masterList = FRIENDS_LIST_MANAGER:GetMasterList()
