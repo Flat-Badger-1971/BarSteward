@@ -221,6 +221,7 @@ read_globals = {
 	"GetNumSkyshardsInZone",
     "GetNumSmithingResearchLines",
 	"GetNumTimedActivityRewards",
+    "GetParentZoneId",
     "GetPendingCompanionDefId",
     "GetPlayerChampionPointsEarned",
     "GetPlayerChampionXP",

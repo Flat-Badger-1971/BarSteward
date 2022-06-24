@@ -188,6 +188,12 @@ BS.widgets[BS.W_SKYSHARDS] = {
         local zoneIndex = GetUnitZoneIndex("player")
         local zoneId = GetZoneId(zoneIndex)
         local inZoneSkyshards = GetNumSkyshardsInZone(zoneId)
+
+        if (inZoneSkyshards == 0) then
+            zoneId = GetParentZoneId(zoneId)
+            inZoneSkyshards = GetNumSkyshardsInZone(zoneId)
+        end
+
         local discoveredInZone = 0
 
         for skyshard = 1, inZoneSkyshards do
