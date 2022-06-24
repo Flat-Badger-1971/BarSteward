@@ -17,11 +17,19 @@ BS.widgets[BS.W_BAG_SPACE] = {
             colour = BS.Vars.Controls[BS.W_BAG_SPACE].WarningColour or BS.Vars.DefaultWarningColour
 
             if (BS.Vars.Controls[BS.W_BAG_SPACE].Announce and newItem) then
-                BS.Announce(
-                    GetString(_G.BARSTEWARD_WARNING),
-                    GetString(_G.BARSTEWARD_WARNING_BAGS),
-                    BS.W_BAG_SPACE
-                )
+                local announce = true
+                local previousTime = BS.Vars.PreviousAnnounceTime[BS.W_BAG_SPACE] or (os.time() - 100)
+                local debounceTime = 30
+
+                if (os.time() - previousTime <= debounceTime) then
+                    announce = false
+                end
+
+                BS.Vars.PreviousAnnounceTime[BS.W_BAG_SPACE] = os.time()
+
+                if (announce == true) then
+                    BS.Announce(GetString(_G.BARSTEWARD_WARNING), GetString(_G.BARSTEWARD_WARNING_BAGS), BS.W_BAG_SPACE)
+                end
             end
         elseif (pcUsed >= BS.Vars.Controls[BS.W_BAG_SPACE].DangerValue) then
             colour = BS.Vars.Controls[BS.W_BAG_SPACE].DangerColour or BS.Vars.DefaultDangerColour

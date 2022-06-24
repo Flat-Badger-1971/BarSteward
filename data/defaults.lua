@@ -16,6 +16,7 @@ BS.Defaults = {
     FriendAnnounce = {},
     Movable = false,
     PreviousFriendTime = {},
+    PreviousAnnounceTime = {},
     TimeFormat12 = "hh:m:s",
     TimeFormat24 = "HH:m:s",
     TimeType = GetString(_G.BARSTEWARD_24),
