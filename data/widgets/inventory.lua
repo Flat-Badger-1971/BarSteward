@@ -377,11 +377,20 @@ local function isMasterWrit(bag, slot)
     return specialisedItemType == _G.SPECIALIZED_ITEMTYPE_MASTER_WRIT
 end
 
+local bagIcon = zo_iconFormat("/esoui/art/tooltips/icon_bag.dds")
+local bankIcon = zo_iconFormat("/esoui/art/tooltips/icon_bank.dds")
+
 local function getDetail(bag, slot)
     local wcount = GetSlotStackSize(bag, slot)
     local itemDisplayQuality = GetItemDisplayQuality(bag, slot)
     local colour = GetItemQualityColor(itemDisplayQuality)
     local name = colour:Colorize(GetItemName(bag, slot))
+
+    if (bag == _G.BAG_BACKPACK) then
+        name = bagIcon .. " " .. name
+    else
+        name = bankIcon .. " " .. name
+    end
 
     return name .. ((wcount > 1) and (" (" .. wcount .. ")") or "")
 end
