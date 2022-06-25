@@ -121,22 +121,41 @@ BS.widgets[BS.W_GOLD] = {
         local goldInBag = GetCurrencyAmount(_G.CURT_MONEY, _G.CURRENCY_LOCATION_CHARACTER)
         local goldInBank = GetCurrencyAmount(_G.CURT_MONEY, _G.CURRENCY_LOCATION_BANK)
         local combined = goldInBag + goldInBank
+        local allCharacters = combined
+        local otherCharacterGold = BS.Vars.Gold
+        local thisCharacter = GetUnitName("player")
+        local charactertt = ""
+        local useSeparators = BS.Vars.Controls[BS.W_GOLD].UseSeparators
 
-        if (BS.Vars.Controls[BS.W_GOLD].UseSeparators == true) then
+        for character, gold in pairs(otherCharacterGold) do
+            if (character ~= thisCharacter) then
+                allCharacters = allCharacters + gold
+                charactertt =
+                    charactertt ..
+                    "|cffd700" ..
+                        tostring(useSeparators and BS.AddSeparators(gold) or gold) ..
+                            "|r " .. ZO_FormatUserFacingCharacterName(character) .. BS.LF
+            end
+        end
+
+        if (useSeparators) then
             goldInBag = BS.AddSeparators(goldInBag)
             goldInBank = BS.AddSeparators(goldInBank)
             combined = BS.AddSeparators(combined)
+            allCharacters = BS.AddSeparators(allCharacters)
         end
 
         local toDisplay = goldInBag
-        local separated = goldInBag .. "/" .. goldInBank --Add by P5ych3
+        local separated = goldInBag .. "/" .. goldInBank
 
         if (BS.Vars.Controls[BS.W_GOLD].GoldType == GetString(_G.BARSTEWARD_GOLD_BANK)) then
             toDisplay = goldInBank
         elseif (BS.Vars.Controls[BS.W_GOLD].GoldType == GetString(_G.BARSTEWARD_GOLD_COMBINED)) then
             toDisplay = combined
-        elseif (BS.Vars.Controls[BS.W_GOLD].GoldType == GetString(_G.BARSTEWARD_GOLD_SEPARATED)) then --Add by P5ych3
+        elseif (BS.Vars.Controls[BS.W_GOLD].GoldType == GetString(_G.BARSTEWARD_GOLD_SEPARATED)) then
             toDisplay = separated
+        elseif (BS.Vars.Controls[BS.W_GOLD].GoldType == GetString(_G.BARSTEWARD_GOLD_EVERYWHERE)) then
+            toDisplay = allCharacters
         end
 
         widget:SetValue(toDisplay)
@@ -146,7 +165,9 @@ BS.widgets[BS.W_GOLD] = {
         local ttt = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_GAMEPAD_INVENTORY_AVAILABLE_FUNDS)) .. BS.LF
         ttt = ttt .. "|cffd700" .. tostring(goldInBag) .. "|r " .. GetString(_G.BARSTEWARD_GOLD_BAG) .. BS.LF
         ttt = ttt .. "|cffd700" .. tostring(goldInBank) .. "|r " .. GetString(_G.BARSTEWARD_GOLD_BANK) .. BS.LF
-        ttt = ttt .. "|cffd700" .. tostring(combined) .. "|r " .. GetString(_G.BARSTEWARD_GOLD_COMBINED)
+        ttt = ttt .. "|cffd700" .. tostring(combined) .. "|r " .. GetString(_G.BARSTEWARD_GOLD_COMBINED) .. BS.LF .. BS.LF
+        ttt = ttt .. charactertt .. BS.LF
+        ttt = ttt .. "|cffd700" .. tostring(allCharacters) .. "|r " .. GetString(_G.BARSTEWARD_GOLD_EVERYWHERE)
 
         widget.tooltip = ttt
 
@@ -161,7 +182,8 @@ BS.widgets[BS.W_GOLD] = {
             GetString(_G.BARSTEWARD_GOLD_BAG),
             GetString(_G.BARSTEWARD_GOLD_BANK),
             GetString(_G.BARSTEWARD_GOLD_COMBINED),
-            GetString(_G.BARSTEWARD_GOLD_SEPARATED) --Add by P5ych3
+            GetString(_G.BARSTEWARD_GOLD_SEPARATED),
+            GetString(_G.BARSTEWARD_GOLD_EVERYWHERE)
         },
         varName = "GoldType",
         refresh = true,
@@ -304,7 +326,7 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
         end
 
         if (#cp > 0) then
-            local tooltipText = GetString(_G.BARSTEWARD_UNSPENT) .. BS.LF
+            local tooltipText = GetString(_G.BARSTEWARD_UNSPENT)
 
             for _, c in ipairs(cp) do
                 if (tooltipText ~= "") then

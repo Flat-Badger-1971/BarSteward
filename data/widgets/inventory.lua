@@ -355,3 +355,93 @@ BS.widgets[BS.W_SOUL_GEMS] = {
         default = GetString(_G.BARSTEWARD_FILLED)
     }
 }
+
+local function isSurveyReport(bag, slot)
+    local _, specialisedItemType = GetItemType(bag, slot)
+    local itemName = GetItemName(bag, slot)
+
+    return specialisedItemType == _G.SPECIALIZED_ITEMTYPE_TROPHY_SURVEY_REPORT or
+        string.find(string.lower(itemName), string.lower(GetString(_G.SI_CONSTANT_SURVEY_MAP)))
+end
+
+local function isTreasureMap(bag, slot)
+    local _, specialisedItemType = GetItemType(bag, slot)
+
+    local itemName = GetItemName(bag, slot)
+    return specialisedItemType == _G.SPECIALIZED_ITEMTYPE_TROPHY_TREASURE_MAP or
+        string.find(string.lower(itemName), string.lower(GetString(_G.SI_CONSTANT_TREASURE_MAP)))
+end
+
+local function isMasterWrit(bag, slot)
+    local _, specialisedItemType = GetItemType(bag, slot)
+    return specialisedItemType == _G.SPECIALIZED_ITEMTYPE_MASTER_WRIT
+end
+
+local function getDetail(bag, slot)
+    local wcount = GetSlotStackSize(bag, slot)
+    local itemDisplayQuality = GetItemDisplayQuality(bag, slot)
+    local colour = GetItemQualityColor(itemDisplayQuality)
+    local name = colour:Colorize(GetItemName(bag, slot))
+
+    return name .. ((wcount > 1) and (" (" .. wcount .. ")") or "")
+end
+
+BS.widgets[BS.W_WRITS_SURVEYS] = {
+    -- v1.2.5
+    name = "writs",
+    update = function(widget, _, _, _, _, _, updateReason)
+        if (updateReason == nil or updateReason == _G.INVENTORY_UPDATE_REASON_DEFAULT) then
+            local writs = 0
+            local surveys = 0
+            local maps = 0
+            local detail = {}
+            local bags = {_G.BAG_BACKPACK, _G.BAG_BANK}
+
+            if (IsESOPlusSubscriber()) then
+                table.insert(bags, _G.BAG_SUBSCRIBER_BANK)
+            end
+
+            for _, bag in pairs(bags) do
+                for slot = 0, GetBagSize(bag) do
+                    if (isMasterWrit(bag, slot)) then
+                        writs = writs + 1
+                    end
+
+                    if (isSurveyReport(bag, slot)) then
+                        surveys = surveys + 1
+                        table.insert(detail, getDetail(bag, slot))
+                    end
+
+                    if (isTreasureMap(bag, slot)) then
+                        maps = maps + 1
+                        table.insert(detail, getDetail(bag, slot))
+                    end
+                end
+            end
+
+            widget:SetValue(writs .. "/" .. surveys .. "/" .. maps)
+            widget:SetColour(unpack(BS.Vars.Controls[BS.W_WRITS_SURVEYS].Colour or BS.Vars.DefaultColour))
+
+            local ttt = GetString(_G.BARSTEWARD_WRITS) .. BS.LF .. "|cf9f9f9"
+            ttt = ttt .. zo_strformat(GetString(_G.BARSTEWARD_WRITS_WRITS), writs) .. BS.LF
+            ttt = ttt .. zo_strformat(GetString(_G.BARSTEWARD_WRITS_SURVEYS), surveys) .. BS.LF
+            ttt = ttt .. zo_strformat(GetString(_G.BARSTEWARD_WRITS_MAPS), maps) .. "|r"
+
+            if (#detail > 0) then
+                table.sort(detail)
+                ttt = ttt .. BS.LF
+
+                for _, d in pairs(detail) do
+                    ttt = ttt .. BS.LF .. d
+                end
+            end
+
+            widget.tooltip = ttt
+
+            return widget:GetValue()
+        end
+    end,
+    event = _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
+    icon = "/esoui/art/journal/journal_tabicon_cadwell_up.dds",
+    tooltip = GetString(_G.BARSTEWARD_WRITS)
+}

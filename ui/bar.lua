@@ -22,6 +22,7 @@ function baseBar:Initialise(barSettings)
     self.bar = WINDOW_MANAGER:CreateTopLevelWindow(barName)
     self.bar.ref = self
     self.bar:SetScale(barSettings.scale)
+    self.bar:SetResizeToFitDescendents(true)
 
     local valueSide = BS.Vars.Bars[barSettings.index].ValueSide
 
@@ -247,69 +248,6 @@ function baseBar:DoUpdate(metadata, ...)
             BS.SoundLastPlayed[metadata.id] = {time = os.time(), value = value}
         end
     end
-
-    if (... ~= "initial") then
-        self:ResizeBar()
-    end
-end
-
-function baseBar:ResizeBar()
-    zo_callLater(
-        function()
-            if (self.orientation == "horizontal") then
-                local width = self:GetCalculatedWidth()
-                self.bar:SetWidth(width)
-                self.bar:SetHeight(self.defaultHeight)
-            else
-                local width = self:GetMaxWidgetWidth()
-                self.bar:SetWidth(width)
-                local height = self:GetCalculatedHeight()
-                self.bar:SetHeight(height)
-            end
-        end,
-        500
-    )
-end
-
--- calculate the current width of the visible widgets
-function baseBar:GetCalculatedWidth()
-    local width = 0
-
-    for _, widget in pairs(self.widgets) do
-        if (widget.widget:IsHidden() == false) then
-            width = width + widget.widget:GetWidth()
-        end
-    end
-
-    return width
-end
-
-function baseBar:GetCalculatedHeight()
-    local height = 0
-    local widgetCount = 0
-
-    for _, widget in pairs(self.widgets) do
-        if (widget.widget:IsHidden() == false) then
-            height = height + widget.widget:GetHeight()
-            widgetCount = widgetCount + 1
-        end
-    end
-
-    return height
-end
-
-function baseBar:GetMaxWidgetWidth()
-    local maxWidth = 20
-    local width
-
-    for _, widget in pairs(self.widgets) do
-        width = widget.widget:GetWidth()
-        if (width > maxWidth) then
-            maxWidth = width
-        end
-    end
-
-    return maxWidth
 end
 
 function baseBar:AddWidgets(widgets)
@@ -406,13 +344,6 @@ function baseBar:AddWidgets(widgets)
     for _, widget in ipairs(self.widgets) do
         self:DoUpdate(widget, "initial")
     end
-
-    zo_callLater(
-        function()
-            self:ResizeBar()
-        end,
-        200
-    )
 end
 
 function baseBar:SetAnchor(...)

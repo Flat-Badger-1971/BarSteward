@@ -96,7 +96,9 @@ BS.widgets[BS.W_PLAYER_NAME] = {
     -- v1.0.3
     name = "playerName",
     update = function(widget)
-        widget:SetValue(GetUnitName("player"))
+        local playerName = GetUnitName("player")
+
+        widget:SetValue(ZO_FormatUserFacingCharacterName(playerName))
         widget:SetColour(unpack(BS.Vars.Controls[BS.W_PLAYER_NAME].Colour or BS.Vars.DefaultColour))
 
         return widget:GetValue()

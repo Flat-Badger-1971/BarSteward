@@ -225,6 +225,8 @@ function BS.CreateLockButton()
     BS.lock.fragment:SetHiddenForReason("disabled", true)
     SCENE_MANAGER:GetScene("hud"):AddFragment(BS.lock.fragment)
     SCENE_MANAGER:GetScene("hudui"):AddFragment(BS.lock.fragment)
+
+    return BS.lock
 end
 
 local function setupDataRow(rowControl, data)

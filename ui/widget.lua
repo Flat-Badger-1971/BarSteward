@@ -108,6 +108,9 @@ function baseWidget:SetValue(value)
         end
     end
 
+    local scale = self.control:GetScale()
+
+    textWidth = textWidth / (scale * scale)
     self.value:SetWidth(textWidth)
 end
 

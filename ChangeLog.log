@@ -1,5 +1,13 @@
+[color=#ff9900][b]Version: 1.2.5 ---------------[/b][/color]
+Fixed scaling issue
+Added gold tracker across all characters - requires logging into each character at least once
+Widget setting groups now in alphabetical order
+Added Writs/Surveys/Map count
+Fixed missing OK button in bar removal dialog
+
 [color=#ff9900][b]Version: 1.2.4 ---------------[/b][/color]
 Added 30s debounce to bag announcements
+Fixed lock button bug
 
 [color=#ff9900][b]Version: 1.2.3 ---------------[/b][/color]
 Handle sky shards within delves

@@ -1,5 +1,12 @@
 local BS = _G.BarSteward
 
+local function trackGold()
+    local goldInBag = GetCurrencyAmount(_G.CURT_MONEY, _G.CURRENCY_LOCATION_CHARACTER)
+    local character = GetUnitName("player")
+
+    BS.Vars.Gold[character] = goldInBag
+end
+
 local function Initialise()
     -- dialogs
     local buttons = {
@@ -48,6 +55,12 @@ local function Initialise()
                 text = GetString(_G.SI_CANCEL),
                 callback = function()
                     BS.BarIndex = nil
+                end
+            },
+            {
+                text = GetString(_G.SI_OK),
+                callback = function()
+                    BS.RemoveBar()
                 end
             }
         }
@@ -131,6 +144,10 @@ local function Initialise()
             end
         end
     end
+
+    -- gold tracker
+    BS.RegisterForEvent(_G.EVENT_PLAYER_ACTIVATED, trackGold)
+    BS.RegisterForEvent(_G.EVENT_MONEY_UPDATE, trackGold)
 
     -- utiltity
     if (_G.SLASH_COMMANDS["/rl"] == nil) then

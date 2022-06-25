@@ -7,7 +7,7 @@ local panel = {
     name = "Bar Steward",
     displayName = "Bar Steward",
     author = "Flat Badger",
-    version = "1.2.4",
+    version = "1.2.5",
     registerForDefaults = true,
     slashCommand = "/bs"
 }
@@ -261,7 +261,13 @@ local function GetBarSettings()
                 end,
                 setFunc = function(value)
                     BS.Vars.Bars[idx].Scale = value
-                    _G[BS.Name .. "_bar_" .. idx]:SetScale(value)
+
+                    local barToScale = _G[BS.Name .. "_bar_" .. idx]
+
+                    barToScale:SetScale(value)
+                    barToScale:SetResizeToFitDescendents(false)
+                    barToScale:SetWidth(0)
+                    barToScale:SetResizeToFitDescendents(true)
                 end,
                 min = 0.4,
                 max = 2,
@@ -447,13 +453,19 @@ local function GetWidgetSettings()
         table.insert(timeSamples24, BS.FormatTime(format, "09:23:12"))
     end
 
-    local widgetNums = {}
+    -- sort the widget settings into alphabetical order
+    local ordered = {}
 
-    for k, _ in ipairs(widgets) do
-        table.insert(widgetNums, k)
+    for key, widget in ipairs(widgets) do
+        table.insert(ordered, {key = key, widget = widget})
     end
 
-    for k, v in ipairs(widgets) do
+    table.sort(ordered, function(a, b) return BS.widgets[a.key].tooltip < BS.widgets[b.key].tooltip end)
+
+    --for k, v in ipairs(widgets) do
+    for idx, w in ipairs(ordered) do
+        local k = w.key
+        local v = w.widget
         local widgetControls = {
             [1] = {
                 type = "dropdown",
@@ -1047,7 +1059,7 @@ local function GetWidgetSettings()
             end
         end
 
-        controls[k] = {
+        controls[idx] = {
             type = "submenu",
             name = BS.widgets[k].tooltip:gsub(":", ""),
             controls = widgetControls,
