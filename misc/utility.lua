@@ -338,6 +338,7 @@ function BS.Announce(header, message, widgetIconNumber, lifespan, sound)
     messageParams:SetSound(sound or "Justice_NowKOS")
     messageParams:SetText(header or "Test Header", message or "Test Message")
     messageParams:SetLifespanMS(lifespan or 6000)
+    messageParams:MarkQueueImmediately(true)
 
     if (widgetIconNumber) then
         messageParams:SetIconData(BS.widgets[widgetIconNumber].icon , "/esoui/art/achievements/achievements_iconbg.dds")

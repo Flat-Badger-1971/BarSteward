@@ -103,7 +103,7 @@ function baseBar:Initialise(barSettings)
 end
 
 -- hide the widget, also shrink it to shrink the bar whilst retaining the anchors for the other widgets
-local function SetHiddenWidget(widget, hidden)
+function baseBar:SetHiddenWidget(widget, hidden)
     if (hidden and widget:IsHidden()) or (not hidden and not widget:IsHidden()) then
         return
     end
@@ -112,24 +112,30 @@ local function SetHiddenWidget(widget, hidden)
         widget.control:SetResizeToFitDescendents(false)
         widget.control:SetDimensions(0, 0)
         widget:SetHidden(true)
+        self.bar:SetResizeToFitDescendents(false)
+        self.bar:SetWidth(0)
+        self.bar:SetResizeToFitDescendents(true)
     else
         widget.control:SetResizeToFitDescendents(true)
         widget:SetHidden(false)
+        self.bar:SetResizeToFitDescendents(false)
+        self.bar:SetWidth(0)
+        self.bar:SetResizeToFitDescendents(true)
     end
 end
 
-local function HideWhen(metadata, value)
+function baseBar:HideWhen(metadata, value)
     local hideValue
 
     if (metadata.complete and value == "hide it!") then
-        SetHiddenWidget(metadata.widget, true)
+        self:SetHiddenWidget(metadata.widget, true)
 
         return
     end
 
     if (metadata.hideWhenTrue) then
         hideValue = metadata.hideWhenTrue()
-        SetHiddenWidget(metadata.widget, hideValue)
+        self:SetHiddenWidget(metadata.widget, hideValue)
 
         if (hideValue == true) then
             return
@@ -145,7 +151,7 @@ local function HideWhen(metadata, value)
             hideValue = metadata.hideWhenEqual
         end
 
-        SetHiddenWidget(metadata.widget, hideValue == value)
+        self:SetHiddenWidget(metadata.widget, hideValue == value)
     end
 
     if (metadata.hideWhenLessThan) then
@@ -155,7 +161,7 @@ local function HideWhen(metadata, value)
             hideValue = metadata.hideWhenLessThan
         end
 
-        SetHiddenWidget(metadata.widget, hideValue < value)
+        self:SetHiddenWidget(metadata.widget, hideValue < value)
     end
 
     if (metadata.hideWhenGreaterThan) then
@@ -165,7 +171,7 @@ local function HideWhen(metadata, value)
             hideValue = metadata.hideWhenGreaterThan
         end
 
-        SetHiddenWidget(metadata.widget, hideValue > value)
+        self:SetHiddenWidget(metadata.widget, hideValue > value)
     end
 end
 
@@ -180,7 +186,7 @@ function baseBar:DoUpdate(metadata, ...)
         if (BS.Vars.Controls[metadata.id].HideWhenComplete) then
             hidecheck = true
             if (metadata.complete() == true) then
-                HideWhen(metadata, "hide it!")
+                self:HideWhen(metadata, "hide it!")
             end
         end
     end
@@ -188,13 +194,13 @@ function baseBar:DoUpdate(metadata, ...)
     -- check if it needs to be hidden
     if (metadata.hideWhenEqual or metadata.hideWhenGreaterThan or metadata.hideWhenLessThan) then
         if (BS.Vars.Controls[metadata.id].Autohide and not hidecheck) then
-            HideWhen(metadata, value)
+            self:HideWhen(metadata, value)
         end
     end
 
     -- check for hide when true
     if (metadata.hideWhenTrue) then
-        HideWhen(metadata, value)
+        self:HideWhen(metadata, value)
     end
 
     -- check if a sound needs to be played

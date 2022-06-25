@@ -190,6 +190,7 @@ BS.widgets[BS.W_SKYSHARDS] = {
         local zoneIndex = GetUnitZoneIndex("player")
         local zoneId = GetZoneId(zoneIndex)
         local inZoneSkyshards = GetNumSkyshardsInZone(zoneId)
+        local skillSkyShards = GetNumSkyShards()
 
         if (inZoneSkyshards == 0) then
             zoneId = GetParentZoneId(zoneId)
@@ -210,6 +211,10 @@ BS.widgets[BS.W_SKYSHARDS] = {
         widget:SetValue(discoveredInZone .. "/" .. inZoneSkyshards)
         widget:SetColour(unpack(BS.Vars.Controls[BS.W_SKYSHARDS].Colour or BS.Vars.DefaultColour))
 
+        local ttt = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_MAPFILTER15)) .. BS.LF
+        ttt = ttt .. "|cffffff" .. zo_strformat(GetString(_G.BARSTEWARD_SKYSHARDS_SKILL_POINTS), skillSkyShards) .. "|r"
+
+        widget.tooltip = ttt
         return discoveredInZone
     end,
     event = _G.EVENT_SKYSHARDS_UPDATED,

@@ -221,6 +221,7 @@ read_globals = {
     "GetNumChampionXPInChampionPoint",
     "GetNumExperiencePointsInCompanionLevel",
 	"GetNumFriends",
+    "GetNumSkyShards",
 	"GetNumSkyshardsInZone",
     "GetNumSmithingResearchLines",
 	"GetNumTimedActivityRewards",
