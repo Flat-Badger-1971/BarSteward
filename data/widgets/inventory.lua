@@ -395,6 +395,18 @@ local function getDetail(bag, slot)
     return name .. ((wcount > 1) and (" (" .. wcount .. ")") or "")
 end
 
+local function getWritType(itemId)
+    for key, itemIds in pairs(BS.WRITS) do
+        for _, id in pairs(itemIds) do
+            if (id == itemId) then
+                return key
+            end
+        end
+    end
+
+    return 0
+end
+
 BS.widgets[BS.W_WRITS_SURVEYS] = {
     -- v1.2.5
     name = "writs",
@@ -405,6 +417,7 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
             local maps = 0
             local detail = {}
             local bags = {_G.BAG_BACKPACK, _G.BAG_BANK}
+            local writDetail = {}
 
             if (IsESOPlusSubscriber()) then
                 table.insert(bags, _G.BAG_SUBSCRIBER_BANK)
@@ -414,6 +427,17 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
                 for slot = 0, GetBagSize(bag) do
                     if (isMasterWrit(bag, slot)) then
                         writs = writs + 1
+                        local type = getWritType(GetItemId(bag, slot))
+
+                        if (type ~= 0) then
+                            if (writDetail[type] == nil) then
+                                writDetail[type] = {bankCount = 0, bagCount = 0}
+                            end
+
+                            local btype = (bag == _G.BAG_BACKPACK) and "bagCount" or "bankCount"
+
+                            writDetail[type][btype] = writDetail[type][btype] + 1
+                        end
                     end
 
                     if (isSurveyReport(bag, slot)) then
@@ -435,6 +459,30 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
             ttt = ttt .. zo_strformat(GetString(_G.BARSTEWARD_WRITS_WRITS), writs) .. BS.LF
             ttt = ttt .. zo_strformat(GetString(_G.BARSTEWARD_WRITS_SURVEYS), surveys) .. BS.LF
             ttt = ttt .. zo_strformat(GetString(_G.BARSTEWARD_WRITS_MAPS), maps) .. "|r"
+
+            local writText = {}
+
+            for type, counts in pairs(writDetail) do
+                local writType = ZO_CachedStrFormat("<<C:1>>", GetString(_G["SI_TRADESKILLTYPE" .. tostring(type)]))
+                if (counts.bagCount > 0) then
+                    writType = writType .. " " .. bagIcon .. " " .. counts.bagCount
+                end
+
+                if (counts.bankCount > 0) then
+                    writType = writType .. " " .. bankIcon .. " " .. counts.bankCount
+                end
+
+                table.insert(writText, writType)
+            end
+
+            if (#writText > 0) then
+                table.sort(writText)
+                ttt = ttt .. BS.LF
+
+                for _, d in pairs(writText) do
+                    ttt = ttt .. BS.LF .. d
+                end
+            end
 
             if (#detail > 0) then
                 table.sort(detail)
