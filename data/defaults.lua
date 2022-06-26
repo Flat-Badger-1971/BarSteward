@@ -128,7 +128,9 @@ BS.Defaults = {
             DangerValue = 24,
             WarningValue = 72,
             Units = GetString(_G.BARSTEWARD_HOURS),
-            Timer = true
+            Timer = true,
+            Autohide = true,
+            hideWhenEqual = 0
         },
         [BS.W_WOODWORKING] = {
             Bar = 1,
@@ -139,7 +141,9 @@ BS.Defaults = {
             DangerValue = 24,
             WarningValue = 72,
             Units = GetString(_G.BARSTEWARD_HOURS),
-            Timer = true
+            Timer = true,
+            Autohide = true,
+            hideWhenEqual = 0
         },
         [BS.W_CLOTHING] = {
             Bar = 1,
@@ -150,7 +154,9 @@ BS.Defaults = {
             DangerValue = 24,
             WarningValue = 72,
             Units = GetString(_G.BARSTEWARD_HOURS),
-            Timer = true
+            Timer = true,
+            Autohide = true,
+            hideWhenEqual = 0
         },
         [BS.W_JEWELCRAFTING] = {
             Bar = 1,
@@ -161,7 +167,9 @@ BS.Defaults = {
             DangerValue = 24,
             WarningValue = 72,
             Units = GetString(_G.BARSTEWARD_HOURS),
-            Timer = true
+            Timer = true,
+            Autohide = true,
+            hideWhenEqual = 0
         },
         [BS.W_REPAIR_COST] = {Bar = 1, Order = 20, Autohide = true, UseSeparators = false, ColourValues = "c"},
         [BS.W_MOUNT_TRAINING] = {

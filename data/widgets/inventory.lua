@@ -441,12 +441,12 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
                     end
 
                     if (isSurveyReport(bag, slot)) then
-                        surveys = surveys + 1
+                        surveys = surveys + GetSlotStackSize(bag, slot)
                         table.insert(detail, getDetail(bag, slot))
                     end
 
                     if (isTreasureMap(bag, slot)) then
-                        maps = maps + 1
+                        maps = maps + GetSlotStackSize(bag, slot)
                         table.insert(detail, getDetail(bag, slot))
                     end
                 end

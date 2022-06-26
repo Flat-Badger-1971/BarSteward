@@ -7,7 +7,7 @@ local panel = {
     name = "Bar Steward",
     displayName = "Bar Steward",
     author = "Flat Badger",
-    version = "1.2.6",
+    version = "1.2.7",
     registerForDefaults = true,
     slashCommand = "/bs"
 }
@@ -525,6 +525,7 @@ local function GetWidgetSettings()
             widgetControls[#widgetControls + 1] = {
                 type = "checkbox",
                 name = GetString(_G.BARSTEWARD_HIDE_WHEN_COMPLETE),
+                tooltip = GetString(_G.BARSTEWARD_HIDE_WHEN_COMPLETE_TOOLTIP),
                 getFunc = function()
                     return BS.Vars.Controls[k].HideWhenComplete
                 end,

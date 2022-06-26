@@ -113,13 +113,13 @@ function baseBar:SetHiddenWidget(widget, hidden)
         widget.control:SetDimensions(0, 0)
         widget:SetHidden(true)
         self.bar:SetResizeToFitDescendents(false)
-        self.bar:SetWidth(0)
+        self.bar:SetDimensions(0, 0)
         self.bar:SetResizeToFitDescendents(true)
     else
         widget.control:SetResizeToFitDescendents(true)
         widget:SetHidden(false)
         self.bar:SetResizeToFitDescendents(false)
-        self.bar:SetWidth(0)
+        self.bar:SetDimensions(0, 0)
         self.bar:SetResizeToFitDescendents(true)
     end
 end
@@ -127,10 +127,14 @@ end
 function baseBar:HideWhen(metadata, value)
     local hideValue
 
-    if (metadata.complete and value == "hide it!") then
-        self:SetHiddenWidget(metadata.widget, true)
+    if (metadata.complete) then
+        if(value == "hide it!") then
+            self:SetHiddenWidget(metadata.widget, true)
 
-        return
+            return
+        else
+            self:SetHiddenWidget(metadata.widget, false)
+        end
     end
 
     if (metadata.hideWhenTrue) then
@@ -181,12 +185,17 @@ function baseBar:DoUpdate(metadata, ...)
     local value = metadata.update(metadata.widget, ...)
     local hidecheck = false
 
+    -- set the intial state as unhidden
+    self:SetHiddenWidget(metadata.widget, false)
+
     -- check for hide on completion
     if (metadata.complete) then
         if (BS.Vars.Controls[metadata.id].HideWhenComplete) then
             hidecheck = true
             if (metadata.complete() == true) then
                 self:HideWhen(metadata, "hide it!")
+            else
+                self:HideWhen(metadata, "unhide it!")
             end
         end
     end

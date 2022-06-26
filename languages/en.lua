@@ -32,7 +32,10 @@ ZO_CreateStringId("BARSTEWARD_NEWBAR_INVALID", "Invalid Bar Name")
 ZO_CreateStringId("BARSTEWARD_NEWBAR_NAME", "New Bar Name (hit Enter when done)")
 ZO_CreateStringId("BARSTEWARD_NEWBAR_WARNING", "Adding a new bar will force a UI reload")
 ZO_CreateStringId("BARSTEWARD_NUDGE", "Nudge the compass down")
-ZO_CreateStringId("BARSTEWARD_NUDGE_WARNING", "If you have moved the compass with another addon, this setting could have strange results")
+ZO_CreateStringId(
+    "BARSTEWARD_NUDGE_WARNING",
+    "If you have moved the compass with another addon, this setting could have strange results"
+)
 ZO_CreateStringId("BARSTEWARD_ORIENTATION", "Orientation")
 ZO_CreateStringId("BARSTEWARD_REMOVE_BAR", "Remove Bar")
 ZO_CreateStringId("BARSTEWARD_REMOVE_WARNING", "This will permanently delete the selected bar!")
@@ -47,12 +50,18 @@ ZO_CreateStringId("BARSTEWARD_12", "12 Hour")
 ZO_CreateStringId("BARSTEWARD_24", "24 Hour")
 ZO_CreateStringId("BARSTEWARD_ADD_SEPARATORS", "Add number separators")
 ZO_CreateStringId("BARSTEWARD_AUTOHIDE", "Autohide")
-ZO_CreateStringId("BARSTEWARD_AUTOHIDE_TOOLTIP", "Hide this widget when the value reaches zero (or the max value for Rapport) or is blank")
+ZO_CreateStringId(
+    "BARSTEWARD_AUTOHIDE_TOOLTIP",
+    "Hide this widget when the value reaches zero (or the max value for Rapport) or is blank"
+)
 ZO_CreateStringId("BARSTEWARD_BOTH", "Both")
 ZO_CreateStringId("BARSTEWARD_DANGER_VALUE", "Danger value")
 ZO_CreateStringId("BARSTEWARD_DANGER_COLOUR", "Danger")
 ZO_CreateStringId("BARSTEWARD_DEBOUNCE", "Debounce time (minutes)")
-ZO_CreateStringId("BARSTEWARD_DEBOUNCE_DESC", "Period of time to wait between consecutive character logons before showing an announcement")
+ZO_CreateStringId(
+    "BARSTEWARD_DEBOUNCE_DESC",
+    "Period of time to wait between consecutive character logons before showing an announcement"
+)
 ZO_CreateStringId("BARSTEWARD_DECIMAL_PLACES", "Decimal places")
 ZO_CreateStringId("BARSTEWARD_DEFAULT_COLOUR", "Default")
 ZO_CreateStringId("BARSTEWARD_EMPTY", "Empty")
@@ -65,6 +74,10 @@ ZO_CreateStringId("BARSTEWARD_GOLD_EVERYWHERE", "Everywhere")
 ZO_CreateStringId("BARSTEWARD_GOLD_SEPARATED", "Bank/bags")
 ZO_CreateStringId("BARSTEWARD_HIDE_SECONDS", "Hide seconds")
 ZO_CreateStringId("BARSTEWARD_HIDE_WHEN_COMPLETE", "Hide when complete")
+ZO_CreateStringId(
+    "BARSTEWARD_HIDE_WHEN_COMPLETE_TOOLTIP",
+    "Hide when no more traits can be researched for this crafting type. This settings will override any Autohide setting."
+)
 ZO_CreateStringId("BARSTEWARD_HOURS", "Hours")
 ZO_CreateStringId("BARSTEWARD_NUMBER_GROUPING", "3")
 ZO_CreateStringId("BARSTEWARD_NUMBER_SEPARATOR", ",")
@@ -130,7 +143,10 @@ ZO_CreateStringId("BARSTEWARD_MOVEFRAME", "Movable Bars")
 ZO_CreateStringId("BARSTEWARD_RELOAD", "UI reload required")
 ZO_CreateStringId("BARSTEWARD_RELOAD_MSG", "The UI will now reload.")
 ZO_CreateStringId("BARSTEWARD_LIB_EVENT_HANDLER_TITLE", "Additional Library Required")
-ZO_CreateStringId("BARSTEWARD_LIB_EVENT_HANDLER", "Bar Steward now requires LibEventHandler to function. Please install it and reload your UI.")
+ZO_CreateStringId(
+    "BARSTEWARD_LIB_EVENT_HANDLER",
+    "Bar Steward now requires LibEventHandler to function. Please install it and reload your UI."
+)
 -- Warnings/alerts
 ZO_CreateStringId("BARSTEWARD_ANNOUNCEMENT", "Show Warning Announcement")
 ZO_CreateStringId("BARSTEWARD_ANNOUNCEMENTS", "Announcements")
