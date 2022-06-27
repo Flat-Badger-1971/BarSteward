@@ -407,6 +407,16 @@ local function getWritType(itemId)
     return 0
 end
 
+local function canCraft(know_list)
+    for _, t in pairs(know_list) do
+        if (t.is_known == false) then
+            return "cannotCraft"
+        end
+    end
+
+    return "canCraft"
+end
+
 BS.widgets[BS.W_WRITS_SURVEYS] = {
     -- v1.2.5
     name = "writs",
@@ -418,6 +428,7 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
             local detail = {}
             local bags = {_G.BAG_BACKPACK, _G.BAG_BANK}
             local writDetail = {}
+            local canDo = {}
 
             if (IsESOPlusSubscriber()) then
                 table.insert(bags, _G.BAG_SUBSCRIBER_BANK)
@@ -437,6 +448,17 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
                             local btype = (bag == _G.BAG_BACKPACK) and "bagCount" or "bankCount"
 
                             writDetail[type][btype] = writDetail[type][btype] + 1
+
+                            if (_G.WritWorthy ~= nil) then
+                                if (canDo[type] == nil) then
+                                    canDo[type] = {canCraft = 0, cannotCraft = 0}
+                                end
+
+                                local _, know_list = _G.WritWorthy.ToMatKnowList(GetItemLink(bag, slot))
+                                local doable = canCraft(know_list)
+
+                                canDo[type][doable] = canDo[type][doable] + 1
+                            end
                         end
                     end
 
@@ -470,6 +492,17 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
 
                 if (counts.bankCount > 0) then
                     writType = writType .. " " .. bankIcon .. " " .. counts.bankCount
+                end
+
+                if (_G.WritWorthy ~= nil) then
+                    local can = canDo[type].canCraft
+                    local cant = canDo[type].cannotCraft
+                    local canColour = BS.ARGBConvert((can > 0) and BS.Vars.DefaultOkColour or BS.Vars.DefaultColour)
+                    local cantColour =
+                        BS.ARGBConvert((cant > 0) and BS.Vars.DefaultDangerColour or BS.Vars.DefaultColour)
+
+                    writType = writType .. "   (" .. canColour .. can .. "|r/"
+                    writType = writType .. cantColour .. cant .. "|r)"
                 end
 
                 table.insert(writText, writType)
