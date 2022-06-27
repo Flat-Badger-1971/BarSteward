@@ -477,8 +477,26 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
             widget:SetValue(writs .. "/" .. surveys .. "/" .. maps)
             widget:SetColour(unpack(BS.Vars.Controls[BS.W_WRITS_SURVEYS].Colour or BS.Vars.DefaultColour))
 
+            local wwText = ""
+
+            if (_G.WritWorthy ~= nil) then
+                local can = 0
+                local cant = 0
+                for _, d in pairs(canDo) do
+                    can = can + d.canCraft
+                    cant = cant + d.cannotCraft
+                end
+
+                local canColour = BS.ARGBConvert((can > 0) and BS.Vars.DefaultOkColour or BS.Vars.DefaultColour)
+                local cantColour =
+                    BS.ARGBConvert((cant > 0) and BS.Vars.DefaultDangerColour or BS.Vars.DefaultColour)
+
+                wwText = "   (" .. canColour .. can .. "|r/"
+                wwText = wwText .. cantColour .. cant .. "|r|cf9f9f9)"
+            end
+
             local ttt = GetString(_G.BARSTEWARD_WRITS) .. BS.LF .. "|cf9f9f9"
-            ttt = ttt .. zo_strformat(GetString(_G.BARSTEWARD_WRITS_WRITS), writs) .. BS.LF
+            ttt = ttt .. zo_strformat(GetString(_G.BARSTEWARD_WRITS_WRITS), writs) .. wwText .. BS.LF
             ttt = ttt .. zo_strformat(GetString(_G.BARSTEWARD_WRITS_SURVEYS), surveys) .. BS.LF
             ttt = ttt .. zo_strformat(GetString(_G.BARSTEWARD_WRITS_MAPS), maps) .. "|r"
 
