@@ -429,6 +429,7 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
             local bags = {_G.BAG_BACKPACK, _G.BAG_BANK}
             local writDetail = {}
             local canDo = {}
+            local wwCache = {}
 
             if (IsESOPlusSubscriber()) then
                 table.insert(bags, _G.BAG_SUBSCRIBER_BANK)
@@ -438,7 +439,8 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
                 for slot = 0, GetBagSize(bag) do
                     if (isMasterWrit(bag, slot)) then
                         writs = writs + 1
-                        local type = getWritType(GetItemId(bag, slot))
+                        local itemId = GetItemId(bag, slot)
+                        local type = getWritType(itemId)
 
                         if (type ~= 0) then
                             if (writDetail[type] == nil) then
@@ -454,7 +456,16 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
                                     canDo[type] = {canCraft = 0, cannotCraft = 0}
                                 end
 
-                                local _, know_list = _G.WritWorthy.ToMatKnowList(GetItemLink(bag, slot))
+                                local know_list
+
+                                if (wwCache[itemId]) then
+                                    know_list = wwCache[itemId]
+                                else
+                                    local link = GetItemLink(bag, slot)
+                                    _, know_list = _G.WritWorthy.ToMatKnowList(link)
+                                    wwCache[itemId] = know_list
+                                end
+
                                 local doable = canCraft(know_list)
 
                                 canDo[type][doable] = canDo[type][doable] + 1
@@ -488,8 +499,7 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
                 end
 
                 local canColour = BS.ARGBConvert((can > 0) and BS.Vars.DefaultOkColour or BS.Vars.DefaultColour)
-                local cantColour =
-                    BS.ARGBConvert((cant > 0) and BS.Vars.DefaultDangerColour or BS.Vars.DefaultColour)
+                local cantColour = BS.ARGBConvert((cant > 0) and BS.Vars.DefaultDangerColour or BS.Vars.DefaultColour)
 
                 wwText = "   (" .. canColour .. can .. "|r/"
                 wwText = wwText .. cantColour .. cant .. "|r|cf9f9f9)"
