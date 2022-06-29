@@ -100,6 +100,11 @@ ZO_CreateStringId("BARSTEWARD_TIMER_FORMAT", "Timer Format")
 ZO_CreateStringId("BARSTEWARD_TIMER_FORMAT_TEXT", "<<1>>d <<2>>h <<3>>m")
 ZO_CreateStringId("BARSTEWARD_TIMER_FORMAT_TEXT_WITH_SECONDS", "<<1>>d <<2>>h <<3>>m <<4>>s")
 ZO_CreateStringId("BARSTEWARD_TWELVE_TWENTY_FOUR", "12/24 Hour")
+ZO_CreateStringId("BARSTEWARD_USE_WRITWORTHY", "Use WritWorthy for writ summaries")
+ZO_CreateStringId(
+    "BARSTEWARD_USE_WRITWORTHY_TOOLTIP",
+    "Use WritWorthy for writ summaries if installed. Note, if you have a lot of writs this could cause a slight stutter each time your bag slots update."
+)
 ZO_CreateStringId("BARSTEWARD_VALUE", "Value")
 ZO_CreateStringId("BARSTEWARD_WARNING_COLOUR", "Warning")
 ZO_CreateStringId("BARSTEWARD_WARNING_VALUE", "Warning value")

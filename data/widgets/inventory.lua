@@ -430,6 +430,7 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
             local writDetail = {}
             local canDo = {}
             local wwCache = {}
+            local useWW = (_G.WritWorthy ~= nil) and (BS.Vars.UseWritWorthy == true)
 
             if (IsESOPlusSubscriber()) then
                 table.insert(bags, _G.BAG_SUBSCRIBER_BANK)
@@ -451,7 +452,7 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
 
                             writDetail[type][btype] = writDetail[type][btype] + 1
 
-                            if (_G.WritWorthy ~= nil) then
+                            if (useWW) then
                                 if (canDo[type] == nil) then
                                     canDo[type] = {canCraft = 0, cannotCraft = 0}
                                 end
@@ -490,7 +491,7 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
 
             local wwText = ""
 
-            if (_G.WritWorthy ~= nil) then
+            if (useWW) then
                 local can = 0
                 local cant = 0
                 for _, d in pairs(canDo) do
@@ -522,7 +523,7 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
                     writType = writType .. " " .. bankIcon .. " " .. counts.bankCount
                 end
 
-                if (_G.WritWorthy ~= nil) then
+                if (useWW) then
                     local can = canDo[type].canCraft
                     local cant = canDo[type].cannotCraft
                     local canColour = BS.ARGBConvert((can > 0) and BS.Vars.DefaultOkColour or BS.Vars.DefaultColour)
@@ -561,5 +562,18 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
     end,
     event = _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
     icon = "/esoui/art/journal/journal_tabicon_cadwell_up.dds",
-    tooltip = GetString(_G.BARSTEWARD_WRITS)
+    tooltip = GetString(_G.BARSTEWARD_WRITS),
+    customSettings = {
+        [1] = {
+            name = GetString(_G.BARSTEWARD_USE_WRITWORTHY),
+            tooltip = GetString(_G.BARSTEWARD_USE_WRITWORTHY_TOOLTIP),
+            type = "checkbox",
+            getFunc = function() return BS.Vars.UseWritWorthy or false end,
+            setFunc = function(value)
+                BS.Vars.UseWritWorthy = value
+                BS.widgets[BS.W_WRITS_SURVEYS].update(_G[BS.Name .. "_Widget_" .. BS.widgets[BS.W_WRITS_SURVEYS].name].ref)
+            end,
+            disabled = function() return _G.WritWorthy == nil end
+        }
+    }
 }
