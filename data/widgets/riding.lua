@@ -20,6 +20,22 @@ BS.widgets[BS.W_MOUNT_TRAINING] = {
 
         widget:SetColour(unpack(colour))
         widget:SetValue(time)
+
+        local ttt = GetString(_G.BARSTEWARD_MOUNT_TRAINING) .. BS.LF .. BS.LF
+        ttt = ttt .. GetString(_G.BARSTEWARD_TRAINING_PROGRESS)
+
+        for trainingType, texture in pairs(_G.STABLE_TRAINING_TEXTURES) do
+            local icon = BS.LF .. "|cf9f9f9" .. zo_iconFormat(texture, 16, 16) .. " "
+            local ttype = ZO_CachedStrFormat("<<C:1>>", GetString(_G["SI_RIDINGTRAINTYPE" .. trainingType])) .. " "
+            local val, maxVal = STABLE_MANAGER:GetStats(trainingType)
+            local tcol = ((val == maxVal) and BS.Vars.DefaultOkColour or BS.Vars.DefaultWarningColour)
+            local col = "|r" .. BS.ARGBConvert(tcol)
+
+            ttt = ttt .. icon .. ttype .. col .. val .. "/" .. maxVal .. "|r"
+        end
+
+        widget.tooltip = ttt
+
         return remaining
     end,
     timer = 1000,

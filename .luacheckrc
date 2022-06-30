@@ -71,6 +71,11 @@ read_globals = {
             Show = {read_only = true}
         }
     },
+	["STABLE_MANAGER"] = {
+		fields = {
+			GetStats = {read_only = true}
+		}
+	},
 	["SYSTEMS"] = {
 		fields = {
 			GetObject = {read_only = true}
