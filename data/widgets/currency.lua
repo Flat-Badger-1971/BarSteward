@@ -98,11 +98,21 @@ BS.widgets[BS.W_EVENT_TICKETS] = {
             colour = BS.Vars.Controls[BS.W_EVENT_TICKETS].DangerColour or BS.Vars.DefaultDangerColour
 
             if (BS.Vars.Controls[BS.W_BAG_SPACE].Announce) then
-                BS.Announce(
-                    GetString(_G.BARSTEWARD_WARNING),
-                    GetString(_G.BARSTEWARD_WARNING_EVENT_TICKETS),
-                    BS.W_EVENT_TICKETS
-                )
+                local announce = true
+                local previousTime = BS.Vars.PreviousAnnounceTime[BS.W_EVENT_TICKETS] or (os.time() - 100)
+                local debounceTime = 30
+
+                if (os.time() - previousTime <= debounceTime) then
+                    announce = false
+                end
+
+                if (announce) then
+                    BS.Announce(
+                        GetString(_G.BARSTEWARD_WARNING),
+                        GetString(_G.BARSTEWARD_WARNING_EVENT_TICKETS),
+                        BS.W_EVENT_TICKETS
+                    )
+                end
             end
         end
 
@@ -110,7 +120,7 @@ BS.widgets[BS.W_EVENT_TICKETS] = {
 
         return value
     end,
-    event = _G.EVENT_QUEST_COMPLETE_DIALOG,
+    event = _G.EVENT_CURRENCY_UPDATE,
     tooltip = GetString(_G.BARSTEWARD_EVENT_TICKETS),
     icon = "/esoui/art/currency/currency_eventticket.dds"
 }
