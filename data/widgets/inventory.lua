@@ -25,9 +25,8 @@ BS.widgets[BS.W_BAG_SPACE] = {
                     announce = false
                 end
 
-                BS.Vars.PreviousAnnounceTime[BS.W_BAG_SPACE] = os.time()
-
                 if (announce == true) then
+                    BS.Vars.PreviousAnnounceTime[BS.W_BAG_SPACE] = os.time()
                     BS.Announce(GetString(_G.BARSTEWARD_WARNING), GetString(_G.BARSTEWARD_WARNING_BAGS), BS.W_BAG_SPACE)
                 end
             end
