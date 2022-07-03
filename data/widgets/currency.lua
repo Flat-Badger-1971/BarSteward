@@ -100,7 +100,7 @@ BS.widgets[BS.W_EVENT_TICKETS] = {
             if (BS.Vars.Controls[BS.W_BAG_SPACE].Announce) then
                 local announce = true
                 local previousTime = BS.Vars.PreviousAnnounceTime[BS.W_EVENT_TICKETS] or (os.time() - 100)
-                local debounceTime = 60
+                local debounceTime = 300
 
                 if (os.time() - previousTime <= debounceTime) then
                     announce = false
