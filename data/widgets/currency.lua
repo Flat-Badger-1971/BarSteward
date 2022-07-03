@@ -97,10 +97,10 @@ BS.widgets[BS.W_EVENT_TICKETS] = {
         if (tickets > BS.Vars.Controls[BS.W_EVENT_TICKETS].DangerValue) then
             colour = BS.Vars.Controls[BS.W_EVENT_TICKETS].DangerColour or BS.Vars.DefaultDangerColour
 
-            if (BS.Vars.Controls[BS.W_BAG_SPACE].Announce) then
+            if (BS.Vars.Controls[BS.W_EVENT_TICKETS].Announce) then
                 local announce = true
                 local previousTime = BS.Vars.PreviousAnnounceTime[BS.W_EVENT_TICKETS] or (os.time() - 100)
-                local debounceTime = 300
+                local debounceTime = (BS.Vars.Controls[BS.W_EVENT_TICKETS].DebounceTime or 5) * 60
 
                 if (os.time() - previousTime <= debounceTime) then
                     announce = false
@@ -123,7 +123,26 @@ BS.widgets[BS.W_EVENT_TICKETS] = {
     end,
     event = _G.EVENT_CURRENCY_UPDATE,
     tooltip = GetString(_G.BARSTEWARD_EVENT_TICKETS),
-    icon = "/esoui/art/currency/currency_eventticket.dds"
+    icon = "/esoui/art/currency/currency_eventticket.dds",
+    customOptions = {
+        name = GetString(_G.BARSTEWARD_DEBOUNCE),
+        tooltip = GetString(_G.BARSTEWARD_DEBOUNCE_DESC),
+        choices = {
+            0,
+            1,
+            5,
+            10,
+            15,
+            20,
+            30,
+            40,
+            50,
+            60
+        },
+        varName = "DebounceTime",
+        refresh = false,
+        default = 5
+    }
 }
 
 BS.widgets[BS.W_GOLD] = {

@@ -1,5 +1,6 @@
 [color=#ff9900][b]Version: 1.2.12 ---------------[/b][/color]
 Fixed debounce timers
+Configurable debounce timers
 
 [color=#ff9900][b]Version: 1.2.11 ---------------[/b][/color]
 Disable resize warning

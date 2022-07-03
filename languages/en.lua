@@ -60,7 +60,7 @@ ZO_CreateStringId("BARSTEWARD_DANGER_COLOUR", "Danger")
 ZO_CreateStringId("BARSTEWARD_DEBOUNCE", "Debounce time (minutes)")
 ZO_CreateStringId(
     "BARSTEWARD_DEBOUNCE_DESC",
-    "Period of time to wait between consecutive character logons before showing an announcement"
+    "Period of time to wait between consecutive announcements"
 )
 ZO_CreateStringId("BARSTEWARD_DECIMAL_PLACES", "Decimal places")
 ZO_CreateStringId("BARSTEWARD_DEFAULT_COLOUR", "Default")

@@ -19,7 +19,7 @@ BS.widgets[BS.W_BAG_SPACE] = {
             if (BS.Vars.Controls[BS.W_BAG_SPACE].Announce and newItem) then
                 local announce = true
                 local previousTime = BS.Vars.PreviousAnnounceTime[BS.W_BAG_SPACE] or (os.time() - 100)
-                local debounceTime = 30
+                local debounceTime = (BS.Vars.Controls[BS.W_BAG_SPACE].DebounceTime or 5) * 60
 
                 if (os.time() - previousTime <= debounceTime) then
                     announce = false
@@ -53,7 +53,26 @@ BS.widgets[BS.W_BAG_SPACE] = {
         else
             SCENE_MANAGER:Show("gamepad_inventory_root")
         end
-    end
+    end,
+    customOptions = {
+        name = GetString(_G.BARSTEWARD_DEBOUNCE),
+        tooltip = GetString(_G.BARSTEWARD_DEBOUNCE_DESC),
+        choices = {
+            0,
+            1,
+            5,
+            10,
+            15,
+            20,
+            30,
+            40,
+            50,
+            60
+        },
+        varName = "DebounceTime",
+        refresh = false,
+        default = 5
+    }
 }
 
 BS.widgets[BS.W_BANK_SPACE] = {
