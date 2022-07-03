@@ -171,13 +171,14 @@ local function Initialise()
     BS.RegisterForEvent(_G.EVENT_PLAYER_ACTIVATED, trackGold)
     BS.RegisterForEvent(_G.EVENT_MONEY_UPDATE, trackGold)
 
-    EVENT_MANAGER:RegisterForEvent(
-        BS.Name,
-        _G.EVENT_ALL_GUI_SCREENS_RESIZED,
-        function()
-            ZO_Dialogs_ShowDialog(BS.Name .. "Resize")
-        end
-    )
+    -- EVENT_MANAGER:RegisterForEvent(
+    --     BS.Name,
+    --     _G.EVENT_ALL_GUI_SCREENS_RESIZED,
+    --     function()
+    --         ZO_Dialogs_ShowDialog(BS.Name .. "Resize")
+    --     end
+    -- )
+
     -- utiltity
     if (_G.SLASH_COMMANDS["/rl"] == nil) then
         _G.SLASH_COMMANDS["/rl"] = function()
