@@ -37,6 +37,7 @@ data/widgets/currency.lua
 data/widgets/inventory.lua
 data/widgets/riding.lua
 data/widgets/social.lua
+data/widgets/thievery.lua
 
 settings/settings.lua
 

@@ -1,6 +1,4 @@
 local BS = _G.BarSteward
-local bagIcon = zo_iconFormat("/esoui/art/tooltips/icon_bag.dds")
-local bankIcon = zo_iconFormat("/esoui/art/tooltips/icon_bank.dds")
 
 BS.widgets[BS.W_BAG_SPACE] = {
     name = "bagSpace",
@@ -253,69 +251,6 @@ BS.widgets[BS.W_REPAIRS_KITS] = {
     tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_HOOK_POINT_STORE_REPAIR_KIT_HEADER)):gsub(":", "")
 }
 
-BS.widgets[BS.W_STOLEN_ITEMS] = {
-    -- v1.0.1
-    name = "stolenItemCount",
-    update = function(widget)
-        local count = 0
-        local bagCounts = {carrying = 0, banked = 0}
-
-        for _, bag in ipairs({_G.BAG_WORN, _G.BAG_BACKPACK, _G.BAG_BANK, _G.BAG_SUBSCRIBER_BANK}) do
-            for slot = 0, GetBagSize(bag) do
-                if (IsItemStolen(bag, slot)) then
-                    count = count + GetSlotStackSize(bag, slot)
-                    if (bag == _G.BAG_BANK or bag == _G.BAG_SUBSCRIBER_BANK) then
-                        bagCounts.banked = bagCounts.banked + 1
-                    else
-                        bagCounts.carrying = bagCounts.carrying + 1
-                    end
-                end
-            end
-        end
-
-        widget:SetValue(count)
-        widget:SetColour(unpack(BS.Vars.Controls[BS.W_STOLEN_ITEMS].Colour or BS.Vars.DefaultColour))
-
-        local ttt = GetString(_G.BARSTEWARD_STOLEN) .. BS.LF
-        ttt = ttt .. bagIcon .. " " .. bagCounts.carrying .. " " .. bankIcon .. " " .. bagCounts.banked
-
-        widget.tooltip = ttt
-
-        return count
-    end,
-    event = _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
-    icon = "/esoui/art/inventory/inventory_stolenitem_icon.dds",
-    tooltip = GetString(_G.BARSTEWARD_STOLEN),
-    hideWhenEqual = 0
-}
-
-BS.widgets[BS.W_FENCE_TRANSACTIONS] = {
-    -- v1.0.2
-    name = "fenceSlots",
-    update = function(widget)
-        local max, used = GetFenceLaunderTransactionInfo()
-        local pcUsed = math.floor(used / max) * 100
-        local colour = BS.Vars.Controls[BS.W_FENCE_TRANSACTIONS].OkColour or BS.Vars.DefaultOkColour
-
-        if
-            (pcUsed >= BS.Vars.Controls[BS.W_FENCE_TRANSACTIONS].WarningValue and
-                pcUsed < BS.Vars.Controls[BS.W_FENCE_TRANSACTIONS].DangerValue)
-         then
-            colour = BS.Vars.Controls[BS.W_FENCE_TRANSACTIONS].WarningColour or BS.Vars.DefaultWarningColour
-        elseif (pcUsed >= BS.Vars.Controls[BS.W_FENCE_TRANSACTIONS].DangerValue) then
-            colour = BS.Vars.Controls[BS.W_FENCE_TRANSACTIONS].DangerColour or BS.Vars.DefaultDangerColour
-        end
-
-        widget:SetColour(unpack(colour))
-        widget:SetValue(used .. "/" .. max)
-
-        return used
-    end,
-    event = _G.EVENT_CLOSE_STORE,
-    icon = "/esoui/art/vendor/vendor_tabicon_fence_up.dds",
-    tooltip = GetString(_G.BARSTEWARD_FENCE)
-}
-
 BS.widgets[BS.W_SOUL_GEMS] = {
     -- v1.2.0
     name = "soulGems",
@@ -397,9 +332,9 @@ local function getDetail(bag, slot)
     local name = colour:Colorize(GetItemName(bag, slot))
 
     if (bag == _G.BAG_BACKPACK) then
-        name = bagIcon .. " " .. name
+        name = BS.BAGICON .. " " .. name
     else
-        name = bankIcon .. " " .. name
+        name = BS.BANKICON .. " " .. name
     end
 
     return name .. ((wcount > 1) and (" (" .. wcount .. ")") or "")
@@ -526,11 +461,11 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
             for type, counts in pairs(writDetail) do
                 local writType = ZO_CachedStrFormat("<<C:1>>", GetString(_G["SI_TRADESKILLTYPE" .. tostring(type)]))
                 if (counts.bagCount > 0) then
-                    writType = writType .. " " .. bagIcon .. " " .. counts.bagCount
+                    writType = writType .. " " .. BS.BAGICON .. " " .. counts.bagCount
                 end
 
                 if (counts.bankCount > 0) then
-                    writType = writType .. " " .. bankIcon .. " " .. counts.bankCount
+                    writType = writType .. " " .. BS.BANKICON .. " " .. counts.bankCount
                 end
 
                 if (useWW) then
@@ -578,12 +513,18 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
             name = GetString(_G.BARSTEWARD_USE_WRITWORTHY),
             tooltip = GetString(_G.BARSTEWARD_USE_WRITWORTHY_TOOLTIP),
             type = "checkbox",
-            getFunc = function() return BS.Vars.UseWritWorthy or false end,
+            getFunc = function()
+                return BS.Vars.UseWritWorthy or false
+            end,
             setFunc = function(value)
                 BS.Vars.UseWritWorthy = value
-                BS.widgets[BS.W_WRITS_SURVEYS].update(_G[BS.Name .. "_Widget_" .. BS.widgets[BS.W_WRITS_SURVEYS].name].ref)
+                BS.widgets[BS.W_WRITS_SURVEYS].update(
+                    _G[BS.Name .. "_Widget_" .. BS.widgets[BS.W_WRITS_SURVEYS].name].ref
+                )
             end,
-            disabled = function() return _G.WritWorthy == nil end
+            disabled = function()
+                return _G.WritWorthy == nil
+            end
         }
     }
 }

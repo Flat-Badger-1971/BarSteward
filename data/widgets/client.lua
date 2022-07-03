@@ -22,6 +22,7 @@ local BS = _G.BarSteward
         }
     }
 ]]
+
 BS.widgets = {
     [BS.W_TIME] = {
         name = "time",

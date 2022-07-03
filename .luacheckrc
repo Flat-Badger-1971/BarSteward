@@ -253,6 +253,7 @@ read_globals = {
 	"GetTimedActivityRewardInfo",
     "GetTimedActivityType",
     "GetTimedActivityTypeLimit",
+    "GetTimeStamp",
     "GetTimeString",
     "GetTimeUntilCanBeTrained",
     "GetUnitAlliance",

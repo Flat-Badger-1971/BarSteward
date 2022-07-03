@@ -1,6 +1,8 @@
 [color=#ff9900][b]Version: 1.2.10 ---------------[/b][/color]
 Fixed issue when global UI scale is changed
 Added summary to stolen items tooltip
+Fence reset timer added
+Reposition lock button so it doesn't obscure new bars
 
 [color=#ff9900][b]Version: 1.2.9 ---------------[/b][/color]
 Debounce event tickets announcement

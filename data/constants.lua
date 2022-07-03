@@ -49,6 +49,7 @@ BS.W_MEMORY = 40
 BS.W_SKYSHARDS = 41
 BS.W_SKILL_POINTS = 42
 BS.W_WRITS_SURVEYS = 43
+BS.W_FENCE_RESET = 44
 
 BS.WRITS = {
     [1] = {119563, 119680, 121527, 121529}, -- blacksmithing
@@ -59,3 +60,6 @@ BS.WRITS = {
     [6] = {119681, 119682, 121530, 121531}, -- woodworking
     [7] = {138789, 138799, 153737, 153739} -- jewellery crafting
 }
+
+BS.BAGICON = zo_iconFormat("/esoui/art/tooltips/icon_bag.dds")
+BS.BANKICON = zo_iconFormat("/esoui/art/tooltips/icon_bank.dds")

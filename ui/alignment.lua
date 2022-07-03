@@ -187,7 +187,7 @@ function BS.CreateLockButton()
 
     BS.lock = WINDOW_MANAGER:CreateTopLevelWindow(name)
     BS.lock:SetDimensions(500, 150)
-    BS.lock:SetAnchor(CENTER, GuiRoot, CENTER)
+    BS.lock:SetAnchor(CENTER, GuiRoot, CENTER, 0, -200)
     BS.lock:SetHidden(true)
 
     BS.lock.button = WINDOW_MANAGER:CreateControl(name .. "_icon", BS.lock, CT_BUTTON)

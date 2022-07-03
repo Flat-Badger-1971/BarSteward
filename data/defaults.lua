@@ -259,6 +259,14 @@ BS.Defaults = {
         },
         [BS.W_SKYSHARDS] = {Bar = 0, Order = 41, ColourValues = "c"},
         [BS.W_SKILL_POINTS] = {Bar = 0, Order = 42, ColourValues = "c", Autohide = true, Colour = {0, 1, 0, 1}},
-        [BS.W_WRITS_SURVEYS] = {Bar = 0, Order = 43, ColourValues = "c"}
+        [BS.W_WRITS_SURVEYS] = {Bar = 0, Order = 43, ColourValues = "c"},
+        [BS.W_FENCE_RESET] = {
+            Bar = 0,
+            Order = 44,
+            HideSeconds = false,
+            Timer = true,
+            Autohide = true,
+            hideWhenEqual = 0
+        }
     }
 }
