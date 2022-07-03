@@ -21,7 +21,7 @@ function baseBar:Initialise(barSettings)
 
     self.bar = WINDOW_MANAGER:CreateTopLevelWindow(barName)
     self.bar.ref = self
-    self.bar:SetScale(barSettings.scale)
+    self.bar:SetScale(barSettings.scale * GetUIGlobalScale())
     self.bar:SetResizeToFitDescendents(true)
 
     local valueSide = BS.Vars.Bars[barSettings.index].ValueSide

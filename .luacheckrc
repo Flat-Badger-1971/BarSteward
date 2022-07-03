@@ -205,6 +205,7 @@ read_globals = {
 	"GetFriendInfo",
     "GetGameCameraInteractableActionInfo",
     "GetGameCameraPickpocketingBonusInfo",
+    "GetUIGlobalScale",
     "GetInteractionType",
     "GetItemCondition",
 	"GetItemDisplayQuality",

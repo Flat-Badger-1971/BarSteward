@@ -66,10 +66,32 @@ local function Initialise()
         }
     }
 
+    local resize = {
+        title = {text = "Bar Steward"},
+        mainText = {text = GetString(_G.BARSTEWARD_RESIZE_MESSAGE)},
+        buttons = {
+            {
+                text = GetString(_G.SI_DIALOG_YES),
+                callback = function()
+                    zo_callLater(
+                        function()
+                            ReloadUI()
+                        end,
+                        500
+                    )
+                end
+            },
+            {
+                text = GetString(_G.SI_DIALOG_NO)
+            }
+        }
+    }
+
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "NotEmpty", notempty)
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "Exists", exists)
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "Reload", reload)
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "Remove", remove)
+    ZO_Dialogs_RegisterCustomDialog(BS.Name .. "Resize", resize)
 
     -- saved variables
     BS.Vars =
@@ -149,6 +171,13 @@ local function Initialise()
     BS.RegisterForEvent(_G.EVENT_PLAYER_ACTIVATED, trackGold)
     BS.RegisterForEvent(_G.EVENT_MONEY_UPDATE, trackGold)
 
+    EVENT_MANAGER:RegisterForEvent(
+        BS.Name,
+        _G.EVENT_ALL_GUI_SCREENS_RESIZED,
+        function()
+            ZO_Dialogs_ShowDialog(BS.Name .. "Resize")
+        end
+    )
     -- utiltity
     if (_G.SLASH_COMMANDS["/rl"] == nil) then
         _G.SLASH_COMMANDS["/rl"] = function()

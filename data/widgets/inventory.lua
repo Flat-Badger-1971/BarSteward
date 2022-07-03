@@ -1,4 +1,6 @@
 local BS = _G.BarSteward
+local bagIcon = zo_iconFormat("/esoui/art/tooltips/icon_bag.dds")
+local bankIcon = zo_iconFormat("/esoui/art/tooltips/icon_bank.dds")
 
 BS.widgets[BS.W_BAG_SPACE] = {
     name = "bagSpace",
@@ -256,17 +258,28 @@ BS.widgets[BS.W_STOLEN_ITEMS] = {
     name = "stolenItemCount",
     update = function(widget)
         local count = 0
+        local bagCounts = {carrying = 0, banked = 0}
 
         for _, bag in ipairs({_G.BAG_WORN, _G.BAG_BACKPACK, _G.BAG_BANK, _G.BAG_SUBSCRIBER_BANK}) do
             for slot = 0, GetBagSize(bag) do
                 if (IsItemStolen(bag, slot)) then
                     count = count + GetSlotStackSize(bag, slot)
+                    if (bag == _G.BAG_BANK or bag == _G.BAG_SUBSCRIBER_BANK) then
+                        bagCounts.banked = bagCounts.banked + 1
+                    else
+                        bagCounts.carrying = bagCounts.carrying + 1
+                    end
                 end
             end
         end
 
         widget:SetValue(count)
         widget:SetColour(unpack(BS.Vars.Controls[BS.W_STOLEN_ITEMS].Colour or BS.Vars.DefaultColour))
+
+        local ttt = GetString(_G.BARSTEWARD_STOLEN) .. BS.LF
+        ttt = ttt .. bagIcon .. " " .. bagCounts.carrying .. " " .. bankIcon .. " " .. bagCounts.banked
+
+        widget.tooltip = ttt
 
         return count
     end,
@@ -376,9 +389,6 @@ local function isMasterWrit(bag, slot)
     local _, specialisedItemType = GetItemType(bag, slot)
     return specialisedItemType == _G.SPECIALIZED_ITEMTYPE_MASTER_WRIT
 end
-
-local bagIcon = zo_iconFormat("/esoui/art/tooltips/icon_bag.dds")
-local bankIcon = zo_iconFormat("/esoui/art/tooltips/icon_bank.dds")
 
 local function getDetail(bag, slot)
     local wcount = GetSlotStackSize(bag, slot)

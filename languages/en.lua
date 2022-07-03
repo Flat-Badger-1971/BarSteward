@@ -159,6 +159,10 @@ ZO_CreateStringId("BARSTEWARD_ANNOUNCEMENTS", "Announcements")
 ZO_CreateStringId("BARSTEWARD_ANNOUNCEMENT_FRIEND", "Show Friend Online Announcement")
 ZO_CreateStringId("BARSTEWARD_FRIEND_ONLINE", "Friend Online")
 ZO_CreateStringId("BARSTEWARD_FRIEND_ONLINE_MESSAGE", "<<1>> (<<2>>) has come online")
+ZO_CreateStringId(
+    "BARSTEWARD_RESIZE_MESSAGE",
+    "Screen resize detected. Bar Steward may not display correctly until a UI reload. Reload now?"
+)
 ZO_CreateStringId("BARSTEWARD_WARNING", "Warning!")
 ZO_CreateStringId("BARSTEWARD_WARNING_BAGS", "Your bags are almost full!")
 ZO_CreateStringId("BARSTEWARD_WARNING_EVENT_TICKETS", "Spend your event tickets!")
