@@ -460,7 +460,12 @@ local function GetWidgetSettings()
         table.insert(ordered, {key = key, widget = widget})
     end
 
-    table.sort(ordered, function(a, b) return BS.widgets[a.key].tooltip < BS.widgets[b.key].tooltip end)
+    table.sort(
+        ordered,
+        function(a, b)
+            return BS.widgets[a.key].tooltip < BS.widgets[b.key].tooltip
+        end
+    )
 
     --for k, v in ipairs(widgets) do
     for idx, w in ipairs(ordered) do
@@ -509,11 +514,13 @@ local function GetWidgetSettings()
                 end,
                 setFunc = function(value)
                     BS.Vars.Controls[k].Autohide = value
-                    local widget = _G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref
-                    local bar = widget.control:GetParent().ref
-                    local metadata = BS.widgets[k]
-                    metadata.widget = widget
-                    bar:DoUpdate(metadata)
+                    if (BS.Vars.Controls[k].Bar ~= 0) then
+                        local widget = _G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref
+                        local bar = widget.control:GetParent().ref
+                        local metadata = BS.widgets[k]
+                        metadata.widget = widget
+                        bar:DoUpdate(metadata)
+                    end
                 end,
                 width = "full",
                 default = BS.Defaults.Controls[k].Autohide
@@ -531,11 +538,13 @@ local function GetWidgetSettings()
                 end,
                 setFunc = function(value)
                     BS.Vars.Controls[k].HideWhenComplete = value
-                    local widget = _G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref
-                    local bar = widget.control:GetParent().ref
-                    local metadata = BS.widgets[k]
-                    metadata.widget = widget
-                    bar:DoUpdate(metadata)
+                    if (BS.Vars.Controls[k].Bar ~= 0) then
+                        local widget = _G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref
+                        local bar = widget.control:GetParent().ref
+                        local metadata = BS.widgets[k]
+                        metadata.widget = widget
+                        bar:DoUpdate(metadata)
+                    end
                 end,
                 width = "full",
                 default = BS.Defaults.Controls[k].HideWhenComplete
@@ -774,7 +783,8 @@ local function GetWidgetSettings()
         if (BS.Defaults.Controls[k].Announce ~= nil) then
             widgetControls[#widgetControls + 1] = {
                 type = "checkbox",
-                name = (k == BS.W_FRIENDS) and GetString(_G.BARSTEWARD_ANNOUNCEMENT_FRIEND) or GetString(_G.BARSTEWARD_ANNOUNCEMENT),
+                name = (k == BS.W_FRIENDS) and GetString(_G.BARSTEWARD_ANNOUNCEMENT_FRIEND) or
+                    GetString(_G.BARSTEWARD_ANNOUNCEMENT),
                 getFunc = function()
                     return BS.Vars.Controls[k].Announce
                 end,
