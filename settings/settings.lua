@@ -7,7 +7,7 @@ local panel = {
     name = "Bar Steward",
     displayName = "Bar Steward",
     author = "Flat Badger",
-    version = "1.2.12",
+    version = "1.2.13",
     registerForDefaults = true,
     slashCommand = "/bs"
 }
