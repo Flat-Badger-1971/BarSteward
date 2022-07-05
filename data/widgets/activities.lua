@@ -1,9 +1,36 @@
 local BS = _G.BarSteward
 
+local function configureWidget(widget, complete, maxComplete, activityType, tasks)
+    widget:SetValue(complete .. "/" .. maxComplete)
+    widget:SetColour(
+        unpack(
+            BS.Vars.Controls[
+                activityType == _G.TIMED_ACTIVITY_TYPE_DAILY and BS.W_DAILY_ENDEAVOURS or BS.W_WEEKLY_ENDEAVOURS
+            ].Colour or BS.Vars.DefaultColour
+        )
+    )
+
+    if (#tasks > 0) then
+        local tooltipText = ""
+
+        for _, t in ipairs(tasks) do
+            if (tooltipText ~= "") then
+                tooltipText = tooltipText .. BS.LF
+            end
+
+            tooltipText = tooltipText .. t
+        end
+
+        widget.tooltip = tooltipText
+    end
+end
+
 local function getTimedActivityProgress(activityType, widget)
     local complete = 0
     local maxComplete = GetTimedActivityTypeLimit(activityType)
     local tasks = {}
+    local maxPcProgress = -1
+    local maxTask = {}
 
     for idx = 1, 30 do
         local name = GetTimedActivityName(idx)
@@ -15,6 +42,7 @@ local function getTimedActivityProgress(activityType, widget)
         if (GetTimedActivityType(idx) == activityType) then
             local max = GetTimedActivityMaxProgress(idx)
             local progress = GetTimedActivityProgress(idx)
+            local pcProgress = max / progress
             local ttext = name .. "  (" .. progress .. "/" .. max .. ")"
             local colour = "|cb4b4b4"
 
@@ -45,33 +73,23 @@ local function getTimedActivityProgress(activityType, widget)
             ttext = colour .. ttext .. "|r" .. " " .. reward
 
             table.insert(tasks, ttext)
-        end
-    end
 
-    widget:SetValue(complete .. "/" .. maxComplete)
-    widget:SetColour(
-        unpack(
-            BS.Vars.Controls[
-                activityType == _G.TIMED_ACTIVITY_TYPE_DAILY and BS.W_DAILY_ENDEAVOURS or BS.W_WEEKLY_ENDEAVOURS
-            ].Colour or BS.Vars.DefaultColour
-        )
-    )
-
-    if (#tasks > 0) then
-        local tooltipText = ""
-
-        for _, t in ipairs(tasks) do
-            if (tooltipText ~= "") then
-                tooltipText = tooltipText .. BS.LF
+            if (pcProgress > maxPcProgress) then
+                maxTask = {
+                    name = name,
+                    description = GetTimedActivityDescription(idx),
+                    progress = progress,
+                    maxProgress = max
+                }
             end
-
-            tooltipText = tooltipText .. t
         end
-
-        widget.tooltip = tooltipText
     end
 
-    return complete
+    if (widget ~= nil) then
+        configureWidget(widget, complete, maxComplete, activityType, tasks)
+    end
+
+    return complete, maxTask
 end
 
 BS.widgets[BS.W_DAILY_ENDEAVOURS] = {
@@ -94,13 +112,43 @@ BS.widgets[BS.W_DAILY_ENDEAVOURS] = {
 
 BS.widgets[BS.W_WEEKLY_ENDEAVOURS] = {
     -- v1.0.1
-    name = "weekyEndeavourProgress",
+    name = "weeklyEndeavourProgress",
     update = function(widget)
         return getTimedActivityProgress(_G.TIMED_ACTIVITY_TYPE_WEEKLY, widget)
     end,
     event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED},
     icon = "/esoui/art/journal/u26_progress_digsite_checked_complete.dds",
     tooltip = GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS),
+    onClick = function()
+        if (not IsInGamepadPreferredMode()) then
+            GROUP_MENU_KEYBOARD:ShowCategory(_G.TIMED_ACTIVITIES_FRAGMENT)
+        else
+            ZO_ACTIVITY_FINDER_ROOT_GAMEPAD:ShowCategory(TIMED_ACTIVITIES_GAMEPAD:GetCategoryData())
+        end
+    end
+}
+
+BS.widgets[BS.W_ENDEAVOUR_PROGRESS] = {
+    -- v1.2.14
+    name = "weeklyEndeavourBar",
+    update = function(widget)
+        local _, maxTask = getTimedActivityProgress(_G.TIMED_ACTIVITY_TYPE_WEEKLY, nil)
+
+        widget:SetProgress(maxTask.progress, 0, maxTask.maxProgress)
+
+        local ttt = GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS_BEST) .. BS.LF
+        ttt = ttt .. "|cf6f6f6"
+        ttt = ttt .. maxTask.name ..BS.LF .. BS.LF
+        ttt = ttt .. maxTask.description
+
+        widget.tooltip = ttt
+
+        return maxTask.progress == maxTask.maxProgress
+    end,
+    progress = true,
+    event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED},
+    icon = "/esoui/art/journal/u26_progress_digsite_marked_complete.dds",
+    tooltip = GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS_BEST),
     onClick = function()
         if (not IsInGamepadPreferredMode()) then
             GROUP_MENU_KEYBOARD:ShowCategory(_G.TIMED_ACTIVITIES_FRAGMENT)

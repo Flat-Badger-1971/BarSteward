@@ -31,18 +31,31 @@ function baseWidget:Initialise(widgetSettings)
     self.icon:SetDimensions(widgetSettings.iconWidth or 32, widgetSettings.iconHeight or 32)
     self.icon:SetAnchor(widgetSettings.valueSide == LEFT and RIGHT or LEFT)
 
-    self.value = WINDOW_MANAGER:CreateControl(name .. "_value", self.control, CT_LABEL)
-    self.value:SetFont("ZoFontGame")
-    self.value:SetColor(unpack(BS.Vars.DefaultColour))
-    self.value:SetAnchor(
-        widgetSettings.valueSide == LEFT and RIGHT or LEFT,
-        self.icon,
-        widgetSettings.valueSide,
-        widgetSettings.valueSide == LEFT and -10 or 10,
-        0
-    )
-    self.value:SetDimensions(widgetSettings.valueWidth or 50, widgetSettings.iconHeight or 32)
-    self.value:SetVerticalAlignment(TEXT_ALIGN_CENTER)
+    if (widgetSettings.progress) then
+        self.value = BS.CreateProgressBar(name .. "_progress", self.control)
+        self.value:SetAnchor(
+            widgetSettings.valueSide == LEFT and RIGHT or LEFT,
+            self.icon,
+            widgetSettings.valueSide,
+            widgetSettings.valueSide == LEFT and -10 or 10,
+            0
+        )
+        self.value:SetDimensions(200, 32)
+        self.value:SetMinMax(0, 100)
+    else
+        self.value = WINDOW_MANAGER:CreateControl(name .. "_value", self.control, CT_LABEL)
+        self.value:SetFont("ZoFontGame")
+        self.value:SetColor(unpack(BS.Vars.DefaultColour))
+        self.value:SetAnchor(
+            widgetSettings.valueSide == LEFT and RIGHT or LEFT,
+            self.icon,
+            widgetSettings.valueSide,
+            widgetSettings.valueSide == LEFT and -10 or 10,
+            0
+        )
+        self.value:SetDimensions(widgetSettings.valueWidth or 50, widgetSettings.iconHeight or 32)
+        self.value:SetVerticalAlignment(TEXT_ALIGN_CENTER)
+    end
 
     self.tooltip = widgetSettings.tooltip
 
@@ -91,6 +104,16 @@ end
 
 -- add functions to the widget to mimic a standard control
 -- set the widget value and adjust the value control's width accordingly
+function baseWidget:SetProgress(value, min, max)
+    if (self.value:GetValue() == value) then
+        return
+    end
+
+    self.value:SetMinMax(min, max)
+    self.value.progress:SetText(value .. "/" .. max)
+    self.value:SetValue(value)
+end
+
 function baseWidget:SetValue(value)
     if (self.value:GetText() == value) then
         return

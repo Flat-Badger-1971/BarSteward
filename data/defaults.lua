@@ -267,6 +267,7 @@ BS.Defaults = {
             Timer = true,
             Autohide = true,
             hideWhenEqual = 0
-        }
+        },
+        [BS.W_ENDEAVOUR_PROGRESS]= {Bar = 0, Order = 45}
     }
 }

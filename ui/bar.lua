@@ -288,7 +288,8 @@ function baseBar:AddWidgets(widgets)
                 tooltip = metadata.tooltip,
                 tooltipAnchor = tooltipAnchor,
                 valueSide = self.valueSide,
-                onClick = metadata.onClick
+                onClick = metadata.onClick,
+                progress = metadata.progress
             }
         )
 
