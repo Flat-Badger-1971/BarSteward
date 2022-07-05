@@ -81,7 +81,7 @@ local function getTimedActivityProgress(activityType, widget)
                     progress = progress,
                     maxProgress = max
                 }
-d(maxTask)
+
                 maxPcProgress = pcProgress
             end
         end
