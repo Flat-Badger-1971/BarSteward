@@ -106,6 +106,12 @@ BS.widgets[BS.W_EVENT_TICKETS] = {
                     announce = false
                 end
 
+                -- if the number of tickets has changed then override the debounce
+                if ((BS.previousEventTicketValue or 0) ~= tickets) then
+                    announce = true
+                    BS.previousEventTicketValue = tickets
+                end
+
                 if (announce) then
                     BS.Vars.PreviousAnnounceTime[BS.W_EVENT_TICKETS] = os.time()
                     BS.Announce(

@@ -9,6 +9,7 @@ local panel = {
     author = "Flat Badger",
     version = "1.2.13",
     registerForDefaults = true,
+    registerForRefresh = true,
     slashCommand = "/bs"
 }
 
@@ -182,7 +183,6 @@ local function GetBarSettings()
                 setFunc = function(value)
                     BS.Vars.Bars[idx].Backdrop.Show = value
                     _G[BS.Name .. "_bar_" .. idx].background:SetHidden(not value)
-                    CALLBACK_MANAGER:FireCallbacks("LAM-RefreshPanel", BS.OptionsPanel)
                 end,
                 default = BS.Defaults.Bars[1].Backdrop.Show
             },
@@ -300,7 +300,6 @@ local function GetBarSettings()
 
                     BS.Vars.Bars[idx].Anchor = GetString(_G.BARSTEWARD_MIDDLE)
                     BS.Vars.Bars[idx].Position = {X = xPos, Y = yPos}
-                    CALLBACK_MANAGER:FireCallbacks("LAM-RefreshPanel", BS.OptionsPanel)
                 end,
                 width = "full"
             }
@@ -354,7 +353,6 @@ local function GetBarSettings()
         end,
         setFunc = function(value)
             BS.NewBarName = value
-            CALLBACK_MANAGER:FireCallbacks("LAM-RefreshPanel", BS.OptionsPanel)
         end,
         isMultiLine = false,
         width = "half"
@@ -639,7 +637,6 @@ local function GetWidgetSettings()
                 end,
                 setFunc = function(value)
                     BS.Vars.Controls[k].SoundWhenEquals = value
-                    CALLBACK_MANAGER:FireCallbacks("LAM-RefreshPanel", BS.OptionsPanel)
                 end,
                 width = "full",
                 default = BS.Defaults.Controls[k].SoundWhenEquals
@@ -689,7 +686,6 @@ local function GetWidgetSettings()
                 end,
                 setFunc = function(value)
                     BS.Vars.Controls[k].SoundWhenOver = value
-                    CALLBACK_MANAGER:FireCallbacks("LAM-RefreshPanel", BS.OptionsPanel)
                 end,
                 width = "full",
                 default = BS.Defaults.Controls[k].SoundWhenOver
@@ -739,7 +735,6 @@ local function GetWidgetSettings()
                 end,
                 setFunc = function(value)
                     BS.Vars.Controls[k].SoundWhenUnder = value
-                    CALLBACK_MANAGER:FireCallbacks("LAM-RefreshPanel", BS.OptionsPanel)
                 end,
                 width = "full",
                 default = BS.Defaults.Controls[k].SoundWhenUnder
@@ -779,7 +774,7 @@ local function GetWidgetSettings()
             }
         end
 
-        -- announcement
+        -- Announcement
         if (BS.Defaults.Controls[k].Announce ~= nil) then
             widgetControls[#widgetControls + 1] = {
                 type = "checkbox",
@@ -796,7 +791,7 @@ local function GetWidgetSettings()
             }
         end
 
-        -- custom dropdown option
+        -- Custom dropdown option
         local copts = BS.widgets[k].customOptions
         if (copts) then
             widgetControls[#widgetControls + 1] = {
@@ -831,7 +826,6 @@ local function GetWidgetSettings()
                 end,
                 setFunc = function(value)
                     BS.Vars.TimeType = value
-                    CALLBACK_MANAGER:FireCallbacks("LAM-RefreshPanel", BS.OptionsPanel)
                 end,
                 default = BS.Defaults.TimeType
             }

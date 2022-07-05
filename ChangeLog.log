@@ -1,5 +1,7 @@
 [color=#ff9900][b]Version: 1.2.13 ---------------[/b][/color]
 Scaling correction
+Override debounce if event tickets have changed
+Settings refresh correction
 
 [color=#ff9900][b]Version: 1.2.12 ---------------[/b][/color]
 Fixed debounce timers
