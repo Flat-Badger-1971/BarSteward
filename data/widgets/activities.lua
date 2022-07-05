@@ -42,7 +42,7 @@ local function getTimedActivityProgress(activityType, widget)
         if (GetTimedActivityType(idx) == activityType) then
             local max = GetTimedActivityMaxProgress(idx)
             local progress = GetTimedActivityProgress(idx)
-            local pcProgress = max / progress
+            local pcProgress = progress / max
             local ttext = name .. "  (" .. progress .. "/" .. max .. ")"
             local colour = "|cb4b4b4"
 
@@ -81,6 +81,8 @@ local function getTimedActivityProgress(activityType, widget)
                     progress = progress,
                     maxProgress = max
                 }
+d(maxTask)
+                maxPcProgress = pcProgress
             end
         end
     end
@@ -146,7 +148,7 @@ BS.widgets[BS.W_ENDEAVOUR_PROGRESS] = {
         return maxTask.progress == maxTask.maxProgress
     end,
     progress = true,
-    event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED},
+    event = {_G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED},
     icon = "/esoui/art/journal/u26_progress_digsite_marked_complete.dds",
     tooltip = GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS_BEST),
     onClick = function()
