@@ -109,9 +109,11 @@ function baseWidget:SetProgress(value, min, max)
         return
     end
 
-    self.value:SetMinMax(min, max)
-    self.value.progress:SetText(value .. "/" .. max)
-    self.value:SetValue(value)
+    if (max and value) then
+        self.value:SetMinMax(min, max)
+        self.value.progress:SetText(value .. "/" .. max)
+        self.value:SetValue(value)
+    end
 end
 
 function baseWidget:SetValue(value)

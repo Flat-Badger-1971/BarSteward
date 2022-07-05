@@ -1,3 +1,6 @@
+[color=#ff9900][b]Version: 1.2.14 ---------------[/b][/color]
+Added progress bar view for best weekly endeavour progress
+
 [color=#ff9900][b]Version: 1.2.13 ---------------[/b][/color]
 Scaling correction
 Override debounce if event tickets have changed

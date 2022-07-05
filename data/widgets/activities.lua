@@ -136,19 +136,23 @@ BS.widgets[BS.W_ENDEAVOUR_PROGRESS] = {
     update = function(widget)
         local _, maxTask = getTimedActivityProgress(_G.TIMED_ACTIVITY_TYPE_WEEKLY, nil)
 
-        widget:SetProgress(maxTask.progress, 0, maxTask.maxProgress)
+        if (maxTask.name and maxTask.maxProgress) then
+            widget:SetProgress(maxTask.progress, 0, maxTask.maxProgress)
 
-        local ttt = GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS_BEST) .. BS.LF
-        ttt = ttt .. "|cf6f6f6"
-        ttt = ttt .. maxTask.name ..BS.LF .. BS.LF
-        ttt = ttt .. maxTask.description
+            local ttt = GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS_BEST) .. BS.LF
+            ttt = ttt .. "|cf6f6f6"
+            ttt = ttt .. maxTask.name .. BS.LF .. BS.LF
+            ttt = ttt .. maxTask.description
 
-        widget.tooltip = ttt
+            widget.tooltip = ttt
 
-        return maxTask.progress == maxTask.maxProgress
+            return maxTask.progress == maxTask.maxProgress
+        else
+            return 0
+        end
     end,
     progress = true,
-    event = {_G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED},
+    event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED},
     icon = "/esoui/art/journal/u26_progress_digsite_marked_complete.dds",
     tooltip = GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS_BEST),
     onClick = function()
