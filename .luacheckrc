@@ -215,6 +215,7 @@ read_globals = {
     "GetItemName",
 	"GetItemQualityColor",
     "GetItemType",
+    "GetInterfaceColor",
     "GetLatency",
     "GetMapContentType",
     "GetMaximumRapport",
