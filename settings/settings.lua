@@ -264,7 +264,7 @@ local function GetBarSettings()
 
                     local barToScale = _G[BS.Name .. "_bar_" .. idx]
 
-                    barToScale:SetScale(value)
+                    barToScale:SetScale(value * GetUIGlobalScale())
                     barToScale:SetResizeToFitDescendents(false)
                     barToScale:SetWidth(0)
                     barToScale:SetResizeToFitDescendents(true)
