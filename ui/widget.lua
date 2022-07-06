@@ -42,6 +42,9 @@ function baseWidget:Initialise(widgetSettings)
         )
         self.value:SetDimensions(200, 32)
         self.value:SetMinMax(0, 100)
+        self.value.progress:SetColor(
+            unpack(BS.Vars.Controls[BS.W_ENDEAVOUR_PROGRESS].ProgressColour or BS.Vars.DefaultWarningColour)
+        )
     else
         self.value = WINDOW_MANAGER:CreateControl(name .. "_value", self.control, CT_LABEL)
         self.value:SetFont("ZoFontGame")
