@@ -51,6 +51,7 @@ BS.W_SKILL_POINTS = 42
 BS.W_WRITS_SURVEYS = 43
 BS.W_FENCE_RESET = 44
 BS.W_ENDEAVOUR_PROGRESS = 45
+BS.W_TROPHY_VAULT_KEYS = 46
 
 BS.WRITS = {
     [1] = {119563, 119680, 121527, 121529}, -- blacksmithing
@@ -60,6 +61,17 @@ BS.WRITS = {
     [5] = {119693}, -- provisioning
     [6] = {119681, 119682, 121530, 121531}, -- woodworking
     [7] = {138789, 138799, 153737, 153739} -- jewellery crafting
+}
+
+BS.TROPHY_VAULT_KEYS = {
+    [64491] = true,
+    [64568] = true,
+    [64572] = true,
+    [64574] = true,
+    [64576] = true,
+    [64570] = true,
+    [69404] = true,
+    [69405] = true
 }
 
 BS.BAGICON = zo_iconFormat("/esoui/art/tooltips/icon_bag.dds")

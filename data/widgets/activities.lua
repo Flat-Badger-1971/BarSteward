@@ -151,7 +151,6 @@ BS.widgets[BS.W_ENDEAVOUR_PROGRESS] = {
             return 0
         end
     end,
-    progress = true,
     gradient = function()
         local startg = {GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, _G.INTERFACE_GENERAL_COLOR_STATUS_BAR_START)}
         local endg = {GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, _G.INTERFACE_GENERAL_COLOR_STATUS_BAR_END)}
@@ -169,74 +168,7 @@ BS.widgets[BS.W_ENDEAVOUR_PROGRESS] = {
         else
             ZO_ACTIVITY_FINDER_ROOT_GAMEPAD:ShowCategory(TIMED_ACTIVITIES_GAMEPAD:GetCategoryData())
         end
-    end,
-    customSettings = {
-        [1] = {
-            type = "colorpicker",
-            name = GetString(_G.BARSTEWARD_PROGRESS_VALUE),
-            getFunc = function()
-                local colour = BS.Vars.Controls[BS.W_ENDEAVOUR_PROGRESS].ProgressColour or BS.Vars.DefaultWarningColour
-
-                return unpack(colour)
-            end,
-            setFunc = function(r, g, b, a)
-                BS.Vars.Controls[BS.W_ENDEAVOUR_PROGRESS].ProgressColour = {r, g, b, a}
-
-                local widget = _G[BS.Name .. "_Widget_" .. BS.widgets[BS.W_ENDEAVOUR_PROGRESS].name].ref
-                widget.value.progress:SetColor(r, g, b, a)
-            end,
-            width = "full",
-            default = function()
-                return unpack(BS.Vars.DefaultWarningColour)
-            end
-        },
-        [2] = {
-            type = "colorpicker",
-            name = GetString(_G.BARSTEWARD_PROGRESS_GRADIENT_START),
-            getFunc = function()
-                local startg = {GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, _G.INTERFACE_GENERAL_COLOR_STATUS_BAR_START)}
-                local colour = BS.Vars.Controls[BS.W_ENDEAVOUR_PROGRESS].GradientStart or startg
-
-                return unpack(colour)
-            end,
-            setFunc = function(r, g, b, a)
-                BS.Vars.Controls[BS.W_ENDEAVOUR_PROGRESS].GradientStart = {r, g, b, a}
-
-                local widget = _G[BS.Name .. "_Widget_" .. BS.widgets[BS.W_ENDEAVOUR_PROGRESS].name].ref
-                local endg = {GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, _G.INTERFACE_GENERAL_COLOR_STATUS_BAR_END)}
-                local er, eg, eb = unpack(BS.Vars.Controls[BS.W_ENDEAVOUR_PROGRESS].GradientEnd or endg)
-
-                widget.value:SetGradientColors(r, g, b, 1, er, eg, eb, 1)
-            end,
-            width = "full",
-            default = function()
-                return GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, _G.INTERFACE_GENERAL_COLOR_STATUS_BAR_START)
-            end
-        },
-        [3] = {
-            type = "colorpicker",
-            name = GetString(_G.BARSTEWARD_PROGRESS_GRADIENT_END),
-            getFunc = function()
-                local endg = {GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, _G.INTERFACE_GENERAL_COLOR_STATUS_BAR_END)}
-                local colour = BS.Vars.Controls[BS.W_ENDEAVOUR_PROGRESS].GradientEnd or endg
-
-                return unpack(colour)
-            end,
-            setFunc = function(r, g, b, a)
-                BS.Vars.Controls[BS.W_ENDEAVOUR_PROGRESS].GradientEnd = {r, g, b, a}
-
-                local widget = _G[BS.Name .. "_Widget_" .. BS.widgets[BS.W_ENDEAVOUR_PROGRESS].name].ref
-                local startg = {GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, _G.INTERFACE_GENERAL_COLOR_STATUS_BAR_START)}
-                local sr, sg, sb = unpack(BS.Vars.Controls[BS.W_ENDEAVOUR_PROGRESS].GradientStart or startg)
-
-                widget.value:SetGradientColors(sr, sg, sb, 1, r, g, b, 1)
-            end,
-            width = "full",
-            default = function()
-                return unpack(BS.Vars.DefaultWarningColour)
-            end
-        }
-    }
+    end
 }
 
 local difficultyColours = {

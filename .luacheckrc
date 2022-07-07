@@ -210,6 +210,7 @@ read_globals = {
     "GetItemCondition",
 	"GetItemDisplayQuality",
 	"GetItemId",
+    "GetItemInfo",
 	"GetItemLink",
     "GetItemLinkName",
     "GetItemName",

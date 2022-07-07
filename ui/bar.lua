@@ -278,18 +278,8 @@ function baseBar:AddWidgets(widgets)
 
     for idx, metadata in ipairs(widgets) do
         -- draw the widget
-        metadata.widget = -- { -- BS.CreateWidget(
-        --     icon = metadata.icon,
-        --     minWidthChars = metadata.minWidthChars,
-        --     name = metadata.name,
-        --     parent = self.bar,
-        --     tooltip = metadata.tooltip,
-        --     tooltipAnchor = tooltipAnchor,
-        --     valueSide = self.valueSide,
-        --     onClick = metadata.onClick,
-        --     progress = metadata.progress
-        -- })
-        BS.CreateWidget(metadata, self.bar, tooltipAnchor, self.valueSide)
+        metadata.progress = BS.Defaults.Controls[metadata.id].Progress
+        metadata.widget = BS.CreateWidget(metadata, self.bar, tooltipAnchor, self.valueSide)
 
         -- register widgets that need to watch for events
         if (metadata.event) then
