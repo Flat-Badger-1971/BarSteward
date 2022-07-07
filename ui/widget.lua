@@ -9,47 +9,71 @@ function baseWidget:New(...)
     return widget
 end
 
-function baseWidget:Initialise(widgetSettings)
-    local name = BS.Name .. "_Widget_" .. widgetSettings.name
+function baseWidget:Initialise(metadata, parent, tooltipAnchor, valueSide)
+    local name = BS.Name .. "_Widget_" .. metadata.name
 
-    self.name = widgetSettings.name
-    self.minWidthChars = widgetSettings.minWidthChars
-    self.control = WINDOW_MANAGER:CreateControl(name, widgetSettings.parent, CT_CONTROL)
+    self.name = metadata.name
+    self.minWidthChars = metadata.minWidthChars
+    self.control = WINDOW_MANAGER:CreateControl(name, parent, CT_CONTROL)
     self.control:SetResizeToFitDescendents(true)
     self.control.ref = self
 
     local texture
 
-    if (type(widgetSettings.icon) == "function") then
-        texture = widgetSettings.icon()
+    if (type(metadata.icon) == "function") then
+        texture = metadata.icon()
     else
-        texture = widgetSettings.icon
+        texture = metadata.icon
     end
 
     self.icon = WINDOW_MANAGER:CreateControl(name .. "_icon", self.control, CT_TEXTURE)
     self.icon:SetTexture(texture)
-    self.icon:SetDimensions(widgetSettings.iconWidth or 32, widgetSettings.iconHeight or 32)
-    self.icon:SetAnchor(widgetSettings.valueSide == LEFT and RIGHT or LEFT)
+    self.icon:SetDimensions(metadata.iconWidth or 32, metadata.iconHeight or 32)
+    self.icon:SetAnchor(valueSide == LEFT and RIGHT or LEFT)
 
-    self.value = WINDOW_MANAGER:CreateControl(name .. "_value", self.control, CT_LABEL)
-    self.value:SetFont("ZoFontGame")
-    self.value:SetColor(unpack(BS.Vars.DefaultColour))
-    self.value:SetAnchor(
-        widgetSettings.valueSide == LEFT and RIGHT or LEFT,
-        self.icon,
-        widgetSettings.valueSide,
-        widgetSettings.valueSide == LEFT and -10 or 10,
-        0
-    )
-    self.value:SetDimensions(widgetSettings.valueWidth or 50, widgetSettings.iconHeight or 32)
-    self.value:SetVerticalAlignment(TEXT_ALIGN_CENTER)
+    if (metadata.progress) then
+        self.value = BS.CreateProgressBar(name .. "_progress", self.control)
+        self.value:SetAnchor(
+            valueSide == LEFT and RIGHT or LEFT,
+            self.icon,
+            valueSide,
+            valueSide == LEFT and -10 or 10,
+            0
+        )
+        self.value:SetDimensions(200, 32)
+        self.value:SetMinMax(0, 100)
+        self.value.progress:SetColor(
+            unpack(BS.Vars.Controls[BS.W_ENDEAVOUR_PROGRESS].ProgressColour or BS.Vars.DefaultWarningColour)
+        )
 
-    self.tooltip = widgetSettings.tooltip
+        if (metadata.gradient) then
+            local startg, endg = metadata.gradient()
+            local sr, sg, sb = unpack(startg)
+            local er, eg, eb = unpack(endg)
 
-    if (widgetSettings.tooltip) then
+            self.value:SetGradientColors(sr, sg, sb, 1, er, eg, eb, 1)
+        end
+    else
+        self.value = WINDOW_MANAGER:CreateControl(name .. "_value", self.control, CT_LABEL)
+        self.value:SetFont("ZoFontGame")
+        self.value:SetColor(unpack(BS.Vars.DefaultColour))
+        self.value:SetAnchor(
+            valueSide == LEFT and RIGHT or LEFT,
+            self.icon,
+            valueSide,
+            valueSide == LEFT and -10 or 10,
+            0
+        )
+        self.value:SetDimensions(metadata.valueWidth or 50, metadata.iconHeight or 32)
+        self.value:SetVerticalAlignment(TEXT_ALIGN_CENTER)
+    end
+
+    self.tooltip = metadata.tooltip
+
+    if (metadata.tooltip) then
         local anchorControl = self.value
 
-        if (widgetSettings.tooltipAnchor == LEFT) then
+        if (tooltipAnchor == LEFT) then
             anchorControl = self.icon
         end
 
@@ -62,7 +86,7 @@ function baseWidget:Initialise(widgetSettings)
             "OnMouseEnter",
             function()
                 local tooltip = getTooltip()
-                ZO_Tooltips_ShowTextTooltip(anchorControl, widgetSettings.tooltipAnchor or BOTTOM, tooltip)
+                ZO_Tooltips_ShowTextTooltip(anchorControl, tooltipAnchor or BOTTOM, tooltip)
             end
         )
 
@@ -74,23 +98,35 @@ function baseWidget:Initialise(widgetSettings)
         )
     end
 
-    if (widgetSettings.onClick ~= nil) then
+    if (metadata.onClick ~= nil) then
         self.control:SetMouseEnabled(true)
         self.control:SetHandler(
             "OnMouseDown",
             function()
-                widgetSettings.onClick()
+                metadata.onClick()
             end
         )
     end
 
     self.spacer = WINDOW_MANAGER:CreateControl(name .. "_spacer", self.control, CT_LABEL)
-    self.spacer:SetDimensions(10, widgetSettings.iconHeight or 32)
-    self.spacer:SetAnchor(widgetSettings.valueSide == LEFT and RIGHT or LEFT, self.value, widgetSettings.valueSide)
+    self.spacer:SetDimensions(10, metadata.iconHeight or 32)
+    self.spacer:SetAnchor(valueSide == LEFT and RIGHT or LEFT, self.value, valueSide)
 end
 
 -- add functions to the widget to mimic a standard control
 -- set the widget value and adjust the value control's width accordingly
+function baseWidget:SetProgress(value, min, max)
+    if (self.value:GetValue() == value) then
+        return
+    end
+
+    if (max and value) then
+        self.value:SetMinMax(min, max)
+        self.value.progress:SetText(value .. "/" .. max)
+        self.value:SetValue(value)
+    end
+end
+
 function baseWidget:SetValue(value)
     if (self.value:GetText() == value) then
         return

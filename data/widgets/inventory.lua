@@ -546,3 +546,68 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
         }
     }
 }
+
+BS.widgets[BS.W_TROPHY_VAULT_KEYS] = {
+    -- v1.2.14
+    name = "trophyVaultKeys",
+    update = function(widget)
+        local count = 0
+        local bags = {_G.BAG_BACKPACK, _G.BAG_BANK}
+        local keys = {bag = {}, bank = {}}
+
+        if (IsESOPlusSubscriber()) then
+            table.insert(bags, _G.BAG_SUBSCRIBER_BANK)
+        end
+
+        for _, bag in pairs(bags) do
+            for slot = 0, GetBagSize(bag) do
+                local itemId = GetItemId(bag, slot)
+
+                if (BS.TROPHY_VAULT_KEYS[itemId]) then
+                    local cnt = GetSlotStackSize(bag, slot)
+
+                    count = count + cnt
+                    local location = bag == _G.BAG_BACKPACK and "bag" or "bank"
+
+                    if (not keys[location][itemId]) then
+                        local icon = GetItemInfo(bag, slot)
+                        local name = GetItemName(bag, slot)
+
+                        keys[location][itemId] = {count = cnt, name = name, icon = icon, bag = bag}
+                    else
+                        keys[location][itemId].count = keys[location][itemId].count + cnt
+                    end
+                end
+            end
+        end
+
+        local colour = BS.Vars.Controls[BS.W_REPAIRS_KITS].Colour or BS.Vars.DefaultColour
+
+        widget:SetColour(unpack(colour))
+        widget:SetValue(count)
+
+        if (count > 0) then
+            local ttt = GetString(_G.BARSTEWARD_TROPHY_VAULT_KEYS) .. BS.LF
+
+            for _, bagType in pairs({"bag", "bank"}) do
+                for _, key in pairs(keys[bagType]) do
+                    local zoIcon = zo_iconFormat(key.icon, 16, 16)
+
+                    ttt = ttt .. BS.LF .. BS.BAGICON .. " " .. zoIcon .. " " .. "|cf9f9f9" .. key.name .. "|r"
+
+                    if (key.count > 1) then
+                        ttt = ttt .. " (" .. key.count .. ")"
+                    end
+                end
+            end
+
+            widget.tooltip = ttt
+        end
+
+        return count
+    end,
+    event = _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
+    icon = "/esoui/art/icons/quest_grinddoorkey_shackles.dds",
+    tooltip = GetString(_G.BARSTEWARD_TROPHY_VAULT_KEYS),
+    hideWhenEqual = 0
+}

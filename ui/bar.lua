@@ -128,7 +128,7 @@ function baseBar:HideWhen(metadata, value)
     local hideValue
 
     if (metadata.complete) then
-        if(value == "hide it!") then
+        if (value == "hide it!") then
             self:SetHiddenWidget(metadata.widget, true)
 
             return
@@ -278,19 +278,8 @@ function baseBar:AddWidgets(widgets)
 
     for idx, metadata in ipairs(widgets) do
         -- draw the widget
-        metadata.widget =
-            BS.CreateWidget(
-            {
-                icon = metadata.icon,
-                minWidthChars = metadata.minWidthChars,
-                name = metadata.name,
-                parent = self.bar,
-                tooltip = metadata.tooltip,
-                tooltipAnchor = tooltipAnchor,
-                valueSide = self.valueSide,
-                onClick = metadata.onClick
-            }
-        )
+        metadata.progress = BS.Defaults.Controls[metadata.id].Progress
+        metadata.widget = BS.CreateWidget(metadata, self.bar, tooltipAnchor, self.valueSide)
 
         -- register widgets that need to watch for events
         if (metadata.event) then

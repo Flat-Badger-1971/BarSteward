@@ -135,3 +135,14 @@ function BS.CreateScrollList(scrollData)
 
     return scrollList
 end
+
+function BS.CreateProgressBar(barName, barParent)
+    local bar = WINDOW_MANAGER:CreateControlFromVirtual(barName, barParent, "ZO_ResponsiveArrowProgressBarWithBG")
+
+    bar.progress = bar:GetNamedChild("Progress")
+    bar.progress:SetColor(unpack(BS.Vars.DefaultWarningColour))
+
+    ZO_StatusBar_InitializeDefaultColors(bar)
+
+    return bar
+end
