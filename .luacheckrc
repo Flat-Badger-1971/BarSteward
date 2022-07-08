@@ -281,6 +281,7 @@ read_globals = {
     "IsItemRepairKit",
     "IsItemStolen",
     "IsUnitGrouped",
+    "IsUnitInCombat",
     "IsUnitPvPFlagged",
 	"PlayEmoteByIndex",
     "PlaySound",

@@ -309,13 +309,22 @@ function baseBar:AddWidgets(widgets)
 
         -- register wigdets that need to update after a set interval
         if (metadata.timer) then
-            EVENT_MANAGER:RegisterForUpdate(
-                BS.Name .. metadata.name,
-                metadata.timer,
-                function()
-                    self:DoUpdate(metadata)
-                end
-            )
+            if (metadata.name == "time") then
+                EVENT_MANAGER:RegisterForUpdate(
+                    BS.Name .. metadata.name,
+                    metadata.timer,
+                    function()
+                        self:DoUpdate(metadata)
+                    end
+                )
+            else
+                BS.RegisterForUpdate(
+                    metadata.timer,
+                    function()
+                        self:DoUpdate(metadata)
+                    end
+                )
+            end
         end
 
         if (self.orientation == "horizontal") then

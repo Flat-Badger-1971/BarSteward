@@ -28,7 +28,7 @@ do
     end
 end
 
-local function Initialise()
+local function initialise()
     BS.options = {}
     BS.options[1] = BS.Vars:GetLibAddonMenuAccountCheckbox()
     BS.options[2] = {
@@ -155,7 +155,7 @@ function BS.RemoveBar()
     )
 end
 
-local function GetBarSettings()
+local function getBarSettings()
     local bars = BS.Vars.Bars
 
     for idx, data in ipairs(bars) do
@@ -372,6 +372,32 @@ local function GetBarSettings()
     }
 end
 
+-- Performance
+local function getPerformanceSettings()
+    local controls = {
+        [1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_PERFORMANCE_TIMERS),
+            tooltip = GetString(_G.BARSTEWARD_PERFORMANCE_TIMERS_TOOLTIP),
+            getFunc = function()
+                return BS.Vars.DisableTimersInCombat
+            end,
+            setFunc = function(value)
+                BS.Vars.DisableTimersInCombat = value
+                BS.CheckPerformance()
+            end,
+            default = false
+        }
+    }
+
+    BS.options[#BS.options + 1] = {
+        type = "submenu",
+        name = GetString(_G.BARSTEWARD_PERFORMANCE),
+        controls = controls,
+        reference = "Performance"
+    }
+end
+
 -- 12 hour time formats
 local twelveFormats = {
     "hh:m:s",
@@ -427,7 +453,7 @@ local function getCV(index)
     return nil
 end
 
-local function GetWidgetSettings()
+local function getWidgetSettings()
     local widgets = BS.Vars.Controls
     local bars = BS.Vars.Bars
     local none = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_DAMAGETYPE0))
@@ -1166,9 +1192,10 @@ local function GetWidgetSettings()
 end
 
 function BS.RegisterSettings()
-    Initialise()
-    GetWidgetSettings()
-    GetBarSettings()
+    initialise()
+    getPerformanceSettings()
+    getWidgetSettings()
+    getBarSettings()
     BS.OptionsPanel = BS.LAM:RegisterAddonPanel("BarStewardOptionsPanel", panel)
     BS.LAM:RegisterOptionControls("BarStewardOptionsPanel", BS.options)
 end

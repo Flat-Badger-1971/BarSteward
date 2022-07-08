@@ -58,10 +58,7 @@ ZO_CreateStringId("BARSTEWARD_BOTH", "Both")
 ZO_CreateStringId("BARSTEWARD_DANGER_VALUE", "Danger value")
 ZO_CreateStringId("BARSTEWARD_DANGER_COLOUR", "Danger")
 ZO_CreateStringId("BARSTEWARD_DEBOUNCE", "Debounce time (minutes)")
-ZO_CreateStringId(
-    "BARSTEWARD_DEBOUNCE_DESC",
-    "Period of time to wait between consecutive announcements"
-)
+ZO_CreateStringId("BARSTEWARD_DEBOUNCE_DESC", "Period of time to wait between consecutive announcements")
 ZO_CreateStringId("BARSTEWARD_DECIMAL_PLACES", "Decimal places")
 ZO_CreateStringId("BARSTEWARD_DEFAULT_COLOUR", "Default")
 ZO_CreateStringId("BARSTEWARD_EMPTY", "Empty")
@@ -152,6 +149,12 @@ ZO_CreateStringId("BARSTEWARD_INCLUDE", "<<1>> has been removed from the exclusi
 ZO_CreateStringId("BARSTEWARD_INCLUDE_NOT_THERE", "<<1>> is not on the exclusion list.")
 ZO_CreateStringId("BARSTEWARD_LOCK_FRAMES", "Lock Bars")
 ZO_CreateStringId("BARSTEWARD_MOVEFRAME", "Movable Bars")
+ZO_CreateStringId("BARSTEWARD_PERFORMANCE", "Performance")
+ZO_CreateStringId("BARSTEWARD_PERFORMANCE_TIMERS", "Disable timers during combat")
+ZO_CreateStringId(
+    "BARSTEWARD_PERFORMANCE_TIMERS_TOOLTIP",
+    "Disable timer based widgets (except the time), during combat. This will reduce the number of potentially performance impacting updates."
+)
 ZO_CreateStringId("BARSTEWARD_RELOAD", "UI reload required")
 ZO_CreateStringId("BARSTEWARD_RELOAD_MSG", "The UI will now reload.")
 ZO_CreateStringId("BARSTEWARD_LIB_EVENT_HANDLER_TITLE", "Additional Library Required")

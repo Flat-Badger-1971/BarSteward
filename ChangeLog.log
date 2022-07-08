@@ -1,5 +1,6 @@
 [color=#ff9900][b]Version: 1.2.15 ---------------[/b][/color]
 Adjust bag space when new space if acquired
+Added option to disable timer based widgets during combat
 
 [color=#ff9900][b]Version: 1.2.14 ---------------[/b][/color]
 Added progress bar view for best weekly endeavour progress

@@ -171,7 +171,7 @@ end
 function BS.RegisterForEvent(event, func)
     local needsRegistration = registerForEvent(event, func)
 
-    if needsRegistration then
+    if (needsRegistration) then
         EVENT_MANAGER:RegisterForEvent(BS.Name, event, callEventFunctions)
     end
 end
@@ -181,7 +181,7 @@ local function unregisterForEvent(event, func)
         return
     end
 
-    if #eventFunctions[event] ~= 0 then
+    if (#eventFunctions[event] ~= 0) then
         local numOfFuncs = #eventFunctions[event]
         for i = 1, numOfFuncs, 1 do
             if eventFunctions[event][i] == func then
@@ -189,9 +189,11 @@ local function unregisterForEvent(event, func)
                 eventFunctions[event][numOfFuncs] = nil
 
                 numOfFuncs = numOfFuncs - 1
+
                 if numOfFuncs == 0 then
                     return true
                 end
+
                 return false
             end
         end
@@ -205,8 +207,146 @@ end
 function BS.UnregisterForEvent(event, func)
     local needsUnregistration = unregisterForEvent(event, func)
 
-    if needsUnregistration then
+    if (needsUnregistration) then
         EVENT_MANAGER:UnregisterForEvent(BS.Name, event)
+    end
+end
+
+--- end events
+
+-- timers
+-- simplifies enabling/disabling all timers at once
+local timerFunctions = {}
+
+local function callTimerFunctions(time)
+    if (#timerFunctions[time] == 0) then
+        return
+    end
+
+    for i = 1, #timerFunctions[time] do
+        timerFunctions[time][i]()
+    end
+end
+
+local function registerForUpdate(time, func)
+    if (time == nil or func == nil) then
+        return
+    end
+
+    if (not timerFunctions[time]) then
+        timerFunctions[time] = {}
+    end
+
+    if (#timerFunctions[time] ~= 0) then
+        local numOfFuncs = #timerFunctions[time]
+
+        for i = 1, numOfFuncs do
+            if (timerFunctions[time][i] == func) then
+                return false
+            end
+        end
+
+        timerFunctions[time][numOfFuncs + 1] = func
+
+        return false
+    else
+        timerFunctions[time][1] = func
+
+        return true
+    end
+end
+
+function BS.RegisterForUpdate(time, func)
+    local needsRegistration = registerForUpdate(time, func)
+
+    if (needsRegistration) then
+        EVENT_MANAGER:RegisterForUpdate(
+            BS.Name .. tostring(time),
+            time,
+            function()
+                callTimerFunctions(time)
+            end
+        )
+    end
+end
+
+local function unregisterForUpdate(time, func)
+    if (time == nil or func == nil) then
+        return
+    end
+
+    if (#timerFunctions[time] ~= 0) then
+        local numOfFuncs = #timerFunctions[time]
+        for i = 1, numOfFuncs, 1 do
+            if (timerFunctions[time][i] == func) then
+                timerFunctions[time][i] = timerFunctions[time][numOfFuncs]
+                timerFunctions[time][numOfFuncs] = nil
+
+                numOfFuncs = numOfFuncs - 1
+
+                if (numOfFuncs == 0) then
+                    return true
+                end
+
+                return false
+            end
+        end
+
+        return false
+    else
+        return false
+    end
+end
+
+function BS.UnregisterForUpdate(time, func)
+    local needsUnregistration = unregisterForUpdate(time, func)
+
+    if (needsUnregistration) then
+        EVENT_MANAGER:UnregisterForUpdate(BS.Name .. tostring(time), time)
+    end
+end
+
+function BS.DisableUpdates()
+    for time, funcs in pairs(timerFunctions) do
+        if (#funcs ~= 0) then
+            EVENT_MANAGER:UnregisterForUpdate(BS.Name .. tostring(time))
+        end
+    end
+end
+
+function BS.EnableUpdates()
+    for time, funcs in pairs(timerFunctions) do
+        if (#funcs ~= 0) then
+            EVENT_MANAGER:RegisterForUpdate(
+                BS.Name .. tostring(time),
+                time,
+                function()
+                    callTimerFunctions(time)
+                end
+            )
+        end
+    end
+end
+-- end timers
+
+function BS.CheckPerformance(inCombat)
+    if (BS.Vars.DisableTimersInCombat) then
+        if (inCombat == nil) then
+            inCombat = IsUnitInCombat("player")
+        end
+
+        if (inCombat and BS.disabledTimers == nil) then
+            BS.DisableUpdates()
+            BS.disabledTimers = true
+        elseif (BS.disabledTimers ~= nil) then
+            BS.EnableUpdates()
+            BS.disabledTimers = nil
+        end
+    else
+        if (BS.disabledTimers ~= nil) then
+            BS.EnableUpdates()
+            BS.disabledTimers = nil
+        end
     end
 end
 
@@ -341,7 +481,7 @@ function BS.Announce(header, message, widgetIconNumber, lifespan, sound)
     messageParams:MarkQueueImmediately(true)
 
     if (widgetIconNumber) then
-        messageParams:SetIconData(BS.widgets[widgetIconNumber].icon , "/esoui/art/achievements/achievements_iconbg.dds")
+        messageParams:SetIconData(BS.widgets[widgetIconNumber].icon, "/esoui/art/achievements/achievements_iconbg.dds")
     end
 
     CENTER_SCREEN_ANNOUNCE:AddMessageWithParams(messageParams)
@@ -359,7 +499,12 @@ function BS.CleanUpBarOrder(barNumber)
         end
     end
 
-    table.sort(barTable, function(a, b) return a.control.Order < b.control.Order end)
+    table.sort(
+        barTable,
+        function(a, b)
+            return a.control.Order < b.control.Order
+        end
+    )
 
     -- resequence the controls
     local index = 1

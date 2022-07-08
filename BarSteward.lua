@@ -171,6 +171,9 @@ local function Initialise()
     BS.RegisterForEvent(_G.EVENT_PLAYER_ACTIVATED, trackGold)
     BS.RegisterForEvent(_G.EVENT_MONEY_UPDATE, trackGold)
 
+    -- performance
+    BS.RegisterForEvent(_G.EVENT_PLAYER_COMBAT_STATE, function(_, inCombat) BS.CheckPerformance(inCombat) end)
+
     -- utiltity
     if (_G.SLASH_COMMANDS["/rl"] == nil) then
         _G.SLASH_COMMANDS["/rl"] = function()
