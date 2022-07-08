@@ -188,32 +188,48 @@ local function getLeadColour(lead)
     return "|c" .. difficultyColours[lead.quality]
 end
 
+local leadActive = true
+
+EVENT_MANAGER:RegisterForEvent(
+    BS.Name,
+    _G.EVENT_ANTIQUITY_LEAD_ACQUIRED,
+    function()
+        leadActive = true
+    end
+)
+
 BS.widgets[BS.W_LEADS] = {
     -- v1.1.0
     name = "leads",
     update = function(widget)
-        local antiquityId = GetNextAntiquityId()
         local minTime = 99999999
         local leads = {}
 
-        while antiquityId do
-            if (DoesAntiquityHaveLead(antiquityId)) then
-                local lead = {
-                    name = ZO_CachedStrFormat("<<C:1>>", GetAntiquityName(antiquityId)),
-                    remaining = GetAntiquityLeadTimeRemainingSeconds(antiquityId),
-                    quality = GetAntiquityQuality(antiquityId),
-                    zone = ZO_CachedStrFormat("<<C:1>>", GetZoneNameById(GetAntiquityZoneId(antiquityId))),
-                    id = antiquityId
-                }
+        if (leadActive) then
+            local antiquityId = GetNextAntiquityId()
 
-                table.insert(leads, lead)
+            while antiquityId do
+                if (DoesAntiquityHaveLead(antiquityId)) then
+                    local lead = {
+                        name = ZO_CachedStrFormat("<<C:1>>", GetAntiquityName(antiquityId)),
+                        remaining = GetAntiquityLeadTimeRemainingSeconds(antiquityId),
+                        quality = GetAntiquityQuality(antiquityId),
+                        zone = ZO_CachedStrFormat("<<C:1>>", GetZoneNameById(GetAntiquityZoneId(antiquityId))),
+                        id = antiquityId
+                    }
 
-                if (lead.remaining < minTime) then
-                    minTime = lead.remaining
+                    table.insert(leads, lead)
+
+                    if (lead.remaining < minTime) then
+                        minTime = lead.remaining
+                    end
                 end
-            end
 
-            antiquityId = GetNextAntiquityId(antiquityId)
+                antiquityId = GetNextAntiquityId(antiquityId)
+            end
+        else
+            minTime = 0
+            leadActive = false
         end
 
         if (#leads > 0) then

@@ -1,33 +1,73 @@
 local BS = _G.BarSteward
+local researchTimersActive = {
+    [_G.CRAFTING_TYPE_BLACKSMITHING] = true,
+    [_G.CRAFTING_TYPE_WOODWORKING] = true,
+    [_G.CRAFTING_TYPE_CLOTHIER] = true,
+    [_G.CRAFTING_TYPE_JEWELRYCRAFTING] = true
+}
 
 -- based on code from AI Research Timer
 local function getResearchTimer(craftType)
     local maxTimer = 2000000
     local maxResearch = GetMaxSimultaneousSmithingResearch(craftType)
-    local maxLines = GetNumSmithingResearchLines(craftType)
-    local maxR = maxResearch
-    local inuse = 0
 
-    for i = 1, maxLines do
-        local _, _, numTraits = GetSmithingResearchLineInfo(craftType, i)
+    if (researchTimersActive[craftType]) then
+        local maxLines = GetNumSmithingResearchLines(craftType)
+        local maxR = maxResearch
+        local inuse = 0
 
-        for j = 1, numTraits do
-            local duration, timeRemaining = GetSmithingResearchLineTraitTimes(craftType, i, j)
+        for i = 1, maxLines do
+            local _, _, numTraits = GetSmithingResearchLineInfo(craftType, i)
 
-            if (duration ~= nil and timeRemaining ~= nil) then
-                maxResearch = maxResearch - 1
-                inuse = inuse + 1
-                maxTimer = math.min(maxTimer, timeRemaining)
+            for j = 1, numTraits do
+                local duration, timeRemaining = GetSmithingResearchLineTraitTimes(craftType, i, j)
+
+                if (duration ~= nil and timeRemaining ~= nil) then
+                    maxResearch = maxResearch - 1
+                    inuse = inuse + 1
+                    maxTimer = math.min(maxTimer, timeRemaining)
+                end
             end
         end
-    end
 
-    if (maxResearch > 0) then
-        maxTimer = 0
-    end
+        if (maxResearch > 0) then
+            maxTimer = 0
+        end
 
-    return maxTimer, maxR, inuse
+        if (maxTimer == 0) then
+            researchTimersActive[craftType] = false
+        end
+
+        return maxTimer, maxR, inuse
+    else
+        return 0, maxResearch, 0
+    end
 end
+
+-- only run the research queries when necessary
+EVENT_MANAGER:RegisterForEvent(
+    BS.Name,
+    _G.EVENT_SMITHING_TRAIT_RESEARCH_STARTED,
+    function(_, craftType)
+        researchTimersActive[craftType] = true
+    end
+)
+
+EVENT_MANAGER:RegisterForEvent(
+    BS.Name,
+    _G.EVENT_SMITHING_TRAIT_RESEARCH_CANCELED,
+    function(_, craftType)
+        researchTimersActive[craftType] = false
+    end
+)
+
+EVENT_MANAGER:RegisterForEvent(
+    BS.Name,
+    _G.EVENT_SMITHING_TRAIT_RESEARCH_COMPLETED,
+    function(_, craftType)
+        researchTimersActive[craftType] = false
+    end
+)
 
 BS.widgets[BS.W_BLACKSMITHING] = {
     name = "blacksmithing",
