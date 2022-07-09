@@ -46,13 +46,13 @@ BS.widgets[BS.W_CROWN_GEMS] = {
     event = _G.EVENT_CROWN_GEM_UPDATE,
     tooltip = GetString(_G.BARSTEWARD_CROWN_GEMS),
     icon = "/esoui/art/currency/currency_crown_gems.dds",
-    onClick = function()
-        if (not IsInGamepadPreferredMode()) then
-            SCENE_MANAGER:Show("market")
-        else
-            SCENE_MANAGER:Show("gamepad_market")
-        end
-    end
+    -- onClick = function()
+    --     if (not IsInGamepadPreferredMode()) then
+    --         SCENE_MANAGER:Show("market")
+    --     else
+    --         SCENE_MANAGER:Show("gamepad_market")
+    --     end
+    -- end
 }
 
 BS.widgets[BS.W_CROWNS] = {
@@ -72,11 +72,11 @@ BS.widgets[BS.W_CROWNS] = {
     event = _G.EVENT_CROWN_UPDATE,
     tooltip = GetString(_G.BARSTEWARD_CROWNS),
     icon = "/esoui/art/currency/currency_crowns_32.dds",
-    onClick = function()
-        if (not IsInGamepadPreferredMode()) then
-            SCENE_MANAGER:Show("market")
-        end
-    end
+    -- onClick = function()
+    --     if (not IsInGamepadPreferredMode()) then
+    --         SCENE_MANAGER:Show("market")
+    --     end
+    -- end
 }
 
 BS.widgets[BS.W_EVENT_TICKETS] = {
