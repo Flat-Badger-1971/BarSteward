@@ -264,6 +264,17 @@ BS.Defaults = {
             Autohide = true
         },
         [BS.W_ENDEAVOUR_PROGRESS] = {Bar = 0, Order = 45, Progress = true},
-        [BS.W_TROPHY_VAULT_KEYS] = {Bar = 0, Order = 46, ColourValues = "c", Autohide = true}
+        [BS.W_TROPHY_VAULT_KEYS] = {Bar = 0, Order = 46, ColourValues = "c", Autohide = true},
+        [BS.W_LOCKPICKS] = {Bar = 0, Order = 47, ColourValues = "okc,wv,wc,dv,dc", WarningValue = 50, DangerValue = 10},
+        [BS.W_LAUNDER_TRANSACTIONS] = {
+            Bar = 0,
+            Order = 31,
+            SoundWhenOver = false,
+            SoundWhenOverSound = "Dual Forfeit",
+            Units = "%",
+            ColourValues = "okc,wv,wc,dv,dc",
+            WarningValue = 85,
+            DangerValue = 95
+        },
     }
 }

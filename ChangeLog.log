@@ -1,7 +1,13 @@
+[color=#ff9900][b]Version: 1.2.16 ---------------[/b][/color]
+Tooltips now resize to fit content (excludes gamepad mode)
+
 [color=#ff9900][b]Version: 1.2.15 ---------------[/b][/color]
 Adjust bag space when new space if acquired
 Added option to disable timer based widgets during combat
 Performance optimisations
+Added lockpicks
+Added icons to widget settings
+Split launder from fencing and corrected the code
 
 [color=#ff9900][b]Version: 1.2.14 ---------------[/b][/color]
 Added progress bar view for best weekly endeavour progress

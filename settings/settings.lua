@@ -5,9 +5,9 @@ BS.LAM = _G.LibAddonMenu2
 local panel = {
     type = "panel",
     name = "Bar Steward",
-    displayName = "Bar Steward",
+    displayName = "|cff9900Bar Steward|r",
     author = "Flat Badger",
-    version = "1.2.15",
+    version = "1.2.16",
     registerForDefaults = true,
     registerForRefresh = true,
     slashCommand = "/bs"
@@ -1175,9 +1175,17 @@ local function getWidgetSettings()
             end
         end
 
+        local textureCoords = nil
+
+        if (k == BS.W_ALLIANCE) then
+            textureCoords = {0, 1, 0, 0.6}
+        end
+
         controls[idx] = {
             type = "submenu",
             name = BS.widgets[k].tooltip:gsub(":", ""),
+            icon = BS.widgets[k].icon,
+            iconTextureCoords = textureCoords,
             controls = widgetControls,
             reference = "BarStewardWidgets" .. k
         }

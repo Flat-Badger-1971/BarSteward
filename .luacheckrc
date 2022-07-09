@@ -30,6 +30,12 @@ read_globals = {
             UnregisterForUpdate = {read_only = true}
         }
     },
+	["FENCE_MANAGER"] = {
+		fields = {
+			GetNumTotalTransactions = {read_only = true},
+			GetNumTransactionsUsed = {read_only = true}
+		}
+	},
 	["FISHING_MANAGER"] = {
 		fields = {
 			StopInteraction = {read_only = true}
@@ -205,18 +211,18 @@ read_globals = {
 	"GetFriendInfo",
     "GetGameCameraInteractableActionInfo",
     "GetGameCameraPickpocketingBonusInfo",
-    "GetUIGlobalScale",
+	"GetUIGlobalScale",
     "GetInteractionType",
+	"GetInterfaceColor",
     "GetItemCondition",
 	"GetItemDisplayQuality",
 	"GetItemId",
-    "GetItemInfo",
+	"GetItemInfo",
 	"GetItemLink",
     "GetItemLinkName",
     "GetItemName",
 	"GetItemQualityColor",
     "GetItemType",
-    "GetInterfaceColor",
     "GetLatency",
     "GetMapContentType",
     "GetMaximumRapport",
@@ -230,6 +236,7 @@ read_globals = {
     "GetNumChampionXPInChampionPoint",
     "GetNumExperiencePointsInCompanionLevel",
 	"GetNumFriends",
+	"GetNumLockpicksLeft",
 	"GetNumSkyShards",
 	"GetNumSkyshardsInZone",
     "GetNumSmithingResearchLines",
@@ -249,14 +256,14 @@ read_globals = {
     "GetSmithingResearchLineTraitInfo",
     "GetSmithingResearchLineTraitTimes",
 	"GetSoulGemInfo",
-    "GetTimedActivityDescription",
+	"GetTimedActivityDescription",
     "GetTimedActivityMaxProgress",
     "GetTimedActivityName",
     "GetTimedActivityProgress",
 	"GetTimedActivityRewardInfo",
     "GetTimedActivityType",
     "GetTimedActivityTypeLimit",
-    "GetTimeStamp",
+	"GetTimeStamp",
     "GetTimeString",
     "GetTimeUntilCanBeTrained",
     "GetUnitAlliance",
@@ -281,7 +288,7 @@ read_globals = {
     "IsItemRepairKit",
     "IsItemStolen",
     "IsUnitGrouped",
-    "IsUnitInCombat",
+	"IsUnitInCombat",
     "IsUnitPvPFlagged",
 	"PlayEmoteByIndex",
     "PlaySound",
@@ -333,7 +340,7 @@ read_globals = {
     "ZO_SmallGroupAnchorFrame",
 	"ZO_SocialList_GetPlatformTextureFunctions",
 	"ZO_SocialList_GetRowColors",
-    "ZO_StatusBar_InitializeDefaultColors",
+	"ZO_StatusBar_InitializeDefaultColors",
     "ZO_TimerBar",
     "ZO_Tooltips_HideTextTooltip",
     "ZO_Tooltips_ShowTextTooltip",

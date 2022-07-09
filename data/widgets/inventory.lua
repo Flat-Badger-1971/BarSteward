@@ -611,3 +611,27 @@ BS.widgets[BS.W_TROPHY_VAULT_KEYS] = {
     tooltip = GetString(_G.BARSTEWARD_TROPHY_VAULT_KEYS),
     hideWhenEqual = 0
 }
+
+BS.widgets[BS.W_LOCKPICKS] = {
+    -- v1.2.15
+    name = "lockpicks",
+    update = function(widget)
+        local available = GetNumLockpicksLeft()
+
+        local colour = BS.Vars.Controls[BS.W_BANK_SPACE].OkColour or BS.Vars.DefaultOkColour
+
+        if (available <= BS.Vars.Controls[BS.W_LOCKPICKS].WarningValue and available > BS.Vars.Controls[BS.W_LOCKPICKS].DangerValue) then
+            colour = BS.Vars.Controls[BS.W_LOCKPICKS].WarningColour or BS.Vars.DefaultWarningColour
+        elseif (available <= BS.Vars.Controls[BS.W_LOCKPICKS].DangerValue) then
+            colour = BS.Vars.Controls[BS.W_LOCKPICKS].DangerColour or BS.Vars.DefaultDangerColour
+        end
+
+        widget:SetColour(unpack(colour))
+        widget:SetValue(available)
+
+        return available
+    end,
+    event = {_G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE, _G.EVENT_LOCKPICK_BROKE},
+    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_GAMEPAD_LOCKPICK_PICKS_REMAINING)),
+    icon = "/esoui/art/icons/lockpick.dds"
+}

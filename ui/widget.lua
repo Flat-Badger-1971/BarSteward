@@ -86,6 +86,12 @@ function baseWidget:Initialise(metadata, parent, tooltipAnchor, valueSide)
             "OnMouseEnter",
             function()
                 local tooltip = getTooltip()
+
+                if (not IsInGamepadPreferredMode()) then
+                    BS.InfoTTDims = {_G.InformationTooltip:GetDimensionConstraints()}
+                    _G.InformationTooltip:SetDimensionConstraints(BS.InfoTTDims[1], BS.InfoTTDims[2], 0, BS.InfoTTDims[4])
+                end
+
                 ZO_Tooltips_ShowTextTooltip(anchorControl, tooltipAnchor or BOTTOM, tooltip)
             end
         )
@@ -94,6 +100,16 @@ function baseWidget:Initialise(metadata, parent, tooltipAnchor, valueSide)
             "OnMouseExit",
             function()
                 ZO_Tooltips_HideTextTooltip()
+
+                if (BS.InfoTTDims) then
+                    -- reset the tooltip to its default values so as no to interfere with other users
+                    _G.InformationTooltip:SetDimensionConstraints(
+                        BS.InfoTTDims[1],
+                        BS.InfoTTDims[2],
+                        BS.InfoTTDims[3],
+                        BS.InfoTTDims[4]
+                    )
+                end
             end
         )
     end
