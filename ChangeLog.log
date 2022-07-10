@@ -1,5 +1,7 @@
 [color=#ff9900][b]Version: 1.2.16 ---------------[/b][/color]
 Tooltips now resize to fit content (excludes gamepad mode)
+Stolen item tooltips now include item breakdown and sell price
+Added movement speed (estimated)
 
 [color=#ff9900][b]Version: 1.2.15 ---------------[/b][/color]
 Adjust bag space when new space if acquired

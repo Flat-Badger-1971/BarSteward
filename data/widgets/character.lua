@@ -245,3 +245,70 @@ BS.widgets[BS.W_SKILL_POINTS] = {
         end
     end
 }
+
+-- based on Ye Olde Infos
+-- estimate of units per meter based on some of the tiles in Alinor
+local UNITS_PER_METER = 200
+
+local function GetCurrentPos()
+    local _, posX, _, posY = GetUnitRawWorldPosition("player")
+    local timestamp = GetGameTimeMilliseconds()
+    return {posX, posY, timestamp}
+end
+
+local function getSpeed(widget)
+    BS.currentPosition = GetCurrentPos()
+
+    local x1, y1, t1 = unpack(BS.currentPosition)
+    local x2, y2, t2 = unpack(BS.lastPosition or BS.currentPosition)
+    local distance = math.sqrt(math.pow(x1 - x2, 2) + math.pow(y1 - y2, 2))
+    local timeDelta = (t1 - t2) / 1000
+    local distanceInMeters = distance / UNITS_PER_METER
+    local speedInMS = distanceInMeters / timeDelta
+    local units = BS.Vars.Controls[BS.W_SPEED].Units
+    local speed
+
+    if (units == "mph") then
+        speed = speedInMS * 2.23694
+    else
+        speed = speedInMS * 3.6
+    end
+
+    speed = math.floor(speed)
+
+    local unitText = GetString(_G["BARSTEWARD_" .. string.upper(units)])
+    widget:SetValue(speed .. " " .. unitText)
+
+    BS.lastPosition = BS.currentPosition
+
+    return speed
+end
+
+local unitChoices = {GetString(_G.BARSTEWARD_MPH), GetString(_G.BARSTEWARD_KPH)}
+
+BS.widgets[BS.W_SPEED] = {
+    -- v1.2.16
+    name = "speed",
+    update = function(widget)
+        return getSpeed(widget)
+    end,
+    timer = 300,
+    icon = "/esoui/art/treeicons/gamepad/gp_emoteicon_physical.dds",
+    tooltip = GetString(_G.BARSTEWARD_SPEED),
+    customSettings = {
+        [1] = {
+            type = "dropdown",
+            name = GetString(_G.BARSTEWARD_SPEED_UNITS),
+            choices = unitChoices,
+            getFunc = function()
+                local units = BS.Vars.Controls[BS.W_SPEED].Units
+                return GetString(_G["BARSTEWARD_" .. string.upper(units)])
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_SPEED].Units = value
+                BS.widgets[BS.W_SPEED].update(_G[BS.Name .. "_Widget_" .. BS.widgets[BS.W_SPEED].name].ref)
+            end,
+            default = BS.Defaults.Controls[BS.W_SPEED].Units
+        }
+    }
+}

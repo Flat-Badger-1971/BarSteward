@@ -268,7 +268,7 @@ BS.Defaults = {
         [BS.W_LOCKPICKS] = {Bar = 0, Order = 47, ColourValues = "okc,wv,wc,dv,dc", WarningValue = 50, DangerValue = 10},
         [BS.W_LAUNDER_TRANSACTIONS] = {
             Bar = 0,
-            Order = 31,
+            Order = 48,
             SoundWhenOver = false,
             SoundWhenOverSound = "Dual Forfeit",
             Units = "%",
@@ -276,5 +276,6 @@ BS.Defaults = {
             WarningValue = 85,
             DangerValue = 95
         },
+        [BS.W_SPEED] = {Bar = 0, Order = 49, ColourValues = "c", Units ="mph"}
     }
 }

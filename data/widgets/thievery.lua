@@ -1,4 +1,5 @@
 local BS = _G.BarSteward
+local goldIcon = zo_iconFormat("/esoui/art/currency/currency_gold.dds", 16, 16) .. " "
 
 BS.widgets[BS.W_STOLEN_ITEMS] = {
     -- v1.0.1
@@ -6,17 +7,29 @@ BS.widgets[BS.W_STOLEN_ITEMS] = {
     update = function(widget)
         local count = 0
         local bagCounts = {carrying = 0, banked = 0}
+        local stolen = {}
 
         for _, bag in ipairs({_G.BAG_WORN, _G.BAG_BACKPACK, _G.BAG_BANK, _G.BAG_SUBSCRIBER_BANK}) do
             for slot = 0, GetBagSize(bag) do
                 if (IsItemStolen(bag, slot)) then
-                    local itemCount = GetSlotStackSize(bag, slot)
+                    local icon, itemCount = GetItemInfo(bag, slot)
+                    --local itemCount = GetSlotStackSize(bag, slot)
                     count = count + itemCount
                     if (bag == _G.BAG_BANK or bag == _G.BAG_SUBSCRIBER_BANK) then
                         bagCounts.banked = bagCounts.banked + itemCount
                     else
                         bagCounts.carrying = bagCounts.carrying + itemCount
                     end
+
+                    table.insert(
+                        stolen,
+                        {
+                            name = GetItemName(bag, slot),
+                            count = itemCount,
+                            icon = zo_iconFormat(icon, 16, 16),
+                            sellPrice = GetItemSellValueWithBonuses(bag, slot)
+                        }
+                    )
                 end
             end
         end
@@ -26,6 +39,21 @@ BS.widgets[BS.W_STOLEN_ITEMS] = {
 
         local ttt = GetString(_G.BARSTEWARD_STOLEN) .. BS.LF .. "|cf9f9f9"
         ttt = ttt .. BS.BAGICON .. " " .. bagCounts.carrying .. " " .. BS.BANKICON .. " " .. bagCounts.banked .. "|r"
+
+        if (#stolen > 0) then
+            ttt = ttt .. BS.LF
+
+            for _, item in pairs(stolen) do
+                ttt = ttt .. BS.LF .. item.icon .. " "
+                ttt = ttt .. "|cf9f9f9" .. item.name
+
+                if (item.count > 1) then
+                    ttt = ttt .. " (" .. item.count .. ")"
+                end
+
+                ttt = ttt .. "   |cffff00" .. (item.sellPrice * item.count) .. "|r " .. goldIcon
+            end
+        end
 
         widget.tooltip = ttt
 

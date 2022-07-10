@@ -39,7 +39,7 @@ read_globals = {
 	["FISHING_MANAGER"] = {
 		fields = {
 			StopInteraction = {read_only = true}
-		}
+		} 
 	},
 	["FRIENDS_LIST_MANAGER"] = {
 		fields = {
@@ -211,6 +211,7 @@ read_globals = {
 	"GetFriendInfo",
     "GetGameCameraInteractableActionInfo",
     "GetGameCameraPickpocketingBonusInfo",
+	"GetGameTimeMilliseconds",
 	"GetUIGlobalScale",
     "GetInteractionType",
 	"GetInterfaceColor",
@@ -222,6 +223,7 @@ read_globals = {
     "GetItemLinkName",
     "GetItemName",
 	"GetItemQualityColor",
+	"GetItemSellValueWithBonuses",
     "GetItemType",
     "GetLatency",
     "GetMapContentType",
@@ -274,6 +276,7 @@ read_globals = {
     "GetUnitName",
     "GetUnitPower",
     "GetUnitRace",
+	"GetUnitRawWorldPosition",
     "GetUnitZone",
 	"GetUnitZoneIndex",
 	"GetZoneId",
@@ -352,6 +355,7 @@ read_globals = {
     "zo_strformat",
 	"zo_strlen",
     "zo_strsplit",
-    -- luacheck misses this one for some reason
-    "math.log10"
+    -- luacheck misses these for some reason
+    "math.log10",
+	"math.pow"
 }
