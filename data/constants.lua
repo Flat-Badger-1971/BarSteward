@@ -79,3 +79,14 @@ BS.TROPHY_VAULT_KEYS = {
 
 BS.BAGICON = zo_iconFormat("/esoui/art/tooltips/icon_bag.dds")
 BS.BANKICON = zo_iconFormat("/esoui/art/tooltips/icon_bank.dds")
+
+BS.FONTS = {
+    ["Default"] = "EsoUi/Common/Fonts/Univers57.otf",
+    ["Univers55"] = "EsoUi/Common/Fonts/Univers55.otf",
+    ["ESO Bold"] = "EsoUi/Common/Fonts/Univers67.otf",
+    ["Antique"] = "EsoUI/Common/Fonts/ProseAntiquePSMT.otf",
+    ["Handwritten"] = "EsoUI/Common/Fonts/Handwritten_Bold.otf",
+    ["Trajan"] = "EsoUI/Common/Fonts/TrajanPro-Regular.otf",
+    ["Futura"] = "EsoUI/Common/Fonts/FuturaStd-CondensedLight.otf",
+    ["Futura Bold"] = "EsoUI/Common/Fonts/FuturaStd-Condensed.otf",
+}

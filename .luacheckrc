@@ -39,7 +39,7 @@ read_globals = {
 	["FISHING_MANAGER"] = {
 		fields = {
 			StopInteraction = {read_only = true}
-		} 
+		}
 	},
 	["FRIENDS_LIST_MANAGER"] = {
 		fields = {

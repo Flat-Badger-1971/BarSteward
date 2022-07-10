@@ -13,6 +13,7 @@ BS.Defaults = {
     DefaultDangerColour = {0.8, 0, 0, 1},
     DefaultWarningColour = {1, 1, 0, 1},
     DefaultOkColour = {0, 1, 0, 1},
+    Font = "Default",
     FriendAnnounce = {},
     Gold = {},
     Movable = false,
@@ -276,6 +277,6 @@ BS.Defaults = {
             WarningValue = 85,
             DangerValue = 95
         },
-        [BS.W_SPEED] = {Bar = 0, Order = 49, ColourValues = "c", Units ="mph"}
+        [BS.W_SPEED] = {Bar = 0, Order = 49, ColourValues = "c", Units = "mph"}
     }
 }

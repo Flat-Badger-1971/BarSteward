@@ -246,7 +246,7 @@ BS.widgets[BS.W_SKILL_POINTS] = {
     end
 }
 
--- based on Ye Olde Infos
+-- based on Ye Olde Speed
 -- estimate of units per meter based on some of the tiles in Alinor
 local UNITS_PER_METER = 200
 
@@ -306,7 +306,10 @@ BS.widgets[BS.W_SPEED] = {
             end,
             setFunc = function(value)
                 BS.Vars.Controls[BS.W_SPEED].Units = value
-                BS.widgets[BS.W_SPEED].update(_G[BS.Name .. "_Widget_" .. BS.widgets[BS.W_SPEED].name].ref)
+
+                if (BS.Vars.Controls[BS.W_SPEED].Bar ~= 0) then
+                    BS.widgets[BS.W_SPEED].update(_G[BS.Name .. "_Widget_" .. BS.widgets[BS.W_SPEED].name].ref)
+                end
             end,
             default = BS.Defaults.Controls[BS.W_SPEED].Units
         }

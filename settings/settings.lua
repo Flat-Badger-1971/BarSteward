@@ -28,6 +28,15 @@ do
     end
 end
 
+-- populate the fonts lookup tables
+local fontNames = {}
+
+do
+    for font, _ in pairs(BS.FONTS) do
+        table.insert(fontNames, font)
+    end
+end
+
 local function initialise()
     BS.options = {}
     BS.options[1] = BS.Vars:GetLibAddonMenuAccountCheckbox()
@@ -58,11 +67,37 @@ local function initialise()
         width = "full",
         default = BS.Defaults.Movable
     }
+
     BS.options[3] = {
+        type = "dropdown",
+        name = GetString(_G.BARSTEWARD_FONT),
+        choices = fontNames,
+        getFunc = function()
+            return BS.Vars.Font
+        end,
+        setFunc = function(value)
+            BS.Vars.Font = value
+
+            _G.BarSteward_SampleText.desc:SetFont(BS.GetFont(value))
+        end,
+        requiresReload = true
+    }
+
+    BS.options[4] = {
+        type = "description",
+        text = function()
+            _G.BarSteward_SampleText.desc:SetFont(BS.GetFont(BS.Vars.Font))
+            return "|c009933" .. GetString(_G.BARSTEWARD_SAMPLE) .. "|r"
+        end,
+        width = "full",
+        reference = "BarSteward_SampleText"
+    }
+
+    BS.options[5] = {
         type = "divider",
         alpha = 0
     }
-    BS.options[4] = {
+    BS.options[6] = {
         type = "button",
         name = GetString(_G.BARSTEWARD_ALIGN_BARS),
         func = function()
@@ -73,7 +108,7 @@ local function initialise()
         end,
         width = "half"
     }
-    BS.options[5] = {
+    BS.options[7] = {
         type = "button",
         name = GetString(_G.BARSTEWARD_REORDER_WIDGETS),
         func = function()
@@ -84,7 +119,7 @@ local function initialise()
         end,
         width = "half"
     }
-    BS.options[6] = {
+    BS.options[8] = {
         type = "divider",
         alpha = 0
     }

@@ -513,3 +513,12 @@ function BS.CleanUpBarOrder(barNumber)
         index = index + 1
     end
 end
+
+
+function BS.GetFont(fontName)
+    local font = BS.FONTS[fontName]
+    local size = 18
+    local hasShadow = "|soft-shadow-thin"
+
+    return font .. "|" .. size .. hasShadow
+end

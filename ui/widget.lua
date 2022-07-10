@@ -45,6 +45,7 @@ function baseWidget:Initialise(metadata, parent, tooltipAnchor, valueSide)
         self.value.progress:SetColor(
             unpack(BS.Vars.Controls[BS.W_ENDEAVOUR_PROGRESS].ProgressColour or BS.Vars.DefaultWarningColour)
         )
+        self.value.progress:SetFont(BS.GetFont(BS.Vars.Font))
 
         if (metadata.gradient) then
             local startg, endg = metadata.gradient()
@@ -55,7 +56,7 @@ function baseWidget:Initialise(metadata, parent, tooltipAnchor, valueSide)
         end
     else
         self.value = WINDOW_MANAGER:CreateControl(name .. "_value", self.control, CT_LABEL)
-        self.value:SetFont("ZoFontGame")
+        self.value:SetFont(BS.GetFont(BS.Vars.Font))
         self.value:SetColor(unpack(BS.Vars.DefaultColour))
         self.value:SetAnchor(
             valueSide == LEFT and RIGHT or LEFT,
@@ -165,6 +166,10 @@ function baseWidget:SetValue(value)
     textWidth = textWidth / (GetUIGlobalScale() * scale)
 
     self.value:SetWidth(textWidth)
+end
+
+function baseWidget:SetFont(font)
+    self.value:SetFont(font)
 end
 
 function baseWidget:SetIcon(value)
