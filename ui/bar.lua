@@ -100,6 +100,9 @@ function baseBar:Initialise(barSettings)
     self.bar.fragment = ZO_HUDFadeSceneFragment:New(self.bar)
     SCENE_MANAGER:GetScene("hud"):AddFragment(self.bar.fragment)
     SCENE_MANAGER:GetScene("hudui"):AddFragment(self.bar.fragment)
+
+    BS.AddToScenes("Crafting", barSettings.index, self.bar)
+    BS.AddToScenes("Banking", barSettings.index, self.bar)
 end
 
 -- hide the widget, also shrink it to shrink the bar whilst retaining the anchors for the other widgets

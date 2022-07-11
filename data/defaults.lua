@@ -14,6 +14,7 @@ BS.Defaults = {
     DefaultWarningColour = {1, 1, 0, 1},
     DefaultOkColour = {0, 1, 0, 1},
     Font = "Default",
+    FontSize = 18,
     FriendAnnounce = {},
     Gold = {},
     Movable = false,

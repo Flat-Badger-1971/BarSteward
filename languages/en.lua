@@ -41,6 +41,8 @@ ZO_CreateStringId("BARSTEWARD_REMOVE_BAR", "Remove Bar")
 ZO_CreateStringId("BARSTEWARD_REMOVE_WARNING", "This will permanently delete the selected bar!")
 ZO_CreateStringId("BARSTEWARD_RIGHT", "Right")
 ZO_CreateStringId("BARSTEWARD_SHOW_BACKDROP", "Show Backdrop")
+ZO_CreateStringId("BARSTEWARD_SHOW_WHILST_BANKING", "Show Whilst Banking")
+ZO_CreateStringId("BARSTEWARD_SHOW_WHILST_CRAFTING", "Show Whilst Crafting")
 ZO_CreateStringId("BARSTEWARD_TOOLTIP_ANCHOR", "Tooltip Anchor")
 ZO_CreateStringId("BARSTEWARD_TOP", "Top")
 ZO_CreateStringId("BARSTEWARD_VALUE_SIDE", "Value Side")
@@ -150,6 +152,7 @@ ZO_CreateStringId("BARSTEWARD_WRITS_MAPS", "<<1[No Treasure Maps/1 Treasure Map/
 ZO_CreateStringId("BARSTEWARD_WRIT_VOUCHERS", "Writ Vouchers")
 -- Other
 ZO_CreateStringId("BARSTEWARD_FONT", "Font")
+ZO_CreateStringId("BARSTEWARD_FONT_SIZE", "Font Size")
 ZO_CreateStringId("BARSTEWARD_LOCK_FRAMES", "Lock Bars")
 ZO_CreateStringId("BARSTEWARD_MOVEFRAME", "Movable Bars")
 ZO_CreateStringId("BARSTEWARD_PERFORMANCE", "Performance")
@@ -160,11 +163,6 @@ ZO_CreateStringId(
 )
 ZO_CreateStringId("BARSTEWARD_RELOAD", "UI reload required")
 ZO_CreateStringId("BARSTEWARD_RELOAD_MSG", "The UI will now reload.")
-ZO_CreateStringId("BARSTEWARD_LIB_EVENT_HANDLER_TITLE", "Additional Library Required")
-ZO_CreateStringId(
-    "BARSTEWARD_LIB_EVENT_HANDLER",
-    "Bar Steward now requires LibEventHandler to function. Please install it and reload your UI."
-)
 -- Warnings/alerts
 ZO_CreateStringId("BARSTEWARD_ANNOUNCEMENT", "Show Warning Announcement")
 ZO_CreateStringId("BARSTEWARD_ANNOUNCEMENTS", "Announcements")

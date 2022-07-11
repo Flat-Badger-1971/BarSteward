@@ -88,5 +88,18 @@ BS.FONTS = {
     ["Handwritten"] = "EsoUI/Common/Fonts/Handwritten_Bold.otf",
     ["Trajan"] = "EsoUI/Common/Fonts/TrajanPro-Regular.otf",
     ["Futura"] = "EsoUI/Common/Fonts/FuturaStd-CondensedLight.otf",
-    ["Futura Bold"] = "EsoUI/Common/Fonts/FuturaStd-Condensed.otf",
+    ["Futura Bold"] = "EsoUI/Common/Fonts/FuturaStd-Condensed.otf"
+}
+
+BS.CRAFTING_SCENES = {
+    "alchemy",
+    "enchanting",
+    "provisioner",
+    "smithing"
+}
+
+BS.BANKING_SCENES = {
+    "bank",
+    "guildBank",
+    "houseBank"
 }

@@ -80,10 +80,28 @@ local function initialise()
 
             _G.BarSteward_SampleText.desc:SetFont(BS.GetFont(value))
         end,
-        requiresReload = true
+        requiresReload = true,
+        default = BS.Defaults.Font
     }
 
     BS.options[4] = {
+        type = "slider",
+        name = GetString(_G.BARSTEWARD_FONT_SIZE),
+        min = 8,
+        max = 32,
+        getFunc = function()
+            return BS.Vars.FontSize
+        end,
+        setFunc = function(value)
+            BS.Vars.FontSize = value
+
+            _G.BarSteward_SampleText.desc:SetFont(BS.GetFont(value))
+        end,
+        requiresReload = true,
+        default = BS.Defaults.FontSize
+    }
+
+    BS.options[5] = {
         type = "description",
         text = function()
             _G.BarSteward_SampleText.desc:SetFont(BS.GetFont(BS.Vars.Font))
@@ -93,11 +111,12 @@ local function initialise()
         reference = "BarSteward_SampleText"
     }
 
-    BS.options[5] = {
+    BS.options[6] = {
         type = "divider",
         alpha = 0
     }
-    BS.options[6] = {
+
+    BS.options[7] = {
         type = "button",
         name = GetString(_G.BARSTEWARD_ALIGN_BARS),
         func = function()
@@ -108,7 +127,8 @@ local function initialise()
         end,
         width = "half"
     }
-    BS.options[7] = {
+
+    BS.options[8] = {
         type = "button",
         name = GetString(_G.BARSTEWARD_REORDER_WIDGETS),
         func = function()
@@ -119,7 +139,8 @@ local function initialise()
         end,
         width = "half"
     }
-    BS.options[8] = {
+
+    BS.options[9] = {
         type = "divider",
         alpha = 0
     }
@@ -312,10 +333,50 @@ local function getBarSettings()
                 default = BS.Defaults.Bars[1].Scale
             },
             [8] = {
+                type = "checkbox",
+                name = GetString(_G.BARSTEWARD_SHOW_WHILST_CRAFTING),
+                getFunc = function()
+                    return BS.Vars.Bars[idx].ShowWhilstCrafting or false
+                end,
+                setFunc = function(value)
+                    BS.Vars.Bars[idx].ShowWhilstCrafting = value
+
+                    local bar = _G[BS.Name .. "_bar_" .. idx].ref.bar
+
+                    BS.AddToScenes("Crafting", idx, bar)
+
+                    if (value == false) then
+                        BS.RemoveFromScenes("Crafting", bar)
+                    end
+                end,
+                width = "full",
+                default = false
+            },
+            [9] = {
+                type = "checkbox",
+                name = GetString(_G.BARSTEWARD_SHOW_WHILST_BANKING),
+                getFunc = function()
+                    return BS.Vars.Bars[idx].ShowWhilstBanking or false
+                end,
+                setFunc = function(value)
+                    BS.Vars.Bars[idx].ShowWhilstBanking = value
+
+                    local bar = _G[BS.Name .. "_bar_" .. idx].ref.bar
+
+                    BS.AddToScenes("Banking", idx, bar)
+
+                    if (value == false) then
+                        BS.RemoveFromScenes("Banking", bar)
+                    end
+                end,
+                width = "full",
+                default = false
+            },
+            [10] = {
                 type = "divider",
                 alpha = 0
             },
-            [9] = {
+            [11] = {
                 type = "button",
                 name = GetString(_G.BARSTEWARD_ALIGN),
                 func = function()

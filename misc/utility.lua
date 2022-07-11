@@ -514,11 +514,30 @@ function BS.CleanUpBarOrder(barNumber)
     end
 end
 
-
-function BS.GetFont(fontName)
-    local font = BS.FONTS[fontName]
-    local size = 18
+function BS.GetFont()
+    local font = BS.FONTS[BS.Vars.Font]
+    local size = BS.Vars.FontSize
     local hasShadow = "|soft-shadow-thin"
 
     return font .. "|" .. size .. hasShadow
+end
+
+function BS.AddToScenes(sceneType, barIndex, bar)
+    local group = BS[string.upper(sceneType) .. "_SCENES"]
+
+    sceneType = "ShowWhilst" .. sceneType
+
+    if (BS.Vars.Bars[barIndex][sceneType]) then
+        for _, scene in ipairs(group) do
+            SCENE_MANAGER:GetScene(scene):AddFragment(bar.fragment)
+        end
+    end
+end
+
+function BS.RemoveFromScenes(sceneType, bar)
+    local group = BS[string.upper(sceneType) .. "_SCENES"]
+
+    for _, scene in ipairs(group) do
+        SCENE_MANAGER:GetScene(scene):AddFragment(bar.fragment)
+    end
 end

@@ -90,7 +90,12 @@ function baseWidget:Initialise(metadata, parent, tooltipAnchor, valueSide)
 
                 if (not IsInGamepadPreferredMode()) then
                     BS.InfoTTDims = {_G.InformationTooltip:GetDimensionConstraints()}
-                    _G.InformationTooltip:SetDimensionConstraints(BS.InfoTTDims[1], BS.InfoTTDims[2], 0, BS.InfoTTDims[4])
+                    _G.InformationTooltip:SetDimensionConstraints(
+                        BS.InfoTTDims[1],
+                        BS.InfoTTDims[2],
+                        0,
+                        BS.InfoTTDims[4]
+                    )
                 end
 
                 ZO_Tooltips_ShowTextTooltip(anchorControl, tooltipAnchor or BOTTOM, tooltip)
@@ -169,7 +174,11 @@ function baseWidget:SetValue(value)
 end
 
 function baseWidget:SetFont(font)
-    self.value:SetFont(font)
+    if (self.value.progress) then
+        self.value.progress:SetFont(font)
+    else
+        self.value:SetFont(font)
+    end
 end
 
 function baseWidget:SetIcon(value)
