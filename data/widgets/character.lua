@@ -1,21 +1,5 @@
 local BS = _G.BarSteward
 
-local mundusstones = {
-    [13940] = true,
-    [13943] = true,
-    [13974] = true,
-    [13975] = true,
-    [13976] = true,
-    [13977] = true,
-    [13978] = true,
-    [13979] = true,
-    [13980] = true,
-    [13981] = true,
-    [13982] = true,
-    [13984] = true,
-    [13985] = true
-}
-
 BS.widgets[BS.W_MUNDUS_STONE] = {
     -- v1.0.1
     name = "mundusstone",
@@ -25,7 +9,7 @@ BS.widgets[BS.W_MUNDUS_STONE] = {
         for buffNum = 1, GetNumBuffs("player") do
             local id = select(11, GetUnitBuffInfo("player", buffNum))
 
-            if (mundusstones[id]) then
+            if (BS.MUNDUS_STONES[id]) then
                 mundusId = id
                 break
             end

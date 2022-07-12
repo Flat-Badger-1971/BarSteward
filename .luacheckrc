@@ -9,12 +9,12 @@ read_globals = {
             FireCallbacks = {read_only = true}
         }
     },
-	["CENTER_SCREEN_ANNOUNCE"] = {
-		fields = {
-			CreateMessageParams = {read_only = true},
-			AddMessageWithParams = {read_only = true}
-		}
-	},
+    ["CENTER_SCREEN_ANNOUNCE"] = {
+        fields = {
+            CreateMessageParams = {read_only = true},
+            AddMessageWithParams = {read_only = true}
+        }
+    },
     ["CHAMPION_DATA_MANAGER"] = {
         fields = {
             FindChampionDisciplineDataById = {read_only = true},
@@ -30,42 +30,42 @@ read_globals = {
             UnregisterForUpdate = {read_only = true}
         }
     },
-	["FENCE_MANAGER"] = {
-		fields = {
-			GetNumTotalTransactions = {read_only = true},
-			GetNumTransactionsUsed = {read_only = true}
-		}
-	},
-	["FISHING_MANAGER"] = {
-		fields = {
-			StopInteraction = {read_only = true}
-		}
-	},
-	["FRIENDS_LIST_MANAGER"] = {
-		fields = {
-			GetMasterList = {read_only = true}
-		}
-	},
-	["GROUP_MENU_KEYBOARD"] = {
-		fields = {
-			ShowCategory = {read_only = true}
-		}
-	},
-	["MAIN_MENU_KEYBOARD"] = {
-		fields = {
-			ShowScene = {read_only = true}
-		}
-	},
-	["MAIN_MENU_GAMEPAD"] = {
-		fields = {
-			ShowScene = {read_only = true}
-		}
-	},
-	["REWARDS_MANAGER"] = {
-		fields = {
-			GetInfoForReward = {read_only = true}
-		}
-	},
+    ["FENCE_MANAGER"] = {
+        fields = {
+            GetNumTotalTransactions = {read_only = true},
+            GetNumTransactionsUsed = {read_only = true}
+        }
+    },
+    ["FISHING_MANAGER"] = {
+        fields = {
+            StopInteraction = {read_only = true}
+        }
+    },
+    ["FRIENDS_LIST_MANAGER"] = {
+        fields = {
+            GetMasterList = {read_only = true}
+        }
+    },
+    ["GROUP_MENU_KEYBOARD"] = {
+        fields = {
+            ShowCategory = {read_only = true}
+        }
+    },
+    ["MAIN_MENU_KEYBOARD"] = {
+        fields = {
+            ShowScene = {read_only = true}
+        }
+    },
+    ["MAIN_MENU_GAMEPAD"] = {
+        fields = {
+            ShowScene = {read_only = true}
+        }
+    },
+    ["REWARDS_MANAGER"] = {
+        fields = {
+            GetInfoForReward = {read_only = true}
+        }
+    },
     ["SCENE_MANAGER"] = {
         fields = {
             GetCurrentScene = {read_only = true},
@@ -77,21 +77,26 @@ read_globals = {
             Show = {read_only = true}
         }
     },
-	["STABLE_MANAGER"] = {
-		fields = {
-			GetStats = {read_only = true}
-		}
-	},
-	["SYSTEMS"] = {
-		fields = {
-			GetObject = {read_only = true}
-		}
-	},
-	["TIMED_ACTIVITIES_GAMEPAD"] = {
-		fields = {
-			GetCategoryData = {read_only = true}
-		}
-	},
+    ["STABLE_MANAGER"] = {
+        fields = {
+            GetStats = {read_only = true}
+        }
+    },
+    ["SYSTEMS"] = {
+        fields = {
+            GetObject = {read_only = true}
+        }
+    },
+    ["TIMED_ACTIVITIES_GAMEPAD"] = {
+        fields = {
+            GetCategoryData = {read_only = true}
+        }
+    },
+    ["TIMED_ACTIVITIES_MANAGER"] = {
+        fields = {
+            GetTimedActivityTypeTimeRemainingSeconds = {read_only = true}
+        }
+    },
     ["WINDOW_MANAGER"] = {
         fields = {
             CreateTopLevelWindow = {read_only = true},
@@ -100,11 +105,11 @@ read_globals = {
             IsSecureRenderModeEnabled = {read_only = true}
         }
     },
-	["ZO_ACTIVITY_FINDER_ROOT_GAMEPAD"] = {
-		fields = {
-			ShowCategory = {read_only = true}
-		}
-	},
+    ["ZO_ACTIVITY_FINDER_ROOT_GAMEPAD"] = {
+        fields = {
+            ShowCategory = {read_only = true}
+        }
+    },
     ["ZO_ComboBox"] = {
         fields = {
             CreateItemEntry = {read_only = true}
@@ -163,7 +168,7 @@ read_globals = {
         }
     },
     -- lua
-	"EndPendingInteraction",
+    "EndPendingInteraction",
     "FormatIntegerWithDigitGrouping",
     "GetBagSize",
     "GetNumBagUsedSlots",
@@ -178,6 +183,7 @@ read_globals = {
     "EndInteraction",
     "GetAbilityIcon",
     "GetAbilityName",
+    "GetAchievementCriterion",
     "GetActiveCollectibleByType",
     "GetActiveCompanionDefId",
     "GetActiveCompanionLevelInfo",
@@ -193,7 +199,7 @@ read_globals = {
     "GetAntiquityName",
     "GetAntiquityQuality",
     "GetAntiquityZoneId",
-	"GetAvailableSkillPoints",
+    "GetAvailableSkillPoints",
     "GetChampionDisciplineId",
     "GetChampionDisciplineName",
     "GetChampionPointPoolForRank",
@@ -208,22 +214,22 @@ read_globals = {
     "GetFishingLureInfo",
     "GetFramerate",
     "GetFrameTimeMilliseconds",
-	"GetFriendInfo",
+    "GetFriendInfo",
     "GetGameCameraInteractableActionInfo",
     "GetGameCameraPickpocketingBonusInfo",
-	"GetGameTimeMilliseconds",
-	"GetUIGlobalScale",
+    "GetGameTimeMilliseconds",
+    "GetUIGlobalScale",
     "GetInteractionType",
-	"GetInterfaceColor",
+    "GetInterfaceColor",
     "GetItemCondition",
-	"GetItemDisplayQuality",
-	"GetItemId",
-	"GetItemInfo",
-	"GetItemLink",
+    "GetItemDisplayQuality",
+    "GetItemId",
+    "GetItemInfo",
+    "GetItemLink",
     "GetItemLinkName",
     "GetItemName",
-	"GetItemQualityColor",
-	"GetItemSellValueWithBonuses",
+    "GetItemQualityColor",
+    "GetItemSellValueWithBonuses",
     "GetItemType",
     "GetLatency",
     "GetMapContentType",
@@ -237,13 +243,13 @@ read_globals = {
     "GetNumChampionDisciplines",
     "GetNumChampionXPInChampionPoint",
     "GetNumExperiencePointsInCompanionLevel",
-	"GetNumFriends",
-	"GetNumLockpicksLeft",
-	"GetNumSkyShards",
-	"GetNumSkyshardsInZone",
+    "GetNumFriends",
+    "GetNumLockpicksLeft",
+    "GetNumSkyShards",
+    "GetNumSkyshardsInZone",
     "GetNumSmithingResearchLines",
-	"GetNumTimedActivityRewards",
-	"GetParentZoneId",
+    "GetNumTimedActivityRewards",
+    "GetParentZoneId",
     "GetPendingCompanionDefId",
     "GetPlayerChampionPointsEarned",
     "GetPlayerChampionXP",
@@ -252,36 +258,36 @@ read_globals = {
     "GetRecipeIngredientItemInfo",
     "GetRepairAllCost",
     "GetRidingStats",
-	"GetSkyshardDiscoveryStatus",
+    "GetSkyshardDiscoveryStatus",
     "GetSlotStackSize",
     "GetSmithingResearchLineInfo",
     "GetSmithingResearchLineTraitInfo",
     "GetSmithingResearchLineTraitTimes",
-	"GetSoulGemInfo",
-	"GetTimedActivityDescription",
+    "GetSoulGemInfo",
+    "GetTimedActivityDescription",
     "GetTimedActivityMaxProgress",
     "GetTimedActivityName",
     "GetTimedActivityProgress",
-	"GetTimedActivityRewardInfo",
+    "GetTimedActivityRewardInfo",
     "GetTimedActivityType",
     "GetTimedActivityTypeLimit",
-	"GetTimeStamp",
+    "GetTimeStamp",
     "GetTimeString",
     "GetTimeUntilCanBeTrained",
     "GetUnitAlliance",
     "GetUnitBuffInfo",
     "GetUnitClass",
     "GetUnitClassId",
-	"GetUnitEffectiveLevel",
+    "GetUnitEffectiveLevel",
     "GetUnitName",
     "GetUnitPower",
     "GetUnitRace",
-	"GetUnitRawWorldPosition",
+    "GetUnitRawWorldPosition",
     "GetUnitZone",
-	"GetUnitZoneIndex",
-	"GetZoneId",
+    "GetUnitZoneIndex",
+    "GetZoneId",
     "GetZoneNameById",
-	"GetZoneSkyshardId",
+    "GetZoneSkyshardId",
     "HasActiveCompanion",
     "HasPendingCompanion",
     "IsCollectibleBlocked",
@@ -291,27 +297,27 @@ read_globals = {
     "IsItemRepairKit",
     "IsItemStolen",
     "IsUnitGrouped",
-	"IsUnitInCombat",
+    "IsUnitInCombat",
     "IsUnitPvPFlagged",
-	"PlayEmoteByIndex",
+    "PlayEmoteByIndex",
     "PlaySound",
     "ReloadUI",
-	"SetGameCameraUIMode",
+    "SetGameCameraUIMode",
     "TriggerTutorial",
     "UseCollectible",
     -- Zenimax objects
     "HUD_SCENE",
     "ZO_CachedStrFormat",
-	"ZO_CheckButton_SetCheckState",
-	"ZO_CheckButton_SetLabelText",
-	"ZO_CheckButton_SetToggleFunction",
+    "ZO_CheckButton_SetCheckState",
+    "ZO_CheckButton_SetLabelText",
+    "ZO_CheckButton_SetToggleFunction",
     "ZO_CreateStringId",
-	"ZO_DeepTableCopy",
-	"ZO_Dialogs_RegisterCustomDialog",
+    "ZO_DeepTableCopy",
+    "ZO_Dialogs_RegisterCustomDialog",
     "ZO_Dialogs_ShowDialog",
-	"ZO_FastFormatDecimalNumber",
-	"ZO_FormatUserFacingCharacterName",
-	"ZO_FormatUserFacingDisplayName",
+    "ZO_FastFormatDecimalNumber",
+    "ZO_FormatUserFacingCharacterName",
+    "ZO_FormatUserFacingDisplayName",
     "ZO_GetAllianceIcon",
     ["ZO_HiddenReasons"] = {
         fields = {
@@ -324,26 +330,26 @@ read_globals = {
         }
     },
     "ZO_min",
-	"ZO_PostHook",
+    "ZO_PostHook",
     "ZO_PreHook",
-	"ZO_PreHookHandler",
+    "ZO_PreHookHandler",
     "ZO_Provisioner",
-	["ZO_SavedVars"] = {
+    ["ZO_SavedVars"] = {
         fields = {
             NewAccountWide = {read_only = true}
         }
     },
-	"ZO_SceneManager_ToggleHUDUIBinding",
-	"ZO_ScrollList_AddDataType",
-	"ZO_ScrollList_Clear",
-	"ZO_ScrollList_Commit",
-	"ZO_ScrollList_CreateDataEntry",
-	"ZO_ScrollList_EnableSelection",
-	"ZO_ScrollList_GetDataList",
+    "ZO_SceneManager_ToggleHUDUIBinding",
+    "ZO_ScrollList_AddDataType",
+    "ZO_ScrollList_Clear",
+    "ZO_ScrollList_Commit",
+    "ZO_ScrollList_CreateDataEntry",
+    "ZO_ScrollList_EnableSelection",
+    "ZO_ScrollList_GetDataList",
     "ZO_SmallGroupAnchorFrame",
-	"ZO_SocialList_GetPlatformTextureFunctions",
-	"ZO_SocialList_GetRowColors",
-	"ZO_StatusBar_InitializeDefaultColors",
+    "ZO_SocialList_GetPlatformTextureFunctions",
+    "ZO_SocialList_GetRowColors",
+    "ZO_StatusBar_InitializeDefaultColors",
     "ZO_TimerBar",
     "ZO_Tooltips_HideTextTooltip",
     "ZO_Tooltips_ShowTextTooltip",
@@ -351,11 +357,11 @@ read_globals = {
     "zo_callLater",
     "zo_iconFormat",
     "zo_roundToNearest",
-	"zo_strfind",
+    "zo_strfind",
     "zo_strformat",
-	"zo_strlen",
+    "zo_strlen",
     "zo_strsplit",
     -- luacheck misses these for some reason
     "math.log10",
-	"math.pow"
+    "math.pow"
 }

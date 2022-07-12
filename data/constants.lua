@@ -55,15 +55,16 @@ BS.W_TROPHY_VAULT_KEYS = 46
 BS.W_LOCKPICKS = 47
 BS.W_LAUNDER_TRANSACTIONS = 48
 BS.W_SPEED = 49
+BS.W_CRAFTING_DAILIES = 50
 
 BS.WRITS = {
-    [1] = {119563, 119680, 121527, 121529}, -- blacksmithing
-    [2] = {119694, 119695, 121532, 121533}, -- clothing
-    [3] = {119564, 121528}, -- enchanting
-    [4] = {119696, 110698, 119699, 119700, 119701, 119702, 119703, 119704, 119705, 119818, 119819, 119820}, -- alchemy
-    [5] = {119693}, -- provisioning
-    [6] = {119681, 119682, 121530, 121531}, -- woodworking
-    [7] = {138789, 138799, 153737, 153739} -- jewellery crafting
+    [_G.CRAFTING_TYPE_ALCHEMY] = {119696, 110698, 119699, 119700, 119701, 119702, 119703, 119704, 119705, 119818, 119819, 119820},
+    [_G.CRAFTING_TYPE_BLACKSMITHING] = {119563, 119680, 121527, 121529},
+    [_G.CRAFTING_TYPE_CLOTHIER] = {119694, 119695, 121532, 121533},
+    [_G.CRAFTING_TYPE_ENCHANTING] = {119564, 121528},
+    [_G.CRAFTING_TYPE_JEWELRYCRAFTING] = {138789, 138799, 153737, 153739},
+    [_G.CRAFTING_TYPE_PROVISIONING] = {119693},
+    [_G.CRAFTING_TYPE_WOODWORKING] = {119681, 119682, 121530, 121531}
 }
 
 BS.TROPHY_VAULT_KEYS = {
@@ -75,6 +76,22 @@ BS.TROPHY_VAULT_KEYS = {
     [64570] = true,
     [69404] = true,
     [69405] = true
+}
+
+BS.MUNDUS_STONES = {
+    [13940] = true,
+    [13943] = true,
+    [13974] = true,
+    [13975] = true,
+    [13976] = true,
+    [13977] = true,
+    [13978] = true,
+    [13979] = true,
+    [13980] = true,
+    [13981] = true,
+    [13982] = true,
+    [13984] = true,
+    [13985] = true
 }
 
 BS.BAGICON = zo_iconFormat("/esoui/art/tooltips/icon_bag.dds")
@@ -102,4 +119,29 @@ BS.BANKING_SCENES = {
     "bank",
     "guildBank",
     "houseBank"
+}
+
+BS.CRAFTING_ACHIEVEMENT_IDS = {
+    [1145] = true,
+    [2225] = true
+}
+
+BS.CRAFTING_ACHIEVEMENT = {
+    [_G.CRAFTING_TYPE_ALCHEMY] = {achievementId = 1145, criterionIndex = 1},
+    [_G.CRAFTING_TYPE_BLACKSMITHING] = {achievementId = 1145, criterionIndex = 2},
+    [_G.CRAFTING_TYPE_CLOTHIER] = {achievementId = 1145, criterionIndex = 3},
+    [_G.CRAFTING_TYPE_ENCHANTING] = {achievementId = 1145, criterionIndex = 4},
+    [_G.CRAFTING_TYPE_JEWELRYCRAFTING] = {achievementId = 2225, criterionIndex = 1},
+    [_G.CRAFTING_TYPE_PROVISIONING] = {achievementId = 1145, criterionIndex = 5},
+    [_G.CRAFTING_TYPE_WOODWORKING] = {achievementId = 1145, criterionIndex = 6}
+}
+
+BS.CRAFTING_DAILY = {
+    [_G.CRAFTING_TYPE_ALCHEMY] = GetString(_G.BARSTEWARD_WRIT_ALCHEMY),
+    [_G.CRAFTING_TYPE_BLACKSMITHING] = GetString(_G.BARSTEWARD_WRIT_BLACKSMITHING),
+    [_G.CRAFTING_TYPE_CLOTHIER] = GetString(_G.BARSTEWARD_WRIT_CLOTHIER),
+    [_G.CRAFTING_TYPE_ENCHANTING] = GetString(_G.BARSTEWARD_WRIT_ENCHANTING),
+    [_G.CRAFTING_TYPE_JEWELRYCRAFTING] = GetString(_G.BARSTEWARD_WRIT_JEWELLERY),
+    [_G.CRAFTING_TYPE_PROVISIONING] = GetString(_G.BARSTEWARD_WRIT_PROVISIONING),
+    [_G.CRAFTING_TYPE_WOODWORKING] = GetString(_G.BARSTEWARD_WRIT_WOODWORKING)
 }

@@ -302,7 +302,7 @@ BS.widgets[BS.W_TRANSMUTE_CRYSTALS] = {
 
         return value
     end,
-    event = _G.EVENT_QUEST_COMPLETE_DIALOG,
+    event = {_G.EVENT_CURRENCY_UPDATE, _G.EVENT_QUEST_COMPLETE_DIALOG},
     tooltip = GetString(_G.BARSTEWARD_TRANSMUTE_CRYSTALS),
     icon = "/esoui/art/currency/icon_seedcrystal.dds"
 }

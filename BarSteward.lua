@@ -172,7 +172,27 @@ local function Initialise()
     BS.RegisterForEvent(_G.EVENT_MONEY_UPDATE, trackGold)
 
     -- performance
-    BS.RegisterForEvent(_G.EVENT_PLAYER_COMBAT_STATE, function(_, inCombat) BS.CheckPerformance(inCombat) end)
+    BS.RegisterForEvent(
+        _G.EVENT_PLAYER_COMBAT_STATE,
+        function(_, inCombat)
+            BS.CheckPerformance(inCombat)
+        end
+    )
+
+    -- track character names
+    if (BS.Vars.CharacterList == nil) then
+        BS.Vars.CharacterList = {}
+
+        if (BS.Vars.Gold) then
+            local gold = BS.Vars.Gold
+
+            for char, _ in pairs(gold) do
+                BS.Vars.CharacterList[char] = true
+            end
+        end
+    end
+
+    BS.Vars.CharacterList[GetUnitName("player")] = true
 
     -- utiltity
     if (_G.SLASH_COMMANDS["/rl"] == nil) then

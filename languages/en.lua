@@ -118,6 +118,7 @@ ZO_CreateStringId("BARSTEWARD_WARNING_VALUE", "Warning value")
 ZO_CreateStringId("BARSTEWARD_BANK", "Bank Space")
 ZO_CreateStringId("BARSTEWARD_CROWNS", "Crowns")
 ZO_CreateStringId("BARSTEWARD_CROWN_GEMS", "Crown Gems")
+ZO_CreateStringId("BARSTEWARD_DAILY_CRAFTING", "Daily Crafting Writs")
 ZO_CreateStringId("BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS", "Daily Endeavour Progress")
 ZO_CreateStringId("BARSTEWARD_DURABILITY", "Lowest Item Durability")
 ZO_CreateStringId("BARSTEWARD_EVENT_TICKETS", "Event Tickets")
@@ -151,16 +152,19 @@ ZO_CreateStringId("BARSTEWARD_WRITS_SURVEYS", "<<1[No Surveys/1 Survey/$d Survey
 ZO_CreateStringId("BARSTEWARD_WRITS_MAPS", "<<1[No Treasure Maps/1 Treasure Map/$s Treasure Maps]>>")
 ZO_CreateStringId("BARSTEWARD_WRIT_VOUCHERS", "Writ Vouchers")
 -- Other
+ZO_CreateStringId("BARSTEWARD_COMPLETED", "Completed")
 ZO_CreateStringId("BARSTEWARD_FONT", "Font")
 ZO_CreateStringId("BARSTEWARD_FONT_SIZE", "Font Size")
 ZO_CreateStringId("BARSTEWARD_LOCK_FRAMES", "Lock Bars")
 ZO_CreateStringId("BARSTEWARD_MOVEFRAME", "Movable Bars")
+ZO_CreateStringId("BARSTEWARD_NOT_PICKED_UP", "Not picked up")
 ZO_CreateStringId("BARSTEWARD_PERFORMANCE", "Performance")
 ZO_CreateStringId("BARSTEWARD_PERFORMANCE_TIMERS", "Disable timers during combat")
 ZO_CreateStringId(
     "BARSTEWARD_PERFORMANCE_TIMERS_TOOLTIP",
     "Disable timer based widgets (except the time), during combat. This will reduce the number of potentially performance impacting updates."
 )
+ZO_CreateStringId("BARSTEWARD_PICKED_UP", "Picked up")
 ZO_CreateStringId("BARSTEWARD_RELOAD", "UI reload required")
 ZO_CreateStringId("BARSTEWARD_RELOAD_MSG", "The UI will now reload.")
 -- Warnings/alerts
@@ -176,3 +180,11 @@ ZO_CreateStringId(
 ZO_CreateStringId("BARSTEWARD_WARNING", "Warning!")
 ZO_CreateStringId("BARSTEWARD_WARNING_BAGS", "Your bags are almost full!")
 ZO_CreateStringId("BARSTEWARD_WARNING_EVENT_TICKETS", "Spend your event tickets!")
+-- writs
+ZO_CreateStringId("BARSTEWARD_WRIT_ALCHEMY", "Alchemist Writ")
+ZO_CreateStringId("BARSTEWARD_WRIT_JEWELLERY", "Jewelry Crafting Writ")
+ZO_CreateStringId("BARSTEWARD_WRIT_BLACKSMITHING", "Blacksmith Writ")
+ZO_CreateStringId("BARSTEWARD_WRIT_CLOTHIER", "Clothier Writ")
+ZO_CreateStringId("BARSTEWARD_WRIT_WOODWORKING", "Woodworker Writ")
+ZO_CreateStringId("BARSTEWARD_WRIT_ENCHANTING", "Enchanter Writ")
+ZO_CreateStringId("BARSTEWARD_WRIT_PROVISIONING", "Provisioner Writ")
