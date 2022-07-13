@@ -7,6 +7,12 @@ local function addToTooltip(friendList, textureFunctions)
         local textColour = BS.ARGBConvert2(ZO_SocialList_GetRowColors(friend, false))
         local noChar = not friend.hasCharacter or (zo_strlen(friend.characterName) <= 0)
 
+        if (BS.Vars.FriendAnnounce) then
+            if (BS.Vars.FriendAnnounce[friend.displayName]) then
+                textColour = BS.ARGBConvert(BS.Vars.DefaultOkColour)
+            end
+        end
+
         tt = tt .. BS.LF .. zo_iconFormat(textureFunctions.playerStatusIcon(friend.status))
         tt = tt .. textColour
         tt = tt .. (noChar and "" or zo_iconFormat(textureFunctions.allianceIcon(friend.alliance)))

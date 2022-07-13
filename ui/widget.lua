@@ -138,10 +138,6 @@ end
 -- add functions to the widget to mimic a standard control
 -- set the widget value and adjust the value control's width accordingly
 function baseWidget:SetProgress(value, min, max)
-    if (self.value:GetValue() == value) then
-        return
-    end
-
     if (max and value) then
         self.value:SetMinMax(min, max)
         self.value.progress:SetText(value .. "/" .. max)

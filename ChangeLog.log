@@ -6,6 +6,8 @@ Added total value of stolen items to tooltip
 Widget reordering tool default view - bar now matches that bars widgets
 Corrected issue when stopping a bar from being shown in the settings
 Added additional options for bar displaying
+Endeavour progress bar bug fix
+Friends list highlighting for announced friends
 
 [color=#ff9900][b]Version: 1.2.16 ---------------[/b][/color]
 Tooltips now resize to fit content (excludes gamepad mode)
