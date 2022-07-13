@@ -306,7 +306,7 @@ local function checkReset()
     local timeRemaining =
         TIMED_ACTIVITIES_MANAGER:GetTimedActivityTypeTimeRemainingSeconds(_G.TIMED_ACTIVITY_TYPE_DAILY)
     local secondsInADay = 86400
-    local lastResetTime = os.time() - timeRemaining
+    local lastResetTime = os.time() - (secondsInADay - timeRemaining)
 
     BS.Vars.lastDailyReset = BS.Vars.lastDailyReset or lastResetTime
 
