@@ -24,7 +24,7 @@ BS.widgets[BS.W_STOLEN_ITEMS] = {
                     table.insert(
                         stolen,
                         {
-                            name = GetItemName(bag, slot),
+                            name = ZO_CachedStrFormat("<<C:1>>", GetItemName(bag, slot)),
                             count = itemCount,
                             icon = zo_iconFormat(icon, 16, 16),
                             sellPrice = GetItemSellValueWithBonuses(bag, slot)
@@ -41,18 +41,28 @@ BS.widgets[BS.W_STOLEN_ITEMS] = {
         ttt = ttt .. BS.BAGICON .. " " .. bagCounts.carrying .. " " .. BS.BANKICON .. " " .. bagCounts.banked .. "|r"
 
         if (#stolen > 0) then
-            ttt = ttt .. BS.LF
+            local total = 0
+
+            local stt = BS.LF
 
             for _, item in pairs(stolen) do
-                ttt = ttt .. BS.LF .. item.icon .. " "
-                ttt = ttt .. "|cf9f9f9" .. item.name
+                stt = stt .. BS.LF .. item.icon .. " "
+                stt = stt .. "|cf9f9f9" .. item.name
 
                 if (item.count > 1) then
-                    ttt = ttt .. " (" .. item.count .. ")"
+                    stt = stt .. " (" .. item.count .. ")"
                 end
 
-                ttt = ttt .. "   |cffff00" .. (item.sellPrice * item.count) .. "|r " .. goldIcon
+                stt = stt .. "   |cffff00" .. (item.sellPrice * item.count) .. "|r " .. goldIcon
+                total = total + (item.sellPrice * item.count)
             end
+
+            ttt = ttt .. BS.LF
+            ttt =
+                ttt ..
+                BS.LF .. zo_strformat(GetString(_G.BARSTEWARD_TOTAL_VALUE), "|cffff00" .. total .. "|r " .. goldIcon)
+
+            ttt = ttt .. stt
         end
 
         widget.tooltip = ttt

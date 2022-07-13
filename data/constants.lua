@@ -121,6 +121,24 @@ BS.BANKING_SCENES = {
     "houseBank"
 }
 
+BS.INVENTORY_SCENES = {
+    "inventory"
+}
+
+BS.MAIL_SCENES = {
+    "mailInbox",
+    "mailSend"
+}
+
+BS.SIEGE_SCENES = {
+    "siegeBar",
+    "siegeBarUI"
+}
+
+BS.MENU_SCENES = {
+    "gameMenuInGame"
+}
+
 BS.CRAFTING_ACHIEVEMENT_IDS = {
     [1145] = true,
     [2225] = true

@@ -538,6 +538,6 @@ function BS.RemoveFromScenes(sceneType, bar)
     local group = BS[string.upper(sceneType) .. "_SCENES"]
 
     for _, scene in ipairs(group) do
-        SCENE_MANAGER:GetScene(scene):AddFragment(bar.fragment)
+        SCENE_MANAGER:GetScene(scene):RemoveFragment(bar.fragment)
     end
 end

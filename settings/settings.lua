@@ -373,10 +373,90 @@ local function getBarSettings()
                 default = false
             },
             [10] = {
+                type = "checkbox",
+                name = GetString(_G.BARSTEWARD_SHOW_WHILST_INVENTORY),
+                getFunc = function()
+                    return BS.Vars.Bars[idx].ShowWhilstInventory or false
+                end,
+                setFunc = function(value)
+                    BS.Vars.Bars[idx].ShowWhilstInventory = value
+
+                    local bar = _G[BS.Name .. "_bar_" .. idx].ref.bar
+
+                    BS.AddToScenes("Inventory", idx, bar)
+
+                    if (value == false) then
+                        BS.RemoveFromScenes("Inventory", bar)
+                    end
+                end,
+                width = "full",
+                default = false
+            },
+            [11] = {
+                type = "checkbox",
+                name = GetString(_G.BARSTEWARD_SHOW_WHILST_MAIL),
+                getFunc = function()
+                    return BS.Vars.Bars[idx].ShowWhilstMail or false
+                end,
+                setFunc = function(value)
+                    BS.Vars.Bars[idx].ShowWhilstMail = value
+
+                    local bar = _G[BS.Name .. "_bar_" .. idx].ref.bar
+
+                    BS.AddToScenes("Mail", idx, bar)
+
+                    if (value == false) then
+                        BS.RemoveFromScenes("Mail", bar)
+                    end
+                end,
+                width = "full",
+                default = false
+            },
+            [12] = {
+                type = "checkbox",
+                name = GetString(_G.BARSTEWARD_SHOW_WHILST_SIEGE),
+                getFunc = function()
+                    return BS.Vars.Bars[idx].ShowWhilstSiege or false
+                end,
+                setFunc = function(value)
+                    BS.Vars.Bars[idx].ShowWhilstSiege = value
+
+                    local bar = _G[BS.Name .. "_bar_" .. idx].ref.bar
+
+                    BS.AddToScenes("Siege", idx, bar)
+
+                    if (value == false) then
+                        BS.RemoveFromScenes("Siege", bar)
+                    end
+                end,
+                width = "full",
+                default = false
+            },
+            [13] = {
+                type = "checkbox",
+                name = GetString(_G.BARSTEWARD_SHOW_WHILST_MENU),
+                getFunc = function()
+                    return BS.Vars.Bars[idx].ShowWhilstMenu or false
+                end,
+                setFunc = function(value)
+                    BS.Vars.Bars[idx].ShowWhilstMenu = value
+
+                    local bar = _G[BS.Name .. "_bar_" .. idx].ref.bar
+
+                    BS.AddToScenes("Menu", idx, bar)
+
+                    if (value == false) then
+                        BS.RemoveFromScenes("Menu", bar)
+                    end
+                end,
+                width = "full",
+                default = false
+            },
+            [14] = {
                 type = "divider",
                 alpha = 0
             },
-            [11] = {
+            [15] = {
                 type = "button",
                 name = GetString(_G.BARSTEWARD_ALIGN),
                 func = function()

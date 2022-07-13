@@ -1,7 +1,12 @@
 [color=#ff9900][b]Version: 1.2.17 ---------------[/b][/color]
 Added another watch event for transmute crystals
-Added daily crafting Writs
-.
+Added daily crafting Writs (widget number 50)
+Added % option to speed
+Added total value of stolen items to tooltip
+Widget reordering tool default view - bar now matches that bars widgets
+Corrected issue when stopping a bar from being shown in the settings
+Added additional options for bar displaying
+
 [color=#ff9900][b]Version: 1.2.16 ---------------[/b][/color]
 Tooltips now resize to fit content (excludes gamepad mode)
 Stolen item tooltips now include item breakdown and sell price

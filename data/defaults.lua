@@ -278,7 +278,7 @@ BS.Defaults = {
             WarningValue = 85,
             DangerValue = 95
         },
-        [BS.W_SPEED] = {Bar = 0, Order = 49, ColourValues = "c", Units = "mph"},
+        [BS.W_SPEED] = {Bar = 0, Order = 49, ColourValues = "c", Units = "mph", ShowPercent = false},
         [BS.W_CRAFTING_DAILIES] = {Bar = 0, Order = 50}
     }
 }

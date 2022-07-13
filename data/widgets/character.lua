@@ -233,6 +233,7 @@ BS.widgets[BS.W_SKILL_POINTS] = {
 -- based on Ye Olde Speed
 -- estimate of units per meter based on some of the tiles in Alinor
 local UNITS_PER_METER = 200
+local DEFAULT_SPEED = 600
 
 local function GetCurrentPos()
     local _, posX, _, posY = GetUnitRawWorldPosition("player")
@@ -247,21 +248,37 @@ local function getSpeed(widget)
     local x2, y2, t2 = unpack(BS.lastPosition or BS.currentPosition)
     local distance = math.sqrt(math.pow(x1 - x2, 2) + math.pow(y1 - y2, 2))
     local timeDelta = (t1 - t2) / 1000
-    local distanceInMeters = distance / UNITS_PER_METER
-    local speedInMS = distanceInMeters / timeDelta
-    local units = BS.Vars.Controls[BS.W_SPEED].Units
-    local speed
+    local speed, speedText
 
-    if (units == "mph") then
-        speed = speedInMS * 2.23694
+    if (BS.Vars.Controls[BS.W_SPEED].ShowPercent) then
+        local rawSpeed = distance / timeDelta
+        local pSpeed = math.floor((rawSpeed * 100 / DEFAULT_SPEED) + 0.5)
+        pSpeed = pSpeed - (pSpeed % 5)
+
+        if (pSpeed < 1) then
+            pSpeed = 0
+        end
+
+        speedText = pSpeed .. "%"
     else
-        speed = speedInMS * 3.6
+        local distanceInMeters = distance / UNITS_PER_METER
+        local speedInMS = distanceInMeters / timeDelta
+        local units = BS.Vars.Controls[BS.W_SPEED].Units
+
+        if (units == "mph") then
+            speed = speedInMS * 2.23694
+        else
+            speed = speedInMS * 3.6
+        end
+
+        speed = math.floor(speed)
+
+        local unitText = GetString(_G["BARSTEWARD_" .. string.upper(units)])
+
+        speedText = speed .. " " .. unitText
     end
 
-    speed = math.floor(speed)
-
-    local unitText = GetString(_G["BARSTEWARD_" .. string.upper(units)])
-    widget:SetValue(speed .. " " .. unitText)
+    widget:SetValue(speedText)
 
     BS.lastPosition = BS.currentPosition
 

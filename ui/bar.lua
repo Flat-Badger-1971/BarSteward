@@ -103,6 +103,10 @@ function baseBar:Initialise(barSettings)
 
     BS.AddToScenes("Crafting", barSettings.index, self.bar)
     BS.AddToScenes("Banking", barSettings.index, self.bar)
+    BS.AddToScenes("Inventory", barSettings.index, self.bar)
+    BS.AddToScenes("Mail", barSettings.index, self.bar)
+    BS.AddToScenes("Siege", barSettings.index, self.bar)
+    BS.AddToScenes("Menu", barSettings.index, self.bar)
 end
 
 -- hide the widget, also shrink it to shrink the bar whilst retaining the anchors for the other widgets

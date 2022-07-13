@@ -350,7 +350,7 @@ function BS.CreateWidgetOrderTool(bars)
     frame.divider2:SetAnchor(TOPLEFT, frame.barValue, BOTTOMLEFT, -50, 10)
     frame.divider2:SetTexture("/esoui/art/campaign/campaignbrowser_divider_short.dds")
 
-    frame.scrollList = createScrollList("Main Bar")
+    frame.scrollList = createScrollList(bars[1])
     frame.scrollList:SetAnchor(TOPLEFT, frame.divider2, BOTTOMLEFT, 50, 10)
 
     frame.button = BS.CreateButton(name .. "_button", frame, 100, 32)
