@@ -294,7 +294,7 @@ BS.widgets[BS.W_SPEED] = {
         return getSpeed(widget)
     end,
     timer = 300,
-    icon = "/esoui/art/treeicons/gamepad/gp_emoteicon_physical.dds",
+    icon = "/esoui/art/icons/emotes/keyboard/emotecategoryicon_physical_up.dds",
     tooltip = GetString(_G.BARSTEWARD_SPEED),
     customSettings = {
         [1] = {
