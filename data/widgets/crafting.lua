@@ -366,6 +366,9 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
             if (done == qualifiedCount) then
                 colour = BS.Vars.DefaultOkColour
                 BS.Vars.dailyQuests[character].complete = true
+            elseif (added == qualifiedCount) then
+                colour = BS.Vars.DefaultWarningColour
+                BS.Vars.dailyQuests[character].pickedup = true
             end
 
             widget:SetValue(added .. "/" .. done .. "/" .. qualifiedCount)
@@ -404,12 +407,15 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
                 for char, _ in pairs(chars) do
                     if (char ~= character) then
                         if (BS.Vars.dailyQuests[char]) then
-                            ttt =
-                                ttt ..
-                                BS.LF ..
-                                    (BS.Vars.dailyQuests[char].complete and BS.ARGBConvert(BS.Vars.DefaultOkColour) or
-                                        ccolour) ..
-                                        char .. "|r"
+                            local dccolour = ccolour
+
+                            if (BS.Vars.dailyQuests[char].complete) then
+                                dccolour = BS.ARGBConvert(BS.Vars.DefaultOkColour)
+                            elseif (BS.Vars.dailyQuests[char].pickedup) then
+                                dccolour = BS.ARGBConvert(BS.Vars.DefaultWarningColour)
+                            end
+
+                            ttt = ttt .. BS.LF .. dccolour .. char .. "|r"
                         else
                             ttt = ttt .. BS.LF .. ccolour .. char .. "|r"
                         end
