@@ -272,3 +272,78 @@ BS.widgets[BS.W_LEADS] = {
     tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ANTIQUITY_SUBHEADING_ACTIVE_LEADS)),
     hideWhenEqual = 99999999
 }
+
+local function getDisplay(timeRemaining, widgetIndex)
+    local display
+    local hours = timeRemaining / 60 / 60
+    local days = math.floor((hours / 24) + 0.5)
+
+    if (BS.Vars.Controls[widgetIndex].ShowDays and days >= 1 and hours > 24) then
+        display = zo_strformat(GetString(_G.BARSTEWARD_DAYS), days)
+    else
+        display =
+            BS.SecondsToTime(
+            timeRemaining,
+            false,
+            false,
+            BS.Vars.Controls[widgetIndex].HideSeconds,
+            BS.Vars.Controls[widgetIndex].Format
+        )
+    end
+
+    return display
+end
+
+local function getTimedActivityTimeRemaining(activityType, widgetIndex, widget)
+    local secondsRemaining = TIMED_ACTIVITIES_MANAGER:GetTimedActivityTypeTimeRemainingSeconds(activityType)
+    local colour = BS.Vars.Controls[widgetIndex].OkColour or BS.Vars.DefaultOkColour
+
+        if (secondsRemaining < (BS.Vars.Controls[widgetIndex].DangerValue * 3600)) then
+            colour = BS.Vars.Controls[widgetIndex].DangerColour or BS.Vars.DefaultDangerColour
+        elseif (secondsRemaining < (BS.Vars.Controls[widgetIndex].WarningValue * 3600)) then
+            colour = BS.Vars.Controls[widgetIndex].WarningColour or BS.Vars.DefaultWarningColour
+        end
+
+        local display = getDisplay(secondsRemaining, widgetIndex)
+
+        widget:SetColour(unpack(colour))
+        widget:SetValue(display)
+
+        return secondsRemaining
+end
+
+BS.widgets[BS.W_DAILY_ENDEAVOUR_TIME] = {
+    -- v1.2.18
+    name = "dailyEndeavourTime",
+    update = function(widget)
+        return getTimedActivityTimeRemaining(_G.TIMED_ACTIVITY_TYPE_DAILY, BS.W_DAILY_ENDEAVOUR_TIME, widget)
+    end,
+    timer = 1000,
+    icon = "/esoui/art/journal/u26_progress_digsite_unknown_incomplete.dds",
+    tooltip = GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_TIME),
+    onClick = function()
+        if (not IsInGamepadPreferredMode()) then
+            GROUP_MENU_KEYBOARD:ShowCategory(_G.TIMED_ACTIVITIES_FRAGMENT)
+        else
+            ZO_ACTIVITY_FINDER_ROOT_GAMEPAD:ShowCategory(TIMED_ACTIVITIES_GAMEPAD:GetCategoryData())
+        end
+    end
+}
+
+BS.widgets[BS.W_WEEKLY_ENDEAVOUR_TIME] = {
+    -- v1.2.18
+    name = "weeklyEndeavourTime",
+    update = function(widget)
+        return getTimedActivityTimeRemaining(_G.TIMED_ACTIVITY_TYPE_WEEKLY, BS.W_WEEKLY_ENDEAVOUR_TIME, widget)
+    end,
+    timer = 1000,
+    icon = "/esoui/art/journal/u26_progress_digsite_unknown_complete.dds",
+    tooltip = GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_TIME),
+    onClick = function()
+        if (not IsInGamepadPreferredMode()) then
+            GROUP_MENU_KEYBOARD:ShowCategory(_G.TIMED_ACTIVITIES_FRAGMENT)
+        else
+            ZO_ACTIVITY_FINDER_ROOT_GAMEPAD:ShowCategory(TIMED_ACTIVITIES_GAMEPAD:GetCategoryData())
+        end
+    end
+}

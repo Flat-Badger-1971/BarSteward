@@ -7,7 +7,7 @@ local panel = {
     name = "Bar Steward",
     displayName = "|cff9900Bar Steward|r",
     author = "Flat Badger",
-    version = "1.2.17",
+    version = "1.2.18",
     registerForDefaults = true,
     registerForRefresh = true,
     slashCommand = "/bs"
@@ -978,10 +978,17 @@ local function getWidgetSettings()
 
         -- Announcement
         if (BS.Defaults.Controls[k].Announce ~= nil) then
+            local nameValue = GetString(_G.BARSTEWARD_ANNOUNCEMENT)
+
+            if (k == BS.W_FRIENDS) then
+                nameValue = GetString(_G.BARSTEWARD_ANNOUNCEMENT_FRIEND)
+            elseif (k == BS.W_GUILD_FRIENDS) then
+                nameValue = GetString(_G.BARSTEWARD_ANNOUNCEMENT_FRIEND_GUILD)
+            end
+
             widgetControls[#widgetControls + 1] = {
                 type = "checkbox",
-                name = (k == BS.W_FRIENDS) and GetString(_G.BARSTEWARD_ANNOUNCEMENT_FRIEND) or
-                    GetString(_G.BARSTEWARD_ANNOUNCEMENT),
+                name = nameValue,
                 getFunc = function()
                     return BS.Vars.Controls[k].Announce
                 end,
@@ -1210,7 +1217,10 @@ local function getWidgetSettings()
                     end,
                     setFunc = function(r, g, b, a)
                         BS.Vars.Controls[k].Colour = {r, g, b, a}
-                        BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
+
+                        if (BS.Vars.Controls[k].Bar ~= 0) then
+                            BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
+                        end
                     end,
                     width = "full",
                     default = unpack(BS.Vars.DefaultColour)
@@ -1226,7 +1236,9 @@ local function getWidgetSettings()
                     end,
                     setFunc = function(r, g, b, a)
                         BS.Vars.Controls[k].OkColour = {r, g, b, a}
-                        BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
+                        if (BS.Vars.Controls[k].Bar ~= 0) then
+                            BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
+                        end
                     end,
                     width = "full",
                     default = unpack(BS.Vars.DefaultOkColour)
@@ -1242,7 +1254,9 @@ local function getWidgetSettings()
                     end,
                     setFunc = function(r, g, b, a)
                         BS.Vars.Controls[k].WarningColour = {r, g, b, a}
-                        BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
+                        if (BS.Vars.Controls[k].Bar ~= 0) then
+                            BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
+                        end
                     end,
                     width = "full",
                     default = unpack(BS.Vars.DefaultWarningColour)
@@ -1258,7 +1272,9 @@ local function getWidgetSettings()
                     end,
                     setFunc = function(r, g, b, a)
                         BS.Vars.Controls[k].DangerColour = {r, g, b, a}
-                        BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
+                        if (BS.Vars.Controls[k].Bar ~= 0) then
+                            BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
+                        end
                     end,
                     width = "full",
                     default = unpack(BS.Vars.DefaultDangerColour)
@@ -1281,7 +1297,9 @@ local function getWidgetSettings()
                             BS.Vars.Controls[k].OkValue = tonumber(value)
                         end
 
-                        BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
+                        if (BS.Vars.Controls[k].Bar ~= 0) then
+                            BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
+                        end
                     end,
                     textType = _G.TEXT_TYPE_NUMERIC,
                     isMultiLine = false,
@@ -1304,7 +1322,9 @@ local function getWidgetSettings()
                             BS.Vars.Controls[k].WarningValue = tonumber(value)
                         end
 
-                        BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
+                        if (BS.Vars.Controls[k].Bar ~= 0) then
+                            BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
+                        end
                     end,
                     textType = _G.TEXT_TYPE_NUMERIC,
                     isMultiLine = false,
@@ -1327,7 +1347,9 @@ local function getWidgetSettings()
                             BS.Vars.Controls[k].DangerValue = tonumber(value)
                         end
 
-                        BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
+                        if (BS.Vars.Controls[k].Bar ~= 0) then
+                            BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
+                        end
                     end,
                     textType = _G.TEXT_TYPE_NUMERIC,
                     isMultiLine = false,
@@ -1346,7 +1368,7 @@ local function getWidgetSettings()
                 csettings = cset()
             end
 
-            for _, setting in pairs(csettings) do
+            for _, setting in ipairs(csettings) do
                 widgetControls[#widgetControls + 1] = setting
             end
         end

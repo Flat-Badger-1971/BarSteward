@@ -1,3 +1,10 @@
+[color=#ff9900][b]Version: 1.2.18 ---------------[/b][/color]
+Option for friends widget tooltip to display online friends only
+Option to show days only for long running crafting timers
+Speed percentage correction
+Added Guild Friends
+Bugfix when changing widget warning settings when not added to a bar
+
 [color=#ff9900][b]Version: 1.2.17 ---------------[/b][/color]
 Added another watch event for transmute crystals
 Added daily crafting Writs (widget number 50)

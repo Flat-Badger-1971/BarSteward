@@ -466,29 +466,28 @@ function BS.FriendsUpdate(scrollList)
     list:Update(BS.friendDataItems)
 end
 
-local function createFriendsScrollList()
-    local scrollData = {
-        name = "BarStewardFriendsList",
-        parent = BS.w_friends_list,
-        width = 400,
-        height = 500,
-        rowHeight = 36,
-        rowTemplate = "BarSteward_Friends_Template",
-        setupCallback = setupFriendsDataRow
-    }
-    local scrollList = BS.CreateScrollList(scrollData)
-    BS.FriendsUpdate(scrollList)
+local function getGuilds()
+    local guilds = {}
 
-    return scrollList
+    for i = 1, GetNumGuilds() do
+        local id = GetGuildId(i)
+        guilds[id] = GetGuildName(id)
+    end
+
+    BS.guilds = guilds
+
+    return guilds
 end
 
-function BS.CreateFriendsTool()
-    local name = BS.Name .. "_Friends_Tool"
+local function CreateTool(heading, toolName, varName, setupFunc, guild)
+    local name = BS.Name .. "_" .. toolName .. "_Tool"
+    local lowerName = string.lower(toolName)
+    local frameName = "w_" .. lowerName .. "_list"
 
-    BS.w_friends_list = WINDOW_MANAGER:CreateTopLevelWindow(name)
-    local frame = BS.w_friends_list
+    BS[frameName] = WINDOW_MANAGER:CreateTopLevelWindow(name)
+    local frame = BS[frameName]
 
-    frame:SetDimensions(470, 900)
+    frame:SetDimensions(470, 900 + (guild and 50 or 0))
     frame:SetAnchor(CENTER, GuiRoot, CENTER)
     frame:SetHidden(true)
 
@@ -510,7 +509,7 @@ function BS.CreateFriendsTool()
     frame.heading:SetFont(nameFont)
     frame.heading:SetColor(0.9, 0.9, 0.9, 1)
     frame.heading:SetAnchor(TOPLEFT, frame, TOPLEFT, 50, 80)
-    frame.heading:SetText(GetString(_G.BARSTEWARD_ANNOUNCEMENT_FRIEND))
+    frame.heading:SetText(heading)
     frame.heading:SetDimensions(350, 24)
 
     frame.divider = WINDOW_MANAGER:CreateControl(name .. "_divider", frame, CT_TEXTURE)
@@ -518,8 +517,49 @@ function BS.CreateFriendsTool()
     frame.divider:SetAnchor(TOPLEFT, frame.heading, BOTTOMLEFT, -50, 10)
     frame.divider:SetTexture("/esoui/art/campaign/campaignbrowser_divider_short.dds")
 
-    frame.scrollList = createFriendsScrollList()
-    frame.scrollList:SetAnchor(TOPLEFT, frame.divider, BOTTOMLEFT, 50, 10)
+    if (guild) then
+        frame.guild = WINDOW_MANAGER:CreateControl(name .. "_guild", frame, CT_LABEL)
+        frame.guild:SetFont("ZoFontGame")
+        frame.guild:SetColor(0.8, 0.8, 0.6, 1)
+        frame.guild:SetAnchor(TOPLEFT, frame.divider, TOPLEFT, 50, 10)
+        frame.guild:SetText(ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_SKILLTYPE5)))
+        frame.guild:SetDimensions(350)
+
+        local guilds = getGuilds()
+        local guildList = {}
+
+        for _, g in pairs(guilds) do
+            table.insert(guildList, g)
+        end
+
+        BS.firstguild = guildList[1]
+
+        local function guildCallback(selectedGuild)
+            BS.selectedGuild = selectedGuild
+            BS.GuildFriendsUpdate(frame.scrollList)
+        end
+
+        frame.guildValue =
+            BS.CreateComboBox(name .. "_guildValue", frame, 200, 32, guildList, BS.firstguild, guildCallback)
+        frame.guildValue:SetAnchor(TOPLEFT, frame.guild, BOTTOMLEFT, 0, 10)
+    end
+
+    local scrollData = {
+        name = "BarSteward" .. toolName .. "List",
+        parent = frame,
+        width = 400,
+        height = 500,
+        rowHeight = 36,
+        rowTemplate = "BarSteward_Friends_Template",
+        setupCallback = setupFunc
+    }
+
+    local anchor = guild and frame.guildValue or frame.divider
+    local xoffset = guild and 0 or 50
+
+    frame.scrollList = BS.CreateScrollList(scrollData)
+    frame.scrollList:SetAnchor(TOPLEFT, anchor, BOTTOMLEFT, xoffset, 10)
+    BS[toolName .. "Update"](frame.scrollList)
 
     frame.button = BS.CreateButton(name .. "_button", frame, 100, 32)
     frame.button:SetText(GetString(_G.BARSTEWARD_OK_COLOUR))
@@ -528,33 +568,162 @@ function BS.CreateFriendsTool()
         "OnClicked",
         function()
             frame.fragment:SetHiddenForReason("disabled", true)
+
+            if (guild) then
+                if (BS.Vars.Controls[BS.W_GUILD_FRIENDS].Bar ~= 0) then
+                    BS.widgets[BS.W_GUILD_FRIENDS].update(
+                        _G[BS.Name .. "_Widget_" .. BS.widgets[BS.W_GUILD_FRIENDS].name].ref
+                    )
+                end
+            end
         end
     )
 
     frame.selectAll = BS.CreateButton(name .. "_select_all", frame, 100, 32)
     frame.selectAll:SetText(GetString(_G.BARSTEWARD_SELECT_ALL))
     frame.selectAll:SetAnchor(TOPLEFT, frame.scrollList, BOTTOMLEFT, 0, 5)
-    frame.selectAll:SetHandler("OnClicked", function()
-        for _, friend in ipairs(BS.friendDataItems) do
-            BS.Vars.FriendAnnounce[friend.name] = true
-            BS.FriendsUpdate(frame.scrollList)
+    frame.selectAll:SetHandler(
+        "OnClicked",
+        function()
+            local dataItems = BS.friendDataItems
+            local value = true
+
+            if (guild) then
+                dataItems = BS.guildFriendDataItems
+                value = BS.GetGuildId(BS.selectedGuild)
+            end
+
+            for _, friend in ipairs(dataItems) do
+                BS.Vars[varName][friend.name] = value
+                BS[toolName .. "Update"](frame.scrollList)
+            end
         end
-    end)
+    )
 
     frame.selectNone = BS.CreateButton(name .. "_select_none", frame, 100, 32)
     frame.selectNone:SetText(GetString(_G.BARSTEWARD_SELECT_NONE))
     frame.selectNone:SetAnchor(LEFT, frame.selectAll, RIGHT, 10, 0)
-    frame.selectNone:SetHandler("OnClicked", function()
-        for _, friend in ipairs(BS.friendDataItems) do
-            BS.Vars.FriendAnnounce[friend.name] = false
-            BS.FriendsUpdate(frame.scrollList)
+    frame.selectNone:SetHandler(
+        "OnClicked",
+        function()
+            local dataItems = BS.friendDataItems
+
+            if (guild) then
+                dataItems = BS.guildFriendDataItems
+            end
+
+            for _, friend in ipairs(dataItems) do
+                BS.Vars[varName][friend.name] = nil
+                BS[toolName .. "Update"](frame.scrollList)
+            end
         end
-    end)
+    )
 
     frame.fragment = ZO_HUDFadeSceneFragment:New(frame)
     frame.fragment:SetHiddenForReason("disabled", true)
+
     SCENE_MANAGER:GetScene("hud"):AddFragment(frame.fragment)
     SCENE_MANAGER:GetScene("hudui"):AddFragment(frame.fragment)
 
     return frame
+end
+
+function BS.CreateFriendsTool()
+    return CreateTool(GetString(_G.BARSTEWARD_ANNOUNCEMENT_FRIEND), "Friends", "FriendAnnounce", setupFriendsDataRow)
+end
+
+-- guild friends
+local function getGuildMembers(guildId)
+    local localPlayerIndex = GetPlayerGuildMemberIndex(guildId)
+    local numGuildMembers = GetNumGuildMembers(guildId)
+    local members = {}
+
+    for guildMemberIndex = 1, numGuildMembers do
+        local displayName, _, _, status = GetGuildMemberInfo(guildId, guildMemberIndex)
+        local isLocalPlayer = guildMemberIndex == localPlayerIndex
+        local hasCharacter, rawCharacterName, _, _, alliance = GetGuildMemberCharacterInfo(guildId, guildMemberIndex)
+
+        if (isLocalPlayer == false) then
+            table.insert(
+                members,
+                {
+                    index = guildMemberIndex,
+                    displayName = displayName,
+                    hasCharacter = hasCharacter,
+                    isLocalPlayer = isLocalPlayer,
+                    characterName = ZO_CachedStrFormat(_G.SI_UNIT_NAME, rawCharacterName),
+                    alliance = alliance,
+                    status = status
+                }
+            )
+        end
+    end
+
+    return members
+end
+
+function BS.GetGuildId(guildName)
+    for id, guild in pairs(BS.guilds) do
+        if (guild == guildName) then
+            return id
+        end
+    end
+end
+
+local function setupGuildFriendsDataRow(rowControl, data)
+    local checkBox = rowControl:GetNamedChild("Check")
+
+    ZO_CheckButton_SetLabelText(checkBox, data.name)
+
+    local function onClicked(checkButton, checked)
+        if (checked) then
+            BS.Vars.GuildFriendAnnounce[checkButton.label:GetText()] = BS.GetGuildId(BS.selectedGuild)
+        else
+            BS.Vars.GuildFriendAnnounce[checkButton.label:GetText()] = nil
+        end
+    end
+
+    ZO_CheckButton_SetToggleFunction(checkBox, onClicked)
+    ZO_CheckButton_SetCheckState(checkBox, BS.Vars.GuildFriendAnnounce[checkBox.label:GetText()])
+end
+
+function BS.UpdateGuildFriendsList()
+    local guildId = BS.GetGuildId(BS.selectedGuild or BS.firstguild)
+    local masterList = getGuildMembers(guildId)
+
+    table.sort(
+        masterList,
+        function(a, b)
+            return a.displayName < b.displayName
+        end
+    )
+    BS.guildFriendDataItems = {}
+    local itemKey = 1
+
+    for _, friend in ipairs(masterList) do
+        local dname = ZO_FormatUserFacingDisplayName(friend.displayName) or friend.displayName
+        BS.guildFriendDataItems[itemKey] = {name = dname}
+        itemKey = itemKey + 1
+    end
+end
+
+function BS.GuildFriendsUpdate(scrollList)
+    BS.UpdateGuildFriendsList()
+
+    local list = scrollList or BS.w_guildfriends_list.scrollList
+    list:Update(BS.guildFriendDataItems)
+end
+
+function BS.CreateGuildFriendsTool()
+    local tool =
+        CreateTool(
+        GetString(_G.BARSTEWARD_GUILD_FRIENDS_MONITORING),
+        "GuildFriends",
+        "GuildFriendAnnounce",
+        setupGuildFriendsDataRow,
+        true
+    )
+    BS.selectedGuild = BS.GetGuildId(BS.firstguild)
+
+    return tool
 end

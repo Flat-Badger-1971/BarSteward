@@ -17,8 +17,10 @@ BS.Defaults = {
     FontSize = 18,
     FriendAnnounce = {},
     Gold = {},
+    GuildFriendAnnounce = {},
     Movable = false,
     PreviousFriendTime = {},
+    PreviousGuildFriendTime = {},
     PreviousAnnounceTime = {},
     TimeFormat12 = "hh:m:s",
     TimeFormat24 = "HH:m:s",
@@ -279,6 +281,27 @@ BS.Defaults = {
             DangerValue = 95
         },
         [BS.W_SPEED] = {Bar = 0, Order = 49, ColourValues = "c", Units = "mph", ShowPercent = false},
-        [BS.W_CRAFTING_DAILIES] = {Bar = 0, Order = 50}
+        [BS.W_CRAFTING_DAILIES] = {Bar = 0, Order = 50},
+        [BS.W_GUILD_FRIENDS] = {Bar = 0, Order = 51, ColourValues = "c", Announce = false},
+        [BS.W_DAILY_ENDEAVOUR_TIME] = {
+            Bar = 0,
+            Order = 52,
+            HideSeconds = false,
+            ColourValues = "okc,wv,wc,dv,dc",
+            DangerValue = 2,
+            WarningValue = 6,
+            Units = GetString(_G.BARSTEWARD_HOURS),
+            Timer = true
+        },
+        [BS.W_WEEKLY_ENDEAVOUR_TIME] = {
+            Bar = 0,
+            Order = 52,
+            HideSeconds = false,
+            ColourValues = "okc,wv,wc,dv,dc",
+            DangerValue = 48,
+            WarningValue = 72,
+            Units = GetString(_G.BARSTEWARD_HOURS),
+            Timer = true
+        }
     }
 }

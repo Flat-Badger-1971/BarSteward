@@ -69,6 +69,63 @@ EVENT_MANAGER:RegisterForEvent(
     end
 )
 
+local function getDisplay(timeRemaining, widgetIndex, inUse, maxResearch)
+    local display
+    local hours = timeRemaining / 60 / 60
+    local days = math.floor((hours / 24) + 0.5)
+
+    if (BS.Vars.Controls[widgetIndex].ShowDays and days >= 1 and hours > 24) then
+        display = zo_strformat(GetString(_G.BARSTEWARD_DAYS), days)
+    else
+        display =
+            BS.SecondsToTime(
+            timeRemaining,
+            false,
+            false,
+            BS.Vars.Controls[widgetIndex].HideSeconds,
+            BS.Vars.Controls[widgetIndex].Format
+        )
+    end
+
+    display = display .. (BS.Vars.Controls[widgetIndex].ShowSlots and " (" .. inUse .. "/" .. maxResearch .. ")" or "")
+
+    return display
+end
+
+local function getSettings(widgetIndex)
+    local settings = {
+        [1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_SHOW_SLOTS),
+            getFunc = function()
+                return BS.Vars.Controls[widgetIndex].ShowSlots
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[widgetIndex].ShowSlots = value
+                BS.widgets[widgetIndex].update(_G[BS.Name .. "_Widget_" .. BS.widgets[widgetIndex].name].ref)
+            end,
+            width = "full"
+        },
+        [2] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_DAYS_ONLY),
+            tooltip = GetString(_G.BARSTEWARD_DAYS_ONLY_TOOLTIP),
+            getFunc = function()
+                return BS.Vars.Controls[widgetIndex].ShowDays
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[widgetIndex].ShowDays = value
+                if (BS.Vars.Controls[widgetIndex].Bar ~= 0) then
+                    BS.widgets[widgetIndex].update(_G[BS.Name .. "_Widget_" .. BS.widgets[widgetIndex].name].ref)
+                end
+            end,
+            width = "full"
+        }
+    }
+
+    return settings
+end
+
 BS.widgets[BS.W_BLACKSMITHING] = {
     name = "blacksmithing",
     update = function(widget)
@@ -81,16 +138,11 @@ BS.widgets[BS.W_BLACKSMITHING] = {
             colour = BS.Vars.Controls[BS.W_BLACKSMITHING].WarningColour or BS.Vars.DefaultWarningColour
         end
 
+        local display = getDisplay(timeRemaining, BS.W_BLACKSMITHING, inUse, maxResearch)
+
         widget:SetColour(unpack(colour))
-        widget:SetValue(
-            BS.SecondsToTime(
-                timeRemaining,
-                false,
-                false,
-                BS.Vars.Controls[BS.W_BLACKSMITHING].HideSeconds,
-                BS.Vars.Controls[BS.W_BLACKSMITHING].Format
-            ) .. (BS.Vars.Controls[BS.W_BLACKSMITHING].ShowSlots and " (" .. inUse .. "/" .. maxResearch .. ")" or "")
-        )
+        widget:SetValue(display)
+
         return timeRemaining
     end,
     timer = 1000,
@@ -100,22 +152,7 @@ BS.widgets[BS.W_BLACKSMITHING] = {
     complete = function()
         return BS.IsTraitResearchComplete(_G.CRAFTING_TYPE_BLACKSMITHING)
     end,
-    customSettings = {
-        [1] = {
-            type = "checkbox",
-            name = GetString(_G.BARSTEWARD_SHOW_SLOTS),
-            getFunc = function()
-                return BS.Vars.Controls[BS.W_BLACKSMITHING].ShowSlots
-            end,
-            setFunc = function(value)
-                BS.Vars.Controls[BS.W_BLACKSMITHING].ShowSlots = value
-                BS.widgets[BS.W_BLACKSMITHING].update(
-                    _G[BS.Name .. "_Widget_" .. BS.widgets[BS.W_BLACKSMITHING].name].ref
-                )
-            end,
-            width = "full"
-        }
-    }
+    customSettings = getSettings(BS.W_BLACKSMITHING)
 }
 
 BS.widgets[BS.W_WOODWORKING] = {
@@ -130,16 +167,11 @@ BS.widgets[BS.W_WOODWORKING] = {
             colour = BS.Vars.Controls[BS.W_WOODWORKING].WarningColour or BS.Vars.DefaultWarningColour
         end
 
+        local display = getDisplay(timeRemaining, BS.W_WOODWORKING, inUse, maxResearch)
+
         widget:SetColour(unpack(colour))
-        widget:SetValue(
-            BS.SecondsToTime(
-                timeRemaining,
-                false,
-                false,
-                BS.Vars.Controls[BS.W_WOODWORKING].HideSeconds,
-                BS.Vars.Controls[BS.W_WOODWORKING].Format
-            ) .. (BS.Vars.Controls[BS.W_WOODWORKING].ShowSlots and " (" .. inUse .. "/" .. maxResearch .. ")" or "")
-        )
+        widget:SetValue(display)
+
         return timeRemaining
     end,
     timer = 1000,
@@ -149,20 +181,7 @@ BS.widgets[BS.W_WOODWORKING] = {
     complete = function()
         return BS.IsTraitResearchComplete(_G.CRAFTING_TYPE_WOODWORKING)
     end,
-    customSettings = {
-        [1] = {
-            type = "checkbox",
-            name = GetString(_G.BARSTEWARD_SHOW_SLOTS),
-            getFunc = function()
-                return BS.Vars.Controls[BS.W_WOODWORKING].ShowSlots
-            end,
-            setFunc = function(value)
-                BS.Vars.Controls[BS.W_WOODWORKING].ShowSlots = value
-                BS.widgets[BS.W_WOODWORKING].update(_G[BS.Name .. "_Widget_" .. BS.widgets[BS.W_WOODWORKING].name].ref)
-            end,
-            width = "full"
-        }
-    }
+    customSettings = getSettings(BS.W_WOODWORKING)
 }
 
 BS.widgets[BS.W_CLOTHING] = {
@@ -177,16 +196,11 @@ BS.widgets[BS.W_CLOTHING] = {
             colour = BS.Vars.Controls[BS.W_CLOTHING].WarningColour or BS.Vars.DefaultWarningColour
         end
 
+        local display = getDisplay(timeRemaining, BS.W_CLOTHING, inUse, maxResearch)
+
         widget:SetColour(unpack(colour))
-        widget:SetValue(
-            BS.SecondsToTime(
-                timeRemaining,
-                false,
-                false,
-                BS.Vars.Controls[BS.W_CLOTHING].HideSeconds,
-                BS.Vars.Controls[BS.W_CLOTHING].Format
-            ) .. (BS.Vars.Controls[BS.W_CLOTHING].ShowSlots and " (" .. inUse .. "/" .. maxResearch .. ")" or "")
-        )
+        widget:SetValue(display)
+
         return timeRemaining
     end,
     timer = 1000,
@@ -196,20 +210,7 @@ BS.widgets[BS.W_CLOTHING] = {
     complete = function()
         return BS.IsTraitResearchComplete(_G.CRAFTING_TYPE_CLOTHIER)
     end,
-    customSettings = {
-        [1] = {
-            type = "checkbox",
-            name = GetString(_G.BARSTEWARD_SHOW_SLOTS),
-            getFunc = function()
-                return BS.Vars.Controls[BS.W_CLOTHING].ShowSlots
-            end,
-            setFunc = function(value)
-                BS.Vars.Controls[BS.W_CLOTHING].ShowSlots = value
-                BS.widgets[BS.W_CLOTHING].update(_G[BS.Name .. "_Widget_" .. BS.widgets[BS.W_CLOTHING].name].ref)
-            end,
-            width = "full"
-        }
-    }
+    customSettings = getSettings(BS.W_CLOTHING)
 }
 
 BS.widgets[BS.W_JEWELCRAFTING] = {
@@ -224,16 +225,11 @@ BS.widgets[BS.W_JEWELCRAFTING] = {
             colour = BS.Vars.Controls[BS.W_JEWELCRAFTING].WarningColour or BS.Vars.DefaultWarningColour
         end
 
+        local display = getDisplay(timeRemaining, BS.W_JEWELCRAFTING, inUse, maxResearch)
+
         widget:SetColour(unpack(colour))
-        widget:SetValue(
-            BS.SecondsToTime(
-                timeRemaining,
-                false,
-                false,
-                BS.Vars.Controls[BS.W_JEWELCRAFTING].HideSeconds,
-                BS.Vars.Controls[BS.W_JEWELCRAFTING].Format
-            ) .. (BS.Vars.Controls[BS.W_JEWELCRAFTING].ShowSlots and " (" .. inUse .. "/" .. maxResearch .. ")" or "")
-        )
+        widget:SetValue(display)
+
         return timeRemaining
     end,
     timer = 1000,
@@ -243,22 +239,7 @@ BS.widgets[BS.W_JEWELCRAFTING] = {
     complete = function()
         return BS.IsTraitResearchComplete(_G.CRAFTING_TYPE_JEWELRYCRAFTING)
     end,
-    customSettings = {
-        [1] = {
-            type = "checkbox",
-            name = GetString(_G.BARSTEWARD_SHOW_SLOTS),
-            getFunc = function()
-                return BS.Vars.Controls[BS.W_JEWELCRAFTING].ShowSlots
-            end,
-            setFunc = function(value)
-                BS.Vars.Controls[BS.W_JEWELCRAFTING].ShowSlots = value
-                BS.widgets[BS.W_JEWELCRAFTING].update(
-                    _G[BS.Name .. "_Widget_" .. BS.widgets[BS.W_JEWELCRAFTING].name].ref
-                )
-            end,
-            width = "full"
-        }
-    }
+    customSettings = getSettings(BS.W_JEWELCRAFTING)
 }
 
 local qualifiedQuestNames = {}

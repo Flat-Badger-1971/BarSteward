@@ -233,7 +233,7 @@ BS.widgets[BS.W_SKILL_POINTS] = {
 -- based on Ye Olde Speed
 -- estimate of units per meter based on some of the tiles in Alinor
 local UNITS_PER_METER = 200
-local DEFAULT_SPEED = 600
+local DEFAULT_SPEED = 660
 
 local function GetCurrentPos()
     local _, posX, _, posY = GetUnitRawWorldPosition("player")

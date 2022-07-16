@@ -51,6 +51,13 @@ read_globals = {
             ShowCategory = {read_only = true}
         }
     },
+	["GUILD_ROSTER_MANAGER"] = {
+		fields = {
+			SetGuildId = {read_only = true},
+			FindDataByDisplayName = {read_only = true},
+			GetGuildId = {read_only = true}
+		}
+	},
     ["MAIN_MENU_KEYBOARD"] = {
         fields = {
             ShowScene = {read_only = true}
@@ -218,6 +225,10 @@ read_globals = {
     "GetGameCameraInteractableActionInfo",
     "GetGameCameraPickpocketingBonusInfo",
     "GetGameTimeMilliseconds",
+	"GetGuildId",
+	"GetGuildMemberCharacterInfo",
+	"GetGuildMemberInfo",
+	"GetGuildName",
     "GetUIGlobalScale",
     "GetInteractionType",
     "GetInterfaceColor",
@@ -244,6 +255,8 @@ read_globals = {
     "GetNumChampionXPInChampionPoint",
     "GetNumExperiencePointsInCompanionLevel",
     "GetNumFriends",
+	"GetNumGuildMembers",
+	"GetNumGuilds",
     "GetNumLockpicksLeft",
     "GetNumSkyShards",
     "GetNumSkyshardsInZone",
@@ -253,6 +266,7 @@ read_globals = {
     "GetPendingCompanionDefId",
     "GetPlayerChampionPointsEarned",
     "GetPlayerChampionXP",
+	"GetPlayerGuildMemberIndex",
     "GetPulseTimeline",
     "GetRecallCooldown",
     "GetRecipeIngredientItemInfo",
