@@ -241,8 +241,14 @@ BS.widgets[BS.W_LEADS] = {
                 timeColour = BS.Vars.Controls[BS.W_LEADS].WarningColour or BS.Vars.DefaultWarningColour
             end
 
+            local value = BS.SecondsToTime(minTime, false, false, true, BS.Vars.Controls[BS.W_LEADS].Format)
+
+            if (BS.Vars.Controls[BS.W_LEADS].ShowCount) then
+                value = "(" .. #leads .. ")  " .. value
+            end
+
             widget:SetColour(unpack(timeColour))
-            widget:SetValue(BS.SecondsToTime(minTime, false, false, true, BS.Vars.Controls[BS.W_LEADS].Format))
+            widget:SetValue(value)
 
             local ttt = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ANTIQUITY_SUBHEADING_ACTIVE_LEADS))
 
@@ -270,7 +276,23 @@ BS.widgets[BS.W_LEADS] = {
     timer = 1000,
     icon = GetAntiquityLeadIcon(),
     tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ANTIQUITY_SUBHEADING_ACTIVE_LEADS)),
-    hideWhenEqual = 99999999
+    hideWhenEqual = 99999999,
+    customSettings = {
+        [1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_SHOW_LEAD_COUNT),
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_LEADS].ShowCount or false
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_LEADS].ShowCount = value
+                if (BS.Vars.Controls[BS.W_LEADS].Bar ~= 0) then
+                    BS.widgets[BS.W_LEADS].update(_G[BS.Name .. "_Widget_" .. BS.widgets[BS.W_LEADS].name].ref)
+                end
+            end,
+            default = false
+        }
+    }
 }
 
 local function getDisplay(timeRemaining, widgetIndex)
@@ -298,18 +320,18 @@ local function getTimedActivityTimeRemaining(activityType, widgetIndex, widget)
     local secondsRemaining = TIMED_ACTIVITIES_MANAGER:GetTimedActivityTypeTimeRemainingSeconds(activityType)
     local colour = BS.Vars.Controls[widgetIndex].OkColour or BS.Vars.DefaultOkColour
 
-        if (secondsRemaining < (BS.Vars.Controls[widgetIndex].DangerValue * 3600)) then
-            colour = BS.Vars.Controls[widgetIndex].DangerColour or BS.Vars.DefaultDangerColour
-        elseif (secondsRemaining < (BS.Vars.Controls[widgetIndex].WarningValue * 3600)) then
-            colour = BS.Vars.Controls[widgetIndex].WarningColour or BS.Vars.DefaultWarningColour
-        end
+    if (secondsRemaining < (BS.Vars.Controls[widgetIndex].DangerValue * 3600)) then
+        colour = BS.Vars.Controls[widgetIndex].DangerColour or BS.Vars.DefaultDangerColour
+    elseif (secondsRemaining < (BS.Vars.Controls[widgetIndex].WarningValue * 3600)) then
+        colour = BS.Vars.Controls[widgetIndex].WarningColour or BS.Vars.DefaultWarningColour
+    end
 
-        local display = getDisplay(secondsRemaining, widgetIndex)
+    local display = getDisplay(secondsRemaining, widgetIndex)
 
-        widget:SetColour(unpack(colour))
-        widget:SetValue(display)
+    widget:SetColour(unpack(colour))
+    widget:SetValue(display)
 
-        return secondsRemaining
+    return secondsRemaining
 end
 
 BS.widgets[BS.W_DAILY_ENDEAVOUR_TIME] = {
