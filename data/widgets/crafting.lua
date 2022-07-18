@@ -102,7 +102,7 @@ local function getSettings(widgetIndex)
             end,
             setFunc = function(value)
                 BS.Vars.Controls[widgetIndex].ShowSlots = value
-                BS.widgets[widgetIndex].update(_G[BS.Name .. "_Widget_" .. BS.widgets[widgetIndex].name].ref)
+                BS.RefreshWidget(widgetIndex)
             end,
             width = "full"
         },
@@ -115,9 +115,7 @@ local function getSettings(widgetIndex)
             end,
             setFunc = function(value)
                 BS.Vars.Controls[widgetIndex].ShowDays = value
-                if (BS.Vars.Controls[widgetIndex].Bar ~= 0) then
-                    BS.widgets[widgetIndex].update(_G[BS.Name .. "_Widget_" .. BS.widgets[widgetIndex].name].ref)
-                end
+                BS.RefreshWidget(widgetIndex)
             end,
             width = "full"
         }

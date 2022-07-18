@@ -129,9 +129,7 @@ BS.widgets[BS.W_FRIENDS] = {
             end,
             setFunc = function(value)
                 BS.Vars.Controls[BS.W_FRIENDS].OnlineOnly = value
-                if (BS.Vars.Controls[BS.W_FRIENDS].Bar ~= 0) then
-                    BS.widgets[BS.W_FRIENDS].update(_G[BS.Name .. "_Widget_" .. BS.widgets[BS.W_FRIENDS].name].ref)
-                end
+                BS.RefreshWidget(BS.W_FRIENDS)
             end,
             width = "full",
             default = false
@@ -276,9 +274,7 @@ BS.widgets[BS.W_GUILD_FRIENDS] = {
             setFunc = function(value)
                 BS.Vars.Controls[BS.W_GUILD_FRIENDS].OnlineOnly = value
                 if (BS.Vars.Controls[BS.W_GUILD_FRIENDS].Bar ~= 0) then
-                    BS.widgets[BS.W_GUILD_FRIENDS].update(
-                        _G[BS.Name .. "_Widget_" .. BS.widgets[BS.W_GUILD_FRIENDS].name].ref
-                    )
+                    BS.RefreshWidget(BS.W_GUILD_FRIENDS)
                 end
             end,
             width = "full",

@@ -108,60 +108,62 @@ local function Initialise()
     BS.alignBars = {}
 
     for idx, barData in pairs(bars) do
-        local widgets = {}
-        local orderedWidgets = {}
+        if (not BS.Vars.Bars[idx].Disable) then
+            local widgets = {}
+            local orderedWidgets = {}
 
-        table.insert(BS.alignBars, barData.Name)
+            table.insert(BS.alignBars, barData.Name)
 
-        -- get the widgets for this bar
-        for id, info in ipairs(BS.Vars.Controls) do
-            if (info.Bar == idx) then
-                local widget = BS.widgets[id]
-                widget.id = id
-                table.insert(widgets, {info.Order, widget})
-            end
-        end
-
-        -- ensure the widgets are in the order we want them drawn
-        table.sort(
-            widgets,
-            function(a, b)
-                return a[1] < b[1]
-            end
-        )
-
-        if (#widgets > 0) then
-            -- ensure there are no gaps in the array sequence
-            local widgetIndex = 1
-            for _, v in ipairs(widgets) do
-                orderedWidgets[widgetIndex] = v[2]
-                widgetIndex = widgetIndex + 1
+            -- get the widgets for this bar
+            for id, info in ipairs(BS.Vars.Controls) do
+                if (info.Bar == idx) then
+                    local widget = BS.widgets[id]
+                    widget.id = id
+                    table.insert(widgets, {info.Order, widget})
+                end
             end
 
-            local bar =
-                BS.CreateBar(
-                {
-                    index = idx,
-                    position = barData.Orientation == GetString(_G.BARSTEWARD_HORIZONTAL) and TOP or LEFT,
-                    scale = barData.Scale or GuiRoot:GetScale(),
-                    settings = BS.Vars.Bars[idx]
-                }
+            -- ensure the widgets are in the order we want them drawn
+            table.sort(
+                widgets,
+                function(a, b)
+                    return a[1] < b[1]
+                end
             )
 
-            bar:AddWidgets(orderedWidgets)
-        end
+            if (#widgets > 0) then
+                -- ensure there are no gaps in the array sequence
+                local widgetIndex = 1
+                for _, v in ipairs(widgets) do
+                    orderedWidgets[widgetIndex] = v[2]
+                    widgetIndex = widgetIndex + 1
+                end
 
-        if (BS.Vars.Bars[idx].NudgeCompass) then
-            BS.NudgeCompass()
-            -- from Bandits UI
-            -- stop the game move the compass back to its original position
-            local block = {ZO_CompassFrame_Keyboard_Template = true, ZO_CompassFrame_Gamepad_Template = true}
-            local ZO_ApplyTemplateToControl = _G.ApplyTemplateToControl
-            _G.ApplyTemplateToControl = function(control, templateName)
-                if block[templateName] then
-                    return
-                else
-                    ZO_ApplyTemplateToControl(control, templateName)
+                local bar =
+                    BS.CreateBar(
+                    {
+                        index = idx,
+                        position = barData.Orientation == GetString(_G.BARSTEWARD_HORIZONTAL) and TOP or LEFT,
+                        scale = barData.Scale or GuiRoot:GetScale(),
+                        settings = BS.Vars.Bars[idx]
+                    }
+                )
+
+                bar:AddWidgets(orderedWidgets)
+            end
+
+            if (BS.Vars.Bars[idx].NudgeCompass) then
+                BS.NudgeCompass()
+                -- from Bandits UI
+                -- stop the game move the compass back to its original position
+                local block = {ZO_CompassFrame_Keyboard_Template = true, ZO_CompassFrame_Gamepad_Template = true}
+                local ZO_ApplyTemplateToControl = _G.ApplyTemplateToControl
+                _G.ApplyTemplateToControl = function(control, templateName)
+                    if block[templateName] then
+                        return
+                    else
+                        ZO_ApplyTemplateToControl(control, templateName)
+                    end
                 end
             end
         end

@@ -541,3 +541,26 @@ function BS.RemoveFromScenes(sceneType, bar)
         SCENE_MANAGER:GetScene(scene):RemoveFragment(bar.fragment)
     end
 end
+
+function BS.VersionDelta(version)
+    local currentVersion = BS.VERSION:gsub("%.", "")
+    local checkVersion = version:gsub("%.", "")
+
+    return tonumber(currentVersion) - tonumber(checkVersion)
+end
+
+function BS.RefreshWidget(widgetIndex)
+    if (BS.Vars.Controls[widgetIndex].Bar ~= 0) then
+        BS.widgets[widgetIndex].update(_G[BS.Name .. "_Widget_" .. BS.widgets[widgetIndex].name].ref)
+    end
+end
+
+function BS.RefreshBar(widgetIndex)
+    if (BS.Vars.Controls[widgetIndex].Bar ~= 0) then
+        local widget = _G[BS.Name .. "_Widget_" .. BS.widgets[widgetIndex].name].ref
+        local bar = widget.control:GetParent().ref
+        local metadata = BS.widgets[widgetIndex]
+        metadata.widget = widget
+        bar:DoUpdate(metadata)
+    end
+end

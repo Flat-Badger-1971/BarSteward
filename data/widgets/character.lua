@@ -307,10 +307,7 @@ BS.widgets[BS.W_SPEED] = {
             end,
             setFunc = function(value)
                 BS.Vars.Controls[BS.W_SPEED].Units = value
-
-                if (BS.Vars.Controls[BS.W_SPEED].Bar ~= 0) then
-                    BS.widgets[BS.W_SPEED].update(_G[BS.Name .. "_Widget_" .. BS.widgets[BS.W_SPEED].name].ref)
-                end
+                BS.RefreshWidget(BS.W_SPEED)
             end,
             default = BS.Defaults.Controls[BS.W_SPEED].Units
         }

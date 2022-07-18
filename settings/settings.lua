@@ -1,13 +1,14 @@
 local BS = _G.BarSteward
 
 BS.LAM = _G.LibAddonMenu2
+BS.VERSION = "1.2.19"
 
 local panel = {
     type = "panel",
     name = "Bar Steward",
     displayName = "|cff9900Bar Steward|r",
     author = "Flat Badger",
-    version = "1.2.19",
+    version = BS.VERSION,
     registerForDefaults = true,
     registerForRefresh = true,
     slashCommand = "/bs"
@@ -453,10 +454,24 @@ local function getBarSettings()
                 default = false
             },
             [14] = {
+                type = "checkbox",
+                name = GetString(_G.BARSTEWARD_DISABLE),
+                getFunc = function()
+                    return BS.Vars.Bars[idx].Disable
+                end,
+                setFunc = function(value)
+                    BS.Vars.Bars[idx].Disable = value
+                end,
+                disabled = function() return idx == 1 end,
+                width = "full",
+                requiresReload = true,
+                default = false
+            },
+            [15] = {
                 type = "divider",
                 alpha = 0
             },
-            [15] = {
+            [16] = {
                 type = "button",
                 name = GetString(_G.BARSTEWARD_ALIGN),
                 func = function()
@@ -714,13 +729,7 @@ local function getWidgetSettings()
                 end,
                 setFunc = function(value)
                     BS.Vars.Controls[k].Autohide = value
-                    if (BS.Vars.Controls[k].Bar ~= 0) then
-                        local widget = _G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref
-                        local bar = widget.control:GetParent().ref
-                        local metadata = BS.widgets[k]
-                        metadata.widget = widget
-                        bar:DoUpdate(metadata)
-                    end
+                    BS.RefreshBar(k)
                 end,
                 width = "full",
                 default = BS.Defaults.Controls[k].Autohide
@@ -738,13 +747,7 @@ local function getWidgetSettings()
                 end,
                 setFunc = function(value)
                     BS.Vars.Controls[k].HideWhenComplete = value
-                    if (BS.Vars.Controls[k].Bar ~= 0) then
-                        local widget = _G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref
-                        local bar = widget.control:GetParent().ref
-                        local metadata = BS.widgets[k]
-                        metadata.widget = widget
-                        bar:DoUpdate(metadata)
-                    end
+                    BS.RefreshBar(k)
                 end,
                 width = "full",
                 default = BS.Defaults.Controls[k].HideWhenComplete
@@ -761,11 +764,7 @@ local function getWidgetSettings()
                 end,
                 setFunc = function(value)
                     BS.Vars.Controls[k].PvPOnly = value
-                    local widget = _G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref
-                    local bar = widget.control:GetParent().ref
-                    local metadata = BS.widgets[k]
-                    metadata.widget = widget
-                    bar:DoUpdate(metadata)
+                    BS.RefreshBar(k)
                 end,
                 width = "full",
                 default = BS.Defaults.Controls[k].PvPOnly
@@ -782,9 +781,7 @@ local function getWidgetSettings()
                 end,
                 setFunc = function(value)
                     BS.Vars.Controls[k].ShowPercent = value
-                    if (BS.Vars.Controls[k].Bar ~= 0) then
-                        BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
-                    end
+                    BS.RefreshWidget(k)
                 end,
                 width = "full",
                 default = BS.Defaults.Controls[k].ShowPercent
@@ -801,9 +798,7 @@ local function getWidgetSettings()
                 end,
                 setFunc = function(value)
                     BS.Vars.Controls[k].UseSeparators = value
-                    if (BS.Vars.Controls[k].Bar ~= 0) then
-                        BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
-                    end
+                    BS.RefreshWidget(k)
                 end,
                 width = "full",
                 default = BS.Defaults.Controls[k].UseSeparators
@@ -820,9 +815,7 @@ local function getWidgetSettings()
                 end,
                 setFunc = function(value)
                     BS.Vars.Controls[k].HideSeconds = value
-                    if (BS.Vars.Controls[k].Bar ~= 0) then
-                        BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
-                    end
+                    BS.RefreshWidget(k)
                 end,
                 width = "full",
                 default = BS.Defaults.Controls[k].HideSeconds
@@ -1099,9 +1092,7 @@ local function getWidgetSettings()
                 setFunc = function(value)
                     BS.Vars.Controls[k][copts.varName] = value
                     if (copts.refresh) then
-                        if (BS.Vars.Controls[k].Bar ~= 0) then
-                            BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
-                        end
+                        BS.RefreshWidget(k)
                     end
                 end,
                 width = "full",
@@ -1196,9 +1187,7 @@ local function getWidgetSettings()
                 end,
                 setFunc = function(value)
                     BS.Vars.Controls[k].Format = value
-                    if (BS.Vars.Controls[k].Bar ~= 0) then
-                        BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
-                    end
+                    BS.RefreshWidget(k)
                 end,
                 default = k == BS.W_LEADS and "01:12:04" or "01:12:04:10"
             }
@@ -1217,10 +1206,7 @@ local function getWidgetSettings()
                     end,
                     setFunc = function(r, g, b, a)
                         BS.Vars.Controls[k].Colour = {r, g, b, a}
-
-                        if (BS.Vars.Controls[k].Bar ~= 0) then
-                            BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
-                        end
+                        BS.RefreshWidget(k)
                     end,
                     width = "full",
                     default = unpack(BS.Vars.DefaultColour)
@@ -1236,9 +1222,7 @@ local function getWidgetSettings()
                     end,
                     setFunc = function(r, g, b, a)
                         BS.Vars.Controls[k].OkColour = {r, g, b, a}
-                        if (BS.Vars.Controls[k].Bar ~= 0) then
-                            BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
-                        end
+                        BS.RefreshWidget(k)
                     end,
                     width = "full",
                     default = unpack(BS.Vars.DefaultOkColour)
@@ -1254,9 +1238,7 @@ local function getWidgetSettings()
                     end,
                     setFunc = function(r, g, b, a)
                         BS.Vars.Controls[k].WarningColour = {r, g, b, a}
-                        if (BS.Vars.Controls[k].Bar ~= 0) then
-                            BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
-                        end
+                        BS.RefreshWidget(k)
                     end,
                     width = "full",
                     default = unpack(BS.Vars.DefaultWarningColour)
@@ -1272,9 +1254,7 @@ local function getWidgetSettings()
                     end,
                     setFunc = function(r, g, b, a)
                         BS.Vars.Controls[k].DangerColour = {r, g, b, a}
-                        if (BS.Vars.Controls[k].Bar ~= 0) then
-                            BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
-                        end
+                        BS.RefreshWidget(k)
                     end,
                     width = "full",
                     default = unpack(BS.Vars.DefaultDangerColour)
@@ -1297,9 +1277,7 @@ local function getWidgetSettings()
                             BS.Vars.Controls[k].OkValue = tonumber(value)
                         end
 
-                        if (BS.Vars.Controls[k].Bar ~= 0) then
-                            BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
-                        end
+                        BS.RefreshWidget(k)
                     end,
                     textType = _G.TEXT_TYPE_NUMERIC,
                     isMultiLine = false,
@@ -1322,9 +1300,7 @@ local function getWidgetSettings()
                             BS.Vars.Controls[k].WarningValue = tonumber(value)
                         end
 
-                        if (BS.Vars.Controls[k].Bar ~= 0) then
-                            BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
-                        end
+                        BS.RefreshWidget(k)
                     end,
                     textType = _G.TEXT_TYPE_NUMERIC,
                     isMultiLine = false,
@@ -1347,9 +1323,7 @@ local function getWidgetSettings()
                             BS.Vars.Controls[k].DangerValue = tonumber(value)
                         end
 
-                        if (BS.Vars.Controls[k].Bar ~= 0) then
-                            BS.widgets[k].update(_G[BS.Name .. "_Widget_" .. BS.widgets[k].name].ref)
-                        end
+                        BS.RefreshWidget(k)
                     end,
                     textType = _G.TEXT_TYPE_NUMERIC,
                     isMultiLine = false,
@@ -1379,9 +1353,11 @@ local function getWidgetSettings()
             textureCoords = {0, 1, 0, 0.6}
         end
 
+        local widgetName = BS.widgets[k].tooltip:gsub(":", "")
+
         controls[idx] = {
             type = "submenu",
-            name = BS.widgets[k].tooltip:gsub(":", ""),
+            name = widgetName,
             icon = BS.widgets[k].icon,
             iconTextureCoords = textureCoords,
             controls = widgetControls,

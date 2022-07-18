@@ -536,9 +536,7 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
             end,
             setFunc = function(value)
                 BS.Vars.UseWritWorthy = value
-                BS.widgets[BS.W_WRITS_SURVEYS].update(
-                    _G[BS.Name .. "_Widget_" .. BS.widgets[BS.W_WRITS_SURVEYS].name].ref
-                )
+                BS.RefreshWidget(BS.W_WRITS_SURVEYS)
             end,
             disabled = function()
                 return _G.WritWorthy == nil
@@ -620,7 +618,10 @@ BS.widgets[BS.W_LOCKPICKS] = {
 
         local colour = BS.Vars.Controls[BS.W_BANK_SPACE].OkColour or BS.Vars.DefaultOkColour
 
-        if (available <= BS.Vars.Controls[BS.W_LOCKPICKS].WarningValue and available > BS.Vars.Controls[BS.W_LOCKPICKS].DangerValue) then
+        if
+            (available <= BS.Vars.Controls[BS.W_LOCKPICKS].WarningValue and
+                available > BS.Vars.Controls[BS.W_LOCKPICKS].DangerValue)
+         then
             colour = BS.Vars.Controls[BS.W_LOCKPICKS].WarningColour or BS.Vars.DefaultWarningColour
         elseif (available <= BS.Vars.Controls[BS.W_LOCKPICKS].DangerValue) then
             colour = BS.Vars.Controls[BS.W_LOCKPICKS].DangerColour or BS.Vars.DefaultDangerColour

@@ -1,5 +1,7 @@
 [color=#ff9900][b]Version: 1.2.19 ---------------[/b][/color]
 Active lead count option added
+Widget refresh refactor
+Allow bars (except main bar) to be disabled
 
 [color=#ff9900][b]Version: 1.2.18 ---------------[/b][/color]
 Option for friends widget tooltip to display online friends only

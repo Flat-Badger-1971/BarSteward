@@ -286,9 +286,7 @@ BS.widgets[BS.W_LEADS] = {
             end,
             setFunc = function(value)
                 BS.Vars.Controls[BS.W_LEADS].ShowCount = value
-                if (BS.Vars.Controls[BS.W_LEADS].Bar ~= 0) then
-                    BS.widgets[BS.W_LEADS].update(_G[BS.Name .. "_Widget_" .. BS.widgets[BS.W_LEADS].name].ref)
-                end
+                BS.RefreshWidget(BS.W_LEADS)
             end,
             default = false
         }

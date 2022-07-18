@@ -239,7 +239,8 @@ BS.Defaults = {
             WarningValue = 72,
             Units = GetString(_G.BARSTEWARD_HOURS),
             Autohide = true,
-            Timer = true
+            Timer = true,
+            NewOption = "1.2.19"
         },
         [BS.W_SOUL_GEMS] = {Bar = 0, Order = 38, ColourValues = "c", UseSeparators = false},
         [BS.W_FRIENDS] = {
@@ -295,7 +296,7 @@ BS.Defaults = {
         },
         [BS.W_WEEKLY_ENDEAVOUR_TIME] = {
             Bar = 0,
-            Order = 52,
+            Order = 53,
             HideSeconds = false,
             ColourValues = "okc,wv,wc,dv,dc",
             DangerValue = 48,
