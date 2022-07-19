@@ -228,7 +228,15 @@ BS.widgets[BS.W_LEADS] = {
                 timeColour = BS.Vars.Controls[BS.W_LEADS].WarningColour or BS.Vars.DefaultWarningColour
             end
 
-            local value = BS.SecondsToTime(minTime, false, false, true, BS.Vars.Controls[BS.W_LEADS].Format)
+            local value
+
+            if (#leads == 1 and leads[1].inProgress) then
+                value = GetString(_G.BARSTEWARD_IN_PROGRESS)
+                timeColour = {1, 0.5, 0, 1}
+                minTime = 0
+            else
+                value = BS.SecondsToTime(minTime, false, false, true, BS.Vars.Controls[BS.W_LEADS].Format)
+            end
 
             if (BS.Vars.Controls[BS.W_LEADS].ShowCount) then
                 value = "(" .. #leads .. ")  " .. value
