@@ -70,6 +70,7 @@ ZO_CreateStringId(
 )
 ZO_CreateStringId("BARSTEWARD_HORIZONTAL", "Horizontal")
 ZO_CreateStringId("BARSTEWARD_HOURS", "Hours")
+ZO_CreateStringId("BARSTEWARD_IN_PROGRESS", "In progress")
 ZO_CreateStringId("BARSTEWARD_KPH", "kph")
 ZO_CreateStringId("BARSTEWARD_LATENCY", "Latency")
 ZO_CreateStringId("BARSTEWARD_LAUNDER", "Launder Transactions")

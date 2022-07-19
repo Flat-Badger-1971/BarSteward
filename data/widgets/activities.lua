@@ -204,32 +204,29 @@ BS.widgets[BS.W_LEADS] = {
     update = function(widget)
         local minTime = 99999999
         local leads = {}
+        local antiquityId = GetNextAntiquityId()
 
-        if (leadActive) then
-            local antiquityId = GetNextAntiquityId()
+        while antiquityId do
+            if (DoesAntiquityHaveLead(antiquityId)) then
+                local lead = {
+                    name = ZO_CachedStrFormat("<<C:1>>", GetAntiquityName(antiquityId)),
+                    remaining = GetAntiquityLeadTimeRemainingSeconds(antiquityId),
+                    quality = GetAntiquityQuality(antiquityId),
+                    zone = ZO_CachedStrFormat("<<C:1>>", GetZoneNameById(GetAntiquityZoneId(antiquityId))),
+                    id = antiquityId,
+                    inProgress = GetNumAntiquityDigSites(antiquityId) > 0
+                }
 
-            while antiquityId do
-                if (DoesAntiquityHaveLead(antiquityId)) then
-                    local lead = {
-                        name = ZO_CachedStrFormat("<<C:1>>", GetAntiquityName(antiquityId)),
-                        remaining = GetAntiquityLeadTimeRemainingSeconds(antiquityId),
-                        quality = GetAntiquityQuality(antiquityId),
-                        zone = ZO_CachedStrFormat("<<C:1>>", GetZoneNameById(GetAntiquityZoneId(antiquityId))),
-                        id = antiquityId
-                    }
+                table.insert(leads, lead)
 
-                    table.insert(leads, lead)
-
+                if (not lead.inProgress) then
                     if (lead.remaining < minTime) then
                         minTime = lead.remaining
                     end
                 end
-
-                antiquityId = GetNextAntiquityId(antiquityId)
             end
-        else
-            minTime = 0
-            leadActive = false
+
+            antiquityId = GetNextAntiquityId(antiquityId)
         end
 
         if (#leads > 0) then
@@ -259,13 +256,20 @@ BS.widgets[BS.W_LEADS] = {
 
                 timeColour = BS.Vars.DefaultOkColour
 
-                if (lead.remaining <= (BS.Vars.Controls[BS.W_LEADS].DangerValue * 3600)) then
-                    timeColour = BS.Vars.Controls[BS.W_LEADS].DangerColour or BS.Vars.DefaultDangerColour
-                elseif (lead.remaining <= (BS.Vars.Controls[BS.W_LEADS].WarningValue * 3600)) then
-                    timeColour = BS.Vars.Controls[BS.W_LEADS].WarningColour or BS.Vars.DefaultWarningColour
+                if (lead.inProgress) then
+                    time = GetString(_G.BARSTEWARD_IN_PROGRESS)
+                    timeColour = {1, 0.5, 0, 1}
+                else
+                    if (lead.remaining <= (BS.Vars.Controls[BS.W_LEADS].DangerValue * 3600)) then
+                        timeColour = BS.Vars.Controls[BS.W_LEADS].DangerColour or BS.Vars.DefaultDangerColour
+                    elseif (lead.remaining <= (BS.Vars.Controls[BS.W_LEADS].WarningValue * 3600)) then
+                        timeColour = BS.Vars.Controls[BS.W_LEADS].WarningColour or BS.Vars.DefaultWarningColour
+                    end
                 end
 
-                ttt = ttt .. BS.LF .. ttlColour .. nameAndZone .. " - |r" .. BS.ARGBConvert(timeColour) .. time .. "|r"
+                ttt =
+                    ttt ..
+                    BS.LF .. " " .. ttlColour .. nameAndZone .. " - |r" .. BS.ARGBConvert(timeColour) .. time .. "|r"
             end
 
             widget.tooltip = ttt

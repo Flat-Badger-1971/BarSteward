@@ -250,6 +250,7 @@ read_globals = {
     "GetMinimumRapport",
     "GetNextAntiquityId",
     "GetNonCombatBonus",
+    "GetNumAntiquityDigSites",
     "GetNumBuffs",
     "GetNumChampionDisciplines",
     "GetNumChampionXPInChampionPoint",
