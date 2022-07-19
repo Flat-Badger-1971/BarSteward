@@ -188,16 +188,6 @@ local function getLeadColour(lead)
     return "|c" .. difficultyColours[lead.quality]
 end
 
-local leadActive = true
-
-EVENT_MANAGER:RegisterForEvent(
-    BS.Name,
-    _G.EVENT_ANTIQUITY_LEAD_ACQUIRED,
-    function()
-        leadActive = true
-    end
-)
-
 BS.widgets[BS.W_LEADS] = {
     -- v1.1.0
     name = "leads",
