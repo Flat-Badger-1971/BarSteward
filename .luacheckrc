@@ -326,6 +326,7 @@ read_globals = {
     "ZO_CheckButton_SetCheckState",
     "ZO_CheckButton_SetLabelText",
     "ZO_CheckButton_SetToggleFunction",
+    "ZO_ClearNumericallyIndexedTable",
     "ZO_CreateStringId",
     "ZO_DeepTableCopy",
     "ZO_Dialogs_RegisterCustomDialog",

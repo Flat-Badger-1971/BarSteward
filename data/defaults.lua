@@ -303,6 +303,7 @@ BS.Defaults = {
             WarningValue = 72,
             Units = GetString(_G.BARSTEWARD_HOURS),
             Timer = true
-        }
+        },
+        [BS.W_COMPANION_LEVEL] = {Bar = 0, Order = 54, ColourValues = "c", Autohide = true, ShowXPPC = true}
     }
 }

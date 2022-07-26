@@ -160,6 +160,52 @@ local function isFriend(displayName)
     return false
 end
 
+local guildMasterList = {}
+
+local function getMasterList()
+    ZO_ClearNumericallyIndexedTable(guildMasterList)
+
+    local guildId = BS.guildId
+    local localPlayerIndex = GetPlayerGuildMemberIndex(guildId)
+    local numGuildMembers = GetNumGuildMembers(guildId)
+
+    for guildMemberIndex = 1, numGuildMembers do
+        local displayName, _, _, status, _ = GetGuildMemberInfo(guildId, guildMemberIndex)
+        local online = (status ~= _G.PLAYER_STATUS_OFFLINE)
+        local isLocalPlayer = guildMemberIndex == localPlayerIndex
+        local hasCharacter, rawCharacterName, zone, _, alliance = GetGuildMemberCharacterInfo(guildId, guildMemberIndex)
+
+        local data = {
+            index = guildMemberIndex,
+            displayName = displayName,
+            hasCharacter = hasCharacter,
+            isLocalPlayer = isLocalPlayer,
+            characterName = ZO_CachedStrFormat(_G.SI_UNIT_NAME, rawCharacterName),
+            formattedZone = ZO_CachedStrFormat(_G.SI_ZONE_NAME, zone),
+            alliance = alliance,
+            formattedAllianceName = ZO_CachedStrFormat(_G.SI_ALLIANCE_NAME, GetAllianceName(alliance)),
+            status = status,
+            online = online
+        }
+
+        guildMasterList[guildMemberIndex] = data
+    end
+end
+
+local function setGuildId(guildId)
+    BS.guildId = guildId
+    getMasterList()
+end
+
+local function findDataByDisplayName(displayName)
+    for i = 1, #guildMasterList do
+        local data = guildMasterList[i]
+        if data.displayName == displayName then
+            return data
+        end
+    end
+end
+
 BS.widgets[BS.W_GUILD_FRIENDS] = {
     --v1.2.18
     name = "guildFriends",
@@ -171,13 +217,13 @@ BS.widgets[BS.W_GUILD_FRIENDS] = {
         local textureFunctions = ZO_SocialList_GetPlatformTextureFunctions()
 
         for member, gid in pairs(masterList) do
-            local current = GUILD_ROSTER_MANAGER:GetGuildId()
+            local current = BS.guildId
 
             if (current ~= gid) then
-                GUILD_ROSTER_MANAGER:SetGuildId(gid)
+                setGuildId(gid)
             end
 
-            local info = GUILD_ROSTER_MANAGER:FindDataByDisplayName(member)
+            local info = findDataByDisplayName(member)
 
             if (info.online) then
                 table.insert(online, info)
@@ -216,8 +262,8 @@ BS.widgets[BS.W_GUILD_FRIENDS] = {
                 BS.Vars.PreviousGuildFriendTime[displayName] = os.time()
 
                 if (announce == true) then
-                    GUILD_ROSTER_MANAGER:SetGuildId(guildId)
-                    local info = GUILD_ROSTER_MANAGER:FindDataByDisplayName(displayName)
+                    setGuildId(guildId)
+                    local info = findDataByDisplayName(displayName)
                     local dname = ZO_FormatUserFacingDisplayName(displayName) or displayName
                     local cname = ZO_FormatUserFacingCharacterName(info.characterName) or info.characterName
 
@@ -290,6 +336,56 @@ BS.widgets[BS.W_GUILD_FRIENDS] = {
                 friends.fragment:SetHiddenForReason("disabled", false)
             end,
             width = "half"
+        }
+    }
+}
+
+BS.widgets[BS.W_COMPANION_LEVEL] = {
+    -- v1.2.19
+    name = "companionLevel",
+    update = function(widget)
+        local companionLevel, currentXPInLevel = GetActiveCompanionLevelInfo()
+        local totalXPInLevel = GetNumExperiencePointsInCompanionLevel(companionLevel + 1) or 0
+        local isMaxLevel = totalXPInLevel == 0
+        local percent = 0
+
+        if (not isMaxLevel) then
+            percent = math.max(zo_roundToNearest((currentXPInLevel or 0) / totalXPInLevel, 0.01), 0) * 100
+        end
+
+        local text = companionLevel
+
+        if (BS.Vars.Controls[BS.W_COMPANION_LEVEL].ShowXPPC) then
+            text = text .. " (" .. percent .. "%)"
+        end
+
+        widget:SetValue(text)
+        widget:SetColour(unpack(BS.Vars.Controls[BS.W_COMPANION_LEVEL].Colour or BS.Vars.DefaultColour))
+
+        local ttt = GetString(_G.BARSTEWARD_COMPANION_LEVEL) .. BS.LF
+        ttt = ttt .. "|cf9f9f9" .. (currentXPInLevel or 0) .. " / " .. totalXPInLevel .. "|r"
+
+        widget.tooltip = ttt
+
+        return widget:GetValue()
+    end,
+    event = {_G.EVENT_ACTIVE_COMPANION_STATE_CHANGED, _G.EVENT_COMPANION_EXPERIENCE_GAIN},
+    icon = "/esoui/art/companion/keyboard/category_u30_companions_up.dds",
+    tooltip = GetString(_G.BARSTEWARD_COMPANION_LEVEL),
+    hideWhenEqual = "0 (0%)",
+    customSettings = {
+        [1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_SHOW_XP_PC),
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_COMPANION_LEVEL].ShowXPPC or true
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_COMPANION_LEVEL].ShowXPPC = value
+                BS.RefreshWidget(BS.W_COMPANION_LEVEL)
+            end,
+            width = "full",
+            default = true
         }
     }
 }
