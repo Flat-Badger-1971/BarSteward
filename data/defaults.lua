@@ -304,6 +304,7 @@ BS.Defaults = {
             Units = GetString(_G.BARSTEWARD_HOURS),
             Timer = true
         },
-        [BS.W_COMPANION_LEVEL] = {Bar = 0, Order = 54, ColourValues = "c", Autohide = true, ShowXPPC = true}
+        [BS.W_COMPANION_LEVEL] = {Bar = 0, Order = 54, ColourValues = "c", Autohide = true, ShowXPPC = true},
+        [BS.W_TRIBUTE_CLUB_RANK] = {Bar = 0, Order = 55, ColourValues = "c" }
     }
 }

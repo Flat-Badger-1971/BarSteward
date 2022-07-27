@@ -369,3 +369,27 @@ BS.widgets[BS.W_WEEKLY_ENDEAVOUR_TIME] = {
         end
     end
 }
+
+BS.widgets[BS.W_TRIBUTE_CLUB_RANK] = {
+    name = "tributeRank",
+    update = function(widget)
+        local rank = GetTributePlayerClubRank()
+        local xp, totalxp = GetTributePlayerExperienceInCurrentClubRank()
+        local percent = zo_floor(xp / totalxp * 100)
+        local icon = string.format("EsoUI/Art/Tribute/tributeClubRank_%d.dds", rank)
+        local rankName = zo_strformat(GetString("SI_TRIBUTECLUBRANK", rank))
+        local displayRank = rank + 1
+
+        widget:SetIcon(icon)
+        widget:SetValue(displayRank .. " (" .. percent .. "%)")
+
+        local ttt = GetString(_G.BARSTEWARD_TRIBUTE_RANK) .. BS.LF
+        ttt = ttt .. "|cf9f9f9" .. displayRank .. " - " .. rankName .. BS.LF .. BS.LF
+        ttt = ttt .. xp .. " / " .. totalxp .. " (" .. percent .. "%)|r"
+
+        widget.tooltip = ttt
+    end,
+    event = {_G.EVENT_TRIBUTE_CLUB_RANK_CHANGED, _G.EVENT_TRIBUTE_CLUB_EXPERIENCE_GAINED, _G.EVENT_TRIBUTE_CLUB_INIT},
+    icon = "/esoui/art/tribute/tributeclubrank_7.dds",
+    tooltip = GetString(_G.BARSTEWARD_TRIBUTE_RANK)
+}
