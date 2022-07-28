@@ -389,7 +389,7 @@ BS.widgets[BS.W_TRIBUTE_CLUB_RANK] = {
 
         widget.tooltip = ttt
     end,
-    event = {_G.EVENT_TRIBUTE_CLUB_RANK_CHANGED, _G.EVENT_TRIBUTE_CLUB_EXPERIENCE_GAINED, _G.EVENT_TRIBUTE_CLUB_INIT},
+    event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_TRIBUTE_CLUB_RANK_CHANGED, _G.EVENT_TRIBUTE_CLUB_EXPERIENCE_GAINED, _G.EVENT_TRIBUTE_CLUB_INIT},
     icon = "/esoui/art/tribute/tributeclubrank_7.dds",
     tooltip = GetString(_G.BARSTEWARD_TRIBUTE_RANK)
 }
