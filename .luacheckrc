@@ -319,6 +319,7 @@ read_globals = {
     "PlayEmoteByIndex",
     "PlaySound",
     "ReloadUI",
+    "RequestTributeClubData",
     "SetGameCameraUIMode",
     "TriggerTutorial",
     "UseCollectible",
