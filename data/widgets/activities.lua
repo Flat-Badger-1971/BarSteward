@@ -374,7 +374,12 @@ BS.widgets[BS.W_TRIBUTE_CLUB_RANK] = {
     name = "tributeRank",
     update = function(widget, updateType)
         if (updateType == "initial") then
-            RequestTributeClubData()
+            zo_callLater(
+                function()
+                    RequestTributeClubData()
+                end,
+                1000
+            )
         else
             local rank = GetTributePlayerClubRank()
             local xp, totalxp = GetTributePlayerExperienceInCurrentClubRank()

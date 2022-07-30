@@ -17,6 +17,7 @@ BS.Defaults = {
     FontSize = 18,
     FriendAnnounce = {},
     Gold = {},
+    OtherCurrencies = {},
     GuildFriendAnnounce = {},
     Movable = false,
     PreviousFriendTime = {},
@@ -80,7 +81,7 @@ BS.Defaults = {
             UseSeparators = false,
             ColourValues = "c"
         },
-        [BS.W_TAL_VAR_STONES] = {
+        [BS.W_TELVAR_STONES] = {
             Bar = 1,
             Order = 8,
             SoundWhenEquals = false,

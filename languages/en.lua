@@ -56,7 +56,7 @@ ZO_CreateStringId("BARSTEWARD_FRIEND_ONLINE_MESSAGE", "<<1>> (<<2>>) has come on
 ZO_CreateStringId("BARSTEWARD_GOLD_BAG", "In your bags")
 ZO_CreateStringId("BARSTEWARD_GOLD_BANK", "In your bank")
 ZO_CreateStringId("BARSTEWARD_GOLD_COMBINED", "Bank and bags")
-ZO_CreateStringId("BARSTEWARD_GOLD_DISPLAY", "Gold display")
+ZO_CreateStringId("BARSTEWARD_GOLD_DISPLAY", "Display")
 ZO_CreateStringId("BARSTEWARD_GOLD_EVERYWHERE", "Everywhere")
 ZO_CreateStringId("BARSTEWARD_GOLD_SEPARATED", "Bank/bags")
 ZO_CreateStringId("BARSTEWARD_GUILD_FRIEND_ONLINE", "Guild Friend Online")

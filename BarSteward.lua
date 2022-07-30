@@ -7,6 +7,14 @@ local function trackGold()
     BS.Vars.Gold[character] = goldInBag
 end
 
+local function trackOtherCurrency(currency)
+    local currencyInBag = GetCurrencyAmount(currency, _G.CURRENCY_LOCATION_CHARACTER)
+    local character = GetUnitName("player")
+
+    BS.Vars.OtherCurrencies[currency] = BS.Vars.OtherCurrencies[currency] or {}
+    BS.Vars.OtherCurrencies[currency][character] = currencyInBag
+end
+
 local function Initialise()
     -- dialogs
     local buttons = {
@@ -101,6 +109,38 @@ local function Initialise()
     )
 
     BS.VersionCheck()
+
+    -- gold tracker
+    BS.RegisterForEvent(_G.EVENT_PLAYER_ACTIVATED, trackGold)
+    BS.RegisterForEvent(_G.EVENT_MONEY_UPDATE, trackGold)
+
+    -- tel var tracker
+    trackOtherCurrency(_G.CURT_TELVAR_STONES)
+    BS.RegisterForEvent(
+        _G.EVENT_TELVAR_STONE_UPDATE,
+        function()
+            trackOtherCurrency(_G.CURT_TELVAR_STONES)
+        end
+    )
+
+    -- alliance points tracker
+    trackOtherCurrency(_G.CURT_ALLIANCE_POINTS)
+    BS.RegisterForEvent(
+        _G.EVENT_ALLIANCE_POINT_UPDATE,
+        function()
+            trackOtherCurrency(_G.CURT_ALLIANCE_POINTS)
+        end
+    )
+
+    -- writ voucher tracker
+    trackOtherCurrency(_G.CURT_WRIT_VOUCHERS)
+    BS.RegisterForEvent(
+        _G.EVENT_WRIT_VOUCHER_UPDATE,
+        function()
+            trackOtherCurrency(_G.CURT_WRIT_VOUCHERS)
+        end
+    )
+
     BS.RegisterSettings()
 
     -- create bars
@@ -168,10 +208,6 @@ local function Initialise()
             end
         end
     end
-
-    -- gold tracker
-    BS.RegisterForEvent(_G.EVENT_PLAYER_ACTIVATED, trackGold)
-    BS.RegisterForEvent(_G.EVENT_MONEY_UPDATE, trackGold)
 
     -- performance
     BS.RegisterForEvent(
