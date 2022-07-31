@@ -9,6 +9,7 @@ local BS = _G.BarSteward
 
 BS.Defaults = {
     Updates = {},
+    DefaultCombatColour = {0.3686274588, 0, 0, 1},
     DefaultColour = {0.9, 0.9, 0.9, 1},
     DefaultDangerColour = {0.8, 0, 0, 1},
     DefaultWarningColour = {1, 1, 0, 1},

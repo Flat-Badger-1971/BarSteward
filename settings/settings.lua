@@ -1,7 +1,7 @@
 local BS = _G.BarSteward
 
 BS.LAM = _G.LibAddonMenu2
-BS.VERSION = "1.2.20"
+BS.VERSION = "1.2.21"
 
 local panel = {
     type = "panel",
@@ -468,10 +468,33 @@ local function getBarSettings()
                 default = false
             },
             [15] = {
+                type = "checkbox",
+                name = GetString(_G.BARSTEWARD_COMBAT_COLOUR),
+                getFunc = function() return BS.Vars.Bars[idx].CombatColourChange or false end,
+                setFunc = function(value) BS.Vars.Bars[idx].CombatColourChange = value end,
+                width = "full",
+                default = false,
+            },
+            [16] = {
+                type = "colorpicker",
+                name = GetString(_G.BARSTEWARD_COMBAT_COLOUR_BACKDROP),
+                getFunc = function()
+                    return unpack(BS.Vars.Bars[idx].CombatColour or BS.Vars.DefaultCombatColour)
+                end,
+                setFunc = function(r, g, b, a)
+                    BS.Vars.Bars[idx].CombatColour = {r, g, b, a}
+                end,
+                width = "full",
+                disabled = function()
+                    return not BS.Vars.Bars[idx].CombatColourChange
+                end,
+                default = unpack(BS.Vars.DefaultCombatColour)
+            },
+            [17] = {
                 type = "divider",
                 alpha = 0
             },
-            [16] = {
+            [18] = {
                 type = "button",
                 name = GetString(_G.BARSTEWARD_ALIGN),
                 func = function()

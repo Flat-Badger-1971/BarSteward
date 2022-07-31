@@ -107,6 +107,28 @@ function baseBar:Initialise(barSettings)
     BS.AddToScenes("Mail", barSettings.index, self.bar)
     BS.AddToScenes("Siege", barSettings.index, self.bar)
     BS.AddToScenes("Menu", barSettings.index, self.bar)
+
+    -- change the bar's colour during combat if required by the user
+    BS.RegisterForEvent(
+        _G.EVENT_PLAYER_COMBAT_STATE,
+        function(_, inCombat)
+            if (BS.Vars.Bars[barSettings.index].CombatColourChange) then
+                if (inCombat == nil) then
+                    inCombat = IsUnitInCombat("player")
+                end
+
+                if (inCombat) then
+                    self.bar.background:SetCenterColor(
+                        unpack(BS.Vars.Bars[barSettings.index].CombatColour or BS.Vars.DefaultCombatColour)
+                    )
+                else
+                    self.bar.background:SetCenterColor(unpack(settings.Backdrop.Colour))
+                end
+            else
+                self.bar.background:SetCenterColor(unpack(settings.Backdrop.Colour))
+            end
+        end
+    )
 end
 
 -- hide the widget, also shrink it to shrink the bar whilst retaining the anchors for the other widgets
