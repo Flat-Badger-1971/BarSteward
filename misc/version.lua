@@ -8,6 +8,28 @@ local function needsUpdate(version)
     return false
 end
 
+local function replace(current)
+    local ucase = string.upper(current)
+
+    if (_G["BARSTEWARD_" .. ucase]) then
+        return GetString(_G["BARSTEWARD_" .. ucase])
+    end
+
+    return current
+end
+
+local function updateLanguageVars()
+    -- if a new language file has been added, some exisiting English saved vars need to be updated
+    local bars = BS.Vars.Bars
+
+    for index, _ in pairs(bars) do
+        BS.Vars.Bars[index].TooltipAnchor = replace(BS.Vars.Bars[index].TooltipAnchor)
+        BS.Vars.Bars[index].ValueSide = replace(BS.Vars.Bars[index].ValueSide)
+        BS.Vars.Bars[index].Orientation = replace(BS.Vars.Bars[index].Orientation)
+        BS.Vars.Bars[index].Anchor = replace(BS.Vars.Bars[index].Anchor)
+    end
+end
+
 function BS.VersionCheck()
     if (needsUpdate(112)) then
         -- update timer value from seconds to hours
@@ -50,5 +72,13 @@ function BS.VersionCheck()
 
     if (needsUpdate(113)) then
         BS.Vars.Movable = false
+    end
+
+    if (needsUpdate(1222))then
+        if (GetCVar("language.2") == "fr") then
+            updateLanguageVars()
+        end
+
+        BS.Vars.Updates[1222] = true
     end
 end

@@ -33,7 +33,7 @@ local function currencyWidget(currencyType, widgetIndex, icon, text, eventList, 
                         charactertt ..
                         "|cffd700" ..
                             tostring(useSeparators and BS.AddSeparators(amount) or amount) ..
-                                "|r " .. ZO_FormatUserFacingCharacterName(character) .. BS.LF
+                                "|r " .. ZO_FormatUserFacingDisplayName(character) .. BS.LF
                 end
             end
 

@@ -82,7 +82,7 @@ BS.widgets[BS.W_PLAYER_NAME] = {
     update = function(widget)
         local playerName = GetUnitName("player")
 
-        widget:SetValue(ZO_FormatUserFacingCharacterName(playerName))
+        widget:SetValue(ZO_FormatUserFacingDisplayName(playerName))
         widget:SetColour(unpack(BS.Vars.Controls[BS.W_PLAYER_NAME].Colour or BS.Vars.DefaultColour))
 
         return widget:GetValue()
@@ -251,7 +251,12 @@ local function getSpeed(widget)
     local speed, speedText
 
     if (BS.Vars.Controls[BS.W_SPEED].ShowPercent) then
-        local rawSpeed = distance / timeDelta
+        local rawSpeed = 0
+
+        if (timeDelta > 0) then
+            rawSpeed = distance / timeDelta
+        end
+
         local pSpeed = math.floor((rawSpeed * 100 / DEFAULT_SPEED) + 0.5)
         pSpeed = pSpeed - (pSpeed % 5)
 
@@ -259,10 +264,15 @@ local function getSpeed(widget)
             pSpeed = 0
         end
 
-        speedText = pSpeed .. "%"
+        speedText = ((string.match(pSpeed, "%D")) and pSpeed or 0) .. "%"
     else
         local distanceInMeters = distance / UNITS_PER_METER
-        local speedInMS = distanceInMeters / timeDelta
+        local speedInMS = 0
+
+        if (timeDelta > 0) then
+            speedInMS = distanceInMeters / timeDelta
+        end
+
         local units = BS.Vars.Controls[BS.W_SPEED].Units
 
         if (units == "mph") then
@@ -275,7 +285,7 @@ local function getSpeed(widget)
 
         local unitText = GetString(_G["BARSTEWARD_" .. string.upper(units)])
 
-        speedText = speed .. " " .. unitText
+        speedText = ((type(speed) == "number") and speed or 0) .. " " .. unitText
     end
 
     widget:SetValue(speedText)

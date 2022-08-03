@@ -1,5 +1,8 @@
 [color=#ff9900][b]Version: 1.2.22 ---------------[/b][/color]
 Added French translations courtesy of Le-Sphinx
+Fix for speed widget sizing
+Fix for character name widget sizing in gamepad mode
+Code added to handle variable migration after a new language file is added
 
 [color=#ff9900][b]Version: 1.2.21 ---------------[/b][/color]
 Option to change bar colour during combat

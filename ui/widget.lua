@@ -1,3 +1,4 @@
+local DEBUG = false
 local BS = _G.BarSteward
 
 local baseWidget = ZO_Object:Subclass()
@@ -133,6 +134,16 @@ function baseWidget:Initialise(metadata, parent, tooltipAnchor, valueSide)
     self.spacer = WINDOW_MANAGER:CreateControl(name .. "_spacer", self.control, CT_LABEL)
     self.spacer:SetDimensions(10, metadata.iconHeight or 32)
     self.spacer:SetAnchor(valueSide == LEFT and RIGHT or LEFT, self.value, valueSide)
+
+    if (DEBUG) then
+        self.overlay = WINDOW_MANAGER:CreateControl(name .. "_overlay", self.control, CT_CONTROL)
+        self.overlay:SetDrawTier(_G.DT_HIGH)
+        self.overlay:SetAnchorFill(self.bar)
+
+        self.overlay.background = WINDOW_MANAGER:CreateControl(name .. "_overlay_background", self.overlay, CT_TEXTURE)
+        self.overlay.background:SetAnchorFill(self.overlay)
+        self.overlay.background:SetTexture("/esoui/art/itemupgrade/eso_itemupgrade_blueslot.dds")
+    end
 end
 
 -- add functions to the widget to mimic a standard control

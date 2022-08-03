@@ -70,7 +70,7 @@ BS.widgets[BS.W_FRIENDS] = {
                         if (announce == true) then
                             local dname = ZO_FormatUserFacingDisplayName(displayName) or displayName
                             if (BS.Vars.FriendAnnounce[dname]) then
-                                local cname = ZO_FormatUserFacingCharacterName(characterName) or characterName
+                                local cname = ZO_FormatUserFacingDisplayName(characterName) or characterName
 
                                 BS.Announce(
                                     GetString(_G.BARSTEWARD_FRIEND_ONLINE),
@@ -265,7 +265,7 @@ BS.widgets[BS.W_GUILD_FRIENDS] = {
                     setGuildId(guildId)
                     local info = findDataByDisplayName(displayName)
                     local dname = ZO_FormatUserFacingDisplayName(displayName) or displayName
-                    local cname = ZO_FormatUserFacingCharacterName(info.characterName) or info.characterName
+                    local cname = ZO_FormatUserFacingDisplayName(info.characterName) or info.characterName
 
                     BS.Announce(
                         GetString(_G.BARSTEWARD_GUILD_FRIEND_ONLINE),
