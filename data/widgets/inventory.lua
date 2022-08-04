@@ -347,7 +347,7 @@ local function getDetail(bag, slot)
     local wcount = GetSlotStackSize(bag, slot)
     local itemDisplayQuality = GetItemDisplayQuality(bag, slot)
     local colour = GetItemQualityColor(itemDisplayQuality)
-    local name = colour:Colorize(GetItemName(bag, slot))
+    local name = colour:Colorize(ZO_CachedStrFormat("<<C:1>>", GetItemName(bag, slot)))
 
     if (bag == _G.BAG_BACKPACK) then
         name = BS.BAGICON .. " " .. name

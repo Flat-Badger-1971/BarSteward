@@ -323,3 +323,32 @@ BS.widgets[BS.W_SPEED] = {
         }
     }
 }
+
+BS.widgets[BS.W_PLAYER_LEVEL] = {
+    name = "playerLevel",
+    update = function(widget)
+        local level = GetUnitLevel("player")
+        local xp, xpMax, xpPc = 0, 0, 0
+
+        if (level ~= GetMaxLevel()) then
+            xp = GetUnitXP("player")
+            xpMax = GetNumExperiencePointsInLevel(level)
+            xpPc = math.floor((xp / xpMax) * 100)
+        end
+
+        widget:SetValue(level .. " (" .. xpPc .. "%)")
+
+        local ttt = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_CAMPAIGNLEVELREQUIREMENTTYPE1)) .. BS.LF
+        ttt = ttt .. "|cf9f9f9"
+        ttt = ttt .. ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_STAT_GAMEPAD_EXPERIENCE_LABEL)) .. "  "
+        ttt = ttt .. xp .. " / " .. xpMax .. "|r"
+
+        widget.tooltip = ttt
+
+        return level
+    end,
+    event = {_G.EVENT_EXPERIENCE_UPDATE, _G.EVENT_LEVEL_UPDATE},
+    icon = "/esoui/art/icons/alchemy/crafting_alchemy_trait_heroism_match.dds",
+    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_CAMPAIGNLEVELREQUIREMENTTYPE1)),
+    hideWhenEqual = GetMaxLevel()
+}

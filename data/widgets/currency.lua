@@ -394,7 +394,7 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
             local id = GetChampionDisciplineId(disciplineIndex)
             disciplineData = CHAMPION_DATA_MANAGER:FindChampionDisciplineDataById(id)
             icon = zo_iconFormat(disciplineData:GetHUDIcon(), 16, 16)
-            local name = GetChampionDisciplineName(id)
+            local name = ZO_CachedStrFormat("<<C:1>>", GetChampionDisciplineName(id))
             local toSpend = disciplineData:GetNumSavedUnspentPoints()
             table.insert(cp, icon .. " " .. name .. " - " .. toSpend)
         end

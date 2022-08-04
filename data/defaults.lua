@@ -307,6 +307,7 @@ BS.Defaults = {
             Timer = true
         },
         [BS.W_COMPANION_LEVEL] = {Bar = 0, Order = 54, ColourValues = "c", Autohide = true, ShowXPPC = true},
-        [BS.W_TRIBUTE_CLUB_RANK] = {Bar = 0, Order = 55, ColourValues = "c" }
+        [BS.W_TRIBUTE_CLUB_RANK] = {Bar = 0, Order = 55, ColourValues = "c" },
+        [BS.W_PLAYER_LEVEL] = {Bar = 0, Order = 56, ColourValues = "c", Autohide = true }
     }
 }
