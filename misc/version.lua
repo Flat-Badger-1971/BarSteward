@@ -30,6 +30,30 @@ local function updateLanguageVars()
     end
 end
 
+local function updateLanguageVars1223()
+    local bars = BS.Vars.Bars
+    local corrections = {
+        ["Bas"] = "En bas",
+        ["Droite"] = "À droite",
+        ["Milieu"] = "Au milieu",
+        ["Horizontal"] = "Horizontale",
+        ["Gauche"] = "À gauche",
+        ["Vertical"] = "Verticale",
+        ["Haut"] = "En haut"
+    }
+    local vars = {"TooltipAnchor", "ValueSide", "Orientation", "Anchor"}
+
+    for index, _ in pairs(bars) do
+        for _, val in ipairs(vars) do
+            local cval = corrections[BS.Vars.Bars[index][val]]
+
+            if (cval) then
+                BS.Vars.Bars[index][val] = cval
+            end
+        end
+    end
+end
+
 function BS.VersionCheck()
     if (needsUpdate(112)) then
         -- update timer value from seconds to hours
@@ -74,11 +98,19 @@ function BS.VersionCheck()
         BS.Vars.Movable = false
     end
 
-    if (needsUpdate(1222))then
+    if (needsUpdate(1222)) then
         if (GetCVar("language.2") == "fr") then
             updateLanguageVars()
         end
 
         BS.Vars.Updates[1222] = true
+    end
+
+    if (needsUpdate(1222)) then
+        if (GetCVar("language.2") == "fr") then
+            updateLanguageVars1223()
+        end
+
+        BS.Vars.Updates[1223] = true
     end
 end
