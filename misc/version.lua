@@ -106,7 +106,7 @@ function BS.VersionCheck()
         BS.Vars.Updates[1222] = true
     end
 
-    if (needsUpdate(1222)) then
+    if (needsUpdate(1223)) then
         if (GetCVar("language.2") == "fr") then
             updateLanguageVars1223()
         end
