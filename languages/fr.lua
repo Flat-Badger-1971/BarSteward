@@ -8,7 +8,7 @@ ZO_CreateStringId("BARSTEWARD_ALIGN_BAR_ANCHOR", "Position")
 ZO_CreateStringId("BARSTEWARD_ALIGN_BARS", "Aligner les barres")
 ZO_CreateStringId("BARSTEWARD_ALIGN_RELATIVE", "Relatif à")
 ZO_CreateStringId("BARSTEWARD_ANNOUNCEMENT", "Afficher l'annonce d'avertissement")
-ZO_CreateStringId("BARSTEWARD_ANNOUNCEMENT_FRIEND", "Annoncer un ami en ligne ")
+ZO_CreateStringId("BARSTEWARD_ANNOUNCEMENT_FRIEND", "Annoncer un ami en ligne")
 ZO_CreateStringId("BARSTEWARD_ANNOUNCEMENT_FRIEND_GUILD", "Annoncer un membre de guilde en ligne")
 ZO_CreateStringId("BARSTEWARD_ANNOUNCEMENTS", "Annonces")
 ZO_CreateStringId("BARSTEWARD_AUTOHIDE", "Masquer automatiquement")
@@ -90,7 +90,7 @@ ZO_CreateStringId("BARSTEWARD_NONE", "Rien à entrainer")
 ZO_CreateStringId("BARSTEWARD_NOT_PICKED_UP", "Non ramassée")
 ZO_CreateStringId("BARSTEWARD_NUDGE", "Déplacer la boussole vers le bas")
 ZO_CreateStringId(
-    "BARSTEWARD_NUDGE_WARNING", 
+    "BARSTEWARD_NUDGE_WARNING",
     "Si vous avez déplacé la boussole avec un autre addon, ce paramètre pourrait avoir des résultats étranges."
 )
 ZO_CreateStringId("BARSTEWARD_NUMBER_GROUPING", "3")
@@ -105,7 +105,7 @@ ZO_CreateStringId("BARSTEWARD_PERCENTAGE", "Afficher en pourcentage")
 ZO_CreateStringId("BARSTEWARD_PERFORMANCE", "Performance")
 ZO_CreateStringId("BARSTEWARD_PERFORMANCE_TIMERS", "Désactiver les temps pendant un combat")
 ZO_CreateStringId(
-    "BARSTEWARD_PERFORMANCE_TIMERS_TOOLTIP", 
+    "BARSTEWARD_PERFORMANCE_TIMERS_TOOLTIP",
     "Désactive les widgets basés sur une minuterie (sauf l'heure), pendant un combat. Cela réduira le nombre de mises à jour susceptibles d'avoir un impact sur les performances."
 )
 ZO_CreateStringId("BARSTEWARD_PICKED_UP", "Ramassée")
@@ -167,7 +167,7 @@ ZO_CreateStringId("BARSTEWARD_UNDAUNTED_KEYS", "Clefs des Indomptables")
 ZO_CreateStringId("BARSTEWARD_UNSPENT", "Non dépensé")
 ZO_CreateStringId("BARSTEWARD_USE_WRITWORTHY", "Utiliser WritWorthy pour les commandes")
 ZO_CreateStringId(
-    "BARSTEWARD_USE_WRITWORTHY_TOOLTIP", 
+    "BARSTEWARD_USE_WRITWORTHY_TOOLTIP",
     "Utilise l'addon WritWorthy pour les résumés de commandes s'il est installé. Noter que si vous en avez beaucoup, cela pourrait provoquer un léger bégaiement à chaque mise à jour de vos emplacements de sacs."
 )
 ZO_CreateStringId("BARSTEWARD_VALUE", "Valeur")
