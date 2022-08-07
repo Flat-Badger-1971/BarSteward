@@ -22,11 +22,28 @@ local function updateLanguageVars()
     -- if a new language file has been added, some exisiting English saved vars need to be updated
     local bars = BS.Vars.Bars
 
+    -- update bar settings
     for index, _ in pairs(bars) do
         BS.Vars.Bars[index].TooltipAnchor = replace(BS.Vars.Bars[index].TooltipAnchor)
         BS.Vars.Bars[index].ValueSide = replace(BS.Vars.Bars[index].ValueSide)
         BS.Vars.Bars[index].Orientation = replace(BS.Vars.Bars[index].Orientation)
         BS.Vars.Bars[index].Anchor = replace(BS.Vars.Bars[index].Anchor)
+    end
+
+    -- update main bar name
+    BS.Vars.Bars[1].Name = GetString(_G.BARSTEWARD_MAIN_BAR)
+
+    --update widget unit settings
+    local widgets = BS.Vars.Controls
+
+    for _, widget in pairs(widgets) do
+        if (widget.Units) then
+            local newUnit = GetString(_G["BARSTEWARD_" .. string.upper(widget.Units)])
+
+            if (newUnit ~= "") then
+                widget.Units = newUnit
+            end
+        end
     end
 end
 
@@ -112,5 +129,25 @@ function BS.VersionCheck()
         end
 
         BS.Vars.Updates[1223] = true
+    end
+
+    if (needsUpdate(1224)) then
+        if (GetCVar("language.2") == "fr") then
+            BS.Vars.Bars[1].Name = GetString(_G.BARSTEWARD_MAIN_BAR)
+
+            local widgets = BS.Vars.Controls
+
+            for _, widget in pairs(widgets) do
+                if (widget.Units) then
+                    local newUnit = GetString(_G["BARSTEWARD_" .. string.upper(widget.Units)])
+
+                    if (newUnit ~= "") then
+                        widget.Units = newUnit
+                    end
+                end
+            end
+        end
+
+        BS.Vars.Updates[1224] = true
     end
 end

@@ -244,7 +244,6 @@ local qualifiedQuestNames = {}
 local qualifiedCount = 0
 
 local function updateQualifications()
-    local qualifications = {}
     qualifiedCount = 0
 
     for craftType, _ in pairs(BS.CRAFTING_DAILY) do
@@ -257,7 +256,7 @@ local function updateQualifications()
         end
     end
 
-    return qualifications
+    return qualifiedCount
 end
 
 BS.RegisterForEvent(
