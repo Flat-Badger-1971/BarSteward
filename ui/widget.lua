@@ -156,14 +156,15 @@ function baseWidget:SetProgress(value, min, max)
     end
 end
 
-function baseWidget:SetValue(value)
+function baseWidget:SetValue(value, plainValue)
     if (self.value:GetText() == value) then
         return
     end
 
     self.value:SetText(value)
 
-    local textWidth = self.value:GetStringWidth(value)
+    -- use the undecorated value for width calculations
+    local textWidth = self.value:GetStringWidth(plainValue or value)
 
     if (self.minWidthChars ~= nil) then
         local minWidth = self.value:GetStringWidth(self.minWidthChars)
