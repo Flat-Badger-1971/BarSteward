@@ -21,6 +21,11 @@ read_globals = {
             FindChampionDisciplineDataByType = {read_only = true}
         }
     },
+    ["CHAMPION_PERKS"] = {
+        fields = {
+            GetChampionBar = {read_only = true}
+        }
+    },
     ["EVENT_MANAGER"] = {
         fields = {
             AddFilterForEvent = {read_only = true},
@@ -274,6 +279,7 @@ read_globals = {
     "GetRecallCooldown",
     "GetRecipeIngredientItemInfo",
     "GetRepairAllCost",
+    "GetRequiredChampionDisciplineIdForSlot",
     "GetRidingStats",
     "GetSkyshardDiscoveryStatus",
     "GetSlotStackSize",
