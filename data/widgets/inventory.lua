@@ -616,7 +616,7 @@ BS.widgets[BS.W_LOCKPICKS] = {
     update = function(widget)
         local available = GetNumLockpicksLeft()
 
-        local colour = BS.Vars.Controls[BS.W_BANK_SPACE].OkColour or BS.Vars.DefaultOkColour
+        local colour = BS.Vars.Controls[BS.W_LOCKPICKS].OkColour or BS.Vars.DefaultOkColour
 
         if
             (available <= BS.Vars.Controls[BS.W_LOCKPICKS].WarningValue and

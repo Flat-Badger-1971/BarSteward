@@ -281,15 +281,7 @@ BS.widgets[BS.W_SEALS_OF_ENDEAVOUR] = {
     tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_CROWN_STORE_MENU_SEALS_STORE_LABEL)),
     icon = "/esoui/art/currency/currency_seals_of_endeavor_64.dds"
     -- onClick = function()
-    --     if (not IsInGamepadPreferredMode()) then
-    --         SYSTEMS:GetObject("mainMenu"):ShowSceneGroup("marketSceneGroup") --, "endeavorSealStoreSceneKeyboard")
-    --     else
-    --         SYSTEMS:GetObject("mainMenu"):SelectMenuEntryAndSubEntry(
-    --             _G.ZO_MENU_MAIN_ENTRIES.CROWN_STORE,
-    --             _G.ZO_MENU_CROWN_STORE_ENTRIES.ENDEAVOR_SEAL_STORE,
-    --             "gamepad_endeavor_seal_market_pre_scene"
-    --         )
-    --     end
+    --     ZO_ShowSealStore()
     -- end
 }
 

@@ -104,6 +104,11 @@ read_globals = {
             GetCategoryData = {read_only = true}
         }
     },
+    ["TIMED_ACTIVITIES_KEYBOARD"] = {
+        fields = {
+            SetCurrentActivityType = {read_only = true}
+        }
+    },
     ["TIMED_ACTIVITIES_MANAGER"] = {
         fields = {
             GetTimedActivityTypeTimeRemainingSeconds = {read_only = true}

@@ -106,6 +106,7 @@ BS.widgets[BS.W_DAILY_ENDEAVOURS] = {
     onClick = function()
         if (not IsInGamepadPreferredMode()) then
             GROUP_MENU_KEYBOARD:ShowCategory(_G.TIMED_ACTIVITIES_FRAGMENT)
+            TIMED_ACTIVITIES_KEYBOARD:SetCurrentActivityType(_G.TIMED_ACTIVITY_TYPE_DAILY)
         else
             ZO_ACTIVITY_FINDER_ROOT_GAMEPAD:ShowCategory(TIMED_ACTIVITIES_GAMEPAD:GetCategoryData())
         end
@@ -124,6 +125,7 @@ BS.widgets[BS.W_WEEKLY_ENDEAVOURS] = {
     onClick = function()
         if (not IsInGamepadPreferredMode()) then
             GROUP_MENU_KEYBOARD:ShowCategory(_G.TIMED_ACTIVITIES_FRAGMENT)
+            TIMED_ACTIVITIES_KEYBOARD:SetCurrentActivityType(_G.TIMED_ACTIVITY_TYPE_WEEKLY)
         else
             ZO_ACTIVITY_FINDER_ROOT_GAMEPAD:ShowCategory(TIMED_ACTIVITIES_GAMEPAD:GetCategoryData())
         end
@@ -389,11 +391,15 @@ BS.widgets[BS.W_TRIBUTE_CLUB_RANK] = {
             local displayRank = rank + 1
 
             widget:SetIcon(icon)
-            widget:SetValue(displayRank .. " (" .. percent .. "%)")
 
+            if (displayRank == 8) then
+                widget:SetValue(displayRank)
+            else
+                widget:SetValue(displayRank .. " (" .. percent .. "%)")
+            end
             local ttt = GetString(_G.BARSTEWARD_TRIBUTE_RANK) .. BS.LF
             ttt = ttt .. "|cf9f9f9" .. displayRank .. " - " .. rankName .. BS.LF .. BS.LF
-            ttt = ttt .. xp .. " / " .. totalxp .. " (" .. percent .. "%)|r"
+            ttt = ttt .. xp .. " / " .. totalxp .. ((displayRank == 8) and "" or " (" .. percent .. "%)|r")
 
             widget.tooltip = ttt
         end
