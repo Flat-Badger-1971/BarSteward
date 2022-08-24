@@ -44,7 +44,7 @@ BS.widgets[BS.W_BAG_SPACE] = {
 
         return pcUsed
     end,
-    event = {_G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE, _G.EVENT_INVENTORY_BAG_CAPACITY_CHANGED},
+    event = {_G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE, _G.EVENT_INVENTORY_BAG_CAPACITY_CHANGED, _G.EVENT_PLAYER_ACTIVATED},
     tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_GAMEPAD_MAIL_INBOX_INVENTORY)):gsub(":", ""),
     icon = "/esoui/art/tooltips/icon_bag.dds",
     onClick = function()
@@ -110,7 +110,7 @@ BS.widgets[BS.W_BANK_SPACE] = {
 
         return pcUsed
     end,
-    event = {_G.EVENT_CLOSE_BANK, _G.EVENT_INVENTORY_BAG_CAPACITY_CHANGED},
+    event = {_G.EVENT_CLOSE_BANK, _G.EVENT_INVENTORY_BAG_CAPACITY_CHANGED, _G.EVENT_PLAYER_ACTIVATED},
     tooltip = GetString(_G.BARSTEWARD_BANK),
     icon = "/esoui/art/tooltips/icon_bank.dds"
 }
