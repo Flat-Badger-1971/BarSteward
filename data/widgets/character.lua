@@ -264,7 +264,7 @@ local function getSpeed(widget)
             pSpeed = 0
         end
 
-        speedText = ((string.match(pSpeed, "%D")) and pSpeed or 0) .. "%"
+        speedText = ((string.match(pSpeed, "%d")) and pSpeed or 0) .. "%"
     else
         local distanceInMeters = distance / UNITS_PER_METER
         local speedInMS = 0

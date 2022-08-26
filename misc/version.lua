@@ -150,4 +150,9 @@ function BS.VersionCheck()
 
         BS.Vars.Updates[1224] = true
     end
+
+    if (needsUpdate(1301)) then
+        BS.Vars.Controls[BS.W_LATENCY].ColourValues = BS.Defaults.Controls[BS.W_LATENCY].ColourValues
+        BS.Vars.Updates[1301] = true
+    end
 end

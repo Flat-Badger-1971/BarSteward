@@ -22,7 +22,6 @@ local BS = _G.BarSteward
         }
     }
 ]]
-
 BS.widgets = {
     [BS.W_TIME] = {
         name = "time",
@@ -62,9 +61,22 @@ BS.widgets = {
         name = "latency",
         update = function(widget)
             local latency = GetLatency()
+            local colour = BS.Vars.Controls[BS.W_LATENCY].Colour or BS.Vars.DefaultColour
+
+            if ((BS.Vars.Controls[BS.W_LATENCY].WarningValue or 0) > 0) then
+                if (latency >= (BS.Vars.Controls[BS.W_LATENCY].WarningValue or 0)) then
+                    colour = BS.Vars.Controls[BS.W_LATENCY].WarningColour or BS.Vars.DefaultWarningColour
+                end
+            end
+
+            if ((BS.Vars.Controls[BS.W_LATENCY].DangerValue or 0) > 0) then
+                if (latency >= (BS.Vars.Controls[BS.W_LATENCY].DangerValue or 0)) then
+                    colour = BS.Vars.Controls[BS.W_LATENCY].DangerColour or BS.Vars.DefaultDangerColour
+                end
+            end
 
             widget:SetValue(math.floor(latency))
-            widget:SetColour(unpack(BS.Vars.Controls[BS.W_LATENCY].Colour or BS.Vars.DefaultColour))
+            widget:SetColour(unpack(colour))
 
             return widget:GetValue()
         end,

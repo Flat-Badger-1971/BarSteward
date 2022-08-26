@@ -69,6 +69,15 @@ EVENT_MANAGER:RegisterForEvent(
     end
 )
 
+BS.RegisterForEvent(
+    _G.EVENT_PLAYER_ACTIVATED,
+    function()
+        for craftType, _ in pairs(researchTimersActive) do
+            researchTimersActive[craftType] = true
+        end
+    end
+)
+
 local function getDisplay(timeRemaining, widgetIndex, inUse, maxResearch)
     local display
     local hours = timeRemaining / 60 / 60
