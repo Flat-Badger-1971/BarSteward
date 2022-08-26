@@ -12,7 +12,10 @@ ZO_CreateStringId("BARSTEWARD_ANNOUNCEMENT_FRIEND", "Annoncer un ami en ligne")
 ZO_CreateStringId("BARSTEWARD_ANNOUNCEMENT_FRIEND_GUILD", "Annoncer un membre de guilde en ligne")
 ZO_CreateStringId("BARSTEWARD_ANNOUNCEMENTS", "Annonces")
 ZO_CreateStringId("BARSTEWARD_AUTOHIDE", "Masquer automatiquement")
-ZO_CreateStringId("BARSTEWARD_AUTOHIDE_TOOLTIP", "Masque ce widget lorsque la valeur atteint zéro (ou la valeur maximale pour Rapport) ou est vide.")
+ZO_CreateStringId(
+    "BARSTEWARD_AUTOHIDE_TOOLTIP",
+    "Masque ce widget lorsque la valeur atteint zéro (ou la valeur maximale pour Rapport) ou est vide."
+)
 ZO_CreateStringId("BARSTEWARD_BACKDROP_COLOUR", "Couleur du fond")
 ZO_CreateStringId("BARSTEWARD_BANK", "Espace de banque")
 ZO_CreateStringId("BARSTEWARD_BAR", "Barre")
@@ -64,7 +67,10 @@ ZO_CreateStringId("BARSTEWARD_GUILD_FRIENDS_MONITORING", "Surveillance des membr
 ZO_CreateStringId("BARSTEWARD_GUILD_FRIENDS_ONLINE", "Membres de guilde connectés")
 ZO_CreateStringId("BARSTEWARD_HIDE_SECONDS", "Masquer les secondes")
 ZO_CreateStringId("BARSTEWARD_HIDE_WHEN_COMPLETE", "Masquer une fois complété")
-ZO_CreateStringId("BARSTEWARD_HIDE_WHEN_COMPLETE_TOOLTIP", "Masque la recherche lorsque plus aucun trait ne peut être recherché pour ce type d'artisanat. Ce paramètre remplacera tous les paramètre de masquage automatique.") 
+ZO_CreateStringId(
+    "BARSTEWARD_HIDE_WHEN_COMPLETE_TOOLTIP",
+    "Masque la recherche lorsque plus aucun trait ne peut être recherché pour ce type d'artisanat. Ce paramètre remplacera tous les paramètre de masquage automatique."
+) 
 ZO_CreateStringId("BARSTEWARD_HORIZONTAL", "Horizontale")
 ZO_CreateStringId("BARSTEWARD_HOURS", "Heures")
 ZO_CreateStringId("BARSTEWARD_IN_PROGRESS", "En cours")
@@ -164,6 +170,9 @@ ZO_CreateStringId("BARSTEWARD_TRIBUTE_RANK", "Rang du club des Récits de Gloire
 ZO_CreateStringId("BARSTEWARD_TROPHY_VAULT_KEYS", "Clefs de Salle des trophées")
 ZO_CreateStringId("BARSTEWARD_TWELVE_TWENTY_FOUR", "12/24 Heure")
 ZO_CreateStringId("BARSTEWARD_UNDAUNTED_KEYS", "Clefs des Indomptables")
+ZO_CreateStringId("BARSTEWARD_UNSLOTTED", "Sans emplacement")
+ZO_CreateStringId("BARSTEWARD_UNSLOTTED_OPTION", "Afficher le nombre sans emplacement")
+ZO_CreateStringId("BARSTEWARD_UNSLOTTED_TOOLTIP", "Affiche le nombre d'emplacements de la barre de points de champion vides.")
 ZO_CreateStringId("BARSTEWARD_UNSPENT", "Non dépensé")
 ZO_CreateStringId("BARSTEWARD_USE_WRITWORTHY", "Utiliser WritWorthy pour les commandes")
 ZO_CreateStringId(
