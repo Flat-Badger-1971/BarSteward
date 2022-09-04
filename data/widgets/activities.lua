@@ -392,14 +392,15 @@ BS.widgets[BS.W_TRIBUTE_CLUB_RANK] = {
 
             widget:SetIcon(icon)
 
-            if (displayRank == 8) then
+            if (rank == 7) then
                 widget:SetValue(displayRank)
             else
                 widget:SetValue(displayRank .. " (" .. percent .. "%)")
             end
+
             local ttt = GetString(_G.BARSTEWARD_TRIBUTE_RANK) .. BS.LF
             ttt = ttt .. "|cf9f9f9" .. displayRank .. " - " .. rankName .. BS.LF .. BS.LF
-            ttt = ttt .. xp .. " / " .. totalxp .. ((displayRank == 8) and "" or " (" .. percent .. "%)|r")
+            ttt = ttt .. xp .. " / " .. totalxp .. ((rank == 7) and "" or " (" .. percent .. "%)|r")
 
             widget.tooltip = ttt
         end

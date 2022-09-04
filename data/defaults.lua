@@ -135,7 +135,8 @@ BS.Defaults = {
             WarningValue = 72,
             Units = GetString(_G.BARSTEWARD_HOURS),
             Timer = true,
-            Autohide = true
+            Autohide = true,
+            HideWhenFullyUsed = false
         },
         [BS.W_WOODWORKING] = {
             Bar = 1,
@@ -147,7 +148,8 @@ BS.Defaults = {
             WarningValue = 72,
             Units = GetString(_G.BARSTEWARD_HOURS),
             Timer = true,
-            Autohide = true
+            Autohide = true,
+            HideWhenFullyUsed = false
         },
         [BS.W_CLOTHING] = {
             Bar = 1,
@@ -159,7 +161,8 @@ BS.Defaults = {
             WarningValue = 72,
             Units = GetString(_G.BARSTEWARD_HOURS),
             Timer = true,
-            Autohide = true
+            Autohide = true,
+            HideWhenFullyUsed = false
         },
         [BS.W_JEWELCRAFTING] = {
             Bar = 1,
@@ -171,7 +174,8 @@ BS.Defaults = {
             WarningValue = 72,
             Units = GetString(_G.BARSTEWARD_HOURS),
             Timer = true,
-            Autohide = true
+            Autohide = true,
+            HideWhenFullyUsed = false
         },
         [BS.W_REPAIR_COST] = {Bar = 1, Order = 20, Autohide = true, UseSeparators = false, ColourValues = "c"},
         [BS.W_MOUNT_TRAINING] = {
@@ -182,7 +186,8 @@ BS.Defaults = {
             ColourValues = "okc,wv,wc,dv,dc",
             DangerValue = 3,
             WarningValue = 6,
-            Units = GetString(_G.BARSTEWARD_HOURS)
+            Units = GetString(_G.BARSTEWARD_HOURS),
+            HideWhenFullyUsed = false
         },
         [BS.W_RAPPORT] = {Bar = 1, Order = 22, Autohide = true},
         [BS.W_CHAMPION_POINTS] = {

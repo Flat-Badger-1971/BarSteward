@@ -11,6 +11,11 @@ BS.widgets[BS.W_RAPPORT] = {
         local rlr, rlg, rlb = 114 / 255, 35 / 255, 35 / 255 -- like
         local rapportPcValue = rapportValue - rapportMin
         local rapportPcMax = rapportMax - rapportMin
+
+        if (rapportPcMax <= 0) then
+            rapportPcMax = 1
+        end
+
         local percent = math.max(zo_roundToNearest(rapportPcValue / rapportPcMax, 0.01), 0)
         local r, g, b = BS.Gradient(percent, rlr, rlg, rlb, rmr, rmg, rmb, rdr, rdg, rdb)
 

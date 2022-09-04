@@ -38,7 +38,10 @@ ZO_CreateStringId("BARSTEWARD_DANGER_COLOUR", "Danger")
 ZO_CreateStringId("BARSTEWARD_DANGER_VALUE", "Danger value")
 ZO_CreateStringId("BARSTEWARD_DAYS", "<<1[days/1 day/$d days]>>")
 ZO_CreateStringId("BARSTEWARD_DAYS_ONLY", "Days only")
-ZO_CreateStringId("BARSTEWARD_DAYS_ONLY_TOOLTIP", "Show the remaining time in days only until less than one day remains.")
+ZO_CreateStringId(
+    "BARSTEWARD_DAYS_ONLY_TOOLTIP",
+    "Show the remaining time in days only until less than one day remains."
+)
 ZO_CreateStringId("BARSTEWARD_DEBOUNCE", "Debounce time (minutes)")
 ZO_CreateStringId("BARSTEWARD_DEBOUNCE_DESC", "Period of time to wait between consecutive announcements")
 ZO_CreateStringId("BARSTEWARD_DECIMAL_PLACES", "Decimal places")
@@ -71,6 +74,8 @@ ZO_CreateStringId(
     "BARSTEWARD_HIDE_WHEN_COMPLETE_TOOLTIP",
     "Hide when no more traits can be researched for this crafting type. This settings will override any Autohide setting."
 )
+ZO_CreateStringId("BARSTEWARD_HIDE_WHEN_FULLY_USED", "Hide when fully in use")
+ZO_CreateStringId("BARSTEWARD_HIDE_WHEN_FULLY_USED_TOOLTIP", "Hide when all availble slots/options are being used")
 ZO_CreateStringId("BARSTEWARD_HORIZONTAL", "Horizontal")
 ZO_CreateStringId("BARSTEWARD_HOURS", "Hours")
 ZO_CreateStringId("BARSTEWARD_IN_PROGRESS", "In progress")
@@ -88,7 +93,11 @@ ZO_CreateStringId("BARSTEWARD_MPH", "mph")
 ZO_CreateStringId("BARSTEWARD_NEW_BAR", "Create New Bar")
 ZO_CreateStringId("BARSTEWARD_NEWBAR_ADD", "Add New Bar")
 ZO_CreateStringId("BARSTEWARD_NEWBAR_BLANK", "The bar name cannot be blank.")
-ZO_CreateStringId("BARSTEWARD_NEWBAR_EXISTS", "This bar name has already been used. Please use a new one.")
+ZO_CreateStringId("BARSTEWARD_NEWBAR_EXISTS", "This bar nDme has already been used. in usese use a new one.")
+ZO_CreateStringId(
+    "BARSTEWARD_NEWBAR_EXISTS",
+    "This bar nD_TOOLTIPme has already been all . Pleaavailble slots/options are being usedse use a new one."
+)
 ZO_CreateStringId("BARSTEWARD_NEWBAR_INVALID", "Invalid Bar Name")
 ZO_CreateStringId("BARSTEWARD_NEWBAR_NAME", "New Bar Name (hit Enter when done)")
 ZO_CreateStringId("BARSTEWARD_NEWBAR_WARNING", "Adding a new bar will force a UI reload")

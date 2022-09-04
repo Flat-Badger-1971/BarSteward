@@ -1,7 +1,7 @@
 local BS = _G.BarSteward
 
 BS.LAM = _G.LibAddonMenu2
-BS.VERSION = "1.3.1"
+BS.VERSION = "1.3.2"
 
 local panel = {
     type = "panel",
@@ -774,6 +774,24 @@ local function getWidgetSettings()
                 end,
                 width = "full",
                 default = BS.Defaults.Controls[k].HideWhenComplete
+            }
+        end
+
+        -- Hide when fully used
+        if (BS.Defaults.Controls[k].HideWhenFullyUsed ~= nil) then
+            widgetControls[#widgetControls + 1] = {
+                type = "checkbox",
+                name = GetString(_G.BARSTEWARD_HIDE_WHEN_FULLY_USED),
+                tooltip = GetString(_G.BARSTEWARD_HIDE_WHEN_FULLY_USED_TOOLTIP),
+                getFunc = function()
+                    return BS.Vars.Controls[k].HideWhenFullyUsed
+                end,
+                setFunc = function(value)
+                    BS.Vars.Controls[k].HideWhenFullyUsed = value
+                    BS.RefreshBar(k)
+                end,
+                width = "full",
+                default = BS.Defaults.Controls[k].HideWhenFullyUsed
             }
         end
 

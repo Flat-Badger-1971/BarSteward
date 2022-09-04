@@ -67,6 +67,9 @@ BS.widgets[BS.W_MOUNT_TRAINING] = {
     icon = "/esoui/art/mounts/tabicon_mounts_up.dds",
     tooltip = GetString(_G.BARSTEWARD_MOUNT_TRAINING),
     hideWhenEqual = 0,
+    fullyUsed = function()
+        return trainingActive
+    end,
     complete = function()
         local inventoryBonus, maxInventoryBonus, staminaBonus, maxStaminaBonus, speedBonus, maxSpeedBonus =
             GetRidingStats()

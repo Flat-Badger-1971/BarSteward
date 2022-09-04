@@ -77,7 +77,11 @@ BS.widgets[BS.W_BAG_SPACE] = {
 
 BS.widgets[BS.W_BANK_SPACE] = {
     name = "bankSpace",
-    update = function(widget)
+    update = function(widget, eventId, bagId)
+        if (eventId == _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE and bagId ~= _G.BAG_BANK) then
+            return
+        end
+
         local bagSize = GetBagSize(_G.BAG_BANK)
         local bagUsed = GetNumBagUsedSlots(_G.BAG_BANK)
 
@@ -110,7 +114,13 @@ BS.widgets[BS.W_BANK_SPACE] = {
 
         return pcUsed
     end,
-    event = {_G.EVENT_CLOSE_BANK, _G.EVENT_INVENTORY_BAG_CAPACITY_CHANGED, _G.EVENT_PLAYER_ACTIVATED},
+    event = {
+        _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
+        _G.EVENT_CLOSE_BANK,
+        _G.EVENT_INVENTORY_BAG_CAPACITY_CHANGED,
+        _G.EVENT_PLAYER_ACTIVATED,
+        _G.EVENT_INVENTORY_BANK_CAPACITY_CHANGED
+    },
     tooltip = GetString(_G.BARSTEWARD_BANK),
     icon = "/esoui/art/tooltips/icon_bank.dds"
 }

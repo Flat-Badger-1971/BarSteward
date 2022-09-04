@@ -1,3 +1,8 @@
+[color=#ff9900][b]Version: 1.3.2 ---------------[/b][/color]
+Bugfix for companion rapport colour
+Bugfix for bank space update after deconstruction
+Option to hide crafting widgets when all slots are in use
+
 [color=#ff9900][b]Version: 1.3.1 ---------------[/b][/color]
 Colour options added to the latency widget
 Bugfix for craft timer widgets

@@ -6,6 +6,13 @@ local researchTimersActive = {
     [_G.CRAFTING_TYPE_JEWELRYCRAFTING] = true
 }
 
+local fullyUsed = {
+    [_G.CRAFTING_TYPE_BLACKSMITHING] = false,
+    [_G.CRAFTING_TYPE_WOODWORKING] = false,
+    [_G.CRAFTING_TYPE_CLOTHIER] = false,
+    [_G.CRAFTING_TYPE_JEWELRYCRAFTING] = false
+}
+
 -- based on code from AI Research Timer
 local function getResearchTimer(craftType)
     local maxTimer = 2000000
@@ -45,38 +52,36 @@ local function getResearchTimer(craftType)
 end
 
 -- only run the research queries when necessary
-EVENT_MANAGER:RegisterForEvent(
-    BS.Name,
+BS.RegisterForEvent(
     _G.EVENT_SMITHING_TRAIT_RESEARCH_STARTED,
     function(_, craftType)
         researchTimersActive[craftType] = true
     end
 )
 
-EVENT_MANAGER:RegisterForEvent(
-    BS.Name,
+BS.RegisterForEvent(
     _G.EVENT_SMITHING_TRAIT_RESEARCH_CANCELED,
     function(_, craftType)
         researchTimersActive[craftType] = false
     end
 )
 
-EVENT_MANAGER:RegisterForEvent(
-    BS.Name,
+BS.RegisterForEvent(
     _G.EVENT_SMITHING_TRAIT_RESEARCH_COMPLETED,
     function(_, craftType)
         researchTimersActive[craftType] = false
     end
 )
 
-BS.RegisterForEvent(
-    _G.EVENT_PLAYER_ACTIVATED,
-    function()
-        for craftType, _ in pairs(researchTimersActive) do
-            researchTimersActive[craftType] = true
-        end
+local function checkAllCraftTypes()
+    for craftType, _ in pairs(researchTimersActive) do
+        researchTimersActive[craftType] = true
     end
-)
+end
+
+BS.RegisterForEvent(_G.EVENT_PLAYER_ACTIVATED, checkAllCraftTypes)
+
+BS.RegisterForEvent(_G.EVENT_SMITHING_TRAIT_RESEARCH_TIMES_UPDATED, checkAllCraftTypes)
 
 local function getDisplay(timeRemaining, widgetIndex, inUse, maxResearch)
     local display
@@ -145,6 +150,7 @@ BS.widgets[BS.W_BLACKSMITHING] = {
             colour = BS.Vars.Controls[BS.W_BLACKSMITHING].WarningColour or BS.Vars.DefaultWarningColour
         end
 
+        fullyUsed[_G.CRAFTING_TYPE_BLACKSMITHING] = inUse == maxResearch
         local display = getDisplay(timeRemaining, BS.W_BLACKSMITHING, inUse, maxResearch)
 
         widget:SetColour(unpack(colour))
@@ -156,6 +162,9 @@ BS.widgets[BS.W_BLACKSMITHING] = {
     icon = "/esoui/art/icons/servicemappins/servicepin_smithy.dds",
     tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_TRADESKILLTYPE1)),
     hideWhenEqual = 0,
+    fullyUsed = function()
+        return fullyUsed[_G.CRAFTING_TYPE_BLACKSMITHING]
+    end,
     complete = function()
         return BS.IsTraitResearchComplete(_G.CRAFTING_TYPE_BLACKSMITHING)
     end,
@@ -174,6 +183,7 @@ BS.widgets[BS.W_WOODWORKING] = {
             colour = BS.Vars.Controls[BS.W_WOODWORKING].WarningColour or BS.Vars.DefaultWarningColour
         end
 
+        fullyUsed[_G.CRAFTING_TYPE_WOODWORKING] = inUse == maxResearch
         local display = getDisplay(timeRemaining, BS.W_WOODWORKING, inUse, maxResearch)
 
         widget:SetColour(unpack(colour))
@@ -185,6 +195,9 @@ BS.widgets[BS.W_WOODWORKING] = {
     icon = "/esoui/art/icons/servicemappins/servicepin_woodworking.dds",
     tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_TRADESKILLTYPE6)),
     hideWhenEqual = 0,
+    fullyUsed = function()
+        return fullyUsed[_G.CRAFTING_TYPE_WOODWORKING]
+    end,
     complete = function()
         return BS.IsTraitResearchComplete(_G.CRAFTING_TYPE_WOODWORKING)
     end,
@@ -203,6 +216,7 @@ BS.widgets[BS.W_CLOTHING] = {
             colour = BS.Vars.Controls[BS.W_CLOTHING].WarningColour or BS.Vars.DefaultWarningColour
         end
 
+        fullyUsed[_G.CRAFTING_TYPE_CLOTHIER] = inUse == maxResearch
         local display = getDisplay(timeRemaining, BS.W_CLOTHING, inUse, maxResearch)
 
         widget:SetColour(unpack(colour))
@@ -214,6 +228,9 @@ BS.widgets[BS.W_CLOTHING] = {
     icon = "/esoui/art/icons/servicemappins/servicepin_outfitter.dds",
     tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_TRADESKILLTYPE2)),
     hideWhenEqual = 0,
+    fullyUsed = function()
+        return fullyUsed[_G.CRAFTING_TYPE_CLOTHIER]
+    end,
     complete = function()
         return BS.IsTraitResearchComplete(_G.CRAFTING_TYPE_CLOTHIER)
     end,
@@ -232,6 +249,7 @@ BS.widgets[BS.W_JEWELCRAFTING] = {
             colour = BS.Vars.Controls[BS.W_JEWELCRAFTING].WarningColour or BS.Vars.DefaultWarningColour
         end
 
+        fullyUsed[_G.CRAFTING_TYPE_JEWELRYCRAFTING] = inUse == maxResearch
         local display = getDisplay(timeRemaining, BS.W_JEWELCRAFTING, inUse, maxResearch)
 
         widget:SetColour(unpack(colour))
@@ -243,6 +261,9 @@ BS.widgets[BS.W_JEWELCRAFTING] = {
     icon = "/esoui/art/icons/icon_jewelrycrafting_symbol.dds",
     tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_TRADESKILLTYPE7)),
     hideWhenEqual = 0,
+    fullyUsed = function()
+        return fullyUsed[_G.CRAFTING_TYPE_JEWELRYCRAFTING]
+    end,
     complete = function()
         return BS.IsTraitResearchComplete(_G.CRAFTING_TYPE_JEWELRYCRAFTING)
     end,
