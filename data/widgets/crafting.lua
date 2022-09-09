@@ -1,9 +1,9 @@
 local BS = _G.BarSteward
-local researchTimersActive = {
-    [_G.CRAFTING_TYPE_BLACKSMITHING] = true,
-    [_G.CRAFTING_TYPE_WOODWORKING] = true,
-    [_G.CRAFTING_TYPE_CLOTHIER] = true,
-    [_G.CRAFTING_TYPE_JEWELRYCRAFTING] = true
+local researchSlots = {
+    [_G.CRAFTING_TYPE_BLACKSMITHING] = {},
+    [_G.CRAFTING_TYPE_WOODWORKING] = {},
+    [_G.CRAFTING_TYPE_CLOTHIER] = {},
+    [_G.CRAFTING_TYPE_JEWELRYCRAFTING] = {}
 }
 
 local fullyUsed = {
@@ -13,75 +13,43 @@ local fullyUsed = {
     [_G.CRAFTING_TYPE_JEWELRYCRAFTING] = false
 }
 
+local function clearSlots(craftType)
+    for slot, _ in pairs(researchSlots[craftType]) do
+        researchSlots[craftType][slot] = 0
+    end
+end
+
 -- based on code from AI Research Timer
 local function getResearchTimer(craftType)
     local maxTimer = 2000000
     local maxResearch = GetMaxSimultaneousSmithingResearch(craftType)
+    local maxLines = GetNumSmithingResearchLines(craftType)
+    local maxR = maxResearch
+    local inuse = 0
 
-    if (researchTimersActive[craftType]) then
-        local maxLines = GetNumSmithingResearchLines(craftType)
-        local maxR = maxResearch
-        local inuse = 0
+    clearSlots(craftType)
 
-        for i = 1, maxLines do
-            local _, _, numTraits = GetSmithingResearchLineInfo(craftType, i)
+    for i = 1, maxLines do
+        local _, _, numTraits = GetSmithingResearchLineInfo(craftType, i)
 
-            for j = 1, numTraits do
-                local duration, timeRemaining = GetSmithingResearchLineTraitTimes(craftType, i, j)
+        for j = 1, numTraits do
+            local duration, timeRemaining = GetSmithingResearchLineTraitTimes(craftType, i, j)
 
-                if (duration ~= nil and timeRemaining ~= nil) then
-                    maxResearch = maxResearch - 1
-                    inuse = inuse + 1
-                    maxTimer = math.min(maxTimer, timeRemaining)
-                end
+            if (duration ~= nil and timeRemaining ~= nil) then
+                maxResearch = maxResearch - 1
+                inuse = inuse + 1
+                maxTimer = math.min(maxTimer, timeRemaining)
+                researchSlots[craftType][inuse] = timeRemaining
             end
         end
-
-        if (maxResearch > 0) then
-            maxTimer = 0
-        end
-
-        if (maxTimer == 0) then
-            researchTimersActive[craftType] = false
-        end
-
-        return maxTimer, maxR, inuse
-    else
-        return 0, maxResearch, 0
     end
+
+    if (maxResearch > 0) then
+        maxTimer = 0
+    end
+
+    return maxTimer, maxR, inuse
 end
-
--- only run the research queries when necessary
-BS.RegisterForEvent(
-    _G.EVENT_SMITHING_TRAIT_RESEARCH_STARTED,
-    function(_, craftType)
-        researchTimersActive[craftType] = true
-    end
-)
-
-BS.RegisterForEvent(
-    _G.EVENT_SMITHING_TRAIT_RESEARCH_CANCELED,
-    function(_, craftType)
-        researchTimersActive[craftType] = false
-    end
-)
-
-BS.RegisterForEvent(
-    _G.EVENT_SMITHING_TRAIT_RESEARCH_COMPLETED,
-    function(_, craftType)
-        researchTimersActive[craftType] = false
-    end
-)
-
-local function checkAllCraftTypes()
-    for craftType, _ in pairs(researchTimersActive) do
-        researchTimersActive[craftType] = true
-    end
-end
-
-BS.RegisterForEvent(_G.EVENT_PLAYER_ACTIVATED, checkAllCraftTypes)
-
-BS.RegisterForEvent(_G.EVENT_SMITHING_TRAIT_RESEARCH_TIMES_UPDATED, checkAllCraftTypes)
 
 local function getDisplay(timeRemaining, widgetIndex, inUse, maxResearch)
     local display
@@ -101,7 +69,10 @@ local function getDisplay(timeRemaining, widgetIndex, inUse, maxResearch)
         )
     end
 
-    display = display .. (BS.Vars.Controls[widgetIndex].ShowSlots and " (" .. inUse .. "/" .. maxResearch .. ")" or "")
+    if (inUse ~= nil) then
+        display =
+            display .. (BS.Vars.Controls[widgetIndex].ShowSlots and " (" .. inUse .. "/" .. maxResearch .. ")" or "")
+    end
 
     return display
 end
@@ -156,6 +127,17 @@ BS.widgets[BS.W_BLACKSMITHING] = {
         widget:SetColour(unpack(colour))
         widget:SetValue(display)
 
+        local ttt = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_TRADESKILLTYPE1))
+
+        for slot = 1, maxResearch do
+            local slotText = BS.LF .. "|cf9f9f9" .. slot .. " - "
+            ttt =
+                ttt ..
+                slotText .. getDisplay(researchSlots[_G.CRAFTING_TYPE_BLACKSMITHING][slot] or 0, BS.W_BLACKSMITHING)
+        end
+
+        widget.tooltip = ttt
+
         return timeRemaining
     end,
     timer = 1000,
@@ -188,6 +170,16 @@ BS.widgets[BS.W_WOODWORKING] = {
 
         widget:SetColour(unpack(colour))
         widget:SetValue(display)
+
+        local ttt = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_TRADESKILLTYPE6))
+
+        for slot = 1, maxResearch do
+            local slotText = BS.LF .. "|cf9f9f9" .. slot .. " - "
+            ttt =
+                ttt .. slotText .. getDisplay(researchSlots[_G.CRAFTING_TYPE_WOODWORKING][slot] or 0, BS.W_WOODWORKING)
+        end
+
+        widget.tooltip = ttt
 
         return timeRemaining
     end,
@@ -222,6 +214,15 @@ BS.widgets[BS.W_CLOTHING] = {
         widget:SetColour(unpack(colour))
         widget:SetValue(display)
 
+        local ttt = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_TRADESKILLTYPE2))
+
+        for slot = 1, maxResearch do
+            local slotText = BS.LF .. "|cf9f9f9" .. slot .. " - "
+            ttt = ttt .. slotText .. getDisplay(researchSlots[_G.CRAFTING_TYPE_CLOTHIER][slot] or 0, BS.W_CLOTHING)
+        end
+
+        widget.tooltip = ttt
+
         return timeRemaining
     end,
     timer = 1000,
@@ -254,6 +255,17 @@ BS.widgets[BS.W_JEWELCRAFTING] = {
 
         widget:SetColour(unpack(colour))
         widget:SetValue(display)
+
+        local ttt = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_TRADESKILLTYPE7))
+
+        for slot = 1, maxResearch do
+            local slotText = BS.LF .. "|cf9f9f9" .. slot .. " - "
+            ttt =
+                ttt ..
+                slotText .. getDisplay(researchSlots[_G.CRAFTING_TYPE_JEWELRYCRAFTING][slot] or 0, BS.W_JEWELCRAFTING)
+        end
+
+        widget.tooltip = ttt
 
         return timeRemaining
     end,

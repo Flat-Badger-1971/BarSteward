@@ -414,3 +414,42 @@ BS.widgets[BS.W_TRIBUTE_CLUB_RANK] = {
     icon = "/esoui/art/tribute/tributeclubrank_7.dds",
     tooltip = GetString(_G.BARSTEWARD_TRIBUTE_RANK)
 }
+
+BS.widgets[BS.W_ACHIEVEMENT_POINTS] = {
+    -- v1.3.3
+    name = "achievementPoints",
+    update = function(widget)
+        local totalPoints = GetTotalAchievementPoints()
+        local earnedPoints = GetEarnedAchievementPoints()
+        local colour = BS.Vars.Controls[BS.W_ACHIEVEMENT_POINTS].Colour or BS.Vars.DefaultColour
+        local value = earnedPoints
+
+        if (BS.Vars.Controls[BS.W_ACHIEVEMENT_POINTS].ShowPercent) then
+            value = math.floor((earnedPoints / totalPoints) * 100) .. "%"
+        end
+
+        widget:SetValue(value)
+        widget:SetColour(unpack(colour))
+
+        local ttt = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ACHIEVEMENTS_OVERALL)) .. BS.LF
+        ttt = ttt .. "|cf9f9f9" .. earnedPoints .. "/" .. totalPoints .. "|r"
+
+        widget.tooltip = ttt
+        return widget:GetValue()
+    end,
+    event = {
+        _G.EVENT_PLAYER_ACTIVATED,
+        _G.EVENT_ACHIEVEMENT_UPDATED,
+        _G.EVENT_ACHIEVEMENT_AWARDED,
+        _G.EVENT_ACHIEVEMENTS_UPDATED
+    },
+    icon = "/esoui/art/journal/journal_tabicon_achievements_up.dds",
+    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ACHIEVEMENTS_OVERALL)),
+    onClick = function()
+        if (not IsInGamepadPreferredMode()) then
+            SCENE_MANAGER:Show("achievements")
+        else
+            SCENE_MANAGER:Show("achievementsGamepad")
+        end
+    end
+}
