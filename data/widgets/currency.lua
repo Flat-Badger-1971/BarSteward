@@ -177,25 +177,27 @@ BS.widgets[BS.W_CROWNS] = {
 BS.widgets[BS.W_EVENT_TICKETS] = {
     name = "eventTickets",
     update = function(widget)
+        local vars = BS.Vars.Controls[BS.W_EVENT_TICKETS]
         local tickets = GetCurrencyAmount(_G.CURT_EVENT_TICKETS, _G.CURRENCY_LOCATION_ACCOUNT)
-        local value = tickets .. "/12"
+        local noLimitColour = vars.NoLimitColour and "|cf9f9f9" or ""
+        local noLimitTerminator = vars.NoLimitColour and "|r" or ""
+        local value = tickets .. (vars.HideLimit and "" or (noLimitColour .. "/12" .. noLimitTerminator))
+        local widthValue = tickets .. (vars.HideLimit and "" or "/12")
         local pc = BS.ToPercent(tickets, 12)
 
-        if (BS.Vars.Controls[BS.W_EVENT_TICKETS].ShowPercent) then
+        if (vars.ShowPercent) then
             value = pc .. "%"
         end
 
-        widget:SetValue(value)
+        local colour = vars.Colour or BS.Vars.DefaultColour
 
-        local colour = BS.Vars.Controls[BS.W_EVENT_TICKETS].Colour or BS.Vars.DefaultColour
+        if (tickets > vars.DangerValue) then
+            colour = vars.DangerColour or BS.Vars.DefaultDangerColour
 
-        if (tickets > BS.Vars.Controls[BS.W_EVENT_TICKETS].DangerValue) then
-            colour = BS.Vars.Controls[BS.W_EVENT_TICKETS].DangerColour or BS.Vars.DefaultDangerColour
-
-            if (BS.Vars.Controls[BS.W_EVENT_TICKETS].Announce) then
+            if (vars.Announce) then
                 local announce = true
                 local previousTime = BS.Vars.PreviousAnnounceTime[BS.W_EVENT_TICKETS] or (os.time() - 100)
-                local debounceTime = (BS.Vars.Controls[BS.W_EVENT_TICKETS].DebounceTime or 5) * 60
+                local debounceTime = (vars.DebounceTime or 5) * 60
 
                 if (os.time() - previousTime <= debounceTime) then
                     announce = false
@@ -219,6 +221,7 @@ BS.widgets[BS.W_EVENT_TICKETS] = {
         end
 
         widget:SetColour(unpack(colour))
+        widget:SetValue(value, widthValue)
 
         return value
     end,
@@ -315,16 +318,30 @@ BS.widgets[BS.W_TELVAR_STONES] =
 BS.widgets[BS.W_TRANSMUTE_CRYSTALS] = {
     name = "transmuteCrystals",
     update = function(widget)
+        local vars = BS.Vars.Controls[BS.W_TRANSMUTE_CRYSTALS]
         local crystals = GetCurrencyAmount(_G.CURT_CHAOTIC_CREATIA, _G.CURRENCY_LOCATION_ACCOUNT)
-        local value = crystals .. "/1000"
+        local value = crystals .. (vars.HideLimit and "" or "/1000")
         local pc = BS.ToPercent(crystals, 1000)
+        local colour = vars.Colour or BS.Vars.DefaultColour
 
-        if (BS.Vars.Controls[BS.W_TRANSMUTE_CRYSTALS].ShowPercent) then
+        if ((vars.WarningValue or 0) > 0) then
+            if (crystals < (vars.WarningValue or 0)) then
+                colour = vars.WarningColour or BS.Vars.DefaultWarningColour
+            end
+        end
+
+        if ((vars.DangerValue or 0) > 0) then
+            if (crystals < (vars.DangerValue or 0)) then
+                colour = vars.DangerColour or BS.Vars.DefaultDangerColour
+            end
+        end
+
+        if (vars.ShowPercent) then
             value = pc .. "%"
         end
 
         widget:SetValue(value)
-        widget:SetColour(unpack(BS.Vars.Controls[BS.W_TRANSMUTE_CRYSTALS].Colour or BS.Vars.DefaultColour))
+        widget:SetColour(unpack(colour))
 
         return value
     end,
@@ -390,14 +407,15 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
         local disciplineType = GetChampionPointPoolForRank(earned + 1)
         local disciplineData = CHAMPION_DATA_MANAGER:FindChampionDisciplineDataByType(disciplineType)
         local cpicon = disciplineData:GetHUDIcon()
+        local vars = BS.Vars.Controls[BS.W_CHAMPION_POINTS]
         local cp = {}
 
-        if (BS.Vars.Controls[BS.W_CHAMPION_POINTS].UseSeparators == true) then
+        if (vars.UseSeparators == true) then
             earned = BS.AddSeparators(earned)
         end
 
+        widget:SetColour(unpack(vars.Colour or BS.Vars.DefaultColour))
         widget:SetValue(earned .. " " .. "(" .. pc .. "%)")
-        widget:SetColour(unpack(BS.Vars.Controls[BS.W_CHAMPION_POINTS].Colour or BS.Vars.DefaultColour))
         widget:SetIcon(cpicon)
 
         local icons = {}
@@ -446,12 +464,12 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
         local value = earned .. " " .. "(" .. pc .. "%)"
         local plainValue = value
 
-        if (BS.Vars.Controls[BS.W_CHAMPION_POINTS].ShowUnslottedCount and unslotted > 0) then
+        if (vars.ShowUnslottedCount and unslotted > 0) then
             plainValue = value .. " - " .. unslotted
             value = value .. " - |cff0000" .. unslotted .. "|r"
         end
 
-        widget:SetColour(unpack(BS.Vars.Controls[BS.W_CHAMPION_POINTS].Colour or BS.Vars.DefaultColour))
+        widget:SetColour(unpack(vars.Colour or BS.Vars.DefaultColour))
         widget:SetValue(value, plainValue)
         widget:SetIcon(cpicon)
 

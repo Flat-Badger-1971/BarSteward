@@ -155,4 +155,9 @@ function BS.VersionCheck()
         BS.Vars.Controls[BS.W_LATENCY].ColourValues = BS.Defaults.Controls[BS.W_LATENCY].ColourValues
         BS.Vars.Updates[1301] = true
     end
+
+    if (needsUpdate(1304)) then
+        BS.Vars.Controls[BS.W_TRANSMUTE_CRYSTALS].ColourValues = BS.Defaults.Controls[BS.W_TRANSMUTE_CRYSTALS].ColourValues
+        BS.Vars.Updates[1304] = true
+    end
 end

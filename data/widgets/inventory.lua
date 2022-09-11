@@ -3,23 +3,24 @@ local BS = _G.BarSteward
 BS.widgets[BS.W_BAG_SPACE] = {
     name = "bagSpace",
     update = function(widget, _, _, _, newItem)
+        local vars = BS.Vars.Controls[BS.W_BAG_SPACE]
         local bagSize = GetBagSize(_G.BAG_BACKPACK)
         local bagUsed = GetNumBagUsedSlots(_G.BAG_BACKPACK)
-        local value = bagUsed .. "/" .. bagSize
+        local noLimitColour = vars.NoLimitColour and "|cf9f9f9" or ""
+        local noLimitTerminator = vars.NoLimitColour and "|r" or ""
+        local value = bagUsed .. (vars.HideLimit and "" or (noLimitColour .. "/" .. bagSize .. noLimitTerminator))
+        local widthValue = bagUsed .. (vars.HideLimit and "" or ("/" .. bagSize))
         local pcUsed = math.floor((bagUsed / bagSize) * 100)
 
-        local colour = BS.Vars.Controls[BS.W_BAG_SPACE].OkColour or BS.Vars.DefaultOkColour
+        local colour = vars.OkColour or BS.Vars.DefaultOkColour
 
-        if
-            (pcUsed >= BS.Vars.Controls[BS.W_BAG_SPACE].WarningValue and
-                pcUsed < BS.Vars.Controls[BS.W_BAG_SPACE].DangerValue)
-         then
-            colour = BS.Vars.Controls[BS.W_BAG_SPACE].WarningColour or BS.Vars.DefaultWarningColour
+        if (pcUsed >= vars.WarningValue and pcUsed < vars.DangerValue) then
+            colour = vars.WarningColour or BS.Vars.DefaultWarningColour
 
-            if (BS.Vars.Controls[BS.W_BAG_SPACE].Announce and newItem) then
+            if (vars.Announce and newItem) then
                 local announce = true
                 local previousTime = BS.Vars.PreviousAnnounceTime[BS.W_BAG_SPACE] or (os.time() - 100)
-                local debounceTime = (BS.Vars.Controls[BS.W_BAG_SPACE].DebounceTime or 5) * 60
+                local debounceTime = (vars.DebounceTime or 5) * 60
 
                 if (os.time() - previousTime <= debounceTime) then
                     announce = false
@@ -30,17 +31,18 @@ BS.widgets[BS.W_BAG_SPACE] = {
                     BS.Announce(GetString(_G.BARSTEWARD_WARNING), GetString(_G.BARSTEWARD_WARNING_BAGS), BS.W_BAG_SPACE)
                 end
             end
-        elseif (pcUsed >= BS.Vars.Controls[BS.W_BAG_SPACE].DangerValue) then
-            colour = BS.Vars.Controls[BS.W_BAG_SPACE].DangerColour or BS.Vars.DefaultDangerColour
+        elseif (pcUsed >= vars.DangerValue) then
+            colour = vars.DangerColour or BS.Vars.DefaultDangerColour
         end
 
         widget:SetColour(unpack(colour))
 
-        if (BS.Vars.Controls[BS.W_BAG_SPACE].ShowPercent) then
+        if (vars.ShowPercent) then
             value = pcUsed .. "%"
+            widthValue = value
         end
 
-        widget:SetValue(value)
+        widget:SetValue(value, widthValue)
 
         return pcUsed
     end,
@@ -82,35 +84,37 @@ BS.widgets[BS.W_BANK_SPACE] = {
             return
         end
 
+        local vars = BS.Vars.Controls[BS.W_BANK_SPACE]
         local bagSize = GetBagSize(_G.BAG_BANK)
         local bagUsed = GetNumBagUsedSlots(_G.BAG_BANK)
+        local noLimitColour = vars.NoLimitColour and "|cf9f9f9" or ""
+        local noLimitTerminator = vars.NoLimitColour and "|r" or ""
 
         if (IsESOPlusSubscriber()) then
             bagSize = bagSize + GetBagSize(_G.BAG_SUBSCRIBER_BANK)
             bagUsed = bagUsed + GetNumBagUsedSlots(_G.BAG_SUBSCRIBER_BANK)
         end
 
-        local value = bagUsed .. "/" .. bagSize
+        local value = bagUsed .. (vars.HideLimit and "" or (noLimitColour .. "/" .. bagSize .. noLimitTerminator))
+        local widthValue = bagUsed .. (vars.HideLimit and "" or ("/" .. bagSize))
         local pcUsed = math.floor((bagUsed / bagSize) * 100)
 
-        local colour = BS.Vars.Controls[BS.W_BANK_SPACE].OkColour or BS.Vars.DefaultOkColour
+        local colour = vars.OkColour or BS.Vars.DefaultOkColour
 
-        if
-            (pcUsed >= BS.Vars.Controls[BS.W_BANK_SPACE].WarningValue and
-                pcUsed < BS.Vars.Controls[BS.W_BANK_SPACE].DangerValue)
-         then
-            colour = BS.Vars.Controls[BS.W_BANK_SPACE].WarningColour or BS.Vars.DefaultWarningColour
-        elseif (pcUsed >= BS.Vars.Controls[BS.W_BANK_SPACE].DangerValue) then
-            colour = BS.Vars.Controls[BS.W_BANK_SPACE].DangerColour or BS.Vars.DefaultDangerColour
+        if (pcUsed >= vars.WarningValue and pcUsed < vars.DangerValue) then
+            colour = vars.WarningColour or BS.Vars.DefaultWarningColour
+        elseif (pcUsed >= vars.DangerValue) then
+            colour = vars.DangerColour or BS.Vars.DefaultDangerColour
         end
 
         widget:SetColour(unpack(colour))
 
-        if (BS.Vars.Controls[BS.W_BANK_SPACE].ShowPercent) then
+        if (vars.ShowPercent) then
             value = pcUsed .. "%"
+            widthValue = value
         end
 
-        widget:SetValue(value)
+        widget:SetValue(value, widthValue)
 
         return pcUsed
     end,
@@ -165,26 +169,18 @@ BS.widgets[BS.W_DURABILITY] = {
             local lowest = 100
             local lowestType = _G.ITEMTYPE_ARMOR
             local items = {}
+            local vars = BS.Vars.Controls[BS.W_DURABILITY]
 
             for slot = 0, GetBagSize(_G.BAG_WORN) do
                 local itemName = ZO_CachedStrFormat("<<C:1>>", GetItemName(_G.BAG_WORN, slot))
                 local condition = GetItemCondition(_G.BAG_WORN, slot)
-                local colour = BS.ARGBConvert(BS.Vars.Controls[BS.W_DURABILITY].OkColour or BS.Vars.DefaultOkColour)
+                local colour = BS.ARGBConvert(vars.OkColour or BS.Vars.DefaultOkColour)
 
                 if (itemName ~= "") then
-                    if
-                        (condition <= BS.Vars.Controls[BS.W_DURABILITY].OkValue and
-                            condition >= BS.Vars.Controls[BS.W_DURABILITY].DangerValue)
-                     then
-                        colour =
-                            BS.ARGBConvert(
-                            BS.Vars.Controls[BS.W_DURABILITY].WarningColour or BS.Vars.DefaultWarningColour
-                        )
-                    elseif (condition < BS.Vars.Controls[BS.W_DURABILITY].DangerValue) then
-                        colour =
-                            BS.ARGBConvert(
-                            BS.Vars.Controls[BS.W_DURABILITY].DangerColour or BS.Vars.DefaultDangerColour
-                        )
+                    if (condition <= vars.OkValue and condition >= vars.DangerValue) then
+                        colour = BS.ARGBConvert(vars.WarningColour or BS.Vars.DefaultWarningColour)
+                    elseif (condition < vars.DangerValue) then
+                        colour = BS.ARGBConvert(vars.DangerColour or BS.Vars.DefaultDangerColour)
                     end
 
                     table.insert(items, colour .. itemName .. " - " .. condition .. "%|r")
@@ -200,17 +196,17 @@ BS.widgets[BS.W_DURABILITY] = {
 
             local colour
 
-            if (lowest >= BS.Vars.Controls[BS.W_DURABILITY].OkValue) then
-                colour = BS.Vars.Controls[BS.W_DURABILITY].OkColour or BS.Vars.DefaultOkColour
-            elseif (BS.Vars.Controls[BS.W_DURABILITY].DangerValue) then
-                colour = BS.Vars.Controls[BS.W_DURABILITY].WarningColour or BS.Vars.DefaultWarningColour
+            if (lowest >= vars.OkValue) then
+                colour = vars.OkColour or BS.Vars.DefaultOkColour
+            elseif (vars.DangerValue) then
+                colour = vars.WarningColour or BS.Vars.DefaultWarningColour
             else
-                colour = BS.Vars.Controls[BS.W_DURABILITY].DangerColour or BS.Vars.DefaultDangerColour
+                colour = vars.DangerColour or BS.Vars.DefaultDangerColour
             end
 
             widget:SetColour(unpack(colour))
 
-            if (lowest <= BS.Vars.Controls[BS.W_DURABILITY].DangerValue) then
+            if (lowest <= vars.DangerValue) then
                 if (lowestType == _G.ITEMTYPE_WEAPON) then
                     widget:SetIcon("/esoui/art/hud/broken_weapon.dds")
                 else
@@ -254,6 +250,7 @@ BS.widgets[BS.W_REPAIRS_KITS] = {
     name = "repairKitCount",
     update = function(widget)
         local count = 0
+        local vars = BS.Vars.Controls[BS.W_REPAIRS_KITS]
 
         for slot = 0, GetBagSize(_G.BAG_BACKPACK) do
             if (IsItemRepairKit(_G.BAG_BACKPACK, slot)) then
@@ -261,12 +258,12 @@ BS.widgets[BS.W_REPAIRS_KITS] = {
             end
         end
 
-        local colour = BS.Vars.Controls[BS.W_REPAIRS_KITS].OkColour or BS.Vars.DefaultOkColour
+        local colour = vars.OkColour or BS.Vars.DefaultOkColour
 
-        if (count < BS.Vars.Controls[BS.W_REPAIRS_KITS].DangerValue) then
-            colour = BS.Vars.Controls[BS.W_REPAIRS_KITS].DangerColour or BS.Vars.DefaultDangerColour
-        elseif (count < BS.Vars.Controls[BS.W_REPAIRS_KITS].WarningValue) then
-            colour = BS.Vars.Controls[BS.W_REPAIRS_KITS].WarningColour or BS.Vars.DefaultWarningColour
+        if (count < vars.DangerValue) then
+            colour = vars.DangerColour or BS.Vars.DefaultDangerColour
+        elseif (count < vars.WarningValue) then
+            colour = vars.WarningColour or BS.Vars.DefaultWarningColour
         end
 
         widget:SetColour(unpack(colour))
@@ -283,28 +280,32 @@ BS.widgets[BS.W_SOUL_GEMS] = {
     -- v1.2.0
     name = "soulGems",
     update = function(widget)
+        local vars = BS.Vars.Controls[BS.W_SOUL_GEMS]
         local level = GetUnitEffectiveLevel("player")
         local _, filledIcon, filledCount = GetSoulGemInfo(_G.SOUL_GEM_TYPE_FILLED, level)
         local _, emptyIcon, emptyCount = GetSoulGemInfo(_G.SOUL_GEM_TYPE_EMPTY, level)
 
-        if (BS.Vars.Controls[BS.W_SOUL_GEMS].UseSeparators == true) then
+        if (vars.UseSeparators == true) then
             filledCount = BS.AddSeparators(filledCount)
             emptyCount = BS.AddSeparators(emptyCount)
         end
 
         local displayValue = filledCount
+        local widthValue = filledCount
         local displayIcon = filledIcon
-        local both = filledCount .. "/" .. emptyCount
+        local both = "|c00ff00" .. filledCount .. "|r/" .. emptyCount
 
-        if (BS.Vars.Controls[BS.W_SOUL_GEMS].GemType == GetString(_G.BARSTEWARD_EMPTY)) then
+        if (vars.GemType == GetString(_G.BARSTEWARD_EMPTY)) then
             displayValue = emptyCount
+            widthValue = emptyCount
             displayIcon = emptyIcon
-        elseif (BS.Vars.Controls[BS.W_SOUL_GEMS].GemType == GetString(_G.BARSTEWARD_BOTH)) then
+        elseif (vars.GemType == GetString(_G.BARSTEWARD_BOTH)) then
             displayValue = both
+            widthValue = filledCount .. "/" .. emptyCount
         end
 
-        widget:SetValue(displayValue)
-        widget:SetColour(unpack(BS.Vars.Controls[BS.W_SOUL_GEMS].Colour or BS.Vars.DefaultColour))
+        widget:SetColour(unpack(vars.Colour or BS.Vars.DefaultColour))
+        widget:SetValue(displayValue, widthValue)
         widget:SetIcon(displayIcon)
 
         -- update the tooltip
@@ -625,16 +626,13 @@ BS.widgets[BS.W_LOCKPICKS] = {
     name = "lockpicks",
     update = function(widget)
         local available = GetNumLockpicksLeft()
+        local vars = BS.Vars.Controls[BS.W_LOCKPICKS]
+        local colour = vars.OkColour or BS.Vars.DefaultOkColour
 
-        local colour = BS.Vars.Controls[BS.W_LOCKPICKS].OkColour or BS.Vars.DefaultOkColour
-
-        if
-            (available <= BS.Vars.Controls[BS.W_LOCKPICKS].WarningValue and
-                available > BS.Vars.Controls[BS.W_LOCKPICKS].DangerValue)
-         then
-            colour = BS.Vars.Controls[BS.W_LOCKPICKS].WarningColour or BS.Vars.DefaultWarningColour
-        elseif (available <= BS.Vars.Controls[BS.W_LOCKPICKS].DangerValue) then
-            colour = BS.Vars.Controls[BS.W_LOCKPICKS].DangerColour or BS.Vars.DefaultDangerColour
+        if (available <= vars.WarningValue and available > vars.DangerValue) then
+            colour = vars.WarningColour or BS.Vars.DefaultWarningColour
+        elseif (available <= vars.DangerValue) then
+            colour = vars.DangerColour or BS.Vars.DefaultDangerColour
         end
 
         widget:SetColour(unpack(colour))

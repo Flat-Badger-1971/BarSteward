@@ -1,7 +1,11 @@
 local BS = _G.BarSteward
+local completed = {
+    [_G.TIMED_ACTIVITY_TYPE_DAILY] = false,
+    [_G.TIMED_ACTIVITY_TYPE_WEEKLY] = false
+}
 
-local function configureWidget(widget, complete, maxComplete, activityType, tasks)
-    widget:SetValue(complete .. "/" .. maxComplete)
+local function configureWidget(widget, complete, maxComplete, activityType, tasks, hideLimit)
+    widget:SetValue(complete .. (hideLimit and "" or ("/" .. maxComplete)))
     widget:SetColour(
         unpack(
             BS.Vars.Controls[
@@ -25,7 +29,7 @@ local function configureWidget(widget, complete, maxComplete, activityType, task
     end
 end
 
-local function getTimedActivityProgress(activityType, widget)
+local function getTimedActivityProgress(activityType, widget, hideLimit)
     local complete = 0
     local maxComplete = GetTimedActivityTypeLimit(activityType)
     local tasks = {}
@@ -45,6 +49,8 @@ local function getTimedActivityProgress(activityType, widget)
             local pcProgress = progress / max
             local ttext = name .. "  (" .. progress .. "/" .. max .. ")"
             local colour = "|cb4b4b4"
+
+            completed[activityType] = false
 
             if (progress > 0 and progress < max and complete ~= maxComplete) then
                 colour = "|cffff00"
@@ -88,7 +94,11 @@ local function getTimedActivityProgress(activityType, widget)
     end
 
     if (widget ~= nil) then
-        configureWidget(widget, complete, maxComplete, activityType, tasks)
+        if (complete == maxComplete) then
+            completed[activityType] = true
+        end
+
+        configureWidget(widget, complete, maxComplete, activityType, tasks, hideLimit)
     end
 
     return complete, maxTask
@@ -98,7 +108,11 @@ BS.widgets[BS.W_DAILY_ENDEAVOURS] = {
     -- v1.0.1
     name = "dailyEndeavourProgress",
     update = function(widget)
-        return getTimedActivityProgress(_G.TIMED_ACTIVITY_TYPE_DAILY, widget)
+        return getTimedActivityProgress(
+            _G.TIMED_ACTIVITY_TYPE_DAILY,
+            widget,
+            BS.Vars.Controls[BS.W_DAILY_ENDEAVOURS].HideLimit
+        )
     end,
     event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED},
     icon = "/esoui/art/journal/u26_progress_digsite_checked_incomplete.dds",
@@ -110,6 +124,9 @@ BS.widgets[BS.W_DAILY_ENDEAVOURS] = {
         else
             ZO_ACTIVITY_FINDER_ROOT_GAMEPAD:ShowCategory(TIMED_ACTIVITIES_GAMEPAD:GetCategoryData())
         end
+    end,
+    complete = function()
+        return completed[_G.TIMED_ACTIVITY_TYPE_DAILY]
     end
 }
 
@@ -117,7 +134,11 @@ BS.widgets[BS.W_WEEKLY_ENDEAVOURS] = {
     -- v1.0.1
     name = "weeklyEndeavourProgress",
     update = function(widget)
-        return getTimedActivityProgress(_G.TIMED_ACTIVITY_TYPE_WEEKLY, widget)
+        return getTimedActivityProgress(
+            _G.TIMED_ACTIVITY_TYPE_WEEKLY,
+            widget,
+            BS.Vars.Controls[BS.W_WEEKLY_ENDEAVOURS].HideLimit
+        )
     end,
     event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED},
     icon = "/esoui/art/journal/u26_progress_digsite_checked_complete.dds",
@@ -129,6 +150,9 @@ BS.widgets[BS.W_WEEKLY_ENDEAVOURS] = {
         else
             ZO_ACTIVITY_FINDER_ROOT_GAMEPAD:ShowCategory(TIMED_ACTIVITIES_GAMEPAD:GetCategoryData())
         end
+    end,
+    complete = function()
+        return completed[_G.TIMED_ACTIVITY_TYPE_WEEKLY]
     end
 }
 
@@ -197,6 +221,7 @@ BS.widgets[BS.W_LEADS] = {
         local minTime = 99999999
         local leads = {}
         local antiquityId = GetNextAntiquityId()
+        local vars = BS.Vars.Controls[BS.W_LEADS]
 
         while antiquityId do
             if (DoesAntiquityHaveLead(antiquityId)) then
@@ -224,10 +249,10 @@ BS.widgets[BS.W_LEADS] = {
         if (#leads > 0) then
             local timeColour = BS.Vars.DefaultOkColour
 
-            if (minTime <= (BS.Vars.Controls[BS.W_LEADS].DangerValue) * 3600) then
-                timeColour = BS.Vars.Controls[BS.W_LEADS].DangerColour or BS.Vars.DefaultDangerColour
-            elseif (minTime <= (BS.Vars.Controls[BS.W_LEADS].WarningValue * 3600)) then
-                timeColour = BS.Vars.Controls[BS.W_LEADS].WarningColour or BS.Vars.DefaultWarningColour
+            if (minTime <= (vars.DangerValue) * 3600) then
+                timeColour = vars.DangerColour or BS.Vars.DefaultDangerColour
+            elseif (minTime <= (vars.WarningValue * 3600)) then
+                timeColour = vars.WarningColour or BS.Vars.DefaultWarningColour
             end
 
             local value
@@ -237,10 +262,10 @@ BS.widgets[BS.W_LEADS] = {
                 timeColour = {1, 0.5, 0, 1}
                 minTime = 0
             else
-                value = BS.SecondsToTime(minTime, false, false, true, BS.Vars.Controls[BS.W_LEADS].Format)
+                value = BS.SecondsToTime(minTime, false, false, true, vars.Format)
             end
 
-            if (BS.Vars.Controls[BS.W_LEADS].ShowCount) then
+            if (vars.ShowCount) then
                 value = "(" .. #leads .. ")  " .. value
             end
 
@@ -251,7 +276,7 @@ BS.widgets[BS.W_LEADS] = {
 
             for _, lead in ipairs(leads) do
                 local nameAndZone = lead.name .. " - " .. lead.zone
-                local time = BS.SecondsToTime(lead.remaining, false, false, true, BS.Vars.Controls[BS.W_LEADS].Format)
+                local time = BS.SecondsToTime(lead.remaining, false, false, true, vars.Format)
                 local ttlColour = getLeadColour(lead)
 
                 timeColour = BS.Vars.DefaultOkColour
@@ -260,10 +285,10 @@ BS.widgets[BS.W_LEADS] = {
                     time = GetString(_G.BARSTEWARD_IN_PROGRESS)
                     timeColour = {1, 0.5, 0, 1}
                 else
-                    if (lead.remaining <= (BS.Vars.Controls[BS.W_LEADS].DangerValue * 3600)) then
-                        timeColour = BS.Vars.Controls[BS.W_LEADS].DangerColour or BS.Vars.DefaultDangerColour
-                    elseif (lead.remaining <= (BS.Vars.Controls[BS.W_LEADS].WarningValue * 3600)) then
-                        timeColour = BS.Vars.Controls[BS.W_LEADS].WarningColour or BS.Vars.DefaultWarningColour
+                    if (lead.remaining <= (vars.DangerValue * 3600)) then
+                        timeColour = vars.DangerColour or BS.Vars.DefaultDangerColour
+                    elseif (lead.remaining <= (vars.WarningValue * 3600)) then
+                        timeColour = vars.WarningColour or BS.Vars.DefaultWarningColour
                     end
                 end
 
@@ -320,12 +345,13 @@ end
 
 local function getTimedActivityTimeRemaining(activityType, widgetIndex, widget)
     local secondsRemaining = TIMED_ACTIVITIES_MANAGER:GetTimedActivityTypeTimeRemainingSeconds(activityType)
-    local colour = BS.Vars.Controls[widgetIndex].OkColour or BS.Vars.DefaultOkColour
+    local vars = BS.Vars.Controls[widgetIndex]
+    local colour = vars.OkColour or BS.Vars.DefaultOkColour
 
-    if (secondsRemaining < (BS.Vars.Controls[widgetIndex].DangerValue * 3600)) then
-        colour = BS.Vars.Controls[widgetIndex].DangerColour or BS.Vars.DefaultDangerColour
-    elseif (secondsRemaining < (BS.Vars.Controls[widgetIndex].WarningValue * 3600)) then
-        colour = BS.Vars.Controls[widgetIndex].WarningColour or BS.Vars.DefaultWarningColour
+    if (secondsRemaining < (vars.DangerValue * 3600)) then
+        colour = vars.DangerColour or BS.Vars.DefaultDangerColour
+    elseif (secondsRemaining < (vars.WarningValue * 3600)) then
+        colour = vars.WarningColour or BS.Vars.DefaultWarningColour
     end
 
     local display = getDisplay(secondsRemaining, widgetIndex)

@@ -20,22 +20,23 @@ BS.widgets[BS.W_MOUNT_TRAINING] = {
     name = "mountTraining",
     update = function(widget)
         local remaining, total = 0, 0
+        local vars = BS.Vars.Controls[BS.W_MOUNT_TRAINING]
 
         if (trainingActive) then
             remaining, total = GetTimeUntilCanBeTrained()
         end
 
-        local colour = BS.Vars.Controls[BS.W_MOUNT_TRAINING].OkColour or BS.Vars.DefaultOkColour
+        local colour = vars.OkColour or BS.Vars.DefaultOkColour
         local time = "X"
 
         if (remaining ~= nil and total ~= nil) then
             remaining = remaining / 1000
-            time = BS.SecondsToTime(remaining, true, false, BS.Vars.Controls[BS.W_MOUNT_TRAINING].HideSeconds)
+            time = BS.SecondsToTime(remaining, true, false, vars.HideSeconds)
 
-            if (remaining < (BS.Vars.Controls[BS.W_MOUNT_TRAINING].DangerValue * 3600)) then
-                colour = BS.Vars.Controls[BS.W_MOUNT_TRAINING].DangerColour or BS.Vars.DefaultDangerColour
-            elseif (remaining < (BS.Vars.Controls[BS.W_MOUNT_TRAINING].WarningValue * 3600)) then
-                colour = BS.Vars.Controls[BS.W_MOUNT_TRAINING].WarningColour or BS.Vars.DefaultWarningColour
+            if (remaining < (vars.DangerValue * 3600)) then
+                colour = vars.DangerColour or BS.Vars.DefaultDangerColour
+            elseif (remaining < (vars.WarningValue * 3600)) then
+                colour = vars.WarningColour or BS.Vars.DefaultWarningColour
             end
 
             if (remaining == 0) then

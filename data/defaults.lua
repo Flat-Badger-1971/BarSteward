@@ -71,7 +71,9 @@ BS.Defaults = {
             SoundWhenOverSound = "Duel Forfeit",
             ColourValues = "c,dv,dc",
             DangerValue = 8,
-            Announce = false
+            Announce = false,
+            HideLimit = false,
+            NoLimitColour = false
         },
         [BS.W_GOLD] = {Bar = 1, Order = 6, UseSeparators = false, ColourValues = "c"},
         [BS.W_SEALS_OF_ENDEAVOUR] = {
@@ -91,7 +93,15 @@ BS.Defaults = {
             UseSeparators = false,
             ColourValues = "c"
         },
-        [BS.W_TRANSMUTE_CRYSTALS] = {Bar = 0, Order = 9, ShowPercent = false, ColourValues = "c"},
+        [BS.W_TRANSMUTE_CRYSTALS] = {
+            Bar = 0,
+            Order = 9,
+            ShowPercent = false,
+            ColourValues = "c,wv,wc,dv,dc",
+            WarningValue = 200,
+            DangerValue = 50,
+            HideLimit = false
+        },
         [BS.W_UNDAUNTED_KEYS] = {
             Bar = 1,
             Order = 10,
@@ -110,7 +120,9 @@ BS.Defaults = {
             ColourValues = "okc,wv,wc,dv,dc",
             WarningValue = 85,
             DangerValue = 95,
-            Announce = false
+            Announce = false,
+            HideLimit = false,
+            NoLimitColour = false
         },
         [BS.W_BANK_SPACE] = {
             Bar = 1,
@@ -121,7 +133,9 @@ BS.Defaults = {
             Units = "%",
             ColourValues = "okc,wv,wc,dv,dc",
             WarningValue = 85,
-            DangerValue = 95
+            DangerValue = 95,
+            HideLimit = false,
+            NoLimitColour = false
         },
         [BS.W_FPS] = {Bar = 0, Order = 14, ColourValues = "c"},
         [BS.W_LATENCY] = {Bar = 1, Order = 15, ColourValues = "c,wv,wc,dc,dv"},
@@ -210,8 +224,20 @@ BS.Defaults = {
             OkValue = 75,
             DangerValue = 15
         },
-        [BS.W_DAILY_ENDEAVOURS] = {Bar = 0, Order = 26, ColourValues = "c"},
-        [BS.W_WEEKLY_ENDEAVOURS] = {Bar = 0, Order = 27, ColourValues = "c"},
+        [BS.W_DAILY_ENDEAVOURS] = {
+            Bar = 0,
+            Order = 26,
+            ColourValues = "c",
+            HideLimit = false,
+            HideWhenCompleted = false
+        },
+        [BS.W_WEEKLY_ENDEAVOURS] = {
+            Bar = 0,
+            Order = 27,
+            ColourValues = "c",
+            HideLimit = false,
+            HideWhenCompleted = false
+        },
         [BS.W_REPAIRS_KITS] = {
             Bar = 0,
             Order = 28,
@@ -231,7 +257,9 @@ BS.Defaults = {
             Units = "%",
             ColourValues = "okc,wv,wc,dv,dc",
             WarningValue = 85,
-            DangerValue = 95
+            DangerValue = 95,
+            HideLimit = false,
+            NoLimitColour = false
         },
         [BS.W_ZONE] = {Bar = 0, Order = 32, ColourValues = "c"},
         [BS.W_PLAYER_NAME] = {Bar = 0, Order = 33, ColourValues = "c"},
@@ -254,7 +282,8 @@ BS.Defaults = {
             Bar = 0,
             Order = 39,
             ColourValues = "c",
-            Announce = false
+            Announce = false,
+            HideLimit = false
         },
         [BS.W_MEMORY] = {
             Bar = 0,
@@ -286,11 +315,13 @@ BS.Defaults = {
             Units = "%",
             ColourValues = "okc,wv,wc,dv,dc",
             WarningValue = 85,
-            DangerValue = 95
+            DangerValue = 95,
+            HideLimit = false,
+            NoLimitColour = false
         },
         [BS.W_SPEED] = {Bar = 0, Order = 49, ColourValues = "c", Units = "mph", ShowPercent = false},
         [BS.W_CRAFTING_DAILIES] = {Bar = 0, Order = 50},
-        [BS.W_GUILD_FRIENDS] = {Bar = 0, Order = 51, ColourValues = "c", Announce = false},
+        [BS.W_GUILD_FRIENDS] = {Bar = 0, Order = 51, ColourValues = "c", Announce = false, HideLimit = false},
         [BS.W_DAILY_ENDEAVOUR_TIME] = {
             Bar = 0,
             Order = 52,

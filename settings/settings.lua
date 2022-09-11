@@ -1,7 +1,7 @@
 local BS = _G.BarSteward
 
 BS.LAM = _G.LibAddonMenu2
-BS.VERSION = "1.3.3"
+BS.VERSION = "1.3.4"
 
 local panel = {
     type = "panel",
@@ -216,16 +216,17 @@ local function getBarSettings()
     local bars = BS.Vars.Bars
 
     for idx, data in ipairs(bars) do
+        local vars = BS.Vars.Bars[idx]
         local controls = {
             [1] = {
                 type = "dropdown",
                 name = GetString(_G.BARSTEWARD_ORIENTATION),
                 choices = {GetString(_G.BARSTEWARD_HORIZONTAL), GetString(_G.BARSTEWARD_VERTICAL)},
                 getFunc = function()
-                    return BS.Vars.Bars[idx].Orientation
+                    return vars.Orientation
                 end,
                 setFunc = function(value)
-                    BS.Vars.Bars[idx].Orientation = value
+                    vars.Orientation = value
                 end,
                 width = "full",
                 requiresReload = true,
@@ -235,10 +236,10 @@ local function getBarSettings()
                 type = "checkbox",
                 name = GetString(_G.BARSTEWARD_SHOW_BACKDROP),
                 getFunc = function()
-                    return BS.Vars.Bars[idx].Backdrop.Show
+                    return vars.Backdrop.Show
                 end,
                 setFunc = function(value)
-                    BS.Vars.Bars[idx].Backdrop.Show = value
+                    vars.Backdrop.Show = value
                     _G[BS.Name .. "_bar_" .. idx].background:SetHidden(not value)
                 end,
                 default = BS.Defaults.Bars[1].Backdrop.Show
@@ -247,15 +248,15 @@ local function getBarSettings()
                 type = "colorpicker",
                 name = GetString(_G.BARSTEWARD_BACKDROP_COLOUR),
                 getFunc = function()
-                    return unpack(BS.Vars.Bars[idx].Backdrop.Colour)
+                    return unpack(vars.Backdrop.Colour)
                 end,
                 setFunc = function(r, g, b, a)
-                    BS.Vars.Bars[idx].Backdrop.Colour = {r, g, b, a}
+                    vars.Backdrop.Colour = {r, g, b, a}
                     _G[BS.Name .. "_bar_" .. idx].background:SetCenterColor(r, g, b, a)
                 end,
                 width = "full",
                 disabled = function()
-                    return not BS.Vars.Bars[idx].Backdrop.Show
+                    return not vars.Backdrop.Show
                 end,
                 default = unpack(BS.Defaults.Bars[1].Backdrop.Colour)
             },
@@ -269,10 +270,10 @@ local function getBarSettings()
                     GetString(_G.BARSTEWARD_BOTTOM)
                 },
                 getFunc = function()
-                    return BS.Vars.Bars[idx].TooltipAnchor
+                    return vars.TooltipAnchor
                 end,
                 setFunc = function(value)
-                    BS.Vars.Bars[idx].TooltipAnchor = value
+                    vars.TooltipAnchor = value
                 end,
                 requiresReload = true,
                 default = BS.Defaults.Bars[1].TooltipAnchor
@@ -285,10 +286,10 @@ local function getBarSettings()
                     GetString(_G.BARSTEWARD_RIGHT)
                 },
                 getFunc = function()
-                    return BS.Vars.Bars[idx].ValueSide
+                    return vars.ValueSide
                 end,
                 setFunc = function(value)
-                    BS.Vars.Bars[idx].ValueSide = value
+                    vars.ValueSide = value
                 end,
                 requiresReload = true,
                 default = BS.Defaults.Bars[1].ValueSide
@@ -302,10 +303,10 @@ local function getBarSettings()
                     GetString(_G.BARSTEWARD_MIDDLE)
                 },
                 getFunc = function()
-                    return BS.Vars.Bars[idx].Anchor or GetString(_G.BARSTEWARD_MIDDLE)
+                    return vars.Anchor or GetString(_G.BARSTEWARD_MIDDLE)
                 end,
                 setFunc = function(value)
-                    BS.Vars.Bars[idx].Anchor = value
+                    vars.Anchor = value
                 end,
                 requiresReload = true,
                 default = BS.Defaults.Bars[1].Anchor
@@ -314,10 +315,10 @@ local function getBarSettings()
                 type = "slider",
                 name = GetString(_G.BARSTEWARD_SCALE),
                 getFunc = function()
-                    return BS.Vars.Bars[idx].Scale or 1
+                    return vars.Scale or 1
                 end,
                 setFunc = function(value)
-                    BS.Vars.Bars[idx].Scale = value
+                    vars.Scale = value
 
                     local barToScale = _G[BS.Name .. "_bar_" .. idx]
 
@@ -337,10 +338,10 @@ local function getBarSettings()
                 type = "checkbox",
                 name = GetString(_G.BARSTEWARD_SHOW_WHILST_CRAFTING),
                 getFunc = function()
-                    return BS.Vars.Bars[idx].ShowWhilstCrafting or false
+                    return vars.ShowWhilstCrafting or false
                 end,
                 setFunc = function(value)
-                    BS.Vars.Bars[idx].ShowWhilstCrafting = value
+                    vars.ShowWhilstCrafting = value
 
                     local bar = _G[BS.Name .. "_bar_" .. idx].ref.bar
 
@@ -357,10 +358,10 @@ local function getBarSettings()
                 type = "checkbox",
                 name = GetString(_G.BARSTEWARD_SHOW_WHILST_BANKING),
                 getFunc = function()
-                    return BS.Vars.Bars[idx].ShowWhilstBanking or false
+                    return vars.ShowWhilstBanking or false
                 end,
                 setFunc = function(value)
-                    BS.Vars.Bars[idx].ShowWhilstBanking = value
+                    vars.ShowWhilstBanking = value
 
                     local bar = _G[BS.Name .. "_bar_" .. idx].ref.bar
 
@@ -377,10 +378,10 @@ local function getBarSettings()
                 type = "checkbox",
                 name = GetString(_G.BARSTEWARD_SHOW_WHILST_INVENTORY),
                 getFunc = function()
-                    return BS.Vars.Bars[idx].ShowWhilstInventory or false
+                    return vars.ShowWhilstInventory or false
                 end,
                 setFunc = function(value)
-                    BS.Vars.Bars[idx].ShowWhilstInventory = value
+                    vars.ShowWhilstInventory = value
 
                     local bar = _G[BS.Name .. "_bar_" .. idx].ref.bar
 
@@ -397,10 +398,10 @@ local function getBarSettings()
                 type = "checkbox",
                 name = GetString(_G.BARSTEWARD_SHOW_WHILST_MAIL),
                 getFunc = function()
-                    return BS.Vars.Bars[idx].ShowWhilstMail or false
+                    return vars.ShowWhilstMail or false
                 end,
                 setFunc = function(value)
-                    BS.Vars.Bars[idx].ShowWhilstMail = value
+                    vars.ShowWhilstMail = value
 
                     local bar = _G[BS.Name .. "_bar_" .. idx].ref.bar
 
@@ -417,10 +418,10 @@ local function getBarSettings()
                 type = "checkbox",
                 name = GetString(_G.BARSTEWARD_SHOW_WHILST_SIEGE),
                 getFunc = function()
-                    return BS.Vars.Bars[idx].ShowWhilstSiege or false
+                    return vars.ShowWhilstSiege or false
                 end,
                 setFunc = function(value)
-                    BS.Vars.Bars[idx].ShowWhilstSiege = value
+                    vars.ShowWhilstSiege = value
 
                     local bar = _G[BS.Name .. "_bar_" .. idx].ref.bar
 
@@ -437,10 +438,10 @@ local function getBarSettings()
                 type = "checkbox",
                 name = GetString(_G.BARSTEWARD_SHOW_WHILST_MENU),
                 getFunc = function()
-                    return BS.Vars.Bars[idx].ShowWhilstMenu or false
+                    return vars.ShowWhilstMenu or false
                 end,
                 setFunc = function(value)
-                    BS.Vars.Bars[idx].ShowWhilstMenu = value
+                    vars.ShowWhilstMenu = value
 
                     local bar = _G[BS.Name .. "_bar_" .. idx].ref.bar
 
@@ -457,12 +458,14 @@ local function getBarSettings()
                 type = "checkbox",
                 name = GetString(_G.BARSTEWARD_DISABLE),
                 getFunc = function()
-                    return BS.Vars.Bars[idx].Disable
+                    return vars.Disable
                 end,
                 setFunc = function(value)
-                    BS.Vars.Bars[idx].Disable = value
+                    vars.Disable = value
                 end,
-                disabled = function() return idx == 1 end,
+                disabled = function()
+                    return idx == 1
+                end,
                 width = "full",
                 requiresReload = true,
                 default = false
@@ -470,23 +473,27 @@ local function getBarSettings()
             [15] = {
                 type = "checkbox",
                 name = GetString(_G.BARSTEWARD_COMBAT_COLOUR),
-                getFunc = function() return BS.Vars.Bars[idx].CombatColourChange or false end,
-                setFunc = function(value) BS.Vars.Bars[idx].CombatColourChange = value end,
+                getFunc = function()
+                    return vars.CombatColourChange or false
+                end,
+                setFunc = function(value)
+                    vars.CombatColourChange = value
+                end,
                 width = "full",
-                default = false,
+                default = false
             },
             [16] = {
                 type = "colorpicker",
                 name = GetString(_G.BARSTEWARD_COMBAT_COLOUR_BACKDROP),
                 getFunc = function()
-                    return unpack(BS.Vars.Bars[idx].CombatColour or BS.Vars.DefaultCombatColour)
+                    return unpack(vars.CombatColour or BS.Vars.DefaultCombatColour)
                 end,
                 setFunc = function(r, g, b, a)
-                    BS.Vars.Bars[idx].CombatColour = {r, g, b, a}
+                    vars.CombatColour = {r, g, b, a}
                 end,
                 width = "full",
                 disabled = function()
-                    return not BS.Vars.Bars[idx].CombatColourChange
+                    return not vars.CombatColourChange
                 end,
                 default = unpack(BS.Vars.DefaultCombatColour)
             },
@@ -533,10 +540,10 @@ local function getBarSettings()
                 type = "checkbox",
                 name = GetString(_G.BARSTEWARD_NUDGE),
                 getFunc = function()
-                    return BS.Vars.Bars[idx].NudgeCompass
+                    return vars.NudgeCompass
                 end,
                 setFunc = function(value)
-                    BS.Vars.Bars[idx].NudgeCompass = value
+                    vars.NudgeCompass = value
                 end,
                 width = "full",
                 requiresReload = true,
@@ -705,7 +712,6 @@ local function getWidgetSettings()
         end
     )
 
-    --for k, v in ipairs(widgets) do
     for idx, w in ipairs(ordered) do
         local k = w.key
         local v = w.widget
@@ -741,155 +747,194 @@ local function getWidgetSettings()
             }
         }
 
+        local vars = BS.Vars.Controls[k]
+        local defaults = BS.Defaults.Controls[k]
+
         -- Autohide
-        if (BS.Defaults.Controls[k].Autohide ~= nil) then
+        if (defaults.Autohide ~= nil) then
             widgetControls[#widgetControls + 1] = {
                 type = "checkbox",
                 name = GetString(_G.BARSTEWARD_AUTOHIDE),
                 tooltip = GetString(_G.BARSTEWARD_AUTOHIDE_TOOLTIP),
                 getFunc = function()
-                    return BS.Vars.Controls[k].Autohide
+                    return vars.Autohide
                 end,
                 setFunc = function(value)
-                    BS.Vars.Controls[k].Autohide = value
+                    vars.Autohide = value
                     BS.RefreshBar(k)
                 end,
                 width = "full",
-                default = BS.Defaults.Controls[k].Autohide
+                default = defaults.Autohide
             }
         end
 
         -- Hide when complete
-        if (BS.Defaults.Controls[k].HideWhenComplete ~= nil) then
+        if (defaults.HideWhenComplete ~= nil or defaults.HideWhenCompleted ~= nil) then
             widgetControls[#widgetControls + 1] = {
                 type = "checkbox",
                 name = GetString(_G.BARSTEWARD_HIDE_WHEN_COMPLETE),
-                tooltip = GetString(_G.BARSTEWARD_HIDE_WHEN_COMPLETE_TOOLTIP),
+                tooltip = (defaults.HideWhenCompleted ~= nil) and "" or GetString(_G.BARSTEWARD_HIDE_WHEN_COMPLETE_TOOLTIP),
                 getFunc = function()
-                    return BS.Vars.Controls[k].HideWhenComplete
+                    return vars.HideWhenComplete
                 end,
                 setFunc = function(value)
-                    BS.Vars.Controls[k].HideWhenComplete = value
+                    vars.HideWhenComplete = value
                     BS.RefreshBar(k)
                 end,
                 width = "full",
-                default = BS.Defaults.Controls[k].HideWhenComplete
+                default = defaults.HideWhenComplete
             }
         end
 
         -- Hide when fully used
-        if (BS.Defaults.Controls[k].HideWhenFullyUsed ~= nil) then
+        if (defaults.HideWhenFullyUsed ~= nil) then
             widgetControls[#widgetControls + 1] = {
                 type = "checkbox",
                 name = GetString(_G.BARSTEWARD_HIDE_WHEN_FULLY_USED),
                 tooltip = GetString(_G.BARSTEWARD_HIDE_WHEN_FULLY_USED_TOOLTIP),
                 getFunc = function()
-                    return BS.Vars.Controls[k].HideWhenFullyUsed
+                    return vars.HideWhenFullyUsed
                 end,
                 setFunc = function(value)
-                    BS.Vars.Controls[k].HideWhenFullyUsed = value
+                    vars.HideWhenFullyUsed = value
                     BS.RefreshBar(k)
                 end,
                 width = "full",
-                default = BS.Defaults.Controls[k].HideWhenFullyUsed
+                default = defaults.HideWhenFullyUsed
             }
         end
 
         -- PvP only
-        if (BS.Defaults.Controls[k].PvPOnly ~= nil) then
+        if (defaults.PvPOnly ~= nil) then
             widgetControls[#widgetControls + 1] = {
                 type = "checkbox",
                 name = GetString(_G.BARSTEWARD_PVP_ONLY),
                 getFunc = function()
-                    return BS.Vars.Controls[k].PvPOnly
+                    return vars.PvPOnly
                 end,
                 setFunc = function(value)
-                    BS.Vars.Controls[k].PvPOnly = value
+                    vars.PvPOnly = value
                     BS.RefreshBar(k)
                 end,
                 width = "full",
-                default = BS.Defaults.Controls[k].PvPOnly
+                default = defaults.PvPOnly
             }
         end
 
         -- Show Percentage
-        if (BS.Defaults.Controls[k].ShowPercent ~= nil) then
+        if (defaults.ShowPercent ~= nil) then
             widgetControls[#widgetControls + 1] = {
                 type = "checkbox",
                 name = GetString(_G.BARSTEWARD_PERCENTAGE),
                 getFunc = function()
-                    return BS.Vars.Controls[k].ShowPercent
+                    return vars.ShowPercent
                 end,
                 setFunc = function(value)
-                    BS.Vars.Controls[k].ShowPercent = value
+                    vars.ShowPercent = value
                     BS.RefreshWidget(k)
                 end,
                 width = "full",
-                default = BS.Defaults.Controls[k].ShowPercent
+                default = defaults.ShowPercent
             }
         end
 
         -- Use separators
-        if (BS.Defaults.Controls[k].UseSeparators ~= nil) then
+        if (defaults.UseSeparators ~= nil) then
             widgetControls[#widgetControls + 1] = {
                 type = "checkbox",
                 name = GetString(_G.BARSTEWARD_ADD_SEPARATORS),
                 getFunc = function()
-                    return BS.Vars.Controls[k].UseSeparators
+                    return vars.UseSeparators
                 end,
                 setFunc = function(value)
-                    BS.Vars.Controls[k].UseSeparators = value
+                    vars.UseSeparators = value
                     BS.RefreshWidget(k)
                 end,
                 width = "full",
-                default = BS.Defaults.Controls[k].UseSeparators
+                default = defaults.UseSeparators
             }
         end
 
         -- Hide seconds
-        if (BS.Defaults.Controls[k].HideSeconds ~= nil) then
+        if (defaults.HideSeconds ~= nil) then
             widgetControls[#widgetControls + 1] = {
                 type = "checkbox",
                 name = GetString(_G.BARSTEWARD_HIDE_SECONDS),
                 getFunc = function()
-                    return BS.Vars.Controls[k].HideSeconds
+                    return vars.HideSeconds
                 end,
                 setFunc = function(value)
-                    BS.Vars.Controls[k].HideSeconds = value
+                    vars.HideSeconds = value
                     BS.RefreshWidget(k)
                 end,
                 width = "full",
-                default = BS.Defaults.Controls[k].HideSeconds
+                default = defaults.HideSeconds
+            }
+        end
+
+        -- Hide limit
+        if (defaults.HideLimit ~= nil) then
+            widgetControls[#widgetControls + 1] = {
+                type = "checkbox",
+                name = GetString(_G.BARSTEWARD_HIDE_LIMIT),
+                tooltip = GetString(_G.BARSTEWARD_HIDE_LIMIT_TOOLTIP),
+                getFunc = function()
+                    return vars.HideLimit
+                end,
+                setFunc = function(value)
+                    vars.HideLimit = value
+                    BS.RefreshWidget(k)
+                end,
+                width = "full",
+                default = defaults.HideLimit
+            }
+        end
+
+        -- No limit colour
+        if (defaults.NoLimitColour ~= nil) then
+            widgetControls[#widgetControls + 1] = {
+                type = "checkbox",
+                name = GetString(_G.BARSTEWARD_NO_LIMIT_COLOUR),
+                tooltip = GetString(_G.BARSTEWARD_NO_LIMIT_COLOUR_TOOLTIP),
+                getFunc = function()
+                    return vars.NoLimitColour
+                end,
+                setFunc = function(value)
+                    vars.NoLimitColour = value
+                    BS.RefreshWidget(k)
+                end,
+                width = "full",
+                default = defaults.NoLimitColour
             }
         end
 
         -- Sound when equals
-        if (BS.Defaults.Controls[k].SoundWhenEquals ~= nil) then
+        if (defaults.SoundWhenEquals ~= nil) then
             widgetControls[#widgetControls + 1] = {
                 type = "checkbox",
                 name = GetString(_G.BARSTEWARD_SOUND_VALUE_EQUALS),
                 getFunc = function()
-                    return BS.Vars.Controls[k].SoundWhenEquals
+                    return vars.SoundWhenEquals
                 end,
                 setFunc = function(value)
-                    BS.Vars.Controls[k].SoundWhenEquals = value
+                    vars.SoundWhenEquals = value
                 end,
                 width = "full",
-                default = BS.Defaults.Controls[k].SoundWhenEquals
+                default = defaults.SoundWhenEquals
             }
 
             widgetControls[#widgetControls + 1] = {
                 type = "editbox",
                 name = GetString(_G.BARSTEWARD_VALUE),
                 getFunc = function()
-                    return BS.Vars.Controls[k].SoundWhenEqualsValue
+                    return vars.SoundWhenEqualsValue
                 end,
                 setFunc = function(value)
-                    BS.Vars.Controls[k].SoundWhenEqualsValue = value
+                    vars.SoundWhenEqualsValue = value
                 end,
                 width = "full",
                 disabled = function()
-                    return not BS.Vars.Controls[k].SoundWhenEquals
+                    return not vars.SoundWhenEquals
                 end,
                 default = nil
             }
@@ -899,46 +944,46 @@ local function getWidgetSettings()
                 name = GetString(_G.BARSTEWARD_SOUND),
                 choices = soundChoices,
                 getFunc = function()
-                    return BS.Vars.Controls[k].SoundWhenEqualsSound
+                    return vars.SoundWhenEqualsSound
                 end,
                 setFunc = function(value)
-                    BS.Vars.Controls[k].SoundWhenEqualsSound = value
+                    vars.SoundWhenEqualsSound = value
                     PlaySound(BS.SoundLookup[value])
                 end,
                 disabled = function()
-                    return not BS.Vars.Controls[k].SoundWhenEquals
+                    return not vars.SoundWhenEquals
                 end,
                 default = nil
             }
         end
 
         -- Sound when over
-        if (BS.Defaults.Controls[k].SoundWhenOver ~= nil) then
+        if (defaults.SoundWhenOver ~= nil) then
             widgetControls[#widgetControls + 1] = {
                 type = "checkbox",
                 name = GetString(_G.BARSTEWARD_SOUND_VALUE_EXCEEDS),
                 getFunc = function()
-                    return BS.Vars.Controls[k].SoundWhenOver
+                    return vars.SoundWhenOver
                 end,
                 setFunc = function(value)
-                    BS.Vars.Controls[k].SoundWhenOver = value
+                    vars.SoundWhenOver = value
                 end,
                 width = "full",
-                default = BS.Defaults.Controls[k].SoundWhenOver
+                default = defaults.SoundWhenOver
             }
 
             widgetControls[#widgetControls + 1] = {
                 type = "editbox",
                 name = GetString(_G.BARSTEWARD_VALUE),
                 getFunc = function()
-                    return BS.Vars.Controls[k].SoundWhenOverValue
+                    return vars.SoundWhenOverValue
                 end,
                 setFunc = function(value)
-                    BS.Vars.Controls[k].SoundWhenOverValue = value
+                    vars.SoundWhenOverValue = value
                 end,
                 width = "full",
                 disabled = function()
-                    return not BS.Vars.Controls[k].SoundWhenOver
+                    return not vars.SoundWhenOver
                 end,
                 default = nil
             }
@@ -948,46 +993,46 @@ local function getWidgetSettings()
                 name = GetString(_G.BARSTEWARD_SOUND),
                 choices = soundChoices,
                 getFunc = function()
-                    return BS.Vars.Controls[k].SoundWhenOverSound
+                    return vars.SoundWhenOverSound
                 end,
                 setFunc = function(value)
-                    BS.Vars.Controls[k].SoundWhenOverSound = value
+                    vars.SoundWhenOverSound = value
                     PlaySound(BS.SoundLookup[value])
                 end,
                 disabled = function()
-                    return not BS.Vars.Controls[k].SoundWhenOver
+                    return not vars.SoundWhenOver
                 end,
                 default = nil
             }
         end
 
         -- Sound when under
-        if (BS.Defaults.Controls[k].SoundWhenUnder ~= nil) then
+        if (defaults.SoundWhenUnder ~= nil) then
             widgetControls[#widgetControls + 1] = {
                 type = "checkbox",
                 name = GetString(_G.BARSTEWARD_SOUND_VALUE_BELOW),
                 getFunc = function()
-                    return BS.Vars.Controls[k].SoundWhenUnder
+                    return vars.SoundWhenUnder
                 end,
                 setFunc = function(value)
-                    BS.Vars.Controls[k].SoundWhenUnder = value
+                    vars.SoundWhenUnder = value
                 end,
                 width = "full",
-                default = BS.Defaults.Controls[k].SoundWhenUnder
+                default = defaults.SoundWhenUnder
             }
 
             widgetControls[#widgetControls + 1] = {
                 type = "editbox",
                 name = GetString(_G.BARSTEWARD_VALUE),
                 getFunc = function()
-                    return BS.Vars.Controls[k].SoundWhenUnderValue
+                    return vars.SoundWhenUnderValue
                 end,
                 setFunc = function(value)
-                    BS.Vars.Controls[k].SoundWhenUnderValue = value
+                    vars.SoundWhenUnderValue = value
                 end,
                 width = "full",
                 disabled = function()
-                    return not BS.Vars.Controls[k].SoundWhenUnder
+                    return not vars.SoundWhenUnder
                 end,
                 default = nil
             }
@@ -997,21 +1042,21 @@ local function getWidgetSettings()
                 name = GetString(_G.BARSTEWARD_SOUND),
                 choices = soundChoices,
                 getFunc = function()
-                    return BS.Vars.Controls[k].SoundWhenUnderSound
+                    return vars.SoundWhenUnderSound
                 end,
                 setFunc = function(value)
-                    BS.Vars.Controls[k].SoundWhenUnderSound = value
+                    vars.SoundWhenUnderSound = value
                     PlaySound(BS.SoundLookup[value])
                 end,
                 disabled = function()
-                    return not BS.Vars.Controls[k].SoundWhenUnder
+                    return not vars.SoundWhenUnder
                 end,
                 default = nil
             }
         end
 
         -- Announcement
-        if (BS.Defaults.Controls[k].Announce ~= nil) then
+        if (defaults.Announce ~= nil) then
             local nameValue = GetString(_G.BARSTEWARD_ANNOUNCEMENT)
 
             if (k == BS.W_FRIENDS) then
@@ -1024,18 +1069,18 @@ local function getWidgetSettings()
                 type = "checkbox",
                 name = nameValue,
                 getFunc = function()
-                    return BS.Vars.Controls[k].Announce
+                    return vars.Announce
                 end,
                 setFunc = function(value)
-                    BS.Vars.Controls[k].Announce = value
+                    vars.Announce = value
                 end,
                 width = "full",
-                default = BS.Defaults.Controls[k].Announce
+                default = defaults.Announce
             }
         end
 
         -- Progress bars
-        if (BS.Defaults.Controls[k].Progress == true) then
+        if (defaults.Progress == true) then
             widgetControls[#widgetControls + 1] = {
                 type = "colorpicker",
                 name = GetString(_G.BARSTEWARD_PROGRESS_VALUE),
@@ -1209,7 +1254,7 @@ local function getWidgetSettings()
             }
         end
 
-        if (BS.Defaults.Controls[k].Timer == true) then
+        if (defaults.Timer == true) then
             local timerFormat =
                 k == BS.W_LEADS and ZO_CachedStrFormat(_G.BARSTEWARD_TIMER_FORMAT_TEXT, 1, 12, 4) or
                 ZO_CachedStrFormat(_G.BARSTEWARD_TIMER_FORMAT_TEXT_WITH_SECONDS, 1, 12, 4, 10)
@@ -1224,10 +1269,10 @@ local function getWidgetSettings()
                 getFunc = function()
                     local default = (k == BS.W_LEADS) and "01:12:04" or "01:12:04:10"
 
-                    return BS.Vars.Controls[k].Format or default
+                    return vars.Format or default
                 end,
                 setFunc = function(value)
-                    BS.Vars.Controls[k].Format = value
+                    vars.Format = value
                     BS.RefreshWidget(k)
                 end,
                 default = k == BS.W_LEADS and "01:12:04" or "01:12:04:10"
@@ -1243,10 +1288,10 @@ local function getWidgetSettings()
                     type = "colorpicker",
                     name = GetString(_G.BARSTEWARD_DEFAULT_COLOUR),
                     getFunc = function()
-                        return unpack(BS.Vars.Controls[k].Colour or BS.Vars.DefaultColour)
+                        return unpack(vars.Colour or BS.Vars.DefaultColour)
                     end,
                     setFunc = function(r, g, b, a)
-                        BS.Vars.Controls[k].Colour = {r, g, b, a}
+                        vars.Colour = {r, g, b, a}
                         BS.RefreshWidget(k)
                     end,
                     width = "full",
@@ -1259,10 +1304,10 @@ local function getWidgetSettings()
                     type = "colorpicker",
                     name = GetString(_G.BARSTEWARD_OK_COLOUR),
                     getFunc = function()
-                        return unpack(BS.Vars.Controls[k].OkColour or BS.Vars.DefaultOkColour)
+                        return unpack(vars.OkColour or BS.Vars.DefaultOkColour)
                     end,
                     setFunc = function(r, g, b, a)
-                        BS.Vars.Controls[k].OkColour = {r, g, b, a}
+                        vars.OkColour = {r, g, b, a}
                         BS.RefreshWidget(k)
                     end,
                     width = "full",
@@ -1275,10 +1320,10 @@ local function getWidgetSettings()
                     type = "colorpicker",
                     name = GetString(_G.BARSTEWARD_WARNING_COLOUR),
                     getFunc = function()
-                        return unpack(BS.Vars.Controls[k].WarningColour or BS.Vars.DefaultWarningColour)
+                        return unpack(vars.WarningColour or BS.Vars.DefaultWarningColour)
                     end,
                     setFunc = function(r, g, b, a)
-                        BS.Vars.Controls[k].WarningColour = {r, g, b, a}
+                        vars.WarningColour = {r, g, b, a}
                         BS.RefreshWidget(k)
                     end,
                     width = "full",
@@ -1291,10 +1336,10 @@ local function getWidgetSettings()
                     type = "colorpicker",
                     name = GetString(_G.BARSTEWARD_DANGER_COLOUR),
                     getFunc = function()
-                        return unpack(BS.Vars.Controls[k].DangerColour or BS.Vars.DefaultDangerColour)
+                        return unpack(vars.DangerColour or BS.Vars.DefaultDangerColour)
                     end,
                     setFunc = function(r, g, b, a)
-                        BS.Vars.Controls[k].DangerColour = {r, g, b, a}
+                        vars.DangerColour = {r, g, b, a}
                         BS.RefreshWidget(k)
                     end,
                     width = "full",
@@ -1302,20 +1347,20 @@ local function getWidgetSettings()
                 }
             end
 
-            local units = BS.Vars.Controls[k].Units
+            local units = vars.Units
 
             if (cv.okv) then
                 widgetControls[#widgetControls + 1] = {
                     type = "editbox",
                     name = GetString(_G.BARSTEWARD_OK_VALUE) .. (units and (" (" .. units .. ")") or ""),
                     getFunc = function()
-                        return BS.Vars.Controls[k].OkValue or ""
+                        return vars.OkValue or ""
                     end,
                     setFunc = function(value)
                         if (value == nil or value == "") then
-                            BS.Vars.Controls[k].OkValue = BS.Default.Controls[k].OkValue
+                            vars.OkValue = BS.Default.Controls[k].OkValue
                         else
-                            BS.Vars.Controls[k].OkValue = tonumber(value)
+                            vars.OkValue = tonumber(value)
                         end
 
                         BS.RefreshWidget(k)
@@ -1332,13 +1377,13 @@ local function getWidgetSettings()
                     type = "editbox",
                     name = GetString(_G.BARSTEWARD_WARNING_VALUE) .. (units and (" (" .. units .. ")") or ""),
                     getFunc = function()
-                        return BS.Vars.Controls[k].WarningValue or ""
+                        return vars.WarningValue or ""
                     end,
                     setFunc = function(value)
                         if (value == nil or value == "") then
-                            BS.Vars.Controls[k].WarningValue = BS.Default.Controls[k].WarningValue
+                            vars.WarningValue = BS.Default.Controls[k].WarningValue
                         else
-                            BS.Vars.Controls[k].WarningValue = tonumber(value)
+                            vars.WarningValue = tonumber(value)
                         end
 
                         BS.RefreshWidget(k)
@@ -1355,13 +1400,13 @@ local function getWidgetSettings()
                     type = "editbox",
                     name = GetString(_G.BARSTEWARD_DANGER_VALUE) .. (units and (" (" .. units .. ")") or ""),
                     getFunc = function()
-                        return BS.Vars.Controls[k].DangerValue or ""
+                        return vars.DangerValue or ""
                     end,
                     setFunc = function(value)
                         if (value == nil or value == "") then
-                            BS.Vars.Controls[k].DangerValue = BS.Default.Controls[k].DangerValue
+                            vars.DangerValue = BS.Default.Controls[k].DangerValue
                         else
-                            BS.Vars.Controls[k].DangerValue = tonumber(value)
+                            vars.DangerValue = tonumber(value)
                         end
 
                         BS.RefreshWidget(k)

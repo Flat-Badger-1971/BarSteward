@@ -1,3 +1,9 @@
+[color=#ff9900][b]Version: 1.3.4 ---------------[/b][/color]
+Warning value added to transmute crystals
+Hide limit (maximum value) added to multiple widgets
+Option added to keep limit (maximum) values white, ignoring warning/danger colours
+Code optimisations
+
 [color=#ff9900][b]Version: 1.3.3 ---------------[/b][/color]
 Total achievement points added
 Fixed research timer issue and improved tooltips

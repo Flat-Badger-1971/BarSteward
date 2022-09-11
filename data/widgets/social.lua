@@ -27,6 +27,7 @@ BS.widgets[BS.W_FRIENDS] = {
     --v1.2.0
     name = "friends",
     update = function(widget, event, displayName, characterName, _, newStatus)
+        local vars = BS.Vars.Controls[BS.W_FRIENDS]
         local masterList = FRIENDS_LIST_MANAGER:GetMasterList()
         local offline, online, other = {}, {}, {}
         local tt = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_SOCIAL_MENU_CONTACTS)) .. "|cffffff"
@@ -45,21 +46,21 @@ BS.widgets[BS.W_FRIENDS] = {
         tt = tt .. addToTooltip(online, textureFunctions)
         tt = tt .. addToTooltip(other, textureFunctions)
 
-        if (not BS.Vars.Controls[BS.W_FRIENDS].OnlineOnly) then
+        if (not vars.OnlineOnly) then
             tt = tt .. addToTooltip(offline, textureFunctions)
         end
 
         widget.tooltip = tt .. "|r"
-        widget:SetValue(#online .. "/" .. #masterList)
-        widget:SetColour(unpack(BS.Vars.Controls[BS.W_FRIENDS].Colour or BS.Vars.DefaultColour))
+        widget:SetValue(#online .. (vars.HideLimit and "" or ("/" .. #masterList)))
+        widget:SetColour(unpack(vars.Colour or BS.Vars.DefaultColour))
 
         if (event == _G.EVENT_FRIEND_PLAYER_STATUS_CHANGED) then
             if (newStatus == _G.PLAYER_STATUS_ONLINE) then
-                if (BS.Vars.Controls[BS.W_FRIENDS].Announce) then
+                if (vars.Announce) then
                     if (BS.Vars.FriendAnnounce[displayName]) then
                         local announce = true
                         local previousTime = BS.Vars.PreviousFriendTime[displayName] or (os.time() - 3600)
-                        local debounceTime = (BS.Vars.Controls[BS.W_FRIENDS].DebounceTime or 5) * 60
+                        local debounceTime = (vars.DebounceTime or 5) * 60
 
                         if (os.time() - previousTime <= debounceTime) then
                             announce = false
@@ -210,6 +211,7 @@ BS.widgets[BS.W_GUILD_FRIENDS] = {
     --v1.2.18
     name = "guildFriends",
     update = function(widget, _, guildId, displayName, _, newStatus)
+        local vars = BS.Vars.Controls[BS.W_GUILD_FRIENDS]
         local masterList = BS.Vars.GuildFriendAnnounce
         local online, offline, other = {}, {}, {}
         local oCount, tCount = 0, 0
@@ -241,19 +243,19 @@ BS.widgets[BS.W_GUILD_FRIENDS] = {
         tt = tt .. addToTooltip(online, textureFunctions)
         tt = tt .. addToTooltip(other, textureFunctions)
 
-        if (not BS.Vars.Controls[BS.W_GUILD_FRIENDS].OnlineOnly) then
+        if (not vars.OnlineOnly) then
             tt = tt .. addToTooltip(offline, textureFunctions)
         end
 
         widget.tooltip = tt .. "|r"
-        widget:SetValue(oCount .. "/" .. tCount)
-        widget:SetColour(unpack(BS.Vars.Controls[BS.W_FRIENDS].Colour or BS.Vars.DefaultColour))
+        widget:SetValue(oCount .. (vars.HideLimit and "" or ("/" .. tCount)))
+        widget:SetColour(unpack(vars.Colour or BS.Vars.DefaultColour))
 
         if (newStatus == _G.PLAYER_STATUS_ONLINE) then
-            if (BS.Vars.Controls[BS.W_GUILD_FRIENDS].Announce and isFriend(displayName)) then
+            if (vars.Announce and isFriend(displayName)) then
                 local announce = true
                 local previousTime = BS.Vars.PreviousGuildFriendTime[displayName] or (os.time() - 3600)
-                local debounceTime = (BS.Vars.Controls[BS.W_GUILD_FRIENDS].DebounceTime or 5) * 60
+                local debounceTime = (vars.DebounceTime or 5) * 60
 
                 if (os.time() - previousTime <= debounceTime) then
                     announce = false

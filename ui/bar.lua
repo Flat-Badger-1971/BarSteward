@@ -219,7 +219,7 @@ function baseBar:DoUpdate(metadata, ...)
 
     -- check for hide on completion
     if (metadata.complete) then
-        if (BS.Vars.Controls[metadata.id].HideWhenComplete) then
+        if (BS.Vars.Controls[metadata.id].HideWhenComplete or BS.Vars.Controls[metadata.id].HideWhenCompleted) then
             hidecheck = true
             if (metadata.complete() == true) then
                 self:HideWhen(metadata, "hide it!")

@@ -61,17 +61,18 @@ BS.widgets = {
         name = "latency",
         update = function(widget)
             local latency = GetLatency()
-            local colour = BS.Vars.Controls[BS.W_LATENCY].Colour or BS.Vars.DefaultColour
+            local vars = BS.Vars.Controls[BS.W_LATENCY]
+            local colour = vars.Colour or BS.Vars.DefaultColour
 
-            if ((BS.Vars.Controls[BS.W_LATENCY].WarningValue or 0) > 0) then
-                if (latency >= (BS.Vars.Controls[BS.W_LATENCY].WarningValue or 0)) then
-                    colour = BS.Vars.Controls[BS.W_LATENCY].WarningColour or BS.Vars.DefaultWarningColour
+            if ((vars.WarningValue or 0) > 0) then
+                if (latency >= (vars.WarningValue or 0)) then
+                    colour = vars.WarningColour or BS.Vars.DefaultWarningColour
                 end
             end
 
-            if ((BS.Vars.Controls[BS.W_LATENCY].DangerValue or 0) > 0) then
-                if (latency >= (BS.Vars.Controls[BS.W_LATENCY].DangerValue or 0)) then
-                    colour = BS.Vars.Controls[BS.W_LATENCY].DangerColour or BS.Vars.DefaultDangerColour
+            if ((vars.DangerValue or 0) > 0) then
+                if (latency >= (vars.DangerValue or 0)) then
+                    colour = vars.DangerColour or BS.Vars.DefaultDangerColour
                 end
             end
 
@@ -91,16 +92,17 @@ BS.widgets = {
         update = function(widget)
             local usedKiB = collectgarbage("count")
             local usedMiB = (usedKiB / 1024)
-            local precision = BS.Vars.Controls[BS.W_MEMORY].Precision or 1
+            local vars = BS.Vars.Controls[BS.W_MEMORY]
+            local precision = vars.Precision or 1
             local rfactor = 10 ^ precision
             local colour = BS.Vars.DefaultOkColour
 
             usedMiB = math.ceil(usedMiB * rfactor) / rfactor
 
-            if (usedMiB > (BS.Vars.Controls[BS.W_MEMORY].DangerValue or 99999)) then
-                colour = BS.Vars.Controls[BS.W_MEMORY].DangerColour or BS.Vars.DefaultDangerColour
-            elseif (usedMiB > (BS.Vars.Controls[BS.W_MEMORY].WarningValue or 99999)) then
-                colour = BS.Vars.Controls[BS.W_MEMORY].WarningColour or BS.Vars.DefaultWarningColour
+            if (usedMiB > (vars.DangerValue or 99999)) then
+                colour = vars.DangerColour or BS.Vars.DefaultDangerColour
+            elseif (usedMiB > (vars.WarningValue or 99999)) then
+                colour = vars.WarningColour or BS.Vars.DefaultWarningColour
             end
 
             widget:SetValue(ZO_FastFormatDecimalNumber(tostring(usedMiB)) .. " MiB")
