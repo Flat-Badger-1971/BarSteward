@@ -93,11 +93,11 @@ local function getTimedActivityProgress(activityType, widget, hideLimit)
         end
     end
 
-    if (widget ~= nil) then
-        if (complete == maxComplete) then
-            completed[activityType] = true
-        end
+    if (complete == maxComplete) then
+        completed[activityType] = true
+    end
 
+    if (widget ~= nil) then
         configureWidget(widget, complete, maxComplete, activityType, tasks, hideLimit)
     end
 
@@ -194,6 +194,9 @@ BS.widgets[BS.W_ENDEAVOUR_PROGRESS] = {
         else
             ZO_ACTIVITY_FINDER_ROOT_GAMEPAD:ShowCategory(TIMED_ACTIVITIES_GAMEPAD:GetCategoryData())
         end
+    end,
+    complete = function()
+        return completed[_G.TIMED_ACTIVITY_TYPE_WEEKLY]
     end
 }
 
@@ -395,6 +398,9 @@ BS.widgets[BS.W_WEEKLY_ENDEAVOUR_TIME] = {
         else
             ZO_ACTIVITY_FINDER_ROOT_GAMEPAD:ShowCategory(TIMED_ACTIVITIES_GAMEPAD:GetCategoryData())
         end
+    end,
+    complete = function()
+        return completed[_G.TIMED_ACTIVITY_TYPE_WEEKLY]
     end
 }
 
