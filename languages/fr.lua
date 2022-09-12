@@ -38,7 +38,10 @@ ZO_CreateStringId("BARSTEWARD_DANGER_COLOUR", "Danger")
 ZO_CreateStringId("BARSTEWARD_DANGER_VALUE", "Valeur de danger")
 ZO_CreateStringId("BARSTEWARD_DAYS", "<<1[jours/1 jour/$d jours]>>")
 ZO_CreateStringId("BARSTEWARD_DAYS_ONLY", "Jours seulement")
-ZO_CreateStringId("BARSTEWARD_DAYS_ONLY_TOOLTIP", "Affiche le temps restant en jours seulement jusqu'à ce qu'il reste moins d'un jour.")
+ZO_CreateStringId(
+    "BARSTEWARD_DAYS_ONLY_TOOLTIP",
+    "Affiche le temps restant en jours seulement jusqu'à ce qu'il reste moins d'un jour."
+)
 ZO_CreateStringId("BARSTEWARD_DEBOUNCE", "Temps d'anti-rebond (minutes)")
 ZO_CreateStringId("BARSTEWARD_DEBOUNCE_DESC", "Délai d'attente entre les annonces consécutives")
 ZO_CreateStringId("BARSTEWARD_DECIMAL_PLACES", "Décimales")
@@ -65,12 +68,16 @@ ZO_CreateStringId("BARSTEWARD_GUILD_FRIEND_ONLINE", "Membre de guilde connecté"
 ZO_CreateStringId("BARSTEWARD_GUILD_FRIENDS", "Membres de guilde")
 ZO_CreateStringId("BARSTEWARD_GUILD_FRIENDS_MONITORING", "Surveillance des membres de guilde")
 ZO_CreateStringId("BARSTEWARD_GUILD_FRIENDS_ONLINE", "Membres de guilde connectés")
+ZO_CreateStringId("BARSTEWARD_HIDE_LIMIT", "Masquer la limite")
+ZO_CreateStringId("BARSTEWARD_HIDE_LIMIT_TOOLTIP", "Masque le montant maximum applicable à ce widget.")
 ZO_CreateStringId("BARSTEWARD_HIDE_SECONDS", "Masquer les secondes")
 ZO_CreateStringId("BARSTEWARD_HIDE_WHEN_COMPLETE", "Masquer une fois complété")
 ZO_CreateStringId(
     "BARSTEWARD_HIDE_WHEN_COMPLETE_TOOLTIP",
     "Masque la recherche lorsque plus aucun trait ne peut être recherché pour ce type d'artisanat. Ce paramètre remplacera tous les paramètre de masquage automatique."
 ) 
+ZO_CreateStringId("BARSTEWARD_HIDE_WHEN_FULLY_USED", "Masquer lorsque tout est utilisé")
+ZO_CreateStringId("BARSTEWARD_HIDE_WHEN_FULLY_USED_TOOLTIP", "Masque quand tout les emplacements/options disponibles sont utilisés.")
 ZO_CreateStringId("BARSTEWARD_HORIZONTAL", "Horizontale")
 ZO_CreateStringId("BARSTEWARD_HOURS", "Heures")
 ZO_CreateStringId("BARSTEWARD_IN_PROGRESS", "En cours")
@@ -92,6 +99,8 @@ ZO_CreateStringId("BARSTEWARD_NEWBAR_EXISTS", "Ce nom de barre a déjà été ut
 ZO_CreateStringId("BARSTEWARD_NEWBAR_INVALID", "Nom de barre invalide")
 ZO_CreateStringId("BARSTEWARD_NEWBAR_NAME", "Nouveau nom de barre (appuyez sur Entrée lorsque vous avez terminé)")
 ZO_CreateStringId("BARSTEWARD_NEWBAR_WARNING", "L'ajout d'une nouvelle barre forcera un rechargement de l'IU")
+ZO_CreateStringId("BARSTEWARD_NO_LIMIT_COLOUR", "Aucune limite de couleur")
+ZO_CreateStringId("BARSTEWARD_NO_LIMIT_COLOUR_TOOLTIP", "N'ajoute pas de couleur à la valeur maximale.")
 ZO_CreateStringId("BARSTEWARD_NONE", "Rien à entrainer")
 ZO_CreateStringId("BARSTEWARD_NOT_PICKED_UP", "Non ramassée")
 ZO_CreateStringId("BARSTEWARD_NUDGE", "Déplacer la boussole vers le bas")
