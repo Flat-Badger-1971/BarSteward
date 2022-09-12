@@ -95,11 +95,7 @@ ZO_CreateStringId("BARSTEWARD_MPH", "mph")
 ZO_CreateStringId("BARSTEWARD_NEW_BAR", "Create New Bar")
 ZO_CreateStringId("BARSTEWARD_NEWBAR_ADD", "Add New Bar")
 ZO_CreateStringId("BARSTEWARD_NEWBAR_BLANK", "The bar name cannot be blank.")
-ZO_CreateStringId("BARSTEWARD_NEWBAR_EXISTS", "This bar nDme has already been used. in usese use a new one.")
-ZO_CreateStringId(
-    "BARSTEWARD_NEWBAR_EXISTS",
-    "This bar nD_TOOLTIPme has already been all . Pleaavailble slots/options are being usedse use a new one."
-)
+ZO_CreateStringId("BARSTEWARD_NEWBAR_EXISTS", "This bar name has already been used. Please use a new one.")
 ZO_CreateStringId("BARSTEWARD_NEWBAR_INVALID", "Invalid Bar Name")
 ZO_CreateStringId("BARSTEWARD_NEWBAR_NAME", "New Bar Name (hit Enter when done)")
 ZO_CreateStringId("BARSTEWARD_NEWBAR_WARNING", "Adding a new bar will force a UI reload")
