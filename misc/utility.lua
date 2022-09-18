@@ -522,12 +522,12 @@ function BS.GetFont()
     return font .. "|" .. size .. hasShadow
 end
 
-function BS.AddToScenes(sceneType, barIndex, bar)
+function BS.AddToScenes(sceneType, barIndex, bar, override)
     local group = BS[string.upper(sceneType) .. "_SCENES"]
 
     sceneType = "ShowWhilst" .. sceneType
 
-    if (BS.Vars.Bars[barIndex][sceneType]) then
+    if (BS.Vars.Bars[barIndex][sceneType] or override) then
         for _, scene in ipairs(group) do
             SCENE_MANAGER:GetScene(scene):AddFragment(bar.fragment)
         end

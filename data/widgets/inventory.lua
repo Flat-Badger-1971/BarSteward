@@ -37,6 +37,10 @@ BS.widgets[BS.W_BAG_SPACE] = {
 
         widget:SetColour(unpack(colour))
 
+        if (vars.ShowFreeSpace) then
+            value = (bagSize - bagUsed) .. (vars.HideLimit and "" or (noLimitColour .. "/" .. bagSize .. noLimitTerminator))
+        end
+
         if (vars.ShowPercent) then
             value = pcUsed .. "%"
             widthValue = value
@@ -108,6 +112,10 @@ BS.widgets[BS.W_BANK_SPACE] = {
         end
 
         widget:SetColour(unpack(colour))
+
+        if (vars.ShowFreeSpace) then
+            value = (bagSize - bagUsed) .. (vars.HideLimit and "" or (noLimitColour .. "/" .. bagSize .. noLimitTerminator))
+        end
 
         if (vars.ShowPercent) then
             value = pcUsed .. "%"

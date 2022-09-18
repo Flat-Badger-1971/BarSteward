@@ -1,7 +1,7 @@
 local BS = _G.BarSteward
 
 BS.LAM = _G.LibAddonMenu2
-BS.VERSION = "1.3.7"
+BS.VERSION = "1.3.8"
 
 local panel = {
     type = "panel",
@@ -214,6 +214,16 @@ end
 
 local function getBarSettings()
     local bars = BS.Vars.Bars
+    local showOptions = {
+        ["CRAFTING"] = "ShowWhilstCrafting",
+        ["BANKING"] = "ShowWhilstBanking",
+        ["INVENTORY"] = "ShowWhilstInventory",
+        ["MAIL"] = "ShowWhilstMail",
+        ["SIEGE"] = "ShowWhilstSiege",
+        ["MENU"] = "ShowWhilstMenu",
+        ["INTERACTING"] = "ShowWhilstInteracting",
+        ["GUILDSTORE"] = "ShowWhilstGuildStore"
+    }
 
     for idx, data in ipairs(bars) do
         local vars = BS.Vars.Bars[idx]
@@ -333,197 +343,85 @@ local function getBarSettings()
                 decimals = 1,
                 width = "full",
                 default = BS.Defaults.Bars[1].Scale
-            },
-            [8] = {
-                type = "checkbox",
-                name = GetString(_G.BARSTEWARD_SHOW_WHILST_CRAFTING),
-                getFunc = function()
-                    return vars.ShowWhilstCrafting or false
-                end,
-                setFunc = function(value)
-                    vars.ShowWhilstCrafting = value
-
-                    local bar = _G[BS.Name .. "_bar_" .. idx].ref.bar
-
-                    BS.AddToScenes("Crafting", idx, bar)
-
-                    if (value == false) then
-                        BS.RemoveFromScenes("Crafting", bar)
-                    end
-                end,
-                width = "full",
-                default = false
-            },
-            [9] = {
-                type = "checkbox",
-                name = GetString(_G.BARSTEWARD_SHOW_WHILST_BANKING),
-                getFunc = function()
-                    return vars.ShowWhilstBanking or false
-                end,
-                setFunc = function(value)
-                    vars.ShowWhilstBanking = value
-
-                    local bar = _G[BS.Name .. "_bar_" .. idx].ref.bar
-
-                    BS.AddToScenes("Banking", idx, bar)
-
-                    if (value == false) then
-                        BS.RemoveFromScenes("Banking", bar)
-                    end
-                end,
-                width = "full",
-                default = false
-            },
-            [10] = {
-                type = "checkbox",
-                name = GetString(_G.BARSTEWARD_SHOW_WHILST_INVENTORY),
-                getFunc = function()
-                    return vars.ShowWhilstInventory or false
-                end,
-                setFunc = function(value)
-                    vars.ShowWhilstInventory = value
-
-                    local bar = _G[BS.Name .. "_bar_" .. idx].ref.bar
-
-                    BS.AddToScenes("Inventory", idx, bar)
-
-                    if (value == false) then
-                        BS.RemoveFromScenes("Inventory", bar)
-                    end
-                end,
-                width = "full",
-                default = false
-            },
-            [11] = {
-                type = "checkbox",
-                name = GetString(_G.BARSTEWARD_SHOW_WHILST_MAIL),
-                getFunc = function()
-                    return vars.ShowWhilstMail or false
-                end,
-                setFunc = function(value)
-                    vars.ShowWhilstMail = value
-
-                    local bar = _G[BS.Name .. "_bar_" .. idx].ref.bar
-
-                    BS.AddToScenes("Mail", idx, bar)
-
-                    if (value == false) then
-                        BS.RemoveFromScenes("Mail", bar)
-                    end
-                end,
-                width = "full",
-                default = false
-            },
-            [12] = {
-                type = "checkbox",
-                name = GetString(_G.BARSTEWARD_SHOW_WHILST_SIEGE),
-                getFunc = function()
-                    return vars.ShowWhilstSiege or false
-                end,
-                setFunc = function(value)
-                    vars.ShowWhilstSiege = value
-
-                    local bar = _G[BS.Name .. "_bar_" .. idx].ref.bar
-
-                    BS.AddToScenes("Siege", idx, bar)
-
-                    if (value == false) then
-                        BS.RemoveFromScenes("Siege", bar)
-                    end
-                end,
-                width = "full",
-                default = false
-            },
-            [13] = {
-                type = "checkbox",
-                name = GetString(_G.BARSTEWARD_SHOW_WHILST_MENU),
-                getFunc = function()
-                    return vars.ShowWhilstMenu or false
-                end,
-                setFunc = function(value)
-                    vars.ShowWhilstMenu = value
-
-                    local bar = _G[BS.Name .. "_bar_" .. idx].ref.bar
-
-                    BS.AddToScenes("Menu", idx, bar)
-
-                    if (value == false) then
-                        BS.RemoveFromScenes("Menu", bar)
-                    end
-                end,
-                width = "full",
-                default = false
-            },
-            [14] = {
-                type = "checkbox",
-                name = GetString(_G.BARSTEWARD_DISABLE),
-                getFunc = function()
-                    return vars.Disable
-                end,
-                setFunc = function(value)
-                    vars.Disable = value
-                end,
-                disabled = function()
-                    return idx == 1
-                end,
-                width = "full",
-                requiresReload = true,
-                default = false
-            },
-            [15] = {
-                type = "checkbox",
-                name = GetString(_G.BARSTEWARD_COMBAT_COLOUR),
-                getFunc = function()
-                    return vars.CombatColourChange or false
-                end,
-                setFunc = function(value)
-                    vars.CombatColourChange = value
-                end,
-                width = "full",
-                default = false
-            },
-            [16] = {
-                type = "colorpicker",
-                name = GetString(_G.BARSTEWARD_COMBAT_COLOUR_BACKDROP),
-                getFunc = function()
-                    return unpack(vars.CombatColour or BS.Vars.DefaultCombatColour)
-                end,
-                setFunc = function(r, g, b, a)
-                    vars.CombatColour = {r, g, b, a}
-                end,
-                width = "full",
-                disabled = function()
-                    return not vars.CombatColourChange
-                end,
-                default = unpack(BS.Vars.DefaultCombatColour)
-            },
-            [17] = {
-                type = "divider",
-                alpha = 0
-            },
-            [18] = {
-                type = "button",
-                name = GetString(_G.BARSTEWARD_ALIGN),
-                func = function()
-                    local bar = _G[BS.Name .. "_bar_" .. idx]
-                    local _, posY = bar:GetCenter()
-                    local guiHeight = GuiRoot:GetHeight() / 2
-                    local centre
-
-                    if (posY > guiHeight) then
-                        centre = posY - guiHeight
-                    else
-                        centre = (guiHeight - posY) * -1
-                    end
-
-                    _G[BS.Name .. "_bar_" .. idx]:SetAnchor(CENTER, GuiRoot, CENTER, 0, centre)
-                    local xPos, yPos = bar:GetCenter()
-
-                    BS.Vars.Bars[idx].Anchor = GetString(_G.BARSTEWARD_MIDDLE)
-                    BS.Vars.Bars[idx].Position = {X = xPos, Y = yPos}
-                end,
-                width = "full"
             }
+        }
+
+        for varType, varName in pairs(showOptions) do
+            controls[#controls + 1] = {
+                type = "checkbox",
+                name = GetString(_G["BARSTEWARD_SHOW_WHILST_" .. varType]),
+                getFunc = function()
+                    return vars[varName] or false
+                end,
+                setFunc = function(value)
+                    vars[varName] = value
+
+                    local bar = _G[BS.Name .. "_bar_" .. idx].ref.bar
+
+                    BS.AddToScenes(varType, idx, bar)
+
+                    if (value == false) then
+                        BS.RemoveFromScenes(varType, bar)
+                    end
+                end,
+                width = "full",
+                default = false
+            }
+        end
+
+        controls[#controls + 1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_COMBAT_COLOUR),
+            getFunc = function()
+                return vars.CombatColourChange or false
+            end,
+            setFunc = function(value)
+                vars.CombatColourChange = value
+            end,
+            width = "full",
+            default = false
+        }
+        controls[#controls + 1] = {
+            type = "colorpicker",
+            name = GetString(_G.BARSTEWARD_COMBAT_COLOUR_BACKDROP),
+            getFunc = function()
+                return unpack(vars.CombatColour or BS.Vars.DefaultCombatColour)
+            end,
+            setFunc = function(r, g, b, a)
+                vars.CombatColour = {r, g, b, a}
+            end,
+            width = "full",
+            disabled = function()
+                return not vars.CombatColourChange
+            end,
+            default = unpack(BS.Vars.DefaultCombatColour)
+        }
+        controls[#controls + 1] = {
+            type = "divider",
+            alpha = 0
+        }
+        controls[#controls + 1] = {
+            type = "button",
+            name = GetString(_G.BARSTEWARD_ALIGN),
+            func = function()
+                local bar = _G[BS.Name .. "_bar_" .. idx]
+                local _, posY = bar:GetCenter()
+                local guiHeight = GuiRoot:GetHeight() / 2
+                local centre
+
+                if (posY > guiHeight) then
+                    centre = posY - guiHeight
+                else
+                    centre = (guiHeight - posY) * -1
+                end
+
+                _G[BS.Name .. "_bar_" .. idx]:SetAnchor(CENTER, GuiRoot, CENTER, 0, centre)
+                local xPos, yPos = bar:GetCenter()
+
+                BS.Vars.Bars[idx].Anchor = GetString(_G.BARSTEWARD_MIDDLE)
+                BS.Vars.Bars[idx].Position = {X = xPos, Y = yPos}
+            end,
+            width = "full"
         }
 
         if (idx ~= 1) then
@@ -773,7 +671,8 @@ local function getWidgetSettings()
             widgetControls[#widgetControls + 1] = {
                 type = "checkbox",
                 name = GetString(_G.BARSTEWARD_HIDE_WHEN_COMPLETE),
-                tooltip = (defaults.HideWhenCompleted ~= nil) and "" or GetString(_G.BARSTEWARD_HIDE_WHEN_COMPLETE_TOOLTIP),
+                tooltip = (defaults.HideWhenCompleted ~= nil) and "" or
+                    GetString(_G.BARSTEWARD_HIDE_WHEN_COMPLETE_TOOLTIP),
                 getFunc = function()
                     return vars.HideWhenComplete
                 end,
@@ -905,6 +804,24 @@ local function getWidgetSettings()
                 end,
                 width = "full",
                 default = defaults.NoLimitColour
+            }
+        end
+
+        -- Show free space
+        if (defaults.ShowFreeSpace ~= nil) then
+            widgetControls[#widgetControls + 1] = {
+                type = "checkbox",
+                name = GetString(_G.BARSTEWARD_BAG_FREE),
+                tooltip = GetString(_G.BARSTEWARD_BAG_FREE_TOOLTIP),
+                getFunc = function()
+                    return vars.ShowFreeSpace or false
+                end,
+                setFunc = function(value)
+                    vars.ShowFreeSpace = value
+                    BS.RefreshWidget(k)
+                end,
+                width = "full",
+                default = defaults.ShowFreeSpace
             }
         end
 

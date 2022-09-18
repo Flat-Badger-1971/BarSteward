@@ -146,6 +146,14 @@ BS.MENU_SCENES = {
     "gameMenuInGame"
 }
 
+BS.INTERACTING_SCENES = {
+    "interact"
+}
+
+BS.GUILDSTORE_SCENES = {
+    "tradinghouse"
+}
+
 BS.CRAFTING_ACHIEVEMENT_IDS = {
     [1145] = true,
     [2225] = true

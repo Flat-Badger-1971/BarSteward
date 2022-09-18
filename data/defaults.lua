@@ -122,7 +122,8 @@ BS.Defaults = {
             DangerValue = 95,
             Announce = false,
             HideLimit = false,
-            NoLimitColour = false
+            NoLimitColour = false,
+            ShowFreeSpace = false
         },
         [BS.W_BANK_SPACE] = {
             Bar = 1,
@@ -135,7 +136,8 @@ BS.Defaults = {
             WarningValue = 85,
             DangerValue = 95,
             HideLimit = false,
-            NoLimitColour = false
+            NoLimitColour = false,
+            ShowFreeSpace = false
         },
         [BS.W_FPS] = {Bar = 0, Order = 14, ColourValues = "c"},
         [BS.W_LATENCY] = {Bar = 1, Order = 15, ColourValues = "c,wv,wc,dc,dv"},

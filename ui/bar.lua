@@ -107,6 +107,8 @@ function baseBar:Initialise(barSettings)
     BS.AddToScenes("Mail", barSettings.index, self.bar)
     BS.AddToScenes("Siege", barSettings.index, self.bar)
     BS.AddToScenes("Menu", barSettings.index, self.bar)
+    BS.AddToScenes("Interacting", barSettings.index, self.bar)
+    BS.AddToScenes("GuildStore", barSettings.index, self.bar, true)
 
     -- change the bar's colour during combat if required by the user
     BS.RegisterForEvent(
