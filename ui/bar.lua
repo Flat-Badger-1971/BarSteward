@@ -98,17 +98,20 @@ function baseBar:Initialise(barSettings)
 
     -- prevent the bar from displaying when not in hud or hudui modes
     self.bar.fragment = ZO_HUDFadeSceneFragment:New(self.bar)
-    SCENE_MANAGER:GetScene("hud"):AddFragment(self.bar.fragment)
-    SCENE_MANAGER:GetScene("hudui"):AddFragment(self.bar.fragment)
 
-    BS.AddToScenes("Crafting", barSettings.index, self.bar)
-    BS.AddToScenes("Banking", barSettings.index, self.bar)
-    BS.AddToScenes("Inventory", barSettings.index, self.bar)
-    BS.AddToScenes("Mail", barSettings.index, self.bar)
-    BS.AddToScenes("Siege", barSettings.index, self.bar)
-    BS.AddToScenes("Menu", barSettings.index, self.bar)
-    BS.AddToScenes("Interacting", barSettings.index, self.bar)
-    BS.AddToScenes("GuildStore", barSettings.index, self.bar)
+    if (not BS.Vars.Bars[barSettings.index].ShowEverywhere) then
+        SCENE_MANAGER:GetScene("hud"):AddFragment(self.bar.fragment)
+        SCENE_MANAGER:GetScene("hudui"):AddFragment(self.bar.fragment)
+
+        BS.AddToScenes("Crafting", barSettings.index, self.bar)
+        BS.AddToScenes("Banking", barSettings.index, self.bar)
+        BS.AddToScenes("Inventory", barSettings.index, self.bar)
+        BS.AddToScenes("Mail", barSettings.index, self.bar)
+        BS.AddToScenes("Siege", barSettings.index, self.bar)
+        BS.AddToScenes("Menu", barSettings.index, self.bar)
+        BS.AddToScenes("Interacting", barSettings.index, self.bar)
+        BS.AddToScenes("GuildStore", barSettings.index, self.bar)
+    end
 
     -- change the bar's colour during combat if required by the user
     BS.RegisterForEvent(
@@ -207,6 +210,16 @@ function baseBar:HideWhen(metadata, value)
         end
 
         self:SetHiddenWidget(metadata.widget, hideValue > value)
+    end
+
+    if (metadata.hideWhenMaxLevel) then
+        if (type(metadata.hideWhenMaxLevel) == "function") then
+            hideValue = metadata.hideWhenMaxLevel(value)
+        else
+            hideValue = metadata.hideWhenMaxLevel
+        end
+
+        self:SetHiddenWidget(metadata.widget, hideValue == value)
     end
 end
 

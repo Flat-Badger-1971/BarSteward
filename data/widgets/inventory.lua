@@ -343,18 +343,14 @@ BS.widgets[BS.W_SOUL_GEMS] = {
 
 local function isSurveyReport(bag, slot)
     local _, specialisedItemType = GetItemType(bag, slot)
-    local itemName = GetItemName(bag, slot)
 
-    return specialisedItemType == _G.SPECIALIZED_ITEMTYPE_TROPHY_SURVEY_REPORT or
-        string.find(string.lower(itemName), string.lower(GetString(_G.SI_CONSTANT_SURVEY_MAP)))
+    return specialisedItemType == _G.SPECIALIZED_ITEMTYPE_TROPHY_SURVEY_REPORT
 end
 
 local function isTreasureMap(bag, slot)
     local _, specialisedItemType = GetItemType(bag, slot)
 
-    local itemName = GetItemName(bag, slot)
-    return specialisedItemType == _G.SPECIALIZED_ITEMTYPE_TROPHY_TREASURE_MAP or
-        string.find(string.lower(itemName), string.lower(GetString(_G.SI_CONSTANT_TREASURE_MAP)))
+    return specialisedItemType == _G.SPECIALIZED_ITEMTYPE_TROPHY_TREASURE_MAP
 end
 
 local function isMasterWrit(bag, slot)

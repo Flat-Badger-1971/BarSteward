@@ -41,14 +41,19 @@ BS.widgets[BS.W_RAPPORT] = {
     end
 }
 
+local isMaxLevel
+local companionCurrentLevel = -1
+
 BS.widgets[BS.W_COMPANION_LEVEL] = {
     -- v1.2.19
     name = "companionLevel",
     update = function(widget)
         local companionLevel, currentXPInLevel = GetActiveCompanionLevelInfo()
         local totalXPInLevel = GetNumExperiencePointsInCompanionLevel(companionLevel + 1) or 0
-        local isMaxLevel = totalXPInLevel == 0
         local percent = 0
+
+        isMaxLevel = totalXPInLevel == 0
+        companionCurrentLevel = companionLevel
 
         if (not isMaxLevel) then
             percent = math.max(zo_roundToNearest((currentXPInLevel or 0) / totalXPInLevel, 0.01), 0) * 100
@@ -56,7 +61,7 @@ BS.widgets[BS.W_COMPANION_LEVEL] = {
 
         local text = companionLevel
 
-        if (BS.Vars.Controls[BS.W_COMPANION_LEVEL].ShowXPPC) then
+        if (BS.Vars.Controls[BS.W_COMPANION_LEVEL].ShowXPPC and not isMaxLevel) then
             text = text .. " (" .. percent .. "%)"
         end
 
@@ -69,16 +74,33 @@ BS.widgets[BS.W_COMPANION_LEVEL] = {
         widget:SetColour(unpack(BS.Vars.Controls[BS.W_COMPANION_LEVEL].Colour or BS.Vars.DefaultColour))
 
         local ttt = GetString(_G.BARSTEWARD_COMPANION_LEVEL) .. BS.LF
-        ttt = ttt .. "|cf9f9f9" .. (currentXPInLevel or 0) .. " / " .. totalXPInLevel .. "|r"
+        local progress = (currentXPInLevel or 0) .. " / " .. totalXPInLevel
+
+        if (progress == "0 / 0") then
+            progress = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_EXPERIENCE_LIMIT_REACHED))
+        end
+
+        ttt = ttt .. "|cf9f9f9" .. progress .. "|r"
 
         widget.tooltip = ttt
 
-        return widget:GetValue()
+        return companionLevel
     end,
     event = {_G.EVENT_ACTIVE_COMPANION_STATE_CHANGED, _G.EVENT_COMPANION_EXPERIENCE_GAIN},
     icon = "/esoui/art/companion/keyboard/category_u30_companions_up.dds",
     tooltip = GetString(_G.BARSTEWARD_COMPANION_LEVEL),
-    hideWhenEqual = "0 (0%)",
+    hideWhenEqual = 0,
+    hideWhenMaxLevel = function()
+        if (not BS.Vars.Controls[BS.W_COMPANION_LEVEL].HideWhenMaxLevel) then
+            return -1
+        end
+
+        if (isMaxLevel) then
+            return companionCurrentLevel
+        else
+            return -1
+        end
+    end,
     customSettings = {
         [1] = {
             type = "checkbox",

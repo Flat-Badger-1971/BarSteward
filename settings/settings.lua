@@ -1,7 +1,7 @@
 local BS = _G.BarSteward
 
 BS.LAM = _G.LibAddonMenu2
-BS.VERSION = "1.3.9"
+BS.VERSION = "1.3.10"
 
 local panel = {
     type = "panel",
@@ -346,6 +346,20 @@ local function getBarSettings()
             }
         }
 
+        controls[#controls + 1] = {
+            type = "checkbox",
+            name = GetString(_G["BARSTEWARD_SHOW_EVERYWHERE"]),
+            getFunc = function()
+                return vars.ShowEverywhere or false
+            end,
+            setFunc = function(value)
+                vars.ShowEverywhere = value
+            end,
+            width = "full",
+            default = false,
+            requiresReload = true
+        }
+
         for varType, varName in pairs(showOptions) do
             controls[#controls + 1] = {
                 type = "checkbox",
@@ -365,7 +379,10 @@ local function getBarSettings()
                     end
                 end,
                 width = "full",
-                default = false
+                default = false,
+                disabled = function()
+                    return vars.ShowEverywhere
+                end
             }
         end
 
@@ -700,6 +717,23 @@ local function getWidgetSettings()
                 end,
                 width = "full",
                 default = defaults.HideWhenFullyUsed
+            }
+        end
+
+        -- Hide when max level
+        if (defaults.HideWhenMaxLevel ~= nil) then
+            widgetControls[#widgetControls + 1] = {
+                type = "checkbox",
+                name = GetString(_G.BARSTEWARD_HIDE_MAX),
+                getFunc = function()
+                    return vars.HideWhenMaxLevel
+                end,
+                setFunc = function(value)
+                    vars.HideWhenMaxLevel = value
+                    BS.RefreshBar(k)
+                end,
+                width = "full",
+                default = defaults.HideWhenMaxLevel
             }
         end
 
