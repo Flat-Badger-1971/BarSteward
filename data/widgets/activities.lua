@@ -485,3 +485,58 @@ BS.widgets[BS.W_ACHIEVEMENT_POINTS] = {
         end
     end
 }
+
+BS.widgets[BS.W_PLEDGES_TIME] = {
+    -- v1.3.11
+    -- same time as any other daily activity
+    name = "dailyPledgesTime",
+    update = function(widget)
+        return getTimedActivityTimeRemaining(_G.TIMED_ACTIVITY_TYPE_DAILY, BS.W_PLEDGES_TIME, widget)
+    end,
+    timer = 1000,
+    icon = "/esoui/art/icons/undaunted_bigcoffer.dds",
+    tooltip = GetString(_G.BARSTEWARD_DAILY_PLEDGES_TIME)
+}
+
+BS.widgets[BS.W_SHADOWY_VENDOR_TIME] = {
+    -- v1.3.11
+    name = "remainsSilentReset",
+    update = function(widget)
+        local timeToReset = GetTimeToShadowyConnectionsResetInSeconds()
+        local colour = BS.Vars.DefaultColour
+        local remaining = BS.SecondsToTime(timeToReset, true, false, BS.Vars.Controls[BS.W_SHADOWY_VENDOR_TIME].HideSeconds)
+
+        widget:SetColour(unpack(colour))
+        widget:SetValue(remaining)
+
+        return timeToReset
+    end,
+    timer = 1000,
+    icon = "/esoui/art/icons/rep_darkbrotherhood_64.dds",
+    tooltip = GetString(_G.BARSTEWARD_SHADOWY_VENDOR_RESET)
+}
+
+BS.widgets[BS.W_LFG_TIME] = {
+    -- v1.3.11
+    name = "lfgTime",
+    update = function(widget)
+        local timeToReset = GetLFGCooldownTimeRemainingSeconds(_G.LFG_COOLDOWN_DUNGEON_REWARD_GRANTED)
+        local colour = BS.Vars.DefaultColour
+        local remaining = BS.SecondsToTime(timeToReset, true, false, BS.Vars.Controls[BS.W_LFG_TIME].HideSeconds)
+
+        widget:SetColour(unpack(colour))
+        widget:SetValue(remaining)
+
+        return timeToReset
+    end,
+    timer = 1000,
+    icon = "/esoui/art/lfg/lfg_indexicon_dungeon_up.dds",
+    tooltip = GetString(_G.BARSTEWARD_DUNGEON_REWARD_RESET),
+    onClick = function()
+        if (IsInGamepadPreferredMode()) then
+            SCENE_MANAGER:Show("gamepad_groupList")
+        else
+            SCENE_MANAGER:Show("groupMenuKeyboard")
+        end
+    end
+}

@@ -354,6 +354,18 @@ BS.Defaults = {
         },
         [BS.W_TRIBUTE_CLUB_RANK] = {Bar = 0, Order = 55, ColourValues = "c"},
         [BS.W_PLAYER_LEVEL] = {Bar = 0, Order = 56, ColourValues = "c", Autohide = true},
-        [BS.W_ACHIEVEMENT_POINTS] = {Bar = 0, Order = 57, ColourValues = "c", ShowPercent = false}
+        [BS.W_ACHIEVEMENT_POINTS] = {Bar = 0, Order = 57, ColourValues = "c", ShowPercent = false},
+        [BS.W_PLEDGES_TIME] = {
+            Bar = 0,
+            Order = 58,
+            HideSeconds = false,
+            ColourValues = "okc,wv,wc,dv,dc",
+            DangerValue = 2,
+            WarningValue = 6,
+            Units = GetString(_G.BARSTEWARD_HOURS),
+            Timer = true
+        },
+        [BS.W_SHADOWY_VENDOR_TIME] = {Bar = 0, Order = 59, HideSeconds = false, Timer = true},
+        [BS.W_LFG_TIME] = {Bar = 0, Order = 60, HideSeconds = false, Timer = true}
     }
 }
