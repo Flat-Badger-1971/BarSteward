@@ -366,6 +366,16 @@ BS.Defaults = {
             Timer = true
         },
         [BS.W_SHADOWY_VENDOR_TIME] = {Bar = 0, Order = 59, HideSeconds = false, Timer = true},
-        [BS.W_LFG_TIME] = {Bar = 0, Order = 60, HideSeconds = false, Timer = true}
+        [BS.W_LFG_TIME] = {Bar = 0, Order = 60, HideSeconds = false, Timer = true},
+        [BS.W_CRAFTING_DAILY_TIME] = {
+            Bar = 0,
+            Order = 61,
+            HideSeconds = false,
+            ColourValues = "okc,wv,wc,dv,dc",
+            DangerValue = 2,
+            WarningValue = 6,
+            Units = GetString(_G.BARSTEWARD_HOURS),
+            Timer = true
+        }
     }
 }

@@ -21,7 +21,7 @@ function BS.SecondsToTime(seconds, hideDays, hideHours, hideSeconds, format)
         remaining = remaining - (minutes * 60)
     end
 
-    if (format or "01:12:04:10" ~= "01:12:04:10" and format ~= "01:12:04") then
+    if ((format or "01:12:04:10") ~= "01:12:04:10" and format ~= "01:12:04") then
         if (hideSeconds) then
             time = ZO_CachedStrFormat(_G.BARSTEWARD_TIMER_FORMAT_TEXT, days, hours, minutes)
         else
@@ -551,16 +551,23 @@ end
 
 function BS.RefreshWidget(widgetIndex)
     if (BS.Vars.Controls[widgetIndex].Bar ~= 0) then
-        BS.widgets[widgetIndex].update(_G[BS.Name .. "_Widget_" .. BS.widgets[widgetIndex].name].ref)
+        local widget = _G[BS.Name .. "_Widget_" .. BS.widgets[widgetIndex].name]
+
+        if (widget ~= nil) then
+            BS.widgets[widgetIndex].update(widget.ref)
+        end
     end
 end
 
 function BS.RefreshBar(widgetIndex)
     if (BS.Vars.Controls[widgetIndex].Bar ~= 0) then
-        local widget = _G[BS.Name .. "_Widget_" .. BS.widgets[widgetIndex].name].ref
-        local bar = widget.control:GetParent().ref
-        local metadata = BS.widgets[widgetIndex]
-        metadata.widget = widget
-        bar:DoUpdate(metadata)
+        local widget = _G[BS.Name .. "_Widget_" .. BS.widgets[widgetIndex].name]
+
+        if (widget ~= nil) then
+            local bar = widget.ref.control:GetParent().ref
+            local metadata = BS.widgets[widgetIndex]
+            metadata.widget = widget
+            bar:DoUpdate(metadata)
+        end
     end
 end

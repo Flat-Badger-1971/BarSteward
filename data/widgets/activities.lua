@@ -540,3 +540,15 @@ BS.widgets[BS.W_LFG_TIME] = {
         end
     end
 }
+
+BS.widgets[BS.W_CRAFTING_DAILY_TIME] = {
+    -- v1.3.11
+    -- same time as any other daily activity
+    name = "dailyPledgesTime",
+    update = function(widget)
+        return getTimedActivityTimeRemaining(_G.TIMED_ACTIVITY_TYPE_DAILY, BS.W_CRAFTING_DAILY_TIME, widget)
+    end,
+    timer = 1000,
+    icon = "/esoui/art/icons/crafting_outfitter_logo.dds",
+    tooltip = GetString(_G.BARSTEWARD_DAILY_WRITS_TIME)
+}
