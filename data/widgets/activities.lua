@@ -544,7 +544,7 @@ BS.widgets[BS.W_LFG_TIME] = {
 BS.widgets[BS.W_CRAFTING_DAILY_TIME] = {
     -- v1.3.11
     -- same time as any other daily activity
-    name = "dailyPledgesTime",
+    name = "craftingDailyTime",
     update = function(widget)
         return getTimedActivityTimeRemaining(_G.TIMED_ACTIVITY_TYPE_DAILY, BS.W_CRAFTING_DAILY_TIME, widget)
     end,
