@@ -566,7 +566,7 @@ function BS.RefreshBar(widgetIndex)
         if (widget ~= nil) then
             local bar = widget.ref.control:GetParent().ref
             local metadata = BS.widgets[widgetIndex]
-            metadata.widget = widget
+            metadata.widget = widget.ref
             bar:DoUpdate(metadata)
         end
     end

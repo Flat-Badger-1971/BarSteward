@@ -57,6 +57,8 @@ BS.widgets[BS.W_COMPANION_LEVEL] = {
 
         if (not isMaxLevel) then
             percent = math.max(zo_roundToNearest((currentXPInLevel or 0) / totalXPInLevel, 0.01), 0) * 100
+        elseif (BS.Vars.Controls[BS.W_COMPANION_LEVEL].HideWhenMaxLevel) then
+            return companionLevel
         end
 
         local text = companionLevel

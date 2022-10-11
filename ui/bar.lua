@@ -178,8 +178,6 @@ function baseBar:HideWhen(metadata, value)
         if (hideValue == true) then
             return
         end
-
-        return
     end
 
     if (metadata.hideWhenEqual) then
@@ -190,7 +188,10 @@ function baseBar:HideWhen(metadata, value)
         end
 
         self:SetHiddenWidget(metadata.widget, hideValue == value)
-        return
+
+        if (hideValue == value) then
+            return
+        end
     end
 
     if (metadata.hideWhenLessThan) then
@@ -201,7 +202,10 @@ function baseBar:HideWhen(metadata, value)
         end
 
         self:SetHiddenWidget(metadata.widget, hideValue < value)
-        return
+
+        if (hideValue < value) then
+            return
+        end
     end
 
     if (metadata.hideWhenGreaterThan) then
@@ -212,7 +216,10 @@ function baseBar:HideWhen(metadata, value)
         end
 
         self:SetHiddenWidget(metadata.widget, hideValue > value)
-        return
+
+        if (hideValue > value) then
+            return
+        end
     end
 
     if (metadata.hideWhenMaxLevel) then
