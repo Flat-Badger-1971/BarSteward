@@ -19,7 +19,7 @@ BS.widgets[BS.W_BAG_SPACE] = {
 
             if (vars.Announce and newItem) then
                 local announce = true
-                local previousTime = BS.Vars.PreviousAnnounceTime[BS.W_BAG_SPACE] or (os.time() - 100)
+                local previousTime = BS.Vars.PreviousAnnounceTime[BS.W_BAG_SPACE] or (os.time() - 301)
                 local debounceTime = (vars.DebounceTime or 5) * 60
 
                 if (os.time() - previousTime <= debounceTime) then
@@ -38,7 +38,8 @@ BS.widgets[BS.W_BAG_SPACE] = {
         widget:SetColour(unpack(colour))
 
         if (vars.ShowFreeSpace) then
-            value = (bagSize - bagUsed) .. (vars.HideLimit and "" or (noLimitColour .. "/" .. bagSize .. noLimitTerminator))
+            value =
+                (bagSize - bagUsed) .. (vars.HideLimit and "" or (noLimitColour .. "/" .. bagSize .. noLimitTerminator))
         end
 
         if (vars.ShowPercent) then
@@ -114,7 +115,8 @@ BS.widgets[BS.W_BANK_SPACE] = {
         widget:SetColour(unpack(colour))
 
         if (vars.ShowFreeSpace) then
-            value = (bagSize - bagUsed) .. (vars.HideLimit and "" or (noLimitColour .. "/" .. bagSize .. noLimitTerminator))
+            value =
+                (bagSize - bagUsed) .. (vars.HideLimit and "" or (noLimitColour .. "/" .. bagSize .. noLimitTerminator))
         end
 
         if (vars.ShowPercent) then
@@ -594,7 +596,7 @@ BS.widgets[BS.W_TROPHY_VAULT_KEYS] = {
             end
         end
 
-        local colour = BS.Vars.Controls[BS.W_REPAIRS_KITS].Colour or BS.Vars.DefaultColour
+        local colour = BS.Vars.Controls[BS.W_TROPHY_VAULT_KEYS].Colour or BS.Vars.DefaultColour
 
         widget:SetColour(unpack(colour))
         widget:SetValue(count)
@@ -647,4 +649,292 @@ BS.widgets[BS.W_LOCKPICKS] = {
     event = {_G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE, _G.EVENT_LOCKPICK_BROKE},
     tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_GAMEPAD_LOCKPICK_PICKS_REMAINING)),
     icon = "/esoui/art/icons/lockpick.dds"
+}
+
+local linkCache = {}
+local previousCounts = {}
+
+BS.widgets[BS.W_WATCHED_ITEMS] = {
+    -- v1.3.14
+    name = "itemWatcher",
+    update = function(widget)
+        local itemIds = BS.Vars.WatchedItems
+        local vars = BS.Vars.Controls[BS.W_WATCHED_ITEMS]
+
+        for itemId, _ in pairs(itemIds) do
+            if (not linkCache[itemId]) then
+                local link = BS.MakeItemLink(itemId)
+                local name = GetItemLinkName(link)
+
+                if (name ~= "") then
+                    linkCache[itemId] = {
+                        icon = GetItemLinkIcon(link),
+                        name = ZO_CachedStrFormat("<<C:1>>", name)
+                    }
+                end
+            end
+        end
+
+        local count = {}
+        local bags = {_G.BAG_BACKPACK, _G.BAG_BANK}
+        local keys = {bag = {}, bank = {}}
+
+        if (IsESOPlusSubscriber()) then
+            table.insert(bags, _G.BAG_SUBSCRIBER_BANK)
+        end
+
+        if (HasCraftBagAccess()) then
+            table.insert(bags, _G.BAG_VIRTUAL)
+        end
+
+        for _, bag in pairs(bags) do
+            for _, data in pairs(_G.SHARED_INVENTORY.bagCache[bag]) do
+                if (data) then
+                    local itemId = GetItemId(bag, data.slotIndex)
+
+                    if (vars[itemId]) then
+                        if (linkCache[itemId]) then
+                            local cnt = GetSlotStackSize(bag, data.slotIndex)
+
+                            if (not count[itemId]) then
+                                count[itemId] = 0
+                            end
+
+                            count[itemId] = count[itemId] + cnt
+
+                            local location = bag == _G.BAG_BANK and "bank" or "bag"
+
+                            if (not keys[location][itemId]) then
+                                local icon = linkCache[itemId].icon
+                                local name = linkCache[itemId].name
+
+                                keys[location][itemId] = {count = cnt, name = name, icon = icon, bag = bag}
+                            else
+                                keys[location][itemId].count = keys[location][itemId].count + cnt
+                            end
+                        end
+                    end
+                end
+            end
+        end
+
+        local colour = vars.Colour or BS.Vars.DefaultColour
+        local ttt = GetString(_G.BARSTEWARD_WATCHED_ITEMS) .. BS.LF
+        local countText = ""
+        local plainCountText = ""
+        local foundIds = {}
+
+        for _, bagType in pairs({"bag", "bank"}) do
+            for itemId, key in pairs(keys[bagType]) do
+                local zoIcon = zo_iconFormat(key.icon, 16, 16)
+                foundIds[itemId] = true
+
+                ttt =
+                    ttt ..
+                    BS.LF ..
+                        (bagType == "bag" and BS.BAGICON or BS.BANKICON) ..
+                            " " .. zoIcon .. " " .. "|cf9f9f9" .. key.name .. "|r"
+                ttt = ttt .. " (" .. key.count .. ")"
+            end
+        end
+
+        for itemId, data in pairs(linkCache) do
+            if (vars[itemId]) then
+                countText = countText .. zo_iconFormat(data.icon) .. " " .. (count[itemId] or 0) .. " "
+                plainCountText = plainCountText .. "888" .. " " .. (count[itemId] or 0) .. " "
+
+                if (not foundIds[itemId]) then
+                    local zoIcon = zo_iconFormat(data.icon, 16, 16)
+                    ttt = ttt .. BS.LF .. BS.BAGICON .. " " .. zoIcon .. " " .. "|cf9f9f9" .. data.name .. "|r"
+                    ttt = ttt .. " (0)"
+                end
+            end
+        end
+
+        widget:SetColour(unpack(colour))
+        widget:SetValue(BS.Trim(countText), BS.Trim(plainCountText))
+        widget.tooltip = ttt
+
+        if (vars.Announce) then
+            for itemId, itemCount in pairs(count) do
+                if (not previousCounts[itemId]) then
+                    previousCounts[itemId] = itemCount
+                end
+
+                if (itemCount > previousCounts[itemId]) then
+                    local announce = true
+                    local previousTime = BS.Vars.PreviousAnnounceTime[BS.W_WATCHED_ITEMS] or (os.time() - 301)
+                    local debounceTime = (vars.DebounceTime or 5) * 60
+
+                    if (os.time() - previousTime <= debounceTime) then
+                        announce = false
+                    end
+
+                    if (announce == true) then
+                        BS.Vars.PreviousAnnounceTime[BS.W_WATCHED_ITEMS] = os.time()
+                        BS.Announce(
+                            GetString(_G.BARSTEWARD_WATCHED_ITEM_ALERT),
+                            zo_strformat(GetString(_G.BARSTEWARD_WATCHED_ITEM_MESSAGE), linkCache[itemId].name),
+                            BS.W_WATCHED_ITEMS,
+                            nil,
+                            nil,
+                            linkCache[itemId].icon
+                        )
+                    end
+                end
+            end
+        end
+
+        return count
+    end,
+    event = _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
+    tooltip = GetString(_G.BARSTEWARD_WATCHED_ITEMS),
+    icon = "/esoui/art/icons/crafting_critter_snake_eyes.dds",
+    customOptions = {
+        name = GetString(_G.BARSTEWARD_DEBOUNCE),
+        tooltip = GetString(_G.BARSTEWARD_DEBOUNCE_DESC),
+        choices = {
+            0,
+            1,
+            5,
+            10,
+            15,
+            20,
+            30,
+            40,
+            50,
+            60
+        },
+        varName = "DebounceTime",
+        refresh = false,
+        default = 5
+    },
+    customSettings = function()
+        local settings = {}
+        local itemIds = BS.Vars.WatchedItems
+
+        for itemId, _ in pairs(itemIds) do
+            if (not linkCache[itemId]) then
+                local link = BS.MakeItemLink(itemId)
+                local name = GetItemLinkName(link)
+
+                if (name ~= "") then
+                    linkCache[itemId] = {
+                        icon = GetItemLinkIcon(link),
+                        name = ZO_CachedStrFormat("<<C:1>>", name)
+                    }
+                end
+            end
+        end
+
+        for itemId, data in pairs(linkCache) do
+            if (data.name ~= "") then
+                settings[#settings + 1] = {
+                    name = function()
+                        local name = zo_iconFormat(data.icon) .. " " .. data.name
+
+                        if (BS.Defaults.WatchedItems[itemId] == nil) then
+                            name = name .. " (" .. itemId .. ")"
+                        end
+
+                        return name
+                    end,
+                    type = "checkbox",
+                    getFunc = function()
+                        return BS.Vars.Controls[BS.W_WATCHED_ITEMS][itemId]
+                    end,
+                    setFunc = function(value)
+                        BS.Vars.Controls[BS.W_WATCHED_ITEMS][itemId] = value
+                        BS.RefreshWidget(BS.W_WATCHED_ITEMS)
+                    end,
+                    default = true
+                }
+            end
+        end
+
+        settings[#settings + 1] = {
+            type = "editbox",
+            name = GetString(_G.BARSTEWARD_ITEM_ID),
+            getFunc = function()
+                return BS.Vars.NewItemId or ""
+            end,
+            setFunc = function(value)
+                BS.Vars.NewItemId = value
+            end,
+            isMultiLine = false,
+            width = "full"
+        }
+
+        settings[#settings + 1] = {
+            type = "description",
+            text = function()
+                if (BS.Vars.NewItemId == "") then
+                    return ""
+                end
+
+                local link = BS.MakeItemLink(BS.Vars.NewItemId)
+                local name = GetItemLinkName(link)
+
+                if (name ~= "") then
+                    local icon = GetItemLinkIcon(link)
+                    name = zo_iconFormat(icon) .. " " .. ZO_CachedStrFormat("<<C:1>>", name)
+                end
+
+                return name
+            end,
+            width = "full"
+        }
+
+        settings[#settings + 1] = {
+            type = "button",
+            name = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_GAMEPAD_TRADE_ADD)),
+            func = function()
+                if (BS.Vars.WatchedItems[tonumber(BS.Vars.NewItemId)] == nil) then
+                    BS.Vars.WatchedItems[tonumber(BS.Vars.NewItemId)] = true
+                    BS.Vars.Controls[BS.W_WATCHED_ITEMS][tonumber(BS.Vars.NewItemId)] = true
+                    BS.Vars.NewItemId = nil
+
+                    ZO_Dialogs_ShowDialog(BS.Name .. "Reload")
+                else
+                    ZO_Dialogs_ShowDialog(BS.Name .. "ItemExists")
+                end
+            end,
+            disabled = function()
+                if (BS.Vars.NewItemId == "") then
+                    return true
+                end
+
+                local link = BS.MakeItemLink(BS.Vars.NewItemId)
+                local name = GetItemLinkName(link)
+
+                return name == ""
+            end,
+            width = "half"
+        }
+
+        settings[#settings + 1] = {
+            type = "button",
+            name = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_DIALOG_REMOVE)),
+            func = function()
+                BS.Vars.WatchedItems[tonumber(BS.Vars.NewItemId)] = nil
+                BS.Vars.Controls[BS.W_WATCHED_ITEMS][tonumber(BS.Vars.NewItemId)] = nil
+                BS.Vars.NewItemId = nil
+
+                ZO_Dialogs_ShowDialog(BS.Name .. "Reload")
+            end,
+            disabled = function()
+                if (BS.Vars.NewItemId == "") then
+                    return true
+                end
+
+                local link = BS.MakeItemLink(BS.Vars.NewItemId)
+                local name = GetItemLinkName(link)
+
+                return name == ""
+            end,
+            width = "half"
+        }
+
+        return settings
+    end
 }

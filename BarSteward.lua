@@ -95,8 +95,15 @@ local function Initialise()
         }
     }
 
+    local itemExists = {
+        title = {text = GetString(_G.BARSTEWARD_ITEM_INVALID)},
+        mainText = {text = GetString(_G.BARSTEWARD_ITEM_EXISTS)},
+        buttons = buttons
+    }
+
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "NotEmpty", notempty)
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "Exists", exists)
+    ZO_Dialogs_RegisterCustomDialog(BS.Name .. "ItemExists", itemExists)
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "Reload", reload)
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "Remove", remove)
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "Resize", resize)

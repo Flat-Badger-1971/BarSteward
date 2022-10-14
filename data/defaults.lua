@@ -8,7 +8,6 @@ local x, y = GuiRoot:GetCenter()
 local BS = _G.BarSteward
 
 BS.Defaults = {
-    Updates = {},
     DefaultCombatColour = {0.3686274588, 0, 0, 1},
     DefaultColour = {0.9, 0.9, 0.9, 1},
     DefaultDangerColour = {0.8, 0, 0, 1},
@@ -18,15 +17,23 @@ BS.Defaults = {
     FontSize = 18,
     FriendAnnounce = {},
     Gold = {},
-    OtherCurrencies = {},
     GuildFriendAnnounce = {},
     Movable = false,
+    OtherCurrencies = {},
     PreviousFriendTime = {},
     PreviousGuildFriendTime = {},
     PreviousAnnounceTime = {},
     TimeFormat12 = "hh:m:s",
     TimeFormat24 = "HH:m:s",
     TimeType = GetString(_G.BARSTEWARD_24),
+    Trackers = {},
+    Updates = {},
+    WatchedItems = {
+        -- perfect roe
+        [64222] = true,
+        -- potent nirncrux
+        [56863] = true
+    },
     Bars = {
         [1] = {
             Orientation = GetString(_G.BARSTEWARD_HORIZONTAL),
@@ -376,6 +383,14 @@ BS.Defaults = {
             WarningValue = 6,
             Units = GetString(_G.BARSTEWARD_HOURS),
             Timer = true
+        },
+        [BS.W_WATCHED_ITEMS] = {
+            Bar = 0,
+            Order = 62,
+            ColourValues = "c",
+            Announce = false,
+            [64222] = true,
+            [56863] = true
         }
     }
 }

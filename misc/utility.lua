@@ -473,15 +473,15 @@ function BS.Split(s)
     return result
 end
 
-function BS.Announce(header, message, widgetIconNumber, lifespan, sound)
+function BS.Announce(header, message, widgetIconNumber, lifespan, sound, otherIcon)
     local messageParams = CENTER_SCREEN_ANNOUNCE:CreateMessageParams(_G.CSA_CATEGORY_LARGE_TEXT)
     messageParams:SetSound(sound or "Justice_NowKOS")
     messageParams:SetText(header or "Test Header", message or "Test Message")
     messageParams:SetLifespanMS(lifespan or 6000)
-    --messageParams:MarkQueueImmediately(true)
+    messageParams:SetCSAType(_G.CENTER_SCREEN_ANNOUNCE_TYPE_SYSTEM_BROADCAST)
 
     if (widgetIconNumber) then
-        messageParams:SetIconData(BS.widgets[widgetIconNumber].icon, "/esoui/art/achievements/achievements_iconbg.dds")
+        messageParams:SetIconData(otherIcon or BS.widgets[widgetIconNumber].icon, "/esoui/art/achievements/achievements_iconbg.dds")
     end
 
     CENTER_SCREEN_ANNOUNCE:AddMessageWithParams(messageParams)
@@ -571,3 +571,36 @@ function BS.RefreshBar(widgetIndex)
         end
     end
 end
+
+function BS.MakeItemLink(itemId)
+    return ZO_LinkHandler_CreateLink(
+        "",
+        nil,
+        _G.ITEM_LINK_TYPE,
+        itemId,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+    )
+end
+
+function BS.Trim(stringValue)
+    return (stringValue:gsub("^%s*(.-)%s*$", "%1"))
+  end

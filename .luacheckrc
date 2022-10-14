@@ -248,6 +248,7 @@ read_globals = {
     "GetItemId",
     "GetItemInfo",
     "GetItemLink",
+    "GetItemLinkIcon",
     "GetItemLinkName",
     "GetItemName",
     "GetItemQualityColor",
@@ -325,6 +326,7 @@ read_globals = {
     "GetZoneNameById",
     "GetZoneSkyshardId",
     "HasActiveCompanion",
+    "HasCraftBagAccess",
     "HasPendingCompanion",
     "IsCollectibleBlocked",
     "IsCollectibleUsable",
@@ -367,6 +369,7 @@ read_globals = {
             New = {read_only = true}
         }
     },
+    "ZO_LinkHandler_CreateLink",
     "ZO_min",
     "ZO_PostHook",
     "ZO_PreHook",

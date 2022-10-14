@@ -498,17 +498,55 @@ BS.widgets[BS.W_PLEDGES_TIME] = {
     tooltip = GetString(_G.BARSTEWARD_DAILY_PLEDGES_TIME)
 }
 
+local function setTracker(widgetIndex, resetSeconds, tooltip)
+    if (not BS.Vars.Trackers[widgetIndex]) then
+        BS.Vars.Trackers[widgetIndex] = {}
+    end
+
+    local thisCharacter = GetUnitName("player")
+
+    if (not BS.Vars.Trackers[widgetIndex][thisCharacter]) then
+        BS.Vars.Trackers[widgetIndex][thisCharacter] = {}
+    end
+
+    local resetTime = resetSeconds + os.time()
+    BS.Vars.Trackers[widgetIndex][thisCharacter].resetTime = resetTime
+
+    local resets = BS.Vars.Trackers[widgetIndex]
+
+    for character, time in pairs(resets) do
+        if (character ~= thisCharacter) then
+            local timeRemaining = 0
+
+            if (time.resetTime > os.time()) then
+                timeRemaining = time - os.time()
+            end
+
+            local formattedTime =
+                BS.SecondsToTime(timeRemaining, true, false, BS.Vars.Controls[BS.W_SHADOWY_VENDOR_TIME].HideSeconds)
+
+            tooltip =
+                tooltip .. BS.LF .. "|cffd700" .. formattedTime .. "|r " .. ZO_FormatUserFacingDisplayName(character)
+        end
+    end
+
+    return tooltip
+end
+
 BS.widgets[BS.W_SHADOWY_VENDOR_TIME] = {
     -- v1.3.11
     name = "remainsSilentReset",
     update = function(widget)
         local timeToReset = GetTimeToShadowyConnectionsResetInSeconds()
         local colour = BS.Vars.DefaultColour
-        local remaining = BS.SecondsToTime(timeToReset, true, false, BS.Vars.Controls[BS.W_SHADOWY_VENDOR_TIME].HideSeconds)
+        local remaining =
+            BS.SecondsToTime(timeToReset, true, false, BS.Vars.Controls[BS.W_SHADOWY_VENDOR_TIME].HideSeconds)
 
         widget:SetColour(unpack(colour))
         widget:SetValue(remaining)
 
+        widget.tooltip =
+            setTracker(BS.W_SHADOWY_VENDOR_TIME, timeToReset, GetString(_G.BARSTEWARD_SHADOWY_VENDOR_RESET))
         return timeToReset
     end,
     timer = 1000,
@@ -526,6 +564,9 @@ BS.widgets[BS.W_LFG_TIME] = {
 
         widget:SetColour(unpack(colour))
         widget:SetValue(remaining)
+
+        widget.tooltip =
+            setTracker(BS.W_LFG_TIME, timeToReset, GetString(_G.BARSTEWARD_DUNGEON_REWARD_RESET))
 
         return timeToReset
     end,
