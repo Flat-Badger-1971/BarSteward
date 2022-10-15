@@ -29,10 +29,8 @@ BS.Defaults = {
     Trackers = {},
     Updates = {},
     WatchedItems = {
-        -- perfect roe
-        [64222] = true,
-        -- potent nirncrux
-        [56863] = true
+        [BS.PERFECT_ROE] = true,
+        [BS.POTENT_NIRNCRUX] = true
     },
     Bars = {
         [1] = {
@@ -389,8 +387,8 @@ BS.Defaults = {
             Order = 62,
             ColourValues = "c",
             Announce = false,
-            [64222] = true,
-            [56863] = true
+            [BS.PERFECT_ROE] = true,
+            [BS.POTENT_NIRNCRUX] = true
         }
     }
 }

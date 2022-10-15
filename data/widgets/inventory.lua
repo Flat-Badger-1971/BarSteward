@@ -772,16 +772,43 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
 
                     if (announce == true) then
                         BS.Vars.PreviousAnnounceTime[BS.W_WATCHED_ITEMS] = os.time()
-                        BS.Announce(
-                            GetString(_G.BARSTEWARD_WATCHED_ITEM_ALERT),
-                            zo_strformat(GetString(_G.BARSTEWARD_WATCHED_ITEM_MESSAGE), linkCache[itemId].name),
-                            BS.W_WATCHED_ITEMS,
-                            nil,
-                            nil,
-                            linkCache[itemId].icon
-                        )
+
+                        -- need a short delay so the announcement doesn't get quashed by any animations
+                        if (itemId == BS.PERFECT_ROE) then
+                            BS.delayedAnnouncement = {
+                                message = zo_strformat(
+                                    GetString(_G.BARSTEWARD_WATCHED_ITEM_MESSAGE),
+                                    linkCache[itemId].name
+                                ),
+                                icon = linkCache[itemId].icon
+                            }
+                            zo_callLater(
+                                function()
+                                    BS.Announce(
+                                        GetString(_G.BARSTEWARD_WATCHED_ITEM_ALERT),
+                                        BS.delayedAnnouncement.message,
+                                        BS.W_WATCHED_ITEMS,
+                                        nil,
+                                        nil,
+                                        BS.delayedAnnouncement.icon
+                                    )
+                                end,
+                                1500
+                            )
+                        else
+                            BS.Announce(
+                                GetString(_G.BARSTEWARD_WATCHED_ITEM_ALERT),
+                                zo_strformat(GetString(_G.BARSTEWARD_WATCHED_ITEM_MESSAGE), linkCache[itemId].name),
+                                BS.W_WATCHED_ITEMS,
+                                nil,
+                                nil,
+                                linkCache[itemId].icon
+                            )
+                        end
                     end
                 end
+
+                previousCounts[itemId] = itemCount
             end
         end
 
