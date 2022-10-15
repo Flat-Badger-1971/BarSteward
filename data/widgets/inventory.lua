@@ -793,7 +793,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
                                         BS.delayedAnnouncement.icon
                                     )
                                 end,
-                                1500
+                                2000
                             )
                         else
                             BS.Announce(
