@@ -148,6 +148,11 @@ local function Initialise()
         end
     )
 
+    -- get a reference to LibClockTST if it's installed
+    if (_G.LibClockTST) then
+        BS.LibClock = _G.LibClockTST:Instance()
+    end
+
     BS.RegisterSettings()
 
     -- create bars

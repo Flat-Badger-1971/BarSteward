@@ -1,7 +1,7 @@
 local BS = _G.BarSteward
 
 BS.LAM = _G.LibAddonMenu2
-BS.VERSION = "1.3.15"
+BS.VERSION = "1.3.17"
 
 local panel = {
     type = "panel",
@@ -630,8 +630,16 @@ local function getWidgetSettings()
     for idx, w in ipairs(ordered) do
         local k = w.key
         local v = w.widget
-        local widgetControls = {
-            [1] = {
+        local widgetControls = {}
+
+        if (k == BS.W_TAMRIEL_TIME and not BS.LibClock) then
+            widgetControls[#widgetControls + 1] = {
+                type = "description",
+                text = "|cff0000" .. GetString(_G.BARSTEWARD_LIBCLOCK) .. "|r",
+                width = "full"
+            }
+        else
+            widgetControls[#widgetControls + 1] = {
                 type = "dropdown",
                 name = GetString(_G.BARSTEWARD_BAR),
                 choices = barNames,
@@ -658,9 +666,18 @@ local function getWidgetSettings()
                 end,
                 width = "full",
                 requiresReload = true,
-                default = BS.Defaults.Controls[k].Bar
+                default = BS.Defaults.Controls[k].Bar,
+                disabled = function()
+                    if (k ~= BS.W_TAMRIEL_TIME) then
+                        return false
+                    end
+
+                    if (not BS.LibClock) then
+                        return true
+                    end
+                end
             }
-        }
+        end
 
         local vars = BS.Vars.Controls[k]
         local defaults = BS.Defaults.Controls[k]
@@ -1138,16 +1155,18 @@ local function getWidgetSettings()
         end
 
         -- time
-        if (k == 1) then
+        if (k == BS.W_TIME or (k == BS.W_TAMRIEL_TIME and BS.LibClock ~= nil)) then
+            local timeVars = (k == BS.W_TIME) and BS.Vars or BS.Vars.Controls[BS.W_TAMRIEL_TIME]
+
             widgetControls[#widgetControls + 1] = {
                 type = "dropdown",
                 name = GetString(_G.BARSTEWARD_TWELVE_TWENTY_FOUR),
                 choices = {GetString(_G.BARSTEWARD_12), GetString(_G.BARSTEWARD_24)},
                 getFunc = function()
-                    return BS.Vars.TimeType
+                    return timeVars.TimeType or BS.Defaults.TimeType
                 end,
                 setFunc = function(value)
-                    BS.Vars.TimeType = value
+                    timeVars.TimeType = value
                 end,
                 default = BS.Defaults.TimeType
             }
@@ -1157,7 +1176,7 @@ local function getWidgetSettings()
                 name = GetString(_G.BARSTEWARD_TIME_FORMAT_12),
                 choices = timeSamples12,
                 getFunc = function()
-                    local format = BS.Vars.TimeFormat12
+                    local format = timeVars.TimeFormat12 or BS.Defaults.TimeFormat12
                     return BS.FormatTime(format, "09:23:12")
                 end,
                 setFunc = function(value)
@@ -1170,10 +1189,10 @@ local function getWidgetSettings()
                         end
                     end
 
-                    BS.Vars.TimeFormat12 = format
+                    timeVars.TimeFormat12 = format
                 end,
                 disabled = function()
-                    return BS.Vars.TimeType ~= GetString(_G.BARSTEWARD_12)
+                    return (timeVars.TimeType or BS.Defaults.TimeType) ~= GetString(_G.BARSTEWARD_12)
                 end,
                 default = BS.Defaults.TimeFormat12
             }
@@ -1183,7 +1202,7 @@ local function getWidgetSettings()
                 name = GetString(_G.BARSTEWARD_TIME_FORMAT_24),
                 choices = timeSamples24,
                 getFunc = function()
-                    local format = BS.Vars.TimeFormat24
+                    local format = timeVars.TimeFormat24 or BS.Defaults.TimeFormat24
                     return BS.FormatTime(format, "09:23:12")
                 end,
                 setFunc = function(value)
@@ -1196,10 +1215,10 @@ local function getWidgetSettings()
                         end
                     end
 
-                    BS.Vars.TimeFormat24 = format
+                    timeVars.TimeFormat24 = format
                 end,
                 disabled = function()
-                    return BS.Vars.TimeType == GetString(_G.BARSTEWARD_12)
+                    return (timeVars.TimeType or BS.Defaults.TimeType) == GetString(_G.BARSTEWARD_12)
                 end,
                 default = BS.Defaults.TimeFormat24
             }
@@ -1233,7 +1252,7 @@ local function getWidgetSettings()
         -- colour / value options
         local cv = getCV(k)
 
-        if (cv) then
+        if (cv and k ~= BS.W_TAMRIEL_TIME or (k == BS.W_TAMRIEL_TIME and BS.LibClock ~= nil)) then
             if (cv.c) then
                 widgetControls[#widgetControls + 1] = {
                     type = "colorpicker",

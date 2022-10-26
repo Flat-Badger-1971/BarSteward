@@ -22,6 +22,21 @@ local BS = _G.BarSteward
         }
     }
 ]]
+local function getMoonPhaseIcon()
+    if (BS.LibClock) then
+        local constants = _G.LibClockTST.CONSTANTS()
+        local moonInfo = BS.LibClock:GetMoon()
+
+        for idx, data in ipairs(constants.moon.phasesPercentage) do
+            if (data.name == moonInfo.currentPhaseName) then
+                return idx
+            end
+        end
+    end
+
+    return 5
+end
+
 BS.widgets = {
     [BS.W_TIME] = {
         name = "time",
@@ -121,5 +136,35 @@ BS.widgets = {
             default = 1
         },
         minWidthChars = "888888"
+    },
+    [BS.W_TAMRIEL_TIME] = {
+        -- v1.3.17
+        name = "tamrielTime",
+        update = function(widget)
+            local vars = BS.Vars.Controls[BS.W_TAMRIEL_TIME]
+            local format = vars.TimeFormat24 or BS.Defaults.TimeFormat24
+
+            if ((vars.TimeType or BS.Defaults.TimeType) == GetString(_G.BARSTEWARD_12)) then
+                format = vars.TimeFormat12 or BS.Defaults.TimeFormat12
+            end
+
+            if (BS.LibClock) then
+                local tamrielTime = BS.LibClock:GetTime()
+                local time = BS.FormatTime(format, nil, tamrielTime)
+                local phase = getMoonPhaseIcon() or 5
+
+                widget:SetIcon("BarSteward/assets/moon/" .. phase .. ".dds")
+                widget:SetValue(time)
+                widget:SetColour(unpack(vars.Colour or BS.Vars.DefaultColour))
+
+                return widget:GetValue()
+            end
+        end,
+        hideWhenTrue = function()
+            return not BS.LibClock
+        end,
+        timer = 1000,
+        tooltip = GetString(_G.BARSTEWARD_TAMRIEL_TIME),
+        icon = "BarSteward/assets/moon/5.dds"
     }
 }

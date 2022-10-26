@@ -519,7 +519,7 @@ local function setTracker(widgetIndex, resetSeconds, tooltip)
             local timeRemaining = 0
 
             if (time.resetTime > os.time()) then
-                timeRemaining = time - os.time()
+                timeRemaining = time.resetTime - os.time()
             end
 
             local formattedTime =

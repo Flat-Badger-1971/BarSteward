@@ -23,8 +23,8 @@ BS.Defaults = {
     PreviousFriendTime = {},
     PreviousGuildFriendTime = {},
     PreviousAnnounceTime = {},
-    TimeFormat12 = "hh:m:s",
-    TimeFormat24 = "HH:m:s",
+    TimeFormat12 = "hh:m",
+    TimeFormat24 = "HH:m",
     TimeType = GetString(_G.BARSTEWARD_24),
     Trackers = {},
     Updates = {},
@@ -389,6 +389,7 @@ BS.Defaults = {
             Announce = false,
             [BS.PERFECT_ROE] = true,
             [BS.POTENT_NIRNCRUX] = true
-        }
+        },
+        [BS.W_TAMRIEL_TIME] = {Bar = 0, Order = 63, ColourValues = "c"}
     }
 }

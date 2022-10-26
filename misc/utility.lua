@@ -82,10 +82,25 @@ end
 
 -- Return a formatted time
 -- from https://esoui.com/forums/showthread.php?t=4507
-function BS.FormatTime(format, timeString)
+function BS.FormatTime(format, timeString, tamrielTime)
     -- split up default timestamp
-    timeString = timeString or GetTimeString()
-    local hours, minutes, seconds = timeString:match("([^%:]+):([^%:]+):([^%:]+)")
+    local hours, minutes, seconds
+
+    if (tamrielTime) then
+        hours, minutes, seconds = tamrielTime.hour, tamrielTime.minute, tamrielTime.second
+
+        if (string.len(tostring(minutes)) == 1) then
+            minutes = '0' .. minutes
+        end
+
+        if (string.len(tostring(seconds)) == 1) then
+            seconds = '0' .. seconds
+        end
+    else
+        timeString = timeString or GetTimeString()
+        hours, minutes, seconds = timeString:match("([^%:]+):([^%:]+):([^%:]+)")
+    end
+
     local hoursNoLead = tonumber(hours) -- hours without leading zero
     local hours12NoLead = (hoursNoLead - 1) % 12 + 1
     local hours12
@@ -481,7 +496,10 @@ function BS.Announce(header, message, widgetIconNumber, lifespan, sound, otherIc
     messageParams:SetCSAType(_G.CENTER_SCREEN_ANNOUNCE_TYPE_SYSTEM_BROADCAST)
 
     if (widgetIconNumber) then
-        messageParams:SetIconData(otherIcon or BS.widgets[widgetIconNumber].icon, "/esoui/art/achievements/achievements_iconbg.dds")
+        messageParams:SetIconData(
+            otherIcon or BS.widgets[widgetIconNumber].icon,
+            "/esoui/art/achievements/achievements_iconbg.dds"
+        )
     end
 
     CENTER_SCREEN_ANNOUNCE:AddMessageWithParams(messageParams)
@@ -603,4 +621,4 @@ end
 
 function BS.Trim(stringValue)
     return (stringValue:gsub("^%s*(.-)%s*$", "%1"))
-  end
+end
