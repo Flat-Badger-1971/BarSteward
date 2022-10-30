@@ -8,6 +8,7 @@ local x, y = GuiRoot:GetCenter()
 local BS = _G.BarSteward
 
 BS.Defaults = {
+    BackBarIcon = "/esoui/art/tradinghouse/tradinghouse_weapons_1h_sword_up.dds",
     DefaultCombatColour = {0.3686274588, 0, 0, 1},
     DefaultColour = {0.9, 0.9, 0.9, 1},
     DefaultDangerColour = {0.8, 0, 0, 1},
@@ -18,6 +19,7 @@ BS.Defaults = {
     FriendAnnounce = {},
     Gold = {},
     GuildFriendAnnounce = {},
+    MainBarIcon = "/esoui/art/tradinghouse/category_u30_equipment_up.dds",
     Movable = false,
     OtherCurrencies = {},
     PreviousFriendTime = {},
@@ -390,6 +392,7 @@ BS.Defaults = {
             [BS.PERFECT_ROE] = true,
             [BS.POTENT_NIRNCRUX] = true
         },
-        [BS.W_TAMRIEL_TIME] = {Bar = 0, Order = 63, ColourValues = "c"}
+        [BS.W_TAMRIEL_TIME] = {Bar = 0, Order = 63, ColourValues = "c"},
+        [BS.W_ACTIVE_BAR] = {Bar = 0, Order = 64}
     }
 }
