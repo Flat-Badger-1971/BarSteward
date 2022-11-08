@@ -1,10 +1,10 @@
-local x, y = GuiRoot:GetCenter()
 --[[
     c - default colour
     okv, okc - ok value, ok colour
     wv, wc - warning value, warning colour
     dv, dc - danger value, danger colour
 ]]
+local x, y = GuiRoot:GetCenter()
 local BS = _G.BarSteward
 
 BS.Defaults = {

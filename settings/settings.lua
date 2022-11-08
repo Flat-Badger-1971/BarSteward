@@ -1,7 +1,7 @@
 local BS = _G.BarSteward
 
 BS.LAM = _G.LibAddonMenu2
-BS.VERSION = "1.4.0"
+BS.VERSION = "1.4.1"
 
 local panel = {
     type = "panel",
@@ -471,7 +471,14 @@ local function getBarSettings()
             type = "submenu",
             name = data.Name,
             controls = controls,
-            reference = "BarStewardBar" .. idx
+            reference = "BarStewardBar" .. idx,
+            icon = function()
+                if (idx == 1) then
+                    return "/esoui/art/compass/compass_dragon.dds"
+                else
+                    return "/esoui/art/compass/compass_waypoint.dds"
+                end
+            end
         }
     end
 
@@ -530,7 +537,8 @@ local function getPerformanceSettings()
         type = "submenu",
         name = GetString(_G.BARSTEWARD_PERFORMANCE),
         controls = controls,
-        reference = "Performance"
+        reference = "Performance",
+        icon = "/esoui/art/ava/avacapturebar_fill_aldmeri.dds"
     }
 end
 
@@ -1425,13 +1433,15 @@ local function getWidgetSettings()
         type = "submenu",
         name = GetString(_G.BARSTEWARD_WIDGETS),
         controls = controls,
-        reference = "BarStewardWidgets"
+        reference = "BarStewardWidgets",
+        icon = "/esoui/art/collections/collections_tabicon_collectibles_up.dds"
     }
 end
 
 function BS.RegisterSettings()
     initialise()
     getPerformanceSettings()
+    BS.GetMaintenanceSettings()
     getWidgetSettings()
     getBarSettings()
     BS.OptionsPanel = BS.LAM:RegisterAddonPanel("BarStewardOptionsPanel", panel)

@@ -402,6 +402,7 @@ read_globals = {
     "zo_roundToNearest",
     "zo_strfind",
     "zo_strformat",
+    "zo_strjoin",
     "zo_strlen",
     "zo_strsplit",
     -- luacheck misses these for some reason

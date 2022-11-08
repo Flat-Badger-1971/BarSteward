@@ -488,6 +488,16 @@ function BS.Split(s)
     return result
 end
 
+function BS.Join(values)
+    local outputTable = {}
+
+    for value, _ in pairs(values) do
+        table.insert(outputTable, ZO_FormatUserFacingCharacterName(value))
+    end
+
+    return table.concat(outputTable, ", ")
+end
+
 function BS.Announce(header, message, widgetIconNumber, lifespan, sound, otherIcon)
     local messageParams = CENTER_SCREEN_ANNOUNCE:CreateMessageParams(_G.CSA_CATEGORY_LARGE_TEXT)
     messageParams:SetSound(sound or "Justice_NowKOS")
