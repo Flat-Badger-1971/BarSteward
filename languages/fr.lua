@@ -81,6 +81,7 @@ ZO_CreateStringId("BARSTEWARD_GUILD_FRIENDS_MONITORING", "Surveillance des membr
 ZO_CreateStringId("BARSTEWARD_GUILD_FRIENDS_ONLINE", "Membres de guilde connectés")
 ZO_CreateStringId("BARSTEWARD_HIDE_LIMIT", "Masquer le montant maximum")
 ZO_CreateStringId("BARSTEWARD_HIDE_LIMIT_TOOLTIP", "Masque le montant maximum applicable à ce widget.")
+ZO_CreateStringId("BARSTEWARD_HIDE_MAX", "Masquer au niveau maximum")
 ZO_CreateStringId("BARSTEWARD_HIDE_SECONDS", "Masquer les secondes")
 ZO_CreateStringId("BARSTEWARD_HIDE_WHEN_COMPLETE", "Masquer une fois complété")
 ZO_CreateStringId(
@@ -88,10 +89,7 @@ ZO_CreateStringId(
     "Masque la recherche lorsque plus aucun trait ne peut être recherché pour ce type d'artisanat. Ce paramètre remplacera tous les paramètre de masquage automatique."
 )
 ZO_CreateStringId("BARSTEWARD_HIDE_WHEN_FULLY_USED", "Masquer lorsque tout est utilisé")
-ZO_CreateStringId(
-    "BARSTEWARD_HIDE_WHEN_FULLY_USED_TOOLTIP",
-    "Masque quand tout les emplacements/options disponibles sont utilisés."
-)
+ZO_CreateStringId("BARSTEWARD_HIDE_WHEN_FULLY_USED_TOOLTIP", "Masque quand tout les emplacements/options disponibles sont utilisés.")
 ZO_CreateStringId("BARSTEWARD_HORIZONTAL", "Horizontale")
 ZO_CreateStringId("BARSTEWARD_HOURS", "Heures")
 ZO_CreateStringId("BARSTEWARD_IN_PROGRESS", "En cours")
@@ -121,10 +119,7 @@ ZO_CreateStringId("BARSTEWARD_NEWBAR_INVALID", "Nom de barre invalide")
 ZO_CreateStringId("BARSTEWARD_NEWBAR_NAME", "Nouveau nom de barre (appuyez sur Entrée lorsque vous avez terminé)")
 ZO_CreateStringId("BARSTEWARD_NEWBAR_WARNING", "L'ajout d'une nouvelle barre forcera un rechargement de l'IU")
 ZO_CreateStringId("BARSTEWARD_NO_LIMIT_COLOUR", "Aucune couleur à la limite")
-ZO_CreateStringId(
-    "BARSTEWARD_NO_LIMIT_COLOUR_TOOLTIP",
-    "Ne change pas de couleur une fois la valeur maximale atteinte."
-)
+ZO_CreateStringId("BARSTEWARD_NO_LIMIT_COLOUR_TOOLTIP", "Ne change pas de couleur une fois la valeur maximale atteinte.")
 ZO_CreateStringId("BARSTEWARD_NONE", "Rien à entrainer")
 ZO_CreateStringId("BARSTEWARD_NOT_PICKED_UP", "Non ramassée")
 ZO_CreateStringId("BARSTEWARD_NUDGE", "Déplacer la boussole vers le bas")
@@ -210,10 +205,7 @@ ZO_CreateStringId("BARSTEWARD_TWELVE_TWENTY_FOUR", "12/24 Heure")
 ZO_CreateStringId("BARSTEWARD_UNDAUNTED_KEYS", "Clefs des Indomptables")
 ZO_CreateStringId("BARSTEWARD_UNSLOTTED", "Sans emplacement")
 ZO_CreateStringId("BARSTEWARD_UNSLOTTED_OPTION", "Afficher le nombre sans emplacement")
-ZO_CreateStringId(
-    "BARSTEWARD_UNSLOTTED_TOOLTIP",
-    "Affiche le nombre d'emplacements de la barre de points de champion vides."
-)
+ZO_CreateStringId("BARSTEWARD_UNSLOTTED_TOOLTIP", "Affiche le nombre d'emplacements de la barre de points de champion vides.")
 ZO_CreateStringId("BARSTEWARD_UNSPENT", "Non dépensé")
 ZO_CreateStringId("BARSTEWARD_USE_WRITWORTHY", "Utiliser WritWorthy pour les commandes")
 ZO_CreateStringId(
@@ -224,8 +216,10 @@ ZO_CreateStringId("BARSTEWARD_VALUE", "Valeur")
 ZO_CreateStringId("BARSTEWARD_VALUE_SIDE", "Valeur de côté")
 ZO_CreateStringId("BARSTEWARD_VERTICAL", "Verticale")
 ZO_CreateStringId("BARSTEWARD_WARN_INSTANCE", "Avertir lors de l'entrée d'une instance")
-ZO_CreateStringId("BARSTEWARD_WARN_INSTANCE_BACK_BAR", "Avertir uniquement lorsque la barre arrière est active")
+ZO_CreateStringId("BARSTEWARD_WARN_INSTANCE_BACK_BAR", "Avertir uniquement si la barre arrière est active")
 ZO_CreateStringId("BARSTEWARD_WARN_INSTANCE_MESSAGE", "<<1>> est active")
+ZO_CreateStringId("BARSTEWARD_WARNING", "Avertissement !")
+ZO_CreateStringId("BARSTEWARD_WATCHED_ITEMS", "Observateur d'objet")
 ZO_CreateStringId("BARSTEWARD_WARNING", "Avertissement !")
 ZO_CreateStringId("BARSTEWARD_WARNING_BAGS", "Vos sacs sont presque pleins !")
 ZO_CreateStringId("BARSTEWARD_WARNING_COLOUR", "Avertissement")
@@ -245,9 +239,6 @@ ZO_CreateStringId("BARSTEWARD_WRIT_PROVISIONING", "Commande de cuisine")
 ZO_CreateStringId("BARSTEWARD_WRIT_VOUCHERS", "Assignats")
 ZO_CreateStringId("BARSTEWARD_WRIT_WOODWORKING", "Commande de travail du bois")
 ZO_CreateStringId("BARSTEWARD_WRITS", "Commandes de maitre/Repérages/Trésor")
-ZO_CreateStringId(
-    "BARSTEWARD_WRITS_WRITS",
-    "<<1[Aucune commandes de maitre/1 Commande de maitre/$d Commandes de maitre]>>"
-)
+ZO_CreateStringId("BARSTEWARD_WRITS_WRITS", "<<1[Aucune commandes de maitre/1 Commande de maitre/$d Commandes de maitre]>>")
 ZO_CreateStringId("BARSTEWARD_WRITS_SURVEYS", "<<1[Aucun repérages/1 Repérage/$d Repérages]>>")
 ZO_CreateStringId("BARSTEWARD_WRITS_MAPS", "<<1[Aucune cartes au trésor/1 Carte au trésor/$s Cartes au trésor]>>")
