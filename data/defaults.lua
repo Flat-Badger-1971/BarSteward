@@ -159,7 +159,8 @@ BS.Defaults = {
             Units = GetString(_G.BARSTEWARD_HOURS),
             Timer = true,
             Autohide = true,
-            HideWhenFullyUsed = false
+            HideWhenFullyUsed = false,
+            HideDaysWhenZero = false
         },
         [BS.W_WOODWORKING] = {
             Bar = 1,
@@ -172,7 +173,8 @@ BS.Defaults = {
             Units = GetString(_G.BARSTEWARD_HOURS),
             Timer = true,
             Autohide = true,
-            HideWhenFullyUsed = false
+            HideWhenFullyUsed = false,
+            HideDaysWhenZero = false
         },
         [BS.W_CLOTHING] = {
             Bar = 1,
@@ -185,7 +187,8 @@ BS.Defaults = {
             Units = GetString(_G.BARSTEWARD_HOURS),
             Timer = true,
             Autohide = true,
-            HideWhenFullyUsed = false
+            HideWhenFullyUsed = false,
+            HideDaysWhenZero = false
         },
         [BS.W_JEWELCRAFTING] = {
             Bar = 1,
@@ -198,7 +201,8 @@ BS.Defaults = {
             Units = GetString(_G.BARSTEWARD_HOURS),
             Timer = true,
             Autohide = true,
-            HideWhenFullyUsed = false
+            HideWhenFullyUsed = false,
+            HideDaysWhenZero = false
         },
         [BS.W_REPAIR_COST] = {Bar = 1, Order = 20, Autohide = true, UseSeparators = false, ColourValues = "c"},
         [BS.W_MOUNT_TRAINING] = {
@@ -284,7 +288,7 @@ BS.Defaults = {
             Units = GetString(_G.BARSTEWARD_HOURS),
             Autohide = true,
             Timer = true,
-            NewOption = "1.2.19"
+            HideDaysWhenZero = false
         },
         [BS.W_SOUL_GEMS] = {Bar = 0, Order = 38, ColourValues = "c", UseSeparators = false},
         [BS.W_FRIENDS] = {
@@ -339,7 +343,8 @@ BS.Defaults = {
             DangerValue = 2,
             WarningValue = 6,
             Units = GetString(_G.BARSTEWARD_HOURS),
-            Timer = true
+            Timer = true,
+            HideDaysWhenZero = true
         },
         [BS.W_WEEKLY_ENDEAVOUR_TIME] = {
             Bar = 0,
@@ -349,7 +354,8 @@ BS.Defaults = {
             DangerValue = 48,
             WarningValue = 72,
             Units = GetString(_G.BARSTEWARD_HOURS),
-            Timer = true
+            Timer = true,
+            HideDaysWhenZero = false
         },
         [BS.W_COMPANION_LEVEL] = {
             Bar = 0,
@@ -370,7 +376,8 @@ BS.Defaults = {
             DangerValue = 2,
             WarningValue = 6,
             Units = GetString(_G.BARSTEWARD_HOURS),
-            Timer = true
+            Timer = true,
+            HideDaysWhenZero = false
         },
         [BS.W_SHADOWY_VENDOR_TIME] = {Bar = 0, Order = 59, HideSeconds = false, Timer = true},
         [BS.W_LFG_TIME] = {Bar = 0, Order = 60, HideSeconds = false, Timer = true},
@@ -382,7 +389,8 @@ BS.Defaults = {
             DangerValue = 2,
             WarningValue = 6,
             Units = GetString(_G.BARSTEWARD_HOURS),
-            Timer = true
+            Timer = true,
+            HideDaysWhenZero = true
         },
         [BS.W_WATCHED_ITEMS] = {
             Bar = 0,

@@ -1,9 +1,12 @@
 local BS = _G.BarSteward
 
-function BS.SecondsToTime(seconds, hideDays, hideHours, hideSeconds, format)
+function BS.SecondsToTime(seconds, hideDays, hideHours, hideSeconds, format, hideDaysWhenZero)
     local time = ""
     local days = math.floor(seconds / 86400)
     local remaining = seconds
+    local hideWhenZeroDays = hideDaysWhenZero == true and days == 0
+
+    hideDays = hideDays or hideWhenZeroDays
 
     if (days > 0) then
         remaining = seconds - (days * 86400)
@@ -23,9 +26,17 @@ function BS.SecondsToTime(seconds, hideDays, hideHours, hideSeconds, format)
 
     if ((format or "01:12:04:10") ~= "01:12:04:10" and format ~= "01:12:04") then
         if (hideSeconds) then
-            time = ZO_CachedStrFormat(_G.BARSTEWARD_TIMER_FORMAT_TEXT, days, hours, minutes)
+            if (hideDays) then
+                time = ZO_CachedStrFormat(_G.BARSTEWARD_TIMER_FORMAT_TEXT_NO_DAYS, hours, minutes)
+            else
+                time = ZO_CachedStrFormat(_G.BARSTEWARD_TIMER_FORMAT_TEXT, days, hours, minutes)
+            end
         else
-            time = ZO_CachedStrFormat(_G.BARSTEWARD_TIMER_FORMAT_TEXT_WITH_SECONDS, days, hours, minutes, remaining)
+            if (hideDays) then
+                time = ZO_CachedStrFormat(_G.BARSTEWARD_TIMER_FORMAT_TEXT_WITH_SECONDS_NO_DAYS, hours, minutes, remaining)
+            else
+                time = ZO_CachedStrFormat(_G.BARSTEWARD_TIMER_FORMAT_TEXT_WITH_SECONDS, days, hours, minutes, remaining)
+            end
         end
     else
         if (not hideDays) then
@@ -90,11 +101,11 @@ function BS.FormatTime(format, timeString, tamrielTime)
         hours, minutes, seconds = tamrielTime.hour, tamrielTime.minute, tamrielTime.second
 
         if (string.len(tostring(minutes)) == 1) then
-            minutes = '0' .. minutes
+            minutes = "0" .. minutes
         end
 
         if (string.len(tostring(seconds)) == 1) then
-            seconds = '0' .. seconds
+            seconds = "0" .. seconds
         end
     else
         timeString = timeString or GetTimeString()

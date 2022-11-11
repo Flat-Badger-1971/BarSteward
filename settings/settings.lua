@@ -1,7 +1,7 @@
 local BS = _G.BarSteward
 
 BS.LAM = _G.LibAddonMenu2
-BS.VERSION = "1.4.1"
+BS.VERSION = "1.4.2"
 
 local panel = {
     type = "panel",
@@ -157,7 +157,7 @@ function BS.NewBar()
     end
 
     for _, bar in pairs(BS.Vars.Bars) do
-        if (bar.name == name) then
+        if (zo_strupper(bar.Name) == zo_strupper(name)) then
             ZO_Dialogs_ShowDialog(BS.Name .. "Exists")
             return
         end
@@ -210,6 +210,28 @@ function BS.RemoveBar()
         end,
         200
     )
+end
+
+function BS.RenameBar(index)
+    local name = BS.BarRename
+    name = name:match("^%s*(.-)%s*$")
+
+    if ((name or "") == "") then
+        ZO_Dialogs_ShowDialog(BS.Name .. "NotEmpty")
+        return
+    end
+
+    for _, bar in pairs(BS.Vars.Bars) do
+        if (zo_strupper(bar.Name) == zo_strupper(name)) then
+            ZO_Dialogs_ShowDialog(BS.Name .. "Exists")
+            return
+        end
+    end
+
+    BS.Vars.Bars[index].Name = BS.BarRename
+    BS.BarRename = ""
+
+    ZO_Dialogs_ShowDialog(BS.Name .. "Reload")
 end
 
 local function getBarSettings()
@@ -449,6 +471,33 @@ local function getBarSettings()
                     BS.RemoveBarCheck(idx)
                 end,
                 width = "full"
+            }
+
+            controls[#controls + 1] = {
+                type = "editbox",
+                name = GetString(_G.BARSTEWARD_BAR_NAME),
+                getFunc = function()
+                    return BS.BarRename or ""
+                end,
+                setFunc = function(value)
+                    BS.BarRename = value
+                end,
+                isMultiLine = false,
+                width = "half"
+            }
+
+            controls[#controls + 1] = {
+                type = "button",
+                name = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_COLLECTIBLE_ACTION_RENAME)),
+                func = function()
+                    BS.RenameBar(idx)
+                end,
+                disabled = function()
+                    return (BS.BarRename or "") == ""
+                end,
+                warning = GetString(_G.BARSTEWARD_RELOAD),
+                width = "half",
+                requiresReload = true
             }
         else
             controls[#controls + 1] = {
@@ -827,6 +876,23 @@ local function getWidgetSettings()
                 end,
                 width = "full",
                 default = defaults.HideSeconds
+            }
+        end
+
+        -- Hide days when zero
+        if (defaults.HideDaysWhenZero ~= nil) then
+            widgetControls[#widgetControls + 1] = {
+                type = "checkbox",
+                name = GetString(_G.BARSTEWARD_HIDE_ZERO_DAYS),
+                getFunc = function()
+                    return vars.HideDaysWhenZero
+                end,
+                setFunc = function(value)
+                    vars.HideDaysWhenZero = value
+                    BS.RefreshWidget(k)
+                end,
+                width = "full",
+                default = defaults.HideDaysWhenZero
             }
         end
 

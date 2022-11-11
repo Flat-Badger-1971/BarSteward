@@ -405,6 +405,7 @@ read_globals = {
     "zo_strjoin",
     "zo_strlen",
     "zo_strsplit",
+    "zo_strupper",
     -- luacheck misses these for some reason
     "math.log10",
     "math.pow"

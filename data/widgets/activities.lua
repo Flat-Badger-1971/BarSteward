@@ -265,7 +265,7 @@ BS.widgets[BS.W_LEADS] = {
                 timeColour = {1, 0.5, 0, 1}
                 minTime = 0
             else
-                value = BS.SecondsToTime(minTime, false, false, true, vars.Format)
+                value = BS.SecondsToTime(minTime, false, false, true, vars.Format, vars.HideDaysWhenZero)
             end
 
             if (vars.ShowCount) then
@@ -279,7 +279,7 @@ BS.widgets[BS.W_LEADS] = {
 
             for _, lead in ipairs(leads) do
                 local nameAndZone = lead.name .. " - " .. lead.zone
-                local time = BS.SecondsToTime(lead.remaining, false, false, true, vars.Format)
+                local time = BS.SecondsToTime(lead.remaining, false, false, true, vars.Format, vars.HideDaysWhenZero)
                 local ttlColour = getLeadColour(lead)
 
                 timeColour = BS.Vars.DefaultOkColour
@@ -339,7 +339,8 @@ local function getDisplay(timeRemaining, widgetIndex)
             false,
             false,
             BS.Vars.Controls[widgetIndex].HideSeconds,
-            BS.Vars.Controls[widgetIndex].Format
+            BS.Vars.Controls[widgetIndex].Format,
+            BS.Vars.Controls[widgetIndex].HideDaysWhenZero
         )
     end
 
@@ -565,8 +566,7 @@ BS.widgets[BS.W_LFG_TIME] = {
         widget:SetColour(unpack(colour))
         widget:SetValue(remaining)
 
-        widget.tooltip =
-            setTracker(BS.W_LFG_TIME, timeToReset, GetString(_G.BARSTEWARD_DUNGEON_REWARD_RESET))
+        widget.tooltip = setTracker(BS.W_LFG_TIME, timeToReset, GetString(_G.BARSTEWARD_DUNGEON_REWARD_RESET))
 
         return timeToReset
     end,

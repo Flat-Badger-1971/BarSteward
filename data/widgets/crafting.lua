@@ -65,7 +65,8 @@ local function getDisplay(timeRemaining, widgetIndex, inUse, maxResearch)
             false,
             false,
             BS.Vars.Controls[widgetIndex].HideSeconds,
-            BS.Vars.Controls[widgetIndex].Format
+            BS.Vars.Controls[widgetIndex].Format,
+            BS.Vars.Controls[widgetIndex].HideDaysWhenZero
         )
     end
 
