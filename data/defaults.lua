@@ -116,7 +116,7 @@ BS.Defaults = {
             SoundWhenEqualsSound = "Daily Login Reward Claim Fanfare",
             ColourValues = "c"
         },
-        [BS.W_WRIT_VOUCHERS] = {Bar = 1, Order = 11, ColourValues = "c"},
+        [BS.W_WRIT_VOUCHERS] = {Bar = 1, Order = 11, ColourValues = "c", UseSeparators = false},
         [BS.W_BAG_SPACE] = {
             Bar = 1,
             Order = 12,

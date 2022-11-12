@@ -8,7 +8,7 @@ function BS.GetMaintenanceSettings()
             text = "|cff0000" .. GetString(_G.BARSTEWARD_DELETE) .. "|r"
         }
     }
-    local characters = BS.Vars.CharacterList
+    local characters = BS.Vars.CharacterList or {}
     local thisCharacter = GetUnitName("player")
 
     for character, _ in pairs(characters) do
