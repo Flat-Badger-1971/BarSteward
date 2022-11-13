@@ -176,6 +176,9 @@ local function Initialise()
         BS.LibClock = _G.LibClockTST:Instance()
     end
 
+    -- initialise LibCombat if it's installed
+    BS.CheckLibCombat()
+
     BS.RegisterSettings()
 
     -- create bars

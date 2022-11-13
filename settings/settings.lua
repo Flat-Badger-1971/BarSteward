@@ -1,7 +1,7 @@
 local BS = _G.BarSteward
 
 BS.LAM = _G.LibAddonMenu2
-BS.VERSION = "1.4.2"
+BS.VERSION = "1.4.4"
 
 local panel = {
     type = "panel",
@@ -693,6 +693,12 @@ local function getWidgetSettings()
             widgetControls[#widgetControls + 1] = {
                 type = "description",
                 text = "|cff0000" .. GetString(_G.BARSTEWARD_LIBCLOCK) .. "|r",
+                width = "full"
+            }
+        elseif (k == BS.W_DPS and not BS.LibCombat) then
+            widgetControls[#widgetControls + 1] = {
+                type = "description",
+                text = "|cff0000" .. GetString(_G.BARSTEWARD_LIBCOMBAT) .. "|r",
                 width = "full"
             }
         else

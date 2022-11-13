@@ -309,6 +309,9 @@ BS.widgets[BS.W_LEADS] = {
     icon = GetAntiquityLeadIcon(),
     tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ANTIQUITY_SUBHEADING_ACTIVE_LEADS)),
     hideWhenEqual = 99999999,
+    hideWhenTrue = function()
+        return not ZO_IsScryingUnlocked()
+    end,
     customSettings = {
         [1] = {
             type = "checkbox",

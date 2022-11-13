@@ -401,6 +401,7 @@ BS.Defaults = {
             [BS.POTENT_NIRNCRUX] = true
         },
         [BS.W_TAMRIEL_TIME] = {Bar = 0, Order = 63, ColourValues = "c"},
-        [BS.W_ACTIVE_BAR] = {Bar = 0, Order = 64}
+        [BS.W_ACTIVE_BAR] = {Bar = 0, Order = 64},
+        [BS.W_DPS] = {Bar = 0, Order = 65, UseSeparators = false, ColourValues = "c"}
     }
 }

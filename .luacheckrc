@@ -370,8 +370,8 @@ read_globals = {
             New = {read_only = true}
         }
     },
+    "ZO_IsScryingUnlocked",
     "ZO_LinkHandler_CreateLink",
-    "ZO_min",
     "ZO_PostHook",
     "ZO_PreHook",
     "ZO_PreHookHandler",
@@ -399,6 +399,8 @@ read_globals = {
     "zo_callLater",
 	"zo_floor",
     "zo_iconFormat",
+    "zo_min",
+    "zo_max",
     "zo_roundToNearest",
     "zo_strfind",
     "zo_strformat",

@@ -1,3 +1,7 @@
+[color=#ff9900][b]Version: 1.4.4 ---------------[/b][/color]
+Active leads widget no longer displays for characters that do no have scrying unlocked
+Simple DPS widget added - requires LibCombat
+
 [color=#ff9900][b]Version: 1.4.3 ---------------[/b][/color]
 Maintenance bugfix for fresh installs
 Number separator added to Writ Vouchers widget
