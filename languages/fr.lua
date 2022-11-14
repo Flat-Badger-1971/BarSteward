@@ -46,7 +46,7 @@ ZO_CreateStringId("BARSTEWARD_DAILY_WRITS_TIME", "Temps des Commandes d'artisana
 ZO_CreateStringId("BARSTEWARD_DANGER_COLOUR", "Danger")
 ZO_CreateStringId("BARSTEWARD_DANGER_VALUE", "Valeur de danger")
 ZO_CreateStringId("BARSTEWARD_DAYS", "<<1[jours/1 jour/$d jours]>>")
-ZO_CreateStringId("BARSTEWARD_DAYS_ONLY", "Jours seulement")
+ZO_CreateStringId("BARSTEWARD_DAYS_ONLY", "Afficher en jours seulement")
 ZO_CreateStringId(
     "BARSTEWARD_DAYS_ONLY_TOOLTIP",
     "Affiche le temps restant en jours seulement jusqu'à ce qu'il reste moins d'un jour."
@@ -80,7 +80,7 @@ ZO_CreateStringId("BARSTEWARD_GUILD_FRIEND_ONLINE", "Membre de guilde connecté"
 ZO_CreateStringId("BARSTEWARD_GUILD_FRIENDS", "Membres de guilde")
 ZO_CreateStringId("BARSTEWARD_GUILD_FRIENDS_MONITORING", "Surveillance des membres de guilde")
 ZO_CreateStringId("BARSTEWARD_GUILD_FRIENDS_ONLINE", "Membres de guilde connectés")
-ZO_CreateStringId("BARSTEWARD_HIDE_ZERO_DAYS", "Masquer les jours à zéro")
+ZO_CreateStringId("BARSTEWARD_HIDE_ZERO_DAYS", "Masquer les jours arrivés à zéro")
 ZO_CreateStringId("BARSTEWARD_HIDE_LIMIT", "Masquer le montant maximum")
 ZO_CreateStringId("BARSTEWARD_HIDE_LIMIT_TOOLTIP", "Masque le montant maximum applicable à ce widget.")
 ZO_CreateStringId("BARSTEWARD_HIDE_MAX", "Masquer au niveau maximum")
