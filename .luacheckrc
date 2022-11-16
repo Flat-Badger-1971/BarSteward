@@ -290,6 +290,8 @@ read_globals = {
     "GetRepairAllCost",
     "GetRequiredChampionDisciplineIdForSlot",
     "GetRidingStats",
+    "GetSkillLineIndicesFromSkillLineId",
+    "GetSkillLineInfo",
     "GetSkyshardDiscoveryStatus",
     "GetSlotStackSize",
     "GetSmithingResearchLineInfo",

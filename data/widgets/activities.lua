@@ -217,6 +217,21 @@ local function getLeadColour(lead)
     return "|c" .. difficultyColours[lead.quality]
 end
 
+BS.isScryingUnlocked = false
+
+BS.RegisterForEvent(
+    _G.EVENT_PLAYER_ACTIVATED,
+    function()
+        BS.isScryingUnlocked = ZO_IsScryingUnlocked()
+    end
+)
+BS.RegisterForEvent(
+    _G.EVENT_SKILL_LINE_ADDED,
+    function()
+        BS.isScryingUnlocked = ZO_IsScryingUnlocked()
+    end
+)
+
 BS.widgets[BS.W_LEADS] = {
     -- v1.1.0
     name = "leads",
@@ -277,6 +292,14 @@ BS.widgets[BS.W_LEADS] = {
 
             local ttt = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ANTIQUITY_SUBHEADING_ACTIVE_LEADS))
 
+            -- sort by time remaining
+            table.sort(
+                leads,
+                function(a, b)
+                    return a.remaining < b.remaining
+                end
+            )
+
             for _, lead in ipairs(leads) do
                 local nameAndZone = lead.name .. " - " .. lead.zone
                 local time = BS.SecondsToTime(lead.remaining, false, false, true, vars.Format, vars.HideDaysWhenZero)
@@ -310,7 +333,7 @@ BS.widgets[BS.W_LEADS] = {
     tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ANTIQUITY_SUBHEADING_ACTIVE_LEADS)),
     hideWhenEqual = 99999999,
     hideWhenTrue = function()
-        return not ZO_IsScryingUnlocked()
+        return not BS.isScryingUnlocked
     end,
     customSettings = {
         [1] = {
@@ -537,6 +560,30 @@ local function setTracker(widgetIndex, resetSeconds, tooltip)
     return tooltip
 end
 
+BS.isShadowyVendorUnlocked = false
+
+function BS.IsShadowyVendorUnlocked()
+    local DarkBrotherhoodSkillLineId = 118
+    local skilltype, skilllineid = GetSkillLineIndicesFromSkillLineId(DarkBrotherhoodSkillLineId)
+    local _, rank, _, _, _, _, active = GetSkillLineInfo(skilltype, skilllineid)
+
+    return (rank > 3) and active
+end
+
+BS.RegisterForEvent(
+    _G.EVENT_PLAYER_ACTIVATED,
+    function()
+        BS.isShadowyVendorUnlocked = BS.IsShadowyVendorUnlocked()
+    end
+)
+
+BS.RegisterForEvent(
+    _G.EVENT_SKILL_LINE_ADDED,
+    function()
+        BS.isShadowyVendorUnlocked = BS.IsShadowyVendorUnlocked()
+    end
+)
+
 BS.widgets[BS.W_SHADOWY_VENDOR_TIME] = {
     -- v1.3.11
     name = "remainsSilentReset",
@@ -555,7 +602,10 @@ BS.widgets[BS.W_SHADOWY_VENDOR_TIME] = {
     end,
     timer = 1000,
     icon = "/esoui/art/icons/rep_darkbrotherhood_64.dds",
-    tooltip = GetString(_G.BARSTEWARD_SHADOWY_VENDOR_RESET)
+    tooltip = GetString(_G.BARSTEWARD_SHADOWY_VENDOR_RESET),
+    hideWhenTrue = function()
+        return not BS.isShadowyVendorUnlocked
+    end
 }
 
 BS.widgets[BS.W_LFG_TIME] = {
