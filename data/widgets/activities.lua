@@ -392,6 +392,10 @@ local function getTimedActivityTimeRemaining(activityType, widgetIndex, widget)
     return secondsRemaining
 end
 
+function BS.GetTimedActivityTimeRemaining(...)
+    return getTimedActivityTimeRemaining(...)
+end
+
 BS.widgets[BS.W_DAILY_ENDEAVOUR_TIME] = {
     -- v1.2.18
     name = "dailyEndeavourTime",
@@ -635,14 +639,88 @@ BS.widgets[BS.W_LFG_TIME] = {
     end
 }
 
-BS.widgets[BS.W_CRAFTING_DAILY_TIME] = {
-    -- v1.3.11
-    -- same time as any other daily activity
-    name = "craftingDailyTime",
+BS.widgets[BS.W_LOREBOOKS] = {
+    -- v1.4.5
+    name = "lorebooks",
     update = function(widget)
-        return getTimedActivityTimeRemaining(_G.TIMED_ACTIVITY_TYPE_DAILY, BS.W_CRAFTING_DAILY_TIME, widget)
+        local colour = BS.Vars.DefaultColour
+        local categories = {}
+
+        for categoryIndex = 1, GetNumLoreCategories() do
+            local categoryName, numCollections = GetLoreCategoryInfo(categoryIndex)
+            local category = {
+                name = categoryName,
+                numCollections = numCollections,
+                numKnownBooks = 0,
+                totalBooks = 0
+            }
+
+            for collectionIndex = 1, numCollections do
+                local _, _, numKnownBooks, totalBooks, hidden = GetLoreCollectionInfo(categoryIndex, collectionIndex)
+                if not hidden then
+                    category.numKnownBooks = category.numKnownBooks + numKnownBooks
+                    category.totalBooks = category.totalBooks + totalBooks
+                end
+            end
+
+            categories[categoryIndex] = category
+        end
+
+        local value = ""
+
+        local tt = GetString(_G.BARSTEWARD_LOREBOOKS)
+
+        for _, category in pairs(categories) do
+            local metrics = category.numKnownBooks .. "/" .. category.totalBooks
+
+            tt = tt .. BS.LF .. "|cf9f9f9"
+            tt = tt .. category.name .. " " .. metrics .. "|r"
+
+            if (BS.Vars.Controls[BS.W_LOREBOOKS].ShowCategory == category.name) then
+                value = metrics
+            end
+        end
+
+        widget:SetColour(unpack(colour))
+        widget:SetValue(value)
+
+        widget.tooltip = tt
+
+        return #categories
     end,
-    timer = 1000,
-    icon = "/esoui/art/icons/crafting_outfitter_logo.dds",
-    tooltip = GetString(_G.BARSTEWARD_DAILY_WRITS_TIME)
+    event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_LORE_BOOK_LEARNED},
+    icon = "/esoui/art/icons/quest_book_001.dds",
+    tooltip = GetString(_G.BARSTEWARD_LOREBOOKS),
+    onClick = function()
+        if (IsInGamepadPreferredMode()) then
+            SCENE_MANAGER:Show("loreLibraryGamepad")
+        else
+            SCENE_MANAGER:Show("loreLibrary")
+        end
+    end,
+    customSettings = function()
+        local options = {}
+
+        for categoryIndex = 1, GetNumLoreCategories() do
+            local categoryName = GetLoreCategoryInfo(categoryIndex)
+
+            table.insert(options, categoryName)
+        end
+
+        return {
+            [1] = {
+                type = "dropdown",
+                name = GetString(_G.BARSTEWARD_LOREBOOKS_CATEGORY),
+                choices = options,
+                getFunc = function()
+                    return BS.Vars.Controls[BS.W_LOREBOOKS].ShowCategory
+                end,
+                setFunc = function(value)
+                    BS.Vars.Controls[BS.W_LOREBOOKS].ShowCategory = value
+                    BS.RefreshWidget(BS.W_LOREBOOKS)
+                end,
+                default = false
+            }
+        }
+    end
 }
