@@ -402,6 +402,7 @@ BS.Defaults = {
         },
         [BS.W_TAMRIEL_TIME] = {Bar = 0, Order = 63, ColourValues = "c"},
         [BS.W_ACTIVE_BAR] = {Bar = 0, Order = 64},
-        [BS.W_DPS] = {Bar = 0, Order = 65, UseSeparators = false, ColourValues = "c"}
+        [BS.W_DPS] = {Bar = 0, Order = 65, UseSeparators = false, ColourValues = "c"},
+        [BS.W_LOREBOOKS] = {Bar = 0, Order = 66, ColourValues = "c", ShowCategory = GetLoreCategoryInfo(1)}
     }
 }

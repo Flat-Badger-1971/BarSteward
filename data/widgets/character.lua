@@ -485,3 +485,127 @@ BS.widgets[BS.W_DPS] = {
         return not BS.LibCombat
     end
 }
+
+local function getEmptySlotCount()
+    local emptySlots = {}
+    local championBar = CHAMPION_PERKS:GetChampionBar()
+    local foundEmpty = false
+
+    for slot = 1, championBar:GetNumSlots() do
+        if (championBar:GetSlot(slot):GetSavedChampionSkillData() == nil) then
+            local disciplineId = GetRequiredChampionDisciplineIdForSlot(slot, _G.HOTBAR_CATEGORY_CHAMPION)
+            local disciplineName = GetChampionDisciplineName(disciplineId)
+
+            emptySlots[disciplineName] = (emptySlots[disciplineName] or 0) + 1
+            foundEmpty = true
+        end
+    end
+
+    return emptySlots, foundEmpty
+end
+
+BS.widgets[BS.W_CHAMPION_POINTS] = {
+    name = "championPoints",
+    update = function(widget)
+        local earned = GetPlayerChampionPointsEarned()
+        local xp, xplvl = GetPlayerChampionXP(), GetNumChampionXPInChampionPoint(earned)
+        local pc = math.floor((xp / xplvl) * 100)
+        local disciplineType = GetChampionPointPoolForRank(earned + 1)
+        local disciplineData = CHAMPION_DATA_MANAGER:FindChampionDisciplineDataByType(disciplineType)
+        local cpicon = disciplineData:GetHUDIcon()
+        local vars = BS.Vars.Controls[BS.W_CHAMPION_POINTS]
+        local cp = {}
+
+        if (vars.UseSeparators == true) then
+            earned = BS.AddSeparators(earned)
+        end
+
+        widget:SetColour(unpack(vars.Colour or BS.Vars.DefaultColour))
+        widget:SetValue(earned .. " " .. "(" .. pc .. "%)")
+        widget:SetIcon(cpicon)
+
+        local icons = {}
+        for disciplineIndex = 1, GetNumChampionDisciplines() do
+            local id = GetChampionDisciplineId(disciplineIndex)
+
+            disciplineData = CHAMPION_DATA_MANAGER:FindChampionDisciplineDataById(id)
+            local icon = zo_iconFormat(disciplineData:GetHUDIcon(), 16, 16)
+            local disciplineName = GetChampionDisciplineName(id)
+            icons[disciplineName] = icon
+
+            local name = ZO_CachedStrFormat("<<C:1>>", disciplineName)
+            local toSpend = disciplineData:GetNumSavedUnspentPoints()
+
+            table.insert(cp, icon .. " " .. name .. " - " .. toSpend)
+        end
+
+        local unslotted = 0
+
+        if (#cp > 0) then
+            local ttt = GetString(_G.BARSTEWARD_UNSPENT)
+
+            for _, c in ipairs(cp) do
+                if (ttt ~= "") then
+                    ttt = ttt .. BS.LF
+                end
+
+                ttt = ttt .. c
+            end
+
+            local emptySlots, foundEmpty = getEmptySlotCount()
+
+            if (foundEmpty) then
+                ttt = ttt .. BS.LF .. BS.LF .. GetString(_G.BARSTEWARD_UNSLOTTED)
+                for discipline, empty in pairs(emptySlots) do
+                    ttt =
+                        ttt ..
+                        BS.LF .. icons[discipline] .. " " .. ZO_CachedStrFormat("<<C:1>>", discipline) .. " - " .. empty
+                    unslotted = unslotted + empty
+                end
+            end
+
+            widget.tooltip = ttt
+        end
+
+        local value = earned .. " " .. "(" .. pc .. "%)"
+        local plainValue = value
+
+        if (vars.ShowUnslottedCount and unslotted > 0) then
+            plainValue = value .. " - " .. unslotted
+            value = value .. " - |cff0000" .. unslotted .. "|r"
+        end
+
+        widget:SetColour(unpack(vars.Colour or BS.Vars.DefaultColour))
+        widget:SetValue(value, plainValue)
+        widget:SetIcon(cpicon)
+
+        return earned
+    end,
+    event = {_G.EVENT_EXPERIENCE_UPDATE, _G.EVENT_UNSPENT_CHAMPION_POINTS_CHANGED},
+    icon = "/esoui/art/champion/champion_points_magicka_icon-hud.dds",
+    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_STAT_GAMEPAD_CHAMPION_POINTS_LABEL)),
+    hideWhenEqual = 0,
+    onClick = function()
+        if (not IsInGamepadPreferredMode()) then
+            MAIN_MENU_KEYBOARD:ShowScene("championPerks")
+        else
+            MAIN_MENU_GAMEPAD:ShowScene("gamepad_championPerks_root")
+        end
+    end,
+    customSettings = {
+        [1] = {
+            name = GetString(_G.BARSTEWARD_UNSLOTTED_OPTION),
+            tooltip = GetString(_G.BARSTEWARD_UNSLOTTED_TOOLTIP),
+            type = "checkbox",
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_CHAMPION_POINTS].ShowUnslottedCount
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_CHAMPION_POINTS].ShowUnslottedCount = value
+                BS.RefreshWidget(BS.W_CHAMPION_POINTS)
+            end,
+            width = "full",
+            default = false
+        }
+    }
+}

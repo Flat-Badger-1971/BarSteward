@@ -457,3 +457,15 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
     icon = "/esoui/art/floatingmarkers/repeatablequest_available_icon.dds",
     tooltip = GetString(_G.BARSTEWARD_DAILY_CRAFTING)
 }
+
+BS.widgets[BS.W_CRAFTING_DAILY_TIME] = {
+    -- v1.3.11
+    -- same time as any other daily activity
+    name = "craftingDailyTime",
+    update = function(widget)
+        return BS.GetTimedActivityTimeRemaining(_G.TIMED_ACTIVITY_TYPE_DAILY, BS.W_CRAFTING_DAILY_TIME, widget)
+    end,
+    timer = 1000,
+    icon = "/esoui/art/icons/crafting_outfitter_logo.dds",
+    tooltip = GetString(_G.BARSTEWARD_DAILY_WRITS_TIME)
+}
