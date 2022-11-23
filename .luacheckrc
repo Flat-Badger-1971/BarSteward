@@ -26,6 +26,11 @@ read_globals = {
             GetChampionBar = {read_only = true}
         }
     },
+    ["CHAT_ROUTER"] = {
+        fields = {
+            AddSystemMessage = {read_only = true}
+        }
+    },
     ["EVENT_MANAGER"] = {
         fields = {
             AddFilterForEvent = {read_only = true},
@@ -250,6 +255,8 @@ read_globals = {
     "GetItemInfo",
     "GetItemLink",
     "GetItemLinkIcon",
+    "GetItemLinkItemId",
+    "GetItemLinkItemType",
     "GetItemLinkName",
     "GetItemName",
     "GetItemQualityColor",
@@ -278,6 +285,7 @@ read_globals = {
 	"GetNumGuilds",
     "GetNumLockpicksLeft",
     "GetNumLoreCategories",
+    "GetNumRecipeLists",
     "GetNumSkyShards",
     "GetNumSkyshardsInZone",
     "GetNumSmithingResearchLines",
@@ -289,7 +297,10 @@ read_globals = {
 	"GetPlayerGuildMemberIndex",
     "GetPulseTimeline",
     "GetRecallCooldown",
+    "GetRecipeInfo",
     "GetRecipeIngredientItemInfo",
+    "GetRecipeListInfo",
+    "GetRecipeResultItemLink",
     "GetRepairAllCost",
     "GetRequiredChampionDisciplineIdForSlot",
     "GetRidingStats",

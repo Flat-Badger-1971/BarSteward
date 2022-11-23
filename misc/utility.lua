@@ -611,9 +611,9 @@ function BS.RefreshBar(widgetIndex)
     end
 end
 
-function BS.MakeItemLink(itemId)
+function BS.MakeItemLink(itemId, name)
     return ZO_LinkHandler_CreateLink(
-        "",
+        name or "",
         nil,
         _G.ITEM_LINK_TYPE,
         itemId,

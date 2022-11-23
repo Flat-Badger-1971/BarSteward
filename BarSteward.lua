@@ -276,13 +276,18 @@ local function Initialise()
             ReloadUI()
         end
     end
+
+    if (_G.SLASH_COMMANDS["/rld"] == nil) then
+        _G.SLASH_COMMANDS["/rld"] = function()
+            if (_G.LibDebugLogger) then
+                _G.LibDebugLogger:ClearLog()
+            end
+            ReloadUI()
+        end
+    end
 end
 
 function BS.OnAddonLoaded(_, addonName)
-    if (_G.LibChatMessage ~= nil) then
-        BS.Chat = _G.LibChatMessage(BS.Name, "Bar Steward")
-    end
-
     if (addonName ~= BS.Name) then
         return
     end

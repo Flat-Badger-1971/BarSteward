@@ -469,3 +469,119 @@ BS.widgets[BS.W_CRAFTING_DAILY_TIME] = {
     icon = "/esoui/art/icons/crafting_outfitter_logo.dds",
     tooltip = GetString(_G.BARSTEWARD_DAILY_WRITS_TIME)
 }
+
+local function getRecipeList()
+    BS.recipeList = {
+        food = {known = 0, unknown = 0.},
+        drink = {known = 0, unknown = 0},
+        furnishing = {known = 0, unknown = 0}
+    }
+
+    BS.unknownRecipeLinks = {[_G.ITEMTYPE_FOOD] = {}, [_G.ITEMTYPE_DRINK] = {}, [_G.ITEMTYPE_FURNISHING] = {}}
+
+    for recipeListIndex = 1, GetNumRecipeLists() do
+        local name, numRecipes = GetRecipeListInfo(recipeListIndex)
+
+        for recipeIndex = 1, numRecipes do
+            local known, _, _, _, _, _, _, resultItemId = GetRecipeInfo(recipeListIndex, recipeIndex)
+            local link = BS.MakeItemLink(resultItemId)
+            local itemType, sit = GetItemLinkItemType(link)
+
+            if (itemType + sit ~= 0) then
+                if (itemType == _G.ITEMTYPE_FOOD) then
+                    if (known == true) then
+                        BS.recipeList.food.known = BS.recipeList.food.known + 1
+                    else
+                        BS.recipeList.food.unknown = BS.recipeList.food.unknown + 1
+                        table.insert(BS.unknownRecipeLinks[_G.ITEMTYPE_FOOD], link)
+                    end
+                elseif (itemType == _G.ITEMTYPE_DRINK) then
+                    if (known == true) then
+                        BS.recipeList.drink.known = BS.recipeList.drink.known + 1
+                    else
+                        BS.recipeList.drink.unknown = BS.recipeList.drink.unknown + 1
+                        table.insert(BS.unknownRecipeLinks[_G.ITEMTYPE_DRINK], link)
+                    end
+                elseif (itemType == _G.ITEMTYPE_FURNISHING) then
+                    if (name ~= "") then
+                        if (known) then
+                            BS.recipeList.furnishing.known = BS.recipeList.furnishing.known + 1
+                        else
+                            BS.recipeList.furnishing.unknown = BS.recipeList.furnishing.unknown + 1
+                            table.insert(BS.unknownRecipeLinks[_G.ITEMTYPE_FURNISHING], link)
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+local food = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ITEMTYPE4))
+local drink = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ITEMTYPE12))
+local furnishing = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ITEMTYPE61))
+local recipes = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ITEMTYPEDISPLAYCATEGORY21))
+
+BS.widgets[BS.W_RECIPES] = {
+    -- v1.4.6
+    name = "recipes",
+    update = function(widget, event)
+        if ((BS.recipeList == nil) or (event == _G.EVENT_RECIPE_LEARNED)) then
+            getRecipeList()
+        end
+
+        local allFood = BS.recipeList.food.known + BS.recipeList.food.unknown
+        local allDrink = BS.recipeList.drink.known + BS.recipeList.drink.unknown
+        local allFurnishing = BS.recipeList.furnishing.known + BS.recipeList.furnishing.unknown
+        local tt = recipes
+
+        tt = tt .. BS.LF .. "|cffd700"
+        tt = tt .. BS.recipeList.food.known .. "/" .. allFood .. "|r |cf9f9f9"
+        tt = tt .. food .. BS.LF .. "|cffd700"
+        tt = tt .. BS.recipeList.drink.known .. "/" .. allDrink .. "|r |cf9f9f9"
+        tt = tt .. drink .. BS.LF .. "|cffd700"
+        tt = tt .. BS.recipeList.furnishing.known .. "/" .. allFurnishing .. "|r |cf9f9f9"
+        tt = tt .. furnishing
+
+        local value = BS.recipeList.food.known .. "/" .. allFood
+
+        if (BS.Vars.Controls[BS.W_RECIPES].Display == drink) then
+            value = BS.recipeList.drink.known .. "/" .. allDrink
+        elseif (BS.Vars.Controls[BS.W_RECIPES].Display == furnishing) then
+            value = BS.recipeList.furnishing.known .. "/" .. allFurnishing
+        end
+
+        widget:SetValue(value)
+        widget.tooltip = tt
+
+        return widget:GetValue()
+    end,
+    event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_RECIPE_LEARNED},
+    icon = "/esoui/art/tradinghouse/tradinghouse_trophy_recipe_fragment_up.dds",
+    tooltip = recipes,
+    onClick = function()
+        local toPrint = _G.ITEMTYPE_FOOD
+
+        if (BS.Vars.Controls[BS.W_RECIPES].Display == drink) then
+            toPrint = _G.ITEMTYPE_DRINK
+        elseif (BS.Vars.Controls[BS.W_RECIPES].Display == furnishing) then
+            toPrint = _G.ITEMTYPE_FURNISHING
+        end
+
+        for _, link in ipairs(BS.unknownRecipeLinks[toPrint]) do
+            -- chat router insists on having the name, even though the link works in game
+            local itemName = GetItemLinkName(link)
+            local itemId = GetItemLinkItemId(link)
+            local newLink = BS.MakeItemLink(itemId, itemName)
+
+            CHAT_ROUTER:AddSystemMessage(newLink)
+        end
+    end,
+    customOptions = {
+        name = GetString(_G.BARSTEWARD_RECIPES_DISPLAY),
+        choices = {food, drink, furnishing},
+        varName = "Display",
+        refresh = true,
+        default = food
+    }
+}
