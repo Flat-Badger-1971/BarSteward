@@ -33,7 +33,8 @@ function BS.SecondsToTime(seconds, hideDays, hideHours, hideSeconds, format, hid
             end
         else
             if (hideDays) then
-                time = ZO_CachedStrFormat(_G.BARSTEWARD_TIMER_FORMAT_TEXT_WITH_SECONDS_NO_DAYS, hours, minutes, remaining)
+                time =
+                    ZO_CachedStrFormat(_G.BARSTEWARD_TIMER_FORMAT_TEXT_WITH_SECONDS_NO_DAYS, hours, minutes, remaining)
             else
                 time = ZO_CachedStrFormat(_G.BARSTEWARD_TIMER_FORMAT_TEXT_WITH_SECONDS, days, hours, minutes, remaining)
             end
@@ -642,4 +643,18 @@ end
 
 function BS.Trim(stringValue)
     return (stringValue:gsub("^%s*(.-)%s*$", "%1"))
+end
+
+function BS.MergeTables(t1, t2)
+    local output = {}
+
+    for _, value in ipairs(t1) do
+        output[#output + 1] = value
+    end
+
+    for _, value in ipairs(t2) do
+        output[#output + 1] = value
+    end
+
+    return output
 end

@@ -522,6 +522,7 @@ end
 
 local food = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ITEMTYPE4))
 local drink = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ITEMTYPE12))
+local foodAndDrink = food .. " + " .. drink
 local furnishing = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ITEMTYPE61))
 local recipes = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ITEMTYPEDISPLAYCATEGORY21))
 
@@ -535,22 +536,28 @@ BS.widgets[BS.W_RECIPES] = {
 
         local allFood = BS.recipeList.food.known + BS.recipeList.food.unknown
         local allDrink = BS.recipeList.drink.known + BS.recipeList.drink.unknown
+        local allFoodAndDrink = allFood + allDrink
         local allFurnishing = BS.recipeList.furnishing.known + BS.recipeList.furnishing.unknown
         local tt = recipes
+        local vars = BS.Vars.Controls[BS.W_RECIPES]
 
         tt = tt .. BS.LF .. "|cffd700"
         tt = tt .. BS.recipeList.food.known .. "/" .. allFood .. "|r |cf9f9f9"
         tt = tt .. food .. BS.LF .. "|cffd700"
         tt = tt .. BS.recipeList.drink.known .. "/" .. allDrink .. "|r |cf9f9f9"
         tt = tt .. drink .. BS.LF .. "|cffd700"
+        tt = tt .. (BS.recipeList.drink.known + BS.recipeList.food.known) .. "/" .. allFoodAndDrink .. "|r |cf9f9f9"
+        tt = tt .. foodAndDrink .. BS.LF .. "|cffd700"
         tt = tt .. BS.recipeList.furnishing.known .. "/" .. allFurnishing .. "|r |cf9f9f9"
         tt = tt .. furnishing
 
         local value = BS.recipeList.food.known .. "/" .. allFood
 
-        if (BS.Vars.Controls[BS.W_RECIPES].Display == drink) then
+        if (vars.Display == drink) then
             value = BS.recipeList.drink.known .. "/" .. allDrink
-        elseif (BS.Vars.Controls[BS.W_RECIPES].Display == furnishing) then
+        elseif (vars.Display == foodAndDrink) then
+            value = (BS.recipeList.drink.known + BS.recipeList.food.known) .. "/" .. allFoodAndDrink
+        elseif (vars.Display == furnishing) then
             value = BS.recipeList.furnishing.known .. "/" .. allFurnishing
         end
 
@@ -563,15 +570,18 @@ BS.widgets[BS.W_RECIPES] = {
     icon = "/esoui/art/tradinghouse/tradinghouse_trophy_recipe_fragment_up.dds",
     tooltip = recipes,
     onClick = function()
-        local toPrint = _G.ITEMTYPE_FOOD
+        local vars = BS.Vars.Controls[BS.W_RECIPES]
+        local display = BS.unknownRecipeLinks[_G.ITEMTYPE_FOOD]
 
-        if (BS.Vars.Controls[BS.W_RECIPES].Display == drink) then
-            toPrint = _G.ITEMTYPE_DRINK
-        elseif (BS.Vars.Controls[BS.W_RECIPES].Display == furnishing) then
-            toPrint = _G.ITEMTYPE_FURNISHING
+        if (vars.Display == drink) then
+            display = BS.unknownRecipeLinks[_G.ITEMTYPE_DRINK]
+        elseif (vars.Display == foodAndDrink) then
+            display = BS.MergeTables(display, BS.unknownRecipeLinks[_G.ITEMTYPE_DRINK])
+        elseif (vars.Display == furnishing) then
+            display = BS.unknownRecipeLinks[_G.ITEMTYPE_FURNISHING]
         end
 
-        for _, link in ipairs(BS.unknownRecipeLinks[toPrint]) do
+        for _, link in ipairs(display) do
             -- chat router insists on having the name, even though the link works in game
             local itemName = GetItemLinkName(link)
             local itemId = GetItemLinkItemId(link)
@@ -582,7 +592,7 @@ BS.widgets[BS.W_RECIPES] = {
     end,
     customOptions = {
         name = GetString(_G.BARSTEWARD_RECIPES_DISPLAY),
-        choices = {food, drink, furnishing},
+        choices = {food, drink, foodAndDrink, furnishing},
         varName = "Display",
         refresh = true,
         default = food
