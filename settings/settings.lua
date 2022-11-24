@@ -1426,19 +1426,43 @@ local function getWidgetSettings()
 
     table.insert(barNames, none)
 
-    -- sort the widget settings into alphabetical order
     local ordered = {}
 
     for key, widget in ipairs(widgets) do
         table.insert(ordered, {key = key, widget = widget})
     end
 
-    table.sort(
-        ordered,
-        function(a, b)
-            return BS.widgets[a.key].tooltip < BS.widgets[b.key].tooltip
-        end
-    )
+    if (BS.Vars.WidgetSortOrder) then
+        -- sort the widget settings by index number
+        table.sort(
+            ordered,
+            function(a, b)
+                return a.key > b.key
+            end
+        )
+    else
+        -- sort the widget settings into alphabetical order
+        table.sort(
+            ordered,
+            function(a, b)
+                return BS.widgets[a.key].tooltip < BS.widgets[b.key].tooltip
+            end
+        )
+    end
+
+    controls[1] = {
+        type = "checkbox",
+        name = GetString(_G.BARSTEWARD_SORT),
+        getFunc = function()
+            return BS.Vars.WidgetSortOrder or false
+        end,
+        setFunc = function(value)
+            BS.Vars.WidgetSortOrder = value
+        end,
+        width = "full",
+        default = false,
+        requiresReload = true
+    }
 
     for idx, w in ipairs(ordered) do
         local k = w.key
@@ -1532,7 +1556,7 @@ local function getWidgetSettings()
 
         local widgetName = BS.widgets[k].tooltip:gsub(":", "")
 
-        controls[idx] = {
+        controls[idx + 1] = {
             type = "submenu",
             name = widgetName,
             icon = BS.widgets[k].icon,
