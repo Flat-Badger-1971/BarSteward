@@ -484,31 +484,34 @@ local function getRecipeList()
 
         for recipeIndex = 1, numRecipes do
             local known, _, _, _, _, _, _, resultItemId = GetRecipeInfo(recipeListIndex, recipeIndex)
-            local link = BS.MakeItemLink(resultItemId)
-            local itemType, sit = GetItemLinkItemType(link)
 
-            if (itemType + sit ~= 0) then
-                if (itemType == _G.ITEMTYPE_FOOD) then
-                    if (known == true) then
-                        BS.recipeList.food.known = BS.recipeList.food.known + 1
-                    else
-                        BS.recipeList.food.unknown = BS.recipeList.food.unknown + 1
-                        table.insert(BS.unknownRecipeLinks[_G.ITEMTYPE_FOOD], link)
-                    end
-                elseif (itemType == _G.ITEMTYPE_DRINK) then
-                    if (known == true) then
-                        BS.recipeList.drink.known = BS.recipeList.drink.known + 1
-                    else
-                        BS.recipeList.drink.unknown = BS.recipeList.drink.unknown + 1
-                        table.insert(BS.unknownRecipeLinks[_G.ITEMTYPE_DRINK], link)
-                    end
-                elseif (itemType == _G.ITEMTYPE_FURNISHING) then
-                    if (name ~= "") then
-                        if (known) then
-                            BS.recipeList.furnishing.known = BS.recipeList.furnishing.known + 1
+            if (not BS.IGNORE_RECIPE[resultItemId]) then
+                local link = BS.MakeItemLink(resultItemId)
+                local itemType, sit = GetItemLinkItemType(link)
+
+                if (itemType + sit ~= 0) then
+                    if (itemType == _G.ITEMTYPE_FOOD) then
+                        if (known == true) then
+                            BS.recipeList.food.known = BS.recipeList.food.known + 1
                         else
-                            BS.recipeList.furnishing.unknown = BS.recipeList.furnishing.unknown + 1
-                            table.insert(BS.unknownRecipeLinks[_G.ITEMTYPE_FURNISHING], link)
+                            BS.recipeList.food.unknown = BS.recipeList.food.unknown + 1
+                            table.insert(BS.unknownRecipeLinks[_G.ITEMTYPE_FOOD], link)
+                        end
+                    elseif (itemType == _G.ITEMTYPE_DRINK) then
+                        if (known == true) then
+                            BS.recipeList.drink.known = BS.recipeList.drink.known + 1
+                        else
+                            BS.recipeList.drink.unknown = BS.recipeList.drink.unknown + 1
+                            table.insert(BS.unknownRecipeLinks[_G.ITEMTYPE_DRINK], link)
+                        end
+                    elseif (itemType == _G.ITEMTYPE_FURNISHING) then
+                        if (name ~= "") then
+                            if (known) then
+                                BS.recipeList.furnishing.known = BS.recipeList.furnishing.known + 1
+                            else
+                                BS.recipeList.furnishing.unknown = BS.recipeList.furnishing.unknown + 1
+                                table.insert(BS.unknownRecipeLinks[_G.ITEMTYPE_FURNISHING], link)
+                            end
                         end
                     end
                 end

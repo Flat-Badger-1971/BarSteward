@@ -392,12 +392,16 @@ local function getBarSettings()
                 setFunc = function(value)
                     vars[varName] = value
 
-                    local bar = _G[BS.Name .. "_bar_" .. idx].ref.bar
+                    local barname = _G[BS.Name .. "_bar_" .. idx]
 
-                    BS.AddToScenes(varType, idx, bar)
+                    if (barname) then
+                        local bar = barname.ref.bar
 
-                    if (value == false) then
-                        BS.RemoveFromScenes(varType, bar)
+                        BS.AddToScenes(varType, idx, bar)
+
+                        if (value == false) then
+                            BS.RemoveFromScenes(varType, bar)
+                        end
                     end
                 end,
                 width = "full",

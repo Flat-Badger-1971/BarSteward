@@ -75,7 +75,20 @@ BS.W_LOREBOOKS = 66
 BS.W_RECIPES = 67
 
 BS.WRITS = {
-    [_G.CRAFTING_TYPE_ALCHEMY] = {119696, 110698, 119699, 119700, 119701, 119702, 119703, 119704, 119705, 119818, 119819, 119820},
+    [_G.CRAFTING_TYPE_ALCHEMY] = {
+        119696,
+        110698,
+        119699,
+        119700,
+        119701,
+        119702,
+        119703,
+        119704,
+        119705,
+        119818,
+        119819,
+        119820
+    },
     [_G.CRAFTING_TYPE_BLACKSMITHING] = {119563, 119680, 121527, 121529},
     [_G.CRAFTING_TYPE_CLOTHIER] = {119694, 119695, 121532, 121533},
     [_G.CRAFTING_TYPE_ENCHANTING] = {119564, 121528},
@@ -191,3 +204,8 @@ BS.CRAFTING_DAILY = {
 
 BS.PERFECT_ROE = 64222
 BS.POTENT_NIRNCRUX = 56863
+
+-- these are in the game code but don't appear to be available anywhere
+BS.IGNORE_RECIPE = {
+    [64470] = true -- Old Orsinium Bloop Soup
+}
