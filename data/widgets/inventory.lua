@@ -1045,10 +1045,12 @@ local function randomOnClick(collectibleTable, widgetIndex)
     if (usable) then
         UseCollectible(collectibleId)
 
-        local name = ZO_CachedStrFormat("<<C:1>>", GetCollectibleName(collectibleId))
-        local output = "|cff9900Bar Steward|r: " .. name
+        if (BS.Vars.Controls[widgetIndex].Print) then
+            local name = ZO_CachedStrFormat("<<C:1>>", GetCollectibleName(collectibleId))
+            local output = "|cff9900Bar Steward|r: " .. name
 
-        CHAT_ROUTER:AddSystemMessage(output)
+            CHAT_ROUTER:AddSystemMessage(output)
+        end
 
         zo_callLater(
             function()
@@ -1162,10 +1164,12 @@ BS.widgets[BS.W_RANDOM_EMOTE] = {
         if (displayName ~= "") then
             PlayEmoteByIndex(emoteIndex)
 
-            local name = ZO_CachedStrFormat("<<C:1>>", displayName)
-            local output = "|cff9900Bar Steward|r: " .. name
+            if (BS.Vars.Controls[BS.W_RANDOM_EMOTE].Print) then
+                local name = ZO_CachedStrFormat("<<C:1>>", displayName)
+                local output = "|cff9900Bar Steward|r: " .. name
 
-            CHAT_ROUTER:AddSystemMessage(output)
+                CHAT_ROUTER:AddSystemMessage(output)
+            end
         end
     end
 }

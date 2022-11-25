@@ -1417,6 +1417,23 @@ local function checkCustomOptions(widgetControls, key)
     end
 end
 
+local function checkPrint(defaults, widgetControls, vars)
+    if (defaults.Print ~= nil) then
+        widgetControls[#widgetControls + 1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_RANDOM_PRINT),
+            getFunc = function()
+                return vars.Print
+            end,
+            setFunc = function(value)
+                vars.Print = value
+            end,
+            width = "full",
+            default = defaults.Print
+        }
+    end
+end
+
 local function getWidgetSettings()
     local widgets = BS.Vars.Controls
     local bars = BS.Vars.Bars
@@ -1551,6 +1568,7 @@ local function getWidgetSettings()
         checkTimer(defaults, widgetControls, vars, k)
         checkColourOptions(widgetControls, vars, k)
         checkCustomOptions(widgetControls, k)
+        checkPrint(defaults, widgetControls, vars)
 
         local textureCoords = nil
 

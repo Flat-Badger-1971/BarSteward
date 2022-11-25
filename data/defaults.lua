@@ -405,9 +405,9 @@ BS.Defaults = {
         [BS.W_DPS] = {Bar = 0, Order = 65, UseSeparators = false, ColourValues = "c"},
         [BS.W_LOREBOOKS] = {Bar = 0, Order = 66, ColourValues = "c", ShowCategory = GetLoreCategoryInfo(1)},
         [BS.W_RECIPES] = {Bar = 0, Order = 67, ColourValues = "c"},
-        [BS.W_RANDOM_MEMENTO] = {Bar = 0, Order = 68},
-        [BS.W_RANDOM_PET] = {Bar = 0, Order = 69},
-        [BS.W_RANDOM_MOUNT] = {Bar = 0, Order = 70},
-        [BS.W_RANDOM_EMOTE] = {Bar = 0, Order = 71}
+        [BS.W_RANDOM_MEMENTO] = {Bar = 0, Order = 68, Print = true},
+        [BS.W_RANDOM_PET] = {Bar = 0, Order = 69, Print = true},
+        [BS.W_RANDOM_MOUNT] = {Bar = 0, Order = 70, Print = true},
+        [BS.W_RANDOM_EMOTE] = {Bar = 0, Order = 71, Print = true}
     }
 }
