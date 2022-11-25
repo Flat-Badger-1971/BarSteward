@@ -688,7 +688,7 @@ BS.widgets[BS.W_LOREBOOKS] = {
 
         return #categories
     end,
-    event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_LORE_BOOK_LEARNED},
+    event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_LORE_BOOK_LEARNED, _G.EVENT_STYLE_LEARNED, _G.EVENT_TRAIT_LEARNED},
     icon = "/esoui/art/icons/quest_book_001.dds",
     tooltip = GetString(_G.BARSTEWARD_LOREBOOKS),
     onClick = function()

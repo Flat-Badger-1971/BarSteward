@@ -61,13 +61,13 @@ read_globals = {
             ShowCategory = {read_only = true}
         }
     },
-	["GUILD_ROSTER_MANAGER"] = {
-		fields = {
-			SetGuildId = {read_only = true},
-			FindDataByDisplayName = {read_only = true},
-			GetGuildId = {read_only = true}
-		}
-	},
+    ["GUILD_ROSTER_MANAGER"] = {
+        fields = {
+            SetGuildId = {read_only = true},
+            FindDataByDisplayName = {read_only = true},
+            GetGuildId = {read_only = true}
+        }
+    },
     ["MAIN_MENU_KEYBOARD"] = {
         fields = {
             ShowScene = {read_only = true}
@@ -76,6 +76,12 @@ read_globals = {
     ["MAIN_MENU_GAMEPAD"] = {
         fields = {
             ShowScene = {read_only = true}
+        }
+    },
+    ["PLAYER_EMOTE_MANAGER"] = {
+        fields = {
+            GetEmoteCategories = {read_only = true},
+            GetEmoteListForType = {read_only = true}
         }
     },
     ["REWARDS_MANAGER"] = {
@@ -130,6 +136,11 @@ read_globals = {
     ["ZO_ACTIVITY_FINDER_ROOT_GAMEPAD"] = {
         fields = {
             ShowCategory = {read_only = true}
+        }
+    },
+    ["ZO_COLLECTIBLE_DATA_MANAGER"] = {
+        fields = {
+            GetCategoryDataByIndicies = {read_only = true}
         }
     },
     ["ZO_ComboBox"] = {
@@ -227,12 +238,18 @@ read_globals = {
     "GetChampionDisciplineName",
     "GetChampionPointPoolForRank",
     "GetClassIcon",
+    "GetCollectibleCategoryId",
+    "GetCollectibleCategoryInfo",
     "GetCollectibleCooldownAndDuration",
+    "GetCollectibleId",
     "GetCollectibleInfo",
+    "GetCollectibleName",
+    "GetCollectibleSubCategoryInfo",
     "GetCompanionCollectibleId",
     "GetCompanionName",
     "GetCurrencyAmount",
     "GetEarnedAchievementPoints",
+    "GetEmoteInfo",
     "GetFenceLaunderTransactionInfo",
     "GetFishingLure",
     "GetFishingLureInfo",
@@ -242,10 +259,10 @@ read_globals = {
     "GetGameCameraInteractableActionInfo",
     "GetGameCameraPickpocketingBonusInfo",
     "GetGameTimeMilliseconds",
-	"GetGuildId",
-	"GetGuildMemberCharacterInfo",
-	"GetGuildMemberInfo",
-	"GetGuildName",
+    "GetGuildId",
+    "GetGuildMemberCharacterInfo",
+    "GetGuildMemberInfo",
+    "GetGuildName",
     "GetUIGlobalScale",
     "GetInteractionType",
     "GetInterfaceColor",
@@ -274,15 +291,16 @@ read_globals = {
     "GetMinimumRapport",
     "GetNextAntiquityId",
     "GetNonCombatBonus",
-	"GetNumAntiquityDigSites",
+    "GetNumAntiquityDigSites",
     "GetNumBuffs",
     "GetNumChampionDisciplines",
     "GetNumChampionXPInChampionPoint",
+    "GetNumCollectibleCategories",
     "GetNumExperiencePointsInCompanionLevel",
     "GetNumExperiencePointsInLevel",
     "GetNumFriends",
-	"GetNumGuildMembers",
-	"GetNumGuilds",
+    "GetNumGuildMembers",
+    "GetNumGuilds",
     "GetNumLockpicksLeft",
     "GetNumLoreCategories",
     "GetNumRecipeLists",
@@ -294,7 +312,7 @@ read_globals = {
     "GetPendingCompanionDefId",
     "GetPlayerChampionPointsEarned",
     "GetPlayerChampionXP",
-	"GetPlayerGuildMemberIndex",
+    "GetPlayerGuildMemberIndex",
     "GetPulseTimeline",
     "GetRecallCooldown",
     "GetRecipeInfo",
@@ -324,8 +342,8 @@ read_globals = {
     "GetTimeToShadowyConnectionsResetInSeconds",
     "GetTimeUntilCanBeTrained",
     "GetTotalAchievementPoints",
-	"GetTributePlayerClubRank",
-	"GetTributePlayerExperienceInCurrentClubRank",
+    "GetTributePlayerClubRank",
+    "GetTributePlayerExperienceInCurrentClubRank",
     "GetUnitAlliance",
     "GetUnitBuffInfo",
     "GetUnitClass",
@@ -367,7 +385,7 @@ read_globals = {
     "ZO_CheckButton_SetCheckState",
     "ZO_CheckButton_SetLabelText",
     "ZO_CheckButton_SetToggleFunction",
-	"ZO_ClearNumericallyIndexedTable",
+    "ZO_ClearNumericallyIndexedTable",
     "ZO_CreateStringId",
     "ZO_DeepTableCopy",
     "ZO_Dialogs_RegisterCustomDialog",
@@ -413,7 +431,7 @@ read_globals = {
     "ZO_Tooltips_ShowTextTooltip",
     -- Zenimax functions
     "zo_callLater",
-	"zo_floor",
+    "zo_floor",
     "zo_iconFormat",
     "zo_min",
     "zo_max",

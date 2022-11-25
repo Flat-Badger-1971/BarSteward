@@ -965,3 +965,207 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
         return settings
     end
 }
+
+local mementos = {}
+local pets = {}
+local mounts = {}
+local emotes = {}
+
+-- based on code from RandomMount
+local function scanCategoryData(categoryData, collectibleType, collectibleTable)
+    local numCollectibles = categoryData:GetNumCollectibles()
+
+    for collectibleIndex = 1, numCollectibles do
+        local collectibleData = categoryData:GetCollectibleDataByIndex(collectibleIndex)
+
+        if (collectibleData:IsUnlocked()) then
+            local categoryType = collectibleData:GetCategoryType()
+
+            if (categoryType == collectibleType) then
+                local id = collectibleData:GetId()
+                table.insert(collectibleTable, id)
+            end
+        end
+    end
+end
+
+local function getCollectibles(collectibleType, collectibleTable)
+    ZO_ClearNumericallyIndexedTable(collectibleTable)
+
+    for categoryIndex = 1, GetNumCollectibleCategories() do
+        local categoryData = ZO_COLLECTIBLE_DATA_MANAGER:GetCategoryDataByIndicies(categoryIndex)
+        local numSubcategories = categoryData:GetNumSubcategories()
+
+        if (numSubcategories == 0) then
+            scanCategoryData(categoryData, collectibleType, collectibleTable)
+        else
+            for subcategoryIndex = 1, numSubcategories do
+                local subcategoryData = categoryData:GetSubcategoryData(subcategoryIndex)
+
+                if (subcategoryData) then
+                    scanCategoryData(subcategoryData, collectibleType, collectibleTable)
+                end
+            end
+        end
+    end
+end
+
+local function getEmotes()
+    ZO_ClearNumericallyIndexedTable(emotes)
+
+    local categories = PLAYER_EMOTE_MANAGER:GetEmoteCategories()
+
+    for _, category in ipairs(categories) do
+        local emotesInCategory = PLAYER_EMOTE_MANAGER:GetEmoteListForType(category)
+
+        for _, emote in ipairs(emotesInCategory) do
+            table.insert(emotes, emote)
+        end
+    end
+end
+
+local function randomOnClick(collectibleTable, widgetIndex)
+    if (#collectibleTable == 0) then
+        return
+    end
+
+    local usable
+    local tryCount = 0
+    local collectibleId
+
+    repeat
+        local collectibleIndex = math.random(1, #collectibleTable)
+
+        collectibleId = collectibleTable[collectibleIndex]
+        tryCount = tryCount + 1
+
+        usable = IsCollectibleUsable(collectibleId, _G.GAMEPLAY_ACTOR_CATEGORY_PLAYER)
+    until (usable == true or tryCount == 10)
+
+    if (usable) then
+        UseCollectible(collectibleId)
+
+        local name = ZO_CachedStrFormat("<<C:1>>", GetCollectibleName(collectibleId))
+        local output = "|cff9900Bar Steward|r: " .. name
+
+        CHAT_ROUTER:AddSystemMessage(output)
+
+        zo_callLater(
+            function()
+                local remaining, duration = GetCollectibleCooldownAndDuration(collectibleId)
+                local widget = _G[BS.Name .. "_Widget_" .. BS.widgets[widgetIndex].name].ref
+
+                widget:StartCooldown(remaining, duration)
+            end,
+            200
+        )
+    end
+end
+
+BS.widgets[BS.W_RANDOM_MEMENTO] = {
+    -- v1.4.7
+    name = "randomMemento",
+    update = function(widget, event)
+        if (#mementos == 0 or event == _G.EVENT_COLLECTION_UPDATED) then
+            getCollectibles(_G.COLLECTIBLE_CATEGORY_TYPE_MEMENTO, mementos)
+        end
+
+        widget:SetValue(zo_iconFormat("/esoui/art/buttons/pointsplus_highlight.dds", 16, 16), "888")
+
+        return 0
+    end,
+    event = {_G.EVENT_COLLECTION_UPDATED},
+    tooltip = GetString(_G.BARSTEWARD_RANDOM_MEMENTO),
+    icon = "/esoui/art/icons/collectible_memento_blizzard.dds",
+    cooldown = true,
+    onClick = function()
+        randomOnClick(mementos, BS.W_RANDOM_MEMENTO)
+    end
+}
+
+BS.widgets[BS.W_RANDOM_PET] = {
+    -- v1.4.7
+    name = "randomPet",
+    update = function(widget, event)
+        if (#pets == 0 or event == _G.EVENT_COLLECTION_UPDATED) then
+            getCollectibles(_G.COLLECTIBLE_CATEGORY_TYPE_VANITY_PET, pets)
+        end
+
+        widget:SetValue(zo_iconFormat("/esoui/art/buttons/pointsplus_highlight.dds", 16, 16), "888")
+
+        return 0
+    end,
+    event = {_G.EVENT_COLLECTION_UPDATED},
+    tooltip = GetString(_G.BARSTEWARD_RANDOM_PET),
+    icon = "/esoui/art/icons/pet_sphynxlynx.dds",
+    cooldown = true,
+    onClick = function()
+        randomOnClick(pets, BS.W_RANDOM_PET)
+    end
+}
+
+BS.widgets[BS.W_RANDOM_MOUNT] = {
+    -- v1.4.7
+    name = "randomMount",
+    update = function(widget, event)
+        if (#mounts == 0 or event == _G.EVENT_COLLECTION_UPDATED) then
+            getCollectibles(_G.COLLECTIBLE_CATEGORY_TYPE_MOUNT, mounts)
+        end
+
+        widget:SetValue(zo_iconFormat("/esoui/art/buttons/pointsplus_highlight.dds", 16, 16), "888")
+
+        return 0
+    end,
+    event = {_G.EVENT_COLLECTION_UPDATED},
+    tooltip = GetString(_G.BARSTEWARD_RANDOM_MOUNT),
+    icon = "/esoui/art/icons/mounticon_horse_zenithauroran.dds",
+    cooldown = true,
+    onClick = function()
+        randomOnClick(mounts, BS.W_RANDOM_MOUNT)
+    end
+}
+
+BS.widgets[BS.W_RANDOM_EMOTE] = {
+    -- v1.4.7
+    name = "randomEmote",
+    update = function(widget, event)
+        if (#emotes == 0 or event == _G.EVENT_COLLECTION_UPDATED) then
+            getEmotes()
+        end
+
+        widget:SetValue(zo_iconFormat("/esoui/art/buttons/pointsplus_highlight.dds", 16, 16), "888")
+
+        return 0
+    end,
+    event = {_G.EVENT_COLLECTION_UPDATED},
+    tooltip = GetString(_G.BARSTEWARD_RANDOM_EMOTE),
+    icon = "/esoui/art/icons/emote_soccer2.dds",
+    cooldown = true,
+    onClick = function()
+        if (#emotes == 0) then
+            return
+        end
+
+        local tryCount = 0
+        local displayName
+        local emoteIndex
+
+        repeat
+            local emoteId = math.random(1, #emotes)
+            emoteIndex = emotes[emoteId]
+
+            displayName = select(4, GetEmoteInfo(emoteIndex))
+
+            tryCount = tryCount + 1
+        until (displayName ~= "" or tryCount == 10)
+
+        if (displayName ~= "") then
+            PlayEmoteByIndex(emoteIndex)
+
+            local name = ZO_CachedStrFormat("<<C:1>>", displayName)
+            local output = "|cff9900Bar Steward|r: " .. name
+
+            CHAT_ROUTER:AddSystemMessage(output)
+        end
+    end
+}

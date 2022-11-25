@@ -32,6 +32,14 @@ function baseWidget:Initialise(metadata, parent, tooltipAnchor, valueSide)
     self.icon:SetDimensions(metadata.iconWidth or 32, metadata.iconHeight or 32)
     self.icon:SetAnchor(valueSide == LEFT and RIGHT or LEFT)
 
+    if (metadata.cooldown) then
+        self.icon.cooldown = WINDOW_MANAGER:CreateControl(name .. "_icon_cooldown", self.icon, CT_COOLDOWN)
+        self.icon.cooldown:SetDimensions(self.icon:GetWidth(), self.icon:GetHeight())
+        self.icon.cooldown:SetAnchor(CENTER, self.icon, CENTER, 0, 0)
+        self.icon.cooldown:SetFillColor(0, 0.1, 0.1, 0.6)
+        self.icon.cooldown:SetHidden(true)
+    end
+
     if (metadata.progress) then
         self.value = BS.CreateProgressBar(name .. "_progress", self.control)
         self.value:SetAnchor(
@@ -236,6 +244,13 @@ end
 
 function baseWidget:SetTextureCoords(...)
     self.icon:SetTextureCoords(...)
+end
+
+function baseWidget:StartCooldown(remaining, duration)
+    if (self.icon.cooldown) then
+        self.icon.cooldown:StartCooldown(remaining, duration, CD_TYPE_RADIAL, CD_TIME_TYPE_TIME_UNTIL, false)
+        self.icon.cooldown:SetHidden(false)
+    end
 end
 
 function BS.CreateWidget(...)
