@@ -530,7 +530,7 @@ BS.widgets[BS.W_RECIPES] = {
     -- v1.4.6
     name = "recipes",
     update = function(widget, event)
-        if ((BS.recipeList == nil) or (event == _G.EVENT_RECIPE_LEARNED)) then
+        if ((BS.recipeList == nil) or (event ~= _G.EVENT_PLAYER_ACTIVATED)) then
             getRecipeList()
         end
 
@@ -566,7 +566,7 @@ BS.widgets[BS.W_RECIPES] = {
 
         return widget:GetValue()
     end,
-    event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_RECIPE_LEARNED},
+    event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_RECIPE_LEARNED, _G.EVENT_MULTIPLE_RECIPES_LEARNED},
     icon = "/esoui/art/tradinghouse/tradinghouse_trophy_recipe_fragment_up.dds",
     tooltip = recipes,
     onClick = function()
