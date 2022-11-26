@@ -1043,10 +1043,18 @@ local function randomOnClick(collectibleTable, widgetIndex)
     until (usable == true or tryCount == 10)
 
     if (usable) then
+        local widget = _G[BS.Name .. "_Widget_" .. BS.widgets[widgetIndex].name].ref
+        local name = ZO_CachedStrFormat("<<C:1>>", GetCollectibleName(collectibleId))
+
+        local tt = BS.widgets[widgetIndex].tooltip .. BS.LF
+        tt = tt .. "|cf9f9f9" .. GetString(_G.BARSTEWARD_RANDOM_RECENT) .. "|r" .. BS.LF
+        tt = tt .. "|cffd700" .. name
+
+        widget.tooltip = tt
+
         UseCollectible(collectibleId)
 
         if (BS.Vars.Controls[widgetIndex].Print) then
-            local name = ZO_CachedStrFormat("<<C:1>>", GetCollectibleName(collectibleId))
             local output = "|cff9900Bar Steward|r: " .. name
 
             CHAT_ROUTER:AddSystemMessage(output)
@@ -1055,7 +1063,6 @@ local function randomOnClick(collectibleTable, widgetIndex)
         zo_callLater(
             function()
                 local remaining, duration = GetCollectibleCooldownAndDuration(collectibleId)
-                local widget = _G[BS.Name .. "_Widget_" .. BS.widgets[widgetIndex].name].ref
 
                 widget:StartCooldown(remaining, duration)
             end,
@@ -1121,7 +1128,6 @@ BS.widgets[BS.W_RANDOM_MOUNT] = {
     event = {_G.EVENT_COLLECTION_UPDATED},
     tooltip = GetString(_G.BARSTEWARD_RANDOM_MOUNT),
     icon = "/esoui/art/icons/mounticon_horse_zenithauroran.dds",
-    cooldown = true,
     onClick = function()
         randomOnClick(mounts, BS.W_RANDOM_MOUNT)
     end
@@ -1141,8 +1147,7 @@ BS.widgets[BS.W_RANDOM_EMOTE] = {
     end,
     event = {_G.EVENT_COLLECTION_UPDATED},
     tooltip = GetString(_G.BARSTEWARD_RANDOM_EMOTE),
-    icon = "/esoui/art/icons/emote_soccer2.dds",
-    cooldown = true,
+    icon = "/esoui/art/icons/emotes/emotecategoryicon_fidget_personality.dds",
     onClick = function()
         if (#emotes == 0) then
             return
@@ -1163,6 +1168,13 @@ BS.widgets[BS.W_RANDOM_EMOTE] = {
 
         if (displayName ~= "") then
             PlayEmoteByIndex(emoteIndex)
+
+            local widget = _G[BS.Name .. "_Widget_" .. BS.widgets[BS.W_RANDOM_EMOTE].name].ref
+            local tt = BS.widgets[BS.W_RANDOM_EMOTE].tooltip .. BS.LF
+            tt = tt .. "|cf9f9f9" .. GetString(_G.BARSTEWARD_RANDOM_RECENT) .. "|r" .. BS.LF
+            tt = tt .. "|cffd700" .. displayName
+
+            widget.tooltip = tt
 
             if (BS.Vars.Controls[BS.W_RANDOM_EMOTE].Print) then
                 local name = ZO_CachedStrFormat("<<C:1>>", displayName)
