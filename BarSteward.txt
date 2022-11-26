@@ -4,7 +4,7 @@
 ## APIVersion: 101036
 ## AddOnVersion: 1407
 ## Version: 1.4.7
--v1.4.7## SavedVariables: BarStewardSavedVars
+## SavedVariables: BarStewardSavedVars
 ## DependsOn: LibSavedVars>=60007 LibAddonMenu-2.0>=33
 ## OptionalDependsOn: BanditsUserInterface WritWorthy>=70302 LibClockTST LibCombat>=62
 
