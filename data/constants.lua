@@ -211,5 +211,12 @@ BS.POTENT_NIRNCRUX = 56863
 
 -- these are in the game code but don't appear to be available anywhere
 BS.IGNORE_RECIPE = {
-    [64470] = true -- Old Orsinium Bloop Soup
+    [64470] = true, -- Recipe: Old Orsinium Bloop Soup
+    [121098] = true, -- Blueprint: Common Campfire, Outdoor
+	[126863] = true, -- Diagram: Dwarven Pipeline Cap, Sealed
+	[132173] = true, -- Blueprint: Witches Brazier, Primitive Log
+	[132179] = true, -- Blueprint: Witches Totem, Antler Charms
 }
+
+BS.COLLAPSE = "/esoui/art/buttons/large_leftdoublearrow_up.dds"
+BS.EXPAND = "/esoui/art/buttons/large_rightdoublearrow_up.dds"

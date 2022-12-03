@@ -435,6 +435,7 @@ read_globals = {
     "zo_iconFormat",
     "zo_min",
     "zo_max",
+    "zo_round",
     "zo_roundToNearest",
     "zo_strfind",
     "zo_strformat",

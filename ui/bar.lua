@@ -239,6 +239,13 @@ function baseBar:DoUpdate(metadata, ...)
     local value = metadata.update(metadata.widget, ...)
     local hidecheck = false
 
+    -- store the value
+    if (not self.widgetValue) then
+        self.widgetValue = {}
+    end
+
+    self.widgetValue[metadata.id] = value
+
     -- set the intial state as unhidden
     self:SetHiddenWidget(metadata.widget, false)
 

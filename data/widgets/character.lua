@@ -356,19 +356,154 @@ BS.widgets[BS.W_PLAYER_LEVEL] = {
 local combatInfo = {}
 
 local function resetCombatInfo()
-    combatInfo = {dpsOut = 0, dpsTime = 0, hpsTime = 0, bossFight = false, units = {}, combatTime = 0}
+    combatInfo = {
+        DPSOut = 0,
+        DPSIn = 0,
+        HPSOut = 0,
+        HPSAOut = 0,
+        HPSIn = 0,
+        dpstime = 0,
+        hpstime = 0,
+        groupDPSOut = 0,
+        groupDPSIn = 0,
+        groupHPSOut = 0,
+        groupHPS = 0
+    }
 end
 
--- some elements based on HodorReflexes
+-- some elements based on CombatMetrics
 local function combatUnitsCallback(_, units)
     combatInfo.units = units
 end
 
+local function getSingleTargetDamage()
+    local damage, groupDamage, unittime = 0, 0, 0
+
+    for _, unit in pairs(combatInfo.units) do
+        local totalUnitDamage = unit.damageOutTotal
+
+        if (totalUnitDamage > 0 and not unit.isFriendly) then
+            if totalUnitDamage > damage then
+                damage = totalUnitDamage
+                groupDamage = unit.groupDamageOut
+                unittime = (unit.dpsend or 0) - (unit.dpsstart or 0)
+            end
+        end
+    end
+
+    unittime = unittime > 0 and unittime / 1000 or combatInfo.dpstime
+
+    return damage, groupDamage, unittime
+end
+
+local function getBossTargetDamage()
+    if not combatInfo.bossfight then
+        return 0, 0, nil, 0
+    end
+
+    local totalBossDamage, bossDamage = 0, 0
+    local totalBossGroupDamage = 0
+    local starttime
+    local endtime
+
+    for _, unit in pairs(combatInfo.units) do
+        local totalUnitDamage = unit.damageOutTotal
+        local totalUnitGroupDamage = unit.groupDamageOut
+
+        if (unit.bossId ~= nil and totalUnitDamage > 0) then
+            totalBossDamage = totalBossDamage + totalUnitDamage
+            totalBossGroupDamage = totalBossGroupDamage + totalUnitGroupDamage
+
+            starttime = math.min(starttime or unit.dpsstart or 0, unit.dpsstart or 0)
+            endtime = math.max(endtime or unit.dpsend or 0, unit.dpsend or 0)
+
+            if totalUnitDamage > bossDamage then
+                bossDamage = totalUnitDamage
+            end
+        end
+    end
+
+    local bossTime = (endtime - starttime) / 1000
+    bossTime = bossTime > 0 and bossTime or combatInfo.dpstime
+
+    return totalBossDamage, totalBossGroupDamage, bossTime
+end
+
+local dpsWidget
+local maxDamage = 0
+local damage = {}
+
+local function getAvarageDps()
+    local entries = 0
+    local total = 0
+
+    for _, dmg in ipairs(damage) do
+        entries = entries + 1
+        total = total + dmg
+    end
+
+    if (entries == 0) then
+        return 0
+    end
+
+    return zo_floor(total / entries)
+end
+
+local function getCombatTime()
+    local maxTime = zo_roundToNearest(zo_max(combatInfo.dpstime, combatInfo.hpstime), 0.1)
+
+    return string.format("%d:%04.1f", maxTime / 60, maxTime % 60)
+end
+
+local function updateWidget()
+    if ((combatInfo.DPSOut + combatInfo.HPSOut) == 0) then
+        return
+    end
+
+    if (BS.LibCombat) then
+        local singleTargetDamage, singleTargetDamageGroup, damageTime = 0, 0, 1
+
+        if combatInfo.bossfight then
+            singleTargetDamage, singleTargetDamageGroup, damageTime = getBossTargetDamage()
+        end
+
+        if ((singleTargetDamage or 0) == 0) and ((singleTargetDamageGroup or 0) == 0) then
+            -- luacheck: push ignore 311
+            singleTargetDamage, singleTargetDamageGroup, damageTime = getSingleTargetDamage()
+        -- luacheck: pop
+        end
+
+        damageTime = math.max(damageTime or 1, 1)
+
+        local dps = zo_round((singleTargetDamage or 0) / damageTime)
+        local useSeparators = BS.Vars.Controls[BS.W_DPS].UseSeparators
+
+        if (dps > maxDamage) then
+            maxDamage = dps
+        end
+
+        table.insert(damage, dps)
+        local value = tostring(useSeparators and BS.AddSeparators(dps) or dps)
+
+        dpsWidget:SetValue(value)
+        dpsWidget:SetColour(unpack(BS.Vars.Controls[BS.W_DPS].Colour or BS.Vars.DefaultColour))
+
+        local ttt = GetString(_G.BARSTEWARD_DPS) .. BS.LF
+        local gold = " |cffd700"
+
+        ttt = ttt .. "|cf9f9f9" .. GetString(_G.BARSTEWARD_PREVIOUS_ENCOUNTER) .. "|r" .. BS.LF
+        ttt = ttt .. GetString(_G.BARSTEWARD_PREVIOUS_ENCOUNTER_AVERAGE) .. gold .. getAvarageDps() .. "|r" .. BS.LF
+        ttt = ttt .. GetString(_G.BARSTEWARD_PREVIOUS_ENCOUNTER_MAXIMUM) .. gold .. maxDamage .. "|r" .. BS.LF
+        ttt = ttt .. GetString(_G.BARSTEWARD_PREVIOUS_ENCOUNTER_DURATION) .. gold .. getCombatTime() .. "|r"
+
+        dpsWidget.tooltip = ttt
+    end
+end
+
 local function combatRecapCallback(_, recapData)
-    combatInfo.dpsOut = recapData.DPSOut
-    combatInfo.dpsTime = recapData.dpstime
-    combatInfo.hpsTime = recapData.hpstime
-    combatInfo.bossFight = recapData.bossfight
+    ZO_DeepTableCopy(recapData, combatInfo)
+
+    updateWidget()
 end
 
 function BS.CheckLibCombat()
@@ -390,25 +525,6 @@ function BS.CheckLibCombat()
     return false
 end
 
-local function getCombatTime()
-    if (IsUnitInCombat("player")) then
-        combatInfo.combatTime = zo_roundToNearest(zo_max(combatInfo.dpsTime, combatInfo.hpsTime), 0.1)
-    end
-
-    return combatInfo.combatTime
-end
-
-local function getPlayerDamage()
-    if (combatInfo.dpsOut == 0) then
-        return 0
-    end
-
-    return zo_floor(combatInfo.dpsOut)
-end
-
-local maxDamage = 0
-local damage = {}
-
 BS.RegisterForEvent(
     _G.EVENT_PLAYER_COMBAT_STATE,
     function(_, inCombat)
@@ -417,7 +533,6 @@ BS.RegisterForEvent(
         end
 
         if (inCombat) then
-            resetCombatInfo()
             BS.inCombat = true
             maxDamage = 0
             damage = {}
@@ -427,58 +542,16 @@ BS.RegisterForEvent(
     end
 )
 
-local function getAvarageDps()
-    local entries = 0
-    local total = 0
-
-    for _, dmg in ipairs(damage) do
-        entries = entries + 1
-        total = total + dmg
-    end
-
-    if (entries == 0) then
-        return 0
-    end
-
-    return zo_floor(total / entries)
-end
-
 BS.widgets[BS.W_DPS] = {
     name = "dps",
     update = function(widget)
-        local value = "0"
+        dpsWidget = widget
+        BS.CheckLibCombat()
+        widget:SetValue(0)
 
-        if (BS.LibCombat) then
-            if (BS.inCombat) then
-                local dps = getPlayerDamage()
-                local useSeparators = BS.Vars.Controls[BS.W_DPS].UseSeparators
-
-                if (dps > maxDamage) then
-                    maxDamage = dps
-                end
-
-                table.insert(damage, dps)
-                value = tostring(useSeparators and BS.AddSeparators(dps) or dps)
-            end
-
-            widget:SetValue(value)
-            widget:SetColour(unpack(BS.Vars.Controls[BS.W_DPS].Colour or BS.Vars.DefaultColour))
-
-            local time = BS.SecondsToTime(getCombatTime(), true, true)
-            local ttt = GetString(_G.BARSTEWARD_DPS) .. BS.LF
-            local gold = " |cffd700"
-
-            ttt = ttt .. "|cf9f9f9" .. GetString(_G.BARSTEWARD_PREVIOUS_ENCOUNTER) .. "|r" .. BS.LF
-            ttt = ttt .. GetString(_G.BARSTEWARD_PREVIOUS_ENCOUNTER_AVERAGE) .. gold .. getAvarageDps() .. "|r" .. BS.LF
-            ttt = ttt .. GetString(_G.BARSTEWARD_PREVIOUS_ENCOUNTER_MAXIMUM) .. gold .. maxDamage .. "|r" .. BS.LF
-            ttt = ttt .. GetString(_G.BARSTEWARD_PREVIOUS_ENCOUNTER_DURATION) .. gold .. time .. "|r"
-
-            widget.tooltip = ttt
-        end
-
-        return value
+        return 0
     end,
-    timer = 1000,
+    event = _G.EVENT_PLAYER_ACTIVATED,
     icon = "/esoui/art/compass/ava_daggerfallvaldmeri.dds",
     tooltip = GetString(_G.BARSTEWARD_DPS),
     hideWhenTrue = function()

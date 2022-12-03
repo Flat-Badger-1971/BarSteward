@@ -347,7 +347,7 @@ BS.widgets[BS.W_TRANSMUTE_CRYSTALS] = {
     end,
     event = {_G.EVENT_CURRENCY_UPDATE, _G.EVENT_QUEST_COMPLETE_DIALOG},
     tooltip = GetString(_G.BARSTEWARD_TRANSMUTE_CRYSTALS),
-    icon = "/esoui/art/currency/icon_seedcrystal.dds"
+    icon = "/esoui/art/currency/currency_seedcrystal_64.dds"
 }
 
 BS.widgets[BS.W_UNDAUNTED_KEYS] = {
@@ -367,7 +367,7 @@ BS.widgets[BS.W_WRIT_VOUCHERS] =
     currencyWidget(
     _G.CURT_WRIT_VOUCHERS,
     BS.W_WRIT_VOUCHERS,
-    "/esoui/art/currency/currency_writvoucher.dds",
+    "/esoui/art/currency/currency_writvoucher_64.dds",
     {
         bag = _G.BARSTEWARD_GOLD_BAG,
         bank = _G.BARSTEWARD_GOLD_BANK,
