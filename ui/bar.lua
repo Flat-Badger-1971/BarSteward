@@ -336,6 +336,30 @@ function baseBar:DoUpdate(metadata, ...)
             BS.SoundLastPlayed[metadata.id] = {time = os.time(), value = value}
         end
     end
+
+    -- check bar hiding
+    if (BS.Vars.Bars[self.index].HideBarEnable and BS.Vars.Bars[self.index].HideBarWidget == metadata.id) then
+        local hideValue = BS.Vars.Bars[self.index].HideBarValue
+
+        if (hideValue) then
+            local condition = BS.Vars.Bars[self.index].HideBarCondition
+            local criterionMet = tostring(hideValue) == tostring(value)
+
+            if (condition == ">") then
+                criterionMet = (tonumber(value) or 0) > (tonumber(hideValue) or 0)
+            elseif (condition == "<") then
+                criterionMet = (tonumber(value) or 0) < (tonumber(hideValue) or 0)
+            end
+
+            if (criterionMet) then
+                self.bar:SetHidden(true)
+            else
+                self.bar:SetHidden(false)
+            end
+        end
+    else
+        self.bar:SetHidden(false)
+    end
 end
 
 function baseBar:AddWidgets(widgets)

@@ -1,7 +1,7 @@
 local BS = _G.BarSteward
 
 BS.LAM = _G.LibAddonMenu2
-BS.VERSION = "1.4.9"
+BS.VERSION = "1.4.10"
 
 local panel = {
     type = "panel",
@@ -234,6 +234,111 @@ function BS.RenameBar(index)
     ZO_Dialogs_ShowDialog(BS.Name .. "Reload")
 end
 
+local function getBarWidgets(barIndex)
+    local widgets = {}
+
+    for idx, widget in pairs(BS.widgets) do
+        -- don't add the dps widget as it doesn't use a conventional update method
+        if (BS.Vars.Controls[idx].Bar == barIndex and idx ~= BS.W_DPS) then
+            table.insert(widgets, {widget = widget, index = idx})
+        end
+    end
+
+    return widgets
+end
+
+local function hideBarOptions(barIndex, controls)
+    local widgets = getBarWidgets(barIndex)
+    local widgetDropdownOptions = {}
+    local widgetDropdownOptionIds = {}
+
+    if (#widgets > 0) then
+        -- sort the widgets
+        table.sort(
+            widgets,
+            function(a, b)
+                return a.widget.tooltip < b.widget.tooltip
+            end
+        )
+
+        for _, metadata in ipairs(widgets) do
+            table.insert(widgetDropdownOptions, metadata.widget.tooltip)
+            table.insert(widgetDropdownOptionIds, metadata.index)
+        end
+
+        controls[#controls + 1] = {
+            type = "divider",
+            width = "full"
+        }
+
+        controls[#controls + 1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_ENABLE_CONDITIONAL),
+            getFunc = function()
+                return BS.Vars.Bars[barIndex].HideBarEnable
+            end,
+            setFunc = function(value)
+                BS.Vars.Bars[barIndex].HideBarEnable = value
+            end,
+            width = "full"
+        }
+
+        controls[#controls + 1] = {
+            type = "dropdown",
+            name = GetString(_G.BARSTEWARD_WIDGET),
+            choices = widgetDropdownOptions,
+            choicesValues = widgetDropdownOptionIds,
+            getFunc = function()
+                return BS.Vars.Bars[barIndex].HideBarWidget or widgetDropdownOptionIds[1]
+            end,
+            setFunc = function(value)
+                BS.Vars.Bars[barIndex].HideBarWidget = value
+            end,
+            disabled = function()
+                return not BS.Vars.Bars[barIndex].HideBarEnable
+            end,
+            width = "full"
+        }
+
+        controls[#controls + 1] = {
+            type = "dropdown",
+            name = GetString(_G.BARSTEWARD_CONDITION),
+            choices = {"=", "<", ">"},
+            getFunc = function()
+                return BS.Vars.Bars[barIndex].HideBarCondition or "="
+            end,
+            setFunc = function(value)
+                BS.Vars.Bars[barIndex].HideBarCondition = value
+            end,
+            disabled = function()
+                return not BS.Vars.Bars[barIndex].HideBarEnable
+            end,
+            width = "full"
+        }
+
+        controls[#controls + 1] = {
+            type = "editbox",
+            name = GetString(_G.BARSTEWARD_VALUE),
+            getFunc = function()
+                return BS.Vars.Bars[barIndex].HideBarValue
+            end,
+            setFunc = function(value)
+                BS.Vars.Bars[barIndex].HideBarValue = value
+            end,
+            disabled = function()
+                return not BS.Vars.Bars[barIndex].HideBarEnable
+            end,
+            isMultiLine = false,
+            width = "full"
+        }
+
+        controls[#controls + 1] = {
+            type = "divider",
+            width = "full"
+        }
+    end
+end
+
 local function getBarSettings()
     local bars = BS.Vars.Bars
     local showOptions = {
@@ -365,8 +470,11 @@ local function getBarSettings()
                 decimals = 1,
                 width = "full",
                 default = BS.Defaults.Bars[1].Scale
-            },
-            [8] = {
+            }
+        }
+
+        if (idx ~= 1) then
+            controls[#controls + 1] = {
                 type = "checkbox",
                 name = GetString(_G.BARSTEWARD_DISABLE),
                 getFunc = function()
@@ -379,7 +487,7 @@ local function getBarSettings()
                 default = false,
                 requiresReload = true
             }
-        }
+        end
 
         controls[#controls + 1] = {
             type = "checkbox",
@@ -452,10 +560,16 @@ local function getBarSettings()
             end,
             default = unpack(BS.Vars.DefaultCombatColour)
         }
-        controls[#controls + 1] = {
-            type = "divider",
-            alpha = 0
-        }
+
+        if (idx ~= 1) then
+            hideBarOptions(idx, controls)
+        else
+            controls[#controls + 1] = {
+                type = "divider",
+                alpha = 0
+            }
+        end
+
         controls[#controls + 1] = {
             type = "button",
             name = GetString(_G.BARSTEWARD_ALIGN),
