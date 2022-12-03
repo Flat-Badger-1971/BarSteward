@@ -460,6 +460,10 @@ local function updateWidget()
         return
     end
 
+    if (not dpsWidget) then
+        return
+    end
+
     if (BS.LibCombat) then
         local singleTargetDamage, singleTargetDamageGroup, damageTime = 0, 0, 1
 
