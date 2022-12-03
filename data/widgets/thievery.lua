@@ -109,6 +109,7 @@ BS.widgets[BS.W_FENCE_TRANSACTIONS] = {
         return used
     end,
     event = _G.EVENT_CLOSE_STORE,
+    hideWhenEqual = 0,
     icon = "/esoui/art/vendor/vendor_tabicon_sell_up.dds",
     tooltip = GetString(_G.BARSTEWARD_FENCE)
 }
@@ -140,6 +141,7 @@ BS.widgets[BS.W_LAUNDER_TRANSACTIONS] = {
         return used
     end,
     event = _G.EVENT_CLOSE_STORE,
+    hideWhenEqual = 0,
     icon = "/esoui/art/vendor/vendor_tabicon_fence_up.dds",
     tooltip = GetString(_G.BARSTEWARD_LAUNDER)
 }
@@ -148,16 +150,17 @@ BS.widgets[BS.W_FENCE_RESET] = {
     -- v1.2.10
     name = "fenceReset",
     update = function(widget)
-        local timeToReset = select(3, GetFenceLaunderTransactionInfo())
+        local _, used, timeToReset = GetFenceLaunderTransactionInfo()
         local colour = BS.Vars.DefaultColour
         local remaining = BS.SecondsToTime(timeToReset, true, false, BS.Vars.Controls[BS.W_FENCE_RESET].HideSeconds)
 
         widget:SetColour(unpack(colour))
         widget:SetValue(remaining)
 
-        return timeToReset
+        return used
     end,
     timer = 1000,
+    hideWhenEqual = 0,
     icon = "/esoui/art/vendor/vendor_tabicon_fence_over.dds",
     tooltip = GetString(_G.BARSTEWARD_FENCE_RESET)
 }

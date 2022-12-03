@@ -272,7 +272,7 @@ BS.Defaults = {
             WarningValue = 85,
             DangerValue = 95,
             HideLimit = false,
-            NoLimitColour = false
+            NoLimitColour = false, Autohide = false
         },
         [BS.W_ZONE] = {Bar = 0, Order = 32, ColourValues = "c"},
         [BS.W_PLAYER_NAME] = {Bar = 0, Order = 33, ColourValues = "c"},
@@ -330,7 +330,8 @@ BS.Defaults = {
             WarningValue = 85,
             DangerValue = 95,
             HideLimit = false,
-            NoLimitColour = false
+            NoLimitColour = false,
+            Autohide = false
         },
         [BS.W_SPEED] = {Bar = 0, Order = 49, ColourValues = "c", Units = "mph", ShowPercent = false},
         [BS.W_CRAFTING_DAILIES] = {Bar = 0, Order = 50},

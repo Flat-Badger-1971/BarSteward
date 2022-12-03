@@ -365,6 +365,19 @@ local function getBarSettings()
                 decimals = 1,
                 width = "full",
                 default = BS.Defaults.Bars[1].Scale
+            },
+            [8] = {
+                type = "checkbox",
+                name = GetString(_G.BARSTEWARD_DISABLE),
+                getFunc = function()
+                    return vars.Disable
+                end,
+                setFunc = function(value)
+                    vars.Disable = value
+                end,
+                width = "full",
+                default = false,
+                requiresReload = true
             }
         }
 

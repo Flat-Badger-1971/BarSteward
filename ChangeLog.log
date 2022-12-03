@@ -1,5 +1,7 @@
 [color=#ff9900][b]Version: 1.4.9 ---------------[/b][/color]
 DPS widget reworked
+Autohide option added to Stolen Items, Fence/Launder Transactions and Fence Timer widgets
+Reinstate missing option to disable bars
 
 [color=#ff9900][b]Version: 1.4.8 ---------------[/b][/color]
 Handle learning multiple recipes in Recipes widget
