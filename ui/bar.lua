@@ -18,6 +18,7 @@ function baseBar:Initialise(barSettings)
     self.position = barSettings.position
     self.orientation = (barSettings.position == TOP or barSettings == BOTTOM) and "horizontal" or "vertical"
     self.defaultHeight = barSettings.iconHeight or 32
+    self.settings = barSettings
 
     self.bar = WINDOW_MANAGER:CreateTopLevelWindow(barName)
     self.bar.ref = self
@@ -98,20 +99,20 @@ function baseBar:Initialise(barSettings)
 
     -- prevent the bar from displaying when not in hud or hudui modes
     self.bar.fragment = ZO_HUDFadeSceneFragment:New(self.bar)
+    self:AddToScenes()
+    -- if (not BS.Vars.Bars[barSettings.index].ShowEverywhere) then
+    --     SCENE_MANAGER:GetScene("hud"):AddFragment(self.bar.fragment)
+    --     SCENE_MANAGER:GetScene("hudui"):AddFragment(self.bar.fragment)
 
-    if (not BS.Vars.Bars[barSettings.index].ShowEverywhere) then
-        SCENE_MANAGER:GetScene("hud"):AddFragment(self.bar.fragment)
-        SCENE_MANAGER:GetScene("hudui"):AddFragment(self.bar.fragment)
-
-        BS.AddToScenes("Crafting", barSettings.index, self.bar)
-        BS.AddToScenes("Banking", barSettings.index, self.bar)
-        BS.AddToScenes("Inventory", barSettings.index, self.bar)
-        BS.AddToScenes("Mail", barSettings.index, self.bar)
-        BS.AddToScenes("Siege", barSettings.index, self.bar)
-        BS.AddToScenes("Menu", barSettings.index, self.bar)
-        BS.AddToScenes("Interacting", barSettings.index, self.bar)
-        BS.AddToScenes("GuildStore", barSettings.index, self.bar)
-    end
+    --     BS.AddToScenes("Crafting", barSettings.index, self.bar)
+    --     BS.AddToScenes("Banking", barSettings.index, self.bar)
+    --     BS.AddToScenes("Inventory", barSettings.index, self.bar)
+    --     BS.AddToScenes("Mail", barSettings.index, self.bar)
+    --     BS.AddToScenes("Siege", barSettings.index, self.bar)
+    --     BS.AddToScenes("Menu", barSettings.index, self.bar)
+    --     BS.AddToScenes("Interacting", barSettings.index, self.bar)
+    --     BS.AddToScenes("GuildStore", barSettings.index, self.bar)
+    -- end
 
     -- change the bar's colour during combat if required by the user
     BS.RegisterForEvent(
@@ -134,6 +135,38 @@ function baseBar:Initialise(barSettings)
             end
         end
     )
+end
+
+function baseBar:AddToScenes()
+    if (not BS.Vars.Bars[self.settings.index].ShowEverywhere) then
+        SCENE_MANAGER:GetScene("hud"):AddFragment(self.bar.fragment)
+        SCENE_MANAGER:GetScene("hudui"):AddFragment(self.bar.fragment)
+
+        BS.AddToScenes("Crafting", self.settings.index, self.bar)
+        BS.AddToScenes("Banking", self.settings.index, self.bar)
+        BS.AddToScenes("Inventory", self.settings.index, self.bar)
+        BS.AddToScenes("Mail", self.settings.index, self.bar)
+        BS.AddToScenes("Siege", self.settings.index, self.bar)
+        BS.AddToScenes("Menu", self.settings.index, self.bar)
+        BS.AddToScenes("Interacting", self.settings.index, self.bar)
+        BS.AddToScenes("GuildStore", self.settings.index, self.bar)
+    end
+end
+
+function baseBar:RemoveFromScenes()
+    if (not BS.Vars.Bars[self.settings.index].ShowEverywhere) then
+        SCENE_MANAGER:GetScene("hud"):RemoveFragment(self.bar.fragment)
+        SCENE_MANAGER:GetScene("hudui"):RemoveFragment(self.bar.fragment)
+
+        BS.RemoveFromScenes("Crafting", self.bar)
+        BS.RemoveFromScenes("Banking", self.bar)
+        BS.RemoveFromScenes("Inventory", self.bar)
+        BS.RemoveFromScenes("Mail", self.bar)
+        BS.RemoveFromScenes("Siege", self.bar)
+        BS.RemoveFromScenes("Menu", self.bar)
+        BS.RemoveFromScenes("Interacting", self.bar)
+        BS.RemoveFromScenes("GuildStore", self.bar)
+    end
 end
 
 -- hide the widget, also shrink it to shrink the bar whilst retaining the anchors for the other widgets
@@ -338,28 +371,28 @@ function baseBar:DoUpdate(metadata, ...)
     end
 
     -- check bar hiding
-    if (BS.Vars.Bars[self.index].HideBarEnable and BS.Vars.Bars[self.index].HideBarWidget == metadata.id) then
-        local hideValue = BS.Vars.Bars[self.index].HideBarValue
+    -- if (BS.Vars.Bars[self.index].HideBarEnable and BS.Vars.Bars[self.index].HideBarWidget == metadata.id) then
+    --     local hideValue = BS.Vars.Bars[self.index].HideBarValue
 
-        if (hideValue) then
-            local condition = BS.Vars.Bars[self.index].HideBarCondition
-            local criterionMet = tostring(hideValue) == tostring(value)
+    --     if (hideValue) then
+    --         local condition = BS.Vars.Bars[self.index].HideBarCondition
+    --         local criterionMet = tostring(hideValue) == tostring(value)
 
-            if (condition == ">") then
-                criterionMet = (tonumber(value) or 0) > (tonumber(hideValue) or 0)
-            elseif (condition == "<") then
-                criterionMet = (tonumber(value) or 0) < (tonumber(hideValue) or 0)
-            end
+    --         if (condition == ">") then
+    --             criterionMet = (tonumber(value) or 0) > (tonumber(hideValue) or 0)
+    --         elseif (condition == "<") then
+    --             criterionMet = (tonumber(value) or 0) < (tonumber(hideValue) or 0)
+    --         end
 
-            if (criterionMet) then
-                self.bar:SetHidden(true)
-            else
-                self.bar:SetHidden(false)
-            end
-        end
-    else
-        self.bar:SetHidden(false)
-    end
+    --         if (criterionMet) then
+    --             self:RemoveFromScenes()
+    --             self.removed = true
+    --         elseif (self.removed) then
+    --             self:AddToScenes()
+    --             self.removed = nil
+    --         end
+    --     end
+    -- end
 end
 
 function baseBar:AddWidgets(widgets)

@@ -561,14 +561,14 @@ local function getBarSettings()
             default = unpack(BS.Vars.DefaultCombatColour)
         }
 
-        if (idx ~= 1) then
-            hideBarOptions(idx, controls)
-        else
+        -- if (idx ~= 1) then
+        --     hideBarOptions(idx, controls)
+        -- else
             controls[#controls + 1] = {
                 type = "divider",
                 alpha = 0
             }
-        end
+        --end
 
         controls[#controls + 1] = {
             type = "button",
