@@ -1197,7 +1197,9 @@ BS.widgets[BS.W_CONTAINERS] = {
         for slot = 0, GetBagSize(_G.BAG_BACKPACK) do
             local itemType = GetItemType(_G.BAG_BACKPACK, slot)
             if (itemType == _G.ITEMTYPE_CONTAINER) then
-                local name = GetItemName(_G.BAG_BACKPACK, slot)
+                local itemDisplayQuality = GetItemDisplayQuality(_G.BAG_BACKPACK, slot)
+                local colour = GetItemQualityColor(itemDisplayQuality)
+                local name = colour:Colorize(ZO_CachedStrFormat("<<C:1>>", GetItemName(_G.BAG_BACKPACK, slot)))
 
                 if (not containers[name]) then
                     containers[name] = 0
@@ -1234,5 +1236,13 @@ BS.widgets[BS.W_CONTAINERS] = {
     end,
     event = _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
     icon = "/esoui/art/inventory/inventory_tabicon_container_up.dds",
-    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ITEMTYPEDISPLAYCATEGORY26))
+    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ITEMTYPEDISPLAYCATEGORY26)),
+    hideWhenEqual = 0,
+    onClick = function()
+        if (not IsInGamepadPreferredMode()) then
+            SCENE_MANAGER:Show("inventory")
+        else
+            SCENE_MANAGER:Show("gamepad_inventory_root")
+        end
+    end
 }
