@@ -1246,3 +1246,64 @@ BS.widgets[BS.W_CONTAINERS] = {
         end
     end
 }
+
+BS.widgets[BS.W_TREASURE] = {
+    -- v1.4.13
+    name = "treasureCount",
+    update = function(widget)
+        local containers = {}
+        local count = 0
+        local vars = BS.Vars.Controls[BS.W_TREASURE]
+
+        for slot = 0, GetBagSize(_G.BAG_BACKPACK) do
+            local itemType = GetItemType(_G.BAG_BACKPACK, slot)
+            if (itemType == _G.ITEMTYPE_TREASURE) then
+                local itemDisplayQuality = GetItemDisplayQuality(_G.BAG_BACKPACK, slot)
+                local colour = GetItemQualityColor(itemDisplayQuality)
+                local name = colour:Colorize(ZO_CachedStrFormat("<<C:1>>", GetItemName(_G.BAG_BACKPACK, slot)))
+
+                if (not containers[name]) then
+                    containers[name] = 0
+                end
+
+                local containerCount = GetSlotStackSize(_G.BAG_BACKPACK, slot)
+                containers[name] = containers[name] + containerCount
+                count = count + containerCount
+            end
+        end
+
+        local colour = vars.Colour or BS.Vars.DefaultColour
+
+        widget:SetColour(unpack(colour))
+        widget:SetValue(count)
+
+        local tt = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ITEMTYPE56))
+
+        if (count > 0) then
+            for name, qty in pairs(containers) do
+                tt = tt .. BS.LF .. "|cf9f9f9" .. name
+
+                if (qty > 1) then
+                    tt = tt .. " " .. "(" .. qty .. ")"
+                end
+
+                tt = tt .. "|r"
+            end
+        end
+
+        widget.tooltip = tt
+
+        return count
+    end,
+    event = _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
+    icon = "/esoui/art/icons/quest_strosmkai_open_treasure_chest.dds",
+    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ITEMTYPE56)),
+    hideWhenEqual = 0,
+    onClick = function()
+        if (not IsInGamepadPreferredMode()) then
+            SCENE_MANAGER:Show("inventory")
+        else
+            SCENE_MANAGER:Show("gamepad_inventory_root")
+        end
+    end
+}

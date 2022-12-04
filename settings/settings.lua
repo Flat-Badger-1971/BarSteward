@@ -1,7 +1,7 @@
 local BS = _G.BarSteward
 
 BS.LAM = _G.LibAddonMenu2
-BS.VERSION = "1.4.12"
+BS.VERSION = "1.4.13"
 
 local panel = {
     type = "panel",
@@ -247,6 +247,7 @@ local function getBarWidgets(barIndex)
     return widgets
 end
 
+--luacheck: push ignore 211
 local function hideBarOptions(barIndex, controls)
     local widgets = getBarWidgets(barIndex)
     local widgetDropdownOptions = {}
@@ -338,6 +339,7 @@ local function hideBarOptions(barIndex, controls)
         }
     end
 end
+--luacheck: pop
 
 local function getBarSettings()
     local bars = BS.Vars.Bars
