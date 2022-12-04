@@ -397,12 +397,13 @@ local function getSingleTargetDamage()
 end
 
 local function getBossTargetDamage()
-    if not combatInfo.bossfight then
-        return 0, 0, nil, 0
+    if (not combatInfo.bossfight) then
+        return 0, 0, 0, nil, 0
     end
 
-    local totalBossDamage, bossDamage = 0, 0
+    local totalBossDamage, bossDamage, bossUnits = 0, 0, 0
     local totalBossGroupDamage = 0
+    local bossname
     local starttime
     local endtime
 
@@ -413,20 +414,26 @@ local function getBossTargetDamage()
         if (unit.bossId ~= nil and totalUnitDamage > 0) then
             totalBossDamage = totalBossDamage + totalUnitDamage
             totalBossGroupDamage = totalBossGroupDamage + totalUnitGroupDamage
+            bossUnits = bossUnits + 1
 
             starttime = math.min(starttime or unit.dpsstart or 0, unit.dpsstart or 0)
             endtime = math.max(endtime or unit.dpsend or 0, unit.dpsend or 0)
 
             if totalUnitDamage > bossDamage then
+                bossname = unit.name
                 bossDamage = totalUnitDamage
             end
         end
     end
 
+    if bossUnits == 0 then
+        return 0, 0, 0, nil, 0
+    end
+
     local bossTime = (endtime - starttime) / 1000
     bossTime = bossTime > 0 and bossTime or combatInfo.dpstime
 
-    return totalBossDamage, totalBossGroupDamage, bossTime
+    return totalBossDamage, totalBossGroupDamage, bossTime, bossname
 end
 
 local dpsWidget
@@ -455,6 +462,9 @@ local function getCombatTime()
     return string.format("%d:%04.1f", maxTime / 60, maxTime % 60)
 end
 
+local bossIcon = "/esoui/art/actionbar/stateoverlay_disease.dds"
+local dpsIcon = "/esoui/art/compass/ava_daggerfallvaldmeri.dds"
+
 local function updateWidget()
     if ((combatInfo.DPSOut + combatInfo.HPSOut) == 0) then
         return
@@ -466,14 +476,18 @@ local function updateWidget()
 
     if (BS.LibCombat) then
         local singleTargetDamage, singleTargetDamageGroup, damageTime = 0, 0, 1
+        local icon = dpsIcon
+        local name
 
         if combatInfo.bossfight then
-            singleTargetDamage, singleTargetDamageGroup, damageTime = getBossTargetDamage()
+            singleTargetDamage, singleTargetDamageGroup, damageTime, name = getBossTargetDamage()
+            icon = bossIcon
         end
 
         if ((singleTargetDamage or 0) == 0) and ((singleTargetDamageGroup or 0) == 0) then
             -- luacheck: push ignore 311
             singleTargetDamage, singleTargetDamageGroup, damageTime = getSingleTargetDamage()
+            icon = dpsIcon
         -- luacheck: pop
         end
 
@@ -491,11 +505,17 @@ local function updateWidget()
 
         dpsWidget:SetValue(value)
         dpsWidget:SetColour(unpack(BS.Vars.Controls[BS.W_DPS].Colour or BS.Vars.DefaultColour))
+        dpsWidget:SetIcon(icon)
 
         local ttt = GetString(_G.BARSTEWARD_DPS) .. BS.LF
         local gold = " |cffd700"
 
         ttt = ttt .. "|cf9f9f9" .. GetString(_G.BARSTEWARD_PREVIOUS_ENCOUNTER) .. "|r" .. BS.LF
+
+        if (name) then
+            ttt = ttt .. "|c8a2be2w" .. ZO_CachedStrFormat("<<C:1>>", name) .. "|r" .. BS.LF
+        end
+
         ttt = ttt .. GetString(_G.BARSTEWARD_PREVIOUS_ENCOUNTER_AVERAGE) .. gold .. getAvarageDps() .. "|r" .. BS.LF
         ttt = ttt .. GetString(_G.BARSTEWARD_PREVIOUS_ENCOUNTER_MAXIMUM) .. gold .. maxDamage .. "|r" .. BS.LF
         ttt = ttt .. GetString(_G.BARSTEWARD_PREVIOUS_ENCOUNTER_DURATION) .. gold .. getCombatTime() .. "|r"
@@ -510,7 +530,7 @@ local function combatRecapCallback(_, recapData)
     updateWidget()
 end
 
-function BS.CheckLibCombat()
+local function checkLibCombat()
     if (_G.LibCombat) then
         if (not BS.LibCombat) then
             resetCombatInfo()
@@ -550,13 +570,16 @@ BS.widgets[BS.W_DPS] = {
     name = "dps",
     update = function(widget)
         dpsWidget = widget
-        BS.CheckLibCombat()
-        widget:SetValue(0)
+        checkLibCombat()
+
+        if ((widget:GetValue() or "") == "") then
+            widget:SetValue(0)
+        end
 
         return 0
     end,
     event = _G.EVENT_PLAYER_ACTIVATED,
-    icon = "/esoui/art/compass/ava_daggerfallvaldmeri.dds",
+    icon = dpsIcon,
     tooltip = GetString(_G.BARSTEWARD_DPS),
     hideWhenTrue = function()
         return not BS.LibCombat

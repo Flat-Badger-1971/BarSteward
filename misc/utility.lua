@@ -658,3 +658,15 @@ function BS.MergeTables(t1, t2)
 
     return output
 end
+
+function BS.Filter(t, filterFunc)
+    local out = {}
+
+    for k, v in pairs(t) do
+        if (filterFunc(v, k, t)) then
+            table.insert(out, v)
+        end
+    end
+
+    return out
+end

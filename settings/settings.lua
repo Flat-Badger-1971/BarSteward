@@ -1,7 +1,7 @@
 local BS = _G.BarSteward
 
 BS.LAM = _G.LibAddonMenu2
-BS.VERSION = "1.4.10"
+BS.VERSION = "1.4.12"
 
 local panel = {
     type = "panel",
@@ -1565,7 +1565,6 @@ local function getWidgetSettings()
     local widgets = BS.Vars.Controls
     local bars = BS.Vars.Bars
     local none = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_DAMAGETYPE0))
-    local controls = {}
     local barNames = {}
 
     for _, v in ipairs(bars) do
@@ -1598,18 +1597,74 @@ local function getWidgetSettings()
         )
     end
 
-    controls[1] = {
-        type = "checkbox",
-        name = GetString(_G.BARSTEWARD_SORT),
-        getFunc = function()
-            return BS.Vars.WidgetSortOrder or false
-        end,
-        setFunc = function(value)
-            BS.Vars.WidgetSortOrder = value
-        end,
-        width = "full",
-        default = false,
-        requiresReload = true
+    if (BS.Vars.WidgetSortOrderUsed) then
+        -- sort the widget settings into used/unused
+        local used =
+            BS.Filter(
+            ordered,
+            function(v)
+                return BS.Vars.Controls[v.key].Bar > 0
+            end
+        )
+        local unused =
+            BS.Filter(
+            ordered,
+            function(v)
+                return BS.Vars.Controls[v.key].Bar == 0
+            end
+        )
+
+        table.sort(
+            used,
+            function(a, b)
+                return BS.widgets[a.key].tooltip < BS.widgets[b.key].tooltip
+            end
+        )
+        table.sort(
+            unused,
+            function(a, b)
+                return BS.widgets[a.key].tooltip < BS.widgets[b.key].tooltip
+            end
+        )
+
+        ordered = BS.MergeTables(used, unused)
+    end
+
+    local controls = {
+        [1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_SORT),
+            getFunc = function()
+                return BS.Vars.WidgetSortOrder or false
+            end,
+            setFunc = function(value)
+                BS.Vars.WidgetSortOrder = value
+
+                if (value) then
+                    BS.Vars.WidgetSortOrderUsed = false
+                end
+            end,
+            width = "full",
+            default = false,
+            requiresReload = true
+        },
+        [2] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_SORT_USED),
+            getFunc = function()
+                return BS.Vars.WidgetSortOrderUsed or false
+            end,
+            setFunc = function(value)
+                BS.Vars.WidgetSortOrderUsed = value
+
+                if (value) then
+                    BS.Vars.WidgetSortOrder = false
+                end
+            end,
+            width = "full",
+            default = false,
+            requiresReload = true
+        }
     }
 
     for idx, w in ipairs(ordered) do
@@ -1623,7 +1678,7 @@ local function getWidgetSettings()
                 text = "|cff0000" .. GetString(_G.BARSTEWARD_LIBCLOCK) .. "|r",
                 width = "full"
             }
-        elseif (k == BS.W_DPS and not BS.LibCombat) then
+        elseif (k == BS.W_DPS and not _G.LibCombat) then
             widgetControls[#widgetControls + 1] = {
                 type = "description",
                 text = "|cff0000" .. GetString(_G.BARSTEWARD_LIBCOMBAT) .. "|r",
@@ -1705,7 +1760,11 @@ local function getWidgetSettings()
 
         local widgetName = BS.widgets[k].tooltip:gsub(":", "")
 
-        controls[idx + 1] = {
+        if (vars.Bar ~= 0) then
+            widgetName = "|c4c9900" .. widgetName .. "|r"
+        end
+
+        controls[idx + 2] = {
             type = "submenu",
             name = widgetName,
             icon = BS.widgets[k].icon,

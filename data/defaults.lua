@@ -409,6 +409,7 @@ BS.Defaults = {
         [BS.W_RANDOM_MEMENTO] = {Bar = 0, Order = 68, Print = true},
         [BS.W_RANDOM_PET] = {Bar = 0, Order = 69, Print = true},
         [BS.W_RANDOM_MOUNT] = {Bar = 0, Order = 70, Print = true},
-        [BS.W_RANDOM_EMOTE] = {Bar = 0, Order = 71, Print = true}
+        [BS.W_RANDOM_EMOTE] = {Bar = 0, Order = 71, Print = true},
+        [BS.W_CONTAINERS] = {Bar = 0, Order = 72, ColourValues = "c"},
     }
 }
