@@ -262,10 +262,16 @@ BS.widgets[BS.W_REPAIRS_KITS] = {
         local count = 0
         local vars = BS.Vars.Controls[BS.W_REPAIRS_KITS]
 
-        for slot = 0, GetBagSize(_G.BAG_BACKPACK) do
-            if (IsItemRepairKit(_G.BAG_BACKPACK, slot)) then
-                count = count + GetSlotStackSize(_G.BAG_BACKPACK, slot)
-            end
+        local filteredItems =
+            SHARED_INVENTORY:GenerateFullSlotData(
+            function(itemdata)
+                return IsItemRepairKit(itemdata.bagId, itemdata.slotIndex)
+            end,
+            _G.BAG_BACKPACK
+        )
+
+        for _, item in ipairs(filteredItems) do
+            count = count + item.stackCount
         end
 
         local colour = vars.OkColour or BS.Vars.DefaultOkColour
@@ -1194,21 +1200,24 @@ BS.widgets[BS.W_CONTAINERS] = {
         local count = 0
         local vars = BS.Vars.Controls[BS.W_CONTAINERS]
 
-        for slot = 0, GetBagSize(_G.BAG_BACKPACK) do
-            local itemType = GetItemType(_G.BAG_BACKPACK, slot)
-            if (itemType == _G.ITEMTYPE_CONTAINER) then
-                local itemDisplayQuality = GetItemDisplayQuality(_G.BAG_BACKPACK, slot)
-                local colour = GetItemQualityColor(itemDisplayQuality)
-                local name = colour:Colorize(ZO_CachedStrFormat("<<C:1>>", GetItemName(_G.BAG_BACKPACK, slot)))
+        local filteredItems =
+            SHARED_INVENTORY:GenerateFullSlotData(
+            function(itemdata)
+                return itemdata.itemType == _G.ITEMTYPE_CONTAINER
+            end,
+            _G.BAG_BACKPACK
+        )
 
-                if (not containers[name]) then
-                    containers[name] = 0
-                end
+        for _, item in ipairs(filteredItems) do
+            local colour = GetItemQualityColor(item.displayQuality)
+            local name = colour:Colorize(item.name)
 
-                local containerCount = GetSlotStackSize(_G.BAG_BACKPACK, slot)
-                containers[name] = containers[name] + containerCount
-                count = count + containerCount
+            if (not containers[name]) then
+                containers[name] = 0
             end
+
+            containers[name] = containers[name] + item.stackCount
+            count = count + item.stackCount
         end
 
         local colour = vars.Colour or BS.Vars.DefaultColour
@@ -1255,21 +1264,24 @@ BS.widgets[BS.W_TREASURE] = {
         local count = 0
         local vars = BS.Vars.Controls[BS.W_TREASURE]
 
-        for slot = 0, GetBagSize(_G.BAG_BACKPACK) do
-            local itemType = GetItemType(_G.BAG_BACKPACK, slot)
-            if (itemType == _G.ITEMTYPE_TREASURE) then
-                local itemDisplayQuality = GetItemDisplayQuality(_G.BAG_BACKPACK, slot)
-                local colour = GetItemQualityColor(itemDisplayQuality)
-                local name = colour:Colorize(ZO_CachedStrFormat("<<C:1>>", GetItemName(_G.BAG_BACKPACK, slot)))
+        local filteredItems =
+            SHARED_INVENTORY:GenerateFullSlotData(
+            function(itemdata)
+                return itemdata.itemType == _G.ITEMTYPE_TREASURE
+            end,
+            _G.BAG_BACKPACK
+        )
 
-                if (not containers[name]) then
-                    containers[name] = 0
-                end
+        for _, item in ipairs(filteredItems) do
+            local colour = GetItemQualityColor(item.displayQuality)
+            local name = colour:Colorize(item.name)
 
-                local containerCount = GetSlotStackSize(_G.BAG_BACKPACK, slot)
-                containers[name] = containers[name] + containerCount
-                count = count + containerCount
+            if (not containers[name]) then
+                containers[name] = 0
             end
+
+            containers[name] = containers[name] + item.stackCount
+            count = count + item.stackCount
         end
 
         local colour = vars.Colour or BS.Vars.DefaultColour

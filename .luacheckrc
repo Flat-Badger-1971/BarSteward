@@ -100,6 +100,11 @@ read_globals = {
             Show = {read_only = true}
         }
     },
+    ["SHARED_INVENTORY"] = {
+        fields = {
+            GenerateFullSlotData = {read_only = true}
+        }
+    },
     ["STABLE_MANAGER"] = {
         fields = {
             GetStats = {read_only = true}
