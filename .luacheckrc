@@ -102,7 +102,8 @@ read_globals = {
     },
     ["SHARED_INVENTORY"] = {
         fields = {
-            GenerateFullSlotData = {read_only = true}
+            GenerateFullSlotData = {read_only = true},
+            bagCache = {read_only = true}
         }
     },
     ["STABLE_MANAGER"] = {

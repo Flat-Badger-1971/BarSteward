@@ -100,19 +100,6 @@ function baseBar:Initialise(barSettings)
     -- prevent the bar from displaying when not in hud or hudui modes
     self.bar.fragment = ZO_HUDFadeSceneFragment:New(self.bar)
     self:AddToScenes()
-    -- if (not BS.Vars.Bars[barSettings.index].ShowEverywhere) then
-    --     SCENE_MANAGER:GetScene("hud"):AddFragment(self.bar.fragment)
-    --     SCENE_MANAGER:GetScene("hudui"):AddFragment(self.bar.fragment)
-
-    --     BS.AddToScenes("Crafting", barSettings.index, self.bar)
-    --     BS.AddToScenes("Banking", barSettings.index, self.bar)
-    --     BS.AddToScenes("Inventory", barSettings.index, self.bar)
-    --     BS.AddToScenes("Mail", barSettings.index, self.bar)
-    --     BS.AddToScenes("Siege", barSettings.index, self.bar)
-    --     BS.AddToScenes("Menu", barSettings.index, self.bar)
-    --     BS.AddToScenes("Interacting", barSettings.index, self.bar)
-    --     BS.AddToScenes("GuildStore", barSettings.index, self.bar)
-    -- end
 
     -- change the bar's colour during combat if required by the user
     BS.RegisterForEvent(
@@ -307,9 +294,11 @@ function baseBar:DoUpdate(metadata, ...)
     end
 
     -- check if it needs to be hidden
-    if (metadata.hideWhenEqual or metadata.hideWhenGreaterThan or metadata.hideWhenLessThan) then
-        if (BS.Vars.Controls[metadata.id].Autohide and not hidecheck) then
-            self:HideWhen(metadata, value)
+    if (hidecheck == false) then
+        if (metadata.hideWhenEqual or metadata.hideWhenGreaterThan or metadata.hideWhenLessThan) then
+            if (BS.Vars.Controls[metadata.id].Autohide) then
+                self:HideWhen(metadata, value)
+            end
         end
     end
 
@@ -369,30 +358,6 @@ function baseBar:DoUpdate(metadata, ...)
             BS.SoundLastPlayed[metadata.id] = {time = os.time(), value = value}
         end
     end
-
-    -- check bar hiding
-    -- if (BS.Vars.Bars[self.index].HideBarEnable and BS.Vars.Bars[self.index].HideBarWidget == metadata.id) then
-    --     local hideValue = BS.Vars.Bars[self.index].HideBarValue
-
-    --     if (hideValue) then
-    --         local condition = BS.Vars.Bars[self.index].HideBarCondition
-    --         local criterionMet = tostring(hideValue) == tostring(value)
-
-    --         if (condition == ">") then
-    --             criterionMet = (tonumber(value) or 0) > (tonumber(hideValue) or 0)
-    --         elseif (condition == "<") then
-    --             criterionMet = (tonumber(value) or 0) < (tonumber(hideValue) or 0)
-    --         end
-
-    --         if (criterionMet) then
-    --             self:RemoveFromScenes()
-    --             self.removed = true
-    --         elseif (self.removed) then
-    --             self:AddToScenes()
-    --             self.removed = nil
-    --         end
-    --     end
-    -- end
 end
 
 function baseBar:AddWidgets(widgets)

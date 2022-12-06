@@ -181,23 +181,21 @@ BS.widgets[BS.W_DURABILITY] = {
             local items = {}
             local vars = BS.Vars.Controls[BS.W_DURABILITY]
 
-            for slot = 0, GetBagSize(_G.BAG_WORN) do
-                local itemName = ZO_CachedStrFormat("<<C:1>>", GetItemName(_G.BAG_WORN, slot))
-                local condition = GetItemCondition(_G.BAG_WORN, slot)
+            for _, data in pairs(_G.SHARED_INVENTORY.bagCache[_G.BAG_WORN]) do
                 local colour = BS.ARGBConvert(vars.OkColour or BS.Vars.DefaultOkColour)
 
-                if (itemName ~= "") then
-                    if (condition <= vars.OkValue and condition >= vars.DangerValue) then
+                if (data.name ~= "") then
+                    if (data.condition <= vars.OkValue and data.condition >= vars.DangerValue) then
                         colour = BS.ARGBConvert(vars.WarningColour or BS.Vars.DefaultWarningColour)
-                    elseif (condition < vars.DangerValue) then
+                    elseif (data.condition < vars.DangerValue) then
                         colour = BS.ARGBConvert(vars.DangerColour or BS.Vars.DefaultDangerColour)
                     end
 
-                    table.insert(items, colour .. itemName .. " - " .. condition .. "%|r")
+                    table.insert(items, colour .. data.name .. " - " .. data.condition .. "%|r")
 
-                    if (lowest > condition) then
-                        lowest = condition
-                        lowestType = GetItemType(_G.BAG_WORN, slot)
+                    if (lowest > data.condition) then
+                        lowest = data.condition
+                        lowestType = data.itemType
                     end
                 end
             end
@@ -349,30 +347,12 @@ BS.widgets[BS.W_SOUL_GEMS] = {
     }
 }
 
-local function isSurveyReport(bag, slot)
-    local _, specialisedItemType = GetItemType(bag, slot)
+local function getDetail(data)
+    local wcount = data.stackCount
+    local colour = GetItemQualityColor(data.displayQuality)
+    local name = colour:Colorize(data.name)
 
-    return specialisedItemType == _G.SPECIALIZED_ITEMTYPE_TROPHY_SURVEY_REPORT
-end
-
-local function isTreasureMap(bag, slot)
-    local _, specialisedItemType = GetItemType(bag, slot)
-
-    return specialisedItemType == _G.SPECIALIZED_ITEMTYPE_TROPHY_TREASURE_MAP
-end
-
-local function isMasterWrit(bag, slot)
-    local _, specialisedItemType = GetItemType(bag, slot)
-    return specialisedItemType == _G.SPECIALIZED_ITEMTYPE_MASTER_WRIT
-end
-
-local function getDetail(bag, slot)
-    local wcount = GetSlotStackSize(bag, slot)
-    local itemDisplayQuality = GetItemDisplayQuality(bag, slot)
-    local colour = GetItemQualityColor(itemDisplayQuality)
-    local name = colour:Colorize(ZO_CachedStrFormat("<<C:1>>", GetItemName(bag, slot)))
-
-    if (bag == _G.BAG_BACKPACK) then
+    if (data.bagId == _G.BAG_BACKPACK) then
         name = BS.BAGICON .. " " .. name
     else
         name = BS.BANKICON .. " " .. name
@@ -423,10 +403,10 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
             end
 
             for _, bag in pairs(bags) do
-                for slot = 0, GetBagSize(bag) do
-                    if (isMasterWrit(bag, slot)) then
+                for _, data in pairs(_G.SHARED_INVENTORY.bagCache[bag]) do
+                    if (data.specializedItemType == _G.SPECIALIZED_ITEMTYPE_MASTER_WRIT) then
                         writs = writs + 1
-                        local itemId = GetItemId(bag, slot)
+                        local itemId = GetItemId(bag, data.slotIndex)
                         local type = getWritType(itemId)
 
                         if (type ~= 0) then
@@ -448,7 +428,7 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
                                 if (wwCache[itemId]) then
                                     know_list = wwCache[itemId]
                                 else
-                                    local link = GetItemLink(bag, slot)
+                                    local link = GetItemLink(bag, data.slotIndex)
                                     _, know_list = _G.WritWorthy.ToMatKnowList(link)
                                     wwCache[itemId] = know_list
                                 end
@@ -460,14 +440,14 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
                         end
                     end
 
-                    if (isSurveyReport(bag, slot)) then
-                        surveys = surveys + GetSlotStackSize(bag, slot)
-                        table.insert(detail, getDetail(bag, slot))
+                    if (data.specializedItemType == _G.SPECIALIZED_ITEMTYPE_TROPHY_SURVEY_REPORT) then
+                        surveys = surveys + data.stackCount
+                        table.insert(detail, getDetail(data))
                     end
 
-                    if (isTreasureMap(bag, slot)) then
-                        maps = maps + GetSlotStackSize(bag, slot)
-                        table.insert(detail, getDetail(bag, slot))
+                    if (data.specializedItemType == _G.SPECIALIZED_ITEMTYPE_TROPHY_TREASURE_MAP) then
+                        maps = maps + data.stackCount
+                        table.insert(detail, getDetail(data))
                     end
                 end
             end
@@ -581,18 +561,18 @@ BS.widgets[BS.W_TROPHY_VAULT_KEYS] = {
         end
 
         for _, bag in pairs(bags) do
-            for slot = 0, GetBagSize(bag) do
-                local itemId = GetItemId(bag, slot)
+            for _, data in pairs(_G.SHARED_INVENTORY.bagCache[bag]) do
+                local itemId = GetItemId(bag, data.slotIndex)
 
                 if (BS.TROPHY_VAULT_KEYS[itemId]) then
-                    local cnt = GetSlotStackSize(bag, slot)
+                    local cnt = data.stackCount
 
                     count = count + cnt
                     local location = bag == _G.BAG_BACKPACK and "bag" or "bank"
 
                     if (not keys[location][itemId]) then
-                        local icon = GetItemInfo(bag, slot)
-                        local name = GetItemName(bag, slot)
+                        local icon = data.icon
+                        local name = data.name
 
                         keys[location][itemId] = {count = cnt, name = name, icon = icon, bag = bag}
                     else
@@ -700,7 +680,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
 
                     if (vars[itemId]) then
                         if (linkCache[itemId]) then
-                            local cnt = GetSlotStackSize(bag, data.slotIndex)
+                            local cnt = data.stackCount
 
                             if (not count[itemId]) then
                                 count[itemId] = 0
