@@ -471,8 +471,10 @@ end
 function baseBar:Toggle()
     if (self.hidden) then
         self:Show()
+        BS.Vars.Bars[self.index].ToggleState = "shown"
     else
         self:Hide()
+        BS.Vars.Bars[self.index].ToggleState = "hidden"
     end
 end
 

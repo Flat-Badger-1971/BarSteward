@@ -46,6 +46,21 @@
             <Action name="BARSTEWARD_KEYBIND_TOGGLE_BAR_15">
                 <Down>BarSteward.ToggleBar(15)</Down>
             </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_BAR_16">
+                <Down>BarSteward.ToggleBar(16)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_BAR_17">
+                <Down>BarSteward.ToggleBar(17)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_BAR_18">
+                <Down>BarSteward.ToggleBar(18)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_BAR_19">
+                <Down>BarSteward.ToggleBar(19)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_BAR_20">
+                <Down>BarSteward.ToggleBar(20)</Down>
+            </Action>
         </Category>
     </Layer>
 </Bindings>

@@ -230,6 +230,15 @@ local function Initialise()
                 )
 
                 bar:AddWidgets(orderedWidgets)
+
+                if (BS.Vars.Bars[idx].ToggleState == "hidden") then
+                    zo_callLater(
+                        function()
+                            bar:Hide()
+                        end,
+                        500
+                    )
+                end
             end
 
             if (BS.Vars.Bars[idx].NudgeCompass) then
