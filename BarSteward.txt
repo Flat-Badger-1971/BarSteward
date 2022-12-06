@@ -51,3 +51,5 @@ ui/controls.lua
 ui/windows.lua
 
 BarSteward.lua
+
+ui/bindings.xml

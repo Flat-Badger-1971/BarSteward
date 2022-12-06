@@ -222,3 +222,6 @@ BS.IGNORE_RECIPE = {
 
 BS.COLLAPSE = "/esoui/art/buttons/large_leftdoublearrow_up.dds"
 BS.EXPAND = "/esoui/art/buttons/large_rightdoublearrow_up.dds"
+
+BS.FADE_IN_TIME = 250
+BS.FADE_OUT_TIME = 750

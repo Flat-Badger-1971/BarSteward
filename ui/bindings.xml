@@ -1,0 +1,51 @@
+<Bindings>
+    <Layer name="SI_KEYBINDINGS_CATEGORY_GENERAL">
+        <Category name="|cff9900Bar Steward|r">
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_BAR_1">
+                <Down>BarSteward.ToggleBar(1)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_BAR_2">
+                <Down>BarSteward.ToggleBar(2)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_BAR_3">
+                <Down>BarSteward.ToggleBar(3)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_BAR_4">
+                <Down>BarSteward.ToggleBar(4)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_BAR_5">
+                <Down>BarSteward.ToggleBar(5)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_BAR_6">
+                <Down>BarSteward.ToggleBar(6)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_BAR_7">
+                <Down>BarSteward.ToggleBar(7)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_BAR_8">
+                <Down>BarSteward.ToggleBar(8)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_BAR_9">
+                <Down>BarSteward.ToggleBar(9)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_BAR_10">
+                <Down>BarSteward.ToggleBar(10)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_BAR_11">
+                <Down>BarSteward.ToggleBar(11)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_BAR_12">
+                <Down>BarSteward.ToggleBar(12)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_BAR_13">
+                <Down>BarSteward.ToggleBar(13)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_BAR_14">
+                <Down>BarSteward.ToggleBar(14)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_BAR_15">
+                <Down>BarSteward.ToggleBar(15)</Down>
+            </Action>
+        </Category>
+    </Layer>
+</Bindings>

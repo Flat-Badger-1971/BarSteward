@@ -458,6 +458,24 @@ function baseBar:SetAnchor(...)
     self.bar:SetAnchor(...)
 end
 
+function baseBar:Hide()
+    self.bar.fragment:SetHiddenForReason("userHidden", true, BS.FADE_IN_TIME, BS.FADE_OUT_TIME)
+    self.hidden = true
+end
+
+function baseBar:Show()
+    self.bar.fragment:SetHiddenForReason("userHidden", false, BS.FADE_IN_TIME, BS.FADE_OUT_TIME)
+    self.hidden = false
+end
+
+function baseBar:Toggle()
+    if (self.hidden) then
+        self:Show()
+    else
+        self:Hide()
+    end
+end
+
 function BS.CreateBar(...)
     local bar = baseBar:New(...)
 

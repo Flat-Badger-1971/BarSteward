@@ -184,6 +184,11 @@ local function Initialise()
 
     for idx, barData in pairs(bars) do
         if (not BS.Vars.Bars[idx].Disable) then
+            ZO_CreateStringId(
+                "SI_BINDING_NAME_BARSTEWARD_KEYBIND_TOGGLE_BAR_" .. idx,
+                ZO_CachedStrFormat(_G.BARSTEWARD_TOGGLE, barData.Name)
+            )
+
             local widgets = {}
             local orderedWidgets = {}
 
@@ -282,6 +287,10 @@ local function Initialise()
             ReloadUI()
         end
     end
+end
+
+function BS.ToggleBar(index)
+    _G[BS.Name .. "_bar_" .. index].ref:Toggle()
 end
 
 function BS.OnAddonLoaded(_, addonName)
