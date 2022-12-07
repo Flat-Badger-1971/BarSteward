@@ -561,18 +561,18 @@ BS.widgets[BS.W_TROPHY_VAULT_KEYS] = {
         end
 
         for _, bag in pairs(bags) do
-            for slot = 0, GetBagSize(bag) do
-                local itemId = GetItemId(bag, slot)
+            for _, data in pairs(_G.SHARED_INVENTORY.bagCache[bag]) do
+                local itemId = GetItemId(bag, data.slotIndex)
 
                 if (BS.TROPHY_VAULT_KEYS[itemId]) then
-                    local cnt = GetSlotStackSize(bag, slot)
+                    local cnt = data.stackCount
 
                     count = count + cnt
                     local location = bag == _G.BAG_BACKPACK and "bag" or "bank"
 
                     if (not keys[location][itemId]) then
-                        local icon = GetItemInfo(bag, slot)
-                        local name = GetItemName(bag, slot)
+                        local icon = data.iconFile
+                        local name = data.name
 
                         keys[location][itemId] = {count = cnt, name = name, icon = icon, bag = bag}
                     else
