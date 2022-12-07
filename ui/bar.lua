@@ -282,7 +282,7 @@ function baseBar:DoUpdate(metadata, ...)
     end
 
     -- check for hide when fully used
-    if (metadata.fullyUsed) then
+    if (metadata.fullyUsed) and not (metadata.complete) then
         if (BS.Vars.Controls[metadata.id].HideWhenFullyUsed) then
             hidecheck = true
             if (metadata.fullyUsed() == true) then
