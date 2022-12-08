@@ -225,3 +225,5 @@ BS.EXPAND = "/esoui/art/buttons/large_rightdoublearrow_up.dds"
 
 BS.FADE_IN_TIME = 250
 BS.FADE_OUT_TIME = 750
+
+BS.CLICK = "/esoui/art/miscellaneous/icon_lmb.dds"

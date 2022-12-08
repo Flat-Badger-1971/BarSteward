@@ -88,6 +88,12 @@ function baseWidget:Initialise(metadata, parent, tooltipAnchor, valueSide)
         end
 
         local function getTooltip()
+            if (metadata.onClick) then
+                if (string.sub(self.tooltip, 1, 2) ~= "|t") then
+                    self.tooltip = zo_iconFormat(BS.CLICK, 32, 32) .. " " .. self.tooltip
+                end
+            end
+
             return self.tooltip
         end
 
@@ -129,7 +135,7 @@ function baseWidget:Initialise(metadata, parent, tooltipAnchor, valueSide)
         )
     end
 
-    if (metadata.onClick ~= nil) then
+    if (metadata.onClick) then
         self.control:SetMouseEnabled(true)
         self.control:SetHandler(
             "OnMouseDown",

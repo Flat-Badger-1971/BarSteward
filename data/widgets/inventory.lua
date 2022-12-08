@@ -225,14 +225,10 @@ BS.widgets[BS.W_DURABILITY] = {
             end
 
             if (#items > 0) then
-                local tooltipText = ""
+                local tooltipText = GetString(_G.BARSTEWARD_DURABILITY)
 
                 for _, i in ipairs(items) do
-                    if (tooltipText ~= "") then
-                        tooltipText = tooltipText .. BS.LF
-                    end
-
-                    tooltipText = tooltipText .. i
+                    tooltipText = tooltipText .. BS.LF .. i
                 end
 
                 widget.tooltip = tooltipText
