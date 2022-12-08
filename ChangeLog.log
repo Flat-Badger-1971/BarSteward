@@ -1,5 +1,7 @@
 [color=#ff9900][b]Version: 1.4.16 ---------------[/b][/color]
 Reinstated code optimisations for vault keys - thanks to karthrag inak for testing
+French translation updates courtesy of XXXspartiateXXX
+Corrected an issue with the widget hiding logic
 
 [color=#ff9900][b]Version: 1.4.15 ---------------[/b][/color]
 Reverted code optimisations for vault keys

@@ -269,25 +269,29 @@ function baseBar:DoUpdate(metadata, ...)
     -- set the intial state as unhidden
     self:SetHiddenWidget(metadata.widget, false)
 
-    -- check for hide on completion
+    local hidden = false
+
+    --- check for hide on completion
     if (metadata.complete) then
         if (BS.Vars.Controls[metadata.id].HideWhenComplete or BS.Vars.Controls[metadata.id].HideWhenCompleted) then
             hidecheck = true
             if (metadata.complete() == true) then
                 self:HideWhen(metadata, "hide it!")
+                hidden = true
             else
                 self:HideWhen(metadata, "unhide it!")
+                hidden = false
             end
         end
     end
 
     -- check for hide when fully used
-    if (metadata.fullyUsed) and not (metadata.complete) then
+    if (metadata.fullyUsed) then
         if (BS.Vars.Controls[metadata.id].HideWhenFullyUsed) then
             hidecheck = true
             if (metadata.fullyUsed() == true) then
                 self:HideWhen(metadata, "hide it!")
-            else
+            elseif (not hidden) then
                 self:HideWhen(metadata, "unhide it!")
             end
         end
