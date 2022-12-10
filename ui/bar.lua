@@ -166,15 +166,11 @@ function baseBar:SetHiddenWidget(widget, hidden)
         widget.control:SetResizeToFitDescendents(false)
         widget.control:SetDimensions(0, 0)
         widget:SetHidden(true)
-        self.bar:SetResizeToFitDescendents(false)
-        self.bar:SetDimensions(0, 0)
-        self.bar:SetResizeToFitDescendents(true)
+        BS.ResizeBar(self.index)
     else
         widget.control:SetResizeToFitDescendents(true)
         widget:SetHidden(false)
-        self.bar:SetResizeToFitDescendents(false)
-        self.bar:SetDimensions(0, 0)
-        self.bar:SetResizeToFitDescendents(true)
+        BS.ResizeBar(self.index)
     end
 end
 

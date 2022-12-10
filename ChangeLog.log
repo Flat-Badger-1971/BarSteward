@@ -1,5 +1,6 @@
 [color=#ff9900][b]Version: 1.4.17 ---------------[/b][/color]
 Mouse icon added to the tooltips of clickable widgets
+Fix for bar resizing issue with item watcher widget
 
 [color=#ff9900][b]Version: 1.4.16 ---------------[/b][/color]
 Reinstated code optimisations for vault keys - thanks to karthrag inak for testing

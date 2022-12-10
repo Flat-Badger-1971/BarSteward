@@ -735,6 +735,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
 
         widget:SetColour(unpack(colour))
         widget:SetValue(BS.Trim(countText), BS.Trim(plainCountText))
+        BS.ResizeBar(vars.Bar)
         widget.tooltip = ttt
 
         if (vars.Announce) then
@@ -821,6 +822,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
     customSettings = function()
         local settings = {}
         local itemIds = BS.Vars.WatchedItems
+        local vars = BS.Vars.Controls[BS.W_WATCHED_ITEMS]
 
         for itemId, _ in pairs(itemIds) do
             if (not linkCache[itemId]) then
@@ -850,11 +852,12 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
                     end,
                     type = "checkbox",
                     getFunc = function()
-                        return BS.Vars.Controls[BS.W_WATCHED_ITEMS][itemId]
+                        return vars[itemId]
                     end,
                     setFunc = function(value)
-                        BS.Vars.Controls[BS.W_WATCHED_ITEMS][itemId] = value
+                        vars[itemId] = value
                         BS.RefreshWidget(BS.W_WATCHED_ITEMS)
+                        BS.ResizeBar(vars.Bar)
                     end,
                     default = true
                 }
@@ -900,7 +903,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
             func = function()
                 if (BS.Vars.WatchedItems[tonumber(BS.Vars.NewItemId)] == nil) then
                     BS.Vars.WatchedItems[tonumber(BS.Vars.NewItemId)] = true
-                    BS.Vars.Controls[BS.W_WATCHED_ITEMS][tonumber(BS.Vars.NewItemId)] = true
+                    vars[tonumber(BS.Vars.NewItemId)] = true
                     BS.Vars.NewItemId = nil
 
                     ZO_Dialogs_ShowDialog(BS.Name .. "Reload")
@@ -926,7 +929,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
             name = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_DIALOG_REMOVE)),
             func = function()
                 BS.Vars.WatchedItems[tonumber(BS.Vars.NewItemId)] = nil
-                BS.Vars.Controls[BS.W_WATCHED_ITEMS][tonumber(BS.Vars.NewItemId)] = nil
+                vars[tonumber(BS.Vars.NewItemId)] = nil
                 BS.Vars.NewItemId = nil
 
                 ZO_Dialogs_ShowDialog(BS.Name .. "Reload")

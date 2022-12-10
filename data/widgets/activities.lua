@@ -4,7 +4,7 @@ local completed = {
     [_G.TIMED_ACTIVITY_TYPE_WEEKLY] = false
 }
 
-local function configureWidget(widget, complete, maxComplete, activityType, tasks, hideLimit)
+local function configureWidget(widget, complete, maxComplete, activityType, tasks, hideLimit, defaultTooltip)
     widget:SetValue(complete .. (hideLimit and "" or ("/" .. maxComplete)))
     widget:SetColour(
         unpack(
@@ -15,21 +15,17 @@ local function configureWidget(widget, complete, maxComplete, activityType, task
     )
 
     if (#tasks > 0) then
-        local tooltipText = ""
+        local tooltipText = defaultTooltip or ""
 
         for _, t in ipairs(tasks) do
-            if (tooltipText ~= "") then
-                tooltipText = tooltipText .. BS.LF
-            end
-
-            tooltipText = tooltipText .. t
+            tooltipText = tooltipText .. BS.LF .. t
         end
 
         widget.tooltip = tooltipText
     end
 end
 
-local function getTimedActivityProgress(activityType, widget, hideLimit)
+local function getTimedActivityProgress(activityType, widget, hideLimit, defaultTooltip)
     local complete = 0
     local maxComplete = GetTimedActivityTypeLimit(activityType)
     local tasks = {}
@@ -98,7 +94,7 @@ local function getTimedActivityProgress(activityType, widget, hideLimit)
     end
 
     if (widget ~= nil) then
-        configureWidget(widget, complete, maxComplete, activityType, tasks, hideLimit)
+        configureWidget(widget, complete, maxComplete, activityType, tasks, hideLimit, defaultTooltip)
     end
 
     return complete, maxTask
@@ -111,7 +107,8 @@ BS.widgets[BS.W_DAILY_ENDEAVOURS] = {
         return getTimedActivityProgress(
             _G.TIMED_ACTIVITY_TYPE_DAILY,
             widget,
-            BS.Vars.Controls[BS.W_DAILY_ENDEAVOURS].HideLimit
+            BS.Vars.Controls[BS.W_DAILY_ENDEAVOURS].HideLimit,
+            GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS)
         )
     end,
     event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED},
@@ -137,7 +134,8 @@ BS.widgets[BS.W_WEEKLY_ENDEAVOURS] = {
         return getTimedActivityProgress(
             _G.TIMED_ACTIVITY_TYPE_WEEKLY,
             widget,
-            BS.Vars.Controls[BS.W_WEEKLY_ENDEAVOURS].HideLimit
+            BS.Vars.Controls[BS.W_WEEKLY_ENDEAVOURS].HideLimit,
+            GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS)
         )
     end,
     event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED},

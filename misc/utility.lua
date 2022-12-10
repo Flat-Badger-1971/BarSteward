@@ -670,3 +670,15 @@ function BS.Filter(t, filterFunc)
 
     return out
 end
+
+function BS.ResizeBar(barIndex)
+    if ((barIndex or 0) == 0) then
+        return
+    end
+
+    local bar = _G[BS.Name .. "_bar_" .. barIndex].ref.bar
+
+    bar:SetResizeToFitDescendents(false)
+    bar:SetDimensions(0, 0)
+    bar:SetResizeToFitDescendents(true)
+end
