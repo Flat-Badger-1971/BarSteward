@@ -1,7 +1,7 @@
 local BS = _G.BarSteward
 
 BS.LAM = _G.LibAddonMenu2
-BS.VERSION = "1.4.16"
+BS.VERSION = "1.4.17"
 
 local panel = {
     type = "panel",
@@ -113,11 +113,25 @@ local function initialise()
     }
 
     BS.options[6] = {
+        type = "checkbox",
+        name = GetString(_G.BARSTEWARD_USE_FONT_CORRECTION),
+        tooltip = GetString(_G.BARSTEWARD_USE_FONT_CORRECTION_TOOLTIP),
+        getFunc = function()
+            return BS.Vars.FontCorrection
+        end,
+        setFunc = function(value)
+            BS.Vars.FontCorrection = value
+        end,
+        requiresReload = true,
+        default = false
+    }
+
+    BS.options[7] = {
         type = "divider",
         alpha = 0
     }
 
-    BS.options[7] = {
+    BS.options[8] = {
         type = "button",
         name = GetString(_G.BARSTEWARD_ALIGN_BARS),
         func = function()
@@ -129,7 +143,7 @@ local function initialise()
         width = "half"
     }
 
-    BS.options[8] = {
+    BS.options[9] = {
         type = "button",
         name = GetString(_G.BARSTEWARD_REORDER_WIDGETS),
         func = function()
@@ -141,7 +155,7 @@ local function initialise()
         width = "half"
     }
 
-    BS.options[9] = {
+    BS.options[10] = {
         type = "divider",
         alpha = 0
     }

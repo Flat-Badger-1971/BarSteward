@@ -191,8 +191,20 @@ function baseWidget:SetValue(value, plainValue)
     local scale = self.control:GetScale()
 
     textWidth = textWidth / (GetUIGlobalScale() * scale)
-
     self.value:SetWidth(textWidth)
+
+    if (BS.Vars.FontCorrection) then
+        self.value:SetHeight(self.value:GetHeight() * 2)
+        self.value:SetWidth(textWidth)
+        if (self.value:DidLineWrap()) then
+            local fontFactor = ((BS.Defaults.FontSize - BS.Vars.FontSize) / BS.Defaults.FontSize) + 0.9
+            textWidth = textWidth * fontFactor
+            textWidth = textWidth / (GetUIGlobalScale() * scale)
+
+            self.value:SetWidth(textWidth)
+        end
+        self.value:SetHeight(self.value:GetHeight() / 2)
+    end
 end
 
 function baseWidget:SetFont(font)

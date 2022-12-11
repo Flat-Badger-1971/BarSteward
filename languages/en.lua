@@ -231,6 +231,11 @@ ZO_CreateStringId("BARSTEWARD_UNSLOTTED", "Unslotted")
 ZO_CreateStringId("BARSTEWARD_UNSLOTTED_OPTION", "Show Unslotted Count")
 ZO_CreateStringId("BARSTEWARD_UNSLOTTED_TOOLTIP", "Show the number of empty champion point slots")
 ZO_CreateStringId("BARSTEWARD_UNSPENT", "Unspent")
+ZO_CreateStringId("BARSTEWARD_USE_FONT_CORRECTION", "Use font size correction (experimental)")
+ZO_CreateStringId(
+    "BARSTEWARD_USE_FONT_CORRECTION_TOOLTIP",
+    "When the font size is set to less than the default, some widgets may have their values truncated. This setting attempts to compensate for that."
+)
 ZO_CreateStringId("BARSTEWARD_USE_WRITWORTHY", "Use WritWorthy for writ summaries")
 ZO_CreateStringId(
     "BARSTEWARD_USE_WRITWORTHY_TOOLTIP",

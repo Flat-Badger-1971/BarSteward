@@ -1,3 +1,6 @@
+[color=#ff9900][b]Version: 1.4.18 ---------------[/b][/color]
+Experimental option added to text width calculation when the font is smaller than the default size
+
 [color=#ff9900][b]Version: 1.4.17 ---------------[/b][/color]
 Mouse icon added to the tooltips of clickable widgets
 Fix for bar resizing issue with item watcher widget
