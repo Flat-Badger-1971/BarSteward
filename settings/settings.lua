@@ -1,7 +1,7 @@
 local BS = _G.BarSteward
 
 BS.LAM = _G.LibAddonMenu2
-BS.VERSION = "1.4.17"
+BS.VERSION = "1.4.19"
 
 local panel = {
     type = "panel",
@@ -40,8 +40,8 @@ end
 
 local function initialise()
     BS.options = {}
-    BS.options[1] = BS.Vars:GetLibAddonMenuAccountCheckbox()
-    BS.options[2] = {
+    BS.options[#BS.options + 1] = BS.Vars:GetLibAddonMenuAccountCheckbox()
+    BS.options[#BS.options + 1] = {
         type = "checkbox",
         name = GetString(_G.BARSTEWARD_MOVEFRAME),
         getFunc = function()
@@ -69,7 +69,7 @@ local function initialise()
         default = BS.Defaults.Movable
     }
 
-    BS.options[3] = {
+    BS.options[#BS.options + 1] = {
         type = "dropdown",
         name = GetString(_G.BARSTEWARD_FONT),
         choices = fontNames,
@@ -85,7 +85,7 @@ local function initialise()
         default = BS.Defaults.Font
     }
 
-    BS.options[4] = {
+    BS.options[#BS.options + 1] = {
         type = "slider",
         name = GetString(_G.BARSTEWARD_FONT_SIZE),
         min = 8,
@@ -102,7 +102,7 @@ local function initialise()
         default = BS.Defaults.FontSize
     }
 
-    BS.options[5] = {
+    BS.options[#BS.options + 1] = {
         type = "description",
         text = function()
             _G.BarSteward_SampleText.desc:SetFont(BS.GetFont(BS.Vars.Font))
@@ -112,7 +112,7 @@ local function initialise()
         reference = "BarSteward_SampleText"
     }
 
-    BS.options[6] = {
+    BS.options[#BS.options + 1] = {
         type = "checkbox",
         name = GetString(_G.BARSTEWARD_USE_FONT_CORRECTION),
         tooltip = GetString(_G.BARSTEWARD_USE_FONT_CORRECTION_TOOLTIP),
@@ -126,12 +126,25 @@ local function initialise()
         default = false
     }
 
-    BS.options[7] = {
+    BS.options[#BS.options + 1] = {
+        type = "checkbox",
+        name = GetString(_G.BARSTEWARD_HIDE_MOUSE),
+        getFunc = function()
+            return BS.Vars.HideMouse or false
+        end,
+        setFunc = function(value)
+            BS.Vars.HideMouse = value
+        end,
+        width = "full",
+        default = false
+    }
+
+    BS.options[#BS.options + 1] = {
         type = "divider",
         alpha = 0
     }
 
-    BS.options[8] = {
+    BS.options[#BS.options + 1] = {
         type = "button",
         name = GetString(_G.BARSTEWARD_ALIGN_BARS),
         func = function()
@@ -143,7 +156,7 @@ local function initialise()
         width = "half"
     }
 
-    BS.options[9] = {
+    BS.options[#BS.options + 1] = {
         type = "button",
         name = GetString(_G.BARSTEWARD_REORDER_WIDGETS),
         func = function()
@@ -155,7 +168,8 @@ local function initialise()
         width = "half"
     }
 
-    BS.options[10] = {
+
+    BS.options[#BS.options + 1] = {
         type = "divider",
         alpha = 0
     }

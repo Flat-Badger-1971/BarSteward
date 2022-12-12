@@ -40,6 +40,7 @@ BS.widgets[BS.W_BAG_SPACE] = {
         if (vars.ShowFreeSpace) then
             value =
                 (bagSize - bagUsed) .. (vars.HideLimit and "" or (noLimitColour .. "/" .. bagSize .. noLimitTerminator))
+            widthValue = (bagSize - bagUsed) .. (vars.HideLimit and "" or ("/" .. bagSize ))
         end
 
         if (vars.ShowPercent) then
@@ -117,6 +118,7 @@ BS.widgets[BS.W_BANK_SPACE] = {
         if (vars.ShowFreeSpace) then
             value =
                 (bagSize - bagUsed) .. (vars.HideLimit and "" or (noLimitColour .. "/" .. bagSize .. noLimitTerminator))
+            widthValue = (bagSize - bagUsed) .. (vars.HideLimit and "" or ("/" .. bagSize))
         end
 
         if (vars.ShowPercent) then

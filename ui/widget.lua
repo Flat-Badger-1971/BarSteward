@@ -88,9 +88,11 @@ function baseWidget:Initialise(metadata, parent, tooltipAnchor, valueSide)
         end
 
         local function getTooltip()
-            if (metadata.onClick) then
-                if (string.sub(self.tooltip, 1, 2) ~= "|t") then
-                    self.tooltip = zo_iconFormat(BS.CLICK, 32, 32) .. " " .. self.tooltip
+            if (not BS.Vars.HideMouse) then
+                if (metadata.onClick) then
+                    if (string.sub(self.tooltip, 1, 2) ~= "|t") then
+                        self.tooltip = zo_iconFormat(BS.CLICK, 32, 32) .. " " .. self.tooltip
+                    end
                 end
             end
 

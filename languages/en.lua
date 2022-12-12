@@ -87,6 +87,7 @@ ZO_CreateStringId("BARSTEWARD_HIDE_ZERO_DAYS", "Hide days when zero")
 ZO_CreateStringId("BARSTEWARD_HIDE_LIMIT", "Hide limit")
 ZO_CreateStringId("BARSTEWARD_HIDE_LIMIT_TOOLTIP", "Don't show the maximum amount applicable to this widget")
 ZO_CreateStringId("BARSTEWARD_HIDE_MAX", "Hide when maximum level")
+ZO_CreateStringId("BARSTEWARD_HIDE_MOUSE", "Hide mouse icon in tooltips")
 ZO_CreateStringId("BARSTEWARD_HIDE_SECONDS", "Hide seconds")
 ZO_CreateStringId("BARSTEWARD_HIDE_WHEN_COMPLETE", "Hide when complete")
 ZO_CreateStringId(
