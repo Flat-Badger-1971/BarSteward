@@ -88,6 +88,7 @@ ZO_CreateStringId("BARSTEWARD_HIDE_ZERO_DAYS", "Masquer les jours arrivés à z�
 ZO_CreateStringId("BARSTEWARD_HIDE_LIMIT", "Masquer le montant maximum")
 ZO_CreateStringId("BARSTEWARD_HIDE_LIMIT_TOOLTIP", "Masque le montant maximum applicable à ce widget.")
 ZO_CreateStringId("BARSTEWARD_HIDE_MAX", "Masquer au niveau maximum")
+ZO_CreateStringId("BARSTEWARD_HIDE_MOUSE", "Masquer l'icône de la souris dans les infobulles")
 ZO_CreateStringId("BARSTEWARD_HIDE_SECONDS", "Masquer les secondes")
 ZO_CreateStringId("BARSTEWARD_HIDE_WHEN_COMPLETE", "Masquer une fois complété")
 ZO_CreateStringId(
@@ -242,6 +243,10 @@ ZO_CreateStringId(
     "Affiche le nombre d'emplacements de la barre de points de champion vides."
 )
 ZO_CreateStringId("BARSTEWARD_UNSPENT", "Non dépensé")
+ZO_CreateStringId("BARSTEWARD_USE_FONT_CORRECTION", "Utiliser la correction de la taille de police (expérimental)")
+ZO_CreateStringId(
+    "BARSTEWARD_USE_FONT_CORRECTION_TOOLTIP",
+    "Lorsque la taille de la police est inférieure à la valeur par défaut, certains widgets peuvent voir leurs valeurs tronquées. Ce paramètre tente de compenser cela."
 ZO_CreateStringId("BARSTEWARD_USE_WRITWORTHY", "Utiliser WritWorthy pour les commandes")
 ZO_CreateStringId(
     "BARSTEWARD_USE_WRITWORTHY_TOOLTIP",
