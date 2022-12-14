@@ -243,7 +243,7 @@ ZO_CreateStringId(
     "Affiche le nombre d'emplacements de la barre de points de champion vides."
 )
 ZO_CreateStringId("BARSTEWARD_UNSPENT", "Non dépensé")
-ZO_CreateStringId("BARSTEWARD_USE_FONT_CORRECTION", "Utiliser la correction de la taille de police (expérimental)")
+ZO_CreateStringId("BARSTEWARD_USE_FONT_CORRECTION", "Corriger la taille de la police (expérimental)")
 ZO_CreateStringId(
     "BARSTEWARD_USE_FONT_CORRECTION_TOOLTIP",
     "Lorsque la taille de la police est inférieure à la valeur par défaut, certains widgets peuvent voir leurs valeurs tronquées. Ce paramètre tente de compenser cela."
