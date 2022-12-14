@@ -247,6 +247,7 @@ ZO_CreateStringId("BARSTEWARD_USE_FONT_CORRECTION", "Utiliser la correction de l
 ZO_CreateStringId(
     "BARSTEWARD_USE_FONT_CORRECTION_TOOLTIP",
     "Lorsque la taille de la police est inférieure à la valeur par défaut, certains widgets peuvent voir leurs valeurs tronquées. Ce paramètre tente de compenser cela."
+)
 ZO_CreateStringId("BARSTEWARD_USE_WRITWORTHY", "Utiliser WritWorthy pour les commandes")
 ZO_CreateStringId(
     "BARSTEWARD_USE_WRITWORTHY_TOOLTIP",
