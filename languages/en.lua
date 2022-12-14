@@ -1,4 +1,5 @@
 -- English localisation
+-- luacheck: push ignore 631
 ZO_CreateStringId("BARSTEWARD_12", "12 Hour")
 ZO_CreateStringId("BARSTEWARD_24", "24 Hour")
 ZO_CreateStringId("BARSTEWARD_ACTIVE_BAR", "Active Bar")
@@ -130,6 +131,7 @@ ZO_CreateStringId("BARSTEWARD_NEWBAR_WARNING", "Adding a new bar will force a UI
 ZO_CreateStringId("BARSTEWARD_NO_LIMIT_COLOUR", "No limit colour")
 ZO_CreateStringId("BARSTEWARD_NO_LIMIT_COLOUR_TOOLTIP", "Don't add a colour to the maximum value")
 ZO_CreateStringId("BARSTEWARD_NONE", "Nothing to train")
+ZO_CreateStringId("BARSTEWARD_NONE_BAR", "None")
 ZO_CreateStringId("BARSTEWARD_NOT_PICKED_UP", "Not picked up")
 ZO_CreateStringId("BARSTEWARD_NUDGE", "Nudge the compass down")
 ZO_CreateStringId(
@@ -274,3 +276,4 @@ ZO_CreateStringId("BARSTEWARD_WRITS", "Master Writs/Surveys/Treasure Maps")
 ZO_CreateStringId("BARSTEWARD_WRITS_WRITS", "<<1[No Master Writs/1 Master Writ/$d Master Writs]>>")
 ZO_CreateStringId("BARSTEWARD_WRITS_SURVEYS", "<<1[No Surveys/1 Survey/$d Surveys]>>")
 ZO_CreateStringId("BARSTEWARD_WRITS_MAPS", "<<1[No Treasure Maps/1 Treasure Map/$s Treasure Maps]>>")
+--luacheck: pop

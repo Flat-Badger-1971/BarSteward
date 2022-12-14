@@ -40,7 +40,7 @@ BS.widgets[BS.W_BAG_SPACE] = {
         if (vars.ShowFreeSpace) then
             value =
                 (bagSize - bagUsed) .. (vars.HideLimit and "" or (noLimitColour .. "/" .. bagSize .. noLimitTerminator))
-            widthValue = (bagSize - bagUsed) .. (vars.HideLimit and "" or ("/" .. bagSize ))
+            widthValue = (bagSize - bagUsed) .. (vars.HideLimit and "" or ("/" .. bagSize))
         end
 
         if (vars.ShowPercent) then
@@ -175,71 +175,69 @@ BS.widgets[BS.W_REPAIR_COST] = {
 BS.widgets[BS.W_DURABILITY] = {
     -- v1.0.1
     name = "durability",
-    update = function(widget, _, _, _, _, _, updateReason)
+    update = function(widget)
         -- find item with lowest durability
-        if (updateReason == nil or updateReason == _G.INVENTORY_UPDATE_REASON_DURABILITY_CHANGE) then
-            local lowest = 100
-            local lowestType = _G.ITEMTYPE_ARMOR
-            local items = {}
-            local vars = BS.Vars.Controls[BS.W_DURABILITY]
+        local lowest = 100
+        local lowestType = _G.ITEMTYPE_ARMOR
+        local items = {}
+        local vars = BS.Vars.Controls[BS.W_DURABILITY]
 
-            for _, data in pairs(_G.SHARED_INVENTORY.bagCache[_G.BAG_WORN]) do
-                local colour = BS.ARGBConvert(vars.OkColour or BS.Vars.DefaultOkColour)
+        for _, data in pairs(_G.SHARED_INVENTORY.bagCache[_G.BAG_WORN]) do
+            local colour = BS.ARGBConvert(vars.OkColour or BS.Vars.DefaultOkColour)
 
-                if (data.name ~= "") then
-                    if (data.condition <= vars.OkValue and data.condition >= vars.DangerValue) then
-                        colour = BS.ARGBConvert(vars.WarningColour or BS.Vars.DefaultWarningColour)
-                    elseif (data.condition < vars.DangerValue) then
-                        colour = BS.ARGBConvert(vars.DangerColour or BS.Vars.DefaultDangerColour)
-                    end
-
-                    table.insert(items, colour .. data.name .. " - " .. data.condition .. "%|r")
-
-                    if (lowest > data.condition) then
-                        lowest = data.condition
-                        lowestType = data.itemType
-                    end
-                end
-            end
-
-            widget:SetValue(lowest .. "%")
-
-            local colour
-
-            if (lowest >= vars.OkValue) then
-                colour = vars.OkColour or BS.Vars.DefaultOkColour
-            elseif (vars.DangerValue) then
-                colour = vars.WarningColour or BS.Vars.DefaultWarningColour
-            else
-                colour = vars.DangerColour or BS.Vars.DefaultDangerColour
-            end
-
-            widget:SetColour(unpack(colour))
-
-            if (lowest <= vars.DangerValue) then
-                if (lowestType == _G.ITEMTYPE_WEAPON) then
-                    widget:SetIcon("/esoui/art/hud/broken_weapon.dds")
-                else
-                    widget:SetIcon("/esoui/art/hud/broken_armor.dds")
-                end
-            else
-                widget:SetIcon("/esoui/art/inventory/inventory_tabicon_armor_up.dds")
-            end
-
-            if (#items > 0) then
-                local tooltipText = GetString(_G.BARSTEWARD_DURABILITY)
-
-                for _, i in ipairs(items) do
-                    tooltipText = tooltipText .. BS.LF .. i
+            if (data.name ~= "") then
+                if (data.condition <= vars.OkValue and data.condition >= vars.DangerValue) then
+                    colour = BS.ARGBConvert(vars.WarningColour or BS.Vars.DefaultWarningColour)
+                elseif (data.condition < vars.DangerValue) then
+                    colour = BS.ARGBConvert(vars.DangerColour or BS.Vars.DefaultDangerColour)
                 end
 
-                widget.tooltip = tooltipText
-            end
+                table.insert(items, colour .. data.name .. " - " .. data.condition .. "%|r")
 
-            return lowest
+                if (lowest > data.condition) then
+                    lowest = data.condition
+                    lowestType = data.itemType
+                end
+            end
         end
+
+        widget:SetValue(lowest .. "%")
+
+        local colour
+
+        if (lowest >= vars.OkValue) then
+            colour = vars.OkColour or BS.Vars.DefaultOkColour
+        elseif (vars.DangerValue) then
+            colour = vars.WarningColour or BS.Vars.DefaultWarningColour
+        else
+            colour = vars.DangerColour or BS.Vars.DefaultDangerColour
+        end
+
+        widget:SetColour(unpack(colour))
+
+        if (lowest <= vars.DangerValue) then
+            if (lowestType == _G.ITEMTYPE_WEAPON) then
+                widget:SetIcon("/esoui/art/hud/broken_weapon.dds")
+            else
+                widget:SetIcon("/esoui/art/hud/broken_armor.dds")
+            end
+        else
+            widget:SetIcon("/esoui/art/inventory/inventory_tabicon_armor_up.dds")
+        end
+
+        if (#items > 0) then
+            local tooltipText = GetString(_G.BARSTEWARD_DURABILITY)
+
+            for _, i in ipairs(items) do
+                tooltipText = tooltipText .. BS.LF .. i
+            end
+
+            widget.tooltip = tooltipText
+        end
+
+        return lowest
     end,
-    event = _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
+    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
     icon = "/esoui/art/inventory/inventory_tabicon_armor_up.dds",
     tooltip = GetString(_G.BARSTEWARD_DURABILITY),
     onClick = function()
@@ -283,7 +281,7 @@ BS.widgets[BS.W_REPAIRS_KITS] = {
 
         return count
     end,
-    event = _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
+    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
     icon = "/esoui/art/inventory/inventory_tabicon_repair_up.dds",
     tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_HOOK_POINT_STORE_REPAIR_KIT_HEADER)):gsub(":", "")
 }
@@ -384,147 +382,144 @@ end
 BS.widgets[BS.W_WRITS_SURVEYS] = {
     -- v1.2.5
     name = "writs",
-    update = function(widget, _, _, _, _, _, updateReason)
-        if (updateReason == nil or updateReason == _G.INVENTORY_UPDATE_REASON_DEFAULT) then
-            local writs = 0
-            local surveys = 0
-            local maps = 0
-            local detail = {}
-            local bags = {_G.BAG_BACKPACK, _G.BAG_BANK}
-            local writDetail = {}
-            local canDo = {}
-            local wwCache = {}
-            local useWW = (_G.WritWorthy ~= nil) and (BS.Vars.UseWritWorthy == true)
+    update = function(widget)
+        local writs = 0
+        local surveys = 0
+        local maps = 0
+        local detail = {}
+        local bags = {_G.BAG_BACKPACK, _G.BAG_BANK}
+        local writDetail = {}
+        local canDo = {}
+        local wwCache = {}
+        local useWW = (_G.WritWorthy ~= nil) and (BS.Vars.UseWritWorthy == true)
 
-            if (IsESOPlusSubscriber()) then
-                table.insert(bags, _G.BAG_SUBSCRIBER_BANK)
-            end
+        if (IsESOPlusSubscriber()) then
+            table.insert(bags, _G.BAG_SUBSCRIBER_BANK)
+        end
 
-            for _, bag in pairs(bags) do
-                for _, data in pairs(_G.SHARED_INVENTORY.bagCache[bag]) do
-                    if (data.specializedItemType == _G.SPECIALIZED_ITEMTYPE_MASTER_WRIT) then
-                        writs = writs + 1
-                        local itemId = GetItemId(bag, data.slotIndex)
-                        local type = getWritType(itemId)
+        for _, bag in pairs(bags) do
+            for _, data in pairs(_G.SHARED_INVENTORY.bagCache[bag]) do
+                if (data.specializedItemType == _G.SPECIALIZED_ITEMTYPE_MASTER_WRIT) then
+                    writs = writs + 1
+                    local itemId = GetItemId(bag, data.slotIndex)
+                    local type = getWritType(itemId)
 
-                        if (type ~= 0) then
-                            if (writDetail[type] == nil) then
-                                writDetail[type] = {bankCount = 0, bagCount = 0}
+                    if (type ~= 0) then
+                        if (writDetail[type] == nil) then
+                            writDetail[type] = {bankCount = 0, bagCount = 0}
+                        end
+
+                        local btype = (bag == _G.BAG_BACKPACK) and "bagCount" or "bankCount"
+
+                        writDetail[type][btype] = writDetail[type][btype] + 1
+
+                        if (useWW) then
+                            if (canDo[type] == nil) then
+                                canDo[type] = {canCraft = 0, cannotCraft = 0}
                             end
 
-                            local btype = (bag == _G.BAG_BACKPACK) and "bagCount" or "bankCount"
+                            local know_list
 
-                            writDetail[type][btype] = writDetail[type][btype] + 1
-
-                            if (useWW) then
-                                if (canDo[type] == nil) then
-                                    canDo[type] = {canCraft = 0, cannotCraft = 0}
-                                end
-
-                                local know_list
-
-                                if (wwCache[itemId]) then
-                                    know_list = wwCache[itemId]
-                                else
-                                    local link = GetItemLink(bag, data.slotIndex)
-                                    _, know_list = _G.WritWorthy.ToMatKnowList(link)
-                                    wwCache[itemId] = know_list
-                                end
-
-                                local doable = canCraft(know_list)
-
-                                canDo[type][doable] = canDo[type][doable] + 1
+                            if (wwCache[itemId]) then
+                                know_list = wwCache[itemId]
+                            else
+                                local link = GetItemLink(bag, data.slotIndex)
+                                _, know_list = _G.WritWorthy.ToMatKnowList(link)
+                                wwCache[itemId] = know_list
                             end
+
+                            local doable = canCraft(know_list)
+
+                            canDo[type][doable] = canDo[type][doable] + 1
                         end
                     end
+                end
 
-                    if (data.specializedItemType == _G.SPECIALIZED_ITEMTYPE_TROPHY_SURVEY_REPORT) then
-                        surveys = surveys + data.stackCount
-                        table.insert(detail, getDetail(data))
-                    end
+                if (data.specializedItemType == _G.SPECIALIZED_ITEMTYPE_TROPHY_SURVEY_REPORT) then
+                    surveys = surveys + data.stackCount
+                    table.insert(detail, getDetail(data))
+                end
 
-                    if (data.specializedItemType == _G.SPECIALIZED_ITEMTYPE_TROPHY_TREASURE_MAP) then
-                        maps = maps + data.stackCount
-                        table.insert(detail, getDetail(data))
-                    end
+                if (data.specializedItemType == _G.SPECIALIZED_ITEMTYPE_TROPHY_TREASURE_MAP) then
+                    maps = maps + data.stackCount
+                    table.insert(detail, getDetail(data))
                 end
             end
+        end
 
-            widget:SetValue(writs .. "/" .. surveys .. "/" .. maps)
-            widget:SetColour(unpack(BS.Vars.Controls[BS.W_WRITS_SURVEYS].Colour or BS.Vars.DefaultColour))
+        widget:SetValue(writs .. "/" .. surveys .. "/" .. maps)
+        widget:SetColour(unpack(BS.Vars.Controls[BS.W_WRITS_SURVEYS].Colour or BS.Vars.DefaultColour))
 
-            local wwText = ""
+        local wwText = ""
+
+        if (useWW) then
+            local can = 0
+            local cant = 0
+            for _, d in pairs(canDo) do
+                can = can + d.canCraft
+                cant = cant + d.cannotCraft
+            end
+
+            local canColour = BS.ARGBConvert((can > 0) and BS.Vars.DefaultOkColour or BS.Vars.DefaultColour)
+            local cantColour = BS.ARGBConvert((cant > 0) and BS.Vars.DefaultDangerColour or BS.Vars.DefaultColour)
+
+            wwText = "   (" .. canColour .. can .. "|r/"
+            wwText = wwText .. cantColour .. cant .. "|r|cf9f9f9)"
+        end
+
+        local ttt = GetString(_G.BARSTEWARD_WRITS) .. BS.LF .. "|cf9f9f9"
+        ttt = ttt .. zo_strformat(GetString(_G.BARSTEWARD_WRITS_WRITS), writs) .. wwText .. BS.LF
+        ttt = ttt .. zo_strformat(GetString(_G.BARSTEWARD_WRITS_SURVEYS), surveys) .. BS.LF
+        ttt = ttt .. zo_strformat(GetString(_G.BARSTEWARD_WRITS_MAPS), maps) .. "|r"
+
+        local writText = {}
+
+        for type, counts in pairs(writDetail) do
+            local writType = ZO_CachedStrFormat("<<C:1>>", GetString(_G["SI_TRADESKILLTYPE" .. tostring(type)]))
+            if (counts.bagCount > 0) then
+                writType = writType .. " " .. BS.BAGICON .. " " .. counts.bagCount
+            end
+
+            if (counts.bankCount > 0) then
+                writType = writType .. " " .. BS.BANKICON .. " " .. counts.bankCount
+            end
 
             if (useWW) then
-                local can = 0
-                local cant = 0
-                for _, d in pairs(canDo) do
-                    can = can + d.canCraft
-                    cant = cant + d.cannotCraft
-                end
-
+                local can = canDo[type].canCraft
+                local cant = canDo[type].cannotCraft
                 local canColour = BS.ARGBConvert((can > 0) and BS.Vars.DefaultOkColour or BS.Vars.DefaultColour)
                 local cantColour = BS.ARGBConvert((cant > 0) and BS.Vars.DefaultDangerColour or BS.Vars.DefaultColour)
 
-                wwText = "   (" .. canColour .. can .. "|r/"
-                wwText = wwText .. cantColour .. cant .. "|r|cf9f9f9)"
+                writType = writType .. "   (" .. canColour .. can .. "|r/"
+                writType = writType .. cantColour .. cant .. "|r)"
             end
 
-            local ttt = GetString(_G.BARSTEWARD_WRITS) .. BS.LF .. "|cf9f9f9"
-            ttt = ttt .. zo_strformat(GetString(_G.BARSTEWARD_WRITS_WRITS), writs) .. wwText .. BS.LF
-            ttt = ttt .. zo_strformat(GetString(_G.BARSTEWARD_WRITS_SURVEYS), surveys) .. BS.LF
-            ttt = ttt .. zo_strformat(GetString(_G.BARSTEWARD_WRITS_MAPS), maps) .. "|r"
-
-            local writText = {}
-
-            for type, counts in pairs(writDetail) do
-                local writType = ZO_CachedStrFormat("<<C:1>>", GetString(_G["SI_TRADESKILLTYPE" .. tostring(type)]))
-                if (counts.bagCount > 0) then
-                    writType = writType .. " " .. BS.BAGICON .. " " .. counts.bagCount
-                end
-
-                if (counts.bankCount > 0) then
-                    writType = writType .. " " .. BS.BANKICON .. " " .. counts.bankCount
-                end
-
-                if (useWW) then
-                    local can = canDo[type].canCraft
-                    local cant = canDo[type].cannotCraft
-                    local canColour = BS.ARGBConvert((can > 0) and BS.Vars.DefaultOkColour or BS.Vars.DefaultColour)
-                    local cantColour =
-                        BS.ARGBConvert((cant > 0) and BS.Vars.DefaultDangerColour or BS.Vars.DefaultColour)
-
-                    writType = writType .. "   (" .. canColour .. can .. "|r/"
-                    writType = writType .. cantColour .. cant .. "|r)"
-                end
-
-                table.insert(writText, writType)
-            end
-
-            if (#writText > 0) then
-                table.sort(writText)
-                ttt = ttt .. BS.LF
-
-                for _, d in pairs(writText) do
-                    ttt = ttt .. BS.LF .. d
-                end
-            end
-
-            if (#detail > 0) then
-                table.sort(detail)
-                ttt = ttt .. BS.LF
-
-                for _, d in pairs(detail) do
-                    ttt = ttt .. BS.LF .. d
-                end
-            end
-
-            widget.tooltip = ttt
-
-            return widget:GetValue()
+            table.insert(writText, writType)
         end
+
+        if (#writText > 0) then
+            table.sort(writText)
+            ttt = ttt .. BS.LF
+
+            for _, d in pairs(writText) do
+                ttt = ttt .. BS.LF .. d
+            end
+        end
+
+        if (#detail > 0) then
+            table.sort(detail)
+            ttt = ttt .. BS.LF
+
+            for _, d in pairs(detail) do
+                ttt = ttt .. BS.LF .. d
+            end
+        end
+
+        widget.tooltip = ttt
+
+        return widget:GetValue()
     end,
-    event = _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
+    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
     icon = "/esoui/art/journal/journal_tabicon_cadwell_up.dds",
     tooltip = GetString(_G.BARSTEWARD_WRITS),
     customSettings = {
@@ -605,7 +600,7 @@ BS.widgets[BS.W_TROPHY_VAULT_KEYS] = {
 
         return count
     end,
-    event = _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
+    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
     icon = "/esoui/art/icons/quest_grinddoorkey_shackles.dds",
     tooltip = GetString(_G.BARSTEWARD_TROPHY_VAULT_KEYS),
     hideWhenEqual = 0
@@ -799,7 +794,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
 
         return count
     end,
-    event = _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
+    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
     tooltip = GetString(_G.BARSTEWARD_WATCHED_ITEMS),
     icon = "/esoui/art/icons/crafting_critter_snake_eyes.dds",
     customOptions = {
@@ -1224,7 +1219,7 @@ BS.widgets[BS.W_CONTAINERS] = {
 
         return count
     end,
-    event = _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
+    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
     icon = "/esoui/art/inventory/inventory_tabicon_container_up.dds",
     tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ITEMTYPEDISPLAYCATEGORY26)),
     hideWhenEqual = 0,
@@ -1288,7 +1283,7 @@ BS.widgets[BS.W_TREASURE] = {
 
         return count
     end,
-    event = _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
+    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
     icon = "/esoui/art/icons/quest_strosmkai_open_treasure_chest.dds",
     tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ITEMTYPE56)),
     hideWhenEqual = 0,

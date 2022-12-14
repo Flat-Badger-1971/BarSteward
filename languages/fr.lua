@@ -1,4 +1,5 @@
 -- French localisation
+-- luacheck: push ignore 631
 ZO_CreateStringId("BARSTEWARD_12", "12 Heures")
 ZO_CreateStringId("BARSTEWARD_24", "24 Heures")
 ZO_CreateStringId("BARSTEWARD_ACTIVE_BAR", "Barre active")
@@ -94,7 +95,10 @@ ZO_CreateStringId(
     "Masque la recherche lorsque plus aucun trait ne peut être recherché pour ce type d'artisanat. Ce paramètre remplacera tous les paramètre de masquage automatique."
 )
 ZO_CreateStringId("BARSTEWARD_HIDE_WHEN_FULLY_USED", "Masquer lorsque tout est utilisé")
-ZO_CreateStringId("BARSTEWARD_HIDE_WHEN_FULLY_USED_TOOLTIP", "Masque quand tout les emplacements/options disponibles sont utilisés.")
+ZO_CreateStringId(
+    "BARSTEWARD_HIDE_WHEN_FULLY_USED_TOOLTIP",
+    "Masque quand tout les emplacements/options disponibles sont utilisés."
+)
 ZO_CreateStringId("BARSTEWARD_HORIZONTAL", "Horizontale")
 ZO_CreateStringId("BARSTEWARD_HOURS", "Heures")
 ZO_CreateStringId("BARSTEWARD_IN_PROGRESS", "En cours")
@@ -127,8 +131,12 @@ ZO_CreateStringId("BARSTEWARD_NEWBAR_INVALID", "Nom de barre invalide")
 ZO_CreateStringId("BARSTEWARD_NEWBAR_NAME", "Nouveau nom de barre (appuyez sur Entrée lorsque vous avez terminé)")
 ZO_CreateStringId("BARSTEWARD_NEWBAR_WARNING", "L'ajout d'une nouvelle barre forcera un rechargement de l'IU")
 ZO_CreateStringId("BARSTEWARD_NO_LIMIT_COLOUR", "Aucune couleur à la limite")
-ZO_CreateStringId("BARSTEWARD_NO_LIMIT_COLOUR_TOOLTIP", "Ne change pas de couleur une fois la valeur maximale atteinte.")
+ZO_CreateStringId(
+    "BARSTEWARD_NO_LIMIT_COLOUR_TOOLTIP",
+    "Ne change pas de couleur une fois la valeur maximale atteinte."
+)
 ZO_CreateStringId("BARSTEWARD_NONE", "Rien à entrainer")
+ZO_CreateStringId("BARSTEWARD_NONE_BAR", "Rien")
 ZO_CreateStringId("BARSTEWARD_NOT_PICKED_UP", "Non ramassée")
 ZO_CreateStringId("BARSTEWARD_NUDGE", "Déplacer la boussole vers le bas")
 ZO_CreateStringId(
@@ -229,7 +237,10 @@ ZO_CreateStringId("BARSTEWARD_TWELVE_TWENTY_FOUR", "12/24 Heure")
 ZO_CreateStringId("BARSTEWARD_UNDAUNTED_KEYS", "Clefs des Indomptables")
 ZO_CreateStringId("BARSTEWARD_UNSLOTTED", "Sans emplacement")
 ZO_CreateStringId("BARSTEWARD_UNSLOTTED_OPTION", "Afficher le nombre sans emplacement")
-ZO_CreateStringId("BARSTEWARD_UNSLOTTED_TOOLTIP", "Affiche le nombre d'emplacements de la barre de points de champion vides.")
+ZO_CreateStringId(
+    "BARSTEWARD_UNSLOTTED_TOOLTIP",
+    "Affiche le nombre d'emplacements de la barre de points de champion vides."
+)
 ZO_CreateStringId("BARSTEWARD_UNSPENT", "Non dépensé")
 ZO_CreateStringId("BARSTEWARD_USE_WRITWORTHY", "Utiliser WritWorthy pour les commandes")
 ZO_CreateStringId(
@@ -264,6 +275,10 @@ ZO_CreateStringId("BARSTEWARD_WRIT_PROVISIONING", "Commande de cuisine")
 ZO_CreateStringId("BARSTEWARD_WRIT_VOUCHERS", "Assignats")
 ZO_CreateStringId("BARSTEWARD_WRIT_WOODWORKING", "Commande de travail du bois")
 ZO_CreateStringId("BARSTEWARD_WRITS", "Commandes de maitre/Repérages/Trésor")
-ZO_CreateStringId("BARSTEWARD_WRITS_WRITS", "<<1[Aucune commandes de maitre/1 Commande de maitre/$d Commandes de maitre]>>")
+ZO_CreateStringId(
+    "BARSTEWARD_WRITS_WRITS",
+    "<<1[Aucune commandes de maitre/1 Commande de maitre/$d Commandes de maitre]>>"
+)
 ZO_CreateStringId("BARSTEWARD_WRITS_SURVEYS", "<<1[Aucun repérages/1 Repérage/$d Repérages]>>")
 ZO_CreateStringId("BARSTEWARD_WRITS_MAPS", "<<1[Aucune cartes au trésor/1 Carte au trésor/$s Cartes au trésor]>>")
+-- luacheck: pop

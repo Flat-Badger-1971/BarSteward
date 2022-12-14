@@ -1,7 +1,7 @@
 local BS = _G.BarSteward
 
 BS.LAM = _G.LibAddonMenu2
-BS.VERSION = "1.4.19"
+BS.VERSION = "1.4.20"
 
 local panel = {
     type = "panel",
@@ -1483,7 +1483,7 @@ end
 local function getWidgetSettings()
     local widgets = BS.Vars.Controls
     local bars = BS.Vars.Bars
-    local none = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_DAMAGETYPE0))
+    local none = GetString(_G.BARSTEWARD_NONE)
     local barNames = {}
 
     for _, v in ipairs(bars) do

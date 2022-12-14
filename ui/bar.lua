@@ -422,6 +422,21 @@ function baseBar:AddWidgets(widgets)
             end
         end
 
+        -- register widgets that need to respond to callbacks
+        if (metadata.callback) then
+            for object, events in pairs(metadata.callback) do
+                for _, event in ipairs(events) do
+                    object:RegisterCallback(
+                        event,
+                        function(...)
+                            d("updatecalled")
+                            self:DoUpdate(metadata, ...)
+                        end
+                    )
+                end
+            end
+        end
+
         if (self.orientation == "horizontal") then
             if (firstWidget) then
                 metadata.widget:SetAnchor(LEFT, self.bar, LEFT)
