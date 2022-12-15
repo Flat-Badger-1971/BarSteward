@@ -137,7 +137,7 @@ ZO_CreateStringId("BARSTEWARD_NEWBAR_WARNING", "Das Anlegen einer neuen Leiste e
 ZO_CreateStringId("BARSTEWARD_NO_LIMIT_COLOUR", "Keine Limit Farbe")
 ZO_CreateStringId("BARSTEWARD_NO_LIMIT_COLOUR_TOOLTIP", "Färbe das Maximum nicht ein")
 ZO_CreateStringId("BARSTEWARD_NONE", "Nichts zu trainieren")
-ZO_CreateStringId("BARSTEWARD_NONE_BAR", "Keiner")
+ZO_CreateStringId("BARSTEWARD_NONE_BAR", "Keine")
 ZO_CreateStringId("BARSTEWARD_NOT_PICKED_UP", "Nicht aufgenommen")
 ZO_CreateStringId("BARSTEWARD_NUDGE", "Drücke den Kompass herunter")
 ZO_CreateStringId(

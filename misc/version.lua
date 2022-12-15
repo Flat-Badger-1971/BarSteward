@@ -160,4 +160,12 @@ function BS.VersionCheck()
         BS.Vars.Controls[BS.W_TRANSMUTE_CRYSTALS].ColourValues = BS.Defaults.Controls[BS.W_TRANSMUTE_CRYSTALS].ColourValues
         BS.Vars.Updates[1304] = true
     end
+
+    if (needsUpdate(1421)) then
+        if (GetCVar("language.2") == "de") then
+            updateLanguageVars()
+        end
+
+        BS.Vars.Updates[1421] = true
+    end
 end

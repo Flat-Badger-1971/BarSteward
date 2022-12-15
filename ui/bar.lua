@@ -429,7 +429,6 @@ function baseBar:AddWidgets(widgets)
                     object:RegisterCallback(
                         event,
                         function(...)
-                            d("updatecalled")
                             self:DoUpdate(metadata, ...)
                         end
                     )
