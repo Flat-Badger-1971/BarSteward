@@ -682,3 +682,29 @@ function BS.ResizeBar(barIndex)
     bar:SetDimensions(0, 0)
     bar:SetResizeToFitDescendents(true)
 end
+
+local itemColours = {}
+
+do
+    for quality = _G.ITEM_DISPLAY_QUALITY_TRASH, _G.ITEM_DISPLAY_QUALITY_MYTHIC_OVERRIDE do
+        itemColours[quality] = {GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_ITEM_QUALITY_COLORS, quality)}
+    end
+end
+
+function BS.ColourToQuality(r, g, b)
+    for quality, rgba in pairs(itemColours) do
+        local rc, gc, bc = math.floor(rgba[1] * 100), math.floor(rgba[2] * 100), math.floor(rgba[3] * 100)
+        local ri, gi, bi = math.floor(r * 100), math.floor(g * 100), math.floor(b * 100)
+
+        if (rc == ri and gc == gi and bc == bi) then
+            return quality
+        end
+
+    end
+end
+
+function BS.ColourToIcon(r, g, b)
+    local quality = BS.ColourToQuality(r, g, b, 1)
+
+    return BS.ITEM_COLOUR_ICON[quality or 1]
+end

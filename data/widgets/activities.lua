@@ -722,3 +722,126 @@ BS.widgets[BS.W_LOREBOOKS] = {
         }
     end
 }
+
+local function getDungeonRewardInfo()
+    local randomDungeons = {[_G.LFG_ACTIVITY_DUNGEON] = {}, [_G.LFG_ACTIVITY_MASTER_DUNGEON] = {}}
+
+    for dungeonType, _ in pairs(randomDungeons) do
+        local locationsData = ZO_ACTIVITY_FINDER_ROOT_MANAGER:GetLocationsData(dungeonType)
+
+        for _, location in ipairs(locationsData) do
+            if (location:ShouldForceFullPanelKeyboard()) then
+                if (location:HasRewardData()) then
+                    local rewardUIDataId, xpReward = location:GetRewardData()
+                    local numShownItemRewardNodes = GetNumLFGActivityRewardUINodes(rewardUIDataId)
+
+                    for nodeIndex = 1, numShownItemRewardNodes do
+                        local displayName, icon, red, green, blue =
+                            GetLFGActivityRewardUINodeInfo(rewardUIDataId, nodeIndex)
+
+                        if (icon) then
+                            randomDungeons[dungeonType] = {
+                                typeName = location:GetNameKeyboard(),
+                                xpReward = xpReward,
+                                displayName = zo_strformat(_G.SI_ACTIVITY_FINDER_REWARD_NAME_FORMAT, displayName),
+                                icon = icon,
+                                colour = {r = red, g = green, b = blue},
+                                active = location:IsActive() or false,
+                                meetsRequirements = location:DoesPlayerMeetLevelRequirements()
+                            }
+                            break
+                        end
+                    end
+                end
+            end
+        end
+    end
+
+    return randomDungeons
+end
+
+BS.widgets[BS.W_RANDOM_DUNGEON] = {
+    -- v1.4.22
+    name = "randomDungeon",
+    update = function(widget)
+        local dungeonInfo = getDungeonRewardInfo()
+        local output, normalisedOutput = "", ""
+        local nd = dungeonInfo[_G.LFG_ACTIVITY_DUNGEON]
+        local vd = dungeonInfo[_G.LFG_ACTIVITY_MASTER_DUNGEON]
+        local tt = GetString(_G.BARSTEWARD_RANDOM_DUNGEON)
+        local eligibleCount = 0
+
+        if (nd) then
+            output = zo_iconFormat(BS.DUNGEON[_G.LFG_ACTIVITY_DUNGEON], 32, 32)
+            if (nd.meetsRequirements) then
+                local icon = BS.ColourToIcon(nd.colour.r, nd.colour.g, nd.colour.b)
+                output = output .. " " .. zo_iconFormat(icon, 32, 32)
+                eligibleCount = 1
+            else
+                output = output .. " " .. zo_iconFormat(BS.INELIGIBLE_ICON, 16, 16)
+            end
+
+            normalisedOutput = "XXXXXXX"
+
+            tt = tt .. BS.LF .. "|cf9f9f9"
+            tt = tt .. ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_DUNGEONDIFFICULTY1)) .. " |r"
+
+            if (nd.meetsRequirements) then
+                tt = tt .. BS.ARGBConvert2(nd.colour) .. nd.displayName .. " |r"
+                tt = tt .. zo_strformat(_G.SI_ACTIVITY_FINDER_REWARD_XP_FORMAT, ZO_CommaDelimitNumber(nd.xpReward))
+            else
+                tt =
+                    tt ..
+                    "|cf90000" ..
+                        ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_HOUSE_TEMPLATE_UNMET_REQUIREMENTS_TEXT)) .. "|r"
+            end
+        end
+
+        if (dungeonInfo[_G.LFG_ACTIVITY_MASTER_DUNGEON]) then
+            if (output ~= "") then
+                output = output .. " "
+                normalisedOutput = normalisedOutput .. " "
+            end
+
+            output = output .. zo_iconFormat(BS.DUNGEON[_G.LFG_ACTIVITY_MASTER_DUNGEON], 32, 32)
+
+            if (vd.meetsRequirements) then
+                local icon = BS.ColourToIcon(vd.colour.r, vd.colour.g, vd.colour.b)
+                output = output .. " " .. zo_iconFormat(icon, 32, 32)
+                eligibleCount = eligibleCount + 1
+            else
+                output = output .. " " .. zo_iconFormat(BS.INELIGIBLE_ICON, 16, 16)
+            end
+
+            normalisedOutput = normalisedOutput .. "XXXXXXX"
+
+            tt = tt .. BS.LF .. "|cf9f9f9"
+            tt = tt .. ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_DUNGEONDIFFICULTY2)) .. " |r"
+            if (vd.meetsRequirements) then
+                tt = tt .. BS.ARGBConvert2(vd.colour) .. vd.displayName .. " |r"
+                tt = tt .. zo_strformat(_G.SI_ACTIVITY_FINDER_REWARD_XP_FORMAT, ZO_CommaDelimitNumber(vd.xpReward))
+            else
+                tt =
+                    tt ..
+                    "|cf90000" ..
+                        ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_HOUSE_TEMPLATE_UNMET_REQUIREMENTS_TEXT)) .. "|r"
+            end
+        end
+
+        widget:SetValue(output, normalisedOutput)
+        widget.tooltip = tt
+
+        return eligibleCount
+    end,
+    event = _G.EVENT_LEVEL_UPDATE,
+    icon = "/esoui/art/icons/achievement_update11_dungeons_019.dds",
+    hideWhenEqual = 0,
+    tooltip = GetString(_G.BARSTEWARD_RANDOM_DUNGEON),
+    onClick = function()
+        if (IsInGamepadPreferredMode()) then
+            SCENE_MANAGER:Show("gamepadDungeonFinder")
+        else
+            SCENE_MANAGER:Show("groupMenuKeyboard")
+        end
+    end
+}

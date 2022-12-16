@@ -79,6 +79,7 @@ BS.W_RANDOM_MOUNT = 70
 BS.W_RANDOM_EMOTE = 71
 BS.W_CONTAINERS = 72
 BS.W_TREASURE = 73
+BS.W_RANDOM_DUNGEON = 74
 
 BS.WRITS = {
     [_G.CRAFTING_TYPE_ALCHEMY] = {
@@ -215,9 +216,9 @@ BS.POTENT_NIRNCRUX = 56863
 BS.IGNORE_RECIPE = {
     [64470] = true, -- Recipe: Old Orsinium Bloop Soup
     [121098] = true, -- Blueprint: Common Campfire, Outdoor
-	[126863] = true, -- Diagram: Dwarven Pipeline Cap, Sealed
-	[132173] = true, -- Blueprint: Witches Brazier, Primitive Log
-	[132179] = true, -- Blueprint: Witches Totem, Antler Charms
+    [126863] = true, -- Diagram: Dwarven Pipeline Cap, Sealed
+    [132173] = true, -- Blueprint: Witches Brazier, Primitive Log
+    [132179] = true -- Blueprint: Witches Totem, Antler Charms
 }
 
 BS.COLLAPSE = "/esoui/art/buttons/large_leftdoublearrow_up.dds"
@@ -227,3 +228,24 @@ BS.FADE_IN_TIME = 250
 BS.FADE_OUT_TIME = 750
 
 BS.CLICK = "/esoui/art/miscellaneous/icon_lmb.dds"
+
+BS.DUNGEON = {
+    [_G.LFG_ACTIVITY_DUNGEON] = "/esoui/art/leveluprewards/levelup_dungeon_64.dds",
+    [_G.LFG_ACTIVITY_MASTER_DUNGEON] = "/esoui/art/leveluprewards/levelup_veteran_dungeon_64.dds"
+}
+
+BS.INELIGIBLE_ICON = "/esoui/art/castbar/forbiddenaction.dds"
+BS.NORMAL_ICON = "/esoui/art/ava/ava_hud_emblem_neutral.dds"
+BS.MAGIC_ICON = "/esoui/art/progression/stamina_points_frame.dds"
+BS.ARCANE_ICON = "/esoui/art/scrying/crystal_on.dds"
+BS.ARTIFACT_ICON = "/esoui/art/battlegrounds/battlegrounds_teamicon_purple_64.dds"
+BS.LEGENDARY_ICON = "/esoui/art/market/keyboard/esoplus_chalice_gold2_64.dds"
+
+BS.ITEM_COLOUR_ICON = {
+    [_G.ITEM_DISPLAY_QUALITY_NORMAL] = BS.NORMAL_ICON,
+    [_G.ITEM_DISPLAY_QUALITY_MAGIC] = BS.MAGIC_ICON,
+    [_G.ITEM_DISPLAY_QUALITY_ARCANE] = BS.ARCANE_ICON,
+    [_G.ITEM_DISPLAY_QUALITY_ARTIFACT] = BS.ARTIFACT_ICON,
+    [_G.ITEM_DISPLAY_QUALITY_LEGENDARY] = BS.LEGENDARY_ICON,
+    [_G.ITEM_DISPLAY_QUALITY_MYTHIC_OVERRIDE] = BS.LEGENDARY_ICON
+}

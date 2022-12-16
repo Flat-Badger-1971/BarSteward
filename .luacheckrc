@@ -144,6 +144,11 @@ read_globals = {
             ShowCategory = {read_only = true}
         }
     },
+    ["ZO_ACTIVITY_FINDER_ROOT_MANAGER"] = {
+        fields = {
+            GetLocationsData = {read_only = true}
+        }
+    },
     ["ZO_COLLECTIBLE_DATA_MANAGER"] = {
         fields = {
             GetCategoryDataByIndicies = {read_only = true}
@@ -269,6 +274,8 @@ read_globals = {
     "GetGuildMemberCharacterInfo",
     "GetGuildMemberInfo",
     "GetGuildName",
+    "GetLFGActivityRewardDescriptionOverride",
+    "GetLFGActivityRewardUINodeInfo",
     "GetUIGlobalScale",
     "GetInteractionType",
     "GetInterfaceColor",
@@ -307,6 +314,7 @@ read_globals = {
     "GetNumFriends",
     "GetNumGuildMembers",
     "GetNumGuilds",
+    "GetNumLFGActivityRewardUINodes",
     "GetNumLockpicksLeft",
     "GetNumLoreCategories",
     "GetNumRecipeLists",
@@ -392,6 +400,7 @@ read_globals = {
     "ZO_CheckButton_SetLabelText",
     "ZO_CheckButton_SetToggleFunction",
     "ZO_ClearNumericallyIndexedTable",
+    "ZO_CommaDelimitNumber",
     "ZO_CreateStringId",
     "ZO_DeepTableCopy",
     "ZO_Dialogs_RegisterCustomDialog",
