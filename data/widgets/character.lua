@@ -664,6 +664,10 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
                 end
             end
 
+            ttt = ttt .. BS.LF .. BS.LF
+            ttt = ttt .. ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_STAT_GAMEPAD_EXPERIENCE_LABEL)) .. BS.LF
+            ttt = ttt .. "|cf9f9f9" .. ZO_CommaDelimitNumber(xp) .. " / " .. ZO_CommaDelimitNumber(xplvl) .. "|r"
+
             widget.tooltip = ttt
         end
 
@@ -708,4 +712,31 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
             default = false
         }
     }
+}
+
+BS.widgets[BS.W_PLAYER_LOCATION] = {
+    -- v1.4.22
+    name = "currentLocation",
+    update = function(widget, _, _, subZoneName)
+        local area = subZoneName
+
+        if ((area or "") == "") then
+            area = GetPlayerLocationName()
+        end
+
+        widget:SetValue(ZO_CachedStrFormat("<<C:1>>", area))
+        widget:SetColour(unpack(BS.Vars.Controls[BS.W_PLAYER_LOCATION].Colour or BS.Vars.DefaultColour))
+
+        return widget:GetValue()
+    end,
+    event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_ZONE_CHANGED},
+    icon = "/esoui/art/icons/mapkey/mapkey_player.dds",
+    tooltip = GetString(_G.BARSTEWARD_PLAYER_LOCATION),
+    onClick = function()
+        if (not IsInGamepadPreferredMode()) then
+            SCENE_MANAGER:Show("worldMap")
+        else
+            SCENE_MANAGER:Show("gamepad_worldMap")
+        end
+    end
 }

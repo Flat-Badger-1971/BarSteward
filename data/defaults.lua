@@ -413,6 +413,7 @@ BS.Defaults = {
         [BS.W_RANDOM_EMOTE] = {Bar = 0, Order = 71, Print = true},
         [BS.W_CONTAINERS] = {Bar = 0, Order = 72, Autohide = false, ColourValues = "c"},
         [BS.W_TREASURE] = {Bar = 0, Order = 73, Autohide = false, ColourValues = "c"},
-        [BS.W_RANDOM_DUNGEON] = {Bar = 0, Order = 74, Autohide = false}
+        [BS.W_RANDOM_DUNGEON] = {Bar = 0, Order = 74, Autohide = false},
+        [BS.W_PLAYER_LOCATION] = {Bar = 0, Order = 75, ColourValues = "c"}
     }
 }

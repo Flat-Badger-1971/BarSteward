@@ -327,6 +327,7 @@ read_globals = {
     "GetPlayerChampionPointsEarned",
     "GetPlayerChampionXP",
     "GetPlayerGuildMemberIndex",
+    "GetPlayerLocationName",
     "GetPulseTimeline",
     "GetRecallCooldown",
     "GetRecipeInfo",

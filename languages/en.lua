@@ -153,6 +153,7 @@ ZO_CreateStringId(
     "BARSTEWARD_PERFORMANCE_TIMERS_TOOLTIP",
     "Disable timer based widgets (except the time), during combat. This will reduce the number of potentially performance impacting updates."
 )
+ZO_CreateStringId("BARSTEWARD_PLAYER_LOCATION", "Player Location")
 ZO_CreateStringId("BARSTEWARD_PREVIOUS_ENCOUNTER", "Previous Encounter")
 ZO_CreateStringId("BARSTEWARD_PREVIOUS_ENCOUNTER_AVERAGE", "Average DPS")
 ZO_CreateStringId("BARSTEWARD_PREVIOUS_ENCOUNTER_DURATION", "Duration")
