@@ -151,6 +151,20 @@ function baseWidget:Initialise(metadata, parent, tooltipAnchor, valueSide)
     self.spacer:SetDimensions(10, metadata.iconHeight or 32)
     self.spacer:SetAnchor(valueSide == LEFT and RIGHT or LEFT, self.value, valueSide)
 
+    if (BS.Vars.FontCorrection) then
+        -- create an invisible label for width testing so it doesn't mess with the visible one
+        if (not parent.ref.fontCheck) then
+            parent.ref.fontCheck =
+                WINDOW_MANAGER:CreateControl(BS.Name .. "_FONT_CHECKER_" .. parent.ref.index, parent, CT_LABEL)
+            parent.ref.fontCheck:SetFont(BS.GetFont(BS.Vars.Font))
+            parent.ref.fontCheck:SetAnchor(TOPLEFT)
+            parent.ref.fontCheck:SetDimensions(50, 32)
+            parent.ref.fontCheck:SetVerticalAlignment(TEXT_ALIGN_CENTER)
+            parent.ref.fontCheck:SetHidden(true)
+        end
+        self.fontCheck = parent.ref.fontCheck
+    end
+
     if (DEBUG) then
         self.overlay = WINDOW_MANAGER:CreateControl(name .. "_overlay", self.control, CT_CONTROL)
         self.overlay:SetDrawTier(_G.DT_HIGH)
@@ -196,16 +210,17 @@ function baseWidget:SetValue(value, plainValue)
     self.value:SetWidth(textWidth)
 
     if (BS.Vars.FontCorrection) then
-        self.value:SetHeight(self.value:GetHeight() * 2)
-        self.value:SetWidth(textWidth)
-        if (self.value:DidLineWrap()) then
+        self.fontCheck:SetHeight(self.value:GetHeight() * 2)
+        self.fontCheck:SetWidth(textWidth)
+        self.fontCheck:SetText(value)
+
+        if (self.fontCheck:DidLineWrap()) then
             local fontFactor = ((BS.Defaults.FontSize - BS.Vars.FontSize) / BS.Defaults.FontSize) + 0.9
             textWidth = textWidth * fontFactor
             textWidth = textWidth / (GetUIGlobalScale() * scale)
 
             self.value:SetWidth(textWidth)
         end
-        self.value:SetHeight(self.value:GetHeight() / 2)
     end
 end
 

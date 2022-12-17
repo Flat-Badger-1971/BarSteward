@@ -16,6 +16,22 @@ local function trackOtherCurrency(currency)
 end
 
 local function Initialise()
+    -- utiltity
+    if (_G.SLASH_COMMANDS["/rl"] == nil) then
+        _G.SLASH_COMMANDS["/rl"] = function()
+            ReloadUI()
+        end
+    end
+
+    if (_G.SLASH_COMMANDS["/rld"] == nil) then
+        _G.SLASH_COMMANDS["/rld"] = function()
+            if (_G.LibDebugLogger) then
+                _G.LibDebugLogger:ClearLog()
+            end
+            ReloadUI()
+        end
+    end
+
     -- dialogs
     local buttons = {
         {
@@ -280,22 +296,6 @@ local function Initialise()
     end
 
     BS.Vars.CharacterList[GetUnitName("player")] = true
-
-    -- utiltity
-    if (_G.SLASH_COMMANDS["/rl"] == nil) then
-        _G.SLASH_COMMANDS["/rl"] = function()
-            ReloadUI()
-        end
-    end
-
-    if (_G.SLASH_COMMANDS["/rld"] == nil) then
-        _G.SLASH_COMMANDS["/rld"] = function()
-            if (_G.LibDebugLogger) then
-                _G.LibDebugLogger:ClearLog()
-            end
-            ReloadUI()
-        end
-    end
 end
 
 function BS.ToggleBar(index)
