@@ -723,33 +723,35 @@ BS.widgets[BS.W_LOREBOOKS] = {
     end
 }
 
-local function getDungeonRewardInfo()
-    local randomDungeons = {[_G.LFG_ACTIVITY_DUNGEON] = {}, [_G.LFG_ACTIVITY_MASTER_DUNGEON] = {}}
+local function getActivityRewardInfo(activityTypes)
+    local result = {}
+    for _, activityType in ipairs(activityTypes) do
+        local locationsData = ZO_ACTIVITY_FINDER_ROOT_MANAGER:GetLocationsData(activityType)
 
-    for dungeonType, _ in pairs(randomDungeons) do
-        local locationsData = ZO_ACTIVITY_FINDER_ROOT_MANAGER:GetLocationsData(dungeonType)
+        if (locationsData) then
+            for _, location in ipairs(locationsData) do
+                if (location:ShouldForceFullPanelKeyboard()) then
+                    if (location:HasRewardData()) then
+                        local rewardUIDataId, xpReward = location:GetRewardData()
+                        local numShownItemRewardNodes = GetNumLFGActivityRewardUINodes(rewardUIDataId)
 
-        for _, location in ipairs(locationsData) do
-            if (location:ShouldForceFullPanelKeyboard()) then
-                if (location:HasRewardData()) then
-                    local rewardUIDataId, xpReward = location:GetRewardData()
-                    local numShownItemRewardNodes = GetNumLFGActivityRewardUINodes(rewardUIDataId)
+                        for nodeIndex = 1, numShownItemRewardNodes do
+                            local displayName, icon, red, green, blue =
+                                GetLFGActivityRewardUINodeInfo(rewardUIDataId, nodeIndex)
 
-                    for nodeIndex = 1, numShownItemRewardNodes do
-                        local displayName, icon, red, green, blue =
-                            GetLFGActivityRewardUINodeInfo(rewardUIDataId, nodeIndex)
-
-                        if (icon) then
-                            randomDungeons[dungeonType] = {
-                                typeName = location:GetNameKeyboard(),
-                                xpReward = xpReward,
-                                displayName = zo_strformat(_G.SI_ACTIVITY_FINDER_REWARD_NAME_FORMAT, displayName),
-                                icon = icon,
-                                colour = {r = red, g = green, b = blue},
-                                active = location:IsActive() or false,
-                                meetsRequirements = location:DoesPlayerMeetLevelRequirements()
-                            }
-                            break
+                            if (icon) then
+                                --d(location:GetSetTypesListText())
+                                result[activityType] = {
+                                    typeName = location:GetNameKeyboard(),
+                                    xpReward = xpReward,
+                                    displayName = zo_strformat(_G.SI_ACTIVITY_FINDER_REWARD_NAME_FORMAT, displayName),
+                                    icon = icon,
+                                    colour = {r = red, g = green, b = blue},
+                                    active = location:IsActive() or false,
+                                    meetsRequirements = location:DoesPlayerMeetLevelRequirements()
+                                }
+                                break
+                            end
                         end
                     end
                 end
@@ -757,86 +759,176 @@ local function getDungeonRewardInfo()
         end
     end
 
-    return randomDungeons
+    return result
+end
+
+local function getActvityOutput(data)
+    if (data.output ~= "") then
+        data.output = data.output .. " "
+        data.normalisedOutput = data.normalisedOutput .. " "
+    end
+
+    data.output = data.output .. zo_iconFormat(data.icon, 32, 32)
+
+    if (data.activityData.meetsRequirements) then
+        local icon = BS.ColourToIcon(data.activityData.colour.r, data.activityData.colour.g, data.activityData.colour.b)
+        data.output = data.output .. " " .. zo_iconFormat(icon, 32, 32)
+        data.eligibleCount = data.eligibleCount + 1
+    else
+        data.output = data.output .. " " .. zo_iconFormat(BS.INELIGIBLE_ICON, 16, 16)
+    end
+
+    data.normalisedOutput = data.normalisedOutput .. "XXXXXXX"
+
+    data.tt = data.tt .. BS.LF .. "|cf9f9f9"
+    data.tt = data.tt .. ZO_CachedStrFormat("<<C:1>>", GetString(data.label)) .. " |r"
+
+    if (data.activityData.meetsRequirements) then
+        local cdt = ZO_CommaDelimitNumber(data.activityData.xpReward)
+        data.tt = data.tt .. BS.ARGBConvert2(data.activityData.colour) .. data.activityData.displayName .. " |r"
+        data.tt = data.tt .. zo_strformat(_G.SI_ACTIVITY_FINDER_REWARD_XP_FORMAT, cdt)
+    else
+        data.tt = data.tt .. "|cf90000"
+        data.tt = data.tt .. ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_HOUSE_TEMPLATE_UNMET_REQUIREMENTS_TEXT))
+        data.tt = data.tt .. "|r"
+    end
+
+    return data
 end
 
 BS.widgets[BS.W_RANDOM_DUNGEON] = {
     -- v1.4.22
     name = "randomDungeon",
     update = function(widget)
-        local dungeonInfo = getDungeonRewardInfo()
-        local output, normalisedOutput = "", ""
+        local activities = {_G.LFG_ACTIVITY_DUNGEON, _G.LFG_ACTIVITY_MASTER_DUNGEON}
+        local dungeonInfo = getActivityRewardInfo(activities)
+        local data = {
+            output = "",
+            normalisedOutput = "",
+            eligibleCount = 0,
+            tt = GetString(_G.BARSTEWARD_RANDOM_DUNGEON)
+        }
         local nd = dungeonInfo[_G.LFG_ACTIVITY_DUNGEON]
         local vd = dungeonInfo[_G.LFG_ACTIVITY_MASTER_DUNGEON]
-        local tt = GetString(_G.BARSTEWARD_RANDOM_DUNGEON)
-        local eligibleCount = 0
 
         if (nd) then
-            output = zo_iconFormat(BS.DUNGEON[_G.LFG_ACTIVITY_DUNGEON], 32, 32)
-            if (nd.meetsRequirements) then
-                local icon = BS.ColourToIcon(nd.colour.r, nd.colour.g, nd.colour.b)
-                output = output .. " " .. zo_iconFormat(icon, 32, 32)
-                eligibleCount = 1
-            else
-                output = output .. " " .. zo_iconFormat(BS.INELIGIBLE_ICON, 16, 16)
-            end
-
-            normalisedOutput = "XXXXXXX"
-
-            tt = tt .. BS.LF .. "|cf9f9f9"
-            tt = tt .. ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_DUNGEONDIFFICULTY1)) .. " |r"
-
-            if (nd.meetsRequirements) then
-                tt = tt .. BS.ARGBConvert2(nd.colour) .. nd.displayName .. " |r"
-                tt = tt .. zo_strformat(_G.SI_ACTIVITY_FINDER_REWARD_XP_FORMAT, ZO_CommaDelimitNumber(nd.xpReward))
-            else
-                tt =
-                    tt ..
-                    "|cf90000" ..
-                        ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_HOUSE_TEMPLATE_UNMET_REQUIREMENTS_TEXT)) .. "|r"
-            end
+            data.activityData = nd
+            data.label = _G.SI_DUNGEONDIFFICULTY1
+            data.icon = BS.DUNGEON[_G.LFG_ACTIVITY_DUNGEON]
+            data = getActvityOutput(data)
         end
 
-        if (dungeonInfo[_G.LFG_ACTIVITY_MASTER_DUNGEON]) then
-            if (output ~= "") then
-                output = output .. " "
-                normalisedOutput = normalisedOutput .. " "
-            end
-
-            output = output .. zo_iconFormat(BS.DUNGEON[_G.LFG_ACTIVITY_MASTER_DUNGEON], 32, 32)
-
-            if (vd.meetsRequirements) then
-                local icon = BS.ColourToIcon(vd.colour.r, vd.colour.g, vd.colour.b)
-                output = output .. " " .. zo_iconFormat(icon, 32, 32)
-                eligibleCount = eligibleCount + 1
-            else
-                output = output .. " " .. zo_iconFormat(BS.INELIGIBLE_ICON, 16, 16)
-            end
-
-            normalisedOutput = normalisedOutput .. "XXXXXXX"
-
-            tt = tt .. BS.LF .. "|cf9f9f9"
-            tt = tt .. ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_DUNGEONDIFFICULTY2)) .. " |r"
-            if (vd.meetsRequirements) then
-                tt = tt .. BS.ARGBConvert2(vd.colour) .. vd.displayName .. " |r"
-                tt = tt .. zo_strformat(_G.SI_ACTIVITY_FINDER_REWARD_XP_FORMAT, ZO_CommaDelimitNumber(vd.xpReward))
-            else
-                tt =
-                    tt ..
-                    "|cf90000" ..
-                        ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_HOUSE_TEMPLATE_UNMET_REQUIREMENTS_TEXT)) .. "|r"
-            end
+        if (vd) then
+            data.activityData = vd
+            data.label = _G.SI_DUNGEONDIFFICULTY2
+            data.icon = BS.DUNGEON[_G.LFG_ACTIVITY_MASTER_DUNGEON]
+            data = getActvityOutput(data)
         end
 
-        widget:SetValue(output, normalisedOutput)
-        widget.tooltip = tt
+        widget:SetValue(data.output, data.normalisedOutput)
+        widget.tooltip = data.tt
 
-        return eligibleCount
+        return data.eligibleCount
     end,
-    event = _G.EVENT_LEVEL_UPDATE,
+    event = _G.EVENT_PLAYER_ACTIVATED,
     icon = "/esoui/art/icons/achievement_update11_dungeons_019.dds",
     hideWhenEqual = 0,
     tooltip = GetString(_G.BARSTEWARD_RANDOM_DUNGEON),
+    onClick = function()
+        if (IsInGamepadPreferredMode()) then
+            SCENE_MANAGER:Show("gamepadDungeonFinder")
+        else
+            SCENE_MANAGER:Show("groupMenuKeyboard")
+        end
+    end
+}
+
+BS.widgets[BS.W_RANDOM_BATTLEGROUND] = {
+    -- v1.4.23
+    name = "randomBattleground",
+    update = function(widget)
+        local activities = {_G.LFG_ACTIVITY_BATTLE_GROUND_LOW_LEVEL, _G.LFG_ACTIVITY_BATTLE_GROUND_NON_CHAMPION}
+        local bgInfo = getActivityRewardInfo(activities)
+        local data = {
+            output = "",
+            normalisedOutput = "",
+            eligibleCount = 0,
+            tt = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_BATTLEGROUND_FINDER_RANDOM_FILTER_TEXT))
+        }
+        local ll = bgInfo[_G.LFG_ACTIVITY_BATTLE_GROUND_LOW_LEVEL] -- Random Battleground
+        --local cp = bgInfo[_G.LFG_ACTIVITY_BATTLE_GROUND_CHAMPION]
+        local np = bgInfo[_G.LFG_ACTIVITY_BATTLE_GROUND_NON_CHAMPION] -- Group Battleground
+        local battleground = ll
+        local icon = BS.BATTLEGROUND_ICON[_G.LFG_ACTIVITY_BATTLE_GROUND_LOW_LEVEL]
+
+        if (np) then
+            if (np.meetsRequirements) then
+                battleground = np
+                icon = BS.BATTLEGROUND_ICON[_G.LFG_ACTIVITY_BATTLE_GROUND_NON_CHAMPION]
+            end
+        end
+
+        data.activityData = battleground
+        data.label = ""
+        data.icon = icon
+        data = getActvityOutput(data)
+
+        widget:SetValue(data.output, data.normalisedOutput)
+        widget.tooltip = data.tt
+
+        return data.eligibleCount
+    end,
+    event = _G.EVENT_PLAYER_ACTIVATED,
+    icon = "/esoui/art/icons/store_battleground.dds",
+    hideWhenEqual = 0,
+    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_BATTLEGROUND_FINDER_RANDOM_FILTER_TEXT)),
+    onClick = function()
+        if (IsInGamepadPreferredMode()) then
+            SCENE_MANAGER:Show("gamepadDungeonFinder")
+        else
+            SCENE_MANAGER:Show("groupMenuKeyboard")
+        end
+    end
+}
+
+BS.widgets[BS.W_RANDOM_TRIBUTE] = {
+    -- v1.4.23
+    name = "randomTribute",
+    update = function(widget)
+        local activities = {_G.LFG_ACTIVITY_TRIBUTE_COMPETITIVE, _G.LFG_ACTIVITY_TRIBUTE_CASUAL}
+        local bgInfo = getActivityRewardInfo(activities)
+        local data = {
+            output = "",
+            normalisedOutput = "",
+            eligibleCount = 0,
+            tt = GetString(_G.BARSTEWARD_RANDOM_TRIBUTE)
+        }
+        local ct = bgInfo[_G.LFG_ACTIVITY_TRIBUTE_COMPETITIVE]
+        local nt = bgInfo[_G.LFG_ACTIVITY_TRIBUTE_CASUAL]
+
+        if (nt) then
+            data.activityData = nt
+            data.label = _G.SI_LFGACTIVITY10
+            data.icon = BS.TRIBUTE_ICON[_G.LFG_ACTIVITY_TRIBUTE_CASUAL]
+            data = getActvityOutput(data)
+        end
+
+        if (ct) then
+            data.activityData = ct
+            data.label = _G.SI_LFGACTIVITY9
+            data.icon = BS.TRIBUTE_ICON[_G.LFG_ACTIVITY_TRIBUTE_COMPETITIVE]
+            data = getActvityOutput(data)
+        end
+
+        widget:SetValue(data.output, data.normalisedOutput)
+        widget.tooltip = data.tt
+
+        return data.eligibleCount
+    end,
+    event = _G.EVENT_PLAYER_ACTIVATED,
+    icon = "/esoui/art/icons/u34_tribute_tutorial.dds",
+    hideWhenEqual = 0,
+    tooltip = GetString(_G.BARSTEWARD_RANDOM_TRIBUTE),
     onClick = function()
         if (IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("gamepadDungeonFinder")

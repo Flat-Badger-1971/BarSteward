@@ -620,10 +620,6 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
             earned = BS.AddSeparators(earned)
         end
 
-        widget:SetColour(unpack(vars.Colour or BS.Vars.DefaultColour))
-        widget:SetValue(earned .. " " .. "(" .. pc .. "%)")
-        widget:SetIcon(cpicon)
-
         local icons = {}
         for disciplineIndex = 1, GetNumChampionDisciplines() do
             local id = GetChampionDisciplineId(disciplineIndex)
@@ -739,4 +735,35 @@ BS.widgets[BS.W_PLAYER_LOCATION] = {
             SCENE_MANAGER:Show("gamepad_worldMap")
         end
     end
+}
+
+BS.widgets[BS.W_PLAYER_EXPERIENCE] = {
+    --v1.4.23
+    name = "playerExperience",
+    update = function(widget)
+        local earned = GetPlayerChampionPointsEarned()
+        local xp, xplvl = GetPlayerChampionXP(), GetNumChampionXPInChampionPoint(earned)
+        local pc = math.floor((xp / xplvl) * 100)
+        local vars = BS.Vars.Controls[BS.W_CHAMPION_POINTS]
+        local out
+
+        if (vars.ShowPercent) then
+            out = pc .. "%"
+        else
+            if (vars.UseSeparators == true) then
+                xp = BS.AddSeparators(xp)
+                xplvl = BS.AddSeparators(xplvl)
+            end
+
+            out = xp .. " / " .. xplvl
+        end
+
+        widget:SetColour(unpack(vars.Colour or BS.Vars.DefaultColour))
+        widget:SetValue(out)
+
+        return xp
+    end,
+    event = {_G.EVENT_EXPERIENCE_UPDATE},
+    icon = "/esoui/art/icons/icon_experience.dds",
+    tooltip = GetString(_G.BARSTEWARD_PLAYER_EXPERIENCE)
 }

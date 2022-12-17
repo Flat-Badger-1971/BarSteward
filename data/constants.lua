@@ -81,6 +81,9 @@ BS.W_CONTAINERS = 72
 BS.W_TREASURE = 73
 BS.W_RANDOM_DUNGEON = 74
 BS.W_PLAYER_LOCATION = 75
+BS.W_RANDOM_BATTLEGROUND = 76
+BS.W_RANDOM_TRIBUTE = 77
+BS.W_PLAYER_EXPERIENCE = 78
 
 BS.WRITS = {
     [_G.CRAFTING_TYPE_ALCHEMY] = {
@@ -249,4 +252,15 @@ BS.ITEM_COLOUR_ICON = {
     [_G.ITEM_DISPLAY_QUALITY_ARTIFACT] = BS.ARTIFACT_ICON,
     [_G.ITEM_DISPLAY_QUALITY_LEGENDARY] = BS.LEGENDARY_ICON,
     [_G.ITEM_DISPLAY_QUALITY_MYTHIC_OVERRIDE] = BS.LEGENDARY_ICON
+}
+
+BS.BATTLEGROUND_ICON = {
+    [_G.LFG_ACTIVITY_BATTLE_GROUND_LOW_LEVEL]="/esoui/art/icons/battleground_medal_murderballcarry_001.dds",
+    [_G.LFG_ACTIVITY_BATTLE_GROUND_NON_CHAMPION]="/esoui/art/icons/battleground_medal_murderballcarry_002.dds",
+    [_G.LFG_ACTIVITY_BATTLE_GROUND_CHAMPION]="/esoui/art/icons/battleground_medal_murderballcarry_003.dds"
+}
+
+BS.TRIBUTE_ICON = {
+    [_G.LFG_ACTIVITY_TRIBUTE_CASUAL]="/esoui/art/icons/u34_tribute_quest3.dds",
+    [_G.LFG_ACTIVITY_TRIBUTE_COMPETITIVE]="/esoui/art/icons/u34_tribute_pvedaily30.dds"
 }
