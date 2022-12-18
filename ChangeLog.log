@@ -1,6 +1,8 @@
 [color=#ff9900][b]Version: 1.4.24 ---------------[/b][/color]
 French translation updates
 Font correction experimental feature change to prevent vertical position issues
+Player XP default changed to not added to a bar
+Memory widget now respects OK colour choice
 
 [color=#ff9900][b]Version: 1.4.23 ---------------[/b][/color]
 Random battleground widget added

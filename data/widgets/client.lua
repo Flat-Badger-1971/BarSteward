@@ -110,7 +110,7 @@ BS.widgets = {
             local vars = BS.Vars.Controls[BS.W_MEMORY]
             local precision = vars.Precision or 1
             local rfactor = 10 ^ precision
-            local colour = BS.Vars.DefaultOkColour
+            local colour = vars.OkColour or BS.Vars.DefaultOkColour
 
             usedMiB = math.ceil(usedMiB * rfactor) / rfactor
 
