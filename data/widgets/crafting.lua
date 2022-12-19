@@ -598,3 +598,157 @@ BS.widgets[BS.W_RECIPES] = {
         default = food
     }
 }
+
+local motifs = {}
+
+BS.widgets[BS.W_MOTIFS] = {
+    -- v1.4.25
+    name = "motifs",
+    update = function(widget)
+        local vars = BS.Vars.Controls[BS.W_MOTIFS]
+        local colour = vars.Colour or BS.Vars.DefaultColour
+        local motifCategoryIndex
+        local motifNumCollections
+        local knownMotifs, unknownMotifs = 0, 0
+        motifs = {}
+
+        for categoryIndex = 1, GetNumLoreCategories() do
+            local _, numCollections, categoryId = GetLoreCategoryInfo(categoryIndex)
+            if (categoryId == BS.CRAFTING_MOTIF_CATEGORY_ID) then
+                motifCategoryIndex = categoryIndex
+                motifNumCollections = numCollections
+                break
+            end
+        end
+
+        if (motifCategoryIndex) then
+            for collectionIndex = 1, motifNumCollections do
+                local name, _, _, totalBooks, hidden = GetLoreCollectionInfo(motifCategoryIndex, collectionIndex)
+                if not hidden then
+                    for bookIndex = 1, totalBooks do
+                        local title, _, known, _ = GetLoreBookInfo(motifCategoryIndex, collectionIndex, bookIndex)
+                        if (not motifs[name]) then
+                            motifs[name] = {known = {}, unknown = {}}
+                        end
+
+                        if (known) then
+                            table.insert(motifs[name].known, title)
+                            knownMotifs = knownMotifs + 1
+                        else
+                            table.insert(motifs[name].unknown, title)
+                            unknownMotifs = unknownMotifs + 1
+                        end
+                    end
+                end
+            end
+        end
+
+        local value = knownMotifs .. " / " .. (unknownMotifs + knownMotifs)
+
+        if (vars.Display == "KNOWN") then
+            value = knownMotifs
+        elseif (vars.Display == "KNOWN_UNKNOWN") then
+            value = knownMotifs .. " / " .. unknownMotifs
+        elseif (vars.Display == "UNKNOWN") then
+            value = unknownMotifs
+        elseif (vars.Display == "UNKNOWN_TOTAL") then
+            value = unknownMotifs .. " / " .. (knownMotifs + unknownMotifs)
+        end
+
+        widget:SetColour(unpack(colour))
+        widget:SetValue(value)
+
+        return knownMotifs
+    end,
+    event = {_G.EVENT_LORE_BOOK_LEARNED, _G.EVENT_STYLE_LEARNED, _G.EVENT_TRAIT_LEARNED},
+    icon = "/esoui/art/icons/crafting_motif_binding_welkynar.dds",
+    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ITEMTYPEDISPLAYCATEGORY24)),
+    onClick = function()
+        local message = ""
+        local append
+        local sorted = {}
+
+        for book, _ in pairs(motifs) do
+            table.insert(sorted, book)
+        end
+
+        table.sort(sorted)
+
+        for _, book in ipairs(sorted) do
+            local chapter = motifs[book]
+            if
+                ((BS.Vars.Controls[BS.W_MOTIFS].MailUnknown and (#chapter.unknown > 0)) or
+                    (BS.Vars.Controls[BS.W_MOTIFS].MailKnown and (#chapter.known > 0)))
+             then
+                if (message ~= "") then
+                    message = message .. BS.LF
+                end
+
+                append = book .. " " .. #chapter.known .. " / " .. (#chapter.unknown + #chapter.known)
+
+                if (zo_strlen(message .. append .. GetString(_G.BARSTEWARD_MAX_MESSAGE)) > _G.MAIL_MAX_BODY_CHARACTERS) then
+                    message = message .. GetString(_G.BARSTEWARD_MAX_MESSAGE)
+                    break
+                end
+
+                message = message .. append
+            end
+        end
+
+        BS.ComposeMail(message)
+    end,
+    customSettings = function()
+        local vars = BS.Vars.Controls[BS.W_MOTIFS]
+        local displayTypes = {"KNOWN", "KNOWN_UNKNOWN", "KNOWN_TOTAL", "UNKNOWN_TOTAL", "UNKNOWN"}
+        local choices = {}
+
+        for _, displayType in ipairs(displayTypes) do
+            table.insert(choices, GetString(_G["BARSTEWARD_SHOW_" .. displayType]))
+        end
+
+        local options = {
+            [1] = {
+                type = "dropdown",
+                name = GetString(_G.BARSTEWARD_GOLD_DISPLAY),
+                choices = choices,
+                choicesValues = displayTypes,
+                getFunc = function()
+                    return vars.Display
+                end,
+                setFunc = function(value)
+                    vars.Display = value
+                    BS.RefreshWidget(BS.W_MOTIFS)
+                end,
+                width = "full"
+            },
+            [2] = {
+                type = "checkbox",
+                name = GetString(_G.BARSTEWARD_MAIL_KNOWN),
+                tooltip = GetString(_G.BARSTEWARD_MAIL_LIMIT),
+                getFunc = function()
+                    return vars.MailKnown
+                end,
+                setFunc = function(value)
+                    vars.MailKnown = value
+                    vars.MailUnknown = not value
+                end,
+                width = "full"
+            },
+            [3] = {
+                type = "checkbox",
+                name = GetString(_G.BARSTEWARD_MAIN_UNKNOWN),
+                tooltip = GetString(_G.BARSTEWARD_MAIL_LIMIT),
+                getFunc = function()
+                    return vars.MailUnknown
+                end,
+                setFunc = function(value)
+                    vars.MailUnknown = value
+                    vars.MailKnown = not value
+                end,
+                width = "full"
+            }
+        }
+
+        return options
+    end
+}

@@ -417,6 +417,14 @@ BS.Defaults = {
         [BS.W_PLAYER_LOCATION] = {Bar = 0, Order = 75, ColourValues = "c"},
         [BS.W_RANDOM_BATTLEGROUND] = {Bar = 0, Order = 76, Autohide = false},
         [BS.W_RANDOM_TRIBUTE] = {Bar = 0, Order = 77, Autohide = false},
-        [BS.W_PLAYER_EXPERIENCE] = {Bar = 0, Order = 77, UseSeparators = false, ColourValues = "c"}
+        [BS.W_PLAYER_EXPERIENCE] = {Bar = 0, Order = 77, UseSeparators = false, ColourValues = "c"},
+        [BS.W_MOTIFS] = {
+            Bar = 0,
+            Order = 78,
+            MailKnown = false,
+            MailUnknown = true,
+            ColourValues = "c",
+            Display = "KNOWN_TOTAL"
+        }
     }
 }

@@ -288,7 +288,7 @@ local function getSpeed(widget)
         speedText = ((type(speed) == "number") and speed or 0) .. " " .. unitText
     end
 
-    widget:SetValue(speedText)
+    widget:SetValue(speedText,"200%")
 
     BS.lastPosition = BS.currentPosition
 

@@ -68,6 +68,16 @@ read_globals = {
             GetGuildId = {read_only = true}
         }
     },
+    ["MAIL_MANAGER_GAMEPAD"] = {
+        fields = {
+            GetSend = {read_only = true}
+        }
+    },
+    ["MAIL_SEND"] = {
+        fields = {
+            ComposeMailTo = {read_only = true}
+        }
+    },
     ["MAIN_MENU_KEYBOARD"] = {
         fields = {
             ShowScene = {read_only = true}
@@ -91,10 +101,12 @@ read_globals = {
     },
     ["SCENE_MANAGER"] = {
         fields = {
+            CallWhen = {read_only = true},
             GetCurrentScene = {read_only = true},
             GetScene = {read_only = true},
             GetSceneGroup = {read_only = true},
             IsInUIMode = {read_only = true},
+            IsShowing = {read_only = true},
             RegisterCallback = {read_only = true},
             SetInUIMode = {read_only = true},
             Show = {read_only = true}
@@ -294,6 +306,7 @@ read_globals = {
     "GetItemType",
     "GetLatency",
     "GetLFGCooldownTimeRemainingSeconds",
+    "GetLoreBookInfo",
     "GetLoreCategoryInfo",
     "GetLoreCollectionInfo",
     "GetMapContentType",
@@ -422,6 +435,7 @@ read_globals = {
     },
     "ZO_IsScryingUnlocked",
     "ZO_LinkHandler_CreateLink",
+    "ZO_MailSendBodyField",
     "ZO_PostHook",
     "ZO_PreHook",
     "ZO_PreHookHandler",

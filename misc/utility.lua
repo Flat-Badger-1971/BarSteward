@@ -699,7 +699,6 @@ function BS.ColourToQuality(r, g, b)
         if (rc == ri and gc == gi and bc == bi) then
             return quality
         end
-
     end
 end
 
@@ -707,4 +706,44 @@ function BS.ColourToIcon(r, g, b)
     local quality = BS.ColourToQuality(r, g, b, 1)
 
     return BS.ITEM_COLOUR_ICON[quality or 1]
+end
+
+-- based on code from TraitBuddy
+local function setBody(body)
+    local bodyField
+
+    if (IsInGamepadPreferredMode()) then
+        bodyField = MAIL_MANAGER_GAMEPAD:GetSend().mailView.bodyEdit.edit
+        body = string.format("%s%s", bodyField:GetText(), body)
+    else
+        bodyField = ZO_MailSendBodyField
+        body = string.format("%s%s", bodyField:GetText(), body)
+    end
+
+    bodyField:SetText(body)
+end
+
+function BS.ComposeMail(body, recipient)
+    local mailManager, scene
+
+    if (IsInGamepadPreferredMode()) then
+        mailManager = MAIL_MANAGER_GAMEPAD:GetSend()
+        scene = "mailManagerGamepad"
+    else
+        mailManager = MAIL_SEND
+        scene = "mailSend"
+    end
+
+    if (SCENE_MANAGER:IsShowing(scene)) then
+        setBody(body)
+    else
+        mailManager:ComposeMailTo(recipient or "")
+        SCENE_MANAGER:CallWhen(
+            scene,
+            _G.SCENE_SHOWN,
+            function()
+                setBody(body)
+            end
+        )
+    end
 end
