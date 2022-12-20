@@ -708,22 +708,25 @@ function BS.ColourToIcon(r, g, b)
     return BS.ITEM_COLOUR_ICON[quality or 1]
 end
 
--- based on code from TraitBuddy
-local function setBody(body)
-    local bodyField
+local function setSubjectAndBody(subject, body, recipient)
+    local bodyField, subjectField, recipientField
 
     if (IsInGamepadPreferredMode()) then
         bodyField = MAIL_MANAGER_GAMEPAD:GetSend().mailView.bodyEdit.edit
-        body = string.format("%s%s", bodyField:GetText(), body)
+        subjectField = MAIL_MANAGER_GAMEPAD:GetSend().mailView.subjectEdit.edit
+        recipientField = MAIL_MANAGER_GAMEPAD:GetSend().mailView.addressEdit.edit
     else
         bodyField = ZO_MailSendBodyField
-        body = string.format("%s%s", bodyField:GetText(), body)
+        subjectField = ZO_MailSendSubjectField
+        recipientField = ZO_MailSendToField
     end
 
-    bodyField:SetText(body)
+    recipientField:SetText(recipient)
+    subjectField:SetText(subject)
+    bodyField:SetText(bodyField:GetText() .. body)
 end
 
-function BS.ComposeMail(body, recipient)
+local function composeMail(subject, body, recipient)
     local mailManager, scene
 
     if (IsInGamepadPreferredMode()) then
@@ -734,16 +737,31 @@ function BS.ComposeMail(body, recipient)
         scene = "mailSend"
     end
 
+    mailManager:ClearFields()
+
     if (SCENE_MANAGER:IsShowing(scene)) then
-        setBody(body)
+        setSubjectAndBody(subject, body, recipient)
     else
         mailManager:ComposeMailTo(recipient or "")
         SCENE_MANAGER:CallWhen(
             scene,
             _G.SCENE_SHOWN,
             function()
-                setBody(body)
+                setSubjectAndBody(subject, body, recipient)
             end
         )
     end
+
+    return mailManager
+end
+
+function BS.SendMail(subject, body, recipient)
+    local mailManager = composeMail(subject, body, recipient)
+
+    zo_callLater(
+        function()
+            mailManager:Send()
+        end,
+        500
+    )
 end

@@ -436,6 +436,8 @@ read_globals = {
     "ZO_IsScryingUnlocked",
     "ZO_LinkHandler_CreateLink",
     "ZO_MailSendBodyField",
+    "ZO_MailSendSubjectField",
+    "ZO_MailSendToField",
     "ZO_PostHook",
     "ZO_PreHook",
     "ZO_PreHookHandler",

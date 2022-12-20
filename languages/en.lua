@@ -113,11 +113,14 @@ ZO_CreateStringId("BARSTEWARD_LOCK_FRAMES", "Lock Bars")
 ZO_CreateStringId("BARSTEWARD_LOREBOOKS", "Lorebooks")
 ZO_CreateStringId("BARSTEWARD_LOREBOOKS_CATEGORY", "Display totals for category")
 ZO_CreateStringId("BARSTEWARD_MAIL_KNOWN", "Mail known when clicked")
+ZO_CreateStringId("BARSTEWARD_MAIL_KNOWN_MAIL", "Known motifs #<<1>>")
 ZO_CreateStringId(
     "BARSTEWARD_MAIL_LIMIT",
-    "There is a 700 character limit when sending mail. Long lists are likely to be truncated."
+    "There is a <<1>> character limit when sending mail. Messages will be split into multiple mails, usually around 4."
 )
-ZO_CreateStringId("BARSTEWARD_MAIN_UNKNOWN", "Main unknown when clicked")
+ZO_CreateStringId("BARSTEWARD_MAIL_RECIPIENT", "Mail Recipient")
+ZO_CreateStringId("BARSTEWARD_MAIL_UNKNOWN", "Mail unknown when clicked")
+ZO_CreateStringId("BARSTEWARD_MAIL_UNKNOWN_MAIL", "Unknown motifs #<<1>>")
 ZO_CreateStringId("BARSTEWARD_MAIN_BAR", "Main Bar")
 ZO_CreateStringId("BARSTEWARD_MAIN_BAR_ICON", "Main Bar Icon")
 ZO_CreateStringId("BARSTEWARD_MAINTENANCE", "Maintenance")

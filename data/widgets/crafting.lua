@@ -664,7 +664,12 @@ BS.widgets[BS.W_MOTIFS] = {
     icon = "/esoui/art/icons/crafting_motif_binding_welkynar.dds",
     tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ITEMTYPEDISPLAYCATEGORY24)),
     onClick = function()
-        local message = ""
+        local vars = BS.Vars.Controls[BS.W_MOTIFS]
+
+        if ((vars.Recipient or "") == "") then
+            return
+        end
+
         local append
         local sorted = {}
 
@@ -674,31 +679,48 @@ BS.widgets[BS.W_MOTIFS] = {
 
         table.sort(sorted)
 
+        local messages = {}
+        local messageIndex = 1
+
         for _, book in ipairs(sorted) do
             local chapter = motifs[book]
-            if
-                ((BS.Vars.Controls[BS.W_MOTIFS].MailUnknown and (#chapter.unknown > 0)) or
-                    (BS.Vars.Controls[BS.W_MOTIFS].MailKnown and (#chapter.known > 0)))
-             then
+            local message = messages[messageIndex] or ""
+            if ((vars.MailUnknown and (#chapter.unknown > 0)) or (vars.MailKnown and (#chapter.known > 0))) then
                 if (message ~= "") then
                     message = message .. BS.LF
                 end
 
                 append = book .. " " .. #chapter.known .. " / " .. (#chapter.unknown + #chapter.known)
 
-                if (zo_strlen(message .. append .. GetString(_G.BARSTEWARD_MAX_MESSAGE)) > _G.MAIL_MAX_BODY_CHARACTERS) then
-                    message = message .. GetString(_G.BARSTEWARD_MAX_MESSAGE)
-                    break
+                if (zo_strlen(message .. append) > _G.MAIL_MAX_BODY_CHARACTERS) then
+                    messageIndex = messageIndex + 1
+                    messages[messageIndex] = append
+                else
+                    messages[messageIndex] = message .. append
                 end
-
-                message = message .. append
             end
         end
 
-        BS.ComposeMail(message)
+        for mailMessageIndex = 1, messageIndex do
+            local subject
+
+            if (vars.MailKnown) then
+                subject = zo_strformat(GetString(_G.BARSTEWARD_MAIL_KNOWN_MAIL), mailMessageIndex)
+            else
+                subject = zo_strformat(GetString(_G.BARSTEWARD_MAIL_UNKNOWN_MAIL), mailMessageIndex)
+            end
+
+            zo_callLater(
+                function()
+                    BS.SendMail(subject, messages[mailMessageIndex], vars.Recipient)
+                end,
+                2000 * (mailMessageIndex - 1)
+            )
+        end
     end,
     customSettings = function()
         local vars = BS.Vars.Controls[BS.W_MOTIFS]
+        local tooltip = zo_strformat(GetString(_G.BARSTEWARD_MAIL_LIMIT), _G.MAIL_MAX_BODY_CHARACTERS)
         local displayTypes = {"KNOWN", "KNOWN_UNKNOWN", "KNOWN_TOTAL", "UNKNOWN_TOTAL", "UNKNOWN"}
         local choices = {}
 
@@ -724,7 +746,7 @@ BS.widgets[BS.W_MOTIFS] = {
             [2] = {
                 type = "checkbox",
                 name = GetString(_G.BARSTEWARD_MAIL_KNOWN),
-                tooltip = GetString(_G.BARSTEWARD_MAIL_LIMIT),
+                tooltip = tooltip,
                 getFunc = function()
                     return vars.MailKnown
                 end,
@@ -736,8 +758,8 @@ BS.widgets[BS.W_MOTIFS] = {
             },
             [3] = {
                 type = "checkbox",
-                name = GetString(_G.BARSTEWARD_MAIN_UNKNOWN),
-                tooltip = GetString(_G.BARSTEWARD_MAIL_LIMIT),
+                name = GetString(_G.BARSTEWARD_MAIL_UNKNOWN),
+                tooltip = tooltip,
                 getFunc = function()
                     return vars.MailUnknown
                 end,
@@ -745,6 +767,18 @@ BS.widgets[BS.W_MOTIFS] = {
                     vars.MailUnknown = value
                     vars.MailKnown = not value
                 end,
+                width = "full"
+            },
+            [4] = {
+                type = "editbox",
+                name = GetString(_G.BARSTEWARD_MAIL_RECIPIENT),
+                getFunc = function()
+                    return vars.Recipient or ""
+                end,
+                setFunc = function(value)
+                    vars.Recipient = value
+                end,
+                isMultiLine = false,
                 width = "full"
             }
         }
