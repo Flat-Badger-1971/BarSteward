@@ -871,7 +871,10 @@ BS.widgets[BS.W_RANDOM_BATTLEGROUND] = {
         data.activityData = battleground
         data.label = ""
         data.icon = icon
-        data = getActvityOutput(data)
+
+        if (battleground) then
+            data = getActvityOutput(data)
+        end
 
         widget:SetValue(data.output, data.normalisedOutput)
         widget.tooltip = data.tt
