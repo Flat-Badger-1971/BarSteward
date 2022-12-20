@@ -105,6 +105,7 @@ read_globals = {
             GetCurrentScene = {read_only = true},
             GetScene = {read_only = true},
             GetSceneGroup = {read_only = true},
+            Hide = {read_only = true},
             IsInUIMode = {read_only = true},
             IsShowing = {read_only = true},
             RegisterCallback = {read_only = true},

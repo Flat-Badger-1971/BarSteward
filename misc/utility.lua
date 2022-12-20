@@ -727,24 +727,24 @@ local function setSubjectAndBody(subject, body, recipient)
 end
 
 local function composeMail(subject, body, recipient)
-    local mailManager, scene
+    local mailManager
 
     if (IsInGamepadPreferredMode()) then
         mailManager = MAIL_MANAGER_GAMEPAD:GetSend()
-        scene = "mailManagerGamepad"
+        BS.mailScene = "mailManagerGamepad"
     else
         mailManager = MAIL_SEND
-        scene = "mailSend"
+        BS.mailScene = "mailSend"
     end
 
     mailManager:ClearFields()
 
-    if (SCENE_MANAGER:IsShowing(scene)) then
+    if (SCENE_MANAGER:IsShowing(BS.mailScene)) then
         setSubjectAndBody(subject, body, recipient)
     else
         mailManager:ComposeMailTo(recipient or "")
         SCENE_MANAGER:CallWhen(
-            scene,
+            BS.mailScene,
             _G.SCENE_SHOWN,
             function()
                 setSubjectAndBody(subject, body, recipient)
@@ -761,7 +761,19 @@ function BS.SendMail(subject, body, recipient)
     zo_callLater(
         function()
             mailManager:Send()
+            zo_callLater(
+                function()
+                    BS.CloseMail()
+                end,
+                500
+            )
         end,
         500
     )
+end
+
+function BS.CloseMail()
+    if (SCENE_MANAGER:IsShowing(BS.mailScene)) then
+        SCENE_MANAGER:Hide(BS.mailScene)
+    end
 end
