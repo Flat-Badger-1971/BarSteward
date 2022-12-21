@@ -168,7 +168,6 @@ local function initialise()
         width = "half"
     }
 
-
     BS.options[#BS.options + 1] = {
         type = "divider",
         alpha = 0
@@ -1702,12 +1701,150 @@ local function getWidgetSettings()
     }
 end
 
+local function getPortToHouseSettings()
+    BS.houses = BS.GetHouses()
+    local choices = {}
+    local choicesValues = {}
+
+    for index, house in ipairs(BS.houses) do
+        table.insert(choices, house.name)
+        table.insert(choicesValues, index)
+    end
+
+    local controls = {
+        [1] = {
+            type = "description",
+            text = GetString(_G.BARSTEWARD_PORT_TO_HOUSE_DESCRIPTION),
+            width = "full"
+        },
+        [2] = {
+            type = "dropdown",
+            name = GetString(_G.BARSTEWARD_PORT_TO_HOUSE_SELECT),
+            choices = choices,
+            choicesValues = choicesValues,
+            getFunc = function()
+                return BS.House_SelectedHouse
+            end,
+            setFunc = function(value)
+                BS.House_SelectedHouse = value
+            end,
+            width = "full"
+        },
+        [3] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_PORT_TO_HOUSE_LOCATION_ONLY),
+            getFunc = function()
+                return BS.House_ShowLocationOnly
+            end,
+            setFunc = function(value)
+                BS.House_ShowLocationOnly = value
+
+                if (value) then
+                    BS.House_ShowLocationToo = false
+                end
+            end,
+            width = "full"
+        },
+        [4] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_PORT_TO_HOUSE_LOCATION_TOO),
+            getFunc = function()
+                return BS.House_ShowLocationToo
+            end,
+            setFunc = function(value)
+                BS.House_ShowLocationToo = value
+
+                if (value) then
+                    BS.House_ShowLocationOnly = false
+                end
+            end,
+            width = "full"
+        },
+        [5] = {
+            type = "description",
+            text = GetString(_G.BARSTEWARD_PORT_TO_HOUSE_PREVIEW),
+            width = "full"
+        },
+        [6] = {
+            type = "description",
+            text = function()
+                local text = ""
+                local icon = ""
+
+                if (BS.House_SelectedHouse) then
+                    local selectedHouse = BS.houses[BS.House_SelectedHouse]
+                    icon = zo_iconFormat(selectedHouse.icon, 32, 32) .. " "
+
+                    if (BS.House_ShowLocationOnly) then
+                        text = selectedHouse.location
+                    elseif (BS.House_ShowLocationToo) then
+                        text = selectedHouse.name .. " (" .. selectedHouse.location .. ")"
+                    else
+                        text = selectedHouse.name
+                    end
+                end
+
+                return icon .. text
+            end,
+            width = "full",
+            reference = "BarSteward_HousePreview"
+        },
+        [7] = {
+            type = "button",
+            name = GetString(_G.BARSTEWARD_ADD_WIDGET),
+            width = "full",
+            requiresReload = true,
+            disabled = function()
+                return not BS.House_SelectedHouse
+            end
+        }
+    }
+
+    BS.options[#BS.options + 1] = {
+        type = "submenu",
+        name = GetString(_G.BARSTEWARD_PORT_TO_HOUSE),
+        controls = controls,
+        reference = "BarStewardPortToHouse",
+        icon = "/esoui/art/icons/poi/poi_group_house_glow.dds"
+    }
+end
+
 function BS.RegisterSettings()
     initialise()
     getPerformanceSettings()
     BS.GetMaintenanceSettings()
     getWidgetSettings()
+    getPortToHouseSettings()
     getBarSettings()
     BS.OptionsPanel = BS.LAM:RegisterAddonPanel("BarStewardOptionsPanel", panel)
     BS.LAM:RegisterOptionControls("BarStewardOptionsPanel", BS.options)
 end
+--[[
+    BS.options[#BS.options + 1] = {
+        type = "slider",
+        name = GetString(_G.BARSTEWARD_FONT_SIZE),
+        min = 8,
+        max = 32,
+        getFunc = function()
+            return BS.Vars.FontSize
+        end,
+        setFunc = function(value)
+            BS.Vars.FontSize = value
+
+            _G.BarSteward_SampleText.desc:SetFont(BS.GetFont(value))
+        end,
+        requiresReload = true,
+        default = BS.Defaults.FontSize
+    }
+
+    BS.options[#BS.options + 1] = {
+        type = "description",
+        text = function()
+            _G.BarSteward_SampleText.desc:SetFont(BS.GetFont(BS.Vars.Font))
+            return "|c009933" .. GetString(_G.BARSTEWARD_SAMPLE) .. "|r"
+        end,
+        width = "full",
+        reference = "BarSteward_SampleText"
+    }
+
+]]

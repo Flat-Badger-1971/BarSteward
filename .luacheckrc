@@ -164,6 +164,7 @@ read_globals = {
     },
     ["ZO_COLLECTIBLE_DATA_MANAGER"] = {
         fields = {
+            GetAllCollectibleDataObjects = {read_only = true},
             GetCategoryDataByIndicies = {read_only = true}
         }
     },
@@ -287,6 +288,7 @@ read_globals = {
     "GetGuildMemberCharacterInfo",
     "GetGuildMemberInfo",
     "GetGuildName",
+    "GetHouseFoundInZoneId",
     "GetLFGActivityRewardDescriptionOverride",
     "GetLFGActivityRewardUINodeInfo",
     "GetUIGlobalScale",

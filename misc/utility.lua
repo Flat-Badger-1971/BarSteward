@@ -777,3 +777,34 @@ function BS.CloseMail()
         SCENE_MANAGER:Hide(BS.mailScene)
     end
 end
+
+function BS.GetHouses()
+    local collectibleData = ZO_COLLECTIBLE_DATA_MANAGER:GetAllCollectibleDataObjects()
+    local ownedHouses = {}
+
+    for _, entry in ipairs(collectibleData) do
+        if (entry:IsHouse() and (not entry:IsLocked())) then
+            local referenceId = entry:GetReferenceId()
+
+            table.insert(
+                ownedHouses,
+                {
+                    icon = entry:GetIcon(),
+                    id = referenceId,
+                    location = entry:GetFormattedHouseLocation(),
+                    name = entry:GetFormattedName(),
+                    primary = entry:IsPrimaryResidence()
+                }
+            )
+        end
+    end
+
+    table.sort(
+        ownedHouses,
+        function(a, b)
+            return a.name < b.name
+        end
+    )
+
+    return ownedHouses
+end
