@@ -209,7 +209,7 @@ function baseWidget:SetValue(value, plainValue)
     textWidth = textWidth / (GetUIGlobalScale() * scale)
     self.value:SetWidth(textWidth)
 
-    if (BS.Vars.FontCorrection) then
+    if (BS.Vars.FontCorrection and (BS.Vars.FontSize < BS.Defaults.FontSize)) then
         self.fontCheck:SetHeight(self.value:GetHeight() * 2)
         self.fontCheck:SetWidth(textWidth)
         self.fontCheck:SetText(value)
