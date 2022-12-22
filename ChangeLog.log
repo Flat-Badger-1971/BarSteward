@@ -1,3 +1,6 @@
+[color=#ff9900][b]Version: 1.4.27 ---------------[/b][/color]
+Reenable font correction feature for all font sizes
+
 [color=#ff9900][b]Version: 1.4.26 ---------------[/b][/color]
 Ignore experimental font adjust when fontsize is default or larger
 Account for display setting in speed widget when fixing the width
