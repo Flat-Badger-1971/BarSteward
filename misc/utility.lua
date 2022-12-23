@@ -778,33 +778,56 @@ function BS.CloseMail()
     end
 end
 
+local function getPTFInfo(id)
+    if ((not BS.PTFHouses) and BS.PTF) then
+        BS.PTFHouses = BS.PTF.GetFavorites()
+    end
+
+    if (BS.PTF) then
+        for _, ptfInfo in ipairs(BS.PTFHouses) do
+            if (ptfInfo.houseId == id) then
+                return ptfInfo.name
+            end
+        end
+    end
+end
+
 function BS.GetHouses()
     local collectibleData = ZO_COLLECTIBLE_DATA_MANAGER:GetAllCollectibleDataObjects()
-    local ownedHouses = {}
+    local houses = {}
 
     for _, entry in ipairs(collectibleData) do
-        if (entry:IsHouse() and (not entry:IsLocked())) then
+        if (entry:IsHouse()) then
             local referenceId = entry:GetReferenceId()
+            local ptfName = getPTFInfo(referenceId)
+            local houseEntry = {
+                icon = entry:GetIcon(),
+                id = referenceId,
+                location = entry:GetFormattedHouseLocation(),
+                name = entry:GetFormattedName(),
+                owned = not entry:IsLocked(),
+                primary = entry:IsPrimaryResidence(),
+                ptfName = ptfName
+            }
 
-            table.insert(
-                ownedHouses,
-                {
-                    icon = entry:GetIcon(),
-                    id = referenceId,
-                    location = entry:GetFormattedHouseLocation(),
-                    name = entry:GetFormattedName(),
-                    primary = entry:IsPrimaryResidence()
-                }
-            )
+            table.insert(houses, houseEntry)
         end
     end
 
     table.sort(
-        ownedHouses,
+        houses,
         function(a, b)
             return a.name < b.name
         end
     )
 
-    return ownedHouses
+    return houses
+end
+
+function BS.GetHouseFromReferenceId(id)
+    for _, house in ipairs(BS.houses) do
+        if (house.id == id) then
+            return house
+        end
+    end
 end

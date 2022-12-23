@@ -47,9 +47,21 @@ local function Initialise()
         buttons = buttons
     }
 
+    local notemptyGeneric = {
+        title = {text = GetString(_G.BARSTEWARD_GENERIC_INVALID)},
+        mainText = {text = GetString(_G.BARSTEWARD_GENERIC_BLANK)},
+        buttons = buttons
+    }
+
     local exists = {
         title = {text = GetString(_G.BARSTEWARD_NEWBAR_INVALID)},
         mainText = {text = GetString(_G.BARSTEWARD_NEWBAR_EXISTS)},
+        buttons = buttons
+    }
+
+    local existsGeneric = {
+        title = {text = GetString(_G.BARSTEWARD_GENERIC_INVALID)},
+        mainText = {text = GetString(_G.BARSTEWARD_GENERIC_EXISTS)},
         buttons = buttons
     }
 
@@ -85,6 +97,29 @@ local function Initialise()
                 text = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_OK)),
                 callback = function()
                     BS.RemoveBar()
+                end
+            }
+        }
+    }
+
+    local removeGeneric = {
+        title = {text = GetString(_G.BARSTEWARD_GENERIC_REMOVE)},
+        mainText = {text = GetString(_G.BARSTEWARD_GENERIC_REMOVE_WARNING)},
+        buttons = {
+            {
+                text = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_CANCEL)),
+                callback = function(dialog)
+                    if (dialog.data and dialog.data.func) then
+                        dialog.data.func()
+                    end
+                end
+            },
+            {
+                text = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_OK)),
+                callback = function(dialog)
+                    if (dialog.data and dialog.data.func) then
+                        dialog.data.func()
+                    end
                 end
             }
         }
@@ -140,10 +175,13 @@ local function Initialise()
     }
 
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "NotEmpty", notempty)
+    ZO_Dialogs_RegisterCustomDialog(BS.Name .. "NotEmptyGeneric", notemptyGeneric)
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "Exists", exists)
+    ZO_Dialogs_RegisterCustomDialog(BS.Name .. "ExistsGeneric", existsGeneric)
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "ItemExists", itemExists)
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "Reload", reload)
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "Remove", remove)
+    ZO_Dialogs_RegisterCustomDialog(BS.Name .. "RemoveGeneric", removeGeneric)
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "Resize", resize)
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "Delete", delete)
 
@@ -216,6 +254,44 @@ local function Initialise()
                     local widget = BS.widgets[id]
                     widget.id = id
                     table.insert(widgets, {info.Order, widget})
+                end
+            end
+
+            -- add any housing widgets
+            if (BS.Vars.HouseWidgets) then
+                BS.PTF = _G.PortToFriend
+
+                if (not BS.houses) then
+                    BS.houses = BS.GetHouses()
+                end
+
+                for id, active in pairs(BS.Vars.HouseWidgets) do
+                    if (active) then
+                        local house = BS.GetHouseFromReferenceId(id)
+                        local vars = BS.Vars.Controls[1000 + id]
+
+                        if (BS.Vars.Controls[1000 + id].Bar == idx) then
+                            local widget = {
+                                name = "house_" .. id,
+                                update = function(widget)
+                                    local colour = BS.Vars.Controls[1000 + id].Colour or BS.Vars.DefaultColour
+                                    widget:SetColour(unpack(colour))
+                                    widget:SetValue(vars.Name, vars.RawName)
+                                end,
+                                tooltip = vars.Name,
+                                icon = house.icon,
+                                onClick = function()
+                                    if (house.ptfName) then
+                                        JumpToSpecificHouse(house.ptfName, id)
+                                    else
+                                        RequestJumpToHouse(id, vars.Outside)
+                                    end
+                                end,
+                                id = 1000 + id
+                            }
+                            table.insert(widgets, {BS.Vars.Controls[1000 + id].Order, widget})
+                        end
+                    end
                 end
             end
 

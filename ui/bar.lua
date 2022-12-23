@@ -373,7 +373,12 @@ function baseBar:AddWidgets(widgets)
 
     for idx, metadata in ipairs(widgets) do
         -- draw the widget
-        metadata.progress = BS.Defaults.Controls[metadata.id].Progress
+        local controlDefaults = BS.Defaults.Controls[metadata.id]
+
+        if (controlDefaults) then
+            metadata.progress = controlDefaults.Progress
+        end
+
         metadata.widget = BS.CreateWidget(metadata, self.bar, tooltipAnchor, self.valueSide)
 
         -- register widgets that need to watch for events
