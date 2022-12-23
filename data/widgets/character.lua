@@ -248,7 +248,7 @@ local function getSpeed(widget)
     local x2, y2, t2 = unpack(BS.lastPosition or BS.currentPosition)
     local distance = math.sqrt(math.pow(x1 - x2, 2) + math.pow(y1 - y2, 2))
     local timeDelta = (t1 - t2) / 1000
-    local speed, speedText
+    local speed, speedText, fixWidth
 
     if (BS.Vars.Controls[BS.W_SPEED].ShowPercent) then
         local rawSpeed = 0
@@ -265,6 +265,7 @@ local function getSpeed(widget)
         end
 
         speedText = ((string.match(pSpeed, "%d")) and pSpeed or 0) .. "%"
+        fixWidth = "200%"
     else
         local distanceInMeters = distance / UNITS_PER_METER
         local speedInMS = 0
@@ -286,9 +287,10 @@ local function getSpeed(widget)
         local unitText = GetString(_G["BARSTEWARD_" .. string.upper(units)])
 
         speedText = ((type(speed) == "number") and speed or 0) .. " " .. unitText
+        fixWidth = "88 mph"
     end
 
-    widget:SetValue(speedText, "200%")
+    widget:SetValue(speedText, fixWidth)
 
     BS.lastPosition = BS.currentPosition
 
