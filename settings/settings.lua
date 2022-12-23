@@ -1763,7 +1763,7 @@ local function getPortToHouseSettings()
 
     for index, house in ipairs(BS.houses) do
         if (house.ptfName or house.owned) then
-            table.insert(choices, house.name)
+            table.insert(choices, house.name .. " - " .. house.location)
             table.insert(choicesValues, index)
         end
     end
