@@ -292,7 +292,9 @@ local function Initialise()
                                 end,
                                 id = 1000 + id
                             }
+
                             table.insert(widgets, {BS.Vars.Controls[1000 + id].Order, widget})
+                            BS.widgets[1000 + id] = widget
                         end
                     end
                 end
