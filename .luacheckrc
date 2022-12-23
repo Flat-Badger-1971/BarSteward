@@ -164,6 +164,7 @@ read_globals = {
     },
     ["ZO_COLLECTIBLE_DATA_MANAGER"] = {
         fields = {
+            GetAllCollectibleDataObjects = {read_only = true},
             GetCategoryDataByIndicies = {read_only = true}
         }
     },
@@ -287,6 +288,7 @@ read_globals = {
     "GetGuildMemberCharacterInfo",
     "GetGuildMemberInfo",
     "GetGuildName",
+    "GetHouseFoundInZoneId",
     "GetLFGActivityRewardDescriptionOverride",
     "GetLFGActivityRewardUINodeInfo",
     "GetUIGlobalScale",
@@ -401,9 +403,11 @@ read_globals = {
     "IsUnitGrouped",
     "IsUnitInCombat",
     "IsUnitPvPFlagged",
+    "JumpToSpecificHouse",
     "PlayEmoteByIndex",
     "PlaySound",
     "ReloadUI",
+    "RequestJumpToHouse",
     "RequestTributeClubData",
     "SetGameCameraUIMode",
     "TriggerTutorial",

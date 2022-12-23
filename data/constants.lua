@@ -264,3 +264,5 @@ BS.TRIBUTE_ICON = {
     [_G.LFG_ACTIVITY_TRIBUTE_CASUAL]="/esoui/art/icons/u34_tribute_quest3.dds",
     [_G.LFG_ACTIVITY_TRIBUTE_COMPETITIVE]="/esoui/art/icons/u34_tribute_pvedaily30.dds"
 }
+
+BS.FRIENDS_ICON = "/esoui/art/chatwindow/chat_friendsonline_up.dds"
