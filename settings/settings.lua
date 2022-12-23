@@ -1930,7 +1930,7 @@ local function getPortToHouseSettings()
                 }
             }
 
-            if (house.ptfName ~= nil) then
+            if (house.ptfName == nil) then
                 submenuControls[#submenuControls + 1] = {
                     type = "checkbox",
                     name = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_HOUSING_BOOK_ACTION_TRAVEL_TO_HOUSE_OUTSIDE)),
