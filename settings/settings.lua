@@ -1708,7 +1708,7 @@ local function getHouseWidgetName()
     if (BS.House_ShowLocationOnly) then
         widgetName = house.location
     elseif (BS.House_ShowLocationToo) then
-        widgetName = house.name .. " (" .. house.location .. ")"
+        widgetName = house.name .. " - " .. house.location
     else
         widgetName = house.name
     end
