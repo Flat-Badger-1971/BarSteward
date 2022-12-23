@@ -271,6 +271,9 @@ local function Initialise()
                         local vars = BS.Vars.Controls[1000 + id]
 
                         if (BS.Vars.Controls[1000 + id].Bar == idx) then
+                            local tooltip = vars.Name .. BS.LF .. "|cf9f9f9"
+                            tooltip = tooltip .. house.location .. "|r"
+
                             local widget = {
                                 name = "house_" .. id,
                                 update = function(widget)
@@ -278,7 +281,7 @@ local function Initialise()
                                     widget:SetColour(unpack(colour))
                                     widget:SetValue(vars.Name, vars.RawName)
                                 end,
-                                tooltip = vars.Name,
+                                tooltip = tooltip,
                                 icon = house.icon,
                                 onClick = function()
                                     if (house.ptfName) then
