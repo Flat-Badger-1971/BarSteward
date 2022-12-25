@@ -239,6 +239,7 @@ read_globals = {
     "DoesAntiquityHaveLead",
     "DoesUnitExist",
     "EndInteraction",
+    "GetAbilityDescription",
     "GetAbilityIcon",
     "GetAbilityName",
     "GetAchievementCriterion",

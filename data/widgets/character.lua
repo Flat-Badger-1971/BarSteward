@@ -4,26 +4,32 @@ BS.widgets[BS.W_MUNDUS_STONE] = {
     -- v1.0.1
     name = "mundusstone",
     update = function(widget)
-        local mundusId = nil
+        local mundusId, mundusName, mundusIcon
 
         for buffNum = 1, GetNumBuffs("player") do
-            local id = select(11, GetUnitBuffInfo("player", buffNum))
+            local name, _, _, _, _, icon, _, _, _, _, id = GetUnitBuffInfo("player", buffNum)
 
             if (BS.MUNDUS_STONES[id]) then
+                mundusIcon = icon
                 mundusId = id
+                mundusName = ZO_CachedStrFormat("<<C:1>>", name)
                 break
             end
         end
 
         if (mundusId ~= nil) then
-            local icon = GetAbilityIcon(mundusId)
-            local name = ZO_CachedStrFormat("<<C:1>>", GetAbilityName(mundusId))
-
-            widget:SetIcon(icon)
-            widget:SetValue(name)
+            widget:SetIcon(mundusIcon)
+            widget:SetValue(mundusName)
             widget:SetColour(unpack(BS.Vars.Controls[BS.W_MUNDUS_STONE].Colour or BS.Vars.DefaultColour))
 
-            return name
+            local tt = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_CONFIRM_MUNDUS_STONE_TITLE)) .. BS.LF
+            local desc = ZO_CachedStrFormat("<<C:1>>", GetAbilityDescription(mundusId))
+
+            tt = tt .. "|cf9f9f9" .. desc .. "|r"
+
+            widget.tooltip = tt
+
+            return mundusName
         else
             widget:SetValue(ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_CRAFTING_INVALID_ITEM_STYLE)))
             widget:SetColour(unpack(BS.Vars.Controls[BS.W_MUNDUS_STONE].DangerColour or BS.Vars.DefaultDangerColour))
