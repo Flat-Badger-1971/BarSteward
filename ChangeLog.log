@@ -1,6 +1,8 @@
-[color=#ff9900][b]Version: 1.4.27 ---------------[/b][/color]
+[color=#ff9900][b]Version: 1.4.28 ---------------[/b][/color]
+Minor code refactoring
 Code optimisations for Mundus Stone widget
 Add effect to Mundus Stone widget tooltip
+Add house name to housing tooltips
 
 [color=#ff9900][b]Version: 1.4.27 ---------------[/b][/color]
 Reenable font correction feature for all font sizes

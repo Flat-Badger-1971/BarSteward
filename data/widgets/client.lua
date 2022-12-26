@@ -1,27 +1,5 @@
 local BS = _G.BarSteward
 
---[[
-    {
-        name = [string] "widget name",
-        update = [function] function that takes widget as an argument and sets the widget value / colour. Must return the raw value,
-        timer = [number] [optional] the time interval in ms before the update function is called again,
-        event = [string/table] [optional] the event or array of events that will trigger the update function,
-        filter = [table] table of filters to apply to an event. Key is the event, value is another table indicating the filter and value
-        tooltip = [string] [optional] the tooltip text that will display when the user hovers over the value,
-        icon = [string/function] path to the eso texture file,
-        hideWhenTrue = [function] this boolean result of this functions determines if the widget should be hidden or not,
-        minWidthChars = [string] string to use to set the minimum width of the widget value,
-        onClick = [function] function to call when the widget is clicked,
-        complete = [function] return true to indicate completion,
-        customOptions = [object] - {
-            name = [string] name for custom options,
-            choices = [array] choices for custom options dropdown,
-            default = [string/number] default value,
-            refresh = [boolean] refresh the widget's value,
-            varName = [string] saved vars variable name
-        }
-    }
-]]
 local function getMoonPhaseIcon()
     if (BS.LibClock) then
         local constants = _G.LibClockTST.CONSTANTS()

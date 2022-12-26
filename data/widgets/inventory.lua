@@ -65,18 +65,7 @@ BS.widgets[BS.W_BAG_SPACE] = {
     customOptions = {
         name = GetString(_G.BARSTEWARD_DEBOUNCE),
         tooltip = GetString(_G.BARSTEWARD_DEBOUNCE_DESC),
-        choices = {
-            0,
-            1,
-            5,
-            10,
-            15,
-            20,
-            30,
-            40,
-            50,
-            60
-        },
+        choices = {0, 1, 5, 10, 15, 20, 30, 40, 50, 60},
         varName = "DebounceTime",
         refresh = false,
         default = 5
@@ -706,13 +695,12 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
         for _, bagType in pairs({"bag", "bank"}) do
             for itemId, key in pairs(keys[bagType]) do
                 local zoIcon = zo_iconFormat(key.icon, 16, 16)
+
                 foundIds[itemId] = true
 
-                ttt =
-                    ttt ..
-                    BS.LF ..
-                        (bagType == "bag" and BS.BAGICON or BS.BANKICON) ..
-                            " " .. zoIcon .. " " .. "|cf9f9f9" .. key.name .. "|r"
+                ttt = ttt .. BS.LF
+                ttt = ttt .. (bagType == "bag" and BS.BAGICON or BS.BANKICON)
+                ttt = ttt .. " " .. zoIcon .. " " .. "|cf9f9f9" .. key.name .. "|r"
                 ttt = ttt .. " (" .. key.count .. ")"
             end
         end
@@ -724,6 +712,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
 
                 if (not foundIds[itemId]) then
                     local zoIcon = zo_iconFormat(data.icon, 16, 16)
+
                     ttt = ttt .. BS.LF .. BS.BAGICON .. " " .. zoIcon .. " " .. "|cf9f9f9" .. data.name .. "|r"
                     ttt = ttt .. " (0)"
                 end
@@ -800,18 +789,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
     customOptions = {
         name = GetString(_G.BARSTEWARD_DEBOUNCE),
         tooltip = GetString(_G.BARSTEWARD_DEBOUNCE_DESC),
-        choices = {
-            0,
-            1,
-            5,
-            10,
-            15,
-            20,
-            30,
-            40,
-            50,
-            60
-        },
+        choices = {0, 1, 5, 10, 15, 20, 30, 40, 50, 60},
         varName = "DebounceTime",
         refresh = false,
         default = 5

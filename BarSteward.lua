@@ -272,6 +272,7 @@ local function Initialise()
 
                         if (BS.Vars.Controls[1000 + id].Bar == idx) then
                             local tooltip = vars.Name .. BS.LF .. "|cf9f9f9"
+                            tooltip = tooltip .. house.name .. BS.LF
                             tooltip = tooltip .. house.location .. "|r"
 
                             local widget = {

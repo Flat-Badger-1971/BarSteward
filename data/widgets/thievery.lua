@@ -13,7 +13,7 @@ BS.widgets[BS.W_STOLEN_ITEMS] = {
             for slot = 0, GetBagSize(bag) do
                 if (IsItemStolen(bag, slot)) then
                     local icon, itemCount = GetItemInfo(bag, slot)
-                    --local itemCount = GetSlotStackSize(bag, slot)
+
                     count = count + itemCount
                     if (bag == _G.BAG_BANK or bag == _G.BAG_SUBSCRIBER_BANK) then
                         bagCounts.banked = bagCounts.banked + itemCount
@@ -58,9 +58,8 @@ BS.widgets[BS.W_STOLEN_ITEMS] = {
             end
 
             ttt = ttt .. BS.LF
-            ttt =
-                ttt ..
-                BS.LF .. zo_strformat(GetString(_G.BARSTEWARD_TOTAL_VALUE), "|cffff00" .. total .. "|r " .. goldIcon)
+            ttt = ttt .. BS.LF
+            ttt = ttt .. zo_strformat(GetString(_G.BARSTEWARD_TOTAL_VALUE), "|cffff00" .. total .. "|r " .. goldIcon)
 
             ttt = ttt .. stt
         end
@@ -87,9 +86,8 @@ BS.widgets[BS.W_FENCE_TRANSACTIONS] = {
     name = "fenceSlots",
     update = function(widget)
         local vars = BS.Vars.Controls[BS.W_FENCE_TRANSACTIONS]
-        local max, used =
-            FENCE_MANAGER:GetNumTotalTransactions(_G.ZO_MODE_STORE_SELL_STOLEN),
-            FENCE_MANAGER:GetNumTransactionsUsed(_G.ZO_MODE_STORE_SELL_STOLEN)
+        local max = FENCE_MANAGER:GetNumTotalTransactions(_G.ZO_MODE_STORE_SELL_STOLEN)
+        local used = FENCE_MANAGER:GetNumTransactionsUsed(_G.ZO_MODE_STORE_SELL_STOLEN)
         local pcUsed = math.floor(used / max) * 100
         local colour = vars.OkColour or BS.Vars.DefaultOkColour
         local noLimitColour = vars.NoLimitColour and "|cf9f9f9" or ""
@@ -119,9 +117,8 @@ BS.widgets[BS.W_LAUNDER_TRANSACTIONS] = {
     name = "launderlots",
     update = function(widget)
         local vars = BS.Vars.Controls[BS.W_LAUNDER_TRANSACTIONS]
-        local max, used =
-            FENCE_MANAGER:GetNumTotalTransactions(_G.ZO_MODE_STORE_LAUNDER),
-            FENCE_MANAGER:GetNumTransactionsUsed(_G.ZO_MODE_STORE_LAUNDER)
+        local max = FENCE_MANAGER:GetNumTotalTransactions(_G.ZO_MODE_STORE_LAUNDER)
+        local used = FENCE_MANAGER:GetNumTransactionsUsed(_G.ZO_MODE_STORE_LAUNDER)
         local pcUsed = math.floor(used / max) * 100
         local colour = vars.OkColour or BS.Vars.DefaultOkColour
         local noLimitColour = vars.NoLimitColour and "|cf9f9f9" or ""

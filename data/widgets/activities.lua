@@ -5,14 +5,10 @@ local completed = {
 }
 
 local function configureWidget(widget, complete, maxComplete, activityType, tasks, hideLimit, defaultTooltip)
+    local widgetIndex = activityType == _G.TIMED_ACTIVITY_TYPE_DAILY and BS.W_DAILY_ENDEAVOURS or BS.W_WEEKLY_ENDEAVOURS
+
     widget:SetValue(complete .. (hideLimit and "" or ("/" .. maxComplete)))
-    widget:SetColour(
-        unpack(
-            BS.Vars.Controls[
-                activityType == _G.TIMED_ACTIVITY_TYPE_DAILY and BS.W_DAILY_ENDEAVOURS or BS.W_WEEKLY_ENDEAVOURS
-            ].Colour or BS.Vars.DefaultColour
-        )
-    )
+    widget:SetColour(unpack(BS.Vars.Controls[widgetIndex].Colour or BS.Vars.DefaultColour))
 
     if (#tasks > 0) then
         local tooltipText = defaultTooltip or ""
@@ -223,6 +219,7 @@ BS.RegisterForEvent(
         BS.isScryingUnlocked = ZO_IsScryingUnlocked()
     end
 )
+
 BS.RegisterForEvent(
     _G.EVENT_SKILL_LINE_ADDED,
     function()
@@ -316,9 +313,8 @@ BS.widgets[BS.W_LEADS] = {
                     end
                 end
 
-                ttt =
-                    ttt ..
-                    BS.LF .. " " .. ttlColour .. nameAndZone .. " - |r" .. BS.ARGBConvert(timeColour) .. time .. "|r"
+                ttt = ttt .. BS.LF .. " " .. ttlColour
+                ttt = ttt .. nameAndZone .. " - |r" .. BS.ARGBConvert(timeColour) .. time .. "|r"
             end
 
             widget.tooltip = ttt
@@ -460,6 +456,7 @@ BS.widgets[BS.W_TRIBUTE_CLUB_RANK] = {
             end
 
             local ttt = GetString(_G.BARSTEWARD_TRIBUTE_RANK) .. BS.LF
+
             ttt = ttt .. "|cf9f9f9" .. displayRank .. " - " .. rankName .. BS.LF .. BS.LF
             ttt = ttt .. xp .. " / " .. totalxp .. ((rank == 7) and "" or " (" .. percent .. "%)|r")
 
@@ -493,6 +490,7 @@ BS.widgets[BS.W_ACHIEVEMENT_POINTS] = {
         widget:SetColour(unpack(colour))
 
         local ttt = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ACHIEVEMENTS_OVERALL)) .. BS.LF
+
         ttt = ttt .. "|cf9f9f9" .. earnedPoints .. "/" .. totalPoints .. "|r"
 
         widget.tooltip = ttt
@@ -554,8 +552,8 @@ local function setTracker(widgetIndex, resetSeconds, tooltip)
             local formattedTime =
                 BS.SecondsToTime(timeRemaining, true, false, BS.Vars.Controls[BS.W_SHADOWY_VENDOR_TIME].HideSeconds)
 
-            tooltip =
-                tooltip .. BS.LF .. "|cffd700" .. formattedTime .. "|r " .. ZO_FormatUserFacingDisplayName(character)
+            tooltip = tooltip .. BS.LF .. "|cffd700"
+            tooltip = tooltip .. formattedTime .. "|r " .. ZO_FormatUserFacingDisplayName(character)
         end
     end
 

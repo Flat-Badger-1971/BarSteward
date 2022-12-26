@@ -157,6 +157,7 @@ BS.widgets[BS.W_ALLIANCE] = {
         widget:SetColour(colour.r, colour.g, colour.b, colour.a)
         widget:SetIcon(icon)
         widget:SetTextureCoords(0, 1, 0, 0.6)
+
         widget.icon:SetWidth(27)
 
         return widget:GetValue()
@@ -202,6 +203,7 @@ BS.widgets[BS.W_SKYSHARDS] = {
         widget:SetColour(unpack(BS.Vars.Controls[BS.W_SKYSHARDS].Colour or BS.Vars.DefaultColour))
 
         local ttt = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_MAPFILTER15)) .. BS.LF
+
         ttt = ttt .. "|cffffff" .. zo_strformat(GetString(_G.BARSTEWARD_SKYSHARDS_SKILL_POINTS), skillSkyShards) .. "|r"
 
         widget.tooltip = ttt
@@ -244,6 +246,7 @@ local DEFAULT_SPEED = 660
 local function GetCurrentPos()
     local _, posX, _, posY = GetUnitRawWorldPosition("player")
     local timestamp = GetGameTimeMilliseconds()
+
     return {posX, posY, timestamp}
 end
 
@@ -264,6 +267,7 @@ local function getSpeed(widget)
         end
 
         local pSpeed = math.floor((rawSpeed * 100 / DEFAULT_SPEED) + 0.5)
+
         pSpeed = pSpeed - (pSpeed % 5)
 
         if (pSpeed < 1) then
@@ -629,12 +633,15 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
         end
 
         local icons = {}
+
         for disciplineIndex = 1, GetNumChampionDisciplines() do
             local id = GetChampionDisciplineId(disciplineIndex)
 
             disciplineData = CHAMPION_DATA_MANAGER:FindChampionDisciplineDataById(id)
+
             local icon = zo_iconFormat(disciplineData:GetHUDIcon(), 16, 16)
             local disciplineName = GetChampionDisciplineName(id)
+
             icons[disciplineName] = icon
 
             local name = ZO_CachedStrFormat("<<C:1>>", disciplineName)
@@ -661,9 +668,8 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
             if (foundEmpty) then
                 ttt = ttt .. BS.LF .. BS.LF .. GetString(_G.BARSTEWARD_UNSLOTTED)
                 for discipline, empty in pairs(emptySlots) do
-                    ttt =
-                        ttt ..
-                        BS.LF .. icons[discipline] .. " " .. ZO_CachedStrFormat("<<C:1>>", discipline) .. " - " .. empty
+                    ttt = ttt .. BS.LF
+                    ttt = ttt .. icons[discipline] .. " " .. ZO_CachedStrFormat("<<C:1>>", discipline) .. " - " .. empty
                     unslotted = unslotted + empty
                 end
             end

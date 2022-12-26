@@ -231,18 +231,7 @@ BS.widgets[BS.W_EVENT_TICKETS] = {
     customOptions = {
         name = GetString(_G.BARSTEWARD_DEBOUNCE),
         tooltip = GetString(_G.BARSTEWARD_DEBOUNCE_DESC),
-        choices = {
-            0,
-            1,
-            5,
-            10,
-            15,
-            20,
-            30,
-            40,
-            50,
-            60
-        },
+        choices = {0, 1, 5, 10, 15, 20, 30, 40, 50, 60},
         varName = "DebounceTime",
         refresh = false,
         default = 5

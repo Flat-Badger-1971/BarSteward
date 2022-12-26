@@ -133,9 +133,9 @@ BS.widgets[BS.W_BLACKSMITHING] = {
 
         for slot = 1, maxResearch do
             local slotText = BS.LF .. "|cf9f9f9" .. slot .. " - "
-            ttt =
-                ttt ..
-                slotText .. getDisplay(researchSlots[_G.CRAFTING_TYPE_BLACKSMITHING][slot] or 0, BS.W_BLACKSMITHING)
+
+            ttt = ttt .. slotText
+            ttt = ttt .. getDisplay(researchSlots[_G.CRAFTING_TYPE_BLACKSMITHING][slot] or 0, BS.W_BLACKSMITHING)
         end
 
         widget.tooltip = ttt
@@ -178,8 +178,9 @@ BS.widgets[BS.W_WOODWORKING] = {
 
         for slot = 1, maxResearch do
             local slotText = BS.LF .. "|cf9f9f9" .. slot .. " - "
-            ttt =
-                ttt .. slotText .. getDisplay(researchSlots[_G.CRAFTING_TYPE_WOODWORKING][slot] or 0, BS.W_WOODWORKING)
+
+            ttt = ttt .. slotText
+            ttt = ttt .. getDisplay(researchSlots[_G.CRAFTING_TYPE_WOODWORKING][slot] or 0, BS.W_WOODWORKING)
         end
 
         widget.tooltip = ttt
@@ -222,6 +223,7 @@ BS.widgets[BS.W_CLOTHING] = {
 
         for slot = 1, maxResearch do
             local slotText = BS.LF .. "|cf9f9f9" .. slot .. " - "
+
             ttt = ttt .. slotText .. getDisplay(researchSlots[_G.CRAFTING_TYPE_CLOTHIER][slot] or 0, BS.W_CLOTHING)
         end
 
@@ -265,9 +267,9 @@ BS.widgets[BS.W_JEWELCRAFTING] = {
 
         for slot = 1, maxResearch do
             local slotText = BS.LF .. "|cf9f9f9" .. slot .. " - "
-            ttt =
-                ttt ..
-                slotText .. getDisplay(researchSlots[_G.CRAFTING_TYPE_JEWELRYCRAFTING][slot] or 0, BS.W_JEWELCRAFTING)
+
+            ttt = ttt .. slotText
+            ttt = ttt .. getDisplay(researchSlots[_G.CRAFTING_TYPE_JEWELRYCRAFTING][slot] or 0, BS.W_JEWELCRAFTING)
         end
 
         widget.tooltip = ttt
@@ -407,17 +409,11 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
                 local tcolour = BS.ARGBConvert(BS.Vars.DefaultColour)
 
                 if (tdone) then
-                    ttt =
-                        ttt ..
-                        BS.LF ..
-                            BS.ARGBConvert(BS.Vars.DefaultOkColour) ..
-                                name .. " - " .. GetString(_G.BARSTEWARD_COMPLETED) .. "|r"
+                    ttt = ttt .. BS.LF .. BS.ARGBConvert(BS.Vars.DefaultOkColour)
+                    ttt = ttt .. name .. " - " .. GetString(_G.BARSTEWARD_COMPLETED) .. "|r"
                 elseif (tadded) then
-                    ttt =
-                        ttt ..
-                        BS.LF ..
-                            BS.ARGBConvert(BS.Vars.DefaultWarningColour) ..
-                                name .. " - " .. GetString(_G.BARSTEWARD_PICKED_UP) .. "|r"
+                    ttt = ttt .. BS.LF .. BS.ARGBConvert(BS.Vars.DefaultWarningColour)
+                    ttt = ttt .. name .. " - " .. GetString(_G.BARSTEWARD_PICKED_UP) .. "|r"
                 else
                     ttt = ttt .. BS.LF .. tcolour .. name .. " - " .. GetString(_G.BARSTEWARD_NOT_PICKED_UP) .. "|r"
                 end
