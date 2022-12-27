@@ -238,10 +238,12 @@ local function Initialise()
 
     for idx, barData in pairs(bars) do
         if (not BS.Vars.Bars[idx].Disable) then
-            ZO_CreateStringId(
-                "SI_BINDING_NAME_BARSTEWARD_KEYBIND_TOGGLE_BAR_" .. idx,
-                ZO_CachedStrFormat(_G.BARSTEWARD_TOGGLE, barData.Name)
-            )
+            if (idx < BS.MAX_BINDINGS) then
+                ZO_CreateStringId(
+                    "SI_BINDING_NAME_BARSTEWARD_KEYBIND_TOGGLE_BAR_" .. idx,
+                    ZO_CachedStrFormat(_G.BARSTEWARD_TOGGLE, barData.Name)
+                )
+            end
 
             local widgets = {}
             local orderedWidgets = {}
@@ -264,6 +266,8 @@ local function Initialise()
                 if (not BS.houses) then
                     BS.houses = BS.GetHouses()
                 end
+
+                local bindings = BS.Vars.HouseBindings or {}
 
                 for id, active in pairs(BS.Vars.HouseWidgets) do
                     if (active) then
@@ -296,6 +300,18 @@ local function Initialise()
 
                             table.insert(widgets, {BS.Vars.Controls[1000 + id].Order, widget})
                             BS.widgets[1000 + id] = widget
+
+                            if (not bindings[id]) then
+                                bindings[id] = BS.GetNextIndex(bindings)
+                                BS.Vars.HouseBindings = bindings
+                            end
+
+                            if (bindings[id] < BS.MAX_BINDINGS) then
+                                ZO_CreateStringId(
+                                    "SI_BINDING_NAME_BARSTEWARD_KEYBIND_TOGGLE_HOUSE_" .. bindings[id],
+                                    ZO_CachedStrFormat(_G.BARSTEWARD_TOGGLE, house.name)
+                                )
+                            end
                         end
                     end
                 end
@@ -378,6 +394,27 @@ local function Initialise()
     end
 
     BS.Vars.CharacterList[GetUnitName("player")] = true
+end
+
+function BS.PortToHouse(index)
+    local id = BS.GetByValue(BS.Vars.HouseBindings, index)
+
+    if (not id) then
+        return
+    end
+
+    if (not BS.houses) then
+        BS.houses = BS.GetHouses()
+    end
+
+    local house = BS.GetHouseFromReferenceId(id)
+    local vars = BS.Vars.Controls[1000 + id]
+
+    if (house.ptfName) then
+        JumpToSpecificHouse(house.ptfName, id)
+    else
+        RequestJumpToHouse(id, vars.Outside)
+    end
 end
 
 function BS.ToggleBar(index)

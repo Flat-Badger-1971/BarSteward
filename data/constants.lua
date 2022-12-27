@@ -266,3 +266,6 @@ BS.TRIBUTE_ICON = {
 }
 
 BS.FRIENDS_ICON = "/esoui/art/chatwindow/chat_friendsonline_up.dds"
+
+-- reflects the number of bindings setup in ui/bindings.xml
+BS.MAX_BINDINGS = 20

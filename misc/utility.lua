@@ -831,3 +831,32 @@ function BS.GetHouseFromReferenceId(id)
         end
     end
 end
+
+-- get then next unused index number from the table's values
+function BS.GetNextIndex(t)
+    local nextIndex = 1
+
+    table.sort(
+        t,
+        function(a, b)
+            return a < b
+        end
+    )
+
+    for _, value in pairs(t) do
+        if (value ~= nextIndex) then
+            return nextIndex
+        end
+        nextIndex = nextIndex + 1
+    end
+
+    return nextIndex
+end
+
+function BS.GetByValue(t, v)
+    for key, value in pairs(t) do
+        if (value == v) then
+            return key
+        end
+    end
+end

@@ -61,6 +61,67 @@
             <Action name="BARSTEWARD_KEYBIND_TOGGLE_BAR_20">
                 <Down>BarSteward.ToggleBar(20)</Down>
             </Action>
+
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_HOUSE_1">
+                <Down>BarSteward.PortToHouse(1)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_HOUSE_2">
+                <Down>BarSteward.PortToHouse(2)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_HOUSE_3">
+                <Down>BarSteward.PortToHouse(3)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_HOUSE_4">
+                <Down>BarSteward.PortToHouse(4)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_HOUSE_5">
+                <Down>BarSteward.PortToHouse(5)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_HOUSE_6">
+                <Down>BarSteward.PortToHouse(6)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_HOUSE_7">
+                <Down>BarSteward.PortToHouse(7)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_HOUSE_8">
+                <Down>BarSteward.PortToHouse(8)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_HOUSE_9">
+                <Down>BarSteward.PortToHouse(9)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_HOUSE_10">
+                <Down>BarSteward.PortToHouse(10)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_HOUSE_11">
+                <Down>BarSteward.PortToHouse(11)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_HOUSE_12">
+                <Down>BarSteward.PortToHouse(12)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_HOUSE_13">
+                <Down>BarSteward.PortToHouse(13)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_HOUSE_14">
+                <Down>BarSteward.PortToHouse(14)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_HOUSE_15">
+                <Down>BarSteward.PortToHouse(15)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_HOUSE_16">
+                <Down>BarSteward.PortToHouse(16)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_HOUSE_17">
+                <Down>BarSteward.PortToHouse(17)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_HOUSE_18">
+                <Down>BarSteward.PortToHouse(18)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_HOUSE_19">
+                <Down>BarSteward.PortToHouse(19)</Down>
+            </Action>
+            <Action name="BARSTEWARD_KEYBIND_TOGGLE_HOUSE_20">
+                <Down>BarSteward.PortToHouse(20)</Down>
+            </Action>
         </Category>
     </Layer>
 </Bindings>
