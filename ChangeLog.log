@@ -1,3 +1,8 @@
+[color=#ff9900][b]Version: 1.4.29 ---------------[/b][/color]
+Move housing widget code to its own file
+Clear binding on house removal
+Add option to change port to house name after creation
+
 [color=#ff9900][b]Version: 1.4.28 ---------------[/b][/color]
 Minor code refactoring
 Code optimisations for Mundus Stone widget
