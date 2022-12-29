@@ -470,7 +470,6 @@ function BS.NudgeCompass()
     end
 end
 
--- trait research
 function BS.IsTraitResearchComplete(craftingType)
     local complete = true
 
@@ -489,9 +488,10 @@ function BS.IsTraitResearchComplete(craftingType)
     return complete
 end
 
-function BS.Split(s)
-    local delimiter = ","
+function BS.Split(s, delimiter)
     local result = {}
+
+    delimiter = delimiter or ","
 
     for match in (s .. delimiter):gmatch("(.-)" .. delimiter) do
         table.insert(result, match)
@@ -512,6 +512,7 @@ end
 
 function BS.Announce(header, message, widgetIconNumber, lifespan, sound, otherIcon)
     local messageParams = CENTER_SCREEN_ANNOUNCE:CreateMessageParams(_G.CSA_CATEGORY_LARGE_TEXT)
+
     messageParams:SetSound(sound or "Justice_NowKOS")
     messageParams:SetText(header or "Test Header", message or "Test Message")
     messageParams:SetLifespanMS(lifespan or 6000)
@@ -612,33 +613,18 @@ function BS.RefreshBar(widgetIndex)
     end
 end
 
+function BS.Repeat(input, times)
+    local output = {}
+
+    for _ = 1, times do
+        table.insert(output, input)
+    end
+
+    return output
+end
+
 function BS.MakeItemLink(itemId, name)
-    return ZO_LinkHandler_CreateLink(
-        name or "",
-        nil,
-        _G.ITEM_LINK_TYPE,
-        itemId,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0
-    )
+    return ZO_LinkHandler_CreateLink(name or "", nil, _G.ITEM_LINK_TYPE, itemId, unpack(BS.Repeat(0, 20)))
 end
 
 function BS.Trim(stringValue)
@@ -775,60 +761,6 @@ end
 function BS.CloseMail()
     if (SCENE_MANAGER:IsShowing(BS.mailScene)) then
         SCENE_MANAGER:Hide(BS.mailScene)
-    end
-end
-
-local function getPTFInfo(id)
-    if ((not BS.PTFHouses) and BS.PTF) then
-        BS.PTFHouses = BS.PTF.GetFavorites()
-    end
-
-    if (BS.PTF) then
-        for _, ptfInfo in ipairs(BS.PTFHouses) do
-            if (ptfInfo.houseId == id) then
-                return ptfInfo.name
-            end
-        end
-    end
-end
-
-function BS.GetHouses()
-    local collectibleData = ZO_COLLECTIBLE_DATA_MANAGER:GetAllCollectibleDataObjects()
-    local houses = {}
-
-    for _, entry in ipairs(collectibleData) do
-        if (entry:IsHouse()) then
-            local referenceId = entry:GetReferenceId()
-            local ptfName = getPTFInfo(referenceId)
-            local houseEntry = {
-                icon = entry:GetIcon(),
-                id = referenceId,
-                location = entry:GetFormattedHouseLocation(),
-                name = entry:GetFormattedName(),
-                owned = not entry:IsLocked(),
-                primary = entry:IsPrimaryResidence(),
-                ptfName = ptfName
-            }
-
-            table.insert(houses, houseEntry)
-        end
-    end
-
-    table.sort(
-        houses,
-        function(a, b)
-            return a.name < b.name
-        end
-    )
-
-    return houses
-end
-
-function BS.GetHouseFromReferenceId(id)
-    for _, house in ipairs(BS.houses) do
-        if (house.id == id) then
-            return house
-        end
     end
 end
 

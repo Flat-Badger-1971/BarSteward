@@ -1,5 +1,59 @@
 local BS = _G.BarSteward
 
+local function getPTFInfo(id)
+    if ((not BS.PTFHouses) and BS.PTF) then
+        BS.PTFHouses = BS.PTF.GetFavorites()
+    end
+
+    if (BS.PTF) then
+        for _, ptfInfo in ipairs(BS.PTFHouses) do
+            if (ptfInfo.houseId == id) then
+                return ptfInfo.name
+            end
+        end
+    end
+end
+
+function BS.GetHouses()
+    local collectibleData = ZO_COLLECTIBLE_DATA_MANAGER:GetAllCollectibleDataObjects()
+    local houses = {}
+
+    for _, entry in ipairs(collectibleData) do
+        if (entry:IsHouse()) then
+            local referenceId = entry:GetReferenceId()
+            local ptfName = getPTFInfo(referenceId)
+            local houseEntry = {
+                icon = entry:GetIcon(),
+                id = referenceId,
+                location = entry:GetFormattedHouseLocation(),
+                name = entry:GetFormattedName(),
+                owned = not entry:IsLocked(),
+                primary = entry:IsPrimaryResidence(),
+                ptfName = ptfName
+            }
+
+            table.insert(houses, houseEntry)
+        end
+    end
+
+    table.sort(
+        houses,
+        function(a, b)
+            return a.name < b.name
+        end
+    )
+
+    return houses
+end
+
+function BS.GetHouseFromReferenceId(id)
+    for _, house in ipairs(BS.houses) do
+        if (house.id == id) then
+            return house
+        end
+    end
+end
+
 function BS.AddHousingWidgets(idx, widgets)
     if (BS.Vars.HouseWidgets) then
         BS.PTF = _G.PortToFriend
