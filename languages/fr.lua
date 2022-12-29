@@ -178,7 +178,7 @@ ZO_CreateStringId("BARSTEWARD_PORT_TO_HOUSE_PTF", "Les emplacements se télépor
 ZO_CreateStringId("BARSTEWARD_PORT_TO_HOUSE_SELECT", "Sélectionner une maison")
 ZO_CreateStringId("BARSTEWARD_PREVIOUS_ENCOUNTER", "Combat précédent")
 ZO_CreateStringId("BARSTEWARD_PREVIOUS_ENCOUNTER_AVERAGE", "DPS moyen")
-ZO_CreateStringId("BARSTEWARD_PREVIOUS_ENCOUNTER_DURATION", "Durée")                                                                                                                                                                                                                                            
+ZO_CreateStringId("BARSTEWARD_PREVIOUS_ENCOUNTER_DURATION", "Durée")
 ZO_CreateStringId("BARSTEWARD_PREVIOUS_ENCOUNTER_MAXIMUM", "DPS maximum")
 ZO_CreateStringId("BARSTEWARD_PICKED_UP", "Ramassée")
 ZO_CreateStringId("BARSTEWARD_PROGRESS_GRADIENT_END", "Fin du dégradé")
