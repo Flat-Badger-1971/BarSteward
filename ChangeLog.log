@@ -1,3 +1,8 @@
+[color=#ff9900][b]Version: 1.4.30 ---------------[/b][/color]
+Updated description text for Port To House widgets
+Minor code refactoring
+Prevent widget refresh if house has not been added to a bar
+
 [color=#ff9900][b]Version: 1.4.29 ---------------[/b][/color]
 Moved housing widget code to its own file
 Minor code refactoring

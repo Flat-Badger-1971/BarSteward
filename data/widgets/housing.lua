@@ -1,11 +1,11 @@
 local BS = _G.BarSteward
 
 local function getPTFInfo(id)
-    if ((not BS.PTFHouses) and BS.PTF) then
-        BS.PTFHouses = BS.PTF.GetFavorites()
-    end
-
     if (BS.PTF) then
+        if ((not BS.PTFHouses) or BS.PTFRefreshRequired) then
+            BS.PTFHouses = BS.PTF.GetFavorites()
+        end
+
         for _, ptfInfo in ipairs(BS.PTFHouses) do
             if (ptfInfo.houseId == id) then
                 return ptfInfo.name
@@ -206,15 +206,16 @@ function BS.GetPortToHouseSettings()
     local controls = {
         [1] = {
             type = "description",
-            text = GetString(_G.BARSTEWARD_PORT_TO_HOUSE_DESCRIPTION),
+            text = GetString(_G.BARSTEWARD_PORT_TO_HOUSE_DESCRIPTION) ..
+                ". " .. GetString(_G.BARSTEWARD_PORT_TO_HOUSE_PTF_INFO),
             width = "full"
         }
     }
 
     if (_G.PortToFriend) then
-        local ptfText =
-            "|c00994c" ..
-            zo_strformat(GetString(_G.BARSTEWARD_PORT_TO_HOUSE_PTF), zo_iconFormat(BS.FRIENDS_ICON, 16, 16)) .. "|r"
+        local ptfIcon = zo_iconFormat(BS.FRIENDS_ICON, 16, 16)
+        local ptfText = "|c00994c" .. zo_strformat(GetString(_G.BARSTEWARD_PORT_TO_HOUSE_PTF), ptfIcon) .. "|r"
+
         controls[#controls + 1] = {
             type = "description",
             text = ptfText,
@@ -401,7 +402,10 @@ function BS.GetPortToHouseSettings()
                     end
 
                     vars.Name = value
-                    BS.RefreshWidget(1000 + id)
+
+                    if (vars.Bar ~= 0) then
+                        BS.RefreshWidget(1000 + id)
+                    end
                 end,
                 isMultiLine = false,
                 width = "half"

@@ -169,6 +169,7 @@ ZO_CreateStringId("BARSTEWARD_PORT_TO_HOUSE_DESCRIPTION", "Create a new widget t
 ZO_CreateStringId("BARSTEWARD_PORT_TO_HOUSE_LOCATION_ONLY", "Show Location Only")
 ZO_CreateStringId("BARSTEWARD_PORT_TO_HOUSE_LOCATION_TOO", "Show Location Too")
 ZO_CreateStringId("BARSTEWARD_PORT_TO_HOUSE_PTF", "Port To Friend's House locations will  have <<1>> appended to their widget.")
+ZO_CreateStringId("BARSTEWARD_PORT_TO_HOUSE_PTF_INFO", "Newly added houses will require a UI reload before they appear here.")
 ZO_CreateStringId("BARSTEWARD_PORT_TO_HOUSE_PREVIEW", "Preview")
 ZO_CreateStringId("BARSTEWARD_PORT_TO_HOUSE_SELECT", "Select House")
 ZO_CreateStringId("BARSTEWARD_PREVIOUS_ENCOUNTER", "Previous Encounter")
