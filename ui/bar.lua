@@ -441,6 +441,19 @@ function baseBar:AddWidgets(widgets)
             end
         end
 
+        -- register LibCharacterKnowledge callback
+        if (metadata.callbackLCK) then
+            if (BS.LibCK) then
+                BS.LibCK.RegisterForCallback(
+                    BS.Name .. metadata.name,
+                    BS.LibCK.EVENT_INITIALIZED,
+                    function()
+                        self:DoUpdate(metadata)
+                    end
+                )
+            end
+        end
+
         if (self.orientation == "horizontal") then
             if (firstWidget) then
                 metadata.widget:SetAnchor(LEFT, self.bar, LEFT)

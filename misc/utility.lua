@@ -785,10 +785,50 @@ function BS.GetNextIndex(t)
     return nextIndex
 end
 
+function BS.Contains(t, v)
+    for _, value in ipairs(t) do
+        if (value == v) then
+            return true
+        end
+    end
+
+    return false
+end
+
 function BS.GetByValue(t, v)
     for key, value in pairs(t) do
-        if (value == v) then
+        if (type(value) == "table") then
+            if (BS.Contains(value, v)) then
+                return key
+            end
+        elseif (value == v) then
             return key
         end
     end
+end
+
+function BS.GetWritType(itemId)
+    for key, itemIds in pairs(BS.WRITS) do
+        for _, id in pairs(itemIds) do
+            if (id == itemId) then
+                return key
+            end
+        end
+    end
+
+    return 0
+end
+
+function BS.ToWritFields(item_link)
+    local parsedLink = {ZO_LinkHandler_ParseLink(item_link)}
+    local bsValues = {
+        itemId = tonumber(parsedLink[4]),
+        writType = BS.GetWritType(tonumber(parsedLink[4])),
+        subType = tonumber(parsedLink[5]),
+        itemType = BS.GetByValue(BS.WRIT_ITEM_TYPES, tonumber(parsedLink[10])) or 0,
+        itemQuality = tonumber(parsedLink[12]),
+        motifNumber = tonumber(parsedLink[15])
+    }
+
+    return bsValues
 end

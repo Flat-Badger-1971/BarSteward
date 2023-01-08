@@ -84,6 +84,7 @@ BS.W_PLAYER_LOCATION = 75
 BS.W_RANDOM_BATTLEGROUND = 76
 BS.W_RANDOM_TRIBUTE = 77
 BS.W_PLAYER_EXPERIENCE = 78
+BS.W_UNKNOWN_WRIT_MOTIFS = 79
 
 BS.WRITS = {
     [_G.CRAFTING_TYPE_ALCHEMY] = {
@@ -255,17 +256,35 @@ BS.ITEM_COLOUR_ICON = {
 }
 
 BS.BATTLEGROUND_ICON = {
-    [_G.LFG_ACTIVITY_BATTLE_GROUND_LOW_LEVEL]="/esoui/art/icons/battleground_medal_murderballcarry_001.dds",
-    [_G.LFG_ACTIVITY_BATTLE_GROUND_NON_CHAMPION]="/esoui/art/icons/battleground_medal_murderballcarry_002.dds",
-    [_G.LFG_ACTIVITY_BATTLE_GROUND_CHAMPION]="/esoui/art/icons/battleground_medal_murderballcarry_003.dds"
+    [_G.LFG_ACTIVITY_BATTLE_GROUND_LOW_LEVEL] = "/esoui/art/icons/battleground_medal_murderballcarry_001.dds",
+    [_G.LFG_ACTIVITY_BATTLE_GROUND_NON_CHAMPION] = "/esoui/art/icons/battleground_medal_murderballcarry_002.dds",
+    [_G.LFG_ACTIVITY_BATTLE_GROUND_CHAMPION] = "/esoui/art/icons/battleground_medal_murderballcarry_003.dds"
 }
 
 BS.TRIBUTE_ICON = {
-    [_G.LFG_ACTIVITY_TRIBUTE_CASUAL]="/esoui/art/icons/u34_tribute_quest3.dds",
-    [_G.LFG_ACTIVITY_TRIBUTE_COMPETITIVE]="/esoui/art/icons/u34_tribute_pvedaily30.dds"
+    [_G.LFG_ACTIVITY_TRIBUTE_CASUAL] = "/esoui/art/icons/u34_tribute_quest3.dds",
+    [_G.LFG_ACTIVITY_TRIBUTE_COMPETITIVE] = "/esoui/art/icons/u34_tribute_pvedaily30.dds"
 }
 
 BS.FRIENDS_ICON = "/esoui/art/chatwindow/chat_friendsonline_up.dds"
 
 -- reflects the number of bindings setup in ui/bindings.xml
 BS.MAX_BINDINGS = 20
+
+-- info from Writ Worthy
+BS.WRIT_ITEM_TYPES = {
+    [_G.ITEM_STYLE_CHAPTER_HELMETS] = {26, 35, 44},
+    [_G.ITEM_STYLE_CHAPTER_GLOVES] = {34, 43, 52},
+    [_G.ITEM_STYLE_CHAPTER_BOOTS] = {32, 41, 50},
+    [_G.ITEM_STYLE_CHAPTER_LEGS] = {31, 40, 49},
+    [_G.ITEM_STYLE_CHAPTER_CHESTS] = {28, 37, 46, 75},
+    [_G.ITEM_STYLE_CHAPTER_BELTS] = {30, 39, 48},
+    [_G.ITEM_STYLE_CHAPTER_SHOULDERS] = {29, 38, 47},
+    [_G.ITEM_STYLE_CHAPTER_SWORDS] = {59, 67},
+    [_G.ITEM_STYLE_CHAPTER_MACES] = {56, 69},
+    [_G.ITEM_STYLE_CHAPTER_AXES] = {53, 68},
+    [_G.ITEM_STYLE_CHAPTER_DAGGERS] = {62},
+    [_G.ITEM_STYLE_CHAPTER_STAVES] = {71, 72, 73, 74},
+    [_G.ITEM_STYLE_CHAPTER_SHIELDS] = {65},
+    [_G.ITEM_STYLE_CHAPTER_BOWS] = {70}
+}

@@ -230,6 +230,11 @@ local function Initialise()
         BS.LibClock = _G.LibClockTST:Instance()
     end
 
+    -- get a reference to LibCharacterKnowledge if it's installed
+    if (_G.LibCharacterKnowledge) then
+        BS.LibCK = _G.LibCharacterKnowledge
+    end
+
     BS.RegisterSettings()
 
     -- create bars

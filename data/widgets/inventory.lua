@@ -346,18 +346,6 @@ local function getDetail(data)
     return name .. ((wcount > 1) and (" (" .. wcount .. ")") or "")
 end
 
-local function getWritType(itemId)
-    for key, itemIds in pairs(BS.WRITS) do
-        for _, id in pairs(itemIds) do
-            if (id == itemId) then
-                return key
-            end
-        end
-    end
-
-    return 0
-end
-
 local function canCraft(know_list)
     for _, t in pairs(know_list) do
         if (t.is_known == false) then
@@ -391,7 +379,7 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
                 if (data.specializedItemType == _G.SPECIALIZED_ITEMTYPE_MASTER_WRIT) then
                     writs = writs + 1
                     local itemId = GetItemId(bag, data.slotIndex)
-                    local type = getWritType(itemId)
+                    local type = BS.GetWritType(itemId)
 
                     if (type ~= 0) then
                         if (writDetail[type] == nil) then
@@ -464,7 +452,7 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
         local writText = {}
 
         for type, counts in pairs(writDetail) do
-            local writType = ZO_CachedStrFormat("<<C:1>>", GetString(_G["SI_TRADESKILLTYPE" .. tostring(type)]))
+            local writType = ZO_CachedStrFormat("<<C:1>>", GetString("SI_TRADESKILLTYPE", type))
             if (counts.bagCount > 0) then
                 writType = writType .. " " .. BS.BAGICON .. " " .. counts.bagCount
             end

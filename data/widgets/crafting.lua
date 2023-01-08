@@ -594,3 +594,83 @@ BS.widgets[BS.W_RECIPES] = {
         default = food
     }
 }
+
+BS.widgets[BS.W_UNKNOWN_WRIT_MOTIFS] = {
+    -- v1.4.31
+    name = "unknownWritMotifs",
+    update = function(widget, event)
+        if (event == "initial") then
+            return
+        end
+
+        local vars = BS.Vars.Controls[BS.W_UNKNOWN_WRIT_MOTIFS]
+        local writs = 0
+        local bags = {_G.BAG_BACKPACK, _G.BAG_BANK}
+        local unknown = {}
+
+        if (IsESOPlusSubscriber()) then
+            table.insert(bags, _G.BAG_SUBSCRIBER_BANK)
+        end
+
+        for _, bag in pairs(bags) do
+            for _, data in pairs(_G.SHARED_INVENTORY.bagCache[bag]) do
+                if (data.specializedItemType == _G.SPECIALIZED_ITEMTYPE_MASTER_WRIT) then
+                    writs = writs + 1
+                    local itemLink = GetItemLink(bag, data.slotIndex)
+                    local writData = BS.ToWritFields(itemLink)
+
+                    -- only interested in crafting types that use motifs
+                    if
+                        (writData.writType == _G.CRAFTING_TYPE_BLACKSMITHING or
+                            writData.writType == _G.CRAFTING_TYPE_CLOTHIER or
+                            writData.writType == _G.CRAFTING_TYPE_WOODWORKING)
+                     then
+                        local knowsMotif =
+                            BS.LibCK.GetMotifKnowledgeForCharacter(
+                            tonumber(writData.motifNumber),
+                            tonumber(writData.itemType)
+                        )
+
+                        if (knowsMotif ~= BS.LibCK.KNOWLEDGE_KNOWN) then
+                            local styleName = GetItemStyleName(writData.motifNumber)
+                            local chapterName = GetString("SI_ITEMSTYLECHAPTER", writData.itemType)
+                            local motifName = zo_strformat("<<C:1>> <<m:2>>", styleName, chapterName)
+                            local colour = GetItemQualityColor(writData.itemQuality)
+                            local name = colour:Colorize(motifName)
+
+                            unknown[name] = true
+                        end
+                    end
+                end
+            end
+        end
+
+        local display = {}
+
+        for motif, _ in pairs(unknown) do
+            table.insert(display, motif)
+        end
+
+        table.sort(display)
+
+        widget:SetColour(unpack(vars.Colour or BS.Vars.DefaultColour))
+        widget:SetValue(#display)
+
+        if (#display > 0) then
+            local tt = GetString(_G.BARSTEWARD_UNKNOWN_WRIT_MOTIFS)
+
+            for _, motif in ipairs(display) do
+                tt = tt .. BS.LF .. motif
+            end
+
+            widget.tooltip = tt
+        end
+
+        return widget:GetValue()
+    end,
+    event = {_G.EVENT_LORE_BOOK_LEARNED},
+    callbackLCK = true,
+    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
+    icon = "/esoui/art/icons/crafting_motif_binding_welkynar.dds",
+    tooltip = GetString(_G.BARSTEWARD_UNKNOWN_WRIT_MOTIFS)
+}
