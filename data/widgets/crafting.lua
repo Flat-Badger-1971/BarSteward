@@ -637,7 +637,9 @@ BS.widgets[BS.W_UNKNOWN_WRIT_MOTIFS] = {
                             local motifName = zo_strformat("<<C:1>> <<m:2>>", styleName, chapterName)
                             local colour = GetItemQualityColor(writData.itemQuality)
                             local name = colour:Colorize(motifName)
+                            local motifId = _G.LibCharacterKnowledgeInternal.GetStyleMotifItems(writData.motifNumber).number
 
+                            name = motifId .. ". " .. name
                             unknown[name] = true
                         end
                     end
