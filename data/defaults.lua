@@ -402,9 +402,9 @@ BS.Defaults = {
             [BS.PERFECT_ROE] = true,
             [BS.POTENT_NIRNCRUX] = true
         },
-        [BS.W_TAMRIEL_TIME] = {Bar = 0, Order = 63, ColourValues = "c"},
+        [BS.W_TAMRIEL_TIME] = {Bar = 0, Order = 63, ColourValues = "c", Requires = "LibClockTST"},
         [BS.W_ACTIVE_BAR] = {Bar = 0, Order = 64},
-        [BS.W_DPS] = {Bar = 0, Order = 65, UseSeparators = false, ColourValues = "c"},
+        [BS.W_DPS] = {Bar = 0, Order = 65, UseSeparators = false, ColourValues = "c", Requires = "LibCombat"},
         [BS.W_LOREBOOKS] = {Bar = 0, Order = 66, ColourValues = "c", ShowCategory = GetLoreCategoryInfo(1)},
         [BS.W_RECIPES] = {Bar = 0, Order = 67, ColourValues = "c"},
         [BS.W_RANDOM_MEMENTO] = {Bar = 0, Order = 68, Print = true},
@@ -418,6 +418,12 @@ BS.Defaults = {
         [BS.W_RANDOM_BATTLEGROUND] = {Bar = 0, Order = 76, Autohide = false},
         [BS.W_RANDOM_TRIBUTE] = {Bar = 0, Order = 77, Autohide = false},
         [BS.W_PLAYER_EXPERIENCE] = {Bar = 0, Order = 78, UseSeparators = false, ColourValues = "c"},
-        [BS.W_UNKNOWN_WRIT_MOTIFS] = {Bar = 0, Order = 79, Autohide = false, ColourValues = "c"}
+        [BS.W_UNKNOWN_WRIT_MOTIFS] = {
+            Bar = 0,
+            Order = 79,
+            Autohide = false,
+            ColourValues = "c",
+            Requires = "LibCharacterKnowledge"
+        }
     }
 }

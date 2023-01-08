@@ -1589,19 +1589,15 @@ local function getWidgetSettings()
         local k = w.key
         local v = w.widget
         local widgetControls = {}
+        local disabled = false
 
-        if (k == BS.W_TAMRIEL_TIME and not BS.LibClock) then
+        if (widgets[k].Requires and not _G[widgets[k].Requires]) then
             widgetControls[#widgetControls + 1] = {
                 type = "description",
-                text = "|cff0000" .. GetString(_G.BARSTEWARD_LIBCLOCK) .. "|r",
+                text = "|cff0000" .. zo_strformat(GetString(_G.BARSTEWARD_REQUIRES), widgets[k].Requires) .. "|r",
                 width = "full"
             }
-        elseif (k == BS.W_DPS and not _G.LibCombat) then
-            widgetControls[#widgetControls + 1] = {
-                type = "description",
-                text = "|cff0000" .. GetString(_G.BARSTEWARD_LIBCOMBAT) .. "|r",
-                width = "full"
-            }
+            disabled = true
         else
             widgetControls[#widgetControls + 1] = {
                 type = "dropdown",
@@ -1646,30 +1642,31 @@ local function getWidgetSettings()
         local vars = BS.Vars.Controls[k]
         local defaults = BS.Defaults.Controls[k]
 
-        checkAutoHide(defaults, widgetControls, vars, k)
-        checkHideWhenComplete(defaults, widgetControls, vars, k)
-        checkHideWhenFullyUsed(defaults, widgetControls, vars, k)
-        checkHideWhenMaxLevel(defaults, widgetControls, vars, k)
-        checkPvPOnly(defaults, widgetControls, vars, k)
-        checkShowPercentage(defaults, widgetControls, vars, k)
-        checkUseSeparators(defaults, widgetControls, vars, k)
-        checkHideSeconds(defaults, widgetControls, vars, k)
-        checkHideDaysWhenZero(defaults, widgetControls, vars, k)
-        checkHideLimit(defaults, widgetControls, vars, k)
-        checkNoLimitColour(defaults, widgetControls, vars, k)
-        checkShowFreeSpace(defaults, widgetControls, vars, k)
-        checkSoundWhenEquals(defaults, widgetControls, vars)
-        checkSoundWhenOver(defaults, widgetControls, vars)
-        checkSoundWhenUnder(defaults, widgetControls, vars)
-        checkAnnouncement(defaults, widgetControls, vars, k)
-        checkProgressBar(defaults, widgetControls, vars, k)
-        checkCustomDropdown(widgetControls, k)
-        checkTime(widgetControls, k)
-        checkTimer(defaults, widgetControls, vars, k)
-        checkColourOptions(widgetControls, vars, k)
-        checkCustomOptions(widgetControls, k)
-        checkPrint(defaults, widgetControls, vars)
-
+        if (not disabled) then
+            checkAutoHide(defaults, widgetControls, vars, k)
+            checkHideWhenComplete(defaults, widgetControls, vars, k)
+            checkHideWhenFullyUsed(defaults, widgetControls, vars, k)
+            checkHideWhenMaxLevel(defaults, widgetControls, vars, k)
+            checkPvPOnly(defaults, widgetControls, vars, k)
+            checkShowPercentage(defaults, widgetControls, vars, k)
+            checkUseSeparators(defaults, widgetControls, vars, k)
+            checkHideSeconds(defaults, widgetControls, vars, k)
+            checkHideDaysWhenZero(defaults, widgetControls, vars, k)
+            checkHideLimit(defaults, widgetControls, vars, k)
+            checkNoLimitColour(defaults, widgetControls, vars, k)
+            checkShowFreeSpace(defaults, widgetControls, vars, k)
+            checkSoundWhenEquals(defaults, widgetControls, vars)
+            checkSoundWhenOver(defaults, widgetControls, vars)
+            checkSoundWhenUnder(defaults, widgetControls, vars)
+            checkAnnouncement(defaults, widgetControls, vars, k)
+            checkProgressBar(defaults, widgetControls, vars, k)
+            checkCustomDropdown(widgetControls, k)
+            checkTime(widgetControls, k)
+            checkTimer(defaults, widgetControls, vars, k)
+            checkColourOptions(widgetControls, vars, k)
+            checkCustomOptions(widgetControls, k)
+            checkPrint(defaults, widgetControls, vars)
+        end
         local textureCoords = nil
 
         if (k == BS.W_ALLIANCE) then

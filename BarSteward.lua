@@ -258,9 +258,19 @@ local function Initialise()
             -- get the widgets for this bar
             for id, info in ipairs(BS.Vars.Controls) do
                 if (info.Bar == idx) then
-                    local widget = BS.widgets[id]
-                    widget.id = id
-                    table.insert(widgets, {info.Order, widget})
+                    local add = true
+                    if (info.Requires) then
+                        local requiredLib = info.Requires
+                        if (_G[requiredLib] == nil) then
+                            add = false
+                        end
+                    end
+
+                    if (add) then
+                        local widget = BS.widgets[id]
+                        widget.id = id
+                        table.insert(widgets, {info.Order, widget})
+                    end
                 end
             end
 
