@@ -596,7 +596,7 @@ BS.widgets[BS.W_RECIPES] = {
 }
 
 BS.widgets[BS.W_UNKNOWN_WRIT_MOTIFS] = {
-    -- v1.4.31
+    -- v1.4.30
     name = "unknownWritMotifs",
     update = function(widget, event)
         if (event == "initial") then
