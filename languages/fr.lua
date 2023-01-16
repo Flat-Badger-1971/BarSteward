@@ -33,6 +33,7 @@ ZO_CreateStringId("BARSTEWARD_BAR_NAME", "Nom de la barre (appuyez sur Entrée p
 ZO_CreateStringId("BARSTEWARD_BOTH", "Les deux")
 ZO_CreateStringId("BARSTEWARD_BOTTOM", "En bas")
 ZO_CreateStringId("BARSTEWARD_BUTTON_ALIGN", "Aligner")
+ZO_CreateStringId("BARSTEWARD_CHANGE", "Changer le nom (appuyez sur Entrée lorsque vous avez terminé)")
 ZO_CreateStringId("BARSTEWARD_COMBAT_COLOUR", "Changer de couleur pendant un combat")
 ZO_CreateStringId("BARSTEWARD_COMBAT_COLOUR_BACKDROP", "Couleur du fond de combat")
 ZO_CreateStringId("BARSTEWARD_COMPLETED", "Complété")
@@ -173,6 +174,7 @@ ZO_CreateStringId("BARSTEWARD_PORT_TO_HOUSE_LOCATION_ONLY", "Afficher l'emplacem
 ZO_CreateStringId("BARSTEWARD_PORT_TO_HOUSE_LOCATION_TOO", "Afficher l'emplacement également")
 ZO_CreateStringId("BARSTEWARD_PORT_TO_HOUSE_PREVIEW", "Aperçu")
 ZO_CreateStringId("BARSTEWARD_PORT_TO_HOUSE_PTF", "Les emplacements se téléporter à la maison d'un ami auront <<1>> ajouté à leur widget.")
+ZO_CreateStringId("BARSTEWARD_PORT_TO_HOUSE_PTF_INFO", "Les nouvelles maisons ajoutées nécessiteront un rechargement de l'interface utilisateur avant d'apparaître ici.")
 ZO_CreateStringId("BARSTEWARD_PORT_TO_HOUSE_SELECT", "Sélectionner une maison")
 ZO_CreateStringId("BARSTEWARD_PREVIOUS_ENCOUNTER", "Combat précédent")
 ZO_CreateStringId("BARSTEWARD_PREVIOUS_ENCOUNTER_AVERAGE", "DPS moyen")
@@ -255,6 +257,7 @@ ZO_CreateStringId("BARSTEWARD_TRIBUTE_RANK", "Rang du club des Récits de Gloire
 ZO_CreateStringId("BARSTEWARD_TROPHY_VAULT_KEYS", "Clefs de Salle des trophées")
 ZO_CreateStringId("BARSTEWARD_TWELVE_TWENTY_FOUR", "12/24 Heure")
 ZO_CreateStringId("BARSTEWARD_UNDAUNTED_KEYS", "Clefs des Indomptables")
+ZO_CreateStringId("BARSTEWARD_UNKNOWN_WRIT_MOTIFS", "Chapitre de motifs manquant")
 ZO_CreateStringId("BARSTEWARD_UNSLOTTED", "Sans emplacement")
 ZO_CreateStringId("BARSTEWARD_UNSLOTTED_OPTION", "Afficher le nombre sans emplacement")
 ZO_CreateStringId(
