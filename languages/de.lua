@@ -14,10 +14,7 @@ ZO_CreateStringId("BARSTEWARD_ANNOUNCEMENT_FRIEND", "Zeige Online Freunde")
 ZO_CreateStringId("BARSTEWARD_ANNOUNCEMENT_FRIEND_GUILD", "Zeige Online Gildenfreunde")
 ZO_CreateStringId("BARSTEWARD_ANNOUNCEMENTS", "Anzeigen")
 ZO_CreateStringId("BARSTEWARD_AUTOHIDE", "Automatisch verstecken")
-ZO_CreateStringId(
-    "BARSTEWARD_AUTOHIDE_TOOLTIP",
-    "Verstecke diese Anzeige, wenn der Wert 0 oder das Maximum erreicht oder leer ist"
-)
+ZO_CreateStringId("BARSTEWARD_AUTOHIDE_TOOLTIP","Verstecke diese Anzeige, wenn der Wert 0 oder das Maximum erreicht oder leer ist")
 ZO_CreateStringId("BARSTEWARD_BACK_BAR", "Zweite Leiste")
 ZO_CreateStringId("BARSTEWARD_BACK_BAR_ICON", "Zweite Leiste Icon")
 ZO_CreateStringId("BARSTEWARD_BACK_BAR_TEXT", "Zweite Leiste Text")
@@ -49,10 +46,7 @@ ZO_CreateStringId("BARSTEWARD_DANGER_COLOUR", "Kritisch")
 ZO_CreateStringId("BARSTEWARD_DANGER_VALUE", "kritischer Wert")
 ZO_CreateStringId("BARSTEWARD_DAYS", "<<1[Tage/1 Tag/$T Tage]>>")
 ZO_CreateStringId("BARSTEWARD_DAYS_ONLY", "nur Tage")
-ZO_CreateStringId(
-    "BARSTEWARD_DAYS_ONLY_TOOLTIP",
-    "Zeige die verbleibende Zeit in Tagen wenn mehr als ein Tag verbleibt."
-)
+ZO_CreateStringId("BARSTEWARD_DAYS_ONLY_TOOLTIP","Zeige die verbleibende Zeit in Tagen wenn mehr als ein Tag verbleibt.")
 ZO_CreateStringId("BARSTEWARD_DEBOUNCE", "Wartezeit (Minuten)")
 ZO_CreateStringId("BARSTEWARD_DEBOUNCE_DESC", "Zeit zwischen aufeinanderfolgenden Ankündigungen")
 ZO_CreateStringId("BARSTEWARD_DECIMAL_PLACES", "Nachkommastellen")
@@ -91,15 +85,17 @@ ZO_CreateStringId("BARSTEWARD_HIDE_MAX", "Verstecke wenn Maximum erreicht")
 ZO_CreateStringId("BARSTEWARD_HIDE_MOUSE", "Verstecke Maus Icon im Tooltip")
 ZO_CreateStringId("BARSTEWARD_HIDE_SECONDS", "Verstecke Sekunden")
 ZO_CreateStringId("BARSTEWARD_HIDE_WHEN_COMPLETE", "Verstecke wenn komplett")
-ZO_CreateStringId(
-    "BARSTEWARD_HIDE_WHEN_COMPLETE_TOOLTIP",
-    "Verstecke wenn keine Eigenschaft mehr für diesen Handwerkstyp erforscht werden kann. Diese Einstellung überschreibt alle 'autom. verstecken' Einstellungen."
-)
+ZO_CreateStringId("BARSTEWARD_HIDE_WHEN_COMPLETE_TOOLTIP","Verstecke wenn keine Eigenschaft mehr für diesen Handwerkstyp erforscht werden kann. Diese Einstellung überschreibt alle 'autom. verstecken' Einstellungen.")
 ZO_CreateStringId("BARSTEWARD_HIDE_WHEN_FULLY_USED", "Verstecke von vollständig genutzt")
-ZO_CreateStringId(
-    "BARSTEWARD_HIDE_WHEN_FULLY_USED_TOOLTIP",
-    "Verstecke wenn alle verfügbaren Optionen in Benutzung sind"
-)
+ZO_CreateStringId("BARSTEWARD_HIDE_WHEN_FULLY_USED_TOOLTIP","Verstecke wenn alle verfügbaren Optionen in Benutzung sind")
+ZO_CreateStringId("BARSTEWARD_HIDE_LIMIT_TOOLTIP", "Verstecke das Widget wenn alle Optionen ausgenutzt sind.")
+ZO_CreateStringId("BARSTEWARD_HIDE_MAX", "Verstecke wenn am Maximum")
+ZO_CreateStringId("BARSTEWARD_HIDE_MOUSE", "Versteck Mauszeiger im Tooltip")
+ZO_CreateStringId("BARSTEWARD_HIDE_SECONDS", "Verstecke Sekunden")
+ZO_CreateStringId("BARSTEWARD_HIDE_WHEN_COMPLETE", "Verstecke wenn vollständig")
+ZO_CreateStringId("BARSTEWARD_HIDE_WHEN_COMPLETE_TOOLTIP","Verstecke wenn keine Eigenschaften für dieses Typ mehr erforscht werden können. Diese Einstellung überschreibt die AutoHide Einstellung.")
+ZO_CreateStringId("BARSTEWARD_HIDE_WHEN_FULLY_USED", "Verstecke wenn komplett ausgelastet")
+ZO_CreateStringId("BARSTEWARD_HIDE_WHEN_FULLY_USED_TOOLTIP", "Verstecke wenn alle Optionen belegt sind")
 ZO_CreateStringId("BARSTEWARD_HORIZONTAL", "Horizontal")
 ZO_CreateStringId("BARSTEWARD_HOURS", "Stunden")
 ZO_CreateStringId("BARSTEWARD_IN_PROGRESS", "im Gange")
@@ -125,10 +121,7 @@ ZO_CreateStringId("BARSTEWARD_MPH", "mph (Meilen pro Stunde)")
 ZO_CreateStringId("BARSTEWARD_NEW_BAR", "Erzeuge neue Leiste")
 ZO_CreateStringId("BARSTEWARD_NEWBAR_ADD", "Erzeuge neue Leiste")
 ZO_CreateStringId("BARSTEWARD_NEWBAR_BLANK", "Der Leistename kann nicht leer sein.")
-ZO_CreateStringId(
-    "BARSTEWARD_NEWBAR_EXISTS",
-    "Dieser Leistenname wird bereits verwendet, bitte wähle einen anderen Namen."
-)
+ZO_CreateStringId("BARSTEWARD_NEWBAR_EXISTS","Dieser Leistenname wird bereits verwendet, bitte wähle einen anderen Namen.")
 ZO_CreateStringId("BARSTEWARD_NEWBAR_INVALID", "Ungültiger Leistenname")
 ZO_CreateStringId("BARSTEWARD_NEWBAR_NAME", "Neuer Leistenname (mit Enter bestätigen)")
 ZO_CreateStringId("BARSTEWARD_NEWBAR_WARNING", "Das Anlegen einer neuen Leiste erzwingt ein Neuladen der Oberfläche")
@@ -138,10 +131,8 @@ ZO_CreateStringId("BARSTEWARD_NONE", "Nichts zu trainieren")
 ZO_CreateStringId("BARSTEWARD_NONE_BAR", "Keine")
 ZO_CreateStringId("BARSTEWARD_NOT_PICKED_UP", "Nicht aufgenommen")
 ZO_CreateStringId("BARSTEWARD_NUDGE", "Drücke den Kompass herunter")
-ZO_CreateStringId(
-    "BARSTEWARD_NUDGE_WARNING",
-    "Wenn der Kompass bereits durch ein anderes Addon heruntergedrückt wurde, kann diese Einstellung eigenartige Auswirkungen haben."
-)
+ZO_CreateStringId("BARSTEWARD_NUDGE_WARNING","Wenn der Kompass bereits durch ein anderes Addon heruntergedrückt wurde, kann diese Einstellung eigenartige Auswirkungen haben.")
+ZO_CreateStringId("BARSTEWARD_NUDGE_WARNING","Wenn der Kompass mit anderen AddOns bewegt wurde, kann diese Option eigenartige Ergebnisse liefern")
 ZO_CreateStringId("BARSTEWARD_NUMBER_GROUPING", "3")
 ZO_CreateStringId("BARSTEWARD_NUMBER_SEPARATOR", ".")
 ZO_CreateStringId("BARSTEWARD_NUMBER_SEPARATORS", "Zahlentrenner")
@@ -153,14 +144,21 @@ ZO_CreateStringId("BARSTEWARD_ORIENTATION", "Ausrichtung")
 ZO_CreateStringId("BARSTEWARD_PERCENTAGE", "Zeige als Prozentsatz")
 ZO_CreateStringId("BARSTEWARD_PERFORMANCE", "Leistung")
 ZO_CreateStringId("BARSTEWARD_PERFORMANCE_TIMERS", "Schalte zeitbasierte Widgets während des Kampfes")
-ZO_CreateStringId(
-    "BARSTEWARD_PERFORMANCE_TIMERS_TOOLTIP",
-    "Schalte zeitbasierte Widgets (ausser der Zeit) während des Kampfes aus. Diese Option verringert die Anzahl der potentiell leistungsmindernden Aktualiserungen."
-)
+ZO_CreateStringId("BARSTEWARD_PERFORMANCE_TIMERS_TOOLTIP","Schalte zeitbasierte Widgets (ausser der Zeit) während des Kampfes aus. Diese Option verringert die Anzahl der potentiell leistungsmindernden Aktualiserungen.")
 ZO_CreateStringId("BARSTEWARD_PREVIOUS_ENCOUNTER", "Vorherige Begegnung")
 ZO_CreateStringId("BARSTEWARD_PREVIOUS_ENCOUNTER_AVERAGE", "Durchschnittliche DPS")
 ZO_CreateStringId("BARSTEWARD_PREVIOUS_ENCOUNTER_DURATION", "Dauer")
-ZO_CreateStringId("BARSTEWARD_PREVIOUS_ENCOUNTER_MAXIMUM", "Maximum DPS")
+ZO_CreateStringId("BARSTEWARD_PORT_TO_HOUSE_DESCRIPTION", "Erzeugt ein neues Widget um zu einem Eurer Häuser zu springen")
+ZO_CreateStringId("BARSTEWARD_PORT_TO_HOUSE_LOCATION_ONLY", "Zeige nur die Lage")
+ZO_CreateStringId("BARSTEWARD_PORT_TO_HOUSE_LOCATION_TOO", "Zeige auch die Lage")
+ZO_CreateStringId("BARSTEWARD_PORT_TO_HOUSE_PTF", "Sprung zu eimen Haus eines Freundes hat <<1>> am Widgetnamen angehängt.")
+ZO_CreateStringId("BARSTEWARD_PORT_TO_HOUSE_PTF_INFO", "Neu hinzugefügte Häuser erfordern ein Neuladen der Oberfläche bevor sie hier erscheinen.")
+ZO_CreateStringId("BARSTEWARD_PORT_TO_HOUSE_PREVIEW", "Vorschau")
+ZO_CreateStringId("BARSTEWARD_PORT_TO_HOUSE_SELECT", "Wähle ein Haus")
+ZO_CreateStringId("BARSTEWARD_PREVIOUS_ENCOUNTER", "Vorhergehende Begegnung")
+ZO_CreateStringId("BARSTEWARD_PREVIOUS_ENCOUNTER_AVERAGE", "Durchschnittliche DPS")
+ZO_CreateStringId("BARSTEWARD_PREVIOUS_ENCOUNTER_DURATION", "Dauer")
+ZO_CreateStringId("BARSTEWARD_PREVIOUS_ENCOUNTER_MAXIMUM", "Maximale DPS")
 ZO_CreateStringId("BARSTEWARD_PICKED_UP", "Aufgenommen")
 ZO_CreateStringId("BARSTEWARD_PROGRESS_GRADIENT_END", "Gradient Ende")
 ZO_CreateStringId("BARSTEWARD_PROGRESS_GRADIENT_START", "Gradient Start")
@@ -240,15 +238,9 @@ ZO_CreateStringId("BARSTEWARD_UNSLOTTED_OPTION", "Zeige Anzahl unbenutzter Plät
 ZO_CreateStringId("BARSTEWARD_UNSLOTTED_TOOLTIP", "Zeige Anzahl der leeren Championpunktslätze")
 ZO_CreateStringId("BARSTEWARD_UNSPENT", "nicht verwendet")
 ZO_CreateStringId("BARSTEWARD_USE_FONT_CORRECTION", "Benutze Schriftgrößenkorrektur (experimentell)")
-ZO_CreateStringId(
-    "BARSTEWARD_USE_FONT_CORRECTION_TOOLTIP",
-    "Bei kleinerer Schriftgröße können Werte der Widgets abgeschnitten werden. Mit dieser Einstellung wird versucht das zu kompensieren."
-)
+ZO_CreateStringId("BARSTEWARD_USE_FONT_CORRECTION_TOOLTIP","Bei kleinerer Schriftgröße können Werte der Widgets abgeschnitten werden. Mit dieser Einstellung wird versucht das zu kompensieren.")
 ZO_CreateStringId("BARSTEWARD_USE_WRITWORTHY", "Benutze WritWorthy für Schrieb Zusammenfassungen")
-ZO_CreateStringId(
-    "BARSTEWARD_USE_WRITWORTHY_TOOLTIP",
-    "Benutze WritWorthy für Schrieb Zusammenfassungen, wenn es installiert ist. Achtung, bei sehr vielen Schrieben kann es zu Verzögerungen bei Inventaraktualiserungen kommen."
-)
+ZO_CreateStringId("BARSTEWARD_USE_WRITWORTHY_TOOLTIP","Benutze WritWorthy für Schrieb Zusammenfassungen, wenn es installiert ist. Achtung, bei sehr vielen Schrieben kann es zu Verzögerungen bei Inventaraktualiserungen kommen.")
 ZO_CreateStringId("BARSTEWARD_VALUE", "Wert")
 ZO_CreateStringId("BARSTEWARD_VALUE_SIDE", "Werteseite")
 ZO_CreateStringId("BARSTEWARD_VERTICAL", "Vertikal")
@@ -266,6 +258,10 @@ ZO_CreateStringId("BARSTEWARD_WATCHED_ITEMS", "Teileüberwachung")
 ZO_CreateStringId("BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS", "Wöchentl. Bestrebungen - Verlauf")
 ZO_CreateStringId("BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS_BEST", "Wöchentl. Bestrebungen - Beste")
 ZO_CreateStringId("BARSTEWARD_WEEKLY_ENDEAVOUR_TIME", "Zeit - Wöchentliche Bestrebungen")
+ZO_CreateStringId("BARSTEWARD_WATCHED_ITEMS", "Teile Beobachtung")
+ZO_CreateStringId("BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS", "Verlauf der wöchentlichen Herausforderungen")
+ZO_CreateStringId("BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS_BEST", "Bester Verlauf der wöchentlichen Herausforderungen")
+ZO_CreateStringId("BARSTEWARD_WEEKLY_ENDEAVOUR_TIME", "Verbleibende Zeit der wöchentlichen Herausforderungen")
 ZO_CreateStringId("BARSTEWARD_WIDGET", "Widget")
 ZO_CreateStringId("BARSTEWARD_WIDGETS", "Widgets")
 ZO_CreateStringId("BARSTEWARD_WIDGET_ORDERING", "Bar Steward Widget Sortierung")
