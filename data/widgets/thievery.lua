@@ -9,29 +9,36 @@ BS.widgets[BS.W_STOLEN_ITEMS] = {
         local bagCounts = {carrying = 0, banked = 0}
         local stolen = {}
 
-        for _, bag in ipairs({_G.BAG_WORN, _G.BAG_BACKPACK, _G.BAG_BANK, _G.BAG_SUBSCRIBER_BANK}) do
-            for slot = 0, GetBagSize(bag) do
-                if (IsItemStolen(bag, slot)) then
-                    local icon, itemCount = GetItemInfo(bag, slot)
+        local filteredItems =
+            SHARED_INVENTORY:GenerateFullSlotData(
+            function(itemdata)
+                return IsItemStolen(itemdata.bagId, itemdata.slotIndex)
+            end,
+            _G.BAG_WORN,
+            _G.BAG_BACKPACK,
+            _G.BAG_BANK,
+            _G.BAG_SUBSCRIBER_BANK
+        )
 
-                    count = count + itemCount
-                    if (bag == _G.BAG_BANK or bag == _G.BAG_SUBSCRIBER_BANK) then
-                        bagCounts.banked = bagCounts.banked + itemCount
-                    else
-                        bagCounts.carrying = bagCounts.carrying + itemCount
-                    end
+        for _, item in ipairs(filteredItems) do
+            local icon = GetItemInfo(item.bagId, item.slotIndex)
+            count = count + item.stackCount
 
-                    table.insert(
-                        stolen,
-                        {
-                            name = ZO_CachedStrFormat("<<C:1>>", GetItemName(bag, slot)),
-                            count = itemCount,
-                            icon = zo_iconFormat(icon, 16, 16),
-                            sellPrice = GetItemSellValueWithBonuses(bag, slot)
-                        }
-                    )
-                end
+            if (item.bagId == _G.BAG_BANK or item.bagId == _G.BAG_SUBSCRIBER_BANK) then
+                bagCounts.banked = bagCounts.banked + item.stackCount
+            else
+                bagCounts.carrying = bagCounts.carrying + item.stackCount
             end
+
+            table.insert(
+                stolen,
+                {
+                    name = ZO_CachedStrFormat("<<C:1>>", GetItemName(item.bagId, item.slotIndex)),
+                    count = item.stackCount,
+                    icon = zo_iconFormat(icon, 16, 16),
+                    sellPrice = GetItemSellValueWithBonuses(item.bagId, item.slotIndex)
+                }
+            )
         end
 
         widget:SetValue(count)
@@ -68,7 +75,7 @@ BS.widgets[BS.W_STOLEN_ITEMS] = {
 
         return count
     end,
-    event = _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
+    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
     icon = "/esoui/art/inventory/inventory_stolenitem_icon.dds",
     tooltip = GetString(_G.BARSTEWARD_STOLEN),
     hideWhenEqual = 0,
