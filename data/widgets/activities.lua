@@ -239,10 +239,10 @@ BS.widgets[BS.W_LEADS] = {
         while antiquityId do
             if (DoesAntiquityHaveLead(antiquityId)) then
                 local lead = {
-                    name = ZO_CachedStrFormat("<<C:1>>", GetAntiquityName(antiquityId)),
+                    name = BS.Format(GetAntiquityName(antiquityId)),
                     remaining = GetAntiquityLeadTimeRemainingSeconds(antiquityId),
                     quality = GetAntiquityQuality(antiquityId),
-                    zone = ZO_CachedStrFormat("<<C:1>>", GetZoneNameById(GetAntiquityZoneId(antiquityId))),
+                    zone = BS.Format(GetZoneNameById(GetAntiquityZoneId(antiquityId))),
                     id = antiquityId,
                     inProgress = GetNumAntiquityDigSites(antiquityId) > 0
                 }
@@ -285,7 +285,7 @@ BS.widgets[BS.W_LEADS] = {
             widget:SetColour(unpack(timeColour))
             widget:SetValue(value)
 
-            local ttt = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ANTIQUITY_SUBHEADING_ACTIVE_LEADS))
+            local ttt = BS.Format(_G.SI_ANTIQUITY_SUBHEADING_ACTIVE_LEADS)
 
             -- sort by time remaining
             table.sort(
@@ -324,7 +324,7 @@ BS.widgets[BS.W_LEADS] = {
     end,
     timer = 1000,
     icon = GetAntiquityLeadIcon(),
-    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ANTIQUITY_SUBHEADING_ACTIVE_LEADS)),
+    tooltip = BS.Format(_G.SI_ANTIQUITY_SUBHEADING_ACTIVE_LEADS),
     hideWhenEqual = 99999999,
     hideWhenTrue = function()
         return not BS.isScryingUnlocked
@@ -489,7 +489,7 @@ BS.widgets[BS.W_ACHIEVEMENT_POINTS] = {
         widget:SetValue(value)
         widget:SetColour(unpack(colour))
 
-        local ttt = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ACHIEVEMENTS_OVERALL)) .. BS.LF
+        local ttt = BS.Format(_G.SI_ACHIEVEMENTS_OVERALL) .. BS.LF
 
         ttt = ttt .. "|cf9f9f9" .. earnedPoints .. "/" .. totalPoints .. "|r"
 
@@ -503,7 +503,7 @@ BS.widgets[BS.W_ACHIEVEMENT_POINTS] = {
         _G.EVENT_ACHIEVEMENTS_UPDATED
     },
     icon = "/esoui/art/journal/journal_tabicon_achievements_up.dds",
-    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ACHIEVEMENTS_OVERALL)),
+    tooltip = BS.Format(_G.SI_ACHIEVEMENTS_OVERALL),
     onClick = function()
         if (not IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("achievements")
@@ -779,7 +779,7 @@ local function getActvityOutput(data)
     data.normalisedOutput = data.normalisedOutput .. "XXXXXXX"
 
     data.tt = data.tt .. BS.LF .. "|cf9f9f9"
-    data.tt = data.tt .. ZO_CachedStrFormat("<<C:1>>", GetString(data.label)) .. " |r"
+    data.tt = data.tt .. BS.Format(data.label) .. " |r"
 
     if (data.activityData.meetsRequirements) then
         local cdt = ZO_CommaDelimitNumber(data.activityData.xpReward)
@@ -787,7 +787,7 @@ local function getActvityOutput(data)
         data.tt = data.tt .. zo_strformat(_G.SI_ACTIVITY_FINDER_REWARD_XP_FORMAT, cdt)
     else
         data.tt = data.tt .. "|cf90000"
-        data.tt = data.tt .. ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_HOUSE_TEMPLATE_UNMET_REQUIREMENTS_TEXT))
+        data.tt = data.tt .. BS.Format(_G.SI_HOUSE_TEMPLATE_UNMET_REQUIREMENTS_TEXT)
         data.tt = data.tt .. "|r"
     end
 
@@ -851,7 +851,7 @@ BS.widgets[BS.W_RANDOM_BATTLEGROUND] = {
             output = "",
             normalisedOutput = "",
             eligibleCount = 0,
-            tt = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_BATTLEGROUND_FINDER_RANDOM_FILTER_TEXT))
+            tt = BS.Format(_G.SI_BATTLEGROUND_FINDER_RANDOM_FILTER_TEXT)
         }
         local ll = bgInfo[_G.LFG_ACTIVITY_BATTLE_GROUND_LOW_LEVEL] -- Random Battleground
         --local cp = bgInfo[_G.LFG_ACTIVITY_BATTLE_GROUND_CHAMPION]
@@ -882,7 +882,7 @@ BS.widgets[BS.W_RANDOM_BATTLEGROUND] = {
     event = _G.EVENT_PLAYER_ACTIVATED,
     icon = "/esoui/art/icons/store_battleground.dds",
     hideWhenEqual = 0,
-    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_BATTLEGROUND_FINDER_RANDOM_FILTER_TEXT)),
+    tooltip = BS.Format(_G.SI_BATTLEGROUND_FINDER_RANDOM_FILTER_TEXT),
     onClick = function()
         if (IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("gamepadDungeonFinder")

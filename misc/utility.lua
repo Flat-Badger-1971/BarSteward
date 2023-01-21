@@ -785,20 +785,10 @@ function BS.GetNextIndex(t)
     return nextIndex
 end
 
-function BS.Contains(t, v)
-    for _, value in ipairs(t) do
-        if (value == v) then
-            return true
-        end
-    end
-
-    return false
-end
-
 function BS.GetByValue(t, v)
     for key, value in pairs(t) do
         if (type(value) == "table") then
-            if (BS.Contains(value, v)) then
+            if (ZO_IsElementInNumericallyIndexedTable(value, v)) then
                 return key
             end
         elseif (value == v) then
@@ -831,4 +821,14 @@ function BS.ToWritFields(item_link)
     }
 
     return bsValues
+end
+
+function BS.Format(value, ...)
+    local text = value
+
+    if (type(value) == "number") then
+        text = GetString(value)
+    end
+
+    return ZO_CachedStrFormat("<<C:1>>", text, ...)
 end

@@ -33,7 +33,7 @@ BS.widgets[BS.W_STOLEN_ITEMS] = {
             table.insert(
                 stolen,
                 {
-                    name = ZO_CachedStrFormat("<<C:1>>", GetItemName(item.bagId, item.slotIndex)),
+                    name = BS.Format(GetItemName(item.bagId, item.slotIndex)),
                     count = item.stackCount,
                     icon = zo_iconFormat(icon, 16, 16),
                     sellPrice = GetItemSellValueWithBonuses(item.bagId, item.slotIndex)

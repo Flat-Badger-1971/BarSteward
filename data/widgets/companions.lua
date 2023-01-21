@@ -79,7 +79,7 @@ BS.widgets[BS.W_COMPANION_LEVEL] = {
         local progress = (currentXPInLevel or 0) .. " / " .. totalXPInLevel
 
         if (progress == "0 / 0") then
-            progress = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_EXPERIENCE_LIMIT_REACHED))
+            progress = BS.Format(_G.SI_EXPERIENCE_LIMIT_REACHED)
         end
 
         ttt = ttt .. "|cf9f9f9" .. progress .. "|r"

@@ -109,7 +109,7 @@ BS.widgets[BS.W_ALLIANCE_POINTS] =
         display = _G.BARSTEWARD_GOLD_DISPLAY,
         everyWhere = _G.BARSTEWARD_GOLD_EVERYWHERE,
         separated = _G.BARSTEWARD_GOLD_SEPARATED,
-        title = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_GAMEPAD_INVENTORY_ALLIANCE_POINTS))
+        title = BS.Format(_G.SI_GAMEPAD_INVENTORY_ALLIANCE_POINTS)
     },
     {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_ALLIANCE_POINT_UPDATE},
     function()
@@ -250,7 +250,7 @@ BS.widgets[BS.W_GOLD] =
         display = _G.BARSTEWARD_GOLD_DISPLAY,
         everyWhere = _G.BARSTEWARD_GOLD_EVERYWHERE,
         separated = _G.BARSTEWARD_GOLD_SEPARATED,
-        title = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_GAMEPAD_INVENTORY_AVAILABLE_FUNDS))
+        title = BS.Format(_G.SI_GAMEPAD_INVENTORY_AVAILABLE_FUNDS)
     },
     _G.EVENT_MONEY_UPDATE
 )
@@ -270,7 +270,7 @@ BS.widgets[BS.W_SEALS_OF_ENDEAVOUR] = {
         return widget:GetValue()
     end,
     event = _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED,
-    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_CROWN_STORE_MENU_SEALS_STORE_LABEL)),
+    tooltip = BS.Format(_G.SI_CROWN_STORE_MENU_SEALS_STORE_LABEL),
     icon = "/esoui/art/currency/currency_seals_of_endeavor_64.dds"
     -- onClick = function()
     --     ZO_ShowSealStore()
@@ -289,7 +289,7 @@ BS.widgets[BS.W_TELVAR_STONES] =
         display = _G.BARSTEWARD_GOLD_DISPLAY,
         everyWhere = _G.BARSTEWARD_GOLD_EVERYWHERE,
         separated = _G.BARSTEWARD_GOLD_SEPARATED,
-        title = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_GAMEPAD_INVENTORY_TELVAR_STONES))
+        title = BS.Format(_G.SI_GAMEPAD_INVENTORY_TELVAR_STONES)
     },
     _G.EVENT_TELVAR_STONE_UPDATE,
     function()

@@ -160,7 +160,7 @@ function BS.CreateAlignmentFrame(alignBars)
     frame.button:SetHandler("OnClicked", onClick)
 
     frame.close = BS.CreateButton(name .. "_close", frame, 100, 32)
-    frame.close:SetText(ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_DIALOG_CLOSE)))
+    frame.close:SetText(BS.Format(_G.SI_DIALOG_CLOSE))
     frame.close:SetAnchor(TOPLEFT, frame.button, TOPRIGHT, 150, 0)
     frame.close:SetHandler(
         "OnClicked",
@@ -368,7 +368,7 @@ function BS.CreateWidgetOrderTool(bars)
     frame.button:SetHandler("OnClicked", onClick)
 
     frame.close = BS.CreateButton(name .. "_close", frame, 100, 32)
-    frame.close:SetText(ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_DIALOG_CLOSE)))
+    frame.close:SetText(BS.Format(_G.SI_DIALOG_CLOSE))
     frame.close:SetAnchor(TOPLEFT, frame.button, TOPRIGHT, 170, 0)
     frame.close:SetHandler(
         "OnClicked",
@@ -522,7 +522,7 @@ local function CreateTool(heading, toolName, varName, setupFunc, guild)
         frame.guild:SetFont("ZoFontGame")
         frame.guild:SetColor(0.8, 0.8, 0.6, 1)
         frame.guild:SetAnchor(TOPLEFT, frame.divider, TOPLEFT, 50, 10)
-        frame.guild:SetText(ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_SKILLTYPE5)))
+        frame.guild:SetText(BS.Format(_G.SI_SKILLTYPE5))
         frame.guild:SetDimensions(350)
 
         local guilds = getGuilds()

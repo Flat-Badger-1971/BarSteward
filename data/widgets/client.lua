@@ -32,7 +32,7 @@ BS.widgets = {
             return widget:GetValue()
         end,
         timer = 1000,
-        tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_TRADINGHOUSELISTINGSORTTYPE0)),
+        tooltip = BS.Format(_G.SI_TRADINGHOUSELISTINGSORTTYPE0),
         icon = "/esoui/art/lfg/lfg_indexicon_timedactivities_up.dds"
     },
     [BS.W_FPS] = {

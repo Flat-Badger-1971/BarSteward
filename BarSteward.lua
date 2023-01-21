@@ -35,7 +35,7 @@ local function Initialise()
     -- dialogs
     local buttons = {
         {
-            text = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_OK)),
+            text = BS.Format(_G.SI_OK),
             callback = function()
             end
         }
@@ -70,7 +70,7 @@ local function Initialise()
         mainText = {text = GetString(_G.BARSTEWARD_RELOAD_MSG)},
         buttons = {
             {
-                text = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_OK)),
+                text = BS.Format(_G.SI_OK),
                 callback = function()
                     zo_callLater(
                         function()
@@ -88,13 +88,13 @@ local function Initialise()
         mainText = {text = GetString(_G.BARSTEWARD_REMOVE_WARNING)},
         buttons = {
             {
-                text = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_CANCEL)),
+                text = BS.Format(_G.SI_CANCEL),
                 callback = function()
                     BS.BarIndex = nil
                 end
             },
             {
-                text = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_OK)),
+                text = BS.Format(_G.SI_OK),
                 callback = function()
                     BS.RemoveBar()
                 end
@@ -107,7 +107,7 @@ local function Initialise()
         mainText = {text = GetString(_G.BARSTEWARD_GENERIC_REMOVE_WARNING)},
         buttons = {
             {
-                text = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_CANCEL)),
+                text = BS.Format(_G.SI_CANCEL),
                 callback = function(dialog)
                     if (dialog.data and dialog.data.func) then
                         dialog.data.func()
@@ -115,7 +115,7 @@ local function Initialise()
                 end
             },
             {
-                text = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_OK)),
+                text = BS.Format(_G.SI_OK),
                 callback = function(dialog)
                     if (dialog.data and dialog.data.func) then
                         dialog.data.func()
@@ -130,7 +130,7 @@ local function Initialise()
         mainText = {text = GetString(_G.BARSTEWARD_RESIZE_MESSAGE)},
         buttons = {
             {
-                text = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_DIALOG_YES)),
+                text = BS.Format(_G.SI_DIALOG_YES),
                 callback = function()
                     zo_callLater(
                         function()
@@ -141,7 +141,7 @@ local function Initialise()
                 end
             },
             {
-                text = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_DIALOG_NO))
+                text = BS.Format(_G.SI_DIALOG_NO)
             }
         }
     }
@@ -153,7 +153,7 @@ local function Initialise()
     }
 
     local delete = {
-        title = {text = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_KEYCODE19))},
+        title = {text = BS.Format(_G.SI_KEYCODE19)},
         mainText = {
             text = function()
                 local characters = BS.Join(BS.forDeletion)
@@ -163,13 +163,13 @@ local function Initialise()
         },
         buttons = {
             {
-                text = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_DIALOG_YES)),
+                text = BS.Format(_G.SI_DIALOG_YES),
                 callback = function()
                     BS.DeleteTrackedData()
                 end
             },
             {
-                text = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_DIALOG_NO))
+                text = BS.Format(_G.SI_DIALOG_NO)
             }
         }
     }

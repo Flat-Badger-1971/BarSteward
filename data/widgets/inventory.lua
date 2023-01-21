@@ -53,7 +53,7 @@ BS.widgets[BS.W_BAG_SPACE] = {
         return pcUsed
     end,
     event = {_G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE, _G.EVENT_INVENTORY_BAG_CAPACITY_CHANGED, _G.EVENT_PLAYER_ACTIVATED},
-    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_GAMEPAD_MAIL_INBOX_INVENTORY)):gsub(":", ""),
+    tooltip = BS.Format(_G.SI_GAMEPAD_MAIL_INBOX_INVENTORY):gsub(":", ""),
     icon = "/esoui/art/tooltips/icon_bag.dds",
     onClick = function()
         if (not IsInGamepadPreferredMode()) then
@@ -272,7 +272,7 @@ BS.widgets[BS.W_REPAIRS_KITS] = {
     end,
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
     icon = "/esoui/art/inventory/inventory_tabicon_repair_up.dds",
-    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_HOOK_POINT_STORE_REPAIR_KIT_HEADER)):gsub(":", "")
+    tooltip = BS.Format(_G.SI_HOOK_POINT_STORE_REPAIR_KIT_HEADER):gsub(":", "")
 }
 
 BS.widgets[BS.W_SOUL_GEMS] = {
@@ -452,7 +452,8 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
         local writText = {}
 
         for type, counts in pairs(writDetail) do
-            local writType = ZO_CachedStrFormat("<<C:1>>", GetString("SI_TRADESKILLTYPE", type))
+            local writType = BS.Format(GetString("SI_TRADESKILLTYPE", type))
+
             if (counts.bagCount > 0) then
                 writType = writType .. " " .. BS.BAGICON .. " " .. counts.bagCount
             end
@@ -603,7 +604,7 @@ BS.widgets[BS.W_LOCKPICKS] = {
         return available
     end,
     event = {_G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE, _G.EVENT_LOCKPICK_BROKE},
-    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_GAMEPAD_LOCKPICK_PICKS_REMAINING)),
+    tooltip = BS.Format(_G.SI_GAMEPAD_LOCKPICK_PICKS_REMAINING),
     icon = "/esoui/art/icons/lockpick.dds"
 }
 
@@ -625,7 +626,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
                 if (name ~= "") then
                     linkCache[itemId] = {
                         icon = GetItemLinkIcon(link),
-                        name = ZO_CachedStrFormat("<<C:1>>", name)
+                        name = BS.Format(name)
                     }
                 end
             end
@@ -795,7 +796,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
                 if (name ~= "") then
                     linkCache[itemId] = {
                         icon = GetItemLinkIcon(link),
-                        name = ZO_CachedStrFormat("<<C:1>>", name)
+                        name = BS.Format(name)
                     }
                 end
             end
@@ -852,7 +853,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
 
                 if (name ~= "") then
                     local icon = GetItemLinkIcon(link)
-                    name = zo_iconFormat(icon) .. " " .. ZO_CachedStrFormat("<<C:1>>", name)
+                    name = zo_iconFormat(icon) .. " " .. BS.Format(name)
                 end
 
                 return name
@@ -862,7 +863,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
 
         settings[#settings + 1] = {
             type = "button",
-            name = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_GAMEPAD_TRADE_ADD)),
+            name = BS.Format(_G.SI_GAMEPAD_TRADE_ADD),
             func = function()
                 if (BS.Vars.WatchedItems[tonumber(BS.Vars.NewItemId)] == nil) then
                     BS.Vars.WatchedItems[tonumber(BS.Vars.NewItemId)] = true
@@ -889,7 +890,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
 
         settings[#settings + 1] = {
             type = "button",
-            name = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_DIALOG_REMOVE)),
+            name = BS.Format(_G.SI_DIALOG_REMOVE),
             func = function()
                 BS.Vars.WatchedItems[tonumber(BS.Vars.NewItemId)] = nil
                 vars[tonumber(BS.Vars.NewItemId)] = nil
@@ -992,7 +993,7 @@ local function randomOnClick(collectibleTable, widgetIndex)
 
     if (usable) then
         local widget = _G[BS.Name .. "_Widget_" .. BS.widgets[widgetIndex].name].ref
-        local name = ZO_CachedStrFormat("<<C:1>>", GetCollectibleName(collectibleId))
+        local name = BS.Format(GetCollectibleName(collectibleId))
 
         local tt = BS.widgets[widgetIndex].tooltip .. BS.LF
         tt = tt .. "|cf9f9f9" .. GetString(_G.BARSTEWARD_RANDOM_RECENT) .. "|r" .. BS.LF
@@ -1125,7 +1126,7 @@ BS.widgets[BS.W_RANDOM_EMOTE] = {
             widget.tooltip = tt
 
             if (BS.Vars.Controls[BS.W_RANDOM_EMOTE].Print) then
-                local name = ZO_CachedStrFormat("<<C:1>>", displayName)
+                local name = BS.Format(displayName)
                 local output = "|cff9900Bar Steward|r: " .. name
 
                 CHAT_ROUTER:AddSystemMessage(output)
@@ -1134,14 +1135,51 @@ BS.widgets[BS.W_RANDOM_EMOTE] = {
     end
 }
 
+local function itemScan(widget, filteredItems, widgetIndex, name)
+    local items = {}
+    local count = 0
+    local vars = BS.Vars.Controls[widgetIndex]
+
+    for _, item in ipairs(filteredItems) do
+        local colour = GetItemQualityColor(item.displayQuality)
+        local filteredName = colour:Colorize(item.name)
+
+        if (not items[filteredName]) then
+            items[filteredName] = 0
+        end
+
+        items[filteredName] = items[filteredName] + item.stackCount
+        count = count + item.stackCount
+    end
+
+    local colour = vars.Colour or BS.Vars.DefaultColour
+
+    widget:SetColour(unpack(colour))
+    widget:SetValue(count)
+
+    local tt = name
+
+    if (count > 0) then
+        for itemName, qty in pairs(items) do
+            tt = tt .. BS.LF .. "|cf9f9f9" .. itemName
+
+            if (qty > 1) then
+                tt = tt .. " " .. "(" .. qty .. ")"
+            end
+
+            tt = tt .. "|r"
+        end
+    end
+
+    widget.tooltip = tt
+
+    return count
+end
+
 BS.widgets[BS.W_CONTAINERS] = {
     -- v1.4.12
     name = "containerCount",
     update = function(widget)
-        local containers = {}
-        local count = 0
-        local vars = BS.Vars.Controls[BS.W_CONTAINERS]
-
         local filteredItems =
             SHARED_INVENTORY:GenerateFullSlotData(
             function(itemdata)
@@ -1150,44 +1188,11 @@ BS.widgets[BS.W_CONTAINERS] = {
             _G.BAG_BACKPACK
         )
 
-        for _, item in ipairs(filteredItems) do
-            local colour = GetItemQualityColor(item.displayQuality)
-            local name = colour:Colorize(item.name)
-
-            if (not containers[name]) then
-                containers[name] = 0
-            end
-
-            containers[name] = containers[name] + item.stackCount
-            count = count + item.stackCount
-        end
-
-        local colour = vars.Colour or BS.Vars.DefaultColour
-
-        widget:SetColour(unpack(colour))
-        widget:SetValue(count)
-
-        local tt = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ITEMTYPEDISPLAYCATEGORY26))
-
-        if (count > 0) then
-            for name, qty in pairs(containers) do
-                tt = tt .. BS.LF .. "|cf9f9f9" .. name
-
-                if (qty > 1) then
-                    tt = tt .. " " .. "(" .. qty .. ")"
-                end
-
-                tt = tt .. "|r"
-            end
-        end
-
-        widget.tooltip = tt
-
-        return count
+        return itemScan(widget, filteredItems, BS.W_CONTAINERS, BS.Format(_G.SI_ITEMTYPEDISPLAYCATEGORY26))
     end,
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
     icon = "/esoui/art/inventory/inventory_tabicon_container_up.dds",
-    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ITEMTYPEDISPLAYCATEGORY26)),
+    tooltip = BS.Format(_G.SI_ITEMTYPEDISPLAYCATEGORY26),
     hideWhenEqual = 0,
     onClick = function()
         if (not IsInGamepadPreferredMode()) then
@@ -1202,10 +1207,6 @@ BS.widgets[BS.W_TREASURE] = {
     -- v1.4.13
     name = "treasureCount",
     update = function(widget)
-        local containers = {}
-        local count = 0
-        local vars = BS.Vars.Controls[BS.W_TREASURE]
-
         local filteredItems =
             SHARED_INVENTORY:GenerateFullSlotData(
             function(itemdata)
@@ -1214,44 +1215,98 @@ BS.widgets[BS.W_TREASURE] = {
             _G.BAG_BACKPACK
         )
 
-        for _, item in ipairs(filteredItems) do
-            local colour = GetItemQualityColor(item.displayQuality)
-            local name = colour:Colorize(item.name)
-
-            if (not containers[name]) then
-                containers[name] = 0
-            end
-
-            containers[name] = containers[name] + item.stackCount
-            count = count + item.stackCount
-        end
-
-        local colour = vars.Colour or BS.Vars.DefaultColour
-
-        widget:SetColour(unpack(colour))
-        widget:SetValue(count)
-
-        local tt = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ITEMTYPE56))
-
-        if (count > 0) then
-            for name, qty in pairs(containers) do
-                tt = tt .. BS.LF .. "|cf9f9f9" .. name
-
-                if (qty > 1) then
-                    tt = tt .. " " .. "(" .. qty .. ")"
-                end
-
-                tt = tt .. "|r"
-            end
-        end
-
-        widget.tooltip = tt
-
-        return count
+        return itemScan(widget, filteredItems, BS.W_TREASURE, BS.Format(_G.SI_ITEMTYPE56))
     end,
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
     icon = "/esoui/art/icons/quest_strosmkai_open_treasure_chest.dds",
-    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ITEMTYPE56)),
+    tooltip = BS.Format(_G.SI_ITEMTYPE56),
+    hideWhenEqual = 0,
+    onClick = function()
+        if (not IsInGamepadPreferredMode()) then
+            SCENE_MANAGER:Show("inventory")
+        else
+            SCENE_MANAGER:Show("gamepad_inventory_root")
+        end
+    end
+}
+
+BS.widgets[BS.W_FURNISHINGS] = {
+    -- v1.4.33
+    name = "furnishingCount",
+    update = function(widget)
+        local filteredItems =
+            SHARED_INVENTORY:GenerateFullSlotData(
+            function(itemdata)
+                return IsItemPlaceableFurniture(itemdata.bagId, itemdata.slotIndex)
+            end,
+            _G.BAG_BACKPACK
+        )
+
+        return itemScan(widget, filteredItems, BS.W_FURNISHINGS, BS.Format(_G.SI_ITEMFILTERTYPE21))
+    end,
+    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
+    icon = "/esoui/art/icons/servicemappins/servicepin_furnishings.dds",
+    tooltip = BS.Format(_G.SI_ITEMFILTERTYPE21),
+    hideWhenEqual = 0,
+    onClick = function()
+        if (not IsInGamepadPreferredMode()) then
+            SCENE_MANAGER:Show("inventory")
+        else
+            SCENE_MANAGER:Show("gamepad_inventory_root")
+        end
+    end
+}
+
+BS.widgets[BS.W_COMPANION_GEAR] = {
+    -- v1.4.33
+    name = "companionGearCount",
+    update = function(widget)
+        local filteredItems =
+            SHARED_INVENTORY:GenerateFullSlotData(
+            function(itemdata)
+                local filterTypes = {GetItemFilterTypeInfo(itemdata.bagId, itemdata.slotIndex)}
+
+                return ZO_IsElementInNumericallyIndexedTable(filterTypes, _G.ITEMFILTERTYPE_COMPANION)
+            end,
+            _G.BAG_BACKPACK
+        )
+
+        return itemScan(widget, filteredItems, BS.W_COMPANION_GEAR, BS.Format(_G.SI_ITEMFILTERTYPE27))
+    end,
+    event = _G.EVENT_PLAYER_ACTIVATED,
+    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
+    icon = "/esoui/art/inventory/inventory_trait_companionequipment_icon.dds",
+    tooltip = BS.Format(_G.SI_ITEMFILTERTYPE27),
+    hideWhenEqual = 0,
+    onClick = function()
+        if (not IsInGamepadPreferredMode()) then
+            SCENE_MANAGER:Show("inventory")
+        else
+            SCENE_MANAGER:Show("gamepad_inventory_root")
+        end
+    end
+}
+
+BS.widgets[BS.W_MUSEUM] = {
+    -- v1.4.33
+    name = "museumCount",
+    update = function(widget)
+        local filteredItems =
+            SHARED_INVENTORY:GenerateFullSlotData(
+            function(itemdata)
+                local _, specialType = GetItemType(itemdata.bagId, itemdata.slotIndex)
+
+                return specialType == _G.SPECIALIZED_ITEMTYPE_TROPHY_MUSEUM_PIECE
+            end,
+            _G.BAG_BACKPACK
+        )
+
+        return itemScan(widget, filteredItems, BS.W_MUSEUM, BS.Format(_G.SI_SPECIALIZEDITEMTYPE103))
+    end,
+    event = _G.EVENT_PLAYER_ACTIVATED,
+    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
+    icon = "/esoui/art/icons/servicemappins/servicepin_museum.dds",
+    tooltip = BS.Format(_G.SI_SPECIALIZEDITEMTYPE103),
     hideWhenEqual = 0,
     onClick = function()
         if (not IsInGamepadPreferredMode()) then

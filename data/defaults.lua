@@ -424,6 +424,9 @@ BS.Defaults = {
             Autohide = false,
             ColourValues = "c",
             Requires = "LibCharacterKnowledge"
-        }
+        },
+        [BS.W_FURNISHINGS] = {Bar = 0, Order = 80, Autohide = false, ColourValues = "c"},
+        [BS.W_COMPANION_GEAR] = {Bar = 0, Order = 81, Autohide = false, ColourValues = "c"},
+        [BS.W_MUSEUM] = {Bar = 0, Order = 82, Autohide = false, ColourValues = "c"}
     }
 }

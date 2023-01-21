@@ -327,7 +327,7 @@ function BS.GetPortToHouseSettings()
                     name = GetString(_G.BARSTEWARD_BAR),
                     choices = barNames,
                     getFunc = function()
-                        local barName = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_DAMAGETYPE0))
+                        local barName = BS.Format(_G.SI_DAMAGETYPE0)
 
                         if (vars.Bar ~= 0) then
                             barName = BS.Vars.Bars[vars.Bar].Name
@@ -369,7 +369,7 @@ function BS.GetPortToHouseSettings()
             if (house.ptfName == nil) then
                 submenuControls[#submenuControls + 1] = {
                     type = "checkbox",
-                    name = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_HOUSING_BOOK_ACTION_TRAVEL_TO_HOUSE_OUTSIDE)),
+                    name = BS.Format(_G.SI_HOUSING_BOOK_ACTION_TRAVEL_TO_HOUSE_OUTSIDE),
                     getFunc = function()
                         return vars.Outside
                     end,

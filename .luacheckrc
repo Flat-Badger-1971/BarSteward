@@ -297,6 +297,7 @@ read_globals = {
     "GetInterfaceColor",
     "GetItemCondition",
     "GetItemDisplayQuality",
+    "GetItemFilterTypeInfo",
     "GetItemId",
     "GetItemInfo",
     "GetItemLink",
@@ -400,6 +401,7 @@ read_globals = {
     "IsCollectibleUsable",
     "IsESOPlusSubscriber",
     "IsInGamepadPreferredMode",
+    "IsItemPlaceableFurniture",
     "IsItemRepairKit",
     "IsItemStolen",
     "IsUnitGrouped",
@@ -440,6 +442,7 @@ read_globals = {
             New = {read_only = true}
         }
     },
+    "ZO_IsElementInNumericallyIndexedTable",
     "ZO_IsScryingUnlocked",
     "ZO_LinkHandler_CreateLink",
     "ZO_LinkHandler_ParseLink",

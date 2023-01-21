@@ -129,7 +129,7 @@ BS.widgets[BS.W_BLACKSMITHING] = {
         widget:SetColour(unpack(colour))
         widget:SetValue(display)
 
-        local ttt = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_TRADESKILLTYPE1))
+        local ttt = BS.Format(_G.SI_TRADESKILLTYPE1)
 
         for slot = 1, maxResearch do
             local slotText = BS.LF .. "|cf9f9f9" .. slot .. " - "
@@ -144,7 +144,7 @@ BS.widgets[BS.W_BLACKSMITHING] = {
     end,
     timer = 1000,
     icon = "/esoui/art/icons/servicemappins/servicepin_smithy.dds",
-    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_TRADESKILLTYPE1)),
+    tooltip = BS.Format(_G.SI_TRADESKILLTYPE1),
     hideWhenEqual = 0,
     fullyUsed = function()
         return fullyUsed[_G.CRAFTING_TYPE_BLACKSMITHING]
@@ -174,7 +174,7 @@ BS.widgets[BS.W_WOODWORKING] = {
         widget:SetColour(unpack(colour))
         widget:SetValue(display)
 
-        local ttt = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_TRADESKILLTYPE6))
+        local ttt = BS.Format(_G.SI_TRADESKILLTYPE6)
 
         for slot = 1, maxResearch do
             local slotText = BS.LF .. "|cf9f9f9" .. slot .. " - "
@@ -189,7 +189,7 @@ BS.widgets[BS.W_WOODWORKING] = {
     end,
     timer = 1000,
     icon = "/esoui/art/icons/servicemappins/servicepin_woodworking.dds",
-    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_TRADESKILLTYPE6)),
+    tooltip = BS.Format(_G.SI_TRADESKILLTYPE6),
     hideWhenEqual = 0,
     fullyUsed = function()
         return fullyUsed[_G.CRAFTING_TYPE_WOODWORKING]
@@ -219,7 +219,7 @@ BS.widgets[BS.W_CLOTHING] = {
         widget:SetColour(unpack(colour))
         widget:SetValue(display)
 
-        local ttt = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_TRADESKILLTYPE2))
+        local ttt = BS.Format(_G.SI_TRADESKILLTYPE2)
 
         for slot = 1, maxResearch do
             local slotText = BS.LF .. "|cf9f9f9" .. slot .. " - "
@@ -233,7 +233,7 @@ BS.widgets[BS.W_CLOTHING] = {
     end,
     timer = 1000,
     icon = "/esoui/art/icons/servicemappins/servicepin_outfitter.dds",
-    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_TRADESKILLTYPE2)),
+    tooltip = BS.Format(_G.SI_TRADESKILLTYPE2),
     hideWhenEqual = 0,
     fullyUsed = function()
         return fullyUsed[_G.CRAFTING_TYPE_CLOTHIER]
@@ -263,7 +263,7 @@ BS.widgets[BS.W_JEWELCRAFTING] = {
         widget:SetColour(unpack(colour))
         widget:SetValue(display)
 
-        local ttt = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_TRADESKILLTYPE7))
+        local ttt = BS.Format(_G.SI_TRADESKILLTYPE7)
 
         for slot = 1, maxResearch do
             local slotText = BS.LF .. "|cf9f9f9" .. slot .. " - "
@@ -278,7 +278,7 @@ BS.widgets[BS.W_JEWELCRAFTING] = {
     end,
     timer = 1000,
     icon = "/esoui/art/icons/icon_jewelrycrafting_symbol.dds",
-    tooltip = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_TRADESKILLTYPE7)),
+    tooltip = BS.Format(_G.SI_TRADESKILLTYPE7),
     hideWhenEqual = 0,
     fullyUsed = function()
         return fullyUsed[_G.CRAFTING_TYPE_JEWELRYCRAFTING]
@@ -516,11 +516,11 @@ local function getRecipeList()
     end
 end
 
-local food = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ITEMTYPE4))
-local drink = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ITEMTYPE12))
+local food = BS.Format(_G.SI_ITEMTYPE4)
+local drink = BS.Format(_G.SI_ITEMTYPE12)
 local foodAndDrink = food .. " + " .. drink
-local furnishing = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ITEMTYPE61))
-local recipes = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_ITEMTYPEDISPLAYCATEGORY21))
+local furnishing = BS.Format(_G.SI_ITEMTYPE61)
+local recipes = BS.Format(_G.SI_ITEMTYPEDISPLAYCATEGORY21)
 
 BS.widgets[BS.W_RECIPES] = {
     -- v1.4.6
