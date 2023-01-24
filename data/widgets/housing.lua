@@ -228,6 +228,7 @@ function BS.GetPortToHouseSettings()
         name = GetString(_G.BARSTEWARD_PORT_TO_HOUSE_SELECT),
         choices = choices,
         choicesValues = choicesValues,
+        scrollable = true,
         getFunc = function()
             return BS.House_SelectedHouse
         end,

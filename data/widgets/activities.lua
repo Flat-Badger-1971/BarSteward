@@ -131,7 +131,7 @@ BS.widgets[BS.W_WEEKLY_ENDEAVOURS] = {
             _G.TIMED_ACTIVITY_TYPE_WEEKLY,
             widget,
             BS.Vars.Controls[BS.W_WEEKLY_ENDEAVOURS].HideLimit,
-            GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS)
+            GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS)
         )
     end,
     event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED},
