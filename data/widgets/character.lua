@@ -91,6 +91,11 @@ BS.widgets[BS.W_PLAYER_NAME] = {
         widget:SetValue(ZO_FormatUserFacingDisplayName(playerName))
         widget:SetColour(unpack(BS.Vars.Controls[BS.W_PLAYER_NAME].Colour or BS.Vars.DefaultColour))
 
+        local classId = GetUnitClassId("player")
+        local icon = GetClassIcon(classId)
+
+        widget:SetIcon(icon)
+
         return widget:GetValue()
     end,
     event = _G.EVENT_PLAYER_ACTIVATED,
@@ -126,15 +131,33 @@ BS.widgets[BS.W_CLASS] = {
         local classId = GetUnitClassId("player")
         local icon = GetClassIcon(classId)
 
-        widget:SetValue(BS.Format(GetUnitClass("player")))
-        widget:SetColour(unpack(BS.Vars.Controls[BS.W_CLASS].Colour or BS.Vars.DefaultColour))
+        if (not BS.Vars.Controls[BS.W_CLASS].NoValue) then
+            widget:SetValue(BS.Format(GetUnitClass("player")))
+            widget:SetColour(unpack(BS.Vars.Controls[BS.W_CLASS].Colour or BS.Vars.DefaultColour))
+        end
+
         widget:SetIcon(icon)
 
         return widget:GetValue()
     end,
     event = _G.EVENT_PLAYER_ACTIVATED,
     icon = "/esoui/art/charactercreate/charactercreate_classicon_up.dds",
-    tooltip = BS.Format(_G.SI_COLLECTIBLERESTRICTIONTYPE3)
+    tooltip = BS.Format(_G.SI_COLLECTIBLERESTRICTIONTYPE3),
+    customSettings = {
+        [1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_HIDE_TEXT),
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_CLASS].NoValue or false
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_CLASS].NoValue = value
+            end,
+            width = "full",
+            default = false,
+            requiresReload = true
+        }
+    }
 }
 
 BS.widgets[BS.W_ALLIANCE] = {
@@ -153,8 +176,11 @@ BS.widgets[BS.W_ALLIANCE] = {
             icon = "/esoui/art/scoredisplay/redflag.dds"
         end
 
-        widget:SetValue(" " .. BS.Format(GetAllianceName(alliance)))
-        widget:SetColour(colour.r, colour.g, colour.b, colour.a)
+        if (not BS.Vars.Controls[BS.W_ALLIANCE].NoValue) then
+            widget:SetValue(" " .. BS.Format(GetAllianceName(alliance)))
+            widget:SetColour(colour.r, colour.g, colour.b, colour.a)
+        end
+
         widget:SetIcon(icon)
         widget:SetTextureCoords(0, 1, 0, 0.6)
 
@@ -171,7 +197,22 @@ BS.widgets[BS.W_ALLIANCE] = {
         else
             SCENE_MANAGER:Show("gamepad_campaign_root")
         end
-    end
+    end,
+    customSettings = {
+        [1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_HIDE_TEXT),
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_ALLIANCE].NoValue or false
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_ALLIANCE].NoValue = value
+            end,
+            width = "full",
+            default = false,
+            requiresReload = true
+        }
+    }
 }
 
 BS.widgets[BS.W_SKYSHARDS] = {

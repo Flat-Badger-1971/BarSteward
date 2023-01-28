@@ -67,6 +67,7 @@ ZO_CreateStringId("BARSTEWARD_DUNGEON_REWARD_RESET", "Time to dungeon reward res
 ZO_CreateStringId("BARSTEWARD_DURABILITY", "Lowest Item Durability")
 ZO_CreateStringId("BARSTEWARD_EMPTY", "Empty")
 ZO_CreateStringId("BARSTEWARD_ENABLE_CONDITIONAL", "Enable Conditional Bar Hiding")
+ZO_CreateStringId("BARSTEWARD_EQUIPPED_POISON", "Equipped Poison")
 ZO_CreateStringId("BARSTEWARD_EVENT_TICKETS", "Event Tickets")
 ZO_CreateStringId("BARSTEWARD_FENCE", "Fence Transactions")
 ZO_CreateStringId("BARSTEWARD_FENCE_RESET", "Fence Reset Timer")
@@ -98,6 +99,7 @@ ZO_CreateStringId("BARSTEWARD_HIDE_LIMIT_TOOLTIP", "Don't show the maximum amoun
 ZO_CreateStringId("BARSTEWARD_HIDE_MAX", "Hide when maximum level")
 ZO_CreateStringId("BARSTEWARD_HIDE_MOUSE", "Hide mouse icon in tooltips")
 ZO_CreateStringId("BARSTEWARD_HIDE_SECONDS", "Hide seconds")
+ZO_CreateStringId("BARSTEWARD_HIDE_TEXT", "Hide text")
 ZO_CreateStringId("BARSTEWARD_HIDE_WHEN_COMPLETE", "Hide when complete")
 ZO_CreateStringId(
     "BARSTEWARD_HIDE_WHEN_COMPLETE_TOOLTIP",
@@ -284,6 +286,7 @@ ZO_CreateStringId("BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS", "Weekly Endeavour Prog
 ZO_CreateStringId("BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS_BEST", "Weekly Endeavour Best Progress")
 ZO_CreateStringId("BARSTEWARD_WEEKLY_ENDEAVOUR_TIME", "Weekly Endeavour Time Remaining")
 ZO_CreateStringId("BARSTEWARD_WIDGET", "Widget")
+ZO_CreateStringId("BARSTEWARD_WIDGET_ICON_SIZE", "Widget icon size")
 ZO_CreateStringId("BARSTEWARD_WIDGETS", "Widgets")
 ZO_CreateStringId("BARSTEWARD_WIDGET_ORDERING", "Bar Steward Widget Ordering")
 ZO_CreateStringId("BARSTEWARD_WRIT_ALCHEMY", "Alchemist Writ")

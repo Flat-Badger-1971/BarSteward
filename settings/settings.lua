@@ -1582,6 +1582,17 @@ local function getWidgetSettings()
             width = "full",
             default = false,
             requiresReload = true
+        },
+        [3] = {
+            type = "slider",
+            name = GetString(_G.BARSTEWARD_WIDGET_ICON_SIZE),
+            getFunc = function() return BS.Vars.IconSize end,
+            setFunc = function(value) BS.Vars.IconSize = value end,
+            min = 8,
+            max = 64,
+            width = "full",
+            default = BS.Defaults.IconSize,
+            requiresReload = true
         }
     }
 
@@ -1679,7 +1690,7 @@ local function getWidgetSettings()
             widgetName = "|c4c9900" .. widgetName .. "|r"
         end
 
-        controls[idx + 2] = {
+        controls[idx + 3] = {
             type = "submenu",
             name = widgetName,
             icon = BS.widgets[k].icon,

@@ -19,6 +19,7 @@ BS.Defaults = {
     FriendAnnounce = {},
     Gold = {},
     GuildFriendAnnounce = {},
+    IconSize = 32,
     MainBarIcon = "/esoui/art/tradinghouse/category_u30_equipment_up.dds",
     Movable = false,
     OtherCurrencies = {},
@@ -279,7 +280,7 @@ BS.Defaults = {
         [BS.W_PLAYER_NAME] = {Bar = 0, Order = 33, ColourValues = "c"},
         [BS.W_RACE] = {Bar = 0, Order = 34, ColourValues = "c"},
         [BS.W_CLASS] = {Bar = 0, Order = 35, ColourValues = "c"},
-        [BS.W_ALLIANCE] = {Bar = 0, Order = 36},
+        [BS.W_ALLIANCE] = {Bar = 0, Order = 36, NoValue = false},
         [BS.W_LEADS] = {
             Bar = 0,
             Order = 37,
@@ -427,6 +428,14 @@ BS.Defaults = {
         },
         [BS.W_FURNISHINGS] = {Bar = 0, Order = 80, Autohide = false, ColourValues = "c"},
         [BS.W_COMPANION_GEAR] = {Bar = 0, Order = 81, Autohide = false, ColourValues = "c"},
-        [BS.W_MUSEUM] = {Bar = 0, Order = 82, Autohide = false, ColourValues = "c"}
+        [BS.W_MUSEUM] = {Bar = 0, Order = 82, Autohide = false, ColourValues = "c"},
+        [BS.W_EQUIPPED_POISON] = {
+            Bar = 0,
+            Order = 83,
+            Autohide = false,
+            ColourValues = "okc,wv,wc,dv,dc",
+            WarningValue = 50,
+            DangerValue = 10
+        }
     }
 }

@@ -1,5 +1,10 @@
 [color=#ff9900][b]Version: 1.4.35 ---------------[/b][/color]
 Tooltip correction for weekly endeavours
+Equipped poison widget added
+Alliance widget option added to hide the text
+Class widget option added to hide the text
+Player Name widget icon now reflects the player's class
+Setting added to adjust the size of widget icons
 
 [color=#ff9900][b]Version: 1.4.34 ---------------[/b][/color]
 Made the dropdown scrollable for the house list

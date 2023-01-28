@@ -379,7 +379,9 @@ function baseBar:AddWidgets(widgets)
             metadata.progress = controlDefaults.Progress
         end
 
-        metadata.widget = BS.CreateWidget(metadata, self.bar, tooltipAnchor, self.valueSide)
+        local noValue = BS.Vars.Controls[metadata.id].NoValue or false
+
+        metadata.widget = BS.CreateWidget(metadata, self.bar, tooltipAnchor, self.valueSide, noValue)
 
         -- register widgets that need to watch for events
         if (metadata.event) then

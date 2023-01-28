@@ -617,6 +617,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
     update = function(widget)
         local itemIds = BS.Vars.WatchedItems
         local vars = BS.Vars.Controls[BS.W_WATCHED_ITEMS]
+        local iconSize = BS.Vars.IconSize
 
         for itemId, _ in pairs(itemIds) do
             if (not linkCache[itemId]) then
@@ -696,7 +697,8 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
 
         for itemId, data in pairs(linkCache) do
             if (vars[itemId]) then
-                countText = countText .. zo_iconFormat(data.icon) .. " " .. (count[itemId] or 0) .. " "
+                countText =
+                    countText .. zo_iconFormat(data.icon, iconSize, iconSize) .. " " .. (count[itemId] or 0) .. " "
                 plainCountText = plainCountText .. "888" .. " " .. (count[itemId] or 0) .. " "
 
                 if (not foundIds[itemId]) then
@@ -1307,6 +1309,46 @@ BS.widgets[BS.W_MUSEUM] = {
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
     icon = "/esoui/art/icons/servicemappins/servicepin_museum.dds",
     tooltip = BS.Format(_G.SI_SPECIALIZEDITEMTYPE103),
+    hideWhenEqual = 0,
+    onClick = function()
+        if (not IsInGamepadPreferredMode()) then
+            SCENE_MANAGER:Show("inventory")
+        else
+            SCENE_MANAGER:Show("gamepad_inventory_root")
+        end
+    end
+}
+
+BS.widgets[BS.W_EQUIPPED_POISON] = {
+    -- v1.4.35
+    name = "equippedPoision",
+    update = function(widget)
+        local hasPoison, count, name = GetItemPairedPoisonInfo(_G.EQUIP_SLOT_MAIN_HAND)
+        local vars = BS.Vars.Controls[BS.W_EQUIPPED_POISON]
+        local colour = vars.OkColour or BS.Vars.DefaultOkColour
+
+        if (count <= vars.WarningValue and count > vars.DangerValue) then
+            colour = vars.WarningColour or BS.Vars.DefaultWarningColour
+        elseif (count <= vars.DangerValue) then
+            colour = vars.DangerColour or BS.Vars.DefaultDangerColour
+        end
+
+        widget:SetColour(unpack(colour))
+        widget:SetValue(count)
+
+        local tt = GetString(_G.BARSTEWARD_EQUIPPED_POISON)
+
+        if (hasPoison) then
+            tt = tt .. BS.LF .. "|cf9f9f9" .. name .. "|r"
+        end
+
+        widget.tooltip = tt
+
+        return count
+    end,
+    callback = {[CALLBACK_MANAGER] = {"WornSlotUpdate"}},
+    tooltip = GetString(_G.BARSTEWARD_EQUIPPED_POISON),
+    icon = "/esoui/art/icons/crafting_poison_001_cyan_003.dds",
     hideWhenEqual = 0,
     onClick = function()
         if (not IsInGamepadPreferredMode()) then

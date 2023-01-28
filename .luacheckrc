@@ -306,6 +306,7 @@ read_globals = {
     "GetItemLinkItemType",
     "GetItemLinkName",
     "GetItemName",
+    "GetItemPairedPoisonInfo",
     "GetItemQualityColor",
     "GetItemSellValueWithBonuses",
     "GetItemStyleName",

@@ -10,7 +10,7 @@ function baseWidget:New(...)
     return widget
 end
 
-function baseWidget:Initialise(metadata, parent, tooltipAnchor, valueSide)
+function baseWidget:Initialise(metadata, parent, tooltipAnchor, valueSide, noValue)
     local name = BS.Name .. "_Widget_" .. metadata.name
 
     self.name = metadata.name
@@ -18,6 +18,7 @@ function baseWidget:Initialise(metadata, parent, tooltipAnchor, valueSide)
     self.control = WINDOW_MANAGER:CreateControl(name, parent, CT_CONTROL)
     self.control:SetResizeToFitDescendents(true)
     self.control.ref = self
+    self.noValue = noValue
 
     local texture
 
@@ -29,7 +30,7 @@ function baseWidget:Initialise(metadata, parent, tooltipAnchor, valueSide)
 
     self.icon = WINDOW_MANAGER:CreateControl(name .. "_icon", self.control, CT_TEXTURE)
     self.icon:SetTexture(texture)
-    self.icon:SetDimensions(metadata.iconWidth or 32, metadata.iconHeight or 32)
+    self.icon:SetDimensions(BS.Vars.IconSize, BS.Vars.IconSize)
     self.icon:SetAnchor(valueSide == LEFT and RIGHT or LEFT)
 
     if (metadata.cooldown) then
@@ -52,7 +53,7 @@ function baseWidget:Initialise(metadata, parent, tooltipAnchor, valueSide)
         self.value:SetDimensions(200, 32)
         self.value:SetMinMax(0, 100)
         self.value.progress:SetColor(
-            unpack(BS.Vars.Controls[BS.W_ENDEAVOUR_PROGRESS].ProgressColour or BS.Vars.DefaultWarningColour)
+            unpack(BS.Vars.Controls[metadata.id].ProgressColour or BS.Vars.DefaultWarningColour)
         )
         self.value.progress:SetFont(BS.GetFont(BS.Vars.Font))
 
@@ -64,24 +65,26 @@ function baseWidget:Initialise(metadata, parent, tooltipAnchor, valueSide)
             self.value:SetGradientColors(sr, sg, sb, 1, er, eg, eb, 1)
         end
     else
-        self.value = WINDOW_MANAGER:CreateControl(name .. "_value", self.control, CT_LABEL)
-        self.value:SetFont(BS.GetFont(BS.Vars.Font))
-        self.value:SetColor(unpack(BS.Vars.DefaultColour))
-        self.value:SetAnchor(
-            valueSide == LEFT and RIGHT or LEFT,
-            self.icon,
-            valueSide,
-            valueSide == LEFT and -10 or 10,
-            0
-        )
-        self.value:SetDimensions(metadata.valueWidth or 50, metadata.iconHeight or 32)
-        self.value:SetVerticalAlignment(TEXT_ALIGN_CENTER)
+        if (not noValue) then
+            self.value = WINDOW_MANAGER:CreateControl(name .. "_value", self.control, CT_LABEL)
+            self.value:SetFont(BS.GetFont(BS.Vars.Font))
+            self.value:SetColor(unpack(BS.Vars.DefaultColour))
+            self.value:SetAnchor(
+                valueSide == LEFT and RIGHT or LEFT,
+                self.icon,
+                valueSide,
+                valueSide == LEFT and -10 or 10,
+                0
+            )
+            self.value:SetDimensions(metadata.valueWidth or 50, 32)
+            self.value:SetVerticalAlignment(TEXT_ALIGN_CENTER)
+        end
     end
 
     self.tooltip = metadata.tooltip
 
     if (metadata.tooltip) then
-        local anchorControl = self.value
+        local anchorControl = noValue and self.icon or self.value
 
         if (tooltipAnchor == LEFT) then
             anchorControl = self.icon
@@ -148,8 +151,8 @@ function baseWidget:Initialise(metadata, parent, tooltipAnchor, valueSide)
     end
 
     self.spacer = WINDOW_MANAGER:CreateControl(name .. "_spacer", self.control, CT_LABEL)
-    self.spacer:SetDimensions(10, metadata.iconHeight or 32)
-    self.spacer:SetAnchor(valueSide == LEFT and RIGHT or LEFT, self.value, valueSide)
+    self.spacer:SetDimensions(10, 32)
+    self.spacer:SetAnchor(valueSide == LEFT and RIGHT or LEFT, (noValue and self.icon or self.value), valueSide)
 
     if (BS.Vars.FontCorrection) then
         -- create an invisible label for width testing so it doesn't mess with the visible one
@@ -179,6 +182,10 @@ end
 -- add functions to the widget to mimic a standard control
 -- set the widget value and adjust the value control's width accordingly
 function baseWidget:SetProgress(value, min, max)
+    if (self.noValue) then
+        return
+    end
+
     if (max and value) then
         self.value:SetMinMax(min, max)
         self.value.progress:SetText(value .. "/" .. max)
@@ -187,6 +194,10 @@ function baseWidget:SetProgress(value, min, max)
 end
 
 function baseWidget:SetValue(value, plainValue)
+    if (self.noValue) then
+        return
+    end
+
     if (self.value:GetText() == value) then
         return
     end
@@ -207,9 +218,10 @@ function baseWidget:SetValue(value, plainValue)
     local scale = self.control:GetScale()
 
     textWidth = textWidth / (GetUIGlobalScale() * scale)
+
     self.value:SetWidth(textWidth)
 
-    if (BS.Vars.FontCorrection and self.fontCheck) then
+    if (BS.Vars.FontCorrection and self.fontCheck and value ~= "") then
         self.fontCheck:SetHeight(self.value:GetHeight() * 2)
         self.fontCheck:SetWidth(textWidth)
         self.fontCheck:SetText(value)
@@ -225,6 +237,10 @@ function baseWidget:SetValue(value, plainValue)
 end
 
 function baseWidget:SetFont(font)
+    if (self.noValue) then
+        return
+    end
+
     if (self.value.progress) then
         self.value.progress:SetFont(font)
     else
@@ -237,6 +253,10 @@ function baseWidget:SetIcon(value)
 end
 
 function baseWidget:GetValue()
+    if (self.noValue) then
+        return ""
+    end
+
     return self.value:GetText()
 end
 
@@ -270,7 +290,9 @@ function baseWidget:IsHidden()
 end
 
 function baseWidget:SetColour(...)
-    self.value:SetColor(...)
+    if (not self.noValue) then
+        self.value:SetColor(...)
+    end
 end
 
 function baseWidget:SetTooltip(tooltip)
