@@ -610,6 +610,7 @@ BS.widgets[BS.W_LOCKPICKS] = {
 
 local linkCache = {}
 local previousCounts = {}
+local DEBUG = false
 
 BS.widgets[BS.W_WATCHED_ITEMS] = {
     -- v1.3.14
@@ -695,11 +696,20 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
             end
         end
 
+        local minSizeNumChars = math.ceil(BS.Vars.IconSize / 8)
+        local minSize = string.rep("_", minSizeNumChars)
+
         for itemId, data in pairs(linkCache) do
             if (vars[itemId]) then
+                local itemCount = count[itemId] or 0
+
+                if (DEBUG) then
+                    itemCount = 100
+                end
+
                 countText =
-                    countText .. zo_iconFormat(data.icon, iconSize, iconSize) .. " " .. (count[itemId] or 0) .. " "
-                plainCountText = plainCountText .. "888" .. " " .. (count[itemId] or 0) .. " "
+                    countText .. zo_iconFormat(data.icon, iconSize, iconSize) .. " " .. itemCount .. " "
+                plainCountText = plainCountText .. minSize .. " " .. itemCount .. " "
 
                 if (not foundIds[itemId]) then
                     local zoIcon = zo_iconFormat(data.icon, 16, 16)
@@ -1030,7 +1040,7 @@ BS.widgets[BS.W_RANDOM_MEMENTO] = {
             getCollectibles(_G.COLLECTIBLE_CATEGORY_TYPE_MEMENTO, mementos)
         end
 
-        widget:SetValue(zo_iconFormat("/esoui/art/buttons/pointsplus_highlight.dds", 16, 16), "888")
+        widget:SetValue(zo_iconFormat("/esoui/art/buttons/pointsplus_highlight.dds", 16, 16), "___")
 
         return 0
     end,
@@ -1051,7 +1061,7 @@ BS.widgets[BS.W_RANDOM_PET] = {
             getCollectibles(_G.COLLECTIBLE_CATEGORY_TYPE_VANITY_PET, pets)
         end
 
-        widget:SetValue(zo_iconFormat("/esoui/art/buttons/pointsplus_highlight.dds", 16, 16), "888")
+        widget:SetValue(zo_iconFormat("/esoui/art/buttons/pointsplus_highlight.dds", 16, 16), "___")
 
         return 0
     end,
@@ -1072,7 +1082,7 @@ BS.widgets[BS.W_RANDOM_MOUNT] = {
             getCollectibles(_G.COLLECTIBLE_CATEGORY_TYPE_MOUNT, mounts)
         end
 
-        widget:SetValue(zo_iconFormat("/esoui/art/buttons/pointsplus_highlight.dds", 16, 16), "888")
+        widget:SetValue(zo_iconFormat("/esoui/art/buttons/pointsplus_highlight.dds", 16, 16), "___")
 
         return 0
     end,
@@ -1092,7 +1102,7 @@ BS.widgets[BS.W_RANDOM_EMOTE] = {
             getEmotes()
         end
 
-        widget:SetValue(zo_iconFormat("/esoui/art/buttons/pointsplus_highlight.dds", 16, 16), "888")
+        widget:SetValue(zo_iconFormat("/esoui/art/buttons/pointsplus_highlight.dds", 16, 16), "___")
 
         return 0
     end,

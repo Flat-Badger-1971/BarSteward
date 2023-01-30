@@ -19,6 +19,7 @@ function baseWidget:Initialise(metadata, parent, tooltipAnchor, valueSide, noVal
     self.control:SetResizeToFitDescendents(true)
     self.control.ref = self
     self.noValue = noValue
+    self.id = metadata.id
 
     local texture
 
@@ -221,7 +222,7 @@ function baseWidget:SetValue(value, plainValue)
 
     self.value:SetWidth(textWidth)
 
-    if (BS.Vars.FontCorrection and self.fontCheck and value ~= "") then
+    if (BS.Vars.FontCorrection and self.fontCheck and self.value) then
         self.fontCheck:SetHeight(self.value:GetHeight() * 2)
         self.fontCheck:SetWidth(textWidth)
         self.fontCheck:SetText(value)

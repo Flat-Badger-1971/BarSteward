@@ -48,7 +48,7 @@ BS.widgets = {
         timer = 1000,
         icon = "/esoui/art/champion/actionbar/champion_bar_combat_selection.dds",
         tooltip = GetString(_G.BARSTEWARD_FPS),
-        minWidthChars = "888"
+        minWidthChars = "___"
     },
     [BS.W_LATENCY] = {
         name = "latency",
@@ -77,7 +77,7 @@ BS.widgets = {
         timer = 1000,
         icon = "/esoui/art/ava/overview_icon_underdog_score.dds",
         tooltip = GetString(_G.BARSTEWARD_LATENCY),
-        minWidthChars = "8888"
+        minWidthChars = "____"
     },
     [BS.W_MEMORY] = {
         -- v1.2.2
@@ -113,7 +113,7 @@ BS.widgets = {
             refresh = true,
             default = 1
         },
-        minWidthChars = "888888"
+        minWidthChars = "______"
     },
     [BS.W_TAMRIEL_TIME] = {
         -- v1.3.17
