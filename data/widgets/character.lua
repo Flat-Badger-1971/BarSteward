@@ -876,7 +876,7 @@ BS.widgets[BS.W_VAMPIRISM_TIMER] = {
     -- v1.4.37
     name = "vampirismTimer",
     update = function(widget)
-        local name, icon
+        local name, icon, plainValue, value
         local isVampire = false
         local ending, id, stage
         local vars = BS.Vars.Controls[BS.W_VAMPIRISM_TIMER]
@@ -911,9 +911,15 @@ BS.widgets[BS.W_VAMPIRISM_TIMER] = {
 
         widget:SetColour(unpack(colour))
 
-        local plainValue = zo_strformat(GetString(_G.BARSTEWARD_VAMPIRE_STAGE), time, "", stage, "|r")
+        if (vars.ShowStage) then
+            plainValue = zo_strformat(GetString(_G.BARSTEWARD_VAMPIRE_STAGE), time, "", stage, "|r")
+            value = zo_strformat(GetString(_G.BARSTEWARD_VAMPIRE_STAGE), time, "|cf9f9f9", stage, "|r")
+        else
+            plainValue = time
+            value = time
+        end
 
-        widget:SetValue(zo_strformat(GetString(_G.BARSTEWARD_VAMPIRE_STAGE), time, "|cf9f9f9", stage, "|r"), plainValue)
+        widget:SetValue(value, plainValue)
 
         local tt = BS.Format(_G.SI_CURSETYPE1)
 
@@ -934,7 +940,22 @@ BS.widgets[BS.W_VAMPIRISM_TIMER] = {
     filter = {[_G.EVENT_EFFECT_CHANGED] = {_G.REGISTER_FILTER_UNIT_TAG, "player"}},
     icon = "/esoui/art/icons/store_vampirebite_01.dds",
     tooltip = GetString(_G.BARSTEWARD_VAMPIRE_STAGE_TIMER),
-    hideWhenEqual = 0
+    hideWhenEqual = 0,
+    customSettings = {
+        [1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_VAMPIRE_SHOW_STAGE),
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_VAMPIRISM_TIMER].ShowStage or false
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_VAMPIRISM_TIMER].ShowStage = value
+                BS.RefreshWidget(BS.W_VAMPIRISM_TIMER)
+            end,
+            width = "full",
+            default = false
+        }
+    }
 }
 
 BS.widgets[BS.W_VAMPIRISM_FEED_TIMER] = {

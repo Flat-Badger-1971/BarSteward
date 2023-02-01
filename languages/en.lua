@@ -273,6 +273,7 @@ ZO_CreateStringId(
 ZO_CreateStringId("BARSTEWARD_VALUE", "Value")
 ZO_CreateStringId("BARSTEWARD_VALUE_SIDE", "Value Side")
 ZO_CreateStringId("BARSTEWARD_VAMPIRE_FEED_TIMER", "Vampire feed timer")
+ZO_CreateStringId("BARSTEWARD_VAMPIRE_SHOW_STAGE", "Show stage")
 ZO_CreateStringId("BARSTEWARD_VAMPIRE_STAGE", "<<1>> <<2>>(Stage <<3>>)<<4>>")
 ZO_CreateStringId("BARSTEWARD_VAMPIRE_STAGE_TIMER", "Vampirism stage timer")
 ZO_CreateStringId("BARSTEWARD_VERTICAL", "Vertical")
