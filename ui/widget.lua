@@ -304,9 +304,15 @@ function baseWidget:SetTextureCoords(...)
     self.icon:SetTextureCoords(...)
 end
 
-function baseWidget:StartCooldown(remaining, duration)
+function baseWidget:StartCooldown(remaining, duration, isSeconds)
+    local multiplier = 1
+
+    if (isSeconds) then
+        multiplier = 1000
+    end
+
     if (self.icon.cooldown) then
-        self.icon.cooldown:StartCooldown(remaining, duration, CD_TYPE_RADIAL, CD_TIME_TYPE_TIME_UNTIL, false)
+        self.icon.cooldown:StartCooldown(remaining * multiplier, duration * multiplier, CD_TYPE_RADIAL, CD_TIME_TYPE_TIME_UNTIL, false)
         self.icon.cooldown:SetHidden(false)
     end
 end

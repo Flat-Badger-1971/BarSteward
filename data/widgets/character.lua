@@ -822,3 +822,174 @@ BS.widgets[BS.W_PLAYER_EXPERIENCE] = {
     icon = "/esoui/art/icons/icon_experience.dds",
     tooltip = GetString(_G.BARSTEWARD_PLAYER_EXPERIENCE)
 }
+
+BS.widgets[BS.W_VAMPIRISM] = {
+    -- v1.4.37
+    name = "vampirismStage",
+    update = function(widget)
+        local name, icon
+        local isVampire = false
+        local started, ending, id
+
+        for buffNum = 1, GetNumBuffs("player") do
+            name, started, ending, _, _, icon, _, _, _, _, id = GetUnitBuffInfo("player", buffNum)
+
+            if (BS.VAMPIRE_STAGES[id]) then
+                isVampire = true
+                break
+            end
+        end
+
+        local text = GetString(_G.BARSTEWARD_NOT_VAMPIRE)
+
+        if (isVampire) then
+            text = BS.Format(name)
+
+            if (ending - started > 0) then
+                widget:StartCooldown(ending - GetGameTimeSeconds(), ending - started, true)
+            end
+        end
+
+        widget:SetValue(text)
+        widget:SetColour(unpack(BS.Vars.Controls[BS.W_VAMPIRISM].Colour or BS.Vars.DefaultColour))
+
+        local tt = BS.Format(_G.SI_CURSETYPE1)
+        tt = tt .. BS.LF .. "|cf9f9f9" .. text .. "|r"
+
+        widget.tooltip = tt
+
+        if (icon) then
+            widget:SetIcon(icon)
+        end
+
+        return ""
+    end,
+    event = _G.EVENT_EFFECT_CHANGED,
+    filter = {[_G.EVENT_EFFECT_CHANGED] = {_G.REGISTER_FILTER_UNIT_TAG, "player"}},
+    icon = "/esoui/art/icons/ability_u26_vampire_infection_stage4.dds",
+    tooltip = BS.Format(_G.SI_CURSETYPE1),
+    cooldown = true,
+    hideWhenEqual = ""
+}
+
+BS.widgets[BS.W_VAMPIRISM_TIMER] = {
+    -- v1.4.37
+    name = "vampirismTimer",
+    update = function(widget)
+        local name, icon
+        local isVampire = false
+        local ending, id
+        local vars = BS.Vars.Controls[BS.W_VAMPIRISM_TIMER]
+
+        for buffNum = 1, GetNumBuffs("player") do
+            name, _, ending, _, _, icon, _, _, _, _, id = GetUnitBuffInfo("player", buffNum)
+
+            if (BS.VAMPIRE_STAGES[id]) then
+                isVampire = true
+                break
+            end
+        end
+
+        local remaining = 0
+        local time = ""
+        local colour = vars.OkColour or BS.Vars.DefaultOkColour
+
+        if (isVampire) then
+            remaining = ending - GetGameTimeSeconds()
+
+            if (remaining > 0) then
+                time = BS.SecondsToTime(remaining, true, false, vars.HideSeconds, vars.Format)
+
+                if (remaining < (vars.DangerValue * 60)) then
+                    colour = vars.DangerColour or BS.Vars.DefaultDangerColour
+                elseif (remaining < (vars.WarningValue * 60)) then
+                    colour = vars.WarningColour or BS.Vars.DefaultWarningColour
+                end
+            end
+        end
+
+        widget:SetColour(unpack(colour))
+        widget:SetValue(time)
+
+        local tt = BS.Format(_G.SI_CURSETYPE1)
+
+        if (isVampire) then
+            tt = tt .. BS.LF .. "|cf9f9f9" .. BS.Format(name) .. "|r"
+        end
+
+        widget.tooltip = tt
+
+        if (icon) then
+            widget:SetIcon(icon)
+        end
+
+        return remaining
+    end,
+    timer = 1000,
+    event = _G.EVENT_EFFECT_CHANGED,
+    filter = {[_G.EVENT_EFFECT_CHANGED] = {_G.REGISTER_FILTER_UNIT_TAG, "player"}},
+    icon = "/esoui/art/icons/store_vampirebite_01.dds",
+    tooltip = GetString(_G.BARSTEWARD_VAMPIRE_STAGE_TIMER),
+    hideWhenEqual = 0
+}
+
+BS.widgets[BS.W_VAMPIRISM_FEED_TIMER] = {
+    -- v1.4.37
+    name = "vampirismFeedTimer",
+    update = function(widget)
+        local name, icon
+        local isVampireWithFeed = false
+        local ending, id
+        local vars = BS.Vars.Controls[BS.W_VAMPIRISM_TIMER]
+
+        for buffNum = 1, GetNumBuffs("player") do
+            name, _, ending, _, _, icon, _, _, _, _, id = GetUnitBuffInfo("player", buffNum)
+
+            if (BS.VAMPIRE_FEED[id]) then
+                isVampireWithFeed = true
+                break
+            end
+        end
+
+        local remaining = 0
+        local time = ""
+        local colour = vars.OkColour or BS.Vars.DefaultOkColour
+
+        if (isVampireWithFeed) then
+            remaining = ending - GetGameTimeSeconds()
+
+            if (remaining > 0) then
+                time = BS.SecondsToTime(remaining, false, false, vars.HideSeconds, vars.Format, vars.HideDaysWhenZero)
+
+                if (remaining < (vars.DangerValue * 60)) then
+                    colour = vars.DangerColour or BS.Vars.DefaultDangerColour
+                elseif (remaining < (vars.WarningValue * 60)) then
+                    colour = vars.WarningColour or BS.Vars.DefaultWarningColour
+                end
+            end
+        end
+
+        widget:SetColour(unpack(colour))
+        widget:SetValue(time)
+
+        local tt = GetString(_G.BARSTEWARD_VAMPIRE_FEED_TIMER)
+
+        if (isVampireWithFeed) then
+            tt = tt .. BS.LF .. "|cf9f9f9" .. BS.Format(name) .. "|r"
+        end
+
+        widget.tooltip = tt
+
+        if (icon) then
+            widget:SetIcon(icon)
+        end
+
+        return remaining
+    end,
+    timer = 1000,
+    event = _G.EVENT_EFFECT_CHANGED,
+    filter = {[_G.EVENT_EFFECT_CHANGED] = {_G.REGISTER_FILTER_UNIT_TAG, "player"}},
+    icon = "/esoui/art/icons/ability_u26_vampire_synergy_feed.dds",
+    tooltip = GetString(_G.BARSTEWARD_VAMPIRE_FEED_TIMER),
+    hideWhenEqual = 0
+}

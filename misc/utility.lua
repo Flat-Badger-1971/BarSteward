@@ -24,6 +24,8 @@ function BS.SecondsToTime(seconds, hideDays, hideHours, hideSeconds, format, hid
         remaining = remaining - (minutes * 60)
     end
 
+    remaining = math.floor(remaining)
+
     if ((format or "01:12:04:10") ~= "01:12:04:10" and format ~= "01:12:04") then
         if (hideSeconds) then
             if (hideDays) then

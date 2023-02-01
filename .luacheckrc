@@ -285,6 +285,7 @@ read_globals = {
     "GetGameCameraInteractableActionInfo",
     "GetGameCameraPickpocketingBonusInfo",
     "GetGameTimeMilliseconds",
+    "GetGameTimeSeconds",
     "GetGuildId",
     "GetGuildMemberCharacterInfo",
     "GetGuildMemberInfo",

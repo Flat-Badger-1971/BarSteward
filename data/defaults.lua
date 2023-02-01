@@ -436,6 +436,30 @@ BS.Defaults = {
             ColourValues = "okc,wv,wc,dv,dc",
             WarningValue = 50,
             DangerValue = 10
+        },
+        [BS.W_VAMPIRISM] = {Bar = 0, Order = 83, Autohide = true, ColourValues = "c"},
+        [BS.W_VAMPIRISM_TIMER] = {
+            Bar = 0,
+            Order = 84,
+            Autohide = true,
+            HideSeconds = false,
+            ColourValues = "okc,wv,wc,dv,dc",
+            DangerValue = 5,
+            WarningValue = 10,
+            Units = GetString(_G.BARSTEWARD_MINUTES),
+            Timer = true
+        },
+        [BS.W_VAMPIRISM_FEED_TIMER] = {
+            Bar = 0,
+            Order = 85,
+            Autohide = true,
+            HideSeconds = false,
+            ColourValues = "okc,wv,wc,dv,dc",
+            DangerValue = 5,
+            WarningValue = 10,
+            Units = GetString(_G.BARSTEWARD_MINUTES),
+            Timer = true,
+            HideDaysWhenZero = false
         }
     }
 }
