@@ -296,5 +296,5 @@ BS.WRIT_ITEM_TYPES = {
     [_G.ITEM_STYLE_CHAPTER_BOWS] = {70}
 }
 
-BS.VAMPIRE_STAGES = {[135397] = true, [135399] = true, [135400] = true, [135402] = true, [135412] = true}
+BS.VAMPIRE_STAGES = {[135397] = 1, [135399] = 2, [135400] = 3, [135402] = 4, [135412] = 5}
 BS.VAMPIRE_FEED = {[40359] = true}

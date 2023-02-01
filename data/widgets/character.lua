@@ -878,7 +878,7 @@ BS.widgets[BS.W_VAMPIRISM_TIMER] = {
     update = function(widget)
         local name, icon
         local isVampire = false
-        local ending, id
+        local ending, id, stage
         local vars = BS.Vars.Controls[BS.W_VAMPIRISM_TIMER]
 
         for buffNum = 1, GetNumBuffs("player") do
@@ -886,6 +886,7 @@ BS.widgets[BS.W_VAMPIRISM_TIMER] = {
 
             if (BS.VAMPIRE_STAGES[id]) then
                 isVampire = true
+                stage = BS.VAMPIRE_STAGES[id]
                 break
             end
         end
@@ -909,7 +910,10 @@ BS.widgets[BS.W_VAMPIRISM_TIMER] = {
         end
 
         widget:SetColour(unpack(colour))
-        widget:SetValue(time)
+
+        local plainValue = zo_strformat(GetString(_G.BARSTEWARD_VAMPIRE_STAGE), time, "", stage, "|r")
+
+        widget:SetValue(zo_strformat(GetString(_G.BARSTEWARD_VAMPIRE_STAGE), time, "|cf9f9f9", stage, "|r"), plainValue)
 
         local tt = BS.Format(_G.SI_CURSETYPE1)
 
@@ -940,7 +944,7 @@ BS.widgets[BS.W_VAMPIRISM_FEED_TIMER] = {
         local name, icon
         local isVampireWithFeed = false
         local ending, id
-        local vars = BS.Vars.Controls[BS.W_VAMPIRISM_TIMER]
+        local vars = BS.Vars.Controls[BS.W_VAMPIRISM_FEED_TIMER]
 
         for buffNum = 1, GetNumBuffs("player") do
             name, _, ending, _, _, icon, _, _, _, _, id = GetUnitBuffInfo("player", buffNum)
