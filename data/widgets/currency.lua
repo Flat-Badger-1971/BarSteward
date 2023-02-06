@@ -179,11 +179,12 @@ BS.widgets[BS.W_EVENT_TICKETS] = {
     update = function(widget)
         local vars = BS.Vars.Controls[BS.W_EVENT_TICKETS]
         local tickets = GetCurrencyAmount(_G.CURT_EVENT_TICKETS, _G.CURRENCY_LOCATION_ACCOUNT)
+        local maxTickets = GetMaxPossibleCurrency(_G.CURT_EVENT_TICKETS, _G.CURRENCY_LOCATION_ACCOUNT)
         local noLimitColour = vars.NoLimitColour and "|cf9f9f9" or ""
         local noLimitTerminator = vars.NoLimitColour and "|r" or ""
-        local value = tickets .. (vars.HideLimit and "" or (noLimitColour .. "/12" .. noLimitTerminator))
-        local widthValue = tickets .. (vars.HideLimit and "" or "/12")
-        local pc = BS.ToPercent(tickets, 12)
+        local value = tickets .. (vars.HideLimit and "" or (noLimitColour .. "/" .. tostring(maxTickets) .. noLimitTerminator))
+        local widthValue = tickets .. (vars.HideLimit and "" or ("/" .. tostring(maxTickets)))
+        local pc = BS.ToPercent(tickets, maxTickets)
 
         if (vars.ShowPercent) then
             value = pc .. "%"
@@ -309,7 +310,8 @@ BS.widgets[BS.W_TRANSMUTE_CRYSTALS] = {
     update = function(widget)
         local vars = BS.Vars.Controls[BS.W_TRANSMUTE_CRYSTALS]
         local crystals = GetCurrencyAmount(_G.CURT_CHAOTIC_CREATIA, _G.CURRENCY_LOCATION_ACCOUNT)
-        local value = crystals .. (vars.HideLimit and "" or "/1000")
+        local maxCrystals = GetMaxPossibleCurrency(_G.CURT_CHAOTIC_CREATIA, _G.CURRENCY_LOCATION_ACCOUNT)
+        local value = crystals .. (vars.HideLimit and "" or ("/" .. tostring(maxCrystals)))
         local pc = BS.ToPercent(crystals, 1000)
         local colour = vars.Colour or BS.Vars.DefaultColour
 

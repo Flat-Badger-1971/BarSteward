@@ -320,6 +320,7 @@ read_globals = {
     "GetMapContentType",
     "GetMaximumRapport",
     "GetMaxLevel",
+    "GetMaxPossibleCurrency",
     "GetMaxRecipeIngredients",
     "GetMaxSimultaneousSmithingResearch",
     "GetMinimumRapport",

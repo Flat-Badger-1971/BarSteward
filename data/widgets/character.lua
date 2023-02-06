@@ -674,6 +674,7 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
         end
 
         local icons = {}
+        local unspent = 0
 
         for disciplineIndex = 1, GetNumChampionDisciplines() do
             local id = GetChampionDisciplineId(disciplineIndex)
@@ -687,6 +688,8 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
 
             local name = BS.Format(disciplineName)
             local toSpend = disciplineData:GetNumSavedUnspentPoints()
+
+            unspent = unspent + toSpend
 
             table.insert(cp, icon .. " " .. name .. " - " .. toSpend)
         end
@@ -722,8 +725,18 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
             widget.tooltip = ttt
         end
 
-        local value = earned .. " " .. "(" .. pc .. "%)"
+        local value = earned .. " (" .. pc .. "%)"
         local plainValue = value
+
+        if (vars.ShowUnspent) then
+            if (unspent == 0) then
+                value = earned
+                plainValue = earned
+            else
+                value = earned .. " (|cffff00" .. unspent .. "|r)"
+                plainValue = earned .. " (" .. unspent .. ")"
+            end
+        end
 
         if (vars.ShowUnslottedCount and unslotted > 0) then
             plainValue = value .. " - " .. unslotted
@@ -757,6 +770,19 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
             end,
             setFunc = function(value)
                 BS.Vars.Controls[BS.W_CHAMPION_POINTS].ShowUnslottedCount = value
+                BS.RefreshWidget(BS.W_CHAMPION_POINTS)
+            end,
+            width = "full",
+            default = false
+        },
+        [2] = {
+            name = GetString(_G.BARSTEWARD_SHOW_UNSPENT),
+            type = "checkbox",
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_CHAMPION_POINTS].ShowUnspent
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_CHAMPION_POINTS].ShowUnspent = value
                 BS.RefreshWidget(BS.W_CHAMPION_POINTS)
             end,
             width = "full",

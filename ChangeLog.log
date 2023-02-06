@@ -1,3 +1,7 @@
+[color=#ff9900][b]Version: 1.4.38 ---------------[/b][/color]
+Use function to determine max possible currency rather than hardcoding to account to no ESO plus memebership
+Option added to Champion Point widget to show unspent points (if above zero)
+
 [color=#ff9900][b]Version: 1.4.37 ---------------[/b][/color]
 Vampirism stage widget added
 Vampirism stage timer widget added
