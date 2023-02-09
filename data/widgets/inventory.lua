@@ -1343,7 +1343,6 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
 
             if (hasPoison) then
                 table.insert(poisons,{name = poisonName, count = poisonCount})
-                d(slot)
                 count = count + poisonCount
             end
         end
