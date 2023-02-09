@@ -1333,7 +1333,21 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
     -- v1.4.35
     name = "equippedPoision",
     update = function(widget)
-        local hasPoison, count, name = GetItemPairedPoisonInfo(_G.EQUIP_SLOT_MAIN_HAND)
+        local slots = {_G.EQUIP_SLOT_MAIN_HAND, _G.EQUIP_SLOT_OFF_HAND}
+        local poisons = {}
+        local hasPoison, poisonCount, poisonName
+        local count = 0
+
+        for _, slot in ipairs(slots) do
+            hasPoison, poisonCount, poisonName = GetItemPairedPoisonInfo(slot)
+
+            if (hasPoison) then
+                table.insert(poisons,{name = poisonName, count = poisonCount})
+                d(slot)
+                count = count + poisonCount
+            end
+        end
+
         local vars = BS.Vars.Controls[BS.W_EQUIPPED_POISON]
         local colour = vars.OkColour or BS.Vars.DefaultOkColour
 
@@ -1348,8 +1362,10 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
 
         local tt = GetString(_G.BARSTEWARD_EQUIPPED_POISON)
 
-        if (hasPoison) then
-            tt = tt .. BS.LF .. "|cf9f9f9" .. name .. "|r"
+        if (#poisons > 0) then
+            for _, poison in ipairs(poisons) do
+                tt = tt .. BS.LF .. "|cf9f9f9" .. poison.name .. "|r b(" .. poison.count .. ")"
+            end
         end
 
         widget.tooltip = tt
