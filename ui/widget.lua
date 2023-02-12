@@ -10,7 +10,7 @@ function baseWidget:New(...)
     return widget
 end
 
-function baseWidget:Initialise(metadata, parent, tooltipAnchor, valueSide, noValue)
+function baseWidget:Initialise(metadata, parent, tooltipAnchor, valueSide, noValue, barSettings)
     local name = BS.Name .. "_Widget_" .. metadata.name
 
     self.name = metadata.name
@@ -29,9 +29,15 @@ function baseWidget:Initialise(metadata, parent, tooltipAnchor, valueSide, noVal
         texture = metadata.icon
     end
 
+    local iconSize = barSettings.Override and barSettings.IconSize or BS.Vars.IconSize
+
+    if (iconSize == nil) then
+        iconSize = BS.Vars.IconSize
+    end
+
     self.icon = WINDOW_MANAGER:CreateControl(name .. "_icon", self.control, CT_TEXTURE)
     self.icon:SetTexture(texture)
-    self.icon:SetDimensions(BS.Vars.IconSize, BS.Vars.IconSize)
+    self.icon:SetDimensions(iconSize, iconSize)
     self.icon:SetAnchor(valueSide == LEFT and RIGHT or LEFT)
 
     if (metadata.cooldown) then
@@ -40,6 +46,12 @@ function baseWidget:Initialise(metadata, parent, tooltipAnchor, valueSide, noVal
         self.icon.cooldown:SetAnchor(CENTER, self.icon, CENTER, 0, 0)
         self.icon.cooldown:SetFillColor(0, 0.1, 0.1, 0.6)
         self.icon.cooldown:SetHidden(true)
+    end
+
+    local font = BS.GetFont(barSettings.Override and barSettings)
+
+    if (font == nil) then
+        font = BS.Vars.Font
     end
 
     if (metadata.progress) then
@@ -56,7 +68,7 @@ function baseWidget:Initialise(metadata, parent, tooltipAnchor, valueSide, noVal
         self.value.progress:SetColor(
             unpack(BS.Vars.Controls[metadata.id].ProgressColour or BS.Vars.DefaultWarningColour)
         )
-        self.value.progress:SetFont(BS.GetFont(BS.Vars.Font))
+        self.value.progress:SetFont(font)
 
         if (metadata.gradient) then
             local startg, endg = metadata.gradient()
@@ -68,7 +80,7 @@ function baseWidget:Initialise(metadata, parent, tooltipAnchor, valueSide, noVal
     else
         if (not noValue) then
             self.value = WINDOW_MANAGER:CreateControl(name .. "_value", self.control, CT_LABEL)
-            self.value:SetFont(BS.GetFont(BS.Vars.Font))
+            self.value:SetFont(font)
             self.value:SetColor(unpack(BS.Vars.DefaultColour))
             self.value:SetAnchor(
                 valueSide == LEFT and RIGHT or LEFT,
@@ -151,8 +163,12 @@ function baseWidget:Initialise(metadata, parent, tooltipAnchor, valueSide, noVal
         )
     end
 
+    local horizontalPadding = (barSettings.Override and (barSettings.HorizontalPadding or 0) or 0) + 10
+    local minVertical = (iconSize > 32) and iconSize or 32
+    local verticalPadding = (barSettings.Override and (barSettings.VerticalPadding or 0) or 0) + minVertical
+
     self.spacer = WINDOW_MANAGER:CreateControl(name .. "_spacer", self.control, CT_LABEL)
-    self.spacer:SetDimensions(10, 32)
+    self.spacer:SetDimensions(horizontalPadding, verticalPadding)
     self.spacer:SetAnchor(valueSide == LEFT and RIGHT or LEFT, (noValue and self.icon or self.value), valueSide)
 
     if (BS.Vars.FontCorrection) then
@@ -160,7 +176,7 @@ function baseWidget:Initialise(metadata, parent, tooltipAnchor, valueSide, noVal
         if (not parent.ref.fontCheck) then
             parent.ref.fontCheck =
                 WINDOW_MANAGER:CreateControl(BS.Name .. "_FONT_CHECKER_" .. parent.ref.index, parent, CT_LABEL)
-            parent.ref.fontCheck:SetFont(BS.GetFont(BS.Vars.Font))
+            parent.ref.fontCheck:SetFont(font)
             parent.ref.fontCheck:SetAnchor(TOPLEFT)
             parent.ref.fontCheck:SetDimensions(50, 32)
             parent.ref.fontCheck:SetVerticalAlignment(TEXT_ALIGN_CENTER)
@@ -312,7 +328,13 @@ function baseWidget:StartCooldown(remaining, duration, isSeconds)
     end
 
     if (self.icon.cooldown) then
-        self.icon.cooldown:StartCooldown(remaining * multiplier, duration * multiplier, CD_TYPE_RADIAL, CD_TIME_TYPE_TIME_UNTIL, false)
+        self.icon.cooldown:StartCooldown(
+            remaining * multiplier,
+            duration * multiplier,
+            CD_TYPE_RADIAL,
+            CD_TIME_TYPE_TIME_UNTIL,
+            false
+        )
         self.icon.cooldown:SetHidden(false)
     end
 end

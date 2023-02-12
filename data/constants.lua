@@ -298,3 +298,30 @@ BS.WRIT_ITEM_TYPES = {
 
 BS.VAMPIRE_STAGES = {[135397] = 1, [135399] = 2, [135400] = 3, [135402] = 4, [135412] = 5}
 BS.VAMPIRE_FEED = {[40359] = true}
+
+BS.BACKGROUNDS = {
+    [1] = "/esoui/art/actionbar/quickslotbg.dds",
+    [2] = "/esoui/art/announcewindow/blackfade.dds",
+    [3] = "/esoui/art/antiquities/codex_missing_document.dds",
+    [4] = "/esoui/art/antiquities/icon_backdrop.dds",
+    [5] = "/esoui/art/interaction/conversation_textbg.dds",
+    [6] = "/esoui/art/interaction/conversationwindow_overlay_important.dds",
+    [7] = "/esoui/art/miscellaneous/dialog_scrollinset_left.dds",
+    [8] = "/esoui/art/achievements/achievements_iconbg.dds",
+    [9] = "/esoui/art/actionbar/abilitycooldowninsert.dds",
+    [10] = "/esoui/art/ava/ava_bonuses_left.dds",
+    [11] = "/esoui/art/campaign/overview_scoringbg_aldmeri_left.dds",
+    [12] = "/esoui/art/campaign/overview_scoringbg_daggerfall_left.dds",
+    [13] = "/esoui/art/campaign/overview_scoringbg_ebonheart_left.dds",
+    [14] = "/esoui/art/champion/champion_sky_cloud1.dds"
+}
+
+BS.BORDERS = {
+    [1] = {"/esoui/art/worldmap/worldmap_frame_edge.dds", 128, 16},
+    [2] = {"/esoui/art/crafting/crafting_tooltip_glow_edge_blue64.dds", 256, 8},
+    [3] = {"/esoui/art/crafting/crafting_tooltip_glow_edge_gold64.dds", 256, 8},
+    [4] = {"/esoui/art/crafting/crafting_tooltip_glow_edge_red64.dds", 256, 8},
+    [5] = {"/esoui/art/chatwindow/gamepad/gp_hud_chatwindowbg_edge.dds", 512, 4},
+    [6] = {"/esoui/art/interaction/conversationborder.dds", 128, 8},
+    [7] = {"/esoui/art/market/market_highlightedge16.dds", 128, 16}
+}

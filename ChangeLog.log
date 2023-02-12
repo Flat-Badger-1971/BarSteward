@@ -1,5 +1,13 @@
+[color=#ff9900][b]Version: 1.4.40 ---------------[/b][/color]
+Correct sizing issue for CP widget when there are unslotted spaces
+Minor code refactoring
+Allow overriding of font, font size and icon size for a specific bar
+Allow setting and overriding of horizontal and vertical padding for a specific bar
+A number of background and border options added
+Bar settings refactor
+
 [color=#ff9900][b]Version: 1.4.39 ---------------[/b][/color]
-Include offhand posions in poison count
+Include offhand poisons in poison count
 German translation updates
 
 [color=#ff9900][b]Version: 1.4.38 ---------------[/b][/color]

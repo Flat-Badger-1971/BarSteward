@@ -557,12 +557,22 @@ function BS.CleanUpBarOrder(barNumber)
     end
 end
 
-function BS.GetFont()
+function BS.GetFont(vars)
     local font = BS.FONTS[BS.Vars.Font]
     local size = BS.Vars.FontSize
+
+    if (vars) then
+        font = BS.FONTS[vars.Font]
+        size = vars.FontSize
+    end
+
     local hasShadow = "|soft-shadow-thin"
 
-    return font .. "|" .. size .. hasShadow
+    if (font and size) then
+        return font .. "|" .. size .. hasShadow
+    else
+        return ""
+    end
 end
 
 function BS.AddToScenes(sceneType, barIndex, bar, override)

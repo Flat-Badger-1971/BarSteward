@@ -739,7 +739,7 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
         end
 
         if (vars.ShowUnslottedCount and unslotted > 0) then
-            plainValue = value .. " - " .. unslotted
+            plainValue = plainValue .. " - " .. unslotted
             value = value .. " - |cff0000" .. unslotted .. "|r"
         end
 
@@ -855,13 +855,17 @@ BS.widgets[BS.W_VAMPIRISM] = {
     update = function(widget)
         local name, icon
         local isVampire = false
-        local started, ending, id
+        local started, ending
 
         for buffNum = 1, GetNumBuffs("player") do
-            name, started, ending, _, _, icon, _, _, _, _, id = GetUnitBuffInfo("player", buffNum)
+            local buffName, buffStarted, buffEnding, _, _, buffIcon, _, _, _, _, id = GetUnitBuffInfo("player", buffNum)
 
             if (BS.VAMPIRE_STAGES[id]) then
                 isVampire = true
+                name = buffName
+                started = buffStarted
+                ending = buffEnding
+                icon = buffIcon
                 break
             end
         end
@@ -904,15 +908,18 @@ BS.widgets[BS.W_VAMPIRISM_TIMER] = {
     update = function(widget)
         local name, icon, plainValue, value
         local isVampire = false
-        local ending, id, stage
+        local ending, stage
         local vars = BS.Vars.Controls[BS.W_VAMPIRISM_TIMER]
 
         for buffNum = 1, GetNumBuffs("player") do
-            name, _, ending, _, _, icon, _, _, _, _, id = GetUnitBuffInfo("player", buffNum)
+            local buffName, _, buffEnding, _, _, buffIcon, _, _, _, _, id = GetUnitBuffInfo("player", buffNum)
 
             if (BS.VAMPIRE_STAGES[id]) then
                 isVampire = true
                 stage = BS.VAMPIRE_STAGES[id]
+                name = buffName
+                ending = buffEnding
+                icon = buffIcon
                 break
             end
         end
@@ -990,14 +997,17 @@ BS.widgets[BS.W_VAMPIRISM_FEED_TIMER] = {
     update = function(widget)
         local name, icon
         local isVampireWithFeed = false
-        local ending, id
+        local ending
         local vars = BS.Vars.Controls[BS.W_VAMPIRISM_FEED_TIMER]
 
         for buffNum = 1, GetNumBuffs("player") do
-            name, _, ending, _, _, icon, _, _, _, _, id = GetUnitBuffInfo("player", buffNum)
+            local buffName, _, buffEnding, _, _, buffIcon, _, _, _, _, id = GetUnitBuffInfo("player", buffNum)
 
             if (BS.VAMPIRE_FEED[id]) then
                 isVampireWithFeed = true
+                name = buffName
+                ending = buffEnding
+                icon = buffIcon
                 break
             end
         end

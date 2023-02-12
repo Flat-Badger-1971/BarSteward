@@ -1,7 +1,7 @@
 local BS = _G.BarSteward
 
 BS.LAM = _G.LibAddonMenu2
-BS.VERSION = "1.4.38"
+BS.VERSION = "1.4.40"
 
 local panel = {
     type = "panel",
@@ -29,13 +29,27 @@ do
     end
 end
 
--- populate the fonts lookup tables
+-- populate the lookup tables
 local fontNames = {}
+local backgroundNames = {}
+local borderNames = {}
 
 do
     for font, _ in pairs(BS.FONTS) do
         table.insert(fontNames, font)
     end
+
+    for background, _ in pairs(BS.BACKGROUNDS) do
+        table.insert(backgroundNames, GetString("BARSTEWARD_BACKGROUND_STYLE_", background))
+    end
+
+    table.insert(backgroundNames, " ")
+
+    for border, _ in pairs(BS.BORDERS) do
+        table.insert(borderNames, GetString("BARSTEWARD_BORDER_STYLE_", border))
+    end
+
+    table.insert(borderNames, " ")
 end
 
 local function initialise()
@@ -321,6 +335,86 @@ local function getBarSettings()
             },
             [4] = {
                 type = "dropdown",
+                name = GetString(_G.BARSTEWARD_BACKGROUND_STYLE),
+                choices = backgroundNames,
+                getFunc = function()
+                    if ((vars.Background or 99) == 99) then
+                        return " "
+                    else
+                        return GetString("BARSTEWARD_BACKGROUND_STYLE_", vars.Background)
+                    end
+                end,
+                setFunc = function(value)
+                    local bar = _G[BS.Name .. "_bar_" .. idx]
+                    if (value == " ") then
+                        vars.Background = 99
+                    else
+                        for id, _ in pairs(BS.BACKGROUNDS) do
+                            if (GetString("BARSTEWARD_BACKGROUND_STYLE_", id) == value) then
+                                vars.Background = id
+                                break
+                            end
+                        end
+                    end
+
+                    local bg = ""
+
+                    if (vars.Background ~= 99) then
+                        bg = BS.BACKGROUNDS[vars.Background]
+                        bar.background:SetCenterColor(1, 1, 1, 1)
+                    else
+                        bar.background:SetCenterColor(unpack(BS.Vars.Bars[idx].Backdrop.Colour))
+                    end
+
+                    bar.background:SetCenterTexture(bg)
+                end,
+                disabled = function()
+                    return not vars.Backdrop.Show
+                end,
+                default = 99
+            },
+            [5] = {
+                type = "dropdown",
+                name = GetString(_G.BARSTEWARD_BORDER_STYLE),
+                choices = borderNames,
+                getFunc = function()
+                    if ((vars.Border or 99) == 99) then
+                        return " "
+                    else
+                        return GetString("BARSTEWARD_BORDER_STYLE_", vars.Border)
+                    end
+                end,
+                setFunc = function(value)
+                    local bar = _G[BS.Name .. "_bar_" .. idx]
+                    if (value == " ") then
+                        vars.Border = 99
+                    else
+                        for id, _ in pairs(BS.BORDERS) do
+                            if (GetString("BARSTEWARD_BORDER_STYLE_", id) == value) then
+                                vars.Border = id
+                                break
+                            end
+                        end
+                    end
+
+                    local border = {"", 128, 2}
+
+                    if (vars.Border ~= 99) then
+                        border = BS.BORDERS[vars.Border]
+                        bar.border:SetEdgeColor(1, 1, 1, 1)
+                    else
+                        bar.border:SetEdgeColor(0, 0, 0, 0)
+                    end
+
+                    bar.border:SetEdgeTexture(unpack(border))
+                end,
+                disabled = function()
+                    return not vars.Backdrop.Show
+                end,
+                default = 99
+            },
+            [6] = {
+                type = "dropdown",
                 name = GetString(_G.BARSTEWARD_TOOLTIP_ANCHOR),
                 choices = {
                     GetString(_G.BARSTEWARD_LEFT),
@@ -337,7 +431,7 @@ local function getBarSettings()
                 requiresReload = true,
                 default = BS.Defaults.Bars[1].TooltipAnchor
             },
-            [5] = {
+            [7] = {
                 type = "dropdown",
                 name = GetString(_G.BARSTEWARD_VALUE_SIDE),
                 choices = {
@@ -353,7 +447,7 @@ local function getBarSettings()
                 requiresReload = true,
                 default = BS.Defaults.Bars[1].ValueSide
             },
-            [6] = {
+            [8] = {
                 type = "dropdown",
                 name = GetString(_G.BARSTEWARD_BAR_ANCHOR),
                 choices = {
@@ -370,7 +464,7 @@ local function getBarSettings()
                 requiresReload = true,
                 default = BS.Defaults.Bars[1].Anchor
             },
-            [7] = {
+            [9] = {
                 type = "slider",
                 name = GetString(_G.BARSTEWARD_SCALE),
                 getFunc = function()
@@ -393,6 +487,10 @@ local function getBarSettings()
                 width = "full",
                 default = BS.Defaults.Bars[1].Scale
             }
+        }
+
+        controls[#controls + 1] = {
+            type = "divider"
         }
 
         if (idx ~= 1) then
@@ -456,6 +554,10 @@ local function getBarSettings()
         end
 
         controls[#controls + 1] = {
+            type = "divider"
+        }
+
+        controls[#controls + 1] = {
             type = "checkbox",
             name = GetString(_G.BARSTEWARD_COMBAT_COLOUR),
             getFunc = function()
@@ -467,6 +569,7 @@ local function getBarSettings()
             width = "full",
             default = false
         }
+
         controls[#controls + 1] = {
             type = "colorpicker",
             name = GetString(_G.BARSTEWARD_COMBAT_COLOUR_BACKDROP),
@@ -483,45 +586,138 @@ local function getBarSettings()
             default = unpack(BS.Vars.DefaultCombatColour)
         }
 
+        -- custom overrides
         controls[#controls + 1] = {
-            type = "divider",
-            alpha = 0
+            type = "divider"
         }
 
         controls[#controls + 1] = {
-            type = "button",
-            name = GetString(_G.BARSTEWARD_ALIGN),
-            func = function()
-                local bar = _G[BS.Name .. "_bar_" .. idx]
-                local _, posY = bar:GetCenter()
-                local guiHeight = GuiRoot:GetHeight() / 2
-                local centre
-
-                if (posY > guiHeight) then
-                    centre = posY - guiHeight
-                else
-                    centre = (guiHeight - posY) * -1
-                end
-
-                _G[BS.Name .. "_bar_" .. idx]:SetAnchor(CENTER, GuiRoot, CENTER, 0, centre)
-                local xPos, yPos = bar:GetCenter()
-
-                BS.Vars.Bars[idx].Anchor = GetString(_G.BARSTEWARD_MIDDLE)
-                BS.Vars.Bars[idx].Position = {X = xPos, Y = yPos}
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_OVERRIDE),
+            getFunc = function()
+                return vars.Override
             end,
+            setFunc = function(value)
+                vars.Override = value
+            end,
+            default = false,
+            requiresReload = true,
             width = "full"
         }
 
-        if (idx ~= 1) then
-            controls[#controls + 1] = {
-                type = "button",
-                name = "|ce60000" .. GetString(_G.SI_GAMEPAD_MAIL_SEND_DETACH_ITEM) .. "|r",
-                func = function()
-                    BS.RemoveBarCheck(idx)
-                end,
-                width = "full"
-            }
+        controls[#controls + 1] = {
+            type = "slider",
+            name = GetString(_G.BARSTEWARD_WIDGET_ICON_SIZE),
+            getFunc = function()
+                return vars.IconSize or BS.Vars.IconSize
+            end,
+            setFunc = function(value)
+                vars.IconSize = value
+            end,
+            min = 8,
+            max = 64,
+            width = "full",
+            default = BS.Defaults.IconSize,
+            requiresReload = true,
+            disabled = function()
+                return not vars.Override
+            end
+        }
 
+        local ref = "BarSteward_SampleText_bar_" .. idx
+
+        controls[#controls + 1] = {
+            type = "dropdown",
+            name = GetString(_G.BARSTEWARD_FONT),
+            choices = fontNames,
+            getFunc = function()
+                return vars.Font or BS.Vars.Font
+            end,
+            setFunc = function(value)
+                vars.Font = value
+
+                _G[ref].desc:SetFont(BS.GetFont(vars))
+            end,
+            requiresReload = true,
+            default = BS.Defaults.Font,
+            disabled = function()
+                return not vars.Override
+            end
+        }
+
+        controls[#controls + 1] = {
+            type = "slider",
+            name = GetString(_G.BARSTEWARD_FONT_SIZE),
+            min = 8,
+            max = 32,
+            getFunc = function()
+                return vars.FontSize or BS.Vars.FontSize
+            end,
+            setFunc = function(value)
+                vars.FontSize = value
+
+                _G[ref].desc:SetFont(BS.GetFont(vars))
+            end,
+            requiresReload = true,
+            default = BS.Defaults.FontSize,
+            disabled = function()
+                return not vars.Override
+            end
+        }
+
+        controls[#controls + 1] = {
+            type = "description",
+            text = function()
+                _G[ref].desc:SetFont(BS.GetFont(vars))
+                return "|c009933" .. GetString(_G.BARSTEWARD_SAMPLE) .. "|r"
+            end,
+            width = "full",
+            reference = ref
+        }
+
+        controls[#controls + 1] = {
+            type = "slider",
+            name = GetString(_G.BARSTEWARD_PADDING_HORIZONTAL),
+            getFunc = function()
+                return vars.HorizontalPadding or 0
+            end,
+            setFunc = function(value)
+                vars.HorizontalPadding = value
+            end,
+            min = 0,
+            max = 64,
+            width = "full",
+            default = 0,
+            requiresReload = true,
+            disabled = function()
+                return not vars.Override
+            end
+        }
+
+        controls[#controls + 1] = {
+            type = "slider",
+            name = GetString(_G.BARSTEWARD_PADDING_VERTICAL),
+            getFunc = function()
+                return vars.VerticalPadding or 0
+            end,
+            setFunc = function(value)
+                vars.VerticalPadding = value
+            end,
+            min = 0,
+            max = 64,
+            width = "full",
+            default = 0,
+            requiresReload = true,
+            disabled = function()
+                return not vars.Override
+            end
+        }
+
+        controls[#controls + 1] = {
+            type = "divider"
+        }
+
+        if (idx ~= 1) then
             controls[#controls + 1] = {
                 type = "editbox",
                 name = GetString(_G.BARSTEWARD_BAR_NAME),
@@ -548,6 +744,19 @@ local function getBarSettings()
                 width = "half",
                 requiresReload = true
             }
+
+            controls[#controls + 1] = {
+                type = "divider"
+            }
+
+            controls[#controls + 1] = {
+                type = "button",
+                name = "|ce60000" .. GetString(_G.SI_GAMEPAD_MAIL_SEND_DETACH_ITEM) .. "|r",
+                func = function()
+                    BS.RemoveBarCheck(idx)
+                end,
+                width = "full"
+            }
         else
             controls[#controls + 1] = {
                 type = "checkbox",
@@ -564,6 +773,30 @@ local function getBarSettings()
                 warning = GetString(_G.BARSTEWARD_NUDGE_WARNING)
             }
         end
+
+        controls[#controls + 1] = {
+            type = "button",
+            name = GetString(_G.BARSTEWARD_ALIGN),
+            func = function()
+                local bar = _G[BS.Name .. "_bar_" .. idx]
+                local _, posY = bar:GetCenter()
+                local guiHeight = GuiRoot:GetHeight() / 2
+                local centre
+
+                if (posY > guiHeight) then
+                    centre = posY - guiHeight
+                else
+                    centre = (guiHeight - posY) * -1
+                end
+
+                _G[BS.Name .. "_bar_" .. idx]:SetAnchor(CENTER, GuiRoot, CENTER, 0, centre)
+                local xPos, yPos = bar:GetCenter()
+
+                BS.Vars.Bars[idx].Anchor = GetString(_G.BARSTEWARD_MIDDLE)
+                BS.Vars.Bars[idx].Position = {X = xPos, Y = yPos}
+            end,
+            width = "full"
+        }
 
         BS.options[#BS.options + 1] = {
             type = "submenu",
@@ -1586,12 +1819,46 @@ local function getWidgetSettings()
         [3] = {
             type = "slider",
             name = GetString(_G.BARSTEWARD_WIDGET_ICON_SIZE),
-            getFunc = function() return BS.Vars.IconSize end,
-            setFunc = function(value) BS.Vars.IconSize = value end,
+            getFunc = function()
+                return BS.Vars.IconSize
+            end,
+            setFunc = function(value)
+                BS.Vars.IconSize = value
+            end,
             min = 8,
             max = 64,
             width = "full",
             default = BS.Defaults.IconSize,
+            requiresReload = true
+        },
+        [4] = {
+            type = "slider",
+            name = GetString(_G.BARSTEWARD_PADDING_HORIZONTAL),
+            getFunc = function()
+                return BS.Vars.HorizontalPadding or 0
+            end,
+            setFunc = function(value)
+                BS.Vars.HorizontalPadding = value
+            end,
+            min = 0,
+            max = 64,
+            width = "full",
+            default = 0,
+            requiresReload = true
+        },
+        [5] = {
+            type = "slider",
+            name = GetString(_G.BARSTEWARD_PADDING_VERTICAL),
+            getFunc = function()
+                return BS.Vars.VerticalPadding or 0
+            end,
+            setFunc = function(value)
+                BS.Vars.VerticalPadding = value
+            end,
+            min = 0,
+            max = 64,
+            width = "full",
+            default = 0,
             requiresReload = true
         }
     }
@@ -1690,7 +1957,7 @@ local function getWidgetSettings()
             widgetName = "|c4c9900" .. widgetName .. "|r"
         end
 
-        controls[idx + 3] = {
+        controls[idx + 5] = {
             type = "submenu",
             name = widgetName,
             icon = BS.widgets[k].icon,

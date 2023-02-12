@@ -17,7 +17,7 @@ function baseBar:Initialise(barSettings)
     self.index = barSettings.index
     self.position = barSettings.position
     self.orientation = (barSettings.position == TOP or barSettings == BOTTOM) and "horizontal" or "vertical"
-    self.defaultHeight = barSettings.iconHeight or 32
+    self.defaultHeight = barSettings.iconSize or BS.Vars.IconSize
     self.settings = barSettings
 
     self.bar = WINDOW_MANAGER:CreateTopLevelWindow(barName)
@@ -65,9 +65,27 @@ function baseBar:Initialise(barSettings)
 
     self.bar.background = WINDOW_MANAGER:CreateControl(barName .. "_background", self.bar, CT_BACKDROP)
     self.bar.background:SetAnchorFill(self.bar)
-    self.bar.background:SetCenterColor(unpack(settings.Backdrop.Colour))
     self.bar.background:SetEdgeColor(0, 0, 0, 0)
+
+    if ((settings.Background or 99) ~= 99) then
+        self.bar.background:SetCenterTexture(BS.BACKGROUNDS[settings.Background])
+    else
+        self.bar.background:SetCenterColor(unpack(settings.Backdrop.Colour))
+    end
+
     self.bar.background:SetHidden(not settings.Backdrop.Show)
+
+    self.bar.border = WINDOW_MANAGER:CreateControl(barName .. "_border", self.bar, CT_BACKDROP)
+    self.bar.border:SetDrawTier(_G.DT_MEDIUM)
+    self.bar.border:SetCenterTexture(0, 0, 0, 0)
+    self.bar.border:SetAnchorFill(self.bar)
+
+    if ((settings.Border or 99) ~= 99) then
+        self.bar.border:SetEdgeTexture(unpack(BS.BORDERS[settings.Border]))
+    else
+        self.bar.border:SetEdgeTexture("", 128, 2)
+        self.bar.border:SetEdgeColor(0, 0, 0, 0)
+    end
 
     self.bar.overlay = WINDOW_MANAGER:CreateControl(barName .. "_overlay", self.bar, CT_CONTROL)
     self.bar.overlay:SetDrawTier(_G.DT_HIGH)
@@ -111,11 +129,20 @@ function baseBar:Initialise(barSettings)
                 end
 
                 if (inCombat) then
+                    if ((self.settings.settings.Background or 99) ~= 99) then
+                        self.bar.background:SetCenterTexture("")
+                    end
+
                     self.bar.background:SetCenterColor(
                         unpack(BS.Vars.Bars[barSettings.index].CombatColour or BS.Vars.DefaultCombatColour)
                     )
                 else
-                    self.bar.background:SetCenterColor(unpack(settings.Backdrop.Colour))
+                    if ((self.settings.settings.Background or 99) ~= 99) then
+                        self.bar.background:SetCenterColor(nil)
+                        self.bar.background:SetCenterTexture(BS.BACKGROUNDS[settings.Background])
+                    else
+                        self.bar.background:SetCenterColor(unpack(settings.Backdrop.Colour))
+                    end
                 end
             else
                 self.bar.background:SetCenterColor(unpack(settings.Backdrop.Colour))
@@ -381,7 +408,8 @@ function baseBar:AddWidgets(widgets)
 
         local noValue = BS.Vars.Controls[metadata.id].NoValue or false
 
-        metadata.widget = BS.CreateWidget(metadata, self.bar, tooltipAnchor, self.valueSide, noValue)
+        metadata.widget =
+            BS.CreateWidget(metadata, self.bar, tooltipAnchor, self.valueSide, noValue, self.settings.settings)
 
         -- register widgets that need to watch for events
         if (metadata.event) then
