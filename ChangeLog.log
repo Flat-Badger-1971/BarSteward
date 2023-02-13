@@ -5,6 +5,7 @@ Allow overriding of font, font size and icon size for a specific bar
 Allow setting and overriding of horizontal and vertical padding for a specific bar
 A number of background and border options added
 Bar settings refactor
+Corrected logic for Equipped Poisons widget and added actionbar options
 
 [color=#ff9900][b]Version: 1.4.39 ---------------[/b][/color]
 Include offhand poisons in poison count

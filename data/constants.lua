@@ -325,3 +325,8 @@ BS.BORDERS = {
     [6] = {"/esoui/art/interaction/conversationborder.dds", 128, 8},
     [7] = {"/esoui/art/market/market_highlightedge16.dds", 128, 16}
 }
+
+BS.MAIN_BAR = 1
+BS.BACK_BAR = 2
+BS.BOTH = 3
+BS.ACTIVE_BAR = 4

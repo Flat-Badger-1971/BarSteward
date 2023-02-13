@@ -1332,25 +1332,45 @@ BS.widgets[BS.W_MUSEUM] = {
     end
 }
 
+local poisonBars = {
+    [BS.MAIN_BAR] = GetString(_G.BARSTEWARD_MAIN_BAR),
+    [BS.BACK_BAR] = GetString(_G.BARSTEWARD_BACK_BAR),
+    [BS.BOTH] = GetString(_G.BARSTEWARD_BOTH),
+    [BS.ACTIVE_BAR] = GetString(_G.BARSTEWARD_ACTIVE_BAR)
+}
+
 BS.widgets[BS.W_EQUIPPED_POISON] = {
     -- v1.4.35
     name = "equippedPoision",
     update = function(widget)
         local slots = {_G.EQUIP_SLOT_MAIN_HAND, _G.EQUIP_SLOT_OFF_HAND}
+        local backup = {_G.EQUIP_SLOT_BACKUP_MAIN, _G.EQUIP_SLOT_BACKUP_OFF}
         local poisons = {}
         local hasPoison, poisonCount, poisonName
         local count = 0
+        local vars = BS.Vars.Controls[BS.W_EQUIPPED_POISON]
+        local selected = vars.PoisonBar or BS.MAIN_BAR
+        local activeWeaponPair = GetActiveWeaponPairInfo()
+
+        if (selected == BS.BACK_BAR) then
+            slots = backup
+        elseif (selected == BS.BOTH) then
+            slots = BS.MergeTables(slots, backup)
+        elseif (selected == BS.ACTIVE_BAR) then
+            if (activeWeaponPair == _G.ACTIVE_WEAPON_PAIR_BACKUP) then
+                slots = backup
+            end
+        end
 
         for _, slot in ipairs(slots) do
             hasPoison, poisonCount, poisonName = GetItemPairedPoisonInfo(slot)
 
             if (hasPoison) then
-                table.insert(poisons, {name = poisonName, count = poisonCount})
+                table.insert(poisons, {name = poisonName, count = poisonCount, slot = slot})
                 count = count + poisonCount
             end
         end
 
-        local vars = BS.Vars.Controls[BS.W_EQUIPPED_POISON]
         local colour = vars.OkColour or BS.Vars.DefaultOkColour
 
         if (count <= vars.WarningValue and count > vars.DangerValue) then
@@ -1366,7 +1386,10 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
 
         if (#poisons > 0) then
             for _, poison in ipairs(poisons) do
-                tt = tt .. BS.LF .. "|cf9f9f9" .. poison.name .. "|r b(" .. poison.count .. ")"
+                local slotName =
+                    BS.Contains(backup, poison.slot) and GetString(_G.BARSTEWARD_BACK_BAR) or
+                    GetString(_G.BARSTEWARD_MAIN_BAR)
+                tt = tt .. BS.LF .. "|cf9f9f9" .. poison.name .. "|r " .. slotName .. " (" .. poison.count .. ")"
             end
         end
 
@@ -1375,6 +1398,7 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
         return count
     end,
     callback = {[CALLBACK_MANAGER] = {"WornSlotUpdate"}},
+    event = _G.EVENT_ACTIVE_WEAPON_PAIR_CHANGED,
     tooltip = GetString(_G.BARSTEWARD_EQUIPPED_POISON),
     icon = "/esoui/art/icons/crafting_poison_001_cyan_003.dds",
     hideWhenEqual = 0,
@@ -1384,5 +1408,23 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
         else
             SCENE_MANAGER:Show("gamepad_inventory_root")
         end
-    end
+    end,
+    customSettings = {
+        [1] = {
+            type = "dropdown",
+            name = GetString(_G.BARSTEWARD_DISPLAY),
+            choices = poisonBars,
+            getFunc = function()
+                return poisonBars[BS.Vars.Controls[BS.W_EQUIPPED_POISON].PoisonBar or BS.MAIN_BAR]
+            end,
+            setFunc = function(value)
+                local index = BS.GetByValue(poisonBars, value)
+                BS.Vars.Controls[BS.W_EQUIPPED_POISON].PoisonBar = index
+
+                BS.RefreshWidget(BS.W_EQUIPPED_POISON)
+            end,
+            width = "full",
+            default = BS.MAIN_BAR
+        }
+    }
 }

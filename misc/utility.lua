@@ -844,3 +844,13 @@ function BS.Format(value, ...)
 
     return ZO_CachedStrFormat("<<C:1>>", text, ...)
 end
+
+function BS.Contains(table, value)
+    for _, v in ipairs(table) do
+        if (v == value) then
+            return true
+        end
+    end
+
+    return false
+end
