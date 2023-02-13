@@ -675,10 +675,28 @@ function BS.ResizeBar(barIndex)
     end
 
     local bar = _G[BS.Name .. "_bar_" .. barIndex].ref.bar
+    bar:SetHidden(false)
 
     bar:SetResizeToFitDescendents(false)
     bar:SetDimensions(0, 0)
     bar:SetResizeToFitDescendents(true)
+
+    -- check for hidden widgets
+    local allHidden = true
+
+    for index, widget in pairs(BS.Vars.Controls) do
+        if (widget.Bar == barIndex) then
+            local w = _G[BS.Name .. "_Widget_" .. BS.widgets[index].name]
+
+            if (w and not w:IsHidden()) then
+                allHidden = false
+            end
+        end
+    end
+
+    if (allHidden) then
+        bar:SetHidden(true)
+    end
 end
 
 local itemColours = {}

@@ -62,7 +62,6 @@ function baseBar:Initialise(barSettings)
     end
 
     self.bar:SetHandler("OnMouseUp", onMouseUp)
-
     self.bar.background = WINDOW_MANAGER:CreateControl(barName .. "_background", self.bar, CT_BACKDROP)
     self.bar.background:SetAnchorFill(self.bar)
     self.bar.background:SetEdgeColor(0, 0, 0, 0)
