@@ -610,7 +610,7 @@ BS.widgets[BS.W_LOCKPICKS] = {
 
 local linkCache = {}
 local previousCounts = {}
-local DEBUG = false
+local DEBUG = true
 
 BS.widgets[BS.W_WATCHED_ITEMS] = {
     -- v1.3.14
@@ -618,7 +618,6 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
     update = function(widget)
         local itemIds = BS.Vars.WatchedItems
         local vars = BS.Vars.Controls[BS.W_WATCHED_ITEMS]
-        local iconSize = BS.Vars.IconSize
 
         for itemId, _ in pairs(itemIds) do
             if (not linkCache[itemId]) then
@@ -696,6 +695,10 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
             end
         end
 
+        local barNumber = BS.Vars.Controls[BS.W_WATCHED_ITEMS].Bar
+        local iconSize =
+            BS.Vars.Bars[barNumber].Override and (BS.Vars.Bars[barNumber].IconSize or BS.Vars.IconSize) or
+            BS.Vars.IconSize
         local minSizeNumChars = math.ceil(BS.Vars.IconSize / 8)
         local minSize = string.rep("_", minSizeNumChars)
 
@@ -707,8 +710,8 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
                     itemCount = 100
                 end
 
-                countText =
-                    countText .. zo_iconFormat(data.icon, iconSize, iconSize) .. " " .. itemCount .. " "
+                local countItem = zo_iconFormat(data.icon, iconSize, iconSize)
+                countText = countText .. countItem .. " " .. itemCount .. " "
                 plainCountText = plainCountText .. minSize .. " " .. itemCount .. " "
 
                 if (not foundIds[itemId]) then
@@ -1342,7 +1345,7 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
             hasPoison, poisonCount, poisonName = GetItemPairedPoisonInfo(slot)
 
             if (hasPoison) then
-                table.insert(poisons,{name = poisonName, count = poisonCount})
+                table.insert(poisons, {name = poisonName, count = poisonCount})
                 count = count + poisonCount
             end
         end
