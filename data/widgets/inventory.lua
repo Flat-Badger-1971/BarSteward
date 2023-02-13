@@ -610,7 +610,7 @@ BS.widgets[BS.W_LOCKPICKS] = {
 
 local linkCache = {}
 local previousCounts = {}
-local DEBUG = true
+local DEBUG = false
 
 BS.widgets[BS.W_WATCHED_ITEMS] = {
     -- v1.3.14

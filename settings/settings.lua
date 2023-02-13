@@ -1,7 +1,7 @@
 local BS = _G.BarSteward
 
 BS.LAM = _G.LibAddonMenu2
-BS.VERSION = "1.4.41"
+BS.VERSION = "1.4.42"
 
 local panel = {
     type = "panel",

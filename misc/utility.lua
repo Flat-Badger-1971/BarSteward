@@ -675,7 +675,10 @@ function BS.ResizeBar(barIndex)
     end
 
     local bar = _G[BS.Name .. "_bar_" .. barIndex].ref.bar
-    bar:SetHidden(false)
+
+    if (bar.fragment:IsShowing()) then
+        bar:SetHidden(false)
+    end
 
     bar:SetResizeToFitDescendents(false)
     bar:SetDimensions(0, 0)
