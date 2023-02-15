@@ -1,3 +1,8 @@
+[color=#ff9900][b]Version: 1.4.43 ---------------[/b][/color]
+Fix issue with bar autohiding
+Fix vampirism autohide
+Font preview bug fix
+
 [color=#ff9900][b]Version: 1.4.42 ---------------[/b][/color]
 Fix issue with bars showing at the wrong time
 Remove debug option preventing the item watcher displaying the correct values

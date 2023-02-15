@@ -1,7 +1,7 @@
 local BS = _G.BarSteward
 
 BS.LAM = _G.LibAddonMenu2
-BS.VERSION = "1.4.42"
+BS.VERSION = "1.4.43"
 
 local panel = {
     type = "panel",
@@ -109,8 +109,7 @@ local function initialise()
         end,
         setFunc = function(value)
             BS.Vars.FontSize = value
-
-            _G.BarSteward_SampleText.desc:SetFont(BS.GetFont(value))
+            _G.BarSteward_SampleText.desc:SetFont(BS.GetFont())
         end,
         requiresReload = true,
         default = BS.Defaults.FontSize
@@ -119,7 +118,8 @@ local function initialise()
     BS.options[#BS.options + 1] = {
         type = "description",
         text = function()
-            _G.BarSteward_SampleText.desc:SetFont(BS.GetFont(BS.Vars.Font))
+            _G.BarSteward_SampleText.desc:SetFont(BS.GetFont())
+
             return "|c009933" .. GetString(_G.BARSTEWARD_SAMPLE) .. "|r"
         end,
         width = "full",

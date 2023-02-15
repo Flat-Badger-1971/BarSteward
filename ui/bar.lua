@@ -188,16 +188,8 @@ function baseBar:SetHiddenWidget(widget, hidden)
         return
     end
 
-    if (hidden) then
-        widget.control:SetResizeToFitDescendents(false)
-        widget.control:SetDimensions(0, 0)
-        widget:SetHidden(true)
-        BS.ResizeBar(self.index)
-    else
-        widget.control:SetResizeToFitDescendents(true)
-        widget:SetHidden(false)
-        BS.ResizeBar(self.index)
-    end
+    widget:SetHidden(hidden)
+    BS.ResizeBar(self.index)
 end
 
 function baseBar:HideWhen(metadata, value)

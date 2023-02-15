@@ -35,6 +35,10 @@ function baseWidget:Initialise(metadata, parent, tooltipAnchor, valueSide, noVal
         iconSize = BS.Vars.IconSize
     end
 
+    local horizontalPadding = (barSettings.Override and (barSettings.HorizontalPadding or 0) or 0) + 10
+    local minVertical = iconSize
+    local verticalPadding = (barSettings.Override and (barSettings.VerticalPadding or 0) or 0) + minVertical
+
     self.icon = WINDOW_MANAGER:CreateControl(name .. "_icon", self.control, CT_TEXTURE)
     self.icon:SetTexture(texture)
     self.icon:SetDimensions(iconSize, iconSize)
@@ -162,10 +166,6 @@ function baseWidget:Initialise(metadata, parent, tooltipAnchor, valueSide, noVal
             end
         )
     end
-
-    local horizontalPadding = (barSettings.Override and (barSettings.HorizontalPadding or 0) or 0) + 10
-    local minVertical = (iconSize > 32) and iconSize or 32
-    local verticalPadding = (barSettings.Override and (barSettings.VerticalPadding or 0) or 0) + minVertical
 
     self.spacer = WINDOW_MANAGER:CreateControl(name .. "_spacer", self.control, CT_LABEL)
     self.spacer:SetDimensions(horizontalPadding, verticalPadding)
@@ -297,15 +297,6 @@ function baseWidget:ClearAnchors()
     self.control:ClearAnchors()
 end
 
-function baseWidget:SetHidden(hidden)
-    self.control:SetHidden(hidden)
-    self.isHidden = hidden
-end
-
-function baseWidget:IsHidden()
-    return self.isHidden or false
-end
-
 function baseWidget:SetColour(...)
     if (not self.noValue) then
         self.value:SetColor(...)
@@ -337,6 +328,23 @@ function baseWidget:StartCooldown(remaining, duration, isSeconds)
         )
         self.icon.cooldown:SetHidden(false)
     end
+end
+
+function baseWidget:SetHidden(hidden)
+    if (hidden) then
+        self.control:SetResizeToFitDescendents(false)
+        self.control:SetDimensions(0, 0)
+        self.control:SetHidden(true)
+        self.isHidden = true
+    else
+        self.control:SetResizeToFitDescendents(true)
+        self.control:SetHidden(false)
+        self.isHidden = false
+    end
+end
+
+function baseWidget:IsHidden()
+    return self.isHidden or false
 end
 
 function BS.CreateWidget(...)

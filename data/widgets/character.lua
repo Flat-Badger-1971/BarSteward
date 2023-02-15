@@ -892,7 +892,7 @@ BS.widgets[BS.W_VAMPIRISM] = {
             widget:SetIcon(icon)
         end
 
-        return ""
+        return isVampire and "vampire" or ""
     end,
     event = _G.EVENT_EFFECT_CHANGED,
     filter = {[_G.EVENT_EFFECT_CHANGED] = {_G.REGISTER_FILTER_UNIT_TAG, "player"}},
