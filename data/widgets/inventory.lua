@@ -1346,7 +1346,7 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
         local slots = {_G.EQUIP_SLOT_MAIN_HAND, _G.EQUIP_SLOT_OFF_HAND}
         local backup = {_G.EQUIP_SLOT_BACKUP_MAIN, _G.EQUIP_SLOT_BACKUP_OFF}
         local poisons = {}
-        local hasPoison, poisonCount, poisonName
+        local hasPoison, poisonCount, poisonName, icon, link
         local count = 0
         local vars = BS.Vars.Controls[BS.W_EQUIPPED_POISON]
         local selected = vars.PoisonBar or BS.MAIN_BAR
@@ -1363,10 +1363,11 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
         end
 
         for _, slot in ipairs(slots) do
-            hasPoison, poisonCount, poisonName = GetItemPairedPoisonInfo(slot)
+            hasPoison, poisonCount, poisonName, link = GetItemPairedPoisonInfo(slot)
+            icon = GetItemLinkInfo(link)
 
             if (hasPoison) then
-                table.insert(poisons, {name = poisonName, count = poisonCount, slot = slot})
+                table.insert(poisons, {name = poisonName, count = poisonCount, slot = slot, icon = icon})
                 count = count + poisonCount
             end
         end
@@ -1389,7 +1390,26 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
                 local slotName =
                     BS.Contains(backup, poison.slot) and GetString(_G.BARSTEWARD_BACK_BAR) or
                     GetString(_G.BARSTEWARD_MAIN_BAR)
-                tt = tt .. BS.LF .. "|cf9f9f9" .. poison.name .. "|r " .. slotName .. " (" .. poison.count .. ")"
+
+                tt = tt .. BS.LF .. zo_iconFormat(poison.icon, 16, 16) .. " "
+                tt = tt .. "|cf9f9f9" .. poison.name .. "|r " .. slotName .. " (" .. poison.count .. ")"
+
+                if (selected == BS.ACTIVE_BAR) then
+                    if
+                        ((BS.Contains(backup, poison.slot) and activeWeaponPair == _G.ACTIVE_WEAPON_PAIR_BACKUP) or
+                            (BS.Contains(slots, poison.slot) and (activeWeaponPair == _G.ACTIVE_WEAPON_PAIR_MAIN)))
+                     then
+                        widget:SetIcon(poison.icon)
+                    end
+                elseif (selected == BS.BACK_BAR) then
+                    if (BS.Contains(backup, poison.slot)) then
+                        widget:SetIcon(poison.icon)
+                    end
+                else
+                    if (BS.Contains(slots, poison.slot)) then
+                        widget:SetIcon(poison.icon)
+                    end
+                end
             end
         end
 

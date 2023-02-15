@@ -1,7 +1,12 @@
+[color=#ff9900][b]Version: 1.4.44 ---------------[/b][/color]
+Poison icon now reflects the selected poison
+Fixed font override bug
+
 [color=#ff9900][b]Version: 1.4.43 ---------------[/b][/color]
 Fix issue with bar autohiding
 Fix vampirism autohide
 Font preview bug fix
+Minor code refactoring
 
 [color=#ff9900][b]Version: 1.4.42 ---------------[/b][/color]
 Fix issue with bars showing at the wrong time

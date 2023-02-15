@@ -303,6 +303,7 @@ read_globals = {
     "GetItemInfo",
     "GetItemLink",
     "GetItemLinkIcon",
+    "GetItemLinkInfo",
     "GetItemLinkItemId",
     "GetItemLinkItemType",
     "GetItemLinkName",
