@@ -1,6 +1,6 @@
 local BS = _G.BarSteward
 
-local function currencyWidget(currencyType, widgetIndex, icon, text, eventList, hideWhenTrue)
+local function currencyWidget(currencyType, widgetIndex, text, eventList, hideWhenTrue)
     local name = "gold"
 
     if (currencyType == _G.CURT_ALLIANCE_POINTS) then
@@ -12,6 +12,11 @@ local function currencyWidget(currencyType, widgetIndex, icon, text, eventList, 
     end
 
     local ctype = (currencyType == _G.CURT_MONEY) and "GoldType" or "CurrencyType"
+    local icon = BS.CURRENCIES[currencyType].icon
+
+    if (not string.find(icon, ".dds")) then
+        icon = "/esoui/art/currency/" .. icon .. ".dds"
+    end
 
     local widgetCode = {
         name = name,
@@ -97,11 +102,30 @@ local function currencyWidget(currencyType, widgetIndex, icon, text, eventList, 
     return widgetCode
 end
 
+local function getcrownStoreCurrencies()
+    local crownStoreInfo = ""
+
+    for currencyType, info in pairs(BS.CURRENCIES) do
+        if (info.crownStore) then
+            if (crownStoreInfo ~= "") then
+                crownStoreInfo = crownStoreInfo .. BS.LF
+            end
+
+            local amount = GetCurrencyAmount(currencyType, _G.CURRENCY_LOCATION_ACCOUNT)
+            local icon = "/esoui/art/currency/" .. info.icon .. ".dds"
+
+            crownStoreInfo = crownStoreInfo .. zo_iconFormat(icon, 16, 16) .. " "
+            crownStoreInfo = crownStoreInfo .. amount
+        end
+    end
+
+    return crownStoreInfo
+end
+
 BS.widgets[BS.W_ALLIANCE_POINTS] =
     currencyWidget(
     _G.CURT_ALLIANCE_POINTS,
     BS.W_ALLIANCE_POINTS,
-    "/esoui/art/currency/alliancepoints_64.dds",
     {
         bag = _G.BARSTEWARD_GOLD_BAG,
         bank = _G.BARSTEWARD_GOLD_BANK,
@@ -136,9 +160,14 @@ BS.widgets[BS.W_CROWN_GEMS] = {
         widget:SetValue(gems)
         widget:SetColour(unpack(BS.Vars.Controls[BS.W_CROWN_GEMS].Colour or BS.Vars.DefaultColour))
 
+        local tt = GetString(_G.BARSTEWARD_CROWN_GEMS) .. BS.LF
+        tt = tt .. getcrownStoreCurrencies()
+
+        widget.tooltip = tt
+
         return widget:GetValue()
     end,
-    event = _G.EVENT_CROWN_GEM_UPDATE,
+    event = {_G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED, _G.EVENT_CROWN_UPDATE, _G.EVENT_CROWN_GEM_UPDATE},
     tooltip = GetString(_G.BARSTEWARD_CROWN_GEMS),
     icon = "/esoui/art/currency/currency_crown_gems.dds"
     -- onClick = function()
@@ -162,9 +191,14 @@ BS.widgets[BS.W_CROWNS] = {
         widget:SetValue(crowns)
         widget:SetColour(unpack(BS.Vars.Controls[BS.W_CROWNS].Colour or BS.Vars.DefaultColour))
 
+        local tt = GetString(_G.BARSTEWARD_CROWNS) .. BS.LF
+        tt = tt .. getcrownStoreCurrencies()
+
+        widget.tooltip = tt
+
         return widget:GetValue()
     end,
-    event = _G.EVENT_CROWN_UPDATE,
+    event = {_G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED, _G.EVENT_CROWN_UPDATE, _G.EVENT_CROWN_GEM_UPDATE},
     tooltip = GetString(_G.BARSTEWARD_CROWNS),
     icon = "/esoui/art/currency/currency_crowns_32.dds"
     -- onClick = function()
@@ -182,7 +216,8 @@ BS.widgets[BS.W_EVENT_TICKETS] = {
         local maxTickets = GetMaxPossibleCurrency(_G.CURT_EVENT_TICKETS, _G.CURRENCY_LOCATION_ACCOUNT)
         local noLimitColour = vars.NoLimitColour and "|cf9f9f9" or ""
         local noLimitTerminator = vars.NoLimitColour and "|r" or ""
-        local value = tickets .. (vars.HideLimit and "" or (noLimitColour .. "/" .. tostring(maxTickets) .. noLimitTerminator))
+        local value =
+            tickets .. (vars.HideLimit and "" or (noLimitColour .. "/" .. tostring(maxTickets) .. noLimitTerminator))
         local widthValue = tickets .. (vars.HideLimit and "" or ("/" .. tostring(maxTickets)))
         local pc = BS.ToPercent(tickets, maxTickets)
 
@@ -243,7 +278,6 @@ BS.widgets[BS.W_GOLD] =
     currencyWidget(
     _G.CURT_MONEY,
     BS.W_GOLD,
-    "/esoui/art/currency/currency_gold_64.dds",
     {
         bag = _G.BARSTEWARD_GOLD_BAG,
         bank = _G.BARSTEWARD_GOLD_BANK,
@@ -268,9 +302,14 @@ BS.widgets[BS.W_SEALS_OF_ENDEAVOUR] = {
         widget:SetValue(seals)
         widget:SetColour(unpack(BS.Vars.Controls[BS.W_SEALS_OF_ENDEAVOUR].Colour or BS.Vars.DefaultColour))
 
+        local tt = BS.Format(_G.SI_CROWN_STORE_MENU_SEALS_STORE_LABEL) .. BS.LF
+        tt = tt .. getcrownStoreCurrencies()
+
+        widget.tooltip = tt
+
         return widget:GetValue()
     end,
-    event = _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED,
+    event = {_G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED, _G.EVENT_CROWN_UPDATE, _G.EVENT_CROWN_GEM_UPDATE},
     tooltip = BS.Format(_G.SI_CROWN_STORE_MENU_SEALS_STORE_LABEL),
     icon = "/esoui/art/currency/currency_seals_of_endeavor_64.dds"
     -- onClick = function()
@@ -282,7 +321,6 @@ BS.widgets[BS.W_TELVAR_STONES] =
     currencyWidget(
     _G.CURT_TELVAR_STONES,
     BS.W_TELVAR_STONES,
-    "/esoui/art/currency/currency_telvar_64.dds",
     {
         bag = _G.BARSTEWARD_GOLD_BAG,
         bank = _G.BARSTEWARD_GOLD_BANK,
@@ -358,7 +396,6 @@ BS.widgets[BS.W_WRIT_VOUCHERS] =
     currencyWidget(
     _G.CURT_WRIT_VOUCHERS,
     BS.W_WRIT_VOUCHERS,
-    "/esoui/art/currency/currency_writvoucher_64.dds",
     {
         bag = _G.BARSTEWARD_GOLD_BAG,
         bank = _G.BARSTEWARD_GOLD_BANK,

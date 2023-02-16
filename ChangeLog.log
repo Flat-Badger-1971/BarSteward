@@ -1,3 +1,9 @@
+[color=#ff9900][b]Version: 1.4.45 ---------------[/b][/color]
+Minor currency code refactor
+Update crown store currency tooltips to show all crown store currencies
+Another bug fix for bar hiding
+French translation update
+
 [color=#ff9900][b]Version: 1.4.44 ---------------[/b][/color]
 Poison icon now reflects the selected poison
 Fixed font override bug

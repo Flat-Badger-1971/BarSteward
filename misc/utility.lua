@@ -692,7 +692,7 @@ function BS.ResizeBar(barIndex)
         if (widget.Bar == barIndex) then
             local w = _G[BS.Name .. "_Widget_" .. BS.widgets[index].name]
 
-            if (w and not w:IsHidden()) then
+            if (w and not w.ref.isHidden) then
                 allHidden = false
                 break
             end
@@ -701,6 +701,8 @@ function BS.ResizeBar(barIndex)
 
     if (allHidden) then
         bar:SetHidden(true)
+    elseif (bar.ToggleState ~= "hidden") then
+        bar:SetHidden(false)
     end
 end
 

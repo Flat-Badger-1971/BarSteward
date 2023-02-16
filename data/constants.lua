@@ -330,3 +330,16 @@ BS.MAIN_BAR = 1
 BS.BACK_BAR = 2
 BS.BOTH = 3
 BS.ACTIVE_BAR = 4
+
+BS.CURRENCIES = {
+    [_G.CURT_MONEY] = {icon = "currency_gold_64", crownStore = false},
+    [_G.CURT_CROWNS] = {icon = "currency_crowns_32", crownStore = true},
+    [_G.CURT_CROWN_GEMS] = {icon = "currency_crown_gems", crownStore = true},
+    [_G.CURT_WRIT_VOUCHERS] = {icon = "currency_writvoucher_64", crownStore = false},
+    [_G.CURT_TELVAR_STONES] = {icon = "currency_telvar_64", crownStore = false},
+    [_G.CURT_EVENT_TICKETS] = {icon = "currency_eventticket", crownStore = false},
+    [_G.CURT_ENDEAVOR_SEALS] = {icon = "currency_seals_of_endeavor_64", crownStore = true},
+    [_G.CURT_UNDAUNTED_KEYS] = {icon = "/esoui/art/icons/quest_key_002.dds", crownStore = false},
+    [_G.CURT_ALLIANCE_POINTS] = {icon = "alliancepoints_64", crownStore = false},
+    [_G.CURT_CHAOTIC_CREATIA] = {icon = "currency_seedcrystal_64", crownStore = false}
+}
