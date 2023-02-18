@@ -884,3 +884,216 @@ function BS.Contains(table, value)
 
     return false
 end
+
+-- https://gist.github.com/tylerneylon/81333721109155b2d244
+local function deepCopy(obj, seen)
+    if (type(obj) ~= "table") then
+        return obj
+    end
+
+    if (seen and seen[obj]) then
+        return seen[obj]
+    end
+
+    local s = seen or {}
+    local res = {}
+
+    s[obj] = res
+
+    for k, v in pairs(obj) do
+        res[deepCopy(k, s)] = deepCopy(v, s)
+    end
+
+    return setmetatable(res, getmetatable(obj))
+end
+
+-- https://gist.github.com/yuhanz/6688d474a3c391daa6d6
+local function serialiseTable(val, name, depth)
+    depth = depth or 0
+
+    local tmp = string.rep(" ", depth)
+
+    if (name) then
+        if (not string.match(name, "^[a-zA-z_][a-zA-Z0-9_]*$")) then
+            name = string.gsub(name, "'", "\\'")
+            name = "['" .. name .. "']"
+        end
+        tmp = tmp .. name .. " = "
+    end
+
+    if (type(val) == "table") then
+        tmp = tmp .. "{" .. ""
+
+        for k, v in pairs(val) do
+            tmp = tmp .. serialiseTable(v, k, depth + 1) .. "," .. ""
+        end
+
+        tmp = tmp .. string.rep(" ", depth) .. "}"
+    elseif (type(val) == "number") then
+        tmp = tmp .. tostring(val)
+    elseif (type(val) == "string") then
+        tmp = tmp .. string.format("%q", val)
+    elseif (type(val) == "boolean") then
+        tmp = tmp .. (val and "true" or "false")
+    else
+        tmp = tmp .. '"[unserialiseable datatype:' .. type(val) .. ']"'
+    end
+
+    return tmp
+end
+
+local function stringToTable(str)
+    local f = loadstring("return " .. str)
+    return f()
+end
+
+local function simpleTableCompare(t1, t2)
+    return table.concat(t1) == table.concat(t2)
+end
+
+local function addQuotes(value, sub)
+    return '"' .. GetString(value, sub) .. '"'
+end
+
+local function cleanseAndEncode(input)
+    -- strip superfluous spaces
+    local output = string.gsub(input, ",%s+", ",")
+    output = string.gsub(output, " = ", "=")
+    output = string.gsub(output, "  ", "")
+    output = string.gsub(output, "{ ", "{")
+    output = string.gsub(output, ",}", "}")
+
+    -- abbreviate keywords
+    for keyword, abbr in pairs(BS.ENCODING) do
+        output = string.gsub(output, "," .. keyword .. "=", "," .. abbr .. "=")
+        output = string.gsub(output, "{" .. keyword .. "=", "{" .. abbr .. "=")
+    end
+
+    output = string.gsub(output, "=true", "=t")
+    output = string.gsub(output, "=false", "=f")
+    output = string.gsub(output, "=" .. addQuotes(_G.BARSTEWARD_VERTICAL), "=v")
+    output = string.gsub(output, "=" .. addQuotes(_G.BARSTEWARD_HORIZONTAL), "=h")
+    output = string.gsub(output, "=" .. addQuotes(_G.BARSTEWARD_LEFT), "=l")
+    output = string.gsub(output, "=" .. addQuotes(_G.BARSTEWARD_RIGHT), "=r")
+    output = string.gsub(output, "=" .. addQuotes(_G.BARSTEWARD_TOP), "=to")
+    output = string.gsub(output, "=" .. addQuotes(_G.BARSTEWARD_BOTTOM), "=b")
+
+    for bg = 1, 14 do
+        output = string.gsub(output, "=" .. addQuotes("BARSTEWARD_BACKGROUND_STYLE_", bg), "=bg" .. tostring(bg))
+
+        if (bg < 8) then
+            output = string.gsub(output, "=" .. addQuotes("BARSTEWARD_BORDER_STYLE_", bg), "=bo" .. tostring(bg))
+        end
+    end
+
+    return output
+end
+
+local function decode(input)
+    local output = string.gsub(input, "=t", "=true")
+
+    output = string.gsub(output, "=f", "=false")
+    output = string.gsub(output, "=v", "=" .. addQuotes(_G.BARSTEWARD_VERTICAL))
+    output = string.gsub(output, "=h", "=" .. addQuotes(_G.BARSTEWARD_HORIZONTAL))
+    output = string.gsub(output, "=l", "=" .. addQuotes(_G.BARSTEWARD_LEFT))
+    output = string.gsub(output, "=r", "=" .. addQuotes(_G.BARSTEWARD_RIGHT))
+    output = string.gsub(output, "=to", "=" .. addQuotes(_G.BARSTEWARD_TOP))
+    output = string.gsub(output, "=b", "=" .. addQuotes(_G.BARSTEWARD_BOTTOM))
+
+    for bg = 1, 14 do
+        output = string.gsub(output, "=bg" .. tostring(bg), "=" .. addQuotes("BARSTEWARD_BACKGROUND_STYLE_", bg))
+
+        if (bg < 8) then
+            output = string.gsub(output, "=bo" .. tostring(bg), "=" .. addQuotes("BARSTEWARD_BORDER_STYLE_", bg))
+        end
+    end
+
+    for keyword, abbr in pairs(BS.ENCODING) do
+        output = string.gsub(output, "," .. abbr .. "=", "," .. keyword .. "=")
+        output = string.gsub(output, "{" .. abbr .. "=", "{" .. keyword .. "=")
+    end
+
+    return output
+end
+
+function BS.ExportBar(barNumber)
+    local destBar = deepCopy(BS.Vars.Bars[barNumber])
+
+    -- remove any default values, no point keeping those
+    for k, v in pairs(destBar) do
+        if (type(v) ~= "table") then
+            if (v == BS.Defaults.Bars[1][k]) then
+                destBar[k] = nil
+            end
+        end
+    end
+
+    if (simpleTableCompare(destBar.Backdrop.Colour, BS.Defaults.Bars[1].Backdrop.Colour)) then
+        destBar.Backdrop.Colour = nil
+    end
+
+    -- don't copy unneeded values
+    destBar.Position = nil
+    destBar.Name = nil
+    destBar.ToggleState = nil
+    destBar.HideBarEnable = nil
+    destBar.Disable = nil
+
+    local forExport = {
+        Bar = destBar,
+        Controls = {}
+    }
+
+    -- copy the widgets
+    for widgetIndex, widgetSettings in pairs(BS.Vars.Controls) do
+        -- ignore housing widgets - they are too client specific
+        if (widgetIndex < 1000) then
+            if (widgetSettings.Bar == barNumber) then
+                forExport.Controls[widgetIndex] = deepCopy(widgetSettings)
+                forExport.Controls[widgetIndex].Bar = nil
+                forExport.Controls[widgetIndex].Exclude = nil
+
+                -- remove any default values, no point keeping those
+                for k, v in pairs(forExport.Controls[widgetIndex]) do
+                    if (type(v) ~= "table") then
+                        if (v == BS.Defaults.Controls[widgetIndex][k]) then
+                            forExport.Controls[widgetIndex][k] = nil
+                        end
+                    end
+                end
+            end
+        end
+    end
+
+    local output = serialiseTable(forExport)
+    output = cleanseAndEncode(output)
+
+    return output
+end
+
+function BS.ImportBar(data)
+    local status, decoded = pcall(decode, data)
+
+    if (not status) then
+        --TODO: something went wrong
+        d("decode failed")
+        d(decoded)
+        return
+    end
+
+    local importTable = stringToTable(decoded)
+
+    if (type(importTable) ~= "table") then
+        --TODO: invalid data
+        d("not a table")
+        return
+    end
+
+    if (importTable.Bar == nil or importTable.Controls == nil) then
+        -- TODO: invalid data
+        d("missing bar or control information")
+        return
+    end
+
+    d(importTable)
+end

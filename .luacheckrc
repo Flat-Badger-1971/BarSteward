@@ -208,6 +208,7 @@ read_globals = {
     "CT_BUTTON",
     "CT_CONTROL",
     "CT_COOLDOWN",
+    "CT_EDITBOX",
     "CT_LABEL",
     "CT_STATUSBAR",
     "CT_TEXTURE",

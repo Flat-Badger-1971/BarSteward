@@ -728,3 +728,74 @@ function BS.CreateGuildFriendsTool()
 
     return tool
 end
+
+function BS.CreateExportFrame()
+    local name = BS.Name .. "_Export_Frame"
+
+    BS.ExportFrame = WINDOW_MANAGER:CreateTopLevelWindow(name)
+    local frame = BS.ExportFrame
+
+    frame:SetDimensions(470, 900)
+    frame:SetAnchor(CENTER, GuiRoot, CENTER)
+    frame:SetHidden(true)
+
+    frame.bgc = WINDOW_MANAGER:CreateControl(name .. "_background", frame, CT_TEXTURE)
+    frame.bgc:SetAnchorFill(frame)
+    frame.bgc:SetTexture("/esoui/art/miscellaneous/centerscreen_left.dds")
+
+    frame.bge = WINDOW_MANAGER:CreateControl(name .. "_edges", frame, CT_TEXTURE)
+    frame.bge:SetDimensions(24, frame:GetHeight())
+    frame.bge:SetAnchor(TOPLEFT, frame.bgc, TOPRIGHT)
+    frame.bge:SetTexture("esoui/art/miscellaneous/centerscreen_right.dds")
+
+    local fontSize = 24
+    local fontStyle = "BOLD_FONT"
+    local fontWeight = "soft-shadow-thick"
+    local nameFont = string.format("$(%s)|$(KB_%s)|%s", fontStyle, fontSize, fontWeight)
+
+    frame.heading = WINDOW_MANAGER:CreateControl(name .. "_heading", frame, CT_LABEL)
+    frame.heading:SetFont(nameFont)
+    frame.heading:SetColor(1, 0.39, 0, 1)
+    frame.heading:SetAnchor(TOPLEFT, frame, TOPLEFT, 50, 80)
+    frame.heading:SetText(GetString(_G.BARSTEWARD_EXPORT_BAR))
+    frame.heading:SetDimensions(350, 24)
+
+    frame.divider = WINDOW_MANAGER:CreateControl(name .. "_divider", frame, CT_TEXTURE)
+    frame.divider:SetDimensions(470, 4)
+    frame.divider:SetAnchor(TOPLEFT, frame.heading, BOTTOMLEFT, -50, 10)
+    frame.divider:SetTexture("/esoui/art/campaign/campaignbrowser_divider_short.dds")
+
+    frame.note = WINDOW_MANAGER:CreateControl(name .. "_note", frame, CT_LABEL)
+    frame.note:SetFont("ZoFontGame")
+    frame.note:SetAnchor(TOPLEFT, frame.divider, BOTTOMLEFT, 30, 10)
+    frame.note:SetText(GetString(_G.BARSTEWARD_COPY))
+    frame.note:SetDimensions(430, 75)
+
+    frame.background = WINDOW_MANAGER:CreateControlFromVirtual(nil, frame, "ZO_EditBackdrop")
+    frame.background:SetAnchor(TOPLEFT, frame.note, BOTTOMLEFT, 0, 10)
+    frame.background:SetDimensions(430, 400)
+
+    frame.content = WINDOW_MANAGER:CreateControlFromVirtual(nil, frame.background, "ZO_DefaultEditMultiLineForBackdrop")
+    frame.content:SetAnchorFill()
+    frame.content:SetTextType(_G.TEXT_TYPE_ALL)
+    frame.content:SetMaxInputChars(2000)
+
+    frame.close = BS.CreateButton(name .. "_close", frame, 100, 32)
+    frame.close:SetText(BS.Format(_G.SI_DIALOG_CLOSE))
+    frame.close:SetAnchor(BOTTOMRIGHT, frame, BOTTOMRIGHT, -20, -200)
+    frame.close:SetHandler(
+        "OnClicked",
+        function()
+            frame.content:Clear()
+            frame.fragment:SetHiddenForReason("disabled", true)
+        end
+    )
+
+    frame.fragment = ZO_HUDFadeSceneFragment:New(frame)
+    frame.fragment:SetHiddenForReason("disabled", true)
+
+    SCENE_MANAGER:GetScene("hud"):AddFragment(frame.fragment)
+    SCENE_MANAGER:GetScene("hudui"):AddFragment(frame.fragment)
+
+    return frame
+end
