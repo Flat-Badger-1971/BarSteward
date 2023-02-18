@@ -1159,6 +1159,11 @@ local function itemScan(widget, filteredItems, widgetIndex, name)
         local colour = GetItemQualityColor(item.displayQuality)
         local filteredName = colour:Colorize(item.name)
 
+        if (IsItemStolen(item.bagId, item.slotIndex)) then
+            filteredName =
+                zo_iconFormat("/esoui/art/inventory/inventory_stolenitem_icon.dds", 16, 16) .. " " .. filteredName
+        end
+
         if (not items[filteredName]) then
             items[filteredName] = 0
         end

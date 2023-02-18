@@ -699,10 +699,15 @@ function BS.ResizeBar(barIndex)
         end
     end
 
+    -- if the bar is hidden, hide the border
     if (allHidden) then
-        bar:SetHidden(true)
+        bar.border:SetEdgeTexture("", 128, 2)
+        bar.border:SetEdgeColor(0, 0, 0, 0)
     elseif (bar.ToggleState ~= "hidden") then
-        bar:SetHidden(false)
+        if ((BS.Vars.Bars[barIndex].Border or 99) ~= 99) then
+            bar.border:SetEdgeTexture(unpack(BS.BORDERS[BS.Vars.Bars[barIndex].Border]))
+            bar.border:SetEdgeColor(1, 1, 1, 1)
+        end
     end
 end
 

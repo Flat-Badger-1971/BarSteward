@@ -171,6 +171,7 @@ function BS.CreateAlignmentFrame(alignBars)
 
     frame.fragment = ZO_HUDFadeSceneFragment:New(frame)
     frame.fragment:SetHiddenForReason("disabled", true)
+
     SCENE_MANAGER:GetScene("hud"):AddFragment(frame.fragment)
     SCENE_MANAGER:GetScene("hudui"):AddFragment(frame.fragment)
 
