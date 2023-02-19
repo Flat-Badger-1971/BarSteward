@@ -169,14 +169,10 @@ BS.widgets[BS.W_CROWN_GEMS] = {
     end,
     event = {_G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED, _G.EVENT_CROWN_UPDATE, _G.EVENT_CROWN_GEM_UPDATE},
     tooltip = GetString(_G.BARSTEWARD_CROWN_GEMS),
-    icon = "/esoui/art/currency/currency_crown_gems.dds"
-    -- onClick = function()
-    --     if (not IsInGamepadPreferredMode()) then
-    --         SCENE_MANAGER:Show("market")
-    --     else
-    --         SCENE_MANAGER:Show("gamepad_market")
-    --     end
-    -- end
+    icon = "/esoui/art/currency/currency_crown_gems.dds",
+    onClick = function()
+        SCENE_MANAGER:Show("show_market")
+    end
 }
 
 BS.widgets[BS.W_CROWNS] = {
@@ -200,12 +196,10 @@ BS.widgets[BS.W_CROWNS] = {
     end,
     event = {_G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED, _G.EVENT_CROWN_UPDATE, _G.EVENT_CROWN_GEM_UPDATE},
     tooltip = GetString(_G.BARSTEWARD_CROWNS),
-    icon = "/esoui/art/currency/currency_crowns_32.dds"
-    -- onClick = function()
-    --     if (not IsInGamepadPreferredMode()) then
-    --         SCENE_MANAGER:Show("market")
-    --     end
-    -- end
+    icon = "/esoui/art/currency/currency_crowns_32.dds",
+    onClick = function()
+        SCENE_MANAGER:Show("show_market")
+    end
 }
 
 BS.widgets[BS.W_EVENT_TICKETS] = {
@@ -311,10 +305,11 @@ BS.widgets[BS.W_SEALS_OF_ENDEAVOUR] = {
     end,
     event = {_G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED, _G.EVENT_CROWN_UPDATE, _G.EVENT_CROWN_GEM_UPDATE},
     tooltip = BS.Format(_G.SI_CROWN_STORE_MENU_SEALS_STORE_LABEL),
-    icon = "/esoui/art/currency/currency_seals_of_endeavor_64.dds"
-    -- onClick = function()
-    --     ZO_ShowSealStore()
-    -- end
+    icon = "/esoui/art/currency/currency_seals_of_endeavor_64.dds",
+    onClick = function()
+        SCENE_MANAGER:Show("show_market")
+        ZO_ShowSealStore()
+    end
 }
 
 BS.widgets[BS.W_TELVAR_STONES] =

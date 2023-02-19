@@ -163,6 +163,7 @@ function baseBar:AddToScenes()
         BS.AddToScenes("Menu", self.settings.index, self.bar)
         BS.AddToScenes("Interacting", self.settings.index, self.bar)
         BS.AddToScenes("GuildStore", self.settings.index, self.bar)
+        BS.AddToScenes("CrownStore", self.settings.index, self.bar)
     end
 end
 

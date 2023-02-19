@@ -469,6 +469,7 @@ read_globals = {
     "ZO_ScrollList_CreateDataEntry",
     "ZO_ScrollList_EnableSelection",
     "ZO_ScrollList_GetDataList",
+    "ZO_ShowSealStore",
     "ZO_SmallGroupAnchorFrame",
     "ZO_SocialList_GetPlatformTextureFunctions",
     "ZO_SocialList_GetRowColors",
