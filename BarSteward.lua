@@ -174,6 +174,26 @@ local function Initialise()
         }
     }
 
+    local import = {
+        title = {text = GetString(_G.BARSTEWARD_IMPORT_BAR)},
+        mainText = {
+            text = function()
+                return zo_strformat(GetString(_G.BARSTEWARD_MOVE_WIDGETS), BS.MovingWidgets)
+            end
+        },
+        buttons = {
+            {
+                text = BS.Format(_G.SI_DIALOG_YES),
+                callback = function()
+                    BS.DoImport()
+                end
+            },
+            {
+                text = BS.Format(_G.SI_DIALOG_NO)
+            }
+        }
+    }
+
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "NotEmpty", notempty)
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "NotEmptyGeneric", notemptyGeneric)
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "Exists", exists)
@@ -184,6 +204,7 @@ local function Initialise()
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "RemoveGeneric", removeGeneric)
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "Resize", resize)
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "Delete", delete)
+    ZO_Dialogs_RegisterCustomDialog(BS.Name .. "Import", import)
 
     -- saved variables
     BS.Vars =

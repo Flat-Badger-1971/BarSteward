@@ -780,6 +780,23 @@ function BS.CreateExportFrame()
     frame.content:SetTextType(_G.TEXT_TYPE_ALL)
     frame.content:SetMaxInputChars(2000)
 
+    frame.error = WINDOW_MANAGER:CreateControl(name .. "_error", frame, CT_LABEL)
+    frame.error:SetFont("ZoFontGame")
+    frame.error:SetColor(1, 0, 0, 1)
+    frame.error:SetAnchor(TOPLEFT, frame.background, BOTTOMLEFT, 20, 10)
+    frame.error:SetDimensions(420, 50)
+    frame.error:SetHorizontalAlignment(TEXT_ALIGN_CENTER)
+
+    frame.import = BS.CreateButton(name .. "_import", frame, 100, 32)
+    frame.import:SetText(GetString(_G.BARSTEWARD_IMPORT))
+    frame.import:SetAnchor(BOTTOMLEFT, frame, BOTTOMLEFT, 20, -200)
+    frame.import:SetHandler(
+        "OnClicked",
+        function()
+            BS.ImportBar(frame.content:GetText())
+        end
+    )
+
     frame.close = BS.CreateButton(name .. "_close", frame, 100, 32)
     frame.close:SetText(BS.Format(_G.SI_DIALOG_CLOSE))
     frame.close:SetAnchor(BOTTOMRIGHT, frame, BOTTOMRIGHT, -20, -200)

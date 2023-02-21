@@ -103,11 +103,11 @@ function BS.FormatTime(format, timeString, tamrielTime)
     if (tamrielTime) then
         hours, minutes, seconds = tamrielTime.hour, tamrielTime.minute, tamrielTime.second
 
-        if (string.len(tostring(minutes)) == 1) then
+        if (tostring(minutes):len() == 1) then
             minutes = "0" .. minutes
         end
 
-        if (string.len(tostring(seconds)) == 1) then
+        if (tostring(seconds):len() == 1) then
             seconds = "0" .. seconds
         end
     else
@@ -581,7 +581,7 @@ function BS.GetFont(vars)
 end
 
 function BS.AddToScenes(sceneType, barIndex, bar, override)
-    local group = BS[string.upper(sceneType) .. "_SCENES"]
+    local group = BS[sceneType:upper() .. "_SCENES"]
 
     sceneType = "ShowWhilst" .. sceneType
 
@@ -593,7 +593,7 @@ function BS.AddToScenes(sceneType, barIndex, bar, override)
 end
 
 function BS.RemoveFromScenes(sceneType, bar)
-    local group = BS[string.upper(sceneType) .. "_SCENES"]
+    local group = BS[sceneType:upper() .. "_SCENES"]
 
     for _, scene in ipairs(group) do
         SCENE_MANAGER:GetScene(scene):RemoveFragment(bar.fragment)
@@ -907,46 +907,6 @@ local function deepCopy(obj, seen)
     return setmetatable(res, getmetatable(obj))
 end
 
--- https://gist.github.com/yuhanz/6688d474a3c391daa6d6
-local function serialiseTable(val, name, depth)
-    depth = depth or 0
-
-    local tmp = string.rep(" ", depth)
-
-    if (name) then
-        if (not string.match(name, "^[a-zA-z_][a-zA-Z0-9_]*$")) then
-            name = string.gsub(name, "'", "\\'")
-            name = "['" .. name .. "']"
-        end
-        tmp = tmp .. name .. " = "
-    end
-
-    if (type(val) == "table") then
-        tmp = tmp .. "{" .. ""
-
-        for k, v in pairs(val) do
-            tmp = tmp .. serialiseTable(v, k, depth + 1) .. "," .. ""
-        end
-
-        tmp = tmp .. string.rep(" ", depth) .. "}"
-    elseif (type(val) == "number") then
-        tmp = tmp .. tostring(val)
-    elseif (type(val) == "string") then
-        tmp = tmp .. string.format("%q", val)
-    elseif (type(val) == "boolean") then
-        tmp = tmp .. (val and "true" or "false")
-    else
-        tmp = tmp .. '"[unserialiseable datatype:' .. type(val) .. ']"'
-    end
-
-    return tmp
-end
-
-local function stringToTable(str)
-    local f = loadstring("return " .. str)
-    return f()
-end
-
 local function simpleTableCompare(t1, t2)
     return table.concat(t1) == table.concat(t2)
 end
@@ -956,33 +916,22 @@ local function addQuotes(value, sub)
 end
 
 local function cleanseAndEncode(input)
-    -- strip superfluous spaces
-    local output = string.gsub(input, ",%s+", ",")
-    output = string.gsub(output, " = ", "=")
-    output = string.gsub(output, "  ", "")
-    output = string.gsub(output, "{ ", "{")
-    output = string.gsub(output, ",}", "}")
+    local output = input
 
-    -- abbreviate keywords
-    for keyword, abbr in pairs(BS.ENCODING) do
-        output = string.gsub(output, "," .. keyword .. "=", "," .. abbr .. "=")
-        output = string.gsub(output, "{" .. keyword .. "=", "{" .. abbr .. "=")
-    end
-
-    output = string.gsub(output, "=true", "=t")
-    output = string.gsub(output, "=false", "=f")
-    output = string.gsub(output, "=" .. addQuotes(_G.BARSTEWARD_VERTICAL), "=v")
-    output = string.gsub(output, "=" .. addQuotes(_G.BARSTEWARD_HORIZONTAL), "=h")
-    output = string.gsub(output, "=" .. addQuotes(_G.BARSTEWARD_LEFT), "=l")
-    output = string.gsub(output, "=" .. addQuotes(_G.BARSTEWARD_RIGHT), "=r")
-    output = string.gsub(output, "=" .. addQuotes(_G.BARSTEWARD_TOP), "=to")
-    output = string.gsub(output, "=" .. addQuotes(_G.BARSTEWARD_BOTTOM), "=b")
+    output = output:gsub("#true%^", "#t%^")
+    output = output:gsub("#false%^", "#f%^")
+    output = output:gsub("#" .. addQuotes(_G.BARSTEWARD_VERTICAL), "#v")
+    output = output:gsub("#" .. addQuotes(_G.BARSTEWARD_HORIZONTAL), "#h")
+    output = output:gsub("#" .. addQuotes(_G.BARSTEWARD_LEFT), "#l")
+    output = output:gsub("#" .. addQuotes(_G.BARSTEWARD_RIGHT), "#r")
+    output = output:gsub("#" .. addQuotes(_G.BARSTEWARD_TOP), "#to")
+    output = output:gsub("#" .. addQuotes(_G.BARSTEWARD_BOTTOM), "#b")
 
     for bg = 1, 14 do
-        output = string.gsub(output, "=" .. addQuotes("BARSTEWARD_BACKGROUND_STYLE_", bg), "=bg" .. tostring(bg))
+        output = output:gsub("#" .. addQuotes("BARSTEWARD_BACKGROUND_STYLE_", bg), "#bg" .. tostring(bg))
 
         if (bg < 8) then
-            output = string.gsub(output, "=" .. addQuotes("BARSTEWARD_BORDER_STYLE_", bg), "=bo" .. tostring(bg))
+            output = output:gsub("#" .. addQuotes("BARSTEWARD_BORDER_STYLE_", bg), "#bo" .. tostring(bg))
         end
     end
 
@@ -990,30 +939,114 @@ local function cleanseAndEncode(input)
 end
 
 local function decode(input)
-    local output = string.gsub(input, "=t", "=true")
+    local output = input:gsub("#t%^", "#true%^")
 
-    output = string.gsub(output, "=f", "=false")
-    output = string.gsub(output, "=v", "=" .. addQuotes(_G.BARSTEWARD_VERTICAL))
-    output = string.gsub(output, "=h", "=" .. addQuotes(_G.BARSTEWARD_HORIZONTAL))
-    output = string.gsub(output, "=l", "=" .. addQuotes(_G.BARSTEWARD_LEFT))
-    output = string.gsub(output, "=r", "=" .. addQuotes(_G.BARSTEWARD_RIGHT))
-    output = string.gsub(output, "=to", "=" .. addQuotes(_G.BARSTEWARD_TOP))
-    output = string.gsub(output, "=b", "=" .. addQuotes(_G.BARSTEWARD_BOTTOM))
+    output = output:gsub("#f%^", "#false%^")
+    output = output:gsub("#v", "#" .. addQuotes(_G.BARSTEWARD_VERTICAL))
+    output = output:gsub("#h", "#" .. addQuotes(_G.BARSTEWARD_HORIZONTAL))
+    output = output:gsub("#l", "#" .. addQuotes(_G.BARSTEWARD_LEFT))
+    output = output:gsub("#r", "#" .. addQuotes(_G.BARSTEWARD_RIGHT))
+    output = output:gsub("#to", "#" .. addQuotes(_G.BARSTEWARD_TOP))
+    output = output:gsub("#b", "#" .. addQuotes(_G.BARSTEWARD_BOTTOM))
 
     for bg = 1, 14 do
-        output = string.gsub(output, "=bg" .. tostring(bg), "=" .. addQuotes("BARSTEWARD_BACKGROUND_STYLE_", bg))
+        output = output:gsub("#bg" .. tostring(bg), "#" .. addQuotes("BARSTEWARD_BACKGROUND_STYLE_", bg))
 
         if (bg < 8) then
-            output = string.gsub(output, "=bo" .. tostring(bg), "=" .. addQuotes("BARSTEWARD_BORDER_STYLE_", bg))
+            output = output:gsub("#bo" .. tostring(bg), "#" .. addQuotes("BARSTEWARD_BORDER_STYLE_", bg))
         end
     end
 
     for keyword, abbr in pairs(BS.ENCODING) do
-        output = string.gsub(output, "," .. abbr .. "=", "," .. keyword .. "=")
-        output = string.gsub(output, "{" .. abbr .. "=", "{" .. keyword .. "=")
+        output = output:gsub("::" .. abbr .. "#", "::" .. keyword .. "#")
+        output = output:gsub("%^" .. abbr .. "#", "%^" .. keyword .. "#")
     end
 
     return output
+end
+
+local function convert(value)
+    if (not value) then
+        return
+    end
+
+    if (value == "true") then
+        return true
+    end
+
+    if (value == "false") then
+        return false
+    end
+
+    local _, count = value:gsub("%-", "")
+
+    if (count == 3) then
+        local array = BS.Split(value, "%-")
+
+        for index, val in pairs(array) do
+            val = val:gsub("%%", "")
+            array[index] = tonumber(val)
+        end
+
+        return array
+    end
+
+    if (tonumber(value)) then
+        return tonumber(value)
+    end
+
+    return value
+end
+
+local function generateTable(input)
+    assert(input:sub(1, 3) == "b::", GetString(_G.BARSTEWARD_IMPORT_ERROR_BAR))
+    assert(input:sub(-1) == "^", GetString(_G.BARSTEWARD_IMPORT_ERROR_DATA))
+    assert(input:find("w::"), GetString(_G.BARSTEWARD_IMPORT_ERROR_WIDGET))
+
+    local widgetStartPos = input:find("w::")
+    local barData = BS.Split(input:sub(4, widgetStartPos - 1), "%^")
+    local widgetData = BS.Split(input:sub(widgetStartPos + 3), "%^")
+
+    local barObject = {}
+
+    -- convert bar data to a table
+    for _, token in pairs(barData) do
+        local info = BS.Split(token, "#")
+
+        if (info[1]) then
+            -- check for backdrop.colour
+            if (info[1] == string.format("%s_%s", BS.ENCODING["Backdrop"], BS.ENCODING["Colour"])) then
+                -- check for backdrop.show
+                barObject.Backdrop = {Colour = convert(info[2])}
+            elseif (info[1] == string.format("%s_%s", BS.ENCODING["Backdrop"], BS.ENCODING["Show"])) then
+                barObject.Backdrop = {Show = convert(info[2])}
+            else
+                barObject[info[1]] = convert(info[2])
+            end
+        end
+    end
+
+    -- convert widget data to a table
+    local currentWidget
+    local widgetsObject = {}
+
+    for _, token in pairs(widgetData) do
+        local info = BS.Split(token, "#")
+
+        if (info[1] and info[1] ~= "%") then
+            if (info[1]:sub(1, 1) == "@") then
+                currentWidget = tonumber(info[1]:sub(2))
+                widgetsObject[currentWidget] = {}
+            elseif (currentWidget) then
+                widgetsObject[currentWidget][info[1]] = convert(info[2])
+            end
+        end
+    end
+
+    return {
+        Bar = barObject,
+        Widgets = widgetsObject
+    }
 end
 
 function BS.ExportBar(barNumber)
@@ -1028,8 +1061,22 @@ function BS.ExportBar(barNumber)
         end
     end
 
-    if (simpleTableCompare(destBar.Backdrop.Colour, BS.Defaults.Bars[1].Backdrop.Colour)) then
-        destBar.Backdrop.Colour = nil
+    if (destBar.Backdrop.Colour) then
+        if (simpleTableCompare(destBar.Backdrop.Colour, BS.Defaults.Bars[1].Backdrop.Colour)) then
+            destBar.Backdrop.Colour = nil
+        end
+    end
+
+    if (destBar.Backdrop.Show) then
+        if (destBar.Backdrop.Show == BS.Defaults.Bars[1].Backdrop.Show) then
+            destBar.Backdrop.Show = nil
+        end
+    end
+
+    if (destBar.CombatColour) then
+        if (simpleTableCompare(destBar.CombatColour, BS.Defaults.DefaultCombatColour)) then
+            destBar.CombatColour = nil
+        end
     end
 
     -- don't copy unneeded values
@@ -1065,35 +1112,180 @@ function BS.ExportBar(barNumber)
         end
     end
 
-    local output = serialiseTable(forExport)
+    local output = "b::"
+
+    -- add bar info
+    for key, value in pairs(forExport.Bar) do
+        if (key == "Backdrop") then
+            if (forExport.Bar.Backdrop.Colour) then
+                output =
+                    output ..
+                    string.format(
+                        "%s_%s#%.3g-%.3g-%.3g-%.3g^",
+                        BS.ENCODING["Backdrop"],
+                        BS.ENCODING["Colour"],
+                        forExport.Bar.Backdrop.Colour[1],
+                        forExport.Bar.Backdrop.Colour[2],
+                        forExport.Bar.Backdrop.Colour[3],
+                        forExport.Bar.Backdrop.Colour[4]
+                    )
+            end
+
+            if (forExport.Bar.Backdrop.Show) then
+                output =
+                    output ..
+                    string.format(
+                        "%s_%s#%s",
+                        BS.ENCODING["Backdrop"],
+                        BS.ENCODING["Show"],
+                        tostring(forExport.Bar.Backdrop.Show)
+                    )
+            end
+        elseif (key == "CombatColour") then
+            if (forExport.Bar.CombatColour) then
+                output =
+                    output ..
+                    string.format(
+                        "%s#%.3g-%.3g-%.3g-%.3g^",
+                        BS.ENCODING["CombatColour"],
+                        forExport.Bar.CombatColour[1],
+                        forExport.Bar.CombatColour[2],
+                        forExport.Bar.CombatColour[3],
+                        forExport.Bar.CombatColour[4]
+                    )
+            end
+        else
+            output = output .. string.format("%s#%s^", BS.ENCODING[key] or key, tostring(value))
+        end
+    end
+
+    -- add widget info
+    output = output .. "w::"
+
+    for widgetIndex, widgetInfo in pairs(forExport.Controls) do
+        output = output .. string.format("@%d^", widgetIndex)
+
+        for key, value in pairs(widgetInfo) do
+            if (key:sub(-6) == "Colour" and key ~= "NoLimitColour") then
+                output =
+                    output ..
+                    string.format(
+                        "%s#%.3g-%.3g-%.3g-%.3g^",
+                        BS.ENCODING[key],
+                        forExport.Controls[widgetIndex][key][1],
+                        forExport.Controls[widgetIndex][key][2],
+                        forExport.Controls[widgetIndex][key][3],
+                        forExport.Controls[widgetIndex][key][4]
+                    )
+            else
+                output = output .. string.format("%s#%s^", BS.ENCODING[key] or key, tostring(value))
+            end
+        end
+    end
+
     output = cleanseAndEncode(output)
 
     return output
 end
 
-function BS.ImportBar(data)
+local function cleanAssert(message)
+    message = message:gsub("assert: ", "")
+
+    local stacktraceStart = message:find("stack traceback")
+
+    message = message:sub(1, stacktraceStart - 1)
+
+    return message
+end
+
+local function validate(data)
     local status, decoded = pcall(decode, data)
 
     if (not status) then
-        --TODO: something went wrong
-        d("decode failed")
-        d(decoded)
+        BS.ExportFrame.error:SetText(cleanAssert(decoded))
         return
     end
 
-    local importTable = stringToTable(decoded)
+    local tableStatus, importTable = pcall(generateTable, decoded)
 
-    if (type(importTable) ~= "table") then
-        --TODO: invalid data
-        d("not a table")
+    if ((not tableStatus) or type(importTable) ~= "table") then
+        BS.ExportFrame.error:SetText(cleanAssert(importTable))
         return
     end
 
-    if (importTable.Bar == nil or importTable.Controls == nil) then
-        -- TODO: invalid data
-        d("missing bar or control information")
+    if (importTable.Bar == nil or importTable.Widgets == nil) then
+        BS.ExportFrame.error:SetText(GetString(_G.BARSTEWARD_IMPORT_ERROR_WIDGET_OR_BAR))
         return
     end
 
-    d(importTable)
+    BS.ExportFrame.fragment:SetHiddenForReason("disabled", true)
+
+    return importTable
+end
+
+function BS.DoImport()
+    local data = BS.ImportData
+    local bars = BS.Vars.Bars
+    local newBarId = #bars + 1
+    local barname = zo_strformat(GetString(_G.BARSTEWARD_NEW_BAR_DEFAULT_NAME), newBarId)
+    local x, y = GuiRoot:GetCenter()
+
+    BS.Vars.Bars[newBarId] = {
+        Orientation = GetString(_G.BARSTEWARD_HORIZONTAL),
+        Position = {X = x, Y = y},
+        Name = barname,
+        Backdrop = {
+            Show = data.Bar.Backdrop and data.Bar.Backdrop.Show or true,
+            Colour = data.Bar.Backdrop and data.Bar.Backdrop.Colour or {0.23, 0.23, 0.23, 0.7}
+        },
+        TooltipAnchor = GetString(_G.BARSTEWARD_BOTTOM),
+        ValueSide = GetString(_G.BARSTEWARD_RIGHT)
+    }
+
+    for key, value in pairs(data.Bar) do
+        if (key ~= "Backdrop") then
+            BS.Vars.Bars[newBarId][key] = value
+        end
+    end
+
+    -- add widgets to the bar
+    for widgetIndex, widgetData in pairs(data.Widgets) do
+        BS.Vars.Controls[widgetIndex].Bar = newBarId
+
+        for key, value in pairs(widgetData) do
+            BS.Vars.Controls[widgetIndex][key] = value
+        end
+    end
+
+    --reload ui
+    zo_callLater(
+        function()
+            ZO_Dialogs_ShowDialog(BS.Name .. "Reload")
+        end,
+        500
+    )
+end
+
+function BS.ImportBar(data)
+    local importTable = validate(data)
+
+    if (importTable) then
+        -- check widget movement
+        local widgetCount = 0
+
+        for widgetIndex, _ in pairs(importTable.Widgets) do
+            if (BS.Vars.Controls[widgetIndex].Bar ~= 0) then
+                widgetCount = widgetCount + 1
+            end
+        end
+
+        BS.ImportData = importTable
+
+        if (widgetCount > 0) then
+            BS.MovingWidgets = widgetCount
+            ZO_Dialogs_ShowDialog(BS.Name .. "Import")
+        else
+            BS.DoImport()
+        end
+    end
 end

@@ -931,14 +931,16 @@ BS.widgets[BS.W_VAMPIRISM_TIMER] = {
         if (isVampire) then
             remaining = ending - GetGameTimeSeconds()
 
-            if (remaining > 0) then
-                time = BS.SecondsToTime(remaining, true, false, vars.HideSeconds, vars.Format)
+            if (remaining < 0) then
+                remaining = 0
+            end
 
-                if (remaining < (vars.DangerValue * 60)) then
-                    colour = vars.DangerColour or BS.Vars.DefaultDangerColour
-                elseif (remaining < (vars.WarningValue * 60)) then
-                    colour = vars.WarningColour or BS.Vars.DefaultWarningColour
-                end
+            time = BS.SecondsToTime(remaining, true, false, vars.HideSeconds, vars.Format)
+
+            if (remaining < (vars.DangerValue * 60)) then
+                colour = vars.DangerColour or BS.Vars.DefaultDangerColour
+            elseif (remaining < (vars.WarningValue * 60)) then
+                colour = vars.WarningColour or BS.Vars.DefaultWarningColour
             end
         end
 
