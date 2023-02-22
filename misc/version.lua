@@ -9,7 +9,7 @@ local function needsUpdate(version)
 end
 
 local function replace(current)
-    local ucase = string.upper(current)
+    local ucase = current:upper()
 
     if (_G["BARSTEWARD_" .. ucase]) then
         return GetString(_G["BARSTEWARD_" .. ucase])
@@ -38,7 +38,7 @@ local function updateLanguageVars()
 
     for _, widget in pairs(widgets) do
         if (widget.Units) then
-            local newUnit = GetString(_G["BARSTEWARD_" .. string.upper(widget.Units)])
+            local newUnit = GetString(_G["BARSTEWARD_" .. widget.Units:upper()])
 
             if (newUnit ~= "") then
                 widget.Units = newUnit
@@ -139,7 +139,7 @@ function BS.VersionCheck()
 
             for _, widget in pairs(widgets) do
                 if (widget.Units) then
-                    local newUnit = GetString(_G["BARSTEWARD_" .. string.upper(widget.Units)])
+                    local newUnit = GetString(_G["BARSTEWARD_" .. widget.Units:upper()])
 
                     if (newUnit ~= "") then
                         widget.Units = newUnit

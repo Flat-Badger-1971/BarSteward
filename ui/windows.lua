@@ -482,7 +482,7 @@ end
 
 local function CreateTool(heading, toolName, varName, setupFunc, guild)
     local name = BS.Name .. "_" .. toolName .. "_Tool"
-    local lowerName = string.lower(toolName)
+    local lowerName = toolName:lower()
     local frameName = "w_" .. lowerName .. "_list"
 
     BS[frameName] = WINDOW_MANAGER:CreateTopLevelWindow(name)

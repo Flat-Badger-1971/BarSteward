@@ -391,13 +391,13 @@ function BS.GetPortToHouseSettings()
                 getFunc = function()
                     local name = vars.Name
 
-                    name = string.gsub(name, "(%s+[|]t.+[|]t)", "")
+                    name = name:gsub("(%s+[|]t.+[|]t)", "")
                     return name
                 end,
                 setFunc = function(value)
                     vars.RawName = value
 
-                    if (string.find(vars.Name, "|t")) then
+                    if (vars.Name:find("|t")) then
                         value = value .. " " .. zo_iconFormat(BS.FRIENDS_ICON, 16, 16)
                         vars.RawName = vars.RawName .. " XX"
                     end
