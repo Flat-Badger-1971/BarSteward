@@ -936,24 +936,42 @@ local mounts = {}
 local emotes = {}
 
 -- based on code from RandomMount
-local function scanCategoryData(categoryData, collectibleType, collectibleTable)
+local function scanCategoryData(categoryData, collectibleType, collectibleTable, toTable, includeAll)
     local numCollectibles = categoryData:GetNumCollectibles()
 
     for collectibleIndex = 1, numCollectibles do
         local collectibleData = categoryData:GetCollectibleDataByIndex(collectibleIndex)
 
-        if (collectibleData:IsUnlocked()) then
+        if (collectibleData:IsUnlocked() or includeAll) then
             local categoryType = collectibleData:GetCategoryType()
 
             if (categoryType == collectibleType) then
                 local id = collectibleData:GetId()
-                table.insert(collectibleTable, id)
+
+                if (toTable) then
+                    local combinationId = GetCollectibleReferenceId(id)
+                    local combinedCollectibleId = GetCombinationUnlockedCollectible(combinationId)
+                    local unlocked = select(5, GetCollectibleInfo(combinedCollectibleId))
+
+                    table.insert(
+                        collectibleTable,
+                        {
+                            id = id,
+                            unlocked = collectibleData:IsUnlocked(),
+                            name = BS.Format(collectibleData:GetName()),
+                            combinedId = combinedCollectibleId,
+                            combinationUnlocked = unlocked
+                        }
+                    )
+                else
+                    table.insert(collectibleTable, id)
+                end
             end
         end
     end
 end
 
-local function getCollectibles(collectibleType, collectibleTable)
+local function getCollectibles(collectibleType, collectibleTable, toTable, includeAll)
     ZO_ClearNumericallyIndexedTable(collectibleTable)
 
     for categoryIndex = 1, GetNumCollectibleCategories() do
@@ -961,13 +979,13 @@ local function getCollectibles(collectibleType, collectibleTable)
         local numSubcategories = categoryData:GetNumSubcategories()
 
         if (numSubcategories == 0) then
-            scanCategoryData(categoryData, collectibleType, collectibleTable)
+            scanCategoryData(categoryData, collectibleType, collectibleTable, toTable, includeAll)
         else
             for subcategoryIndex = 1, numSubcategories do
                 local subcategoryData = categoryData:GetSubcategoryData(subcategoryIndex)
 
                 if (subcategoryData) then
-                    scanCategoryData(subcategoryData, collectibleType, collectibleTable)
+                    scanCategoryData(subcategoryData, collectibleType, collectibleTable, toTable, includeAll)
                 end
             end
         end
@@ -1346,7 +1364,7 @@ local poisonBars = {
 
 BS.widgets[BS.W_EQUIPPED_POISON] = {
     -- v1.4.35
-    name = "equippedPoision",
+    name = "equippedPoison",
     update = function(widget)
         local slots = {_G.EQUIP_SLOT_MAIN_HAND, _G.EQUIP_SLOT_OFF_HAND}
         local backup = {_G.EQUIP_SLOT_BACKUP_MAIN, _G.EQUIP_SLOT_BACKUP_OFF}
@@ -1452,4 +1470,85 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
             default = BS.MAIN_BAR
         }
     }
+}
+
+BS.widgets[BS.W_FRAGMENTS] = {
+    -- v1.4.47
+    name = "fragments",
+    update = function(widget)
+        local vars = BS.Vars.Controls[BS.W_FRAGMENTS]
+        local colour = vars.Colour or BS.Vars.DefaultColour
+
+        local frags = {}
+        getCollectibles(_G.COLLECTIBLE_CATEGORY_TYPE_COMBINATION_FRAGMENT, frags, true, true)
+
+        local collected, uncollected = 0, 0
+        local unnecessary = 0
+        local fragmentInfo = {}
+
+        for _, fragmentData in ipairs(frags) do
+            BS.CollectibleId = fragmentData.id
+            if (not fragmentInfo[fragmentData.combinedId]) then
+                fragmentInfo[fragmentData.combinedId] = {collected = 0, uncollected = 0, unnecessary = 0}
+            end
+
+            if (not fragmentData.combinationUnlocked) then
+                if (fragmentData.unlocked) then
+                    fragmentInfo[fragmentData.combinedId].collected =
+                        fragmentInfo[fragmentData.combinedId].collected + 1
+                    collected = collected + 1
+                else
+                    fragmentInfo[fragmentData.combinedId].uncollected =
+                        fragmentInfo[fragmentData.combinedId].uncollected + 1
+                    uncollected = uncollected + 1
+                end
+            elseif (fragmentData.unlocked) then
+                fragmentInfo[fragmentData.combinedId].unnecessary =
+                    fragmentInfo[fragmentData.combinedId].unnecessary + 1
+                unnecessary = unnecessary + 1
+            end
+        end
+
+        local text = collected .. "/" .. (collected + uncollected)
+        local plainText = text
+
+        if (unnecessary > 0) then
+            plainText = text .. "/" .. unnecessary
+            text = text .. "/|cffff00" .. unnecessary .. "|r"
+        end
+
+        widget:SetValue(text, plainText)
+        widget:SetColour(unpack(colour))
+
+        local tt = BS.Format(_G.SI_ANTIQUITY_FRAGMENTS)
+        local collectedtt = "|cf9f9f9"
+        local unnecessarytt = "|cffff00"
+
+        for id, info in pairs(fragmentInfo) do
+            local collectibleName = BS.Format(GetCollectibleName(id))
+
+            if (info.collected + info.uncollected + info.unnecessary > 0) then
+                if (info.collected and (info.unnecessary == 0)) then
+                    collectedtt = collectedtt .. collectibleName .. " " .. info.collected
+                    collectedtt = collectedtt .. " / " .. (info.collected + info.uncollected) .. BS.LF
+                end
+
+                if (info.unnecessary > 0) then
+                    unnecessarytt = BS.LF .. unnecessarytt .. collectibleName .. " " .. info.unnecessary
+                    unnecessarytt = unnecessarytt .. " / " .. (info.collected + info.uncollected)
+                end
+            end
+        end
+
+        tt = tt .. BS.LF .. collectedtt .. "|r" .. unnecessarytt .. "|r"
+        widget.tooltip = tt
+
+        return collected
+    end,
+    onClick = function()
+        COLLECTIONS_BOOK:BrowseToCollectible(BS.CollectibleId)
+    end,
+    callback = {[CALLBACK_MANAGER] = {"OnCollectionUpdated"}},
+    tooltip = BS.Format(_G.SI_ANTIQUITY_FRAGMENTS),
+    icon = "/esoui/art/icons/antiquities_u30_museum_fragment07.dds"
 }

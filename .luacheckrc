@@ -31,6 +31,11 @@ read_globals = {
             AddSystemMessage = {read_only = true}
         }
     },
+    ["COLLECTIONS_BOOK"] = {
+        fields = {
+            BrowseToCollectible = {read_only = true}
+        }
+    },
     ["EVENT_MANAGER"] = {
         fields = {
             AddFilterForEvent = {read_only = true},
@@ -271,7 +276,9 @@ read_globals = {
     "GetCollectibleId",
     "GetCollectibleInfo",
     "GetCollectibleName",
+    "GetCollectibleReferenceId",
     "GetCollectibleSubCategoryInfo",
+    "GetCombinationUnlockedCollectible",
     "GetCompanionCollectibleId",
     "GetCompanionName",
     "GetCurrencyAmount",
