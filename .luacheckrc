@@ -273,6 +273,7 @@ read_globals = {
     "GetCollectibleCategoryId",
     "GetCollectibleCategoryInfo",
     "GetCollectibleCooldownAndDuration",
+    "GetCollectibleIcon",
     "GetCollectibleId",
     "GetCollectibleInfo",
     "GetCollectibleName",

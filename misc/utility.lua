@@ -875,16 +875,6 @@ function BS.Format(value, ...)
     return ZO_CachedStrFormat("<<C:1>>", text, ...)
 end
 
-function BS.Contains(table, value)
-    for _, v in ipairs(table) do
-        if (v == value) then
-            return true
-        end
-    end
-
-    return false
-end
-
 -- https://gist.github.com/tylerneylon/81333721109155b2d244
 local function deepCopy(obj, seen)
     if (type(obj) ~= "table") then

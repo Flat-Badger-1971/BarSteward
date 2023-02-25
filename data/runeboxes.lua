@@ -7,8 +7,8 @@ local RUNEBOX_FRAGMENTS = {
     [139465] = {cid = 5047, fragments = {139457, 139458, 139459, 139460, 139461, 139462, 139463}},
     [141749] = {cid = 5656, fragments = {141748, 141742, 141743, 141744, 141745, 141746, 141747}},
     [147499] = {cid = 6197, fragments = {147492, 147493, 147494, 147495, 147496, 147497, 147498}},
-    [166960] = {total = 50, fragments = {166466}},
-    [171472] = {total = 10, fragments = {171469}}
+    [166960] = {cid = "166960", total = 50, fragments = {166466}},
+    [171472] = {cid = 8198, total = 10, fragments = {171469}}
 }
 
 local COLLECTIBLE_FRAGMENTS = {
@@ -51,4 +51,42 @@ function BS.GetCollectibleId(bagId, slotIndex)
     end
 
     return collectibleId, quantity
+end
+
+local availableIds = {}
+
+local function getAvailableIds()
+    for _, data in pairs(RUNEBOX_FRAGMENTS) do
+        availableIds[data.cid] = data.total or #data.fragments
+    end
+
+    for id, qty in pairs(COLLECTIBLE_FRAGMENTS) do
+        availableIds[id] = qty
+    end
+end
+
+function BS.GetNoneCollected(collecting)
+    local collectingIds = {}
+
+    for id, _ in pairs(collecting) do
+        table.insert(collectingIds, id)
+    end
+
+    local uncollected = {}
+
+    if (#availableIds == 0) then
+        getAvailableIds()
+    end
+
+    for id, qty in pairs(availableIds) do
+        if (not ZO_IsElementInNumericallyIndexedTable(collectingIds, id)) then
+            local unlocked = select(5, GetCollectibleInfo(id))
+
+            if (not unlocked) then
+                uncollected[id] = qty
+            end
+        end
+    end
+
+    return uncollected
 end

@@ -161,6 +161,15 @@ BS.widgets[BS.W_REPAIR_COST] = {
     end
 }
 
+local ignoreSlots = {
+    [_G.EQUIP_SLOT_NECK] = true,
+    [_G.EQUIP_SLOT_RING1] = true,
+    [_G.EQUIP_SLOT_RING2] = true,
+    [_G.EQUIP_SLOT_COSTUME] = true,
+    [_G.EQUIP_SLOT_POISON] = true,
+    [_G.EQUIP_SLOT_BACKUP_POISON] = true
+}
+
 BS.widgets[BS.W_DURABILITY] = {
     -- v1.0.1
     name = "durability",
@@ -171,21 +180,23 @@ BS.widgets[BS.W_DURABILITY] = {
         local items = {}
         local vars = BS.Vars.Controls[BS.W_DURABILITY]
 
-        for _, data in pairs(_G.SHARED_INVENTORY.bagCache[_G.BAG_WORN]) do
-            local colour = BS.ARGBConvert(vars.OkColour or BS.Vars.DefaultOkColour)
+        for _, item in pairs(_G.SHARED_INVENTORY.bagCache[_G.BAG_WORN]) do
+            if (not ignoreSlots[item.slotIndex]) then
+                local colour = BS.ARGBConvert(vars.OkColour or BS.Vars.DefaultOkColour)
 
-            if (data.name ~= "") then
-                if (data.condition <= vars.OkValue and data.condition >= vars.DangerValue) then
-                    colour = BS.ARGBConvert(vars.WarningColour or BS.Vars.DefaultWarningColour)
-                elseif (data.condition < vars.DangerValue) then
-                    colour = BS.ARGBConvert(vars.DangerColour or BS.Vars.DefaultDangerColour)
-                end
+                if (item.name ~= "") then
+                    if (item.condition <= vars.OkValue and item.condition >= vars.DangerValue) then
+                        colour = BS.ARGBConvert(vars.WarningColour or BS.Vars.DefaultWarningColour)
+                    elseif (item.condition < vars.DangerValue) then
+                        colour = BS.ARGBConvert(vars.DangerColour or BS.Vars.DefaultDangerColour)
+                    end
 
-                table.insert(items, colour .. data.name .. " - " .. data.condition .. "%|r")
+                    table.insert(items, colour .. item.name .. " - " .. item.condition .. "%|r")
 
-                if (lowest > data.condition) then
-                    lowest = data.condition
-                    lowestType = data.itemType
+                    if (lowest > item.condition) then
+                        lowest = item.condition
+                        lowestType = item.itemType
+                    end
                 end
             end
         end
@@ -1411,7 +1422,7 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
         if (#poisons > 0) then
             for _, poison in ipairs(poisons) do
                 local slotName =
-                    BS.Contains(backup, poison.slot) and GetString(_G.BARSTEWARD_BACK_BAR) or
+                    ZO_IsElementInNumericallyIndexedTable(backup, poison.slot) and GetString(_G.BARSTEWARD_BACK_BAR) or
                     GetString(_G.BARSTEWARD_MAIN_BAR)
 
                 tt = tt .. BS.LF .. zo_iconFormat(poison.icon, 16, 16) .. " "
@@ -1419,17 +1430,19 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
 
                 if (selected == BS.ACTIVE_BAR) then
                     if
-                        ((BS.Contains(backup, poison.slot) and activeWeaponPair == _G.ACTIVE_WEAPON_PAIR_BACKUP) or
-                            (BS.Contains(slots, poison.slot) and (activeWeaponPair == _G.ACTIVE_WEAPON_PAIR_MAIN)))
+                        ((ZO_IsElementInNumericallyIndexedTable(backup, poison.slot) and
+                            activeWeaponPair == _G.ACTIVE_WEAPON_PAIR_BACKUP) or
+                            (ZO_IsElementInNumericallyIndexedTable(slots, poison.slot) and
+                                (activeWeaponPair == _G.ACTIVE_WEAPON_PAIR_MAIN)))
                      then
                         widget:SetIcon(poison.icon)
                     end
                 elseif (selected == BS.BACK_BAR) then
-                    if (BS.Contains(backup, poison.slot)) then
+                    if (ZO_IsElementInNumericallyIndexedTable(backup, poison.slot)) then
                         widget:SetIcon(poison.icon)
                     end
                 else
-                    if (BS.Contains(slots, poison.slot)) then
+                    if (ZO_IsElementInNumericallyIndexedTable(slots, poison.slot)) then
                         widget:SetIcon(poison.icon)
                     end
                 end
@@ -1473,7 +1486,7 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
 }
 
 BS.widgets[BS.W_FRAGMENTS] = {
-    -- v1.4.47
+    -- v1.4.49
     name = "fragments",
     update = function(widget)
         local vars = BS.Vars.Controls[BS.W_FRAGMENTS]
@@ -1529,17 +1542,20 @@ BS.widgets[BS.W_FRAGMENTS] = {
         local unnecessarytt = "|cffff00"
 
         for id, info in pairs(fragmentInfo) do
-            local collectibleName = BS.Format(GetCollectibleName(id))
+            local name, _, icon = GetCollectibleInfo(id)
+            local collectibleName = BS.Format(name)
 
             if (info.collected + info.uncollected + info.unnecessary > 0) then
                 if (info.collected and (info.unnecessary == 0)) then
+                    collectedtt = collectedtt .. zo_iconFormat(icon, 16, 16) .. " "
                     collectedtt = collectedtt .. "|cf9f9f9" .. collectibleName .. " "
                     collectedtt = collectedtt .. "|r|c00ff00" .. info.collected
                     collectedtt = collectedtt .. " / " .. (info.collected + info.uncollected) .. "|r" .. BS.LF
                 end
 
                 if (info.unnecessary > 0) then
-                    unnecessarytt = BS.LF .. unnecessarytt .. collectibleName .. " " .. info.unnecessary
+                    unnecessarytt = BS.LF .. unnecessarytt .. zo_iconFormat(icon, 16, 16) .. " "
+                    unnecessarytt = unnecessarytt .. collectibleName .. " " .. info.unnecessary
                     unnecessarytt = unnecessarytt .. " / " .. (info.unnecessary + info.uncollected)
                 end
             end
@@ -1559,7 +1575,7 @@ BS.widgets[BS.W_FRAGMENTS] = {
 }
 
 BS.widgets[BS.W_RUNEBOXES] = {
-    -- v1.4.47
+    -- v1.4.49
     name = "runeboxFragments",
     update = function(widget)
         local vars = BS.Vars.Controls[BS.W_FRAGMENTS]
@@ -1625,23 +1641,52 @@ BS.widgets[BS.W_RUNEBOXES] = {
         local tt = BS.Format(_G.SI_ANTIQUITY_FRAGMENTS)
         local collectedtt = ""
         local unnecessarytt = "|cffff00"
+        local icon
 
-        for _, info in pairs(fragmentInfo) do
+        for id, info in pairs(fragmentInfo) do
+            if (type(id) == "string") then
+                icon = GetItemLinkIcon(BS.MakeItemLink(tonumber(id)))
+            else
+                icon = GetCollectibleIcon(id)
+            end
+
             if (info.collected + info.required + info.unnecessary > 0) then
                 if (info.collected and (info.unnecessary == 0)) then
+                    collectedtt = collectedtt .. zo_iconFormat(icon, 16, 16) .. " "
                     collectedtt = collectedtt .. "|cf9f9f9" .. info.name .. " "
                     collectedtt = collectedtt .. "|r|c00ff00" .. info.collected
                     collectedtt = collectedtt .. " / " .. info.required .. "|r" .. BS.LF
                 end
 
                 if (info.unnecessary > 0) then
-                    unnecessarytt = BS.LF .. unnecessarytt .. info.name .. " " .. info.unnecessary
+                    unnecessarytt = BS.LF .. unnecessarytt .. zo_iconFormat(icon, 16, 16) .. " "
+                    unnecessarytt = unnecessarytt .. info.name .. " " .. info.unnecessary
                     unnecessarytt = unnecessarytt .. " / " .. info.required
                 end
             end
         end
 
         tt = tt .. BS.LF .. collectedtt .. "|r" .. unnecessarytt .. "|r"
+
+        local uncollected = BS.GetNoneCollected(fragmentInfo)
+
+        tt = tt .. BS.LF .. "|cababab"
+        local name
+
+        for id, qty in pairs(uncollected) do
+            if (type(id) == "string") then
+                local link = BS.MakeItemLink(tonumber(id))
+                icon = GetItemLinkIcon(link)
+                name = GetItemLinkName(link)
+            else
+                local cname, _, cicon = GetCollectibleInfo(id)
+                name, icon = cname, cicon
+            end
+
+            tt = tt .. BS.LF .. zo_iconFormat(icon, 16, 16) .. " "
+            tt = tt .. BS.Format(name) .. " 0/" .. qty
+        end
+
         widget.tooltip = tt
 
         return collected
