@@ -844,6 +844,68 @@ local function getBarSettings()
         warning = GetString(_G.BARSTEWARD_RELOAD),
         width = "half"
     }
+
+    local barChoices = {}
+    local barNumbers = {}
+
+    for idx, bar in pairs(bars) do
+        table.insert(barChoices, bar.Name)
+        barNumbers[bar.Name] = idx
+    end
+
+    table.sort(barChoices)
+    BS.options[#BS.options + 1] = {
+        type = "dropdown",
+        name = GetString(_G.BARSTEWARD_EXPORT_BAR),
+        choices = barChoices,
+        getFunc = function()
+            return BS.Export
+        end,
+        setFunc = function(value)
+            BS.Export = value
+        end,
+        default = nil
+    }
+
+    BS.options[#BS.options + 1] = {
+        type = "button",
+        name = GetString(_G.BARSTEWARD_EXPORT),
+        func = function()
+            local data = BS.ExportBar(barNumbers[BS.Export])
+            local exportFrame = BS.ExportFrame or BS.CreateExportFrame()
+
+            SCENE_MANAGER:Show("hudui")
+            SetGameCameraUIMode(true)
+            exportFrame.content:SetText(data)
+            exportFrame.heading:SetText(GetString(_G.BARSTEWARD_EXPORT_BAR))
+            exportFrame.note:SetText(GetString(_G.BARSTEWARD_COPY))
+            exportFrame.import:SetHidden(true)
+            exportFrame.error:SetText("")
+            exportFrame.fragment:SetHiddenForReason("disabled", false)
+        end,
+        width = "full",
+        disabled = function()
+            return BS.Export == nil
+        end
+    }
+
+    BS.options[#BS.options + 1] = {
+        type = "button",
+        name = GetString(_G.BARSTEWARD_IMPORT_BAR),
+        func = function()
+            local importFrame = BS.ExportFrame or BS.CreateExportFrame()
+
+            SCENE_MANAGER:Show("hudui")
+            SetGameCameraUIMode(true)
+            importFrame.content:Clear()
+            importFrame.heading:SetText(GetString(_G.BARSTEWARD_IMPORT_BAR))
+            importFrame.note:SetText(GetString(_G.BARSTEWARD_PASTE))
+            importFrame.import:SetHidden(false)
+            importFrame.error:SetText("")
+            importFrame.fragment:SetHiddenForReason("disabled", false)
+        end,
+        width = "full"
+    }
 end
 
 -- Performance

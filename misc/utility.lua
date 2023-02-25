@@ -103,11 +103,11 @@ function BS.FormatTime(format, timeString, tamrielTime)
     if (tamrielTime) then
         hours, minutes, seconds = tamrielTime.hour, tamrielTime.minute, tamrielTime.second
 
-        if (string.len(tostring(minutes)) == 1) then
+        if (tostring(minutes):len() == 1) then
             minutes = "0" .. minutes
         end
 
-        if (string.len(tostring(seconds)) == 1) then
+        if (tostring(seconds):len() == 1) then
             seconds = "0" .. seconds
         end
     else
@@ -581,7 +581,7 @@ function BS.GetFont(vars)
 end
 
 function BS.AddToScenes(sceneType, barIndex, bar, override)
-    local group = BS[string.upper(sceneType) .. "_SCENES"]
+    local group = BS[sceneType:upper() .. "_SCENES"]
 
     sceneType = "ShowWhilst" .. sceneType
 
@@ -593,7 +593,7 @@ function BS.AddToScenes(sceneType, barIndex, bar, override)
 end
 
 function BS.RemoveFromScenes(sceneType, bar)
-    local group = BS[string.upper(sceneType) .. "_SCENES"]
+    local group = BS[sceneType:upper() .. "_SCENES"]
 
     for _, scene in ipairs(group) do
         SCENE_MANAGER:GetScene(scene):RemoveFragment(bar.fragment)
@@ -883,4 +883,409 @@ function BS.Contains(table, value)
     end
 
     return false
+end
+
+-- https://gist.github.com/tylerneylon/81333721109155b2d244
+local function deepCopy(obj, seen)
+    if (type(obj) ~= "table") then
+        return obj
+    end
+
+    if (seen and seen[obj]) then
+        return seen[obj]
+    end
+
+    local s = seen or {}
+    local res = {}
+
+    s[obj] = res
+
+    for k, v in pairs(obj) do
+        res[deepCopy(k, s)] = deepCopy(v, s)
+    end
+
+    return setmetatable(res, getmetatable(obj))
+end
+
+local function simpleTableCompare(t1, t2)
+    return table.concat(t1) == table.concat(t2)
+end
+
+local function addQuotes(value, sub)
+    return '"' .. GetString(value, sub) .. '"'
+end
+
+local function cleanseAndEncode(input)
+    local output = input
+
+    output = output:gsub("#true%^", "#t%^")
+    output = output:gsub("#false%^", "#f%^")
+    output = output:gsub("#" .. addQuotes(_G.BARSTEWARD_VERTICAL), "#v")
+    output = output:gsub("#" .. addQuotes(_G.BARSTEWARD_HORIZONTAL), "#h")
+    output = output:gsub("#" .. addQuotes(_G.BARSTEWARD_LEFT), "#l")
+    output = output:gsub("#" .. addQuotes(_G.BARSTEWARD_RIGHT), "#r")
+    output = output:gsub("#" .. addQuotes(_G.BARSTEWARD_TOP), "#to")
+    output = output:gsub("#" .. addQuotes(_G.BARSTEWARD_BOTTOM), "#b")
+
+    for bg = 1, 14 do
+        output = output:gsub("#" .. addQuotes("BARSTEWARD_BACKGROUND_STYLE_", bg), "#bg" .. tostring(bg))
+
+        if (bg < 8) then
+            output = output:gsub("#" .. addQuotes("BARSTEWARD_BORDER_STYLE_", bg), "#bo" .. tostring(bg))
+        end
+    end
+
+    return output
+end
+
+local function decode(input)
+    local output = input:gsub("#t%^", "#true%^")
+
+    output = output:gsub("#f%^", "#false%^")
+    output = output:gsub("#v", "#" .. addQuotes(_G.BARSTEWARD_VERTICAL))
+    output = output:gsub("#h", "#" .. addQuotes(_G.BARSTEWARD_HORIZONTAL))
+    output = output:gsub("#l", "#" .. addQuotes(_G.BARSTEWARD_LEFT))
+    output = output:gsub("#r", "#" .. addQuotes(_G.BARSTEWARD_RIGHT))
+    output = output:gsub("#to", "#" .. addQuotes(_G.BARSTEWARD_TOP))
+    output = output:gsub("#b", "#" .. addQuotes(_G.BARSTEWARD_BOTTOM))
+
+    for bg = 1, 14 do
+        output = output:gsub("#bg" .. tostring(bg), "#" .. addQuotes("BARSTEWARD_BACKGROUND_STYLE_", bg))
+
+        if (bg < 8) then
+            output = output:gsub("#bo" .. tostring(bg), "#" .. addQuotes("BARSTEWARD_BORDER_STYLE_", bg))
+        end
+    end
+
+    for keyword, abbr in pairs(BS.ENCODING) do
+        output = output:gsub("::" .. abbr .. "#", "::" .. keyword .. "#")
+        output = output:gsub("%^" .. abbr .. "#", "%^" .. keyword .. "#")
+    end
+
+    return output
+end
+
+local function convert(value)
+    if (not value) then
+        return
+    end
+
+    if (value == "true") then
+        return true
+    end
+
+    if (value == "false") then
+        return false
+    end
+
+    local _, count = value:gsub("%-", "")
+
+    if (count == 3) then
+        local array = BS.Split(value, "%-")
+
+        for index, val in pairs(array) do
+            val = val:gsub("%%", "")
+            array[index] = tonumber(val)
+        end
+
+        return array
+    end
+
+    if (tonumber(value)) then
+        return tonumber(value)
+    end
+
+    return value
+end
+
+local function generateTable(input)
+    assert(input:sub(1, 3) == "b::", GetString(_G.BARSTEWARD_IMPORT_ERROR_BAR))
+    assert(input:sub(-1) == "^", GetString(_G.BARSTEWARD_IMPORT_ERROR_DATA))
+    assert(input:find("w::"), GetString(_G.BARSTEWARD_IMPORT_ERROR_WIDGET))
+
+    local widgetStartPos = input:find("w::")
+    local barData = BS.Split(input:sub(4, widgetStartPos - 1), "%^")
+    local widgetData = BS.Split(input:sub(widgetStartPos + 3), "%^")
+
+    local barObject = {}
+
+    -- convert bar data to a table
+    for _, token in pairs(barData) do
+        local info = BS.Split(token, "#")
+
+        if (info[1]) then
+            -- check for backdrop.colour
+            if (info[1] == string.format("%s_%s", BS.ENCODING["Backdrop"], BS.ENCODING["Colour"])) then
+                -- check for backdrop.show
+                barObject.Backdrop = {Colour = convert(info[2])}
+            elseif (info[1] == string.format("%s_%s", BS.ENCODING["Backdrop"], BS.ENCODING["Show"])) then
+                barObject.Backdrop = {Show = convert(info[2])}
+            else
+                barObject[info[1]] = convert(info[2])
+            end
+        end
+    end
+
+    -- convert widget data to a table
+    local currentWidget
+    local widgetsObject = {}
+
+    for _, token in pairs(widgetData) do
+        local info = BS.Split(token, "#")
+
+        if (info[1] and info[1] ~= "%") then
+            if (info[1]:sub(1, 1) == "@") then
+                currentWidget = tonumber(info[1]:sub(2))
+                widgetsObject[currentWidget] = {}
+            elseif (currentWidget) then
+                widgetsObject[currentWidget][info[1]] = convert(info[2])
+            end
+        end
+    end
+
+    return {
+        Bar = barObject,
+        Widgets = widgetsObject
+    }
+end
+
+function BS.ExportBar(barNumber)
+    local destBar = deepCopy(BS.Vars.Bars[barNumber])
+
+    -- remove any default values, no point keeping those
+    for k, v in pairs(destBar) do
+        if (type(v) ~= "table") then
+            if (v == BS.Defaults.Bars[1][k]) then
+                destBar[k] = nil
+            end
+        end
+    end
+
+    if (destBar.Backdrop.Colour) then
+        if (simpleTableCompare(destBar.Backdrop.Colour, BS.Defaults.Bars[1].Backdrop.Colour)) then
+            destBar.Backdrop.Colour = nil
+        end
+    end
+
+    if (destBar.Backdrop.Show) then
+        if (destBar.Backdrop.Show == BS.Defaults.Bars[1].Backdrop.Show) then
+            destBar.Backdrop.Show = nil
+        end
+    end
+
+    if (destBar.CombatColour) then
+        if (simpleTableCompare(destBar.CombatColour, BS.Defaults.DefaultCombatColour)) then
+            destBar.CombatColour = nil
+        end
+    end
+
+    -- don't copy unneeded values
+    destBar.Position = nil
+    destBar.Name = nil
+    destBar.ToggleState = nil
+    destBar.HideBarEnable = nil
+    destBar.Disable = nil
+
+    local forExport = {
+        Bar = destBar,
+        Controls = {}
+    }
+
+    -- copy the widgets
+    for widgetIndex, widgetSettings in pairs(BS.Vars.Controls) do
+        -- ignore housing widgets - they are too client specific
+        if (widgetIndex < 1000) then
+            if (widgetSettings.Bar == barNumber) then
+                forExport.Controls[widgetIndex] = deepCopy(widgetSettings)
+                forExport.Controls[widgetIndex].Bar = nil
+                forExport.Controls[widgetIndex].Exclude = nil
+
+                -- remove any default values, no point keeping those
+                for k, v in pairs(forExport.Controls[widgetIndex]) do
+                    if (type(v) ~= "table") then
+                        if (v == BS.Defaults.Controls[widgetIndex][k]) then
+                            forExport.Controls[widgetIndex][k] = nil
+                        end
+                    end
+                end
+            end
+        end
+    end
+
+    local output = "b::"
+
+    -- add bar info
+    for key, value in pairs(forExport.Bar) do
+        if (key == "Backdrop") then
+            if (forExport.Bar.Backdrop.Colour) then
+                output =
+                    output ..
+                    string.format(
+                        "%s_%s#%.3g-%.3g-%.3g-%.3g^",
+                        BS.ENCODING["Backdrop"],
+                        BS.ENCODING["Colour"],
+                        forExport.Bar.Backdrop.Colour[1],
+                        forExport.Bar.Backdrop.Colour[2],
+                        forExport.Bar.Backdrop.Colour[3],
+                        forExport.Bar.Backdrop.Colour[4]
+                    )
+            end
+
+            if (forExport.Bar.Backdrop.Show) then
+                output =
+                    output ..
+                    string.format(
+                        "%s_%s#%s",
+                        BS.ENCODING["Backdrop"],
+                        BS.ENCODING["Show"],
+                        tostring(forExport.Bar.Backdrop.Show)
+                    )
+            end
+        elseif (key == "CombatColour") then
+            if (forExport.Bar.CombatColour) then
+                output =
+                    output ..
+                    string.format(
+                        "%s#%.3g-%.3g-%.3g-%.3g^",
+                        BS.ENCODING["CombatColour"],
+                        forExport.Bar.CombatColour[1],
+                        forExport.Bar.CombatColour[2],
+                        forExport.Bar.CombatColour[3],
+                        forExport.Bar.CombatColour[4]
+                    )
+            end
+        else
+            output = output .. string.format("%s#%s^", BS.ENCODING[key] or key, tostring(value))
+        end
+    end
+
+    -- add widget info
+    output = output .. "w::"
+
+    for widgetIndex, widgetInfo in pairs(forExport.Controls) do
+        output = output .. string.format("@%d^", widgetIndex)
+
+        for key, value in pairs(widgetInfo) do
+            if (key:sub(-6) == "Colour" and key ~= "NoLimitColour") then
+                output =
+                    output ..
+                    string.format(
+                        "%s#%.3g-%.3g-%.3g-%.3g^",
+                        BS.ENCODING[key],
+                        forExport.Controls[widgetIndex][key][1],
+                        forExport.Controls[widgetIndex][key][2],
+                        forExport.Controls[widgetIndex][key][3],
+                        forExport.Controls[widgetIndex][key][4]
+                    )
+            else
+                output = output .. string.format("%s#%s^", BS.ENCODING[key] or key, tostring(value))
+            end
+        end
+    end
+
+    output = cleanseAndEncode(output)
+
+    return output
+end
+
+local function cleanAssert(message)
+    message = message:gsub("assert: ", "")
+
+    local stacktraceStart = message:find("stack traceback")
+
+    message = message:sub(1, stacktraceStart - 1)
+
+    return message
+end
+
+local function validate(data)
+    local status, decoded = pcall(decode, data)
+
+    if (not status) then
+        BS.ExportFrame.error:SetText(cleanAssert(decoded))
+        return
+    end
+
+    local tableStatus, importTable = pcall(generateTable, decoded)
+
+    if ((not tableStatus) or type(importTable) ~= "table") then
+        BS.ExportFrame.error:SetText(cleanAssert(importTable))
+        return
+    end
+
+    if (importTable.Bar == nil or importTable.Widgets == nil) then
+        BS.ExportFrame.error:SetText(GetString(_G.BARSTEWARD_IMPORT_ERROR_WIDGET_OR_BAR))
+        return
+    end
+
+    BS.ExportFrame.fragment:SetHiddenForReason("disabled", true)
+
+    return importTable
+end
+
+function BS.DoImport()
+    local data = BS.ImportData
+    local bars = BS.Vars.Bars
+    local newBarId = #bars + 1
+    local barname = zo_strformat(GetString(_G.BARSTEWARD_NEW_BAR_DEFAULT_NAME), newBarId)
+    local x, y = GuiRoot:GetCenter()
+
+    BS.Vars.Bars[newBarId] = {
+        Orientation = GetString(_G.BARSTEWARD_HORIZONTAL),
+        Position = {X = x, Y = y},
+        Name = barname,
+        Backdrop = {
+            Show = data.Bar.Backdrop and data.Bar.Backdrop.Show or true,
+            Colour = data.Bar.Backdrop and data.Bar.Backdrop.Colour or {0.23, 0.23, 0.23, 0.7}
+        },
+        TooltipAnchor = GetString(_G.BARSTEWARD_BOTTOM),
+        ValueSide = GetString(_G.BARSTEWARD_RIGHT)
+    }
+
+    for key, value in pairs(data.Bar) do
+        if (key ~= "Backdrop") then
+            BS.Vars.Bars[newBarId][key] = value
+        end
+    end
+
+    -- add widgets to the bar
+    for widgetIndex, widgetData in pairs(data.Widgets) do
+        BS.Vars.Controls[widgetIndex].Bar = newBarId
+
+        for key, value in pairs(widgetData) do
+            BS.Vars.Controls[widgetIndex][key] = value
+        end
+    end
+
+    --reload ui
+    zo_callLater(
+        function()
+            ZO_Dialogs_ShowDialog(BS.Name .. "Reload")
+        end,
+        500
+    )
+end
+
+function BS.ImportBar(data)
+    local importTable = validate(data)
+
+    if (importTable) then
+        -- check widget movement
+        local widgetCount = 0
+
+        for widgetIndex, _ in pairs(importTable.Widgets) do
+            if (BS.Vars.Controls[widgetIndex].Bar ~= 0) then
+                widgetCount = widgetCount + 1
+            end
+        end
+
+        BS.ImportData = importTable
+
+        if (widgetCount > 0) then
+            BS.MovingWidgets = widgetCount
+            ZO_Dialogs_ShowDialog(BS.Name .. "Import")
+        else
+            BS.DoImport()
+        end
+    end
 end

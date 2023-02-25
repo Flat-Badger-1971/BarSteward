@@ -14,7 +14,7 @@ local function currencyWidget(currencyType, widgetIndex, text, eventList, hideWh
     local ctype = (currencyType == _G.CURT_MONEY) and "GoldType" or "CurrencyType"
     local icon = BS.CURRENCIES[currencyType].icon
 
-    if (not string.find(icon, ".dds")) then
+    if (not icon:find(".dds")) then
         icon = "/esoui/art/currency/" .. icon .. ".dds"
     end
 

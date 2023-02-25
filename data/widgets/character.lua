@@ -168,9 +168,9 @@ BS.widgets[BS.W_ALLIANCE] = {
         local icon = ZO_GetAllianceIcon(alliance)
         local colour = GetAllianceColor(alliance)
 
-        if (string.find(icon, "daggerfall")) then
+        if (icon:find("daggerfall")) then
             icon = "/esoui/art/scoredisplay/blueflag.dds"
-        elseif (string.find(icon, "aldmeri")) then
+        elseif (icon:find("aldmeri")) then
             icon = "/esoui/art/scoredisplay/yellowflag.dds"
         else
             icon = "/esoui/art/scoredisplay/redflag.dds"
@@ -315,7 +315,7 @@ local function getSpeed(widget)
             pSpeed = 0
         end
 
-        speedText = ((string.match(pSpeed, "%d")) and pSpeed or 0) .. "%"
+        speedText = ((pSpeed:match("%d")) and pSpeed or 0) .. "%"
         fixWidth = "200%"
     else
         local distanceInMeters = distance / UNITS_PER_METER
@@ -335,7 +335,7 @@ local function getSpeed(widget)
 
         speed = math.floor(speed)
 
-        local unitText = GetString(_G["BARSTEWARD_" .. string.upper(units)])
+        local unitText = GetString(_G["BARSTEWARD_" .. units:upper()])
 
         speedText = ((type(speed) == "number") and speed or 0) .. " " .. unitText
         fixWidth = "88 mph"
@@ -366,7 +366,7 @@ BS.widgets[BS.W_SPEED] = {
             choices = unitChoices,
             getFunc = function()
                 local units = BS.Vars.Controls[BS.W_SPEED].Units
-                return GetString(_G["BARSTEWARD_" .. string.upper(units)])
+                return GetString(_G["BARSTEWARD_" .. units:upper()])
             end,
             setFunc = function(value)
                 BS.Vars.Controls[BS.W_SPEED].Units = value
@@ -931,14 +931,16 @@ BS.widgets[BS.W_VAMPIRISM_TIMER] = {
         if (isVampire) then
             remaining = ending - GetGameTimeSeconds()
 
-            if (remaining > 0) then
-                time = BS.SecondsToTime(remaining, true, false, vars.HideSeconds, vars.Format)
+            if (remaining < 0) then
+                remaining = 0
+            end
 
-                if (remaining < (vars.DangerValue * 60)) then
-                    colour = vars.DangerColour or BS.Vars.DefaultDangerColour
-                elseif (remaining < (vars.WarningValue * 60)) then
-                    colour = vars.WarningColour or BS.Vars.DefaultWarningColour
-                end
+            time = BS.SecondsToTime(remaining, true, false, vars.HideSeconds, vars.Format)
+
+            if (remaining < (vars.DangerValue * 60)) then
+                colour = vars.DangerColour or BS.Vars.DefaultDangerColour
+            elseif (remaining < (vars.WarningValue * 60)) then
+                colour = vars.WarningColour or BS.Vars.DefaultWarningColour
             end
         end
 

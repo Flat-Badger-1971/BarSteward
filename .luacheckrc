@@ -31,6 +31,11 @@ read_globals = {
             AddSystemMessage = {read_only = true}
         }
     },
+    ["COLLECTIONS_BOOK"] = {
+        fields = {
+            BrowseToCollectible = {read_only = true}
+        }
+    },
     ["EVENT_MANAGER"] = {
         fields = {
             AddFilterForEvent = {read_only = true},
@@ -208,6 +213,7 @@ read_globals = {
     "CT_BUTTON",
     "CT_CONTROL",
     "CT_COOLDOWN",
+    "CT_EDITBOX",
     "CT_LABEL",
     "CT_STATUSBAR",
     "CT_TEXTURE",
@@ -270,7 +276,9 @@ read_globals = {
     "GetCollectibleId",
     "GetCollectibleInfo",
     "GetCollectibleName",
+    "GetCollectibleReferenceId",
     "GetCollectibleSubCategoryInfo",
+    "GetCombinationUnlockedCollectible",
     "GetCompanionCollectibleId",
     "GetCompanionName",
     "GetCurrencyAmount",
@@ -302,6 +310,7 @@ read_globals = {
     "GetItemId",
     "GetItemInfo",
     "GetItemLink",
+    "GetItemLinkContainerCollectibleId",
     "GetItemLinkIcon",
     "GetItemLinkInfo",
     "GetItemLinkItemId",
