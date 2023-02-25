@@ -118,11 +118,11 @@ function BS.CreateAlignmentFrame(alignBars)
 
         for idx, barData in pairs(bars) do
             if (barData.Name == alignBarName and not alignBar) then
-                alignBar = _G[BS.Name .. "_bar_" .. idx]
+                alignBar = _G[string.format("%s_bar_%d", BS.Name, idx)]
             end
 
             if (barData.Name == relBarName and not relBar) then
-                relBar = _G[BS.Name .. "_bar_" .. idx]
+                relBar = _G[string.format("%s_bar_%d", BS.Name, idx)]
             end
         end
 
@@ -596,7 +596,7 @@ local function CreateTool(heading, toolName, varName, setupFunc, guild)
 
             for _, friend in ipairs(dataItems) do
                 BS.Vars[varName][friend.name] = value
-                BS[toolName .. "Update"](frame.scrollList)
+                BS[string.format("%sUpdate", toolName)](frame.scrollList)
             end
         end
     )

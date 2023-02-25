@@ -191,7 +191,7 @@ BS.widgets[BS.W_DURABILITY] = {
                         colour = BS.ARGBConvert(vars.DangerColour or BS.Vars.DefaultDangerColour)
                     end
 
-                    table.insert(items, colour .. item.name .. " - " .. item.condition .. "%|r")
+                    table.insert(items, string.format("%s%s - %s%%|r", colour, item.name, item.condition))
 
                     if (lowest > item.condition) then
                         lowest = item.condition
@@ -466,11 +466,11 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
             local writType = BS.Format(GetString("SI_TRADESKILLTYPE", type))
 
             if (counts.bagCount > 0) then
-                writType = writType .. " " .. BS.BAGICON .. " " .. counts.bagCount
+                writType = string.format("%s %s %d", writType, BS.BAGICON, counts.bagCount)
             end
 
             if (counts.bankCount > 0) then
-                writType = writType .. " " .. BS.BANKICON .. " " .. counts.bankCount
+                writType = string.format("%s %s %d", writType, BS.BANKICON, counts.bankCount)
             end
 
             if (useWW) then
@@ -479,8 +479,8 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
                 local canColour = BS.ARGBConvert((can > 0) and BS.Vars.DefaultOkColour or BS.Vars.DefaultColour)
                 local cantColour = BS.ARGBConvert((cant > 0) and BS.Vars.DefaultDangerColour or BS.Vars.DefaultColour)
 
-                writType = writType .. "   (" .. canColour .. can .. "|r/"
-                writType = writType .. cantColour .. cant .. "|r)"
+                writType = string.format("%s   (%s%d|r/", writType, canColour, can)
+                writType = string.format("%s%s%d|r)", writType, cantColour, cant)
             end
 
             table.insert(writText, writType)
@@ -500,7 +500,7 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
             ttt = ttt .. BS.LF
 
             for _, d in pairs(detail) do
-                ttt = ttt .. BS.LF .. d
+                ttt = string.format("%s%s%s", ttt, BS.LF, d)
             end
         end
 
@@ -1547,16 +1547,16 @@ BS.widgets[BS.W_FRAGMENTS] = {
 
             if (info.collected + info.uncollected + info.unnecessary > 0) then
                 if (info.collected and (info.unnecessary == 0)) then
-                    collectedtt = collectedtt .. zo_iconFormat(icon, 16, 16) .. " "
-                    collectedtt = collectedtt .. "|cf9f9f9" .. collectibleName .. " "
-                    collectedtt = collectedtt .. "|r|c00ff00" .. info.collected
-                    collectedtt = collectedtt .. " / " .. (info.collected + info.uncollected) .. "|r" .. BS.LF
+                    collectedtt = string.format("%s%s ", collectedtt, zo_iconFormat(icon, 16, 16))
+                    collectedtt = string.format("%s|cf9f9f9%s ", collectedtt, collectibleName)
+                    collectedtt = string.format("%s|r|c00ff00%d", collectedtt, info.collected)
+                    collectedtt = string.format("%s / %d|r%s", collectedtt, info.collected + info.uncollected, BS.LF)
                 end
 
                 if (info.unnecessary > 0) then
-                    unnecessarytt = BS.LF .. unnecessarytt .. zo_iconFormat(icon, 16, 16) .. " "
-                    unnecessarytt = unnecessarytt .. collectibleName .. " " .. info.unnecessary
-                    unnecessarytt = unnecessarytt .. " / " .. (info.unnecessary + info.uncollected)
+                    unnecessarytt = string.format("%s%s%s ", BS.LF, unnecessarytt, zo_iconFormat(icon, 16, 16))
+                    unnecessarytt = string.format("%s%s %d", unnecessarytt, collectibleName, info.unnecessary)
+                    unnecessarytt = string.format("%s / %d", unnecessarytt, info.unnecessary + info.uncollected)
                 end
             end
         end
@@ -1652,16 +1652,16 @@ BS.widgets[BS.W_RUNEBOXES] = {
 
             if (info.collected + info.required + info.unnecessary > 0) then
                 if (info.collected and (info.unnecessary == 0)) then
-                    collectedtt = collectedtt .. zo_iconFormat(icon, 16, 16) .. " "
-                    collectedtt = collectedtt .. "|cf9f9f9" .. info.name .. " "
-                    collectedtt = collectedtt .. "|r|c00ff00" .. info.collected
-                    collectedtt = collectedtt .. " / " .. info.required .. "|r" .. BS.LF
+                    collectedtt = string.format("%s%s ", collectedtt, zo_iconFormat(icon, 16, 16))
+                    collectedtt = string.format("%s|cf9f9f9%s ", collectedtt, info.name)
+                    collectedtt = string.format("%s|r|c00ff00%d", collectedtt, info.collected)
+                    collectedtt = string.format("%s / %d|r%s", collectedtt, info.required, BS.LF)
                 end
 
                 if (info.unnecessary > 0) then
-                    unnecessarytt = BS.LF .. unnecessarytt .. zo_iconFormat(icon, 16, 16) .. " "
-                    unnecessarytt = unnecessarytt .. info.name .. " " .. info.unnecessary
-                    unnecessarytt = unnecessarytt .. " / " .. info.required
+                    unnecessarytt = string.format("%s%s%s ", BS.LF, unnecessarytt, zo_iconFormat(icon, 16, 16))
+                    unnecessarytt = string.format("%s%s %d", unnecessarytt, info.name, info.unnecessary)
+                    unnecessarytt = string.format("%s / %d", unnecessarytt, info.required)
                 end
             end
         end
@@ -1683,8 +1683,8 @@ BS.widgets[BS.W_RUNEBOXES] = {
                 name, icon = cname, cicon
             end
 
-            tt = tt .. BS.LF .. zo_iconFormat(icon, 16, 16) .. " "
-            tt = tt .. BS.Format(name) .. " 0/" .. qty
+            tt = string.format("%s%s%s ", tt, BS.LF, zo_iconFormat(icon, 16, 16))
+            tt = string.format("%s%s 0/%d", tt, BS.Format(name), qty)
         end
 
         widget.tooltip = tt

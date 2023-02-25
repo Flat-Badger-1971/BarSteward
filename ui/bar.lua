@@ -433,7 +433,7 @@ function baseBar:AddWidgets(widgets)
         if (metadata.timer) then
             if (metadata.name == "time") then
                 EVENT_MANAGER:RegisterForUpdate(
-                    BS.Name .. metadata.name,
+                    string.format("%s%s", BS.Name, metadata.name),
                     metadata.timer,
                     function()
                         self:DoUpdate(metadata)

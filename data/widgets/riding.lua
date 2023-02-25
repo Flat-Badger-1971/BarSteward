@@ -51,13 +51,13 @@ BS.widgets[BS.W_MOUNT_TRAINING] = {
         ttt = ttt .. GetString(_G.BARSTEWARD_TRAINING_PROGRESS)
 
         for trainingType, texture in pairs(_G.STABLE_TRAINING_TEXTURES) do
-            local icon = BS.LF .. "|cf9f9f9" .. zo_iconFormat(texture, 16, 16) .. " "
-            local ttype = BS.Format(GetString("SI_RIDINGTRAINTYPE", trainingType)) .. " "
+            local icon = string.format("%s|cf9f9f9%s ", BS.LF, zo_iconFormat(texture, 16, 16))
+            local ttype = string.format("%s ", BS.Format(GetString("SI_RIDINGTRAINTYPE", trainingType)))
             local val, maxVal = STABLE_MANAGER:GetStats(trainingType)
             local tcol = ((val == maxVal) and BS.Vars.DefaultOkColour or BS.Vars.DefaultWarningColour)
-            local col = "|r" .. BS.ARGBConvert(tcol)
+            local col = string.format("|r%s", BS.ARGBConvert(tcol))
 
-            ttt = ttt .. icon .. ttype .. col .. val .. "/" .. maxVal .. "|r"
+            ttt = string.format("%s%s%s%s%s/%s|r", ttt, icon, ttype, col, val, maxVal)
         end
 
         widget.tooltip = ttt

@@ -53,19 +53,18 @@ BS.widgets[BS.W_STOLEN_ITEMS] = {
             local stt = BS.LF
 
             for _, item in pairs(stolen) do
-                stt = stt .. BS.LF .. item.icon .. " "
-                stt = stt .. "|cf9f9f9" .. item.name
+                stt = string.format("%s%s%s ", stt, BS.LF, item.icon)
+                stt = string.format("%s|cf9f9f9%s", stt, item.name)
 
                 if (item.count > 1) then
-                    stt = stt .. " (" .. item.count .. ")"
+                    stt = string.format("%s (%d)", stt, item.count)
                 end
 
-                stt = stt .. "   |cffff00" .. (item.sellPrice * item.count) .. "|r " .. goldIcon
+                stt = string.format("%s   |cffff00%d|r%s", stt, item.sellPrice * item.count, goldIcon)
                 total = total + (item.sellPrice * item.count)
             end
 
-            ttt = ttt .. BS.LF
-            ttt = ttt .. BS.LF
+            ttt = ttt .. BS.LF .. BS.LF
             ttt = ttt .. zo_strformat(GetString(_G.BARSTEWARD_TOTAL_VALUE), "|cffff00" .. total .. "|r " .. goldIcon)
 
             ttt = ttt .. stt

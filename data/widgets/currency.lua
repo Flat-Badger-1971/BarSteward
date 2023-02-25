@@ -35,10 +35,13 @@ local function currencyWidget(currencyType, widgetIndex, text, eventList, hideWh
                 if (character ~= thisCharacter) then
                     allCharacters = allCharacters + amount
                     charactertt =
-                        charactertt ..
-                        "|cffd700" ..
-                            tostring(useSeparators and BS.AddSeparators(amount) or amount) ..
-                                "|r " .. ZO_FormatUserFacingDisplayName(character) .. BS.LF
+                        string.format(
+                        "%s|cffd700%s|r %s%s",
+                        charactertt,
+                        tostring(useSeparators and BS.AddSeparators(amount) or amount),
+                        ZO_FormatUserFacingDisplayName(character),
+                        BS.LF
+                    )
                 end
             end
 

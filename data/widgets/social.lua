@@ -13,11 +13,11 @@ local function addToTooltip(friendList, textureFunctions)
             end
         end
 
-        tt = tt .. BS.LF .. zo_iconFormat(textureFunctions.playerStatusIcon(friend.status))
-        tt = tt .. textColour
-        tt = tt .. (noChar and "" or zo_iconFormat(textureFunctions.allianceIcon(friend.alliance)))
-        tt = tt .. ZO_FormatUserFacingDisplayName(friend.displayName)
-        tt = tt .. (noChar and "" or (" - " .. friend.formattedZone)) .. "|r"
+        tt = string.format("%s%s%s", tt, BS.LF, zo_iconFormat(textureFunctions.playerStatusIcon(friend.status)))
+        tt = string.format("%s%s", tt, textColour)
+        tt = string.format("%s%s", tt, noChar and "" or zo_iconFormat(textureFunctions.allianceIcon(friend.alliance)))
+        tt = string.format("%s%s", tt, ZO_FormatUserFacingDisplayName(friend.displayName))
+        tt = string.format("%s%s|r", tt, noChar and "" or (" - " .. friend.formattedZone))
     end
 
     return tt

@@ -338,7 +338,7 @@ end
 function BS.DisableUpdates()
     for time, funcs in pairs(timerFunctions) do
         if (#funcs ~= 0) then
-            EVENT_MANAGER:UnregisterForUpdate(BS.Name .. tostring(time))
+            EVENT_MANAGER:UnregisterForUpdate(string.format("%s%s", BS.Name, tostring(time)))
         end
     end
 end
@@ -347,7 +347,7 @@ function BS.EnableUpdates()
     for time, funcs in pairs(timerFunctions) do
         if (#funcs ~= 0) then
             EVENT_MANAGER:RegisterForUpdate(
-                BS.Name .. tostring(time),
+                string.format("%s%s", BS.Name, tostring(time)),
                 time,
                 function()
                     callTimerFunctions(time)
@@ -690,7 +690,7 @@ function BS.ResizeBar(barIndex)
 
     for index, widget in pairs(BS.Vars.Controls) do
         if (widget.Bar == barIndex) then
-            local w = _G[BS.Name .. "_Widget_" .. BS.widgets[index].name]
+            local w = _G[string.format("%s_Widget_%s", BS.Name, BS.widgets[index].name)]
 
             if (w and not w.ref.isHidden) then
                 allHidden = false
