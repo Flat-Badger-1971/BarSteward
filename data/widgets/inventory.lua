@@ -1601,7 +1601,7 @@ BS.widgets[BS.W_RUNEBOXES] = {
         for _, item in ipairs(filteredItems) do
             local collectibleId, fragments = BS.GetCollectibleId(item.bagId, item.slotIndex)
 
-            if (collectibleId > 0) then
+            if (tonumber(collectibleId) and collectibleId > 0) then
                 local unlocked = select(5, GetCollectibleInfo(collectibleId))
 
                 if (not fragmentInfo[collectibleId]) then
