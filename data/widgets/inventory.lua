@@ -1614,7 +1614,7 @@ BS.widgets[BS.W_RUNEBOXES] = {
                     }
                 end
 
-                fragmentInfo[collectibleId].required = fragmentInfo[collectibleId].collected + fragments
+                fragmentInfo[collectibleId].required = fragments
 
                 if (not unlocked) then
                     fragmentInfo[collectibleId].collected = fragmentInfo[collectibleId].collected + item.stackCount
