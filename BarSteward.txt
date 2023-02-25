@@ -24,6 +24,7 @@ languages/$(language).lua
 data/constants.lua
 data/defaults.lua
 data/encoding.lua
+data/runeboxes.lua
 data/sounds.lua
 
 misc/utility.lua

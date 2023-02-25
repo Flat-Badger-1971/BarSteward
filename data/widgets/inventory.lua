@@ -1506,6 +1506,10 @@ BS.widgets[BS.W_FRAGMENTS] = {
                 fragmentInfo[fragmentData.combinedId].unnecessary =
                     fragmentInfo[fragmentData.combinedId].unnecessary + 1
                 unnecessary = unnecessary + 1
+            else
+                fragmentInfo[fragmentData.combinedId].uncollected =
+                    fragmentInfo[fragmentData.combinedId].uncollected + 1
+                uncollected = uncollected + 1
             end
         end
 
@@ -1521,7 +1525,7 @@ BS.widgets[BS.W_FRAGMENTS] = {
         widget:SetColour(unpack(colour))
 
         local tt = BS.Format(_G.SI_ANTIQUITY_FRAGMENTS)
-        local collectedtt = "|cf9f9f9"
+        local collectedtt = ""
         local unnecessarytt = "|cffff00"
 
         for id, info in pairs(fragmentInfo) do
@@ -1529,13 +1533,14 @@ BS.widgets[BS.W_FRAGMENTS] = {
 
             if (info.collected + info.uncollected + info.unnecessary > 0) then
                 if (info.collected and (info.unnecessary == 0)) then
-                    collectedtt = collectedtt .. collectibleName .. " " .. info.collected
-                    collectedtt = collectedtt .. " / " .. (info.collected + info.uncollected) .. BS.LF
+                    collectedtt = collectedtt .. "|cf9f9f9" .. collectibleName .. " "
+                    collectedtt = collectedtt .. "|r|c00ff00" .. info.collected
+                    collectedtt = collectedtt .. " / " .. (info.collected + info.uncollected) .. "|r" .. BS.LF
                 end
 
                 if (info.unnecessary > 0) then
                     unnecessarytt = BS.LF .. unnecessarytt .. collectibleName .. " " .. info.unnecessary
-                    unnecessarytt = unnecessarytt .. " / " .. (info.collected + info.uncollected)
+                    unnecessarytt = unnecessarytt .. " / " .. (info.unnecessary + info.uncollected)
                 end
             end
         end
@@ -1549,6 +1554,106 @@ BS.widgets[BS.W_FRAGMENTS] = {
         COLLECTIONS_BOOK:BrowseToCollectible(BS.CollectibleId)
     end,
     callback = {[CALLBACK_MANAGER] = {"OnCollectionUpdated"}},
-    tooltip = BS.Format(_G.SI_ANTIQUITY_FRAGMENTS),
+    tooltip = GetString(_G.BARSTEWARD_COLLECTIBLE_FRAGMENTS),
     icon = "/esoui/art/icons/antiquities_u30_museum_fragment07.dds"
+}
+
+BS.widgets[BS.W_RUNEBOXES] = {
+    -- v1.4.47
+    name = "runeboxFragments",
+    update = function(widget)
+        local vars = BS.Vars.Controls[BS.W_FRAGMENTS]
+        local colour = vars.Colour or BS.Vars.DefaultColour
+        local collected, required = 0, 0
+        local unnecessary = 0
+        local fragmentInfo = {}
+
+        local bags = {_G.BAG_BACKPACK, _G.BAG_BANK}
+
+        if (IsESOPlusSubscriber()) then
+            table.insert(bags, _G.BAG_SUBSCRIBER_BANK)
+        end
+
+        local filteredItems =
+            SHARED_INVENTORY:GenerateFullSlotData(
+            function(itemdata)
+                return ZO_IsElementInNumericallyIndexedTable(BS.FRAGMENT_TYPES, itemdata.specializedItemType)
+            end,
+            unpack(bags)
+        )
+
+        for _, item in ipairs(filteredItems) do
+            local collectibleId, fragments = BS.GetCollectibleId(item.bagId, item.slotIndex)
+
+            if (collectibleId > 0) then
+                local unlocked = select(5, GetCollectibleInfo(collectibleId))
+
+                if (not fragmentInfo[collectibleId]) then
+                    fragmentInfo[collectibleId] = {
+                        name = item.name,
+                        collected = 0,
+                        uncollected = 0,
+                        unnecessary = 0,
+                        required = 0
+                    }
+                end
+
+                fragmentInfo[collectibleId].required = fragmentInfo[collectibleId].collected + fragments
+
+                if (not unlocked) then
+                    fragmentInfo[collectibleId].collected = fragmentInfo[collectibleId].collected + item.stackCount
+                    collected = collected + item.stackCount
+                    required = required + fragments
+                else
+                    fragmentInfo[collectibleId].unnecessary = fragmentInfo[collectibleId].unnecessary + item.stackCount
+                    unnecessary = unnecessary + item.stackCount
+                end
+            end
+        end
+
+        local text = collected .. "/" .. required
+        local plainText = text
+
+        if (unnecessary > 0) then
+            plainText = text .. "/" .. unnecessary
+            text = text .. "/|cffff00" .. unnecessary .. "|r"
+        end
+
+        widget:SetValue(text, plainText)
+        widget:SetColour(unpack(colour))
+
+        local tt = BS.Format(_G.SI_ANTIQUITY_FRAGMENTS)
+        local collectedtt = ""
+        local unnecessarytt = "|cffff00"
+
+        for _, info in pairs(fragmentInfo) do
+            if (info.collected + info.required + info.unnecessary > 0) then
+                if (info.collected and (info.unnecessary == 0)) then
+                    collectedtt = collectedtt .. "|cf9f9f9" .. info.name .. " "
+                    collectedtt = collectedtt .. "|r|c00ff00" .. info.collected
+                    collectedtt = collectedtt .. " / " .. info.required .. "|r" .. BS.LF
+                end
+
+                if (info.unnecessary > 0) then
+                    unnecessarytt = BS.LF .. unnecessarytt .. info.name .. " " .. info.unnecessary
+                    unnecessarytt = unnecessarytt .. " / " .. info.required
+                end
+            end
+        end
+
+        tt = tt .. BS.LF .. collectedtt .. "|r" .. unnecessarytt .. "|r"
+        widget.tooltip = tt
+
+        return collected
+    end,
+    onClick = function()
+        if (not IsInGamepadPreferredMode()) then
+            SCENE_MANAGER:Show("inventory")
+        else
+            SCENE_MANAGER:Show("gamepad_inventory_root")
+        end
+    end,
+    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
+    tooltip = GetString(_G.BARSTEWARD_RUNEBOX_FRAGMENTS),
+    icon = "/esoui/art/tradinghouse/tradinghouse_trophy_runebox_fragment_up.dds"
 }
