@@ -1601,28 +1601,31 @@ BS.widgets[BS.W_RUNEBOXES] = {
         for _, item in ipairs(filteredItems) do
             local collectibleId, fragments = BS.GetCollectibleId(item.bagId, item.slotIndex)
 
-            if (tonumber(collectibleId) and collectibleId > 0) then
-                local unlocked = select(5, GetCollectibleInfo(collectibleId))
+            if (tonumber(collectibleId)) then
+                if (collectibleId > 0) then
+                    local unlocked = select(5, GetCollectibleInfo(collectibleId))
 
-                if (not fragmentInfo[collectibleId]) then
-                    fragmentInfo[collectibleId] = {
-                        name = item.name,
-                        collected = 0,
-                        uncollected = 0,
-                        unnecessary = 0,
-                        required = 0
-                    }
-                end
+                    if (not fragmentInfo[collectibleId]) then
+                        fragmentInfo[collectibleId] = {
+                            name = item.name,
+                            collected = 0,
+                            uncollected = 0,
+                            unnecessary = 0,
+                            required = 0
+                        }
+                    end
 
-                fragmentInfo[collectibleId].required = fragments
+                    fragmentInfo[collectibleId].required = fragments
 
-                if (not unlocked) then
-                    fragmentInfo[collectibleId].collected = fragmentInfo[collectibleId].collected + item.stackCount
-                    collected = collected + item.stackCount
-                    required = required + fragments
-                else
-                    fragmentInfo[collectibleId].unnecessary = fragmentInfo[collectibleId].unnecessary + item.stackCount
-                    unnecessary = unnecessary + item.stackCount
+                    if (not unlocked) then
+                        fragmentInfo[collectibleId].collected = fragmentInfo[collectibleId].collected + item.stackCount
+                        collected = collected + item.stackCount
+                        required = required + fragments
+                    else
+                        fragmentInfo[collectibleId].unnecessary =
+                            fragmentInfo[collectibleId].unnecessary + item.stackCount
+                        unnecessary = unnecessary + item.stackCount
+                    end
                 end
             end
         end
