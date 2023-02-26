@@ -1536,7 +1536,7 @@ BS.widgets[BS.W_FRAGMENTS] = {
         widget:SetValue(text, plainText)
         widget:SetColour(unpack(colour))
 
-        local tt = BS.Format(_G.SI_ANTIQUITY_FRAGMENTS)
+        local tt = GetString(_G.BARSTEWARD_COLLECTIBLE_FRAGMENTS)
         local collectedtt = ""
         local unnecessarytt = "|cffff00"
         local uncollectedtt = "|cababab"
@@ -1596,7 +1596,9 @@ BS.widgets[BS.W_FRAGMENTS] = {
             uncollectedtt = uncollectedtt:sub(1, uncollectedtt:len() - 1)
         end
 
-        tt = tt .. BS.LF .. collectedtt .. BS.LF .. unnecessarytt .. "|r" .. BS.LF .. uncollectedtt .. "|r"
+        tt = tt .. BS.LF .. collectedtt .. BS.LF
+        tt = tt .. GetString(_G.BARSTEWARD_ALREADY_COLLECTED) .. BS.LF .. unnecessarytt .. "|r" .. BS.LF
+        tt = tt .. GetString(_G.BARSTEWARD_NOT_COLLECTED) .. BS.LF .. uncollectedtt .. "|r"
         widget.tooltip = tt
 
         return collected
@@ -1679,7 +1681,7 @@ BS.widgets[BS.W_RUNEBOXES] = {
         widget:SetValue(text, plainText)
         widget:SetColour(unpack(colour))
 
-        local tt = BS.Format(_G.SI_ANTIQUITY_FRAGMENTS)
+        local tt = GetString(_G.BARSTEWARD_RUNEBOX_FRAGMENTS)
         local collectedtt = ""
         local unnecessarytt = "|cffff00"
         local icon
@@ -1721,18 +1723,19 @@ BS.widgets[BS.W_RUNEBOXES] = {
                 end
 
                 if (info.unnecessary > 0) then
-                    unnecessarytt = string.format("%s%s%s ", BS.LF, unnecessarytt, zo_iconFormat(info.icon, 16, 16))
+                    unnecessarytt = string.format("%s%s ", unnecessarytt, zo_iconFormat(info.icon, 16, 16))
                     unnecessarytt = string.format("%s%s %d", unnecessarytt, info.name, info.unnecessary)
                     unnecessarytt = string.format("%s / %d%s", unnecessarytt, info.required, BS.LF)
                 end
             end
         end
 
-        tt = tt .. BS.LF .. collectedtt .. "|r" .. unnecessarytt .. "|r"
+        tt = tt .. BS.LF .. collectedtt .. "|r" .. BS.LF
+        tt = tt .. GetString(_G.BARSTEWARD_ALREADY_COLLECTED) .. BS.LF .. unnecessarytt .. "|r"
 
         local uncollected = BS.GetNoneCollected(fragmentInfo)
 
-        tt = tt .. "|cababab"
+        tt = tt .. BS.LF .. GetString(_G.BARSTEWARD_NOT_COLLECTED) .. "|cababab"
 
         for _, info in ipairs(uncollected) do
             tt = string.format("%s%s%s ", tt, BS.LF, zo_iconFormat(info.icon, 16, 16))
