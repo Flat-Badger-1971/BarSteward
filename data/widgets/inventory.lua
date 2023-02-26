@@ -1491,13 +1491,12 @@ BS.widgets[BS.W_FRAGMENTS] = {
     update = function(widget)
         local vars = BS.Vars.Controls[BS.W_FRAGMENTS]
         local colour = vars.Colour or BS.Vars.DefaultColour
-
-        local frags = {}
-        getCollectibles(_G.COLLECTIBLE_CATEGORY_TYPE_COMBINATION_FRAGMENT, frags, true, true)
-
         local collected, uncollected = 0, 0
         local unnecessary = 0
         local fragmentInfo = {}
+        local frags = {}
+
+        getCollectibles(_G.COLLECTIBLE_CATEGORY_TYPE_COMBINATION_FRAGMENT, frags, true, true)
 
         for _, fragmentData in ipairs(frags) do
             BS.CollectibleId = fragmentData.id
@@ -1540,28 +1539,64 @@ BS.widgets[BS.W_FRAGMENTS] = {
         local tt = BS.Format(_G.SI_ANTIQUITY_FRAGMENTS)
         local collectedtt = ""
         local unnecessarytt = "|cffff00"
+        local uncollectedtt = "|cababab"
+        local fragmentsForDisplay = {}
 
         for id, info in pairs(fragmentInfo) do
-            local name, _, icon = GetCollectibleInfo(id)
-            local collectibleName = BS.Format(name)
+            local data = ZO_COLLECTIBLE_DATA_MANAGER:GetCollectibleDataById(id)
+
+            if ((not data:IsUnlocked()) or info.unnecessary > 0) then
+                table.insert(
+                    fragmentsForDisplay,
+                    {
+                        name = data:GetName(),
+                        collected = info.collected,
+                        uncollected = info.uncollected,
+                        unnecessary = info.unnecessary,
+                        icon = data:GetIcon()
+                    }
+                )
+            end
+        end
+
+        table.sort(
+            fragmentsForDisplay,
+            function(a, b)
+                return a.name < b.name
+            end
+        )
+
+        for _, info in ipairs(fragmentsForDisplay) do
+            local collectibleName = BS.Format(info.name)
 
             if (info.collected + info.uncollected + info.unnecessary > 0) then
-                if (info.collected and (info.unnecessary == 0)) then
-                    collectedtt = string.format("%s%s ", collectedtt, zo_iconFormat(icon, 16, 16))
+                if (info.collected and (info.unnecessary == 0) and info.collected > 0) then
+                    collectedtt = string.format("%s%s ", collectedtt, zo_iconFormat(info.icon, 16, 16))
                     collectedtt = string.format("%s|cf9f9f9%s ", collectedtt, collectibleName)
                     collectedtt = string.format("%s|r|c00ff00%d", collectedtt, info.collected)
                     collectedtt = string.format("%s / %d|r%s", collectedtt, info.collected + info.uncollected, BS.LF)
                 end
 
                 if (info.unnecessary > 0) then
-                    unnecessarytt = string.format("%s%s%s ", BS.LF, unnecessarytt, zo_iconFormat(icon, 16, 16))
+                    unnecessarytt = string.format("%s%s ", unnecessarytt, zo_iconFormat(info.icon, 16, 16))
                     unnecessarytt = string.format("%s%s %d", unnecessarytt, collectibleName, info.unnecessary)
-                    unnecessarytt = string.format("%s / %d", unnecessarytt, info.unnecessary + info.uncollected)
+                    unnecessarytt =
+                        string.format("%s / %d%s", unnecessarytt, info.unnecessary + info.uncollected, BS.LF)
+                end
+
+                if (info.collected and (info.unnecessary == 0) and info.collected == 0) then
+                    uncollectedtt = string.format("%s%s ", uncollectedtt, zo_iconFormat(info.icon, 16, 16))
+                    uncollectedtt = string.format("%s%s 0/", uncollectedtt, collectibleName)
+                    uncollectedtt = string.format("%s%d%s", uncollectedtt, info.collected + info.uncollected, BS.LF)
                 end
             end
         end
 
-        tt = tt .. BS.LF .. collectedtt .. "|r" .. unnecessarytt .. "|r"
+        if (uncollectedtt:sub(-1) == BS.LF) then
+            uncollectedtt = uncollectedtt:sub(1, uncollectedtt:len() - 1)
+        end
+
+        tt = tt .. BS.LF .. collectedtt .. BS.LF .. unnecessarytt .. "|r" .. BS.LF .. uncollectedtt .. "|r"
         widget.tooltip = tt
 
         return collected
@@ -1600,32 +1635,35 @@ BS.widgets[BS.W_RUNEBOXES] = {
 
         for _, item in ipairs(filteredItems) do
             local collectibleId, fragments = BS.GetCollectibleId(item.bagId, item.slotIndex)
+            local unlocked
 
-            if (type(collectibleId) == "number") then
-                if (collectibleId > 0) then
-                    local unlocked = select(5, GetCollectibleInfo(collectibleId))
+            if (type(collectibleId) == "string") then
+                unlocked = false
+                collectibleId = tonumber(collectibleId) + 1000000
+            elseif (collectibleId > 0) then
+                unlocked = ZO_COLLECTIBLE_DATA_MANAGER:GetCollectibleDataById(collectibleId):IsUnlocked()
+            end
 
-                    if (not fragmentInfo[collectibleId]) then
-                        fragmentInfo[collectibleId] = {
-                            name = item.name,
-                            collected = 0,
-                            uncollected = 0,
-                            unnecessary = 0,
-                            required = 0
-                        }
-                    end
+            if (unlocked ~= nil) then
+                if (not fragmentInfo[collectibleId]) then
+                    fragmentInfo[collectibleId] = {
+                        name = item.name,
+                        collected = 0,
+                        uncollected = 0,
+                        unnecessary = 0,
+                        required = 0
+                    }
+                end
 
-                    fragmentInfo[collectibleId].required = fragments
+                fragmentInfo[collectibleId].required = fragments
 
-                    if (not unlocked) then
-                        fragmentInfo[collectibleId].collected = fragmentInfo[collectibleId].collected + item.stackCount
-                        collected = collected + item.stackCount
-                        required = required + fragments
-                    else
-                        fragmentInfo[collectibleId].unnecessary =
-                            fragmentInfo[collectibleId].unnecessary + item.stackCount
-                        unnecessary = unnecessary + item.stackCount
-                    end
+                if (not unlocked) then
+                    fragmentInfo[collectibleId].collected = fragmentInfo[collectibleId].collected + item.stackCount
+                    collected = collected + item.stackCount
+                    required = required + fragments
+                else
+                    fragmentInfo[collectibleId].unnecessary = fragmentInfo[collectibleId].unnecessary + item.stackCount
+                    unnecessary = unnecessary + item.stackCount
                 end
             end
         end
@@ -1645,26 +1683,47 @@ BS.widgets[BS.W_RUNEBOXES] = {
         local collectedtt = ""
         local unnecessarytt = "|cffff00"
         local icon
+        local tttable = {}
 
         for id, info in pairs(fragmentInfo) do
-            if (type(id) == "string") then
-                icon = GetItemLinkIcon(BS.MakeItemLink(tonumber(id)))
+            if (id > 1000000) then
+                icon = GetItemLinkIcon(BS.MakeItemLink(tonumber(id - 1000000)))
             else
-                icon = GetCollectibleIcon(id)
+                icon = ZO_COLLECTIBLE_DATA_MANAGER:GetCollectibleDataById(id):GetIcon()
             end
 
+            table.insert(
+                tttable,
+                {
+                    name = info.name,
+                    icon = icon,
+                    collected = info.collected,
+                    unnecessary = info.unnecessary,
+                    required = info.required
+                }
+            )
+        end
+
+        table.sort(
+            tttable,
+            function(a, b)
+                return a.name < b.name
+            end
+        )
+
+        for _, info in ipairs(tttable) do
             if (info.collected + info.required + info.unnecessary > 0) then
                 if (info.collected and (info.unnecessary == 0)) then
-                    collectedtt = string.format("%s%s ", collectedtt, zo_iconFormat(icon, 16, 16))
+                    collectedtt = string.format("%s%s ", collectedtt, zo_iconFormat(info.icon, 16, 16))
                     collectedtt = string.format("%s|cf9f9f9%s ", collectedtt, info.name)
                     collectedtt = string.format("%s|r|c00ff00%d", collectedtt, info.collected)
                     collectedtt = string.format("%s / %d|r%s", collectedtt, info.required, BS.LF)
                 end
 
                 if (info.unnecessary > 0) then
-                    unnecessarytt = string.format("%s%s%s ", BS.LF, unnecessarytt, zo_iconFormat(icon, 16, 16))
+                    unnecessarytt = string.format("%s%s%s ", BS.LF, unnecessarytt, zo_iconFormat(info.icon, 16, 16))
                     unnecessarytt = string.format("%s%s %d", unnecessarytt, info.name, info.unnecessary)
-                    unnecessarytt = string.format("%s / %d", unnecessarytt, info.required)
+                    unnecessarytt = string.format("%s / %d%s", unnecessarytt, info.required, BS.LF)
                 end
             end
         end
@@ -1673,21 +1732,11 @@ BS.widgets[BS.W_RUNEBOXES] = {
 
         local uncollected = BS.GetNoneCollected(fragmentInfo)
 
-        tt = tt .. BS.LF .. "|cababab"
-        local name
+        tt = tt .. "|cababab"
 
-        for id, qty in pairs(uncollected) do
-            if (type(id) == "string") then
-                local link = BS.MakeItemLink(tonumber(id))
-                icon = GetItemLinkIcon(link)
-                name = GetItemLinkName(link)
-            else
-                local cname, _, cicon = GetCollectibleInfo(id)
-                name, icon = cname, cicon
-            end
-
-            tt = string.format("%s%s%s ", tt, BS.LF, zo_iconFormat(icon, 16, 16))
-            tt = string.format("%s%s 0/%d", tt, BS.Format(name), qty)
+        for _, info in ipairs(uncollected) do
+            tt = string.format("%s%s%s ", tt, BS.LF, zo_iconFormat(info.icon, 16, 16))
+            tt = string.format("%s%s 0/%d", tt, BS.Format(info.name), info.quantity)
         end
 
         widget.tooltip = tt

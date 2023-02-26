@@ -170,7 +170,8 @@ read_globals = {
     ["ZO_COLLECTIBLE_DATA_MANAGER"] = {
         fields = {
             GetAllCollectibleDataObjects = {read_only = true},
-            GetCategoryDataByIndicies = {read_only = true}
+            GetCategoryDataByIndicies = {read_only = true},
+            GetCollectibleDataById = {read_only = true}
         }
     },
     ["ZO_ComboBox"] = {
