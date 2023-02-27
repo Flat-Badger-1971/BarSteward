@@ -315,7 +315,7 @@ local function getSpeed(widget)
             pSpeed = 0
         end
 
-        speedText = ((pSpeed:match("%d")) and pSpeed or 0) .. "%"
+        speedText = ((type(pSpeed) == "number") and pSpeed or 0) .. "%"
         fixWidth = "200%"
     else
         local distanceInMeters = distance / UNITS_PER_METER
