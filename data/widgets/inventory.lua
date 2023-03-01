@@ -1800,7 +1800,7 @@ BS.widgets[BS.W_RECIPE_WATCH] = {
             BS.Vars.FoundCount = 0
         end
 
-        if ((event or "initial")== "initial") then
+        if ((event or "initial") == "initial") then
             widget:SetValue(BS.Vars.FoundCount or 0)
             widget.tooltip = getFoundRecipesTooltip()
         end
@@ -1820,25 +1820,15 @@ BS.widgets[BS.W_RECIPE_WATCH] = {
         BS.Vars.FoundCount = BS.Vars.FoundCount + quantity
 
         if (vars.Announce) then
-            local announce = true
-            local previousTime = BS.Vars.PreviousAnnounceTime[BS.W_RECIPE_WATCH] or (os.time() - 301)
-            local debounceTime = (vars.DebounceTime or 5) * 60
+            local icolour = GetItemQualityColor(displayQuality)
+            local iname = icolour:Colorize(BS.Format(itemName))
 
-            if (os.time() - previousTime <= debounceTime) then
-                announce = false
-            end
-
-            if (announce == true) then
-                local icolour = GetItemQualityColor(displayQuality)
-                local iname = icolour:Colorize(BS.Format(itemName))
-
-                BS.Vars.PreviousAnnounceTime[BS.W_RECIPE_WATCH] = os.time()
-                BS.Announce(
-                    GetString(_G.BARSTEWARD_RECIPES),
-                    zo_strformat(GetString(_G.BARSTEWARD_WATCHED_ITEM_MESSAGE), iname),
-                    BS.W_WATCHED_ITEMS
-                )
-            end
+            BS.Vars.PreviousAnnounceTime[BS.W_RECIPE_WATCH] = os.time()
+            BS.Announce(
+                GetString(_G.BARSTEWARD_RECIPES),
+                zo_strformat(GetString(_G.BARSTEWARD_WATCHED_ITEM_MESSAGE), iname),
+                BS.W_WATCHED_ITEMS
+            )
         end
 
         widget:SetValue(BS.Vars.FoundCount)
@@ -1856,13 +1846,5 @@ BS.widgets[BS.W_RECIPE_WATCH] = {
         BS.Vars.FoundRecipes = {}
         BS.Vars.FoundCount = 0
         BS.RefreshWidget(BS.W_RECIPE_WATCH)
-    end,
-    customOptions = {
-        name = GetString(_G.BARSTEWARD_DEBOUNCE),
-        tooltip = GetString(_G.BARSTEWARD_DEBOUNCE_DESC),
-        choices = {0, 1, 5, 10, 15, 20, 30, 40, 50, 60},
-        varName = "DebounceTime",
-        refresh = false,
-        default = 5
-    }
+    end
 }
