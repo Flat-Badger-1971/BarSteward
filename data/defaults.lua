@@ -462,6 +462,7 @@ BS.Defaults = {
             HideDaysWhenZero = false
         },
         [BS.W_FRAGMENTS] = {Bar = 0, Order = 87, ColourValues = "c"},
-        [BS.W_RUNEBOXES] = {Bar = 0, Order = 88, ColourValues = "c"}
+        [BS.W_RUNEBOXES] = {Bar = 0, Order = 88, ColourValues = "c"},
+        [BS.W_RECIPE_WATCH] = {Bar = 0, Order = 89, Autohide = false, Announce = true, ColourValues="c"}
     }
 }

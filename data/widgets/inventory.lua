@@ -1757,3 +1757,112 @@ BS.widgets[BS.W_RUNEBOXES] = {
     tooltip = GetString(_G.BARSTEWARD_RUNEBOX_FRAGMENTS),
     icon = "/esoui/art/tradinghouse/tradinghouse_trophy_runebox_fragment_up.dds"
 }
+
+local function getFoundRecipesTooltip()
+    local tt = GetString(_G.BARSTEWARD_RECIPES)
+    local tttable = {}
+
+    for _, info in pairs(BS.Vars.FoundRecipes) do
+        table.insert(tttable, info)
+    end
+
+    table.sort(
+        tttable,
+        function(a, b)
+            return a.name < b.name
+        end
+    )
+
+    for _, info in ipairs(tttable) do
+        local colour = GetItemQualityColor(info.displayQuality)
+        local name = colour:Colorize(BS.Format(info.name))
+
+        tt = tt .. BS.LF .. name .. "|r" .. ((info.qty > 1) and (" (" .. info.qty .. ")") or "")
+
+        if (info.known) then
+            tt = tt .. " " .. zo_iconFormat("/esoui/art/miscellaneous/check.dds", 16, 16)
+        end
+    end
+
+    return tt
+end
+
+BS.widgets[BS.W_RECIPE_WATCH] = {
+    -- v1.4.50
+    name = "recipeWatch",
+    update = function(widget, event, _, itemName, quantity, _, _, _, _, _, itemId)
+        local link = BS.MakeItemLink(itemId, itemName)
+        local itemType = GetItemLinkItemType(link)
+        local vars = BS.Vars.Controls[BS.W_RECIPE_WATCH]
+
+        if (not BS.Vars.FoundRecipes) then
+            BS.Vars.FoundRecipes = {}
+            BS.Vars.FoundCount = 0
+        end
+
+        if ((event or "initial")== "initial") then
+            widget:SetValue(BS.Vars.FoundCount or 0)
+            widget.tooltip = getFoundRecipesTooltip()
+        end
+
+        if (itemType ~= _G.ITEMTYPE_RECIPE) then
+            return
+        end
+
+        local displayQuality = GetItemLinkDisplayQuality(link)
+
+        if (not BS.Vars.FoundRecipes[itemId]) then
+            BS.Vars.FoundRecipes[itemId] = {name = itemName, qty = 0, displayQuality = displayQuality, known = false}
+        end
+
+        BS.Vars.FoundRecipes[itemId].qty = BS.Vars.FoundRecipes[itemId].qty + quantity
+        BS.Vars.FoundRecipes[itemId].known = IsItemLinkRecipeKnown(link)
+        BS.Vars.FoundCount = BS.Vars.FoundCount + quantity
+
+        if (vars.Announce) then
+            local announce = true
+            local previousTime = BS.Vars.PreviousAnnounceTime[BS.W_RECIPE_WATCH] or (os.time() - 301)
+            local debounceTime = (vars.DebounceTime or 5) * 60
+
+            if (os.time() - previousTime <= debounceTime) then
+                announce = false
+            end
+
+            if (announce == true) then
+                local icolour = GetItemQualityColor(displayQuality)
+                local iname = icolour:Colorize(BS.Format(itemName))
+
+                BS.Vars.PreviousAnnounceTime[BS.W_RECIPE_WATCH] = os.time()
+                BS.Announce(
+                    GetString(_G.BARSTEWARD_RECIPES),
+                    zo_strformat(GetString(_G.BARSTEWARD_WATCHED_ITEM_MESSAGE), iname),
+                    BS.W_WATCHED_ITEMS
+                )
+            end
+        end
+
+        widget:SetValue(BS.Vars.FoundCount)
+        widget:SetColour(unpack(vars.Colour or BS.Vars.DefaultColour))
+
+        widget.tooltip = getFoundRecipesTooltip()
+
+        return BS.Vars.FoundCount
+    end,
+    event = _G.EVENT_LOOT_RECEIVED,
+    icon = "/esoui/art/icons/event_newlifefestival_2016_recipe.dds",
+    tooltip = GetString(_G.BARSTEWARD_RECIPES),
+    hideWhenEqual = 0,
+    onClick = function()
+        BS.Vars.FoundRecipes = {}
+        BS.Vars.FoundCount = 0
+        BS.RefreshWidget(BS.W_RECIPE_WATCH)
+    end,
+    customOptions = {
+        name = GetString(_G.BARSTEWARD_DEBOUNCE),
+        tooltip = GetString(_G.BARSTEWARD_DEBOUNCE_DESC),
+        choices = {0, 1, 5, 10, 15, 20, 30, 40, 50, 60},
+        varName = "DebounceTime",
+        refresh = false,
+        default = 5
+    }
+}
