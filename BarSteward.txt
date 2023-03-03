@@ -6,7 +6,7 @@
 ## Version: 1.4.50
 ## SavedVariables: BarStewardSavedVars
 ## DependsOn: LibSavedVars>=60007 LibAddonMenu-2.0>=33
-## OptionalDependsOn: BanditsUserInterface WritWorthy>=70302 LibClockTST LibCombat>=62 PortToFriendsHouse>=92 LibCharacterKnowledge>=16
+## OptionalDependsOn: BanditsUserInterface WritWorthy>=70302 LibClockTST LibCombat>=62 PortToFriendsHouse>=92 LibCharacterKnowledge>=16 Taneth>=21
 
 # DISCLAIMER:
 #
@@ -56,3 +56,5 @@ ui/windows.lua
 BarSteward.lua
 
 ui/bindings.xml
+
+tests/utility_tests.lua
