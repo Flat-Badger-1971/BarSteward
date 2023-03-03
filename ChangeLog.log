@@ -1,5 +1,7 @@
 [color=#ff9900][b]Version: 1.4.50 ---------------[/b][/color]
 Found Recipe widget added
+Ignore weapons in durability widget
+Snap to grid option added for bar movement
 
 [color=#ff9900][b]Version: 1.4.49 ---------------[/b][/color]
 Bugfix for speed widget when displaying as a percentage

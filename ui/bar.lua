@@ -9,6 +9,16 @@ function baseBar:New(...)
     return bar
 end
 
+local function getPosition(bar, anchor)
+    if (anchor == CENTER) then
+        return bar:GetCenter()
+    elseif (anchor == LEFT) then
+        return bar:GetLeft(), bar:GetTop()
+    elseif (anchor == RIGHT) then
+        return bar:GetRight(), bar:GetTop()
+    end
+end
+
 function baseBar:Initialise(barSettings)
     local barName = BS.Name .. "_bar_" .. barSettings.index
     local settings = barSettings.settings
@@ -48,17 +58,24 @@ function baseBar:Initialise(barSettings)
         end
 
         local anchor = BS.GetAnchorFromText(BS.Vars.Bars[barSettings.index].Anchor)
-        local xPos, yPos
+        local xPos, yPos = getPosition(self.bar, anchor)
+        local snapX, snapY
+        local gridSize = BS.Vars.GridSize
 
-        if (anchor == CENTER) then
-            xPos, yPos = self.bar:GetCenter()
-        elseif (anchor == LEFT) then
-            xPos, yPos = self.bar:GetLeft(), self.bar:GetTop()
-        elseif (anchor == RIGHT) then
-            xPos, yPos = self.bar:GetRight(), self.bar:GetTop()
+        if (BS.Vars.SnapToGrid) then
+            snapX = BS.GetNearest(xPos, gridSize)
+            snapY = BS.GetNearest(yPos, gridSize)
+
+            self.bar:ClearAnchors()
+            self.bar:SetAnchor(barAnchor, GuiRoot, TOPLEFT, snapX, snapY)
+
+            xPos, yPos = snapX, snapY
         end
 
         BS.Vars.Bars[barSettings.index].Position = {X = xPos, Y = yPos}
+
+        -- stop UI mode being reset too soon
+        SetGameCameraUIMode(true)
     end
 
     self.bar:SetHandler("OnMouseUp", onMouseUp)

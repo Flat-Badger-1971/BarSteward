@@ -1279,3 +1279,16 @@ function BS.ImportBar(data)
         end
     end
 end
+
+function BS.GetNearest(input, factor)
+    local remaining = input % factor
+    local lower = input - remaining
+    local upper = lower + factor
+    local result = lower
+
+    if ((input - lower) > (upper - input)) then
+        result = upper
+    end
+
+    return result
+end

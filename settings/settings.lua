@@ -73,14 +73,44 @@ local function initialise()
 
             if (value) then
                 SCENE_MANAGER:Show("hudui")
-                SetGameCameraUIMode(true)
                 frame.fragment:SetHiddenForReason("disabled", false)
+                SetGameCameraUIMode(true)
             else
                 frame.fragment:SetHiddenForReason("disabled", true)
             end
         end,
         width = "full",
         default = BS.Defaults.Movable
+    }
+
+    BS.options[#BS.options + 1] = {
+        type = "checkbox",
+        name = GetString(_G.BARSTEWARD_SNAP),
+        getFunc = function()
+            return BS.Vars.SnapToGrid
+        end,
+        setFunc = function(value)
+            BS.Vars.SnapToGrid = value
+        end,
+        width = "full",
+        default = BS.Defaults.SnapToGrid
+    }
+
+    BS.options[#BS.options + 1] = {
+        type = "slider",
+        name = GetString(_G.BARSTEWARD_GRID_SIZE),
+        min = 2,
+        max = 50,
+        getFunc = function()
+            return BS.Vars.GridSize
+        end,
+        setFunc = function(value)
+            BS.Vars.GridSize = value
+        end,
+        default = BS.Defaults.GridSize,
+        disabled = function()
+            return not BS.Vars.SnapToGrid
+        end
     }
 
     BS.options[#BS.options + 1] = {

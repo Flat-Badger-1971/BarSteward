@@ -167,7 +167,10 @@ local ignoreSlots = {
     [_G.EQUIP_SLOT_RING2] = true,
     [_G.EQUIP_SLOT_COSTUME] = true,
     [_G.EQUIP_SLOT_POISON] = true,
-    [_G.EQUIP_SLOT_BACKUP_POISON] = true
+    [_G.EQUIP_SLOT_BACKUP_POISON] = true,
+    [_G.EQUIP_SLOT_MAIN_HAND] = true,
+    [_G.EQUIP_SLOT_BACKUP_MAIN] = true,
+    [_G.EQUIP_SLOT_BACKUP_OFF] = true
 }
 
 BS.widgets[BS.W_DURABILITY] = {
