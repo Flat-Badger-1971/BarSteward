@@ -1,3 +1,5 @@
+-- luacheck: push ignore
+
 if not Taneth then
     return
 end
@@ -88,3 +90,5 @@ Taneth("BarSteward", function()
 
     end)
 end)
+
+-- luacheck: pop

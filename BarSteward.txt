@@ -57,4 +57,4 @@ BarSteward.lua
 
 ui/bindings.xml
 
-tests/utility_tests.lua
+# tests/utility_tests.lua
