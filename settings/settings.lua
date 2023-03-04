@@ -1432,7 +1432,8 @@ local function checkProgressBar(defaults, widgetControls, vars, key)
             setFunc = function(r, g, b, a)
                 vars.ProgressColour = {r, g, b, a}
 
-                local widget = _G[BS.Name .. "_Widget_" .. BS.widgets[key].name].ref
+                local widget = BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[key]).ref
+
                 widget.value.progress:SetColor(r, g, b, a)
             end,
             width = "full",
@@ -1456,7 +1457,7 @@ local function checkProgressBar(defaults, widgetControls, vars, key)
             setFunc = function(r, g, b)
                 vars.GradientStart = {r, g, b}
 
-                local widget = _G[BS.Name .. "_Widget_" .. BS.widgets[key].name].ref
+                local widget = BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[key]).ref
                 local endg = {
                     GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, _G.INTERFACE_GENERAL_COLOR_STATUS_BAR_END)
                 }
@@ -1485,7 +1486,7 @@ local function checkProgressBar(defaults, widgetControls, vars, key)
             setFunc = function(r, g, b)
                 vars.GradientEnd = {r, g, b}
 
-                local widget = _G[BS.Name .. "_Widget_" .. BS.widgets[key].name].ref
+                local widget = BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[key]).ref
                 local startg = {
                     GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, _G.INTERFACE_GENERAL_COLOR_STATUS_BAR_START)
                 }

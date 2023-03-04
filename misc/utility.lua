@@ -609,7 +609,7 @@ end
 
 function BS.RefreshWidget(widgetIndex)
     if (BS.Vars.Controls[widgetIndex].Bar ~= 0) then
-        local widget = _G[BS.Name .. "_Widget_" .. BS.widgets[widgetIndex].name]
+        local widget = BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[widgetIndex])
 
         if (widget ~= nil) then
             BS.widgets[widgetIndex].update(widget.ref, "initial")
@@ -619,7 +619,7 @@ end
 
 function BS.RefreshBar(widgetIndex)
     if (BS.Vars.Controls[widgetIndex].Bar ~= 0) then
-        local widget = _G[BS.Name .. "_Widget_" .. BS.widgets[widgetIndex].name]
+        local widget = BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[widgetIndex])
 
         if (widget ~= nil) then
             local bar = widget.ref.control:GetParent().ref
@@ -696,9 +696,9 @@ function BS.ResizeBar(barIndex)
 
     for index, widget in pairs(BS.Vars.Controls) do
         if (widget.Bar == barIndex) then
-            local w = _G[string.format("%s_Widget_%s", BS.Name, BS.widgets[index].name)]
+            local w = BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[index])
 
-            if (w and not w.ref.isHidden) then
+            if (w and not w.isHidden) then
                 allHidden = false
                 break
             end

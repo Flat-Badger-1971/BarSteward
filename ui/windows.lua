@@ -573,7 +573,7 @@ local function CreateTool(heading, toolName, varName, setupFunc, guild)
             if (guild) then
                 if (BS.Vars.Controls[BS.W_GUILD_FRIENDS].Bar ~= 0) then
                     BS.widgets[BS.W_GUILD_FRIENDS].update(
-                        _G[BS.Name .. "_Widget_" .. BS.widgets[BS.W_GUILD_FRIENDS].name].ref
+                        BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[BS.W_GUILD_FRIENDS]).ref
                     )
                 end
             end

@@ -1039,7 +1039,7 @@ local function randomOnClick(collectibleTable, widgetIndex)
     until (usable == true or tryCount == 10)
 
     if (usable) then
-        local widget = _G[BS.Name .. "_Widget_" .. BS.widgets[widgetIndex].name].ref
+        local widget = BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[widgetIndex]).ref
         local name = BS.Format(GetCollectibleName(collectibleId))
 
         local tt = BS.widgets[widgetIndex].tooltip .. BS.LF
@@ -1165,7 +1165,7 @@ BS.widgets[BS.W_RANDOM_EMOTE] = {
         if (displayName ~= "") then
             PlayEmoteByIndex(emoteIndex)
 
-            local widget = _G[BS.Name .. "_Widget_" .. BS.widgets[BS.W_RANDOM_EMOTE].name].ref
+            local widget = BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[BS.W_RANDOM_EMOTE]).ref
             local tt = BS.widgets[BS.W_RANDOM_EMOTE].tooltip .. BS.LF
             tt = tt .. "|cf9f9f9" .. GetString(_G.BARSTEWARD_RANDOM_RECENT) .. "|r" .. BS.LF
             tt = tt .. "|cffd700" .. displayName
