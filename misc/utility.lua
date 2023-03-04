@@ -450,7 +450,7 @@ end
 
 -- based on Wykkyd toolbar
 function BS.NudgeCompass()
-    local bar1Top = _G[BS.Name .. "_bar_1"]:GetTop()
+    local bar1Top = BS.BarObjectPool:GetActiveObject(BS.BarObjects[1]).bar:GetTop()
 
     if (bar1Top <= 80) then
         if (ZO_CompassFrame:GetTop() ~= bar1Top + 70) then
@@ -685,7 +685,7 @@ function BS.ResizeBar(barIndex)
         return
     end
 
-    local bar = _G[BS.Name .. "_bar_" .. barIndex].ref.bar
+    local bar = BS.BarObjectPool:GetActiveObject(BS.BarObjects[barIndex]).bar
 
     bar:SetResizeToFitDescendents(false)
     bar:SetDimensions(0, 0)

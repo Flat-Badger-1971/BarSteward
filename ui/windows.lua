@@ -118,11 +118,11 @@ function BS.CreateAlignmentFrame(alignBars)
 
         for idx, barData in pairs(bars) do
             if (barData.Name == alignBarName and not alignBar) then
-                alignBar = _G[string.format("%s_bar_%d", BS.Name, idx)]
+                alignBar = BS.BarObjectPool:GetActiveObject(BS.BarObjects[idx])
             end
 
             if (barData.Name == relBarName and not relBar) then
-                relBar = _G[string.format("%s_bar_%d", BS.Name, idx)]
+                relBar = BS.BarObjectPool:GetActiveObject(BS.BarObjects[idx])
             end
         end
 

@@ -394,7 +394,11 @@ local function Initialise()
 end
 
 function BS.ToggleBar(index)
-    _G[BS.Name .. "_bar_" .. index].ref:Toggle()
+    local bar = BS.BarObjectPool:GetActiveObject(BS.BarObjects[index])
+
+    if (bar) then
+        bar.ref:Toggle()
+    end
 end
 
 function BS.OnAddonLoaded(_, addonName)

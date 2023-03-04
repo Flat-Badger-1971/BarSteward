@@ -343,7 +343,7 @@ local function getBarSettings()
                 end,
                 setFunc = function(value)
                     vars.Backdrop.Show = value
-                    _G[BS.Name .. "_bar_" .. idx].background:SetHidden(not value)
+                    BS.BarObjectPool:GetActiveObject(BS.BarObjects[idx]).background:SetHidden(not value)
                 end,
                 default = BS.Defaults.Bars[1].Backdrop.Show
             },
@@ -355,7 +355,7 @@ local function getBarSettings()
                 end,
                 setFunc = function(r, g, b, a)
                     vars.Backdrop.Colour = {r, g, b, a}
-                    _G[BS.Name .. "_bar_" .. idx].background:SetCenterColor(r, g, b, a)
+                    BS.BarObjectPool:GetActiveObject(BS.BarObjects[idx]).background:SetCenterColor(r, g, b, a)
                 end,
                 width = "full",
                 disabled = function()
@@ -375,7 +375,8 @@ local function getBarSettings()
                     end
                 end,
                 setFunc = function(value)
-                    local bar = _G[BS.Name .. "_bar_" .. idx]
+                    local bar = BS.BarObjectPool:GetActiveObject(BS.BarObjects[idx])
+
                     if (value == " ") then
                         vars.Background = 99
                     else
@@ -415,7 +416,8 @@ local function getBarSettings()
                     end
                 end,
                 setFunc = function(value)
-                    local bar = _G[BS.Name .. "_bar_" .. idx]
+                    local bar = BS.BarObjectPool:GetActiveObject(BS.BarObjects[idx])
+
                     if (value == " ") then
                         vars.Border = 99
                     else
@@ -503,7 +505,7 @@ local function getBarSettings()
                 setFunc = function(value)
                     vars.Scale = value
 
-                    local barToScale = _G[BS.Name .. "_bar_" .. idx]
+                    local barToScale = BS.BarObjectPool:GetActiveObject(BS.BarObjects[idx])
 
                     barToScale:SetScale(value * GetUIGlobalScale())
                     barToScale:SetResizeToFitDescendents(false)
@@ -563,10 +565,10 @@ local function getBarSettings()
                 setFunc = function(value)
                     vars[varName] = value
 
-                    local barname = _G[BS.Name .. "_bar_" .. idx]
+                    local barObject = BS.BarObjectPool:GetActiveObject(BS.BarObjects[idx])
 
-                    if (barname) then
-                        local bar = barname.ref.bar
+                    if (barObject) then
+                        local bar = barObject.ref.bar
 
                         BS.AddToScenes(varType, idx, bar)
 
@@ -808,7 +810,7 @@ local function getBarSettings()
             type = "button",
             name = GetString(_G.BARSTEWARD_ALIGN),
             func = function()
-                local bar = _G[BS.Name .. "_bar_" .. idx]
+                local bar = BS.BarObjectPool:GetActiveObject(BS.BarObjects[idx]).bar
                 local _, posY = bar:GetCenter()
                 local guiHeight = GuiRoot:GetHeight() / 2
                 local centre
@@ -819,7 +821,7 @@ local function getBarSettings()
                     centre = (guiHeight - posY) * -1
                 end
 
-                _G[BS.Name .. "_bar_" .. idx]:SetAnchor(CENTER, GuiRoot, CENTER, 0, centre)
+                bar:SetAnchor(CENTER, GuiRoot, CENTER, 0, centre)
                 local xPos, yPos = bar:GetCenter()
 
                 BS.Vars.Bars[idx].Anchor = GetString(_G.BARSTEWARD_MIDDLE)
