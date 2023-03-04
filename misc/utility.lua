@@ -698,7 +698,7 @@ function BS.ResizeBar(barIndex)
         if (widget.Bar == barIndex) then
             local w = BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[index])
 
-            if (w and not w.isHidden) then
+            if (w and not w:IsHidden()) then
                 allHidden = false
                 break
             end
