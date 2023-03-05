@@ -903,7 +903,7 @@ local function deepCopy(obj, seen)
     return setmetatable(res, getmetatable(obj))
 end
 
-local function simpleTableCompare(t1, t2)
+function BS.SimpleTableCompare(t1, t2)
     return table.concat(t1) == table.concat(t2)
 end
 
@@ -1058,7 +1058,7 @@ function BS.ExportBar(barNumber)
     end
 
     if (destBar.Backdrop.Colour) then
-        if (simpleTableCompare(destBar.Backdrop.Colour, BS.Defaults.Bars[1].Backdrop.Colour)) then
+        if (BS.SimpleTableCompare(destBar.Backdrop.Colour, BS.Defaults.Bars[1].Backdrop.Colour)) then
             destBar.Backdrop.Colour = nil
         end
     end
@@ -1070,7 +1070,7 @@ function BS.ExportBar(barNumber)
     end
 
     if (destBar.CombatColour) then
-        if (simpleTableCompare(destBar.CombatColour, BS.Defaults.DefaultCombatColour)) then
+        if (BS.SimpleTableCompare(destBar.CombatColour, BS.Defaults.DefaultCombatColour)) then
             destBar.CombatColour = nil
         end
     end

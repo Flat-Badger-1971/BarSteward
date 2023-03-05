@@ -1643,7 +1643,12 @@ local function checkColourOptions(widgetControls, vars, key)
                     return unpack(vars.Colour or BS.Vars.DefaultColour)
                 end,
                 setFunc = function(r, g, b, a)
-                    vars.Colour = {r, g, b, a}
+                    if (BS.SimpleTableCompare({r, g, b, a}, BS.Vars.DefaultColour)) then
+                        vars.Colour = nil
+                    else
+                        vars.Colour = {r, g, b, a}
+                    end
+
                     BS.RefreshWidget(key)
                 end,
                 width = "full",
@@ -1659,7 +1664,12 @@ local function checkColourOptions(widgetControls, vars, key)
                     return unpack(vars.OkColour or BS.Vars.DefaultOkColour)
                 end,
                 setFunc = function(r, g, b, a)
-                    vars.OkColour = {r, g, b, a}
+                    if (BS.SimpleTableCompare({r, g, b, a}, BS.Vars.DefaultOkColour)) then
+                        vars.OkColour = nil
+                    else
+                        vars.OkColour = {r, g, b, a}
+                    end
+
                     BS.RefreshWidget(key)
                 end,
                 width = "full",
@@ -1675,7 +1685,12 @@ local function checkColourOptions(widgetControls, vars, key)
                     return unpack(vars.WarningColour or BS.Vars.DefaultWarningColour)
                 end,
                 setFunc = function(r, g, b, a)
-                    vars.WarningColour = {r, g, b, a}
+                    if (BS.SimpleTableCompare({r, g, b, a}, BS.Vars.DefaultWarningColour)) then
+                        vars.WarningColour = nil
+                    else
+                        vars.WarningColour = {r, g, b, a}
+                    end
+
                     BS.RefreshWidget(key)
                 end,
                 width = "full",
@@ -1691,7 +1706,12 @@ local function checkColourOptions(widgetControls, vars, key)
                     return unpack(vars.DangerColour or BS.Vars.DefaultDangerColour)
                 end,
                 setFunc = function(r, g, b, a)
-                    vars.DangerColour = {r, g, b, a}
+                    if (BS.SimpleTableCompare({r, g, b, a}, BS.Vars.DefaultDangerColour)) then
+                        vars.DangerColour = nil
+                    else
+                        vars.DangerColour = {r, g, b, a}
+                    end
+
                     BS.RefreshWidget(key)
                 end,
                 width = "full",
