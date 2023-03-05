@@ -639,7 +639,7 @@ BS.widgets[BS.W_LOREBOOKS] = {
     -- v1.4.5
     name = "lorebooks",
     update = function(widget)
-        local colour = BS.Vars.DefaultColour
+        local colour = BS.Vars.Controls[BS.W_LOREBOOKS].Colour or BS.Vars.DefaultColour
         local categories = {}
 
         for categoryIndex = 1, GetNumLoreCategories() do
@@ -677,8 +677,8 @@ BS.widgets[BS.W_LOREBOOKS] = {
             end
         end
 
-        widget:SetColour(unpack(colour))
         widget:SetValue(value)
+        widget:SetColour(unpack(colour))
 
         widget.tooltip = tt
 

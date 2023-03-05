@@ -1955,6 +1955,34 @@ local function getWidgetSettings()
         }
     }
 
+    local defaultColours = {
+        ["_"] = {0.9, 0.9, 0.9, 1},
+        ["Ok"] = {0, 1, 0, 1},
+        ["Warning"] = {1, 1, 0, 1},
+        ["Danger"] = {0.8, 0, 0, 1}
+    }
+
+    for colourType, defaultValue in pairs(defaultColours) do
+        local i18Name = string.format("BARSTEWARD_CHANGE_DEFAULT%s", colourType:upper():gsub("_", ""))
+        local defaultName = string.format("Default%sColour", colourType:gsub("_", ""))
+
+        controls[#controls + 1] = {
+            type = "colorpicker",
+            name = GetString(_G[i18Name]),
+            getFunc = function()
+                return unpack(BS.Vars[defaultName])
+            end,
+            setFunc = function(r, g, b, a)
+                BS.Vars[defaultName] = {r, g, b, a}
+                BS.RefreshAll()
+            end,
+            width = "full",
+            default = unpack(defaultValue)
+        }
+    end
+
+    local numBaseControls = #controls
+
     for idx, w in ipairs(ordered) do
         local k = w.key
         local v = w.widget
@@ -2049,7 +2077,7 @@ local function getWidgetSettings()
             widgetName = "|c4c9900" .. widgetName .. "|r"
         end
 
-        controls[idx + 5] = {
+        controls[idx + numBaseControls] = {
             type = "submenu",
             name = widgetName,
             icon = BS.widgets[k].icon,

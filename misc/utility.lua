@@ -612,7 +612,7 @@ function BS.RefreshWidget(widgetIndex)
         local widget = _G[BS.Name .. "_Widget_" .. BS.widgets[widgetIndex].name]
 
         if (widget ~= nil) then
-            BS.widgets[widgetIndex].update(widget.ref)
+            BS.widgets[widgetIndex].update(widget.ref, "initial")
         end
     end
 end
@@ -627,6 +627,12 @@ function BS.RefreshBar(widgetIndex)
             metadata.widget = widget.ref
             bar:DoUpdate(metadata)
         end
+    end
+end
+
+function BS.RefreshAll()
+    for widgetIndex in pairs(BS.Vars.Controls) do
+        BS.RefreshWidget(widgetIndex)
     end
 end
 

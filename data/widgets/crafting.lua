@@ -548,6 +548,7 @@ BS.widgets[BS.W_RECIPES] = {
         tt = tt .. furnishing
 
         local value = BS.recipeList.food.known .. "/" .. allFood
+        local colour = vars.Colour or BS.Vars.DefaultColour
 
         if (vars.Display == drink) then
             value = BS.recipeList.drink.known .. "/" .. allDrink
@@ -558,6 +559,8 @@ BS.widgets[BS.W_RECIPES] = {
         end
 
         widget:SetValue(value)
+        widget:SetColour(unpack(colour))
+
         widget.tooltip = tt
 
         return widget:GetValue()
@@ -599,11 +602,13 @@ BS.widgets[BS.W_UNKNOWN_WRIT_MOTIFS] = {
     -- v1.4.30
     name = "unknownWritMotifs",
     update = function(widget, event)
+        local vars = BS.Vars.Controls[BS.W_UNKNOWN_WRIT_MOTIFS]
+
         if (event == "initial") then
+            widget:SetColour(unpack(vars.Colour or BS.Vars.DefaultColour))
             return
         end
 
-        local vars = BS.Vars.Controls[BS.W_UNKNOWN_WRIT_MOTIFS]
         local writs = 0
         local bags = {_G.BAG_BACKPACK, _G.BAG_BANK}
         local unknown = {}

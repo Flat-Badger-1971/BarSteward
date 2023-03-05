@@ -349,7 +349,7 @@ BS.widgets[BS.W_SOUL_GEMS] = {
 local function getDetail(data)
     local wcount = data.stackCount
     local colour = GetItemQualityColor(data.displayQuality)
-    local name = colour:Colorize(data.name)
+    local name = colour:Colorize(BS.Format(data.name))
 
     if (data.bagId == _G.BAG_BACKPACK) then
         name = BS.BAGICON .. " " .. name
@@ -1806,6 +1806,7 @@ BS.widgets[BS.W_RECIPE_WATCH] = {
         if ((event or "initial") == "initial") then
             widget:SetValue(BS.Vars.FoundCount or 0)
             widget.tooltip = getFoundRecipesTooltip()
+            widget:SetColour(unpack(vars.Colour or BS.Vars.DefaultColour))
         end
 
         if (itemType ~= _G.ITEMTYPE_RECIPE) then
