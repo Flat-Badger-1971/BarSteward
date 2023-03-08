@@ -907,6 +907,20 @@ function BS.SimpleTableCompare(t1, t2)
     return table.concat(t1) == table.concat(t2)
 end
 
+function BS.CompareColours(c1, c2)
+    local colours = {c1, c2}
+
+    -- just compare colours down to 3 decimal places
+    for _, colour in ipairs(colours) do
+        for idx, value in pairs(colour) do
+            local rounded = tonumber(string.format("%.3g", value))
+            colour[idx] = rounded
+        end
+    end
+
+    return BS.SimpleTableCompare(c1, c2)
+end
+
 local function addQuotes(value, sub)
     return '"' .. GetString(value, sub) .. '"'
 end
