@@ -13,6 +13,13 @@ BS.widgets[BS.W_MUNDUS_STONE] = {
                 mundusIcon = icon
                 mundusId = id
                 mundusName = BS.Format(name)
+
+                if (BS.Vars.Controls[BS.W_MUNDUS_STONE].Shorten) then
+                    local colonPosition = mundusName:find(":")
+
+                    mundusName = mundusName:gsub(mundusName:sub(1, colonPosition + 1), "")
+                end
+
                 break
             end
         end
@@ -41,7 +48,22 @@ BS.widgets[BS.W_MUNDUS_STONE] = {
     filter = {[_G.EVENT_EFFECT_CHANGED] = {_G.REGISTER_FILTER_UNIT_TAG, "player"}},
     icon = "/esoui/art/icons/ability_mundusstones_002.dds",
     tooltip = BS.Format(_G.SI_CONFIRM_MUNDUS_STONE_TITLE),
-    hideWhenEqual = ""
+    hideWhenEqual = "",
+    customSettings = {
+        [1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_SHORTEN),
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_MUNDUS_STONE].Shorten or false
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_MUNDUS_STONE].Shorten = value
+                BS.RefreshWidget(BS.W_MUNDUS_STONE)
+            end,
+            width = "full",
+            default = false
+        }
+    }
 }
 
 BS.widgets[BS.W_RECALL_COOLDOWN] = {
