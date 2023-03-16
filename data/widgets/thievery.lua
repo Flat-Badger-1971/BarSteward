@@ -8,7 +8,7 @@ BS.widgets[BS.W_STOLEN_ITEMS] = {
         local count = 0
         local bagCounts = {carrying = 0, banked = 0}
         local stolen = {}
-
+        local slotCount = 0
         local filteredItems =
             SHARED_INVENTORY:GenerateFullSlotData(
             function(itemdata)
@@ -39,9 +39,17 @@ BS.widgets[BS.W_STOLEN_ITEMS] = {
                     sellPrice = GetItemSellValueWithBonuses(item.bagId, item.slotIndex)
                 }
             )
+
+            slotCount = slotCount + 1
         end
 
-        widget:SetValue(count)
+        local value = count
+
+        if (BS.Vars.Controls[BS.W_STOLEN_ITEMS].ShowSlots) then
+            value = value .. "/" .. slotCount
+        end
+
+        widget:SetValue(value)
         widget:SetColour(unpack(BS.Vars.Controls[BS.W_STOLEN_ITEMS].Colour or BS.Vars.DefaultColour))
 
         local ttt = GetString(_G.BARSTEWARD_STOLEN) .. BS.LF .. "|cf9f9f9"
@@ -84,7 +92,22 @@ BS.widgets[BS.W_STOLEN_ITEMS] = {
         else
             SCENE_MANAGER:Show("gamepad_inventory_root")
         end
-    end
+    end,
+    customSettings = {
+        [1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_SHOW_STOLEN_SLOTS),
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_STOLEN_ITEMS].ShowSlots or false
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_STOLEN_ITEMS].ShowSlots = value
+                BS.RefreshWidget(BS.W_STOLEN_ITEMS)
+            end,
+            width = "full",
+            default = false
+        }
+    }
 }
 
 BS.widgets[BS.W_FENCE_TRANSACTIONS] = {
