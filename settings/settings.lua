@@ -123,6 +123,7 @@ local function initialise()
         setFunc = function(value)
             BS.Vars.Font = value
 
+            --BS.RegenerateAllBars()
             _G.BarSteward_SampleText.desc:SetFont(BS.GetFont(value))
         end,
         requiresReload = true,
@@ -139,6 +140,8 @@ local function initialise()
         end,
         setFunc = function(value)
             BS.Vars.FontSize = value
+
+            --BS.RegenerateAllBars()
             _G.BarSteward_SampleText.desc:SetFont(BS.GetFont())
         end,
         requiresReload = true,
@@ -165,8 +168,8 @@ local function initialise()
         end,
         setFunc = function(value)
             BS.Vars.FontCorrection = value
+            BS.RegenerateAllBars()
         end,
-        requiresReload = true,
         default = false
     }
 
@@ -330,9 +333,9 @@ local function getBarSettings()
                 end,
                 setFunc = function(value)
                     vars.Orientation = value
+                    BS.RegenerateBar(idx)
                 end,
                 width = "full",
-                requiresReload = true,
                 default = BS.Defaults.Bars[1].Orientation
             },
             [2] = {
@@ -459,8 +462,8 @@ local function getBarSettings()
                 end,
                 setFunc = function(value)
                     vars.TooltipAnchor = value
+                    BS.RegenerateBar(idx)
                 end,
-                requiresReload = true,
                 default = BS.Defaults.Bars[1].TooltipAnchor
             },
             [7] = {
@@ -475,8 +478,8 @@ local function getBarSettings()
                 end,
                 setFunc = function(value)
                     vars.ValueSide = value
+                    BS.RegenerateBar(idx)
                 end,
-                requiresReload = true,
                 default = BS.Defaults.Bars[1].ValueSide
             },
             [8] = {
@@ -492,8 +495,8 @@ local function getBarSettings()
                 end,
                 setFunc = function(value)
                     vars.Anchor = value
+                    BS.RegenerateBar(idx)
                 end,
-                requiresReload = true,
                 default = BS.Defaults.Bars[1].Anchor
             },
             [9] = {
@@ -534,10 +537,15 @@ local function getBarSettings()
                 end,
                 setFunc = function(value)
                     vars.Disable = value
+
+                    if (value) then
+                        BS.DestroyBar(idx)
+                    else
+                        BS.GenerateBar(idx)
+                    end
                 end,
                 width = "full",
-                default = false,
-                requiresReload = true
+                default = false
             }
         end
 
@@ -631,9 +639,9 @@ local function getBarSettings()
             end,
             setFunc = function(value)
                 vars.Override = value
+                BS.RegenerateBar(idx)
             end,
             default = false,
-            requiresReload = true,
             width = "full"
         }
 
@@ -645,12 +653,12 @@ local function getBarSettings()
             end,
             setFunc = function(value)
                 vars.IconSize = value
+                BS.RegenerateBar(idx)
             end,
             min = 8,
             max = 64,
             width = "full",
             default = BS.Defaults.IconSize,
-            requiresReload = true,
             disabled = function()
                 return not vars.Override
             end
@@ -667,10 +675,9 @@ local function getBarSettings()
             end,
             setFunc = function(value)
                 vars.Font = value
-
+                BS.RegenerateBar(idx)
                 _G[ref].desc:SetFont(BS.GetFont(vars))
             end,
-            requiresReload = true,
             default = BS.Defaults.Font,
             disabled = function()
                 return not vars.Override
@@ -687,10 +694,9 @@ local function getBarSettings()
             end,
             setFunc = function(value)
                 vars.FontSize = value
-
+                BS.RegenerateBar(idx)
                 _G[ref].desc:SetFont(BS.GetFont(vars))
             end,
-            requiresReload = true,
             default = BS.Defaults.FontSize,
             disabled = function()
                 return not vars.Override
@@ -715,12 +721,12 @@ local function getBarSettings()
             end,
             setFunc = function(value)
                 vars.HorizontalPadding = value
+                BS.RegenerateBar(idx)
             end,
             min = 0,
             max = 64,
             width = "full",
             default = 0,
-            requiresReload = true,
             disabled = function()
                 return not vars.Override
             end
@@ -734,12 +740,12 @@ local function getBarSettings()
             end,
             setFunc = function(value)
                 vars.VerticalPadding = value
+                BS.RegenerateBar(idx)
             end,
             min = 0,
             max = 64,
             width = "full",
             default = 0,
-            requiresReload = true,
             disabled = function()
                 return not vars.Override
             end
@@ -798,9 +804,14 @@ local function getBarSettings()
                 end,
                 setFunc = function(value)
                     vars.NudgeCompass = value
+
+                    if (value) then
+                        BS.NudgeCompass()
+                    else
+                        BS.ResetNudge()
+                    end
                 end,
                 width = "full",
-                requiresReload = true,
                 default = BS.Defaults.Bars[1].NudgeCompass,
                 warning = GetString(_G.BARSTEWARD_NUDGE_WARNING)
             }
@@ -1939,12 +1950,12 @@ local function getWidgetSettings()
             end,
             setFunc = function(value)
                 BS.Vars.IconSize = value
+                BS.RegenerateAllBars()
             end,
             min = 8,
             max = 64,
             width = "full",
-            default = BS.Defaults.IconSize,
-            requiresReload = true
+            default = BS.Defaults.IconSize
         },
         [4] = {
             type = "slider",
@@ -1954,12 +1965,12 @@ local function getWidgetSettings()
             end,
             setFunc = function(value)
                 BS.Vars.HorizontalPadding = value
+                BS.RegenerateAllBars()
             end,
             min = 0,
             max = 64,
             width = "full",
             default = 0,
-            requiresReload = true
         },
         [5] = {
             type = "slider",
@@ -1969,12 +1980,12 @@ local function getWidgetSettings()
             end,
             setFunc = function(value)
                 BS.Vars.VerticalPadding = value
+                BS.RegenerateAllBars()
             end,
             min = 0,
             max = 64,
             width = "full",
-            default = 0,
-            requiresReload = true
+            default = 0
         }
     }
 
@@ -2044,9 +2055,9 @@ local function getWidgetSettings()
                     end
 
                     BS.Vars.Controls[k].Bar = barNum
+                    BS.RegenerateAllBars()
                 end,
                 width = "full",
-                requiresReload = true,
                 default = BS.Defaults.Controls[k].Bar,
                 disabled = function()
                     if (k ~= BS.W_TAMRIEL_TIME) then

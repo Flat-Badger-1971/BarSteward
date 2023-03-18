@@ -11,16 +11,16 @@ function baseWidget:New(...)
 end
 
 function baseWidget:Initialise()
-    self.control = WINDOW_MANAGER:CreateControl(nil, GuiRoot, CT_CONTROL)
+    self.control = self.control or WINDOW_MANAGER:CreateControl(nil, GuiRoot, CT_CONTROL)
     self.control:SetResizeToFitDescendents(true)
     self.control.ref = self
 
     if (DEBUG) then
-        self.overlay = WINDOW_MANAGER:CreateControl(nil, self.control, CT_CONTROL)
+        self.overlay = self.overlay or WINDOW_MANAGER:CreateControl(nil, self.control, CT_CONTROL)
         self.overlay:SetDrawTier(_G.DT_HIGH)
         self.overlay:SetAnchorFill(self.bar)
 
-        self.overlay.background = WINDOW_MANAGER:CreateControl(nil, self.overlay, CT_TEXTURE)
+        self.overlay.background = self.overlay.background or WINDOW_MANAGER:CreateControl(nil, self.overlay, CT_TEXTURE)
         self.overlay.background:SetAnchorFill(self.overlay)
         self.overlay.background:SetTexture("/esoui/art/itemupgrade/eso_itemupgrade_blueslot.dds")
     end
@@ -147,9 +147,7 @@ end
 
 function baseWidget:CreateProgress(progress, gradient)
     if (progress) then
-        self.value =
-            (self.value and (self.valueType == "progress")) and self.value or BS.CreateProgressBar(nil, self.control)
-        self.valueType = "progress"
+        self.value = self.value or BS.CreateProgressBar(nil, self.control)
         self.value:ClearAnchors()
         self.value:SetAnchor(
             self.valueSide == LEFT and RIGHT or LEFT,
@@ -171,11 +169,8 @@ function baseWidget:CreateProgress(progress, gradient)
             self.value:SetGradientColors(sr, sg, sb, 1, er, eg, eb, 1)
         end
     else
-        if (not self.noValue) then
-            self.value =
-                (self.value and (self.valueType == "value")) and self.value or
-                WINDOW_MANAGER:CreateControl(nil, self.control, CT_LABEL)
-            self.value.valueType = "value"
+        if (not self:HasNoValue()) then
+            self.value = self.value or WINDOW_MANAGER:CreateControl(nil, self.control, CT_LABEL)
             self.value:SetFont(self.font)
             self.value:SetColor(unpack(BS.Vars.DefaultColour))
             self.value:ClearAnchors()
@@ -193,14 +188,14 @@ function baseWidget:CreateProgress(progress, gradient)
 end
 
 function baseWidget:SetInitialFont()
-    self.font = BS.GetFont(self.barSettings.Override and self.barSettings.Font)
-
-    if (self.font == nil) then
-        self.font = BS.Vars.Font
+    if (self.barSettings.Override and self.barSettings.Font) then
+        self.font = BS.GetFont(self.barSettings)
+    else
+        self.font = BS.GetFont()
     end
 end
 
-function baseWidget:GetFont()
+function baseWidget:GetInitialFont()
     return self.font
 end
 
@@ -221,7 +216,7 @@ function baseWidget:CreateIcon(icon)
         texture = icon
     end
 
-    self.icon = WINDOW_MANAGER:CreateControl(nil, self.control, CT_TEXTURE)
+    self.icon = self.icon or WINDOW_MANAGER:CreateControl(nil, self.control, CT_TEXTURE)
     self.icon:SetTexture(texture)
     self.icon:SetDimensions(self.iconSize, self.iconSize)
     self.icon:SetAnchor(self.valueSide == LEFT and RIGHT or LEFT)
@@ -236,10 +231,17 @@ function baseWidget:GetValueSide()
 end
 
 function baseWidget:SetPadding()
-    self.horizontalPadding = (self.barSettings.Override and (self.barSettings.HorizontalPadding or 0) or 0) + 10
+    local horizontalPadding = BS.Vars.HorizontalPadding or 0
+    local verticalPadding = BS.Vars.VerticalPadding or 0
+
+    if (self.barSettings.Override) then
+        horizontalPadding = self.barSettings.HorizontalPadding or 0
+        verticalPadding = self.barSettings.VerticalPadding or 0
+    end
+
+    self.horizontalPadding = horizontalPadding + 10
     self.minVertical = self.iconSize
-    self.verticalPadding =
-        (self.barSettings.Override and (self.barSettings.VerticalPadding or 0) or 0) + self.minVertical
+    self.verticalPadding = verticalPadding + self.minVertical
 end
 
 function baseWidget:GetPadding()
@@ -315,10 +317,6 @@ function baseWidget:SetValue(value, plainValue)
         return
     end
 
-    if (self.value:GetText() == value) then
-        return
-    end
-
     self.value:SetText(value)
 
     -- use the undecorated value for width calculations
@@ -358,10 +356,12 @@ function baseWidget:SetFont(font)
         return
     end
 
-    if (self.value.progress) then
-        self.value.progress:SetFont(font)
-    else
-        self.value:SetFont(font)
+    if (self.value) then
+        if (self.value.progress) then
+            self.value.progress:SetFont(font)
+        else
+            self.value:SetFont(font)
+        end
     end
 end
 
@@ -457,10 +457,11 @@ local function checkOrCreatePool()
                 return baseWidget:New()
             end,
             --reset
-            function(bar)
-                bar:Hide()
-                bar:SetParent(GuiRoot)
-                bar:ClearAnchors()
+            function(widget)
+                widget.destroyed = true
+                widget:SetHidden(true)
+                widget:SetParent(GuiRoot)
+                widget:ClearAnchors()
             end
         )
     end
@@ -491,6 +492,9 @@ function BS.CreateWidget(metadata, parent, tooltipAnchor, valueSide, noValue, ba
     widget:CreateTooltip(metadata.tooltip)
     widget:CreateSpacer()
     widget:ApplyFontCorrection()
+    widget:SetHidden(false)
+
+    widget.destroyed = false
 
     return widget
 end

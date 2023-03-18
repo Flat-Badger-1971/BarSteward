@@ -341,6 +341,18 @@ end
 
 function baseBar:DoUpdate(metadata, ...)
     -- update the widget and capture the raw value for use in HideWhen
+
+    if (self.destroyed) then
+        return
+    end
+
+    local widgetKey = BS.WidgetObjects[metadata.id]
+    local widget = BS.WidgetObjectPool:AcquireObject(widgetKey)
+
+    if (widget.destroyed) then
+        return
+    end
+
     -- get the widget's current (new) value
     local value = metadata.update(metadata.widget, ...)
     local hidecheck = false
@@ -613,8 +625,10 @@ local function checkOrCreatePool()
             end,
             --reset
             function(bar)
+                bar.destroyed = true
                 bar:RemoveFromScenes()
                 bar:Hide()
+                bar.bar:SetHidden(true)
                 bar:ClearAnchors()
             end
         )
@@ -628,7 +642,6 @@ function BS.CreateBar(barSettings)
     local bar, key = BS.BarObjectPool:AcquireObject(barKey)
 
     BS.BarObjects[barSettings.index] = key
-    BS.Bars = BS.Bars or {}
 
     bar:SetIndex(barSettings.index)
     bar:SetPositionAndOrientation(barSettings.position)
@@ -643,7 +656,11 @@ function BS.CreateBar(barSettings)
     bar:AddToScenes()
     bar:Show()
 
-    table.insert(BS.Bars, bar.name)
+    bar.destroyed = false
+
+    if (bar.bar:IsHidden()) then
+        bar.bar:SetHidden(false)
+    end
 
     return bar
 end
