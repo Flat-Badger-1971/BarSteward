@@ -363,7 +363,7 @@ function BS.CreateWidgetOrderTool(bars)
             BS.Vars.Controls[item.key].Order = item.order
         end
 
-        ZO_Dialogs_ShowDialog(BS.Name .. "Reload")
+        BS.RegenerateAllBars()
     end
 
     frame.button:SetHandler("OnClicked", onClick)

@@ -253,7 +253,7 @@ function BS.NewBar()
         ValueSide = GetString(_G.BARSTEWARD_RIGHT)
     }
 
-    ZO_Dialogs_ShowDialog(BS.Name .. "Reload")
+    BS.GenerateBar(newBarId)
 end
 
 function BS.RemoveBarCheck(index)
@@ -280,7 +280,7 @@ function BS.RemoveBar()
 
     zo_callLater(
         function()
-            ZO_Dialogs_ShowDialog(BS.Name .. "Reload")
+            BS.DestroyBar(BS.BarIndex)
         end,
         200
     )
@@ -884,7 +884,6 @@ local function getBarSettings()
         disabled = function()
             return (BS.NewBarName or "") == ""
         end,
-        warning = GetString(_G.BARSTEWARD_RELOAD),
         width = "half"
     }
 

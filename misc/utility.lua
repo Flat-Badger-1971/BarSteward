@@ -1281,10 +1281,9 @@ function BS.DoImport()
         end
     end
 
-    --reload ui
     zo_callLater(
         function()
-            ZO_Dialogs_ShowDialog(BS.Name .. "Reload")
+            BS.GenerateBar(newBarId)
         end,
         500
     )
