@@ -651,7 +651,7 @@ function BS.MakeItemLink(itemId, name)
 end
 
 function BS.Trim(stringValue)
-    return (stringValue:gsub("^%s*(.-)%s*$", "%1"))
+    return stringValue:gsub("^%s*(.-)%s*$", "%1")
 end
 
 function BS.MergeTables(t1, t2)
@@ -921,6 +921,12 @@ function BS.CompareColours(c1, c2)
     return BS.SimpleTableCompare(c1, c2)
 end
 
+function BS.Count(input, searchFor)
+    local _, count = input:gsub(searchFor, "")
+
+    return count
+end
+
 local function addQuotes(value, sub)
     return '"' .. GetString(value, sub) .. '"'
 end
@@ -988,7 +994,7 @@ local function convert(value)
         return false
     end
 
-    local _, count = value:gsub("%-", "")
+    local count = BS.Count(value, "%-")
 
     if (count == 3) then
         local array = BS.Split(value, "%-")

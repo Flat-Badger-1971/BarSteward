@@ -6,9 +6,20 @@ local completed = {
 
 local function configureWidget(widget, complete, maxComplete, activityType, tasks, hideLimit, defaultTooltip)
     local widgetIndex = activityType == _G.TIMED_ACTIVITY_TYPE_DAILY and BS.W_DAILY_ENDEAVOURS or BS.W_WEEKLY_ENDEAVOURS
+    local colour = BS.Vars.Controls[widgetIndex].Colour or BS.Vars.DefaultColour
+
+    if (BS.Vars.Controls[widgetIndex].UseRag) then
+        if (complete > 0 and complete < maxComplete) then
+            colour = BS.Vars.DefaultWarningColour
+        elseif (complete == maxComplete) then
+            colour = BS.Vars.DefaultOkColour
+        else
+            colour = BS.Vars.DefaultDangerColour
+        end
+    end
 
     widget:SetValue(complete .. (hideLimit and "" or ("/" .. maxComplete)))
-    widget:SetColour(unpack(BS.Vars.Controls[widgetIndex].Colour or BS.Vars.DefaultColour))
+    widget:SetColour(unpack(colour))
 
     if (#tasks > 0) then
         local tooltipText = defaultTooltip or ""
@@ -107,7 +118,7 @@ BS.widgets[BS.W_DAILY_ENDEAVOURS] = {
             GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS)
         )
     end,
-    event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED},
+    event = _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED,
     icon = "/esoui/art/journal/u26_progress_digsite_checked_incomplete.dds",
     tooltip = GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS),
     onClick = function()
@@ -120,7 +131,20 @@ BS.widgets[BS.W_DAILY_ENDEAVOURS] = {
     end,
     complete = function()
         return completed[_G.TIMED_ACTIVITY_TYPE_DAILY]
-    end
+    end,
+    customSettings = {
+        [1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_USE_RAG),
+            getFunc = function() return BS.Vars.Controls[BS.W_DAILY_ENDEAVOURS].UseRag end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_DAILY_ENDEAVOURS].UseRag = value
+                BS.RefreshWidget(BS.W_DAILY_ENDEAVOURS)
+            end,
+            width = "full",
+            default = false
+        }
+    }
 }
 
 BS.widgets[BS.W_WEEKLY_ENDEAVOURS] = {
@@ -134,7 +158,7 @@ BS.widgets[BS.W_WEEKLY_ENDEAVOURS] = {
             GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS)
         )
     end,
-    event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED},
+    event = _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED,
     icon = "/esoui/art/journal/u26_progress_digsite_checked_complete.dds",
     tooltip = GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS),
     onClick = function()
@@ -147,7 +171,20 @@ BS.widgets[BS.W_WEEKLY_ENDEAVOURS] = {
     end,
     complete = function()
         return completed[_G.TIMED_ACTIVITY_TYPE_WEEKLY]
-    end
+    end,
+    customSettings = {
+        [1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_USE_RAG),
+            getFunc = function() return BS.Vars.Controls[BS.W_WEEKLY_ENDEAVOURS].UseRag end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_WEEKLY_ENDEAVOURS].UseRag = value
+                BS.RefreshWidget(BS.W_WEEKLY_ENDEAVOURS)
+            end,
+            width = "full",
+            default = false
+        }
+    }
 }
 
 BS.widgets[BS.W_ENDEAVOUR_PROGRESS] = {
