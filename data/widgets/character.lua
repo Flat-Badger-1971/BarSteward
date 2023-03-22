@@ -176,10 +176,10 @@ BS.widgets[BS.W_CLASS] = {
             end,
             setFunc = function(value)
                 BS.Vars.Controls[BS.W_CLASS].NoValue = value
+                BS.RegenerateBar(BS.Vars.Controls[BS.W_CLASS].Bar)
             end,
             width = "full",
-            default = false,
-            requiresReload = true
+            default = false
         }
     }
 }
@@ -231,10 +231,10 @@ BS.widgets[BS.W_ALLIANCE] = {
             end,
             setFunc = function(value)
                 BS.Vars.Controls[BS.W_ALLIANCE].NoValue = value
+                BS.RegenerateBar(BS.Vars.Controls[BS.W_ALLIANCE].Bar)
             end,
             width = "full",
-            default = false,
-            requiresReload = true
+            default = false
         }
     }
 }

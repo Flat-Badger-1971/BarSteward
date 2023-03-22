@@ -1392,6 +1392,10 @@ local function setBinding(barIndex, barName)
 end
 
 function BS.GenerateBar(barIndex)
+    if ((barIndex or 0) == 0) then
+        return
+    end
+
     local barData = BS.Vars.Bars[barIndex]
     local bar =
         BS.CreateBar(
@@ -1445,6 +1449,10 @@ function BS.GenerateBar(barIndex)
 end
 
 function BS.DestroyBar(barIndex)
+    if ((barIndex or 0) == 0) then
+        return
+    end
+
     -- return widgets to the pool
     local widgets = getWidgets(barIndex)
 
@@ -1492,6 +1500,10 @@ local function refreshBarWidgets(barIndex)
 end
 
 function BS.RegenerateBar(barIndex)
+    if ((barIndex or 0) == 0) then
+        return
+    end
+
     if (not BS.Vars.Bars[barIndex].Disable) then
         BS.DestroyBar(barIndex)
         BS.GenerateBar(barIndex)

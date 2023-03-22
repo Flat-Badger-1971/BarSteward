@@ -347,9 +347,9 @@ function BS.GetPortToHouseSettings()
                         end
 
                         vars.Bar = barNum
+                        BS.RegenerateBar(barNum)
                     end,
                     width = "full",
-                    requiresReload = true,
                     default = 0
                 },
                 [2] = {
