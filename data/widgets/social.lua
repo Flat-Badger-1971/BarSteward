@@ -27,7 +27,8 @@ BS.widgets[BS.W_FRIENDS] = {
     --v1.2.0
     name = "friends",
     update = function(widget, event, displayName, characterName, _, newStatus)
-        local vars = BS.Vars.Controls[BS.W_FRIENDS]
+        local this = BS.W_FRIENDS
+        local vars = BS.Vars.Controls[this]
         local masterList = FRIENDS_LIST_MANAGER:GetMasterList()
         local offline, online, other = {}, {}, {}
         local tt = BS.Format(_G.SI_SOCIAL_MENU_CONTACTS) .. "|cffffff"
@@ -76,7 +77,7 @@ BS.widgets[BS.W_FRIENDS] = {
                                 BS.Announce(
                                     GetString(_G.BARSTEWARD_FRIEND_ONLINE),
                                     zo_strformat(GetString(_G.BARSTEWARD_FRIEND_ONLINE_MESSAGE), cname, dname),
-                                    BS.W_FRIENDS
+                                    this
                                 )
                             end
                         end
@@ -201,7 +202,8 @@ BS.widgets[BS.W_GUILD_FRIENDS] = {
     --v1.2.18
     name = "guildFriends",
     update = function(widget, _, guildId, displayName, _, newStatus)
-        local vars = BS.Vars.Controls[BS.W_GUILD_FRIENDS]
+        local this = BS.W_GUILD_FRIENDS
+        local vars = BS.Vars.Controls[this]
         local masterList = BS.Vars.GuildFriendAnnounce
         local online, offline, other = {}, {}, {}
         local oCount, tCount = 0, 0
@@ -262,7 +264,7 @@ BS.widgets[BS.W_GUILD_FRIENDS] = {
                     BS.Announce(
                         GetString(_G.BARSTEWARD_GUILD_FRIEND_ONLINE),
                         zo_strformat(GetString(_G.BARSTEWARD_FRIEND_ONLINE_MESSAGE), cname, dname),
-                        BS.W_GUILD_FRIENDS
+                        this
                     )
                 end
             end

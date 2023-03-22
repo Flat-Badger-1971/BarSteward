@@ -154,14 +154,15 @@ BS.widgets[BS.W_ALLIANCE_POINTS] =
 BS.widgets[BS.W_CROWN_GEMS] = {
     name = "crownGems",
     update = function(widget)
+        local this = BS.W_CROWN_GEMS
         local gems = GetCurrencyAmount(_G.CURT_CROWN_GEMS, _G.CURRENCY_LOCATION_ACCOUNT)
 
-        if (BS.Vars.Controls[BS.W_CROWN_GEMS].UseSeparators == true) then
+        if (BS.Vars.Controls[this].UseSeparators == true) then
             gems = BS.AddSeparators(gems)
         end
 
         widget:SetValue(gems)
-        widget:SetColour(unpack(BS.Vars.Controls[BS.W_CROWN_GEMS].Colour or BS.Vars.DefaultColour))
+        widget:SetColour(unpack(BS.Vars.Controls[this].Colour or BS.Vars.DefaultColour))
 
         local tt = GetString(_G.BARSTEWARD_CROWN_GEMS) .. BS.LF
         tt = tt .. getcrownStoreCurrencies()
@@ -181,14 +182,15 @@ BS.widgets[BS.W_CROWN_GEMS] = {
 BS.widgets[BS.W_CROWNS] = {
     name = "crowns",
     update = function(widget)
+        local this = BS.W_CROWNS
         local crowns = GetCurrencyAmount(_G.CURT_CROWNS, _G.CURRENCY_LOCATION_ACCOUNT)
 
-        if (BS.Vars.Controls[BS.W_CROWNS].UseSeparators == true) then
+        if (BS.Vars.Controls[this].UseSeparators == true) then
             crowns = BS.AddSeparators(crowns)
         end
 
         widget:SetValue(crowns)
-        widget:SetColour(unpack(BS.Vars.Controls[BS.W_CROWNS].Colour or BS.Vars.DefaultColour))
+        widget:SetColour(unpack(BS.Vars.Controls[this].Colour or BS.Vars.DefaultColour))
 
         local tt = GetString(_G.BARSTEWARD_CROWNS) .. BS.LF
         tt = tt .. getcrownStoreCurrencies()
@@ -208,7 +210,8 @@ BS.widgets[BS.W_CROWNS] = {
 BS.widgets[BS.W_EVENT_TICKETS] = {
     name = "eventTickets",
     update = function(widget)
-        local vars = BS.Vars.Controls[BS.W_EVENT_TICKETS]
+        local this = BS.W_EVENT_TICKETS
+        local vars = BS.Vars.Controls[this]
         local tickets = GetCurrencyAmount(_G.CURT_EVENT_TICKETS, _G.CURRENCY_LOCATION_ACCOUNT)
         local maxTickets = GetMaxPossibleCurrency(_G.CURT_EVENT_TICKETS, _G.CURRENCY_LOCATION_ACCOUNT)
         local noLimitColour = vars.NoLimitColour and "|cf9f9f9" or ""
@@ -229,7 +232,7 @@ BS.widgets[BS.W_EVENT_TICKETS] = {
 
             if (vars.Announce) then
                 local announce = true
-                local previousTime = BS.Vars.PreviousAnnounceTime[BS.W_EVENT_TICKETS] or (os.time() - 100)
+                local previousTime = BS.Vars.PreviousAnnounceTime[this] or (os.time() - 100)
                 local debounceTime = (vars.DebounceTime or 5) * 60
 
                 if (os.time() - previousTime <= debounceTime) then
@@ -243,12 +246,8 @@ BS.widgets[BS.W_EVENT_TICKETS] = {
                 end
 
                 if (announce) then
-                    BS.Vars.PreviousAnnounceTime[BS.W_EVENT_TICKETS] = os.time()
-                    BS.Announce(
-                        GetString(_G.BARSTEWARD_WARNING),
-                        GetString(_G.BARSTEWARD_WARNING_EVENT_TICKETS),
-                        BS.W_EVENT_TICKETS
-                    )
+                    BS.Vars.PreviousAnnounceTime[this] = os.time()
+                    BS.Announce(GetString(_G.BARSTEWARD_WARNING), GetString(_G.BARSTEWARD_WARNING_EVENT_TICKETS), this)
                 end
             end
         end
@@ -290,14 +289,15 @@ BS.widgets[BS.W_GOLD] =
 BS.widgets[BS.W_SEALS_OF_ENDEAVOUR] = {
     name = "sealsOfEndeavour",
     update = function(widget)
+        local this = BS.W_SEALS_OF_ENDEAVOUR
         local seals = GetCurrencyAmount(_G.CURT_ENDEAVOR_SEALS, _G.CURRENCY_LOCATION_ACCOUNT)
 
-        if (BS.Vars.Controls[BS.W_SEALS_OF_ENDEAVOUR].UseSeparators == true) then
+        if (BS.Vars.Controls[this].UseSeparators == true) then
             seals = BS.AddSeparators(seals)
         end
 
         widget:SetValue(seals)
-        widget:SetColour(unpack(BS.Vars.Controls[BS.W_SEALS_OF_ENDEAVOUR].Colour or BS.Vars.DefaultColour))
+        widget:SetColour(unpack(BS.Vars.Controls[this].Colour or BS.Vars.DefaultColour))
 
         local tt = BS.Format(_G.SI_CROWN_STORE_MENU_SEALS_STORE_LABEL) .. BS.LF
         tt = tt .. getcrownStoreCurrencies()

@@ -5,6 +5,7 @@ BS.widgets[BS.W_STOLEN_ITEMS] = {
     -- v1.0.1
     name = "stolenItemCount",
     update = function(widget)
+        local this = BS.W_STOLEN_ITEMS
         local count = 0
         local bagCounts = {carrying = 0, banked = 0}
         local stolen = {}
@@ -45,12 +46,12 @@ BS.widgets[BS.W_STOLEN_ITEMS] = {
 
         local value = count
 
-        if (BS.Vars.Controls[BS.W_STOLEN_ITEMS].ShowSlots) then
+        if (BS.Vars.Controls[this].ShowSlots) then
             value = value .. "/" .. slotCount
         end
 
         widget:SetValue(value)
-        widget:SetColour(unpack(BS.Vars.Controls[BS.W_STOLEN_ITEMS].Colour or BS.Vars.DefaultColour))
+        widget:SetColour(unpack(BS.Vars.Controls[this].Colour or BS.Vars.DefaultColour))
 
         local ttt = GetString(_G.BARSTEWARD_STOLEN) .. BS.LF .. "|cf9f9f9"
         ttt = ttt .. BS.BAGICON .. " " .. bagCounts.carrying .. " " .. BS.BANKICON .. " " .. bagCounts.banked .. "|r"

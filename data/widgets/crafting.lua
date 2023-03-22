@@ -113,8 +113,9 @@ end
 BS.widgets[BS.W_BLACKSMITHING] = {
     name = "blacksmithing",
     update = function(widget)
+        local this = BS.W_BLACKSMITHING
         local timeRemaining, maxResearch, inUse = getResearchTimer(_G.CRAFTING_TYPE_BLACKSMITHING)
-        local vars = BS.Vars.Controls[BS.W_BLACKSMITHING]
+        local vars = BS.Vars.Controls[this]
         local colour = vars.OkColour or BS.Vars.DefaultOkColour
 
         if (timeRemaining < (vars.DangerValue * 3600)) then
@@ -124,7 +125,7 @@ BS.widgets[BS.W_BLACKSMITHING] = {
         end
 
         fullyUsed[_G.CRAFTING_TYPE_BLACKSMITHING] = inUse == maxResearch
-        local display = getDisplay(timeRemaining, BS.W_BLACKSMITHING, inUse, maxResearch)
+        local display = getDisplay(timeRemaining, this, inUse, maxResearch)
 
         widget:SetColour(unpack(colour))
         widget:SetValue(display)
@@ -135,7 +136,7 @@ BS.widgets[BS.W_BLACKSMITHING] = {
             local slotText = BS.LF .. "|cf9f9f9" .. slot .. " - "
 
             ttt = ttt .. slotText
-            ttt = ttt .. getDisplay(researchSlots[_G.CRAFTING_TYPE_BLACKSMITHING][slot] or 0, BS.W_BLACKSMITHING)
+            ttt = ttt .. getDisplay(researchSlots[_G.CRAFTING_TYPE_BLACKSMITHING][slot] or 0, this)
         end
 
         widget.tooltip = ttt
@@ -158,8 +159,9 @@ BS.widgets[BS.W_BLACKSMITHING] = {
 BS.widgets[BS.W_WOODWORKING] = {
     name = "woodworking",
     update = function(widget)
+        local this = BS.W_WOODWORKING
         local timeRemaining, maxResearch, inUse = getResearchTimer(_G.CRAFTING_TYPE_WOODWORKING)
-        local vars = BS.Vars.Controls[BS.W_WOODWORKING]
+        local vars = BS.Vars.Controls[this]
         local colour = vars.OkColour or BS.Vars.DefaultOkColour
 
         if (timeRemaining < (vars.DangerValue * 3600)) then
@@ -169,7 +171,7 @@ BS.widgets[BS.W_WOODWORKING] = {
         end
 
         fullyUsed[_G.CRAFTING_TYPE_WOODWORKING] = inUse == maxResearch
-        local display = getDisplay(timeRemaining, BS.W_WOODWORKING, inUse, maxResearch)
+        local display = getDisplay(timeRemaining, this, inUse, maxResearch)
 
         widget:SetColour(unpack(colour))
         widget:SetValue(display)
@@ -180,7 +182,7 @@ BS.widgets[BS.W_WOODWORKING] = {
             local slotText = BS.LF .. "|cf9f9f9" .. slot .. " - "
 
             ttt = ttt .. slotText
-            ttt = ttt .. getDisplay(researchSlots[_G.CRAFTING_TYPE_WOODWORKING][slot] or 0, BS.W_WOODWORKING)
+            ttt = ttt .. getDisplay(researchSlots[_G.CRAFTING_TYPE_WOODWORKING][slot] or 0, this)
         end
 
         widget.tooltip = ttt
@@ -203,8 +205,9 @@ BS.widgets[BS.W_WOODWORKING] = {
 BS.widgets[BS.W_CLOTHING] = {
     name = "clothing",
     update = function(widget)
+        local this = BS.W_CLOTHING
         local timeRemaining, maxResearch, inUse = getResearchTimer(_G.CRAFTING_TYPE_CLOTHIER)
-        local vars = BS.Vars.Controls[BS.W_CLOTHING]
+        local vars = BS.Vars.Controls[this]
         local colour = vars.OkColour or BS.Vars.DefaultOkColour
 
         if (timeRemaining < (vars.DangerValue * 3600)) then
@@ -214,7 +217,7 @@ BS.widgets[BS.W_CLOTHING] = {
         end
 
         fullyUsed[_G.CRAFTING_TYPE_CLOTHIER] = inUse == maxResearch
-        local display = getDisplay(timeRemaining, BS.W_CLOTHING, inUse, maxResearch)
+        local display = getDisplay(timeRemaining, this, inUse, maxResearch)
 
         widget:SetColour(unpack(colour))
         widget:SetValue(display)
@@ -224,7 +227,7 @@ BS.widgets[BS.W_CLOTHING] = {
         for slot = 1, maxResearch do
             local slotText = BS.LF .. "|cf9f9f9" .. slot .. " - "
 
-            ttt = ttt .. slotText .. getDisplay(researchSlots[_G.CRAFTING_TYPE_CLOTHIER][slot] or 0, BS.W_CLOTHING)
+            ttt = ttt .. slotText .. getDisplay(researchSlots[_G.CRAFTING_TYPE_CLOTHIER][slot] or 0, this)
         end
 
         widget.tooltip = ttt
@@ -247,8 +250,9 @@ BS.widgets[BS.W_CLOTHING] = {
 BS.widgets[BS.W_JEWELCRAFTING] = {
     name = "jewelcrafting",
     update = function(widget)
+        local this = BS.W_JEWELCRAFTING
         local timeRemaining, maxResearch, inUse = getResearchTimer(_G.CRAFTING_TYPE_JEWELRYCRAFTING)
-        local vars = BS.Vars.Controls[BS.W_JEWELCRAFTING]
+        local vars = BS.Vars.Controls[this]
         local colour = vars.OkColour or BS.Vars.DefaultOkColour
 
         if (timeRemaining < (vars.DangerValue * 3600)) then
@@ -258,7 +262,7 @@ BS.widgets[BS.W_JEWELCRAFTING] = {
         end
 
         fullyUsed[_G.CRAFTING_TYPE_JEWELRYCRAFTING] = inUse == maxResearch
-        local display = getDisplay(timeRemaining, BS.W_JEWELCRAFTING, inUse, maxResearch)
+        local display = getDisplay(timeRemaining, this, inUse, maxResearch)
 
         widget:SetColour(unpack(colour))
         widget:SetValue(display)
@@ -269,7 +273,7 @@ BS.widgets[BS.W_JEWELCRAFTING] = {
             local slotText = BS.LF .. "|cf9f9f9" .. slot .. " - "
 
             ttt = ttt .. slotText
-            ttt = ttt .. getDisplay(researchSlots[_G.CRAFTING_TYPE_JEWELRYCRAFTING][slot] or 0, BS.W_JEWELCRAFTING)
+            ttt = ttt .. getDisplay(researchSlots[_G.CRAFTING_TYPE_JEWELRYCRAFTING][slot] or 0, this)
         end
 
         widget.tooltip = ttt
@@ -642,7 +646,8 @@ BS.widgets[BS.W_UNKNOWN_WRIT_MOTIFS] = {
                             local motifName = zo_strformat("<<C:1>> <<m:2>>", styleName, chapterName)
                             local colour = GetItemQualityColor(writData.itemQuality)
                             local name = colour:Colorize(motifName)
-                            local motifId = _G.LibCharacterKnowledgeInternal.GetStyleMotifItems(writData.motifNumber).number
+                            local motifId =
+                                _G.LibCharacterKnowledgeInternal.GetStyleMotifItems(writData.motifNumber).number
 
                             name = motifId .. ". " .. name
                             unknown[name] = true

@@ -48,6 +48,7 @@ BS.widgets[BS.W_COMPANION_LEVEL] = {
     -- v1.2.19
     name = "companionLevel",
     update = function(widget)
+        local this = BS.W_COMPANION_LEVEL
         local companionLevel, currentXPInLevel = GetActiveCompanionLevelInfo()
         local totalXPInLevel = GetNumExperiencePointsInCompanionLevel(companionLevel + 1) or 0
         local percent = 0
@@ -57,13 +58,13 @@ BS.widgets[BS.W_COMPANION_LEVEL] = {
 
         if (not isMaxLevel) then
             percent = math.max(zo_roundToNearest((currentXPInLevel or 0) / totalXPInLevel, 0.01), 0) * 100
-        elseif (BS.Vars.Controls[BS.W_COMPANION_LEVEL].HideWhenMaxLevel) then
+        elseif (BS.Vars.Controls[this].HideWhenMaxLevel) then
             return companionLevel
         end
 
         local text = companionLevel
 
-        if (BS.Vars.Controls[BS.W_COMPANION_LEVEL].ShowXPPC and not isMaxLevel) then
+        if (BS.Vars.Controls[this].ShowXPPC and not isMaxLevel) then
             text = text .. " (" .. percent .. "%)"
         end
 
@@ -73,7 +74,7 @@ BS.widgets[BS.W_COMPANION_LEVEL] = {
 
         widget:SetIcon(icon)
         widget:SetValue(text)
-        widget:SetColour(unpack(BS.Vars.Controls[BS.W_COMPANION_LEVEL].Colour or BS.Vars.DefaultColour))
+        widget:SetColour(unpack(BS.Vars.Controls[this].Colour or BS.Vars.DefaultColour))
 
         local ttt = GetString(_G.BARSTEWARD_COMPANION_LEVEL) .. BS.LF
         local progress = (currentXPInLevel or 0) .. " / " .. totalXPInLevel

@@ -4,6 +4,7 @@ BS.widgets[BS.W_MUNDUS_STONE] = {
     -- v1.0.1
     name = "mundusstone",
     update = function(widget)
+        local this = BS.W_MUNDUS_STONE
         local mundusId, mundusName, mundusIcon
 
         for buffNum = 1, GetNumBuffs("player") do
@@ -14,7 +15,7 @@ BS.widgets[BS.W_MUNDUS_STONE] = {
                 mundusId = id
                 mundusName = BS.Format(name)
 
-                if (BS.Vars.Controls[BS.W_MUNDUS_STONE].Shorten) then
+                if (BS.Vars.Controls[this].Shorten) then
                     local colonPosition = mundusName:find(":")
 
                     mundusName = mundusName:gsub(mundusName:sub(1, colonPosition + 1), "")
@@ -27,7 +28,7 @@ BS.widgets[BS.W_MUNDUS_STONE] = {
         if (mundusId ~= nil) then
             widget:SetIcon(mundusIcon)
             widget:SetValue(mundusName)
-            widget:SetColour(unpack(BS.Vars.Controls[BS.W_MUNDUS_STONE].Colour or BS.Vars.DefaultColour))
+            widget:SetColour(unpack(BS.Vars.Controls[this].Colour or BS.Vars.DefaultColour))
 
             local tt = BS.Format(_G.SI_CONFIRM_MUNDUS_STONE_TITLE) .. BS.LF
             local desc = BS.Format(GetAbilityDescription(mundusId))
@@ -39,7 +40,7 @@ BS.widgets[BS.W_MUNDUS_STONE] = {
             return mundusName
         else
             widget:SetValue(BS.Format(_G.SI_CRAFTING_INVALID_ITEM_STYLE))
-            widget:SetColour(unpack(BS.Vars.Controls[BS.W_MUNDUS_STONE].DangerColour or BS.Vars.DefaultDangerColour))
+            widget:SetColour(unpack(BS.Vars.Controls[this].DangerColour or BS.Vars.DefaultDangerColour))
         end
 
         return ""
@@ -150,12 +151,13 @@ BS.widgets[BS.W_CLASS] = {
     -- v1.0.3
     name = "playerClass",
     update = function(widget)
+        local this = BS.W_CLASS
         local classId = GetUnitClassId("player")
         local icon = GetClassIcon(classId)
 
-        if (not BS.Vars.Controls[BS.W_CLASS].NoValue) then
+        if (not BS.Vars.Controls[this].NoValue) then
             widget:SetValue(BS.Format(GetUnitClass("player")))
-            widget:SetColour(unpack(BS.Vars.Controls[BS.W_CLASS].Colour or BS.Vars.DefaultColour))
+            widget:SetColour(unpack(BS.Vars.Controls[this].Colour or BS.Vars.DefaultColour))
         end
 
         widget:SetIcon(icon)
@@ -847,7 +849,7 @@ BS.widgets[BS.W_PLAYER_EXPERIENCE] = {
         local earned = GetPlayerChampionPointsEarned()
         local xp, xplvl = GetPlayerChampionXP(), GetNumChampionXPInChampionPoint(earned)
         local pc = math.floor((xp / xplvl) * 100)
-        local vars = BS.Vars.Controls[BS.W_CHAMPION_POINTS]
+        local vars = BS.Vars.Controls[BS.W_PLAYER_EXPERIENCE]
         local out
 
         if (vars.ShowPercent) then
