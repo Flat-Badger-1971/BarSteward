@@ -140,6 +140,8 @@ function baseBar:SetBorder()
 end
 
 function baseBar:SetBackground()
+    self.backdropColour = self.settings.Backdrop.Colour
+
     if ((self.settings.Background or 99) ~= 99) then
         self.bar.background:SetCenterTexture(BS.BACKGROUNDS[self.settings.Background])
     else

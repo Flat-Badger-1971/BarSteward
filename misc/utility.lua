@@ -1512,11 +1512,20 @@ function BS.RegenerateBar(barIndex)
     end
 end
 
-function BS.RegenerateAllBars()
+function BS.RegenerateAllBars(barsToRegenerate)
     local bars = BS.Vars.Bars
+    local regenerate = true
 
     for barIndex, barInfo in pairs(bars) do
-        if (not barInfo.Disable) then
+        if (barsToRegenerate) then
+            if (barsToRegenerate[barIndex]) then
+                regenerate = true
+            else
+                regenerate = false
+            end
+        end
+
+        if ((not barInfo.Disable) and regenerate) then
             BS.RegenerateBar(barIndex)
         end
     end

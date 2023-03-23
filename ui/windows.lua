@@ -359,11 +359,14 @@ function BS.CreateWidgetOrderTool(bars)
     frame.button:SetAnchor(TOPLEFT, frame.scrollList, BOTTOMLEFT, 0, 40)
 
     local onClick = function()
+        local bars = {}
         for _, item in pairs(BS.dataItems) do
             BS.Vars.Controls[item.key].Order = item.order
+            bars[BS.Vars.Controls[item.key].Bar] = true
         end
 
-        BS.RegenerateAllBars()
+        -- only regenerate altered bars
+        BS.RegenerateAllBars(bars)
     end
 
     frame.button:SetHandler("OnClicked", onClick)
