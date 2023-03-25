@@ -102,7 +102,7 @@ function baseBar:Initialise()
                 end
 
                 if (inCombat) then
-                    if ((self.settings.settings.Background or 99) ~= 99) then
+                    if ((self.background or 99) ~= 99) then
                         self.bar.background:SetCenterTexture("")
                     end
 
