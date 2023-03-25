@@ -123,10 +123,10 @@ local function initialise()
         setFunc = function(value)
             BS.Vars.Font = value
 
-            --BS.RegenerateAllBars()
+            BS.RegenerateAllBars()
             _G.BarSteward_SampleText.desc:SetFont(BS.GetFont(value))
         end,
-        requiresReload = true,
+
         default = BS.Defaults.Font
     }
 
@@ -141,10 +141,9 @@ local function initialise()
         setFunc = function(value)
             BS.Vars.FontSize = value
 
-            --BS.RegenerateAllBars()
+            BS.RegenerateAllBars()
             _G.BarSteward_SampleText.desc:SetFont(BS.GetFont())
         end,
-        requiresReload = true,
         default = BS.Defaults.FontSize
     }
 

@@ -604,6 +604,14 @@ function BS.RemoveFromScenes(sceneType, bar)
     end
 end
 
+function BS.RemoveFromAllScenes(barIndex)
+    local bar = BS.BarObjectPool:GetActiveObject(BS.BarObjects[barIndex])
+
+    for _, scene in ipairs(BS.SCENES) do
+        BS.RemoveFromScenes(scene, bar)
+    end
+end
+
 function BS.VersionDelta(version)
     local currentVersion = BS.VERSION:gsub("%.", "")
     local checkVersion = version:gsub("%.", "")
@@ -1452,6 +1460,9 @@ function BS.DestroyBar(barIndex)
     if ((barIndex or 0) == 0) then
         return
     end
+
+    -- remove the bar from all scenes
+    BS.RemoveFromAllScenes(barIndex)
 
     -- return widgets to the pool
     local widgets = getWidgets(barIndex)
