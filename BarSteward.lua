@@ -375,6 +375,22 @@ local function Initialise()
     end
 
     BS.Vars.CharacterList[GetUnitName("player")] = true
+
+    BS.RegisterForEvent(
+        _G.EVENT_PLAYER_ACTIVATED,
+        function()
+            if (BS.Vars.Controls[BS.W_CHESTS_FOUND].Bar == 0) then
+                return
+            end
+
+            local isInDungeon = IsUnitInDungeon("player")
+
+            if (BS.Vars.DungeonInfo.IsInDungeon ~= isInDungeon) then
+                BS.Vars.DungeonInfo.IsInDungeon = isInDungeon
+                BS.Vars.DungeonInfo.ChestCount = 0
+            end
+        end
+    )
 end
 
 function BS.ToggleBar(index)

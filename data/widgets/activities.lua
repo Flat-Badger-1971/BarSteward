@@ -136,7 +136,9 @@ BS.widgets[BS.W_DAILY_ENDEAVOURS] = {
         [1] = {
             type = "checkbox",
             name = GetString(_G.BARSTEWARD_USE_RAG),
-            getFunc = function() return BS.Vars.Controls[BS.W_DAILY_ENDEAVOURS].UseRag end,
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_DAILY_ENDEAVOURS].UseRag
+            end,
             setFunc = function(value)
                 BS.Vars.Controls[BS.W_DAILY_ENDEAVOURS].UseRag = value
                 BS.RefreshWidget(BS.W_DAILY_ENDEAVOURS)
@@ -176,7 +178,9 @@ BS.widgets[BS.W_WEEKLY_ENDEAVOURS] = {
         [1] = {
             type = "checkbox",
             name = GetString(_G.BARSTEWARD_USE_RAG),
-            getFunc = function() return BS.Vars.Controls[BS.W_WEEKLY_ENDEAVOURS].UseRag end,
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_WEEKLY_ENDEAVOURS].UseRag
+            end,
             setFunc = function(value)
                 BS.Vars.Controls[BS.W_WEEKLY_ENDEAVOURS].UseRag = value
                 BS.RefreshWidget(BS.W_WEEKLY_ENDEAVOURS)
@@ -672,35 +676,58 @@ BS.widgets[BS.W_LFG_TIME] = {
     end
 }
 
+local function updateLoreBooks()
+    local bypass =
+        BS.Vars.Controls[BS.W_LOREBOOKS].Bar + BS.Vars.Controls[BS.W_LOREBOOKS].Bar +
+        BS.Vars.Controls[BS.W_LOREBOOKS].Bar ==
+        0
+
+    if (bypass) then
+        return
+    end
+
+    local categories = {}
+
+    for categoryIndex = 1, GetNumLoreCategories() do
+        local categoryName, numCollections, categoryId = GetLoreCategoryInfo(categoryIndex)
+        local category = {
+            id = categoryId,
+            name = categoryName,
+            numCollections = numCollections,
+            numKnownBooks = 0,
+            totalBooks = 0
+        }
+
+        for collectionIndex = 1, numCollections do
+            local _, _, numKnownBooks, totalBooks, hidden = GetLoreCollectionInfo(categoryIndex, collectionIndex)
+            if not hidden then
+                category.numKnownBooks = category.numKnownBooks + numKnownBooks
+                category.totalBooks = category.totalBooks + totalBooks
+            end
+        end
+
+        categories[categoryIndex] = category
+    end
+
+    CALLBACK_MANAGER:FireCallbacks(BS.Name .. "CB_Lorebooks_Updated", categories)
+end
+
+BS.RegisterForEvent(_G.EVENT_PLAYER_ACTIVATED, updateLoreBooks)
+BS.RegisterForEvent(_G.EVENT_LORE_BOOK_LEARNED, updateLoreBooks)
+BS.RegisterForEvent(_G.EVENT_STYLE_LEARNED, updateLoreBooks)
+BS.RegisterForEvent(_G.EVENT_TRAIT_LEARNED, updateLoreBooks)
+
 BS.widgets[BS.W_LOREBOOKS] = {
     -- v1.4.5
     name = "lorebooks",
-    update = function(widget)
-        local colour = BS.Vars.Controls[BS.W_LOREBOOKS].Colour or BS.Vars.DefaultColour
-        local categories = {}
-
-        for categoryIndex = 1, GetNumLoreCategories() do
-            local categoryName, numCollections = GetLoreCategoryInfo(categoryIndex)
-            local category = {
-                name = categoryName,
-                numCollections = numCollections,
-                numKnownBooks = 0,
-                totalBooks = 0
-            }
-
-            for collectionIndex = 1, numCollections do
-                local _, _, numKnownBooks, totalBooks, hidden = GetLoreCollectionInfo(categoryIndex, collectionIndex)
-                if not hidden then
-                    category.numKnownBooks = category.numKnownBooks + numKnownBooks
-                    category.totalBooks = category.totalBooks + totalBooks
-                end
-            end
-
-            categories[categoryIndex] = category
+    update = function(widget, categories)
+        if (categories == "initial") then
+            return
         end
 
+        local self = BS.W_LOREBOOKS
+        local colour = BS.Vars.Controls[self].Colour or BS.Vars.DefaultColour
         local value = ""
-
         local tt = GetString(_G.BARSTEWARD_LOREBOOKS)
 
         for _, category in pairs(categories) do
@@ -709,7 +736,7 @@ BS.widgets[BS.W_LOREBOOKS] = {
             tt = tt .. BS.LF .. "|cf9f9f9"
             tt = tt .. category.name .. " " .. metrics .. "|r"
 
-            if (BS.Vars.Controls[BS.W_LOREBOOKS].ShowCategory == category.name) then
+            if (BS.Vars.Controls[self].ShowCategory == category.name) then
                 value = metrics
             end
         end
@@ -721,7 +748,7 @@ BS.widgets[BS.W_LOREBOOKS] = {
 
         return #categories
     end,
-    event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_LORE_BOOK_LEARNED, _G.EVENT_STYLE_LEARNED, _G.EVENT_TRAIT_LEARNED},
+    callback = {[CALLBACK_MANAGER] = {BS.Name .. "CB_Lorebooks_Updated"}},
     icon = "/esoui/art/icons/quest_book_001.dds",
     tooltip = GetString(_G.BARSTEWARD_LOREBOOKS),
     onClick = function()
@@ -755,6 +782,80 @@ BS.widgets[BS.W_LOREBOOKS] = {
                 default = false
             }
         }
+    end
+}
+
+BS.widgets[BS.W_SHALIDORS_LIBRARY] = {
+    -- v1.5.3
+    name = "shalidorsLibrary",
+    update = function(widget, categories)
+        if (categories == "initial") then
+            return
+        end
+
+        local colour = BS.Vars.Controls[BS.W_SHALIDORS_LIBRARY].Colour or BS.Vars.DefaultColour
+        local value = "0/0"
+        local known = 0
+
+        for _, category in pairs(categories) do
+            if (category.id == BS.L_SHALIDORS_LIBRARY) then
+                value = category.numKnownBooks .. "/" .. category.totalBooks
+                known = category.numKnownBooks
+                break
+            end
+        end
+
+        widget:SetValue(value)
+        widget:SetColour(unpack(colour))
+
+        return known
+    end,
+    callback = {[CALLBACK_MANAGER] = {BS.Name .. "CB_Lorebooks_Updated"}},
+    icon = "/esoui/art/icons/housing_sum_fur_booksfloatingset003.dds",
+    tooltip = BS.Format(_G.SI_ZONECOMPLETIONTYPE11),
+    onClick = function()
+        if (IsInGamepadPreferredMode()) then
+            SCENE_MANAGER:Show("loreLibraryGamepad")
+        else
+            SCENE_MANAGER:Show("loreLibrary")
+        end
+    end
+}
+
+BS.widgets[BS.W_CRAFTING_MOTIFS] = {
+    -- v1.5.3
+    name = "craftingMotifs",
+    update = function(widget, categories)
+        if (categories == "initial") then
+            return
+        end
+
+        local colour = BS.Vars.Controls[BS.W_CRAFTING_MOTIFS].Colour or BS.Vars.DefaultColour
+        local value = "0/0"
+        local known = 0
+
+        for _, category in pairs(categories) do
+            if (category.id == BS.L_CRAFTING_MOTIFS) then
+                value = category.numKnownBooks .. "/" .. category.totalBooks
+                known = category.numKnownBooks
+                break
+            end
+        end
+
+        widget:SetValue(value)
+        widget:SetColour(unpack(colour))
+
+        return known
+    end,
+    callback = {[CALLBACK_MANAGER] = {BS.Name .. "CB_Lorebooks_Updated"}},
+    icon = "/esoui/art/icons/u34_crafting_style_item_sybranic_marine.dds",
+    tooltip = GetString(_G.BARSTEWARD_CRAFTING_MOTIFS),
+    onClick = function()
+        if (IsInGamepadPreferredMode()) then
+            SCENE_MANAGER:Show("loreLibraryGamepad")
+        else
+            SCENE_MANAGER:Show("loreLibrary")
+        end
     end
 }
 
@@ -974,4 +1075,47 @@ BS.widgets[BS.W_RANDOM_TRIBUTE] = {
             SCENE_MANAGER:Show("groupMenuKeyboard")
         end
     end
+}
+
+-- widget based in InfoPanel
+
+local function isChest(name)
+    return BS.Count("Truhe,Coffre,Chest,сундук", name) > 0
+end
+
+BS.widgets[BS.W_CHESTS_FOUND] = {
+    -- v1.5.3
+    name = "chestsFound",
+    update = function(widget, _, result, targetName)
+        local colour = BS.Vars.Controls[BS.W_CHESTS_FOUND].Colour or BS.Vars.DefaultColour
+
+        if (BS.Vars.DungeonInfo.IsInDungeon) then
+            if (result == _G.CLIENT_INTERACT_RESULT_SUCCESS and isChest(targetName)) then
+                local x, y, _ = GetMapPlayerPosition("player")
+                local delta = 0.003
+
+                x = math.floor(x * 10000) / 10000
+                y = math.floor(y * 10000) / 10000
+
+                if
+                    (math.abs(BS.Vars.DungeonInfo.PreviousChest.x - x) > delta and
+                        math.abs(BS.Vars.DungeonInfo.PreviousChest.y - y) > delta)
+                 then
+                    BS.Vars.DungeonInfo.PreviousChest = {x = x, y = y}
+                    BS.Vars.DungeonInfo.ChestCount = BS.Vars.DungeonInfo.ChestCount + 1
+                end
+            end
+        end
+
+        widget:SetValue(BS.Vars.DungeonInfo.ChestCount)
+        widget:SetColour(unpack(colour))
+
+        return BS.Vars.DungeonInfo.ChestCount
+    end,
+    event = {_G.EVENT_CLIENT_INTERACT_RESULT, _G.EVENT_PLAYER_ACTIVATED},
+    hideWhenTrue = function()
+        return not IsUnitInDungeon("player")
+    end,
+    icon = "/esoui/art/icons/quest_strosmkai_open_treasure_chest.dds",
+    tooltip = GetString(_G.BARSTEWARD_FOUND_CHESTS)
 }

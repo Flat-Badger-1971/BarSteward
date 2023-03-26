@@ -14,6 +14,7 @@ BS.Defaults = {
     DefaultDangerColour = {(204 / 255), 0, 0, 1},
     DefaultWarningColour = {1, 1, 0, 1},
     DefaultOkColour = {0, 1, 0, 1},
+    DungeonInfo = {IsInDungeon = false, ChestCount = 0, PreviousChest = {x = 0, y = 0}},
     Font = "Default",
     FontSize = 18,
     FriendAnnounce = {},
@@ -465,6 +466,9 @@ BS.Defaults = {
         },
         [BS.W_FRAGMENTS] = {Bar = 0, Order = 87, ColourValues = "c"},
         [BS.W_RUNEBOXES] = {Bar = 0, Order = 88, ColourValues = "c"},
-        [BS.W_RECIPE_WATCH] = {Bar = 0, Order = 89, Autohide = false, Announce = true, ColourValues = "c"}
+        [BS.W_RECIPE_WATCH] = {Bar = 0, Order = 89, Autohide = false, Announce = true, ColourValues = "c"},
+        [BS.W_CHESTS_FOUND] = {Bar = 0, Order = 90, ColourValues = "c", Autohide = false},
+        [BS.W_SHALIDORS_LIBRARY] = {Bar = 0, Order = 91, ColourValues = "c"},
+        [BS.W_CRAFTING_MOTIFS] = {Bar = 0, Order = 92, ColourValues = "c"},
     }
 }

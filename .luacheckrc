@@ -363,6 +363,7 @@ read_globals = {
     "GetPlayerChampionXP",
     "GetPlayerGuildMemberIndex",
     "GetPlayerLocationName",
+    "GetMapPlayerPosition",
     "GetPulseTimeline",
     "GetRecallCooldown",
     "GetRecipeInfo",
@@ -423,6 +424,7 @@ read_globals = {
     "IsItemStolen",
     "IsUnitGrouped",
     "IsUnitInCombat",
+    "IsUnitInDungeon",
     "IsUnitPvPFlagged",
     "JumpToSpecificHouse",
     "PlayEmoteByIndex",
@@ -436,6 +438,7 @@ read_globals = {
     -- Zenimax objects
     "HUD_SCENE",
     "ZO_CachedStrFormat",
+    "ZO_CallbackObject",
     "ZO_CheckButton_SetCheckState",
     "ZO_CheckButton_SetLabelText",
     "ZO_CheckButton_SetToggleFunction",

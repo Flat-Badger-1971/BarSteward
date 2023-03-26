@@ -73,6 +73,7 @@ ZO_CreateStringId(
     "BARSTEWARD_COPY",
     "Select the text below, then use ctrl-c to copy it. The text can then be pasted into Bar Steward's 'Import Bar' box for another user."
 )
+ZO_CreateStringId("BARSTEWARD_CRAFTING_MOTIFS", "Crafting Motifs")
 ZO_CreateStringId("BARSTEWARD_CROWNS", "Crowns")
 ZO_CreateStringId("BARSTEWARD_CROWN_GEMS", "Crown Gems")
 ZO_CreateStringId("BARSTEWARD_DAILY_CRAFTING", "Daily Crafting Writs")
@@ -113,6 +114,7 @@ ZO_CreateStringId("BARSTEWARD_FENCE_RESET", "Fence Reset Timer")
 ZO_CreateStringId("BARSTEWARD_FILLED", "Filled")
 ZO_CreateStringId("BARSTEWARD_FONT", "Font")
 ZO_CreateStringId("BARSTEWARD_FONT_SIZE", "Font Size")
+ZO_CreateStringId("BARSTEWARD_FOUND_CHESTS", "Chests found in the current dungeon")
 ZO_CreateStringId("BARSTEWARD_FPS", "FPS")
 ZO_CreateStringId("BARSTEWARD_FRIEND_ONLINE", "Friend Online")
 ZO_CreateStringId("BARSTEWARD_FRIEND_ONLINE_MESSAGE", "<<1>> (<<2>>) has come online")
