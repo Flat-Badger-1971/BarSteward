@@ -786,7 +786,7 @@ BS.widgets[BS.W_LOREBOOKS] = {
 }
 
 BS.widgets[BS.W_SHALIDORS_LIBRARY] = {
-    -- v1.5.3
+    -- v1.5.2
     name = "shalidorsLibrary",
     update = function(widget, categories)
         if (categories == "initial") then
@@ -823,7 +823,7 @@ BS.widgets[BS.W_SHALIDORS_LIBRARY] = {
 }
 
 BS.widgets[BS.W_CRAFTING_MOTIFS] = {
-    -- v1.5.3
+    -- v1.5.2
     name = "craftingMotifs",
     update = function(widget, categories)
         if (categories == "initial") then
@@ -1084,7 +1084,7 @@ local function isChest(name)
 end
 
 BS.widgets[BS.W_CHESTS_FOUND] = {
-    -- v1.5.3
+    -- v1.5.2
     name = "chestsFound",
     update = function(widget, _, result, targetName)
         local colour = BS.Vars.Controls[BS.W_CHESTS_FOUND].Colour or BS.Vars.DefaultColour
