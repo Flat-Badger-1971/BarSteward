@@ -163,44 +163,16 @@ BS.FONTS = {
     ["Futura Bold"] = "EsoUI/Common/Fonts/FuturaStd-Condensed.otf"
 }
 
-BS.CRAFTING_SCENES = {
-    "alchemy",
-    "enchanting",
-    "provisioner",
-    "smithing"
-}
-
-BS.BANKING_SCENES = {
-    "bank",
-    "guildBank",
-    "houseBank"
-}
-
-BS.INVENTORY_SCENES = {
-    "inventory"
-}
-
-BS.MAIL_SCENES = {
-    "mailInbox",
-    "mailSend"
-}
-
-BS.SIEGE_SCENES = {
-    "siegeBar",
-    "siegeBarUI"
-}
-
-BS.MENU_SCENES = {
-    "gameMenuInGame"
-}
-
-BS.INTERACTING_SCENES = {
-    "interact"
-}
-
-BS.GUILDSTORE_SCENES = {
-    "tradinghouse"
-}
+BS.CRAFTING_SCENES = {"alchemy", "enchanting", "provisioner", "smithing"}
+BS.BANKING_SCENES = {"bank", "guildBank", "houseBank"}
+BS.INVENTORY_SCENES = {"inventory"}
+BS.MAIL_SCENES = {"mailInbox", "mailSend"}
+BS.SIEGE_SCENES = {"siegeBar", "siegeBarUI"}
+BS.MENU_SCENES = {"gameMenuInGame"}
+BS.INTERACTING_SCENES = {"interact"}
+BS.GUILDSTORE_SCENES = {"tradinghouse"}
+BS.DEFAULT_SCENES = {"hud", "hudui"}
+BS.SCENES = {"banking", "crafting", "default", "guildstore", "interacting", "inventory", "mail", "menu", "siege"}
 
 BS.CRAFTING_ACHIEVEMENT_IDS = {
     [1145] = true,
