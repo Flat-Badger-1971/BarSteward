@@ -58,7 +58,8 @@ function baseWidget:Initialise(metadata, parent, tooltipAnchor, valueSide, noVal
         font = BS.Vars.Font
     end
 
-    if (metadata.progress) then
+    --if (metadata.progress) then
+    if (BS.Vars.Controls[self.id].Progress) then
         self.value = BS.CreateProgressBar(name .. "_progress", self.control)
         self.value:SetAnchor(
             valueSide == LEFT and RIGHT or LEFT,

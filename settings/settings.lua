@@ -1,7 +1,7 @@
 local BS = _G.BarSteward
 
 BS.LAM = _G.LibAddonMenu2
-BS.VERSION = "1.5.3"
+BS.VERSION = "1.5.4"
 
 local panel = {
     type = "panel",
@@ -1417,8 +1417,8 @@ local function checkAnnouncement(defaults, widgetControls, vars, key)
     end
 end
 
-local function checkProgressBar(defaults, widgetControls, vars, key)
-    if (defaults.Progress == true) then
+local function checkProgressBar(_, widgetControls, vars, key)
+    if (vars.Progress == true) then
         widgetControls[#widgetControls + 1] = {
             type = "colorpicker",
             name = GetString(_G.BARSTEWARD_PROGRESS_VALUE),
@@ -1635,7 +1635,7 @@ local function checkColourOptions(widgetControls, vars, key)
     local cv = getCV(key)
 
     if (cv and key ~= BS.W_TAMRIEL_TIME or (key == BS.W_TAMRIEL_TIME and BS.LibClock ~= nil)) then
-        if (cv.c) then
+        if (cv.c and not vars.Progress) then
             widgetControls[#widgetControls + 1] = {
                 type = "colorpicker",
                 name = GetString(_G.BARSTEWARD_DEFAULT_COLOUR),

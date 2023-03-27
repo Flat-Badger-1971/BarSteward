@@ -32,7 +32,7 @@ local function configureWidget(widget, complete, maxComplete, activityType, task
     end
 end
 
-local function getTimedActivityProgress(activityType, widget, hideLimit, defaultTooltip)
+local function getTimedActivityProgress(activityType, widget, hideLimit, defaultTooltip, ignoreComplete)
     local complete = 0
     local maxComplete = GetTimedActivityTypeLimit(activityType)
     local tasks = {}
@@ -83,7 +83,13 @@ local function getTimedActivityProgress(activityType, widget, hideLimit, default
 
             table.insert(tasks, ttext)
 
-            if (pcProgress > maxPcProgress) then
+            local add = pcProgress > maxPcProgress
+
+            if (ignoreComplete and (progress == max)) then
+                add = false
+            end
+
+            if (add) then
                 maxTask = {
                     name = name,
                     description = GetTimedActivityDescription(idx),
@@ -196,9 +202,17 @@ BS.widgets[BS.W_ENDEAVOUR_PROGRESS] = {
     name = "weeklyEndeavourBar",
     update = function(widget)
         local _, maxTask = getTimedActivityProgress(_G.TIMED_ACTIVITY_TYPE_WEEKLY, nil)
+        local this = BS.W_ENDEAVOUR_PROGRESS
 
         if (maxTask.name and maxTask.maxProgress) then
-            widget:SetProgress(maxTask.progress, 0, maxTask.maxProgress)
+            if (BS.Vars.Controls[this].Progress) then
+                widget:SetProgress(maxTask.progress, 0, maxTask.maxProgress)
+            else
+                local colour = BS.Vars.Controls[this].Colour or BS.Vars.DefaultColour
+
+                widget:SetValue(maxTask.progress .. "/" .. maxTask.maxProgress)
+                widget:SetColour(unpack(colour))
+            end
 
             local ttt = GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS_BEST) .. BS.LF
             ttt = ttt .. "|cf6f6f6"
@@ -232,7 +246,22 @@ BS.widgets[BS.W_ENDEAVOUR_PROGRESS] = {
     end,
     complete = function()
         return completed[_G.TIMED_ACTIVITY_TYPE_WEEKLY]
-    end
+    end,
+    customSettings = {
+        [1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_USE_PROGRESS),
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_DAILY_PROGRESS].Progress or false
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_DAILY_PROGRESS].Progress = value
+            end,
+            requiresReload = true,
+            default = false,
+            width = "full"
+        }
+    }
 }
 
 local difficultyColours = {
@@ -1118,4 +1147,71 @@ BS.widgets[BS.W_CHESTS_FOUND] = {
     end,
     icon = "/esoui/art/icons/quest_strosmkai_open_treasure_chest.dds",
     tooltip = GetString(_G.BARSTEWARD_FOUND_CHESTS)
+}
+
+BS.widgets[BS.W_DAILY_PROGRESS] = {
+    -- v1.5.4
+    name = "dailyEndeavourBar",
+    update = function(widget)
+        local _, maxTask = getTimedActivityProgress(_G.TIMED_ACTIVITY_TYPE_DAILY, nil, nil, nil, true)
+        local this = BS.W_DAILY_PROGRESS
+
+        if (maxTask.name and maxTask.maxProgress) then
+            if (BS.Vars.Controls[this].Progress) then
+                widget:SetProgress(maxTask.progress, 0, maxTask.maxProgress)
+            else
+                local colour = BS.Vars.Controls[this].Colour or BS.Vars.DefaultColour
+
+                widget:SetValue(maxTask.progress .. "/" .. maxTask.maxProgress)
+                widget:SetColour(unpack(colour))
+            end
+
+            local ttt = GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS_BEST) .. BS.LF
+            ttt = ttt .. "|cf6f6f6"
+            ttt = ttt .. maxTask.name .. BS.LF .. BS.LF
+            ttt = ttt .. maxTask.description
+
+            widget.tooltip = ttt
+
+            return maxTask.progress == maxTask.maxProgress
+        else
+            return 0
+        end
+    end,
+    gradient = function()
+        local startg = {GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, _G.INTERFACE_GENERAL_COLOR_STATUS_BAR_START)}
+        local endg = {GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, _G.INTERFACE_GENERAL_COLOR_STATUS_BAR_END)}
+        local s = BS.Vars.Controls[BS.W_DAILY_PROGRESS].GradientStart or startg
+        local e = BS.Vars.Controls[BS.W_DAILY_PROGRESS].GradientEnd or endg
+
+        return s, e
+    end,
+    event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED},
+    icon = "/esoui/art/journal/u26_progress_digsite_marked_incomplete.dds",
+    tooltip = GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS_BEST),
+    onClick = function()
+        if (not IsInGamepadPreferredMode()) then
+            GROUP_MENU_KEYBOARD:ShowCategory(_G.TIMED_ACTIVITIES_FRAGMENT)
+        else
+            ZO_ACTIVITY_FINDER_ROOT_GAMEPAD:ShowCategory(TIMED_ACTIVITIES_GAMEPAD:GetCategoryData())
+        end
+    end,
+    complete = function()
+        return completed[_G.TIMED_ACTIVITY_TYPE_DAILY]
+    end,
+    customSettings = {
+        [1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_USE_PROGRESS),
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_DAILY_PROGRESS].Progress or false
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_DAILY_PROGRESS].Progress = value
+            end,
+            requiresReload = true,
+            default = false,
+            width = "full"
+        }
+    }
 }

@@ -1380,8 +1380,9 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
     -- v1.4.35
     name = "equippedPoison",
     update = function(widget)
-        local slots = {_G.EQUIP_SLOT_MAIN_HAND, _G.EQUIP_SLOT_OFF_HAND}
+        local main = {_G.EQUIP_SLOT_MAIN_HAND, _G.EQUIP_SLOT_OFF_HAND}
         local backup = {_G.EQUIP_SLOT_BACKUP_MAIN, _G.EQUIP_SLOT_BACKUP_OFF}
+        local slots = {_G.EQUIP_SLOT_MAIN_HAND, _G.EQUIP_SLOT_OFF_HAND}
         local poisons = {}
         local hasPoison, poisonCount, poisonName, icon, link
         local count = 0
@@ -1399,13 +1400,30 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
             end
         end
 
+        local foundMain, foundBack, add
+
         for _, slot in ipairs(slots) do
             hasPoison, poisonCount, poisonName, link = GetItemPairedPoisonInfo(slot)
             icon = GetItemLinkInfo(link)
+            add = false
 
             if (hasPoison) then
-                table.insert(poisons, {name = poisonName, count = poisonCount, slot = slot, icon = icon})
-                count = count + poisonCount
+                if (ZO_IsElementInNumericallyIndexedTable(main, slot)) then
+                    if (not foundMain) then
+                        add = true
+                        foundMain = true
+                    end
+                elseif (ZO_IsElementInNumericallyIndexedTable(backup, slot)) then
+                    if (not foundBack) then
+                        add = true
+                        foundBack = true
+                    end
+                end
+
+                if (add) then
+                    table.insert(poisons, {name = poisonName, count = poisonCount, slot = slot, icon = icon})
+                    count = count + poisonCount
+                end
             end
         end
 

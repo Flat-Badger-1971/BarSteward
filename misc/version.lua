@@ -157,7 +157,8 @@ function BS.VersionCheck()
     end
 
     if (needsUpdate(1304)) then
-        BS.Vars.Controls[BS.W_TRANSMUTE_CRYSTALS].ColourValues = BS.Defaults.Controls[BS.W_TRANSMUTE_CRYSTALS].ColourValues
+        BS.Vars.Controls[BS.W_TRANSMUTE_CRYSTALS].ColourValues =
+            BS.Defaults.Controls[BS.W_TRANSMUTE_CRYSTALS].ColourValues
         BS.Vars.Updates[1304] = true
     end
 
@@ -167,5 +168,10 @@ function BS.VersionCheck()
         end
 
         BS.Vars.Updates[1421] = true
+    end
+
+    if (needsUpdate(1504)) then
+        BS.Vars.Controls[BS.W_ENDEAVOUR_PROGRESS].ColourValues =
+            BS.Defaults.Controls[BS.W_ENDEAVOUR_PROGRESS].ColourValues
     end
 end

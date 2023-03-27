@@ -322,7 +322,7 @@ BS.Defaults = {
             Timer = true,
             Autohide = true
         },
-        [BS.W_ENDEAVOUR_PROGRESS] = {Bar = 0, Order = 45, Progress = true, HideWhenComplete = false},
+        [BS.W_ENDEAVOUR_PROGRESS] = {Bar = 0, Order = 45, Progress = true, HideWhenComplete = false, ColourValues = "c"},
         [BS.W_TROPHY_VAULT_KEYS] = {Bar = 0, Order = 46, ColourValues = "c", Autohide = true},
         [BS.W_LOCKPICKS] = {Bar = 0, Order = 47, ColourValues = "okc,wv,wc,dv,dc", WarningValue = 50, DangerValue = 10},
         [BS.W_LAUNDER_TRANSACTIONS] = {
@@ -470,5 +470,6 @@ BS.Defaults = {
         [BS.W_CHESTS_FOUND] = {Bar = 0, Order = 90, ColourValues = "c", Autohide = false},
         [BS.W_SHALIDORS_LIBRARY] = {Bar = 0, Order = 91, ColourValues = "c"},
         [BS.W_CRAFTING_MOTIFS] = {Bar = 0, Order = 92, ColourValues = "c"},
+        [BS.W_DAILY_PROGRESS] = {Bar = 0, Order = 93, Progress = true, HideWhenComplete = false, ColourValues = "c"}
     }
 }
