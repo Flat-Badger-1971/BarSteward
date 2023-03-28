@@ -252,10 +252,10 @@ BS.widgets[BS.W_ENDEAVOUR_PROGRESS] = {
             type = "checkbox",
             name = GetString(_G.BARSTEWARD_USE_PROGRESS),
             getFunc = function()
-                return BS.Vars.Controls[BS.W_DAILY_PROGRESS].Progress or false
+                return BS.Vars.Controls[BS.W_ENDEAVOUR_PROGRESS].Progress or false
             end,
             setFunc = function(value)
-                BS.Vars.Controls[BS.W_DAILY_PROGRESS].Progress = value
+                BS.Vars.Controls[BS.W_ENDEAVOUR_PROGRESS].Progress = value
             end,
             requiresReload = true,
             default = false,
@@ -352,6 +352,10 @@ BS.widgets[BS.W_LEADS] = {
                 value = "(" .. #leads .. ")  " .. value
             end
 
+            if (vars.HideTimer) then
+                value = tostring(#leads)
+            end
+
             widget:SetColour(unpack(timeColour))
             widget:SetValue(value)
 
@@ -409,6 +413,20 @@ BS.widgets[BS.W_LEADS] = {
             setFunc = function(value)
                 BS.Vars.Controls[BS.W_LEADS].ShowCount = value
                 BS.RefreshWidget(BS.W_LEADS)
+            end,
+            disabled = function() return BS.Vars.Controls[BS.W_LEADS].HideTimer end,
+            default = false
+        },
+        [2] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_HIDE_TIMER),
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_LEADS].HideTimer or false
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_LEADS].HideTimer = value
+                BS.RefreshWidget(BS.W_LEADS)
+                BS.ResizeBar(BS.Vars.Controls[BS.W_LEADS].Bar)
             end,
             default = false
         }

@@ -143,6 +143,7 @@ ZO_CreateStringId("BARSTEWARD_HIDE_MAX", "Hide when maximum level")
 ZO_CreateStringId("BARSTEWARD_HIDE_MOUSE", "Hide mouse icon in tooltips")
 ZO_CreateStringId("BARSTEWARD_HIDE_SECONDS", "Hide seconds")
 ZO_CreateStringId("BARSTEWARD_HIDE_TEXT", "Hide text")
+ZO_CreateStringId("BARSTEWARD_HIDE_TIMER", "Hide timer")
 ZO_CreateStringId("BARSTEWARD_HIDE_WHEN_COMPLETE", "Hide when complete")
 ZO_CreateStringId(
     "BARSTEWARD_HIDE_WHEN_COMPLETE_TOOLTIP",
