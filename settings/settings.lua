@@ -1,7 +1,7 @@
 local BS = _G.BarSteward
 
 BS.LAM = _G.LibAddonMenu2
-BS.VERSION = "1.5.5"
+BS.VERSION = "1.5.6"
 
 local panel = {
     type = "panel",
@@ -111,6 +111,38 @@ local function initialise()
         disabled = function()
             return not BS.Vars.SnapToGrid
         end
+    }
+
+    BS.options[#BS.options + 1] = {
+        type = "slider",
+        name = GetString(_G.BARSTEWARD_GRID_SIZE_VISIBLE),
+        min = 30,
+        max = 100,
+        getFunc = function()
+            return BS.Vars.VisibleGridSize
+        end,
+        setFunc = function(value)
+            BS.Vars.VisibleGridSize = value
+            BS.GridChanged = true
+        end,
+        disabled = function()
+            return BS.ShowGridSetting
+        end,
+        default = BS.Defaults.VisibleGridSize
+    }
+
+    BS.options[#BS.options + 1] = {
+        type = "checkbox",
+        name = GetString(_G.BARSTEWARD_SHOW_GRID),
+        getFunc = function()
+            return BS.ShowGridSetting or false
+        end,
+        setFunc = function(value)
+            BS.ShowGridSetting = value
+            BS.ShowGrid(value)
+        end,
+        width = "full",
+        default = BS.Defaults.ShowGrid
     }
 
     BS.options[#BS.options + 1] = {

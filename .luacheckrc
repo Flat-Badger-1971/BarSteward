@@ -469,6 +469,11 @@ read_globals = {
     "ZO_MailSendBodyField",
     "ZO_MailSendSubjectField",
     "ZO_MailSendToField",
+    ["ZO_ObjectPool"] = {
+        fields = {
+            New = {read_only = true}
+        }
+    },
     "ZO_PostHook",
     "ZO_PreHook",
     "ZO_PreHookHandler",

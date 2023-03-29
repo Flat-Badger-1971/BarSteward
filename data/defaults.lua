@@ -34,6 +34,7 @@ BS.Defaults = {
     TimeType = GetString(_G.BARSTEWARD_24),
     Trackers = {},
     Updates = {},
+    VisibleGridSize = 65,
     WatchedItems = {
         [BS.PERFECT_ROE] = true,
         [BS.POTENT_NIRNCRUX] = true

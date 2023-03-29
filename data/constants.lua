@@ -192,7 +192,8 @@ BS.SIEGE_SCENES = {
 }
 
 BS.MENU_SCENES = {
-    "gameMenuInGame"
+    "gameMenuInGame",
+    "mainMenuGamepad"
 }
 
 BS.INTERACTING_SCENES = {
