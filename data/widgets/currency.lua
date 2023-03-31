@@ -253,6 +253,12 @@ BS.widgets[BS.W_EVENT_TICKETS] = {
             end
         end
 
+        if (vars.MaxValue) then
+            if (tickets == maxTickets) then
+                colour = vars.MaxColour or BS.Vars.DefaultMaxColour
+            end
+        end
+
         widget:SetColour(unpack(colour))
         widget:SetValue(value, widthValue)
 
@@ -351,15 +357,33 @@ BS.widgets[BS.W_TRANSMUTE_CRYSTALS] = {
         local pc = BS.ToPercent(crystals, 1000)
         local colour = vars.Colour or BS.Vars.DefaultColour
 
-        if ((vars.WarningValue or 0) > 0) then
-            if (crystals < (vars.WarningValue or 0)) then
-                colour = vars.WarningColour or BS.Vars.DefaultWarningColour
+        if (vars.Invert) then
+            if ((vars.DangerValue or 0) > 0) then
+                if (crystals > vars.DangerValue) then
+                    colour = vars.DangerColour or BS.Vars.DefaultDangerColour
+                end
+            elseif ((vars.WarningValue or 0) > 0) then
+                if (crystals > vars.WarningValue) then
+                    colour = vars.WarningColour or BS.Vars.DefaultWarningColour
+                end
+            end
+        else
+            if ((vars.WarningValue or 0) > 0) then
+                if (crystals < vars.WarningValue) then
+                    colour = vars.WarningColour or BS.Vars.DefaultWarningColour
+                end
+            end
+
+            if ((vars.DangerValue or 0) > 0) then
+                if (crystals < vars.DangerValue) then
+                    colour = vars.DangerColour or BS.Vars.DefaultDangerColour
+                end
             end
         end
 
-        if ((vars.DangerValue or 0) > 0) then
-            if (crystals < (vars.DangerValue or 0)) then
-                colour = vars.DangerColour or BS.Vars.DefaultDangerColour
+        if (vars.MaxValue) then
+            if (crystals == maxCrystals) then
+                colour = vars.MaxColour or BS.Vars.DefaultMaxColour
             end
         end
 

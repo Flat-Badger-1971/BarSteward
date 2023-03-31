@@ -173,5 +173,15 @@ function BS.VersionCheck()
     if (needsUpdate(1504)) then
         BS.Vars.Controls[BS.W_ENDEAVOUR_PROGRESS].ColourValues =
             BS.Defaults.Controls[BS.W_ENDEAVOUR_PROGRESS].ColourValues
+        BS.Vars.Updates[1504] = true
+    end
+
+    if (needsUpdate(1506)) then
+        BS.Vars.Controls[BS.W_EVENT_TICKETS].ColourValues = BS.Defaults.Controls[BS.W_EVENT_TICKETS].ColourValues
+        BS.Vars.Controls[BS.W_BAG_SPACE].ColourValues = BS.Defaults.Controls[BS.W_BAG_SPACE].ColourValues
+        BS.Vars.Controls[BS.W_BANK_SPACE].ColourValues = BS.Defaults.Controls[BS.W_BANK_SPACE].ColourValues
+        BS.Vars.Controls[BS.W_TRANSMUTE_CRYSTALS].ColourValues =
+            BS.Defaults.Controls[BS.W_TRANSMUTE_CRYSTALS].ColourValues
+        BS.Vars.Updates[1506] = true
     end
 end

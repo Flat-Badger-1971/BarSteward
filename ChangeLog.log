@@ -1,5 +1,9 @@
 [color=#ff9900][b]Version: 1.5.6 ---------------[/b][/color]
 Option added to display an alignment grid
+Option added to have horizontal bar backgrounds span with full width of the screen
+Logic inversion option for Transmute Crystal warning/danger values added
+Option to change to default number separator added to widgets section
+Option to set a maximum colour added to Bag Space, Bank Space, Event Ticket and Transmute Crystal widgets
 
 [color=#ff9900][b]Version: 1.5.5 ---------------[/b][/color]
 Bugfix for daily/weekly endeavour best progress settings

@@ -35,6 +35,12 @@ BS.widgets[BS.W_BAG_SPACE] = {
             colour = vars.DangerColour or BS.Vars.DefaultDangerColour
         end
 
+        if (vars.MaxValue) then
+            if (pcUsed == 100) then
+                colour = vars.MaxColour or BS.Vars.DefaultMaxColour
+            end
+        end
+
         widget:SetColour(unpack(colour))
 
         if (vars.ShowFreeSpace) then
@@ -100,6 +106,12 @@ BS.widgets[BS.W_BANK_SPACE] = {
             colour = vars.WarningColour or BS.Vars.DefaultWarningColour
         elseif (pcUsed >= vars.DangerValue) then
             colour = vars.DangerColour or BS.Vars.DefaultDangerColour
+        end
+
+        if (vars.MaxValue) then
+            if (pcUsed == 100) then
+                colour = vars.MaxColour or BS.Vars.DefaultMaxColour
+            end
         end
 
         widget:SetColour(unpack(colour))

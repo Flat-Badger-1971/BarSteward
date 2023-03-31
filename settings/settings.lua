@@ -408,6 +408,7 @@ local function getBarSettings()
                 end,
                 setFunc = function(value)
                     local bar = _G[BS.Name .. "_bar_" .. idx]
+
                     if (value == " ") then
                         vars.Background = 99
                     else
@@ -419,16 +420,9 @@ local function getBarSettings()
                         end
                     end
 
-                    local bg = ""
-
-                    if (vars.Background ~= 99) then
-                        bg = BS.BACKGROUNDS[vars.Background]
-                        bar.background:SetCenterColor(1, 1, 1, 1)
-                    else
-                        bar.background:SetCenterColor(unpack(BS.Vars.Bars[idx].Backdrop.Colour))
+                    if (bar) then
+                        bar.ref.checkBackground()
                     end
-
-                    bar.background:SetCenterTexture(bg)
                 end,
                 disabled = function()
                     return not vars.Backdrop.Show
@@ -448,6 +442,7 @@ local function getBarSettings()
                 end,
                 setFunc = function(value)
                     local bar = _G[BS.Name .. "_bar_" .. idx]
+
                     if (value == " ") then
                         vars.Border = 99
                     else
@@ -461,14 +456,16 @@ local function getBarSettings()
 
                     local border = {"", 128, 2}
 
-                    if (vars.Border ~= 99) then
-                        border = BS.BORDERS[vars.Border]
-                        bar.border:SetEdgeColor(1, 1, 1, 1)
-                    else
-                        bar.border:SetEdgeColor(0, 0, 0, 0)
-                    end
+                    if (bar) then
+                        if (vars.Border ~= 99) then
+                            border = BS.BORDERS[vars.Border]
+                            bar.border:SetEdgeColor(1, 1, 1, 1)
+                        else
+                            bar.border:SetEdgeColor(0, 0, 0, 0)
+                        end
 
-                    bar.border:SetEdgeTexture(unpack(border))
+                        bar.border:SetEdgeTexture(unpack(border))
+                    end
                 end,
                 disabled = function()
                     return not vars.Backdrop.Show
@@ -548,6 +545,37 @@ local function getBarSettings()
                 decimals = 1,
                 width = "full",
                 default = BS.Defaults.Bars[1].Scale
+            },
+            [10] = {
+                type = "checkbox",
+                name = GetString(_G.BARSTEWARD_EXPAND),
+                tooltip = GetString(_G.BARSTEWARD_EXPAND_TOOLTIP),
+                getFunc = function()
+                    return vars.Expand
+                end,
+                setFunc = function(value)
+                    vars.Expand = value
+
+                    local bar = _G[BS.Name .. "_bar_" .. idx]
+
+                    if (bar) then
+                        bar.ref.checkBackground()
+
+                        if (value) then
+                            bar.border:SetParent(bar.expandtlc)
+                            bar.border:ClearAnchors()
+                            bar.border:SetAnchorFill()
+                        else
+                            bar.border:SetParent(bar)
+                            bar.border:ClearAnchors()
+                            bar.border:SetAnchorFill()
+                        end
+                    end
+                end,
+                default = false,
+                disabled = function()
+                    return vars.Orientation ~= GetString(_G.BARSTEWARD_HORIZONTAL)
+                end
             }
         }
 
@@ -1067,6 +1095,25 @@ local function checkAutoHide(defaults, widgetControls, vars, key)
             end,
             width = "full",
             default = defaults.Autohide
+        }
+    end
+end
+
+local function checkInvert(defaults, widgetControls, vars, key)
+    if (defaults.Invert ~= nil) then
+        widgetControls[#widgetControls + 1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_INVERT),
+            tooltip = GetString(_G.BARSTEWARD_INVERT_TOOLTIP),
+            getFunc = function()
+                return vars.Invert or false
+            end,
+            setFunc = function(value)
+                vars.Invert = value
+                BS.RefreshWidget(key)
+            end,
+            width = "full",
+            default = false
         }
     end
 end
@@ -1751,6 +1798,27 @@ local function checkColourOptions(widgetControls, vars, key)
             }
         end
 
+        if (cv.mc) then
+            widgetControls[#widgetControls + 1] = {
+                type = "colorpicker",
+                name = GetString(_G.BARSTEWARD_MAX_COLOUR),
+                getFunc = function()
+                    return unpack(vars.MaxColour or BS.Vars.DefaultMaxColour)
+                end,
+                setFunc = function(r, g, b, a)
+                    if (BS.CompareColours({r, g, b, a}, BS.Vars.DefaultMaxColour)) then
+                        vars.MaxColour = nil
+                    else
+                        vars.MaxColour = {r, g, b, a}
+                    end
+
+                    BS.RefreshWidget(key)
+                end,
+                width = "full",
+                default = unpack(BS.Vars.DefaultMaxColour)
+            }
+        end
+
         local units = vars.Units
 
         if (cv.okv) then
@@ -1819,6 +1887,22 @@ local function checkColourOptions(widgetControls, vars, key)
                 isMultiLine = false,
                 width = "half",
                 default = nil
+            }
+        end
+
+        if (cv.mv) then
+            widgetControls[#widgetControls + 1] = {
+                type = "checkbox",
+                name = GetString(_G.BARSTEWARD_MAX_VALUE),
+                getFunc = function()
+                    return vars.MaxValue or false
+                end,
+                setFunc = function(value)
+                    vars.MaxValue = value
+                    BS.RefreshWidget(key)
+                end,
+                width = "full",
+                default = false
             }
         end
     end
@@ -2033,6 +2117,23 @@ local function getWidgetSettings()
         }
     end
 
+    controls[#controls + 1] = {
+        type = "editbox",
+        name = GetString(_G.BARSTEWARD_NUMBER_SEPARATORS),
+        getFunc = function()
+            return BS.Vars.NumberSeparator or GetString(_G.BARSTEWARD_NUMBER_SEPARATOR)
+        end,
+        setFunc = function(value)
+            BS.Vars.NumberSeparator = value
+            BS.RefreshAll()
+        end,
+        isMultiLine = false,
+        isExtraWide = false,
+        maxChars = 3,
+        width = "full",
+        default = GetString(_G.BARSTEWARD_NUMBER_SEPARATOR)
+    }
+
     local numBaseControls = #controls
 
     for idx, w in ipairs(ordered) do
@@ -2116,7 +2217,9 @@ local function getWidgetSettings()
             checkColourOptions(widgetControls, vars, k)
             checkCustomOptions(widgetControls, k)
             checkPrint(defaults, widgetControls, vars)
+            checkInvert(defaults, widgetControls, vars, k)
         end
+
         local textureCoords = nil
 
         if (k == BS.W_ALLIANCE) then
