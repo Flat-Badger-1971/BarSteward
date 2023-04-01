@@ -12,6 +12,7 @@ BS.Defaults = {
     DefaultCombatColour = {0.3686274588, 0, 0, 1},
     DefaultColour = {(230 / 255), (230 / 255), (230 / 255), 1},
     DefaultDangerColour = {(204 / 255), 0, 0, 1},
+    DefaultMaxColour = {1, 0.5, 0, 1},
     DefaultWarningColour = {1, 1, 0, 1},
     DefaultOkColour = {0, 1, 0, 1},
     DungeonInfo = {IsInDungeon = false, ChestCount = 0, PreviousChest = {x = 0, y = 0}},
@@ -34,6 +35,7 @@ BS.Defaults = {
     TimeType = GetString(_G.BARSTEWARD_24),
     Trackers = {},
     Updates = {},
+    VisibleGridSize = 65,
     WatchedItems = {
         [BS.PERFECT_ROE] = true,
         [BS.POTENT_NIRNCRUX] = true
@@ -80,7 +82,7 @@ BS.Defaults = {
             SoundWhenOver = false,
             SoundWhenEqualsSound = "Daily Login Reward Claim Fanfare",
             SoundWhenOverSound = "Duel Forfeit",
-            ColourValues = "c,dv,dc",
+            ColourValues = "c,dv,dc,mv,mc",
             DangerValue = 8,
             Announce = false,
             HideLimit = false,
@@ -108,10 +110,11 @@ BS.Defaults = {
             Bar = 0,
             Order = 9,
             ShowPercent = false,
-            ColourValues = "c,wv,wc,dv,dc",
+            ColourValues = "c,wv,wc,dv,dc,mv,mc",
             WarningValue = 200,
             DangerValue = 50,
-            HideLimit = false
+            HideLimit = false,
+            Invert = false
         },
         [BS.W_UNDAUNTED_KEYS] = {
             Bar = 1,
@@ -128,7 +131,7 @@ BS.Defaults = {
             SoundWhenOver = false,
             SoundWhenOverSound = "Duel Forfeit",
             Units = "%",
-            ColourValues = "okc,wv,wc,dv,dc",
+            ColourValues = "okc,wv,wc,dv,dc,mv,mc",
             WarningValue = 85,
             DangerValue = 95,
             Announce = false,
@@ -143,7 +146,7 @@ BS.Defaults = {
             SoundWhenOver = false,
             SoundWhenOverSound = "Duel Forfeit",
             Units = "%",
-            ColourValues = "okc,wv,wc,dv,dc",
+            ColourValues = "okc,wv,wc,dv,dc,mv,mc",
             WarningValue = 85,
             DangerValue = 95,
             HideLimit = false,
@@ -322,7 +325,7 @@ BS.Defaults = {
             Timer = true,
             Autohide = true
         },
-        [BS.W_ENDEAVOUR_PROGRESS] = {Bar = 0, Order = 45, Progress = true, HideWhenComplete = false},
+        [BS.W_ENDEAVOUR_PROGRESS] = {Bar = 0, Order = 45, Progress = true, HideWhenComplete = false, ColourValues = "c"},
         [BS.W_TROPHY_VAULT_KEYS] = {Bar = 0, Order = 46, ColourValues = "c", Autohide = true},
         [BS.W_LOCKPICKS] = {Bar = 0, Order = 47, ColourValues = "okc,wv,wc,dv,dc", WarningValue = 50, DangerValue = 10},
         [BS.W_LAUNDER_TRANSACTIONS] = {
@@ -470,5 +473,6 @@ BS.Defaults = {
         [BS.W_CHESTS_FOUND] = {Bar = 0, Order = 90, ColourValues = "c", Autohide = false},
         [BS.W_SHALIDORS_LIBRARY] = {Bar = 0, Order = 91, ColourValues = "c"},
         [BS.W_CRAFTING_MOTIFS] = {Bar = 0, Order = 92, ColourValues = "c"},
+        [BS.W_DAILY_PROGRESS] = {Bar = 0, Order = 93, Progress = true, HideWhenComplete = false, ColourValues = "c"}
     }
 }

@@ -421,7 +421,7 @@ end
 
 function BS.AddSeparators(number)
     local grouping = tonumber(GetString(_G.BARSTEWARD_NUMBER_GROUPING))
-    local separator = GetString(_G.BARSTEWARD_NUMBER_SEPARATOR)
+    local separator = BS.Vars.NumberSeparator or GetString(_G.BARSTEWARD_NUMBER_SEPARATOR)
 
     if type(number) ~= "number" or number < 0 or number == 0 or not number then
         return number

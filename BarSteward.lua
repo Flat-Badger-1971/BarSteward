@@ -308,6 +308,8 @@ local function Initialise()
             end
         end
     )
+
+    BS.GridChanged = true
 end
 
 function BS.ToggleBar(index)

@@ -23,6 +23,7 @@ function baseBar:Initialise()
     self.bar = WINDOW_MANAGER:CreateTopLevelWindow()
     self.bar.ref = self
     self.bar:SetResizeToFitDescendents(true)
+    self.bar:SetDrawLayer(_G.DL_CONTROLS)
     self.bar:SetMouseEnabled(true)
 
     if (BS.Vars.Movable) then
@@ -57,14 +58,108 @@ function baseBar:Initialise()
     end
 
     self.bar:SetHandler("OnMouseUp", onMouseUp)
+
+    self.checkBackground = function()
+        local vars = BS.Vars.Bars[self.index]
+
+        self.expand = vars.Expand and self.orientation == "horizontal"
+
+        if ((vars.Background or 99) ~= 99) then
+            if (self.expand) then
+                self.bar.expandbackground:SetCenterColor(1, 1, 1, 1)
+                self.bar.expandbackground:SetCenterTexture(BS.BACKGROUNDS[vars.Background])
+                self.bar.background:SetCenterColor(0, 0, 0, 0)
+                self.bar.expandtlc:SetHidden(false)
+            else
+                if (self.bar.expandtlc) then
+                    self.bar.expandtlc:SetHidden(true)
+                end
+
+                self.bar.background:SetCenterColor(1, 1, 1, 1)
+                self.bar.background:SetCenterTexture(BS.BACKGROUNDS[vars.Background])
+            end
+        else
+            if (self.expand) then
+                self.bar.expandbackground:SetCenterTexture("")
+                self.bar.expandbackground:SetCenterColor(unpack(vars.Backdrop.Colour))
+                self.bar.background:SetCenterColor(0, 0, 0, 0)
+                self.bar.expandtlc:SetHidden(false)
+            else
+                if (self.bar.expandtlc) then
+                    self.bar.expandtlc:SetHidden(true)
+                end
+
+                self.bar.background:SetCenterTexture("")
+                self.bar.background:SetCenterColor(unpack(vars.Backdrop.Colour))
+            end
+        end
+    end
+
+    self.bar.expandtlc = WINDOW_MANAGER:CreateTopLevelWindow()
+    self.bar.expandtlc:SetScale(self.bar:GetScale())
+    self.bar.expandtlc:SetWidth(GuiRoot:GetWidth())
+    self.bar.expandtlc:SetDrawLayer(_G.DL_BACKGROUND)
+
+    self.bar.expandbackground = WINDOW_MANAGER:CreateControl(nil, self.bar.expandtlc, CT_BACKDROP)
+    self.bar.expandbackground:ClearAnchors()
+    self.bar.expandbackground:SetAnchorFill()
+    self.bar.expandbackground:SetEdgeColor(0, 0, 0, 0)
+    self.bar.expandtlc:SetHidden(true)
+
+    self.bar:SetHandler(
+        "OnRectChanged",
+        function()
+            local height = self.bar:GetHeight()
+
+            self.bar.expandtlc:SetHeight(height)
+            self.bar.expandtlc:ClearAnchors()
+            self.bar.expandtlc:SetAnchor(TOPLEFT, GuiRoot, TOPLEFT, 0, BS.Vars.Bars[self.index].Position.Y - (height / 2))
+        end
+    )
+
+    self.bar:SetHandler(
+        "OnMoveStart",
+        function()
+            self.expand = false
+            self.bar.expandtlc:SetHidden(true)
+            self.checkBackground()
+        end
+    )
+
+    self.bar:SetHandler(
+        "OnMoveStop",
+        function()
+            zo_callLater(
+                function()
+                    local height = self.bar:GetHeight()
+                    local newYPos = BS.Vars.Bars[self.index].Position.Y
+
+                    self.bar.expandtlc:ClearAnchors()
+                    self.bar.expandtlc:SetAnchor(TOPLEFT, GuiRoot, TOPLEFT, 0, newYPos - (height / 2))
+
+                    self.checkBackground()
+                    self.expand = true
+                    self.bar.expandtlc:SetHidden(false)
+                end,
+                200
+            )
+        end
+    )
+
     self.bar.background = WINDOW_MANAGER:CreateControl(nil, self.bar, CT_BACKDROP)
     self.bar.background:SetAnchorFill(self.bar)
     self.bar.background:SetEdgeColor(0, 0, 0, 0)
 
-    self.bar.border = WINDOW_MANAGER:CreateControl(nil, self.bar, CT_BACKDROP)
+    local borderParent = self.bar
+
+    if (self.expand) then
+        borderParent = self.bar.expandtlc
+    end
+
+    self.bar.border = WINDOW_MANAGER:CreateControl(nil, borderParent, CT_BACKDROP)
     self.bar.border:SetDrawTier(_G.DT_MEDIUM)
     self.bar.border:SetCenterTexture(0, 0, 0, 0)
-    self.bar.border:SetAnchorFill(self.bar)
+    self.bar.border:SetAnchorFill()
 
     self.bar.overlay = WINDOW_MANAGER:CreateControl(nil, self.bar, CT_CONTROL)
     self.bar.overlay:SetDrawTier(_G.DT_HIGH)
@@ -78,12 +173,7 @@ function baseBar:Initialise()
         end
     )
 
-    self.bar.overlay:SetHandler(
-        "OnMouseUp",
-        function()
-            onMouseUp()
-        end
-    )
+    self.bar.overlay:SetHandler("OnMouseUp", onMouseUp)
 
     self.bar.overlay.background = WINDOW_MANAGER:CreateControl(nil, self.bar.overlay, CT_TEXTURE)
     self.bar.overlay.background:SetAnchorFill(self.bar.overlay)
@@ -103,22 +193,45 @@ function baseBar:Initialise()
 
                 if (inCombat) then
                     if ((self.background or 99) ~= 99) then
-                        self.bar.background:SetCenterTexture("")
+                        if (self.Expand) then
+                            self.bar.expandbackground:SetCenterTexture("")
+                        else
+                            self.bar.background:SetCenterTexture("")
+                        end
                     end
 
-                    self.bar.background:SetCenterColor(
-                        unpack(BS.Vars.Bars[self.index].CombatColour or BS.Vars.DefaultCombatColour)
-                    )
+                    if (self.Expand) then
+                        self.bar.expandbackground:SetCenterColor(
+                            unpack(BS.Vars.Bars[self.index].CombatColour or BS.Vars.DefaultCombatColour)
+                        )
+                    else
+                        self.bar.background:SetCenterColor(
+                            unpack(BS.Vars.Bars[self.index].CombatColour or BS.Vars.DefaultCombatColour)
+                        )
+                    end
                 else
                     if ((self.background or 99) ~= 99) then
-                        self.bar.background:SetCenterColor(nil)
-                        self.bar.background:SetCenterTexture(BS.BACKGROUNDS[self.background])
+                        if (self.expand) then
+                            self.bar.expandbackground:SetCenterColor(1, 1, 1, 1)
+                            self.bar.expandbackground:SetCenterTexture(BS.BACKGROUNDS[self.settings.Background])
+                        else
+                            self.bar.background:SetCenterColor(1, 1, 1, 1)
+                            self.bar.background:SetCenterTexture(BS.BACKGROUNDS[self.settings.Background])
+                        end
                     else
-                        self.bar.background:SetCenterColor(unpack(self.backdropColour))
+                        if (self.expand) then
+                            self.bar.expandbackground:SetCenterColor(unpack(self.settings.Backdrop.Colour))
+                        else
+                            self.bar.background:SetCenterColor(unpack(self.settings.Backdrop.Colour))
+                        end
                     end
                 end
             else
-                self.bar.background:SetCenterColor(unpack(self.backdropColour))
+                if (self.expand) then
+                    self.bar.expandbackground:SetCenterColor(unpack(self.settings.Backdrop.Colour))
+                else
+                    self.bar.background:SetCenterColor(unpack(self.settings.Backdrop.Colour))
+                end
             end
         end
     )
@@ -209,6 +322,10 @@ end
 
 function baseBar:GetPosition()
     return self.position
+end
+
+function baseBar:SetExpand(expand)
+    self.expand = expand and self.orientation == "horizontal"
 end
 
 function baseBar:GetOrientation()
@@ -647,6 +764,7 @@ function BS.CreateBar(barSettings)
 
     bar:SetIndex(barSettings.index)
     bar:SetPositionAndOrientation(barSettings.position)
+    bar:SetExpand(barSettings.settings.Expand)
     bar:SetIconSize(barSettings.iconSize)
     bar:SetSettings(barSettings.settings)
     bar:SetScale(barSettings.scale)

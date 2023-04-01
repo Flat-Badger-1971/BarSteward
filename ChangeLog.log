@@ -1,3 +1,22 @@
+[color=#ff9900][b]Version: 1.5.6 ---------------[/b][/color]
+Option added to display an alignment grid
+Option added to have horizontal bar backgrounds span with full width of the screen
+Logic inversion option for Transmute Crystal warning/danger values added
+Option to change to default number separator added to widgets section
+Option to set a maximum colour added to Bag Space, Bank Space, Event Ticket and Transmute Crystal widgets
+
+[color=#ff9900][b]Version: 1.5.5 ---------------[/b][/color]
+Bugfix for daily/weekly endeavour best progress settings
+Added an option to the Active Leads widget to hide the timer
+
+[color=#ff9900][b]Version: 1.5.4 ---------------[/b][/color]
+Fixed an issue with dual wield poison count
+Daily endeavour best progress widget added
+Added option to week endeavour best progress widget to not use progress bar
+
+[color=#ff9900][b]Version: 1.5.3 ---------------[/b][/color]
+Bugfix for endeavour widgets
+
 [color=#ff9900][b]Version: 1.5.2 ---------------[/b][/color]
 Dungeon chests widget added
 Shalidor's Library and Crafting Motifs now have their own widgets, Lorebooks is unchanged

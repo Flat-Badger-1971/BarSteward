@@ -819,3 +819,74 @@ function BS.CreateExportFrame()
 
     return frame
 end
+
+local function checkOrCreatePool(grid)
+    if (not BS.SquareObjectPool) then
+        BS.SquareObjectPool =
+            ZO_ObjectPool:New(
+            -- factory
+            function()
+                local square = WINDOW_MANAGER:CreateControl(nil, grid, CT_BACKDROP)
+
+                square:SetCenterColor(0, 0, 0, 0)
+                square:SetEdgeColor(0, 0, 0, 0.7)
+                square:SetEdgeTexture("", 2, 2, 1, 0)
+
+                return square
+            end,
+            --reset
+            function(square)
+                square:SetHidden(true)
+                square:ClearAnchors()
+            end
+        )
+    end
+end
+
+--Based on RAEIH InfoHub, but modified to object pool to avoid UI reloads
+function BS.ShowGrid(showGrid)
+    if (showGrid) then
+        if (BS.GridChanged) then
+            local gridSquares = BS.Vars.VisibleGridSize
+            local guiWidth, guiHeight = GuiRoot:GetDimensions()
+            local gridDimension = guiWidth / gridSquares
+            local gridYNumMax = guiHeight / gridDimension
+            local gridYNum = 1
+            local gridX, gridY = 0, 0
+            local index = 1
+
+            if (not BS.Grid) then
+                BS.Grid = WINDOW_MANAGER:CreateTopLevelWindow()
+                BS.Grid:SetAnchorFill()
+                checkOrCreatePool(BS.Grid)
+            end
+
+            -- release any old squares
+            BS.SquareObjectPool:ReleaseAllObjects()
+
+            while (index <= gridSquares) do
+                local square = BS.SquareObjectPool:AcquireObject()
+
+                square:SetDimensions(gridDimension, gridDimension)
+                square:SetSimpleAnchor(BS.Grid, gridX, gridY)
+                square:SetHidden(false)
+
+                gridX = gridX + gridDimension
+                index = index + 1
+
+                if (index == gridSquares + 1 and gridYNum < gridYNumMax) then
+                    gridX = 0
+                    gridY = gridY + gridDimension
+                    gridYNum = gridYNum + 1
+                    index = 1
+                end
+            end
+
+            BS.GridChanged = false
+        end
+
+        BS.Grid:SetHidden(false)
+    else
+        BS.Grid:SetHidden(true)
+    end
+end

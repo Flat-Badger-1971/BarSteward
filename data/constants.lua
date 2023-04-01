@@ -98,6 +98,7 @@ BS.W_RECIPE_WATCH = 89
 BS.W_CHESTS_FOUND = 90
 BS.W_SHALIDORS_LIBRARY = 91
 BS.W_CRAFTING_MOTIFS = 92
+BS.W_DAILY_PROGRESS = 93
 
 BS.WRITS = {
     [_G.CRAFTING_TYPE_ALCHEMY] = {
@@ -168,7 +169,7 @@ BS.BANKING_SCENES = {"bank", "guildBank", "houseBank"}
 BS.INVENTORY_SCENES = {"inventory"}
 BS.MAIL_SCENES = {"mailInbox", "mailSend"}
 BS.SIEGE_SCENES = {"siegeBar", "siegeBarUI"}
-BS.MENU_SCENES = {"gameMenuInGame"}
+BS.MENU_SCENES = {"gameMenuInGame", "mainMenuGamepad"}
 BS.INTERACTING_SCENES = {"interact"}
 BS.GUILDSTORE_SCENES = {"tradinghouse"}
 BS.DEFAULT_SCENES = {"hud", "hudui"}
