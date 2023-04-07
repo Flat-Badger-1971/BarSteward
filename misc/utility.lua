@@ -585,6 +585,10 @@ function BS.GetFont(vars)
 end
 
 function BS.AddToScenes(sceneType, barIndex, bar, override)
+    if (sceneType == "Default") then
+        return
+    end
+
     local group = BS[sceneType:upper() .. "_SCENES"]
 
     sceneType = "ShowWhilst" .. sceneType
@@ -597,6 +601,10 @@ function BS.AddToScenes(sceneType, barIndex, bar, override)
 end
 
 function BS.RemoveFromScenes(sceneType, bar)
+    if (sceneType == "Default") then
+        return
+    end
+
     local group = BS[sceneType:upper() .. "_SCENES"]
 
     for _, scene in ipairs(group) do
@@ -1548,4 +1556,11 @@ function BS.RegenerateAllBars(barsToRegenerate)
             BS.RegenerateBar(barIndex)
         end
     end
+end
+
+function BS.SentenceCase(text)
+    local initial = text:sub(1, 1):upper()
+    local rest = text:sub(2)
+
+    return initial .. rest
 end

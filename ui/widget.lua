@@ -463,23 +463,10 @@ local function checkOrCreatePool()
             ZO_ObjectPool:New(
             -- factory
             function()
-                d("new")
                 return baseWidget:New()
             end,
             --reset
             function(widget)
-                -- if (widget.value) then
-                --     if (not widget.value.progress) then
-                --         widget.value:SetText("")
-                --     end
-
-                --     widget.value:ClearAnchors()
-                -- end
-
-                -- if (widget.icon) then
-                --     widget.icon:SetTexture("")
-                --     widget.icon:ClearAnchors()
-                -- end
                 widget.control:SetHidden(true)
                 widget:SetParent(GuiRoot)
                 widget:ClearAnchors()
@@ -498,7 +485,7 @@ function BS.CreateWidget(metadata, parent, tooltipAnchor, valueSide, noValue, ba
     local widget, key = BS.WidgetObjectPool:AcquireObject(widgetKey)
     local extant = BS.GetByValue(BS.WidgetObjects, key)
 
-    -- if this widget was being used by something else previously, clear it
+    -- if this object was being used by something else previously, clear it
     -- so a new one will be created
     if (extant) then
         BS.WidgetObjects[extant] = nil

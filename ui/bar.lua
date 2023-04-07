@@ -63,7 +63,7 @@ function baseBar:Initialise()
         local vars = BS.Vars.Bars[self.index]
 
         self.expand = vars.Expand and self.orientation == "horizontal"
-
+        d(self.expand)
         if ((vars.Background or 99) ~= 99) then
             if (self.expand) then
                 self.bar.expandbackground:SetCenterColor(1, 1, 1, 1)
@@ -105,17 +105,25 @@ function baseBar:Initialise()
     self.bar.expandbackground:SetEdgeColor(0, 0, 0, 0)
     self.bar.expandtlc:SetHidden(true)
 
-    self.bar:SetHandler(
-        "OnRectChanged",
-        function()
+    self.OnRectChanged = function()
+        if (self.expand) then
             local height = self.bar:GetHeight()
 
             self.bar.expandtlc:SetHeight(height)
             self.bar.expandtlc:ClearAnchors()
             self.bar.expandtlc:SetAnchor(RIGHT, GuiRoot, RIGHT)
-            self.bar.expandtlc:SetAnchor(TOPLEFT, GuiRoot, TOPLEFT, 0, BS.Vars.Bars[self.index].Position.Y - (height / 2))
+            self.bar.expandtlc:SetAnchor(
+                TOPLEFT,
+                GuiRoot,
+                TOPLEFT,
+                0,
+                BS.Vars.Bars[self.index].Position.Y - (height / 2)
+            )
+            self.checkBackground()
         end
-    )
+    end
+
+    self.bar:SetHandler("OnRectChanged", self.OnRectChanged)
 
     self.bar:SetHandler(
         "OnMoveStart",
@@ -345,15 +353,9 @@ function baseBar:AddToScenes()
         SCENE_MANAGER:GetScene("hud"):AddFragment(self.bar.fragment)
         SCENE_MANAGER:GetScene("hudui"):AddFragment(self.bar.fragment)
 
-        BS.AddToScenes("Crafting", self.index, self.bar)
-        BS.AddToScenes("Banking", self.index, self.bar)
-        BS.AddToScenes("Inventory", self.index, self.bar)
-        BS.AddToScenes("Mail", self.index, self.bar)
-        BS.AddToScenes("Siege", self.index, self.bar)
-        BS.AddToScenes("Menu", self.index, self.bar)
-        BS.AddToScenes("Interacting", self.index, self.bar)
-        BS.AddToScenes("GuildStore", self.index, self.bar)
-        BS.AddToScenes("CrownStore", self.index, self.bar)
+        for _, scene in ipairs(BS.SCENES) do
+            BS.AddToScenes(BS.SentenceCase(scene), self.index, self.bar)
+        end
     end
 end
 
@@ -362,14 +364,9 @@ function baseBar:RemoveFromScenes()
         SCENE_MANAGER:GetScene("hud"):RemoveFragment(self.bar.fragment)
         SCENE_MANAGER:GetScene("hudui"):RemoveFragment(self.bar.fragment)
 
-        BS.RemoveFromScenes("Crafting", self.bar)
-        BS.RemoveFromScenes("Banking", self.bar)
-        BS.RemoveFromScenes("Inventory", self.bar)
-        BS.RemoveFromScenes("Mail", self.bar)
-        BS.RemoveFromScenes("Siege", self.bar)
-        BS.RemoveFromScenes("Menu", self.bar)
-        BS.RemoveFromScenes("Interacting", self.bar)
-        BS.RemoveFromScenes("GuildStore", self.bar)
+        for _, scene in ipairs(BS.SCENES) do
+            BS.RemoveFromScenes(BS.SentenceCase(scene), self.bar)
+        end
     end
 end
 
@@ -759,6 +756,13 @@ function BS.CreateBar(barSettings)
 
     local barKey = BS.BarObjects[barSettings.index]
     local bar, key = BS.BarObjectPool:AcquireObject(barKey)
+    local extant = BS.GetByValue(BS.BarObjects, key)
+
+    -- if this object was being used by something else previously, clear it
+    -- so a new one will be created
+    if (extant) then
+        BS.BarObjects[extant] = nil
+    end
 
     BS.BarObjects[barSettings.index] = key
 

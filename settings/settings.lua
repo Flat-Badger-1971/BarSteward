@@ -555,12 +555,13 @@ local function getBarSettings()
                     return vars.Expand
                 end,
                 setFunc = function(value)
+                    local barObject = BS.BarObjectPool:GetActiveObject(BS.BarObjects[idx])
+                    local bar = barObject.bar
+
                     vars.Expand = value
 
-                    local bar = _G[BS.Name .. "_bar_" .. idx]
-
-                    if (bar) then
-                        bar.ref.checkBackground()
+                    if (barObject) then
+                        barObject:SetExpand(value)
 
                         if (value) then
                             bar.border:SetParent(bar.expandtlc)
@@ -571,6 +572,9 @@ local function getBarSettings()
                             bar.border:ClearAnchors()
                             bar.border:SetAnchorFill()
                         end
+
+                        barObject.checkBackground()
+                        barObject.OnRectChanged()
                     end
                 end,
                 default = false,
