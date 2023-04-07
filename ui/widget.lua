@@ -18,9 +18,11 @@ function baseWidget:Initialise()
     if (DEBUG) then
         self.overlay = self.overlay or WINDOW_MANAGER:CreateControl(nil, self.control, CT_CONTROL)
         self.overlay:SetDrawTier(_G.DT_HIGH)
+        self.overlay:ClearAnchors()
         self.overlay:SetAnchorFill(self.bar)
 
         self.overlay.background = self.overlay.background or WINDOW_MANAGER:CreateControl(nil, self.overlay, CT_TEXTURE)
+        self.overlay.background:ClearAnchors()
         self.overlay.background:SetAnchorFill(self.overlay)
         self.overlay.background:SetTexture("/esoui/art/itemupgrade/eso_itemupgrade_blueslot.dds")
     end
@@ -145,9 +147,14 @@ function baseWidget:GetTooltipAnchor()
     return self.tooltipAnchor
 end
 
+BS.ProgressIndex = 0
+
 function baseWidget:CreateProgress(progress, gradient)
     if (progress) then
-        self.value = self.value or BS.CreateProgressBar(nil, self.control)
+        local name = BS.Name .. "_progress_" .. BS.ProgressIndex
+
+        BS.ProgressIndex = BS.ProgressIndex + 1
+        self.value = self.value or BS.CreateProgressBar(name, self.control)
         self.value:ClearAnchors()
         self.value:SetAnchor(
             self.valueSide == LEFT and RIGHT or LEFT,
@@ -202,6 +209,7 @@ end
 function baseWidget:CreateCooldown()
     self.icon.cooldown = self.icon.cooldown or WINDOW_MANAGER:CreateControl(nil, self.icon, CT_COOLDOWN)
     self.icon.cooldown:SetDimensions(self.icon:GetWidth(), self.icon:GetHeight())
+    self.icon.cooldown:ClearAnchors()
     self.icon.cooldown:SetAnchor(CENTER, self.icon, CENTER, 0, 0)
     self.icon.cooldown:SetFillColor(0, 0.1, 0.1, 0.6)
     self.icon.cooldown:SetHidden(true)
@@ -219,6 +227,7 @@ function baseWidget:CreateIcon(icon)
     self.icon = self.icon or WINDOW_MANAGER:CreateControl(nil, self.control, CT_TEXTURE)
     self.icon:SetTexture(texture)
     self.icon:SetDimensions(self.iconSize, self.iconSize)
+    self.icon:ClearAnchors()
     self.icon:SetAnchor(self.valueSide == LEFT and RIGHT or LEFT)
 end
 
@@ -458,10 +467,23 @@ local function checkOrCreatePool()
             end,
             --reset
             function(widget)
-                widget.destroyed = true
-                widget:SetHidden(true)
+                -- if (widget.value) then
+                --     if (not widget.value.progress) then
+                --         widget.value:SetText("")
+                --     end
+
+                --     widget.value:ClearAnchors()
+                -- end
+
+                -- if (widget.icon) then
+                --     widget.icon:SetTexture("")
+                --     widget.icon:ClearAnchors()
+                -- end
+                widget.control:SetHidden(true)
                 widget:SetParent(GuiRoot)
                 widget:ClearAnchors()
+
+                widget.destroyed = true
             end
         )
     end

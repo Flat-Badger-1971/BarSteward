@@ -2183,8 +2183,11 @@ local function getWidgetSettings()
                         end
                     end
 
+                    local oldBarNum = BS.Vars.Controls[k].Bar
+
                     BS.Vars.Controls[k].Bar = barNum
-                    BS.RegenerateAllBars()
+                    BS.RegenerateBar(oldBarNum, k)
+                    BS.RegenerateBar(barNum)
                 end,
                 width = "full",
                 default = BS.Defaults.Controls[k].Bar,

@@ -1510,9 +1510,17 @@ local function refreshBarWidgets(barIndex)
     end
 end
 
-function BS.RegenerateBar(barIndex)
+function BS.RegenerateBar(barIndex, destroyWidget)
     if ((barIndex or 0) == 0) then
         return
+    end
+
+    if (destroyWidget) then
+        local widgetKey = BS.WidgetObjects[destroyWidget]
+
+        if (widgetKey) then
+            BS.WidgetObjectPool:ReleaseObject(widgetKey)
+        end
     end
 
     if (not BS.Vars.Bars[barIndex].Disable) then
