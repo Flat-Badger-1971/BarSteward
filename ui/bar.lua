@@ -97,7 +97,6 @@ function baseBar:Initialise()
 
     self.bar.expandtlc = WINDOW_MANAGER:CreateTopLevelWindow()
     self.bar.expandtlc:SetScale(self.bar:GetScale())
-    self.bar.expandtlc:SetWidth(GuiRoot:GetWidth())
     self.bar.expandtlc:SetDrawLayer(_G.DL_BACKGROUND)
 
     self.bar.expandbackground = WINDOW_MANAGER:CreateControl(nil, self.bar.expandtlc, CT_BACKDROP)
@@ -113,6 +112,7 @@ function baseBar:Initialise()
 
             self.bar.expandtlc:SetHeight(height)
             self.bar.expandtlc:ClearAnchors()
+            self.bar.expandtlc:SetAnchor(RIGHT, GuiRoot, RIGHT)
             self.bar.expandtlc:SetAnchor(TOPLEFT, GuiRoot, TOPLEFT, 0, BS.Vars.Bars[self.index].Position.Y - (height / 2))
         end
     )

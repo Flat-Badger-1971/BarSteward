@@ -463,6 +463,7 @@ local function checkOrCreatePool()
             ZO_ObjectPool:New(
             -- factory
             function()
+                d("new")
                 return baseWidget:New()
             end,
             --reset
@@ -492,8 +493,16 @@ end
 function BS.CreateWidget(metadata, parent, tooltipAnchor, valueSide, noValue, barSettings)
     checkOrCreatePool()
 
+    -- try to resuse the original widget
     local widgetKey = BS.WidgetObjects[metadata.id]
     local widget, key = BS.WidgetObjectPool:AcquireObject(widgetKey)
+    local extant = BS.GetByValue(BS.WidgetObjects, key)
+
+    -- if this widget was being used by something else previously, clear it
+    -- so a new one will be created
+    if (extant) then
+        BS.WidgetObjects[extant] = nil
+    end
 
     BS.WidgetObjects[metadata.id] = key
 

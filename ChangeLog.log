@@ -1,3 +1,6 @@
+[color=#ff9900][b]Version: 1.5.7 ---------------[/b][/color]
+Change anchoring on fullwidth bar to compensate for scale
+
 [color=#ff9900][b]Version: 1.5.6 ---------------[/b][/color]
 Option added to display an alignment grid
 Option added to have horizontal bar backgrounds span with full width of the screen
