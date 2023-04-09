@@ -1,3 +1,8 @@
+[color=#ff9900][b]Version: 2.0.0 ---------------[/b][/color]
+Major code refactor
+Options that require a UI reload reduced by 80%
+Widget reordering tool ordering method changed to simplify moving widgets through multiple positions
+
 [color=#ff9900][b]Version: 1.5.7 ---------------[/b][/color]
 Change anchoring on fullwidth bar to compensate for scale
 

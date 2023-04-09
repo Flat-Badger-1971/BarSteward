@@ -63,7 +63,7 @@ function baseBar:Initialise()
         local vars = BS.Vars.Bars[self.index]
 
         self.expand = vars.Expand and self.orientation == "horizontal"
-        d(self.expand)
+
         if ((vars.Background or 99) ~= 99) then
             if (self.expand) then
                 self.bar.expandbackground:SetCenterColor(1, 1, 1, 1)

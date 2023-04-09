@@ -230,10 +230,27 @@ function BS.CreateLockButton()
     return BS.lock
 end
 
+local selected = -1
+
+local function onClicked(key)
+    selected = key
+    BS.w_order.scrollList:Update(BS.dataItems)
+end
+
 local function setupDataRow(rowControl, data)
     rowControl:GetNamedChild("Title"):SetText(data.name)
-    --rowControl:GetNamedChild("Sequence"):SetText(data.order)
     rowControl:GetNamedChild("Icon"):SetTexture(data.icon)
+
+    local cb = rowControl:GetNamedChild("CheckBox")
+    local c = cb:GetNamedChild("Check")
+
+    c:SetHandler("OnClicked", function() onClicked(data.key) end)
+
+    if (data.key ~= selected) then
+        ZO_CheckButton_SetCheckState(c, false)
+    else
+        ZO_CheckButton_SetCheckState(c, true)
+    end
 
     if (data.key == BS.W_ALLIANCE) then
         rowControl:GetNamedChild("Icon"):SetTextureCoords(0, 1, 0, 0.6)
@@ -269,7 +286,13 @@ local function updateList(barName)
         for key, control in pairs(controls) do
             if (control.Bar == barIndex) then
                 local widget = BS.widgets[key]
-                BS.dataItems[itemKey] = {name = widget.tooltip, icon = widget.icon, key = key, order = control.Order}
+                BS.dataItems[itemKey] = {
+                    name = widget.tooltip,
+                    icon = widget.icon,
+                    key = key,
+                    order = control.Order,
+                    selected = key == selected
+                }
                 itemKey = itemKey + 1
             end
         end
@@ -296,20 +319,18 @@ local function createScrollList(barName)
 end
 
 function BS.CreateWidgetOrderTool(bars)
-    local name = BS.Name .. "_Widget_Order_Tool"
-
-    BS.w_order = WINDOW_MANAGER:CreateTopLevelWindow(name)
+    BS.w_order = WINDOW_MANAGER:CreateTopLevelWindow()
     local frame = BS.w_order
 
     frame:SetDimensions(470, 1050)
     frame:SetAnchor(CENTER, GuiRoot, CENTER)
     frame:SetHidden(true)
 
-    frame.bgc = WINDOW_MANAGER:CreateControl(name .. "_background", frame, CT_TEXTURE)
+    frame.bgc = WINDOW_MANAGER:CreateControl(nil, frame, CT_TEXTURE)
     frame.bgc:SetAnchorFill(frame)
     frame.bgc:SetTexture("/esoui/art/miscellaneous/centerscreen_left.dds")
 
-    frame.bge = WINDOW_MANAGER:CreateControl(name .. "_edges", frame, CT_TEXTURE)
+    frame.bge = WINDOW_MANAGER:CreateControl(nil, frame, CT_TEXTURE)
     frame.bge:SetDimensions(24, frame:GetHeight())
     frame.bge:SetAnchor(TOPLEFT, frame.bgc, TOPRIGHT)
     frame.bge:SetTexture("esoui/art/miscellaneous/centerscreen_right.dds")
@@ -319,19 +340,19 @@ function BS.CreateWidgetOrderTool(bars)
     local fontWeight = "soft-shadow-thick"
     local nameFont = string.format("$(%s)|$(KB_%s)|%s", fontStyle, fontSize, fontWeight)
 
-    frame.heading = WINDOW_MANAGER:CreateControl(name .. "_heading", frame, CT_LABEL)
+    frame.heading = WINDOW_MANAGER:CreateControl(nil, frame, CT_LABEL)
     frame.heading:SetFont(nameFont)
     frame.heading:SetColor(0.9, 0.9, 0.9, 1)
     frame.heading:SetAnchor(TOPLEFT, frame, TOPLEFT, 50, 80)
     frame.heading:SetText(GetString(_G.BARSTEWARD_WIDGET_ORDERING))
     frame.heading:SetDimensions(350, 24)
 
-    frame.divider = WINDOW_MANAGER:CreateControl(name .. "_divider", frame, CT_TEXTURE)
+    frame.divider = WINDOW_MANAGER:CreateControl(nil, frame, CT_TEXTURE)
     frame.divider:SetDimensions(470, 4)
     frame.divider:SetAnchor(TOPLEFT, frame.heading, BOTTOMLEFT, -50, 10)
     frame.divider:SetTexture("/esoui/art/campaign/campaignbrowser_divider_short.dds")
 
-    frame.bar = WINDOW_MANAGER:CreateControl(name .. "_bar", frame, CT_LABEL)
+    frame.bar = WINDOW_MANAGER:CreateControl(nil, frame, CT_LABEL)
     frame.bar:SetFont("ZoFontGame")
     frame.bar:SetColor(0.8, 0.8, 0.6, 1)
     frame.bar:SetAnchor(TOPLEFT, frame.divider, TOPLEFT, 50, 30)
@@ -343,10 +364,34 @@ function BS.CreateWidgetOrderTool(bars)
         frame.scrollList:Update(BS.dataItems)
     end
 
-    frame.barValue = BS.CreateComboBox(name .. "_barValue", frame, 200, 32, bars, bars[1], comboCallback)
+    frame.barValue = BS.CreateComboBox(nil, frame, 200, 32, bars, bars[1], comboCallback)
     frame.barValue:SetAnchor(TOPLEFT, frame.bar, BOTTOMLEFT, 0, 10)
 
-    frame.divider2 = WINDOW_MANAGER:CreateControl(name .. "_divider2", frame, CT_TEXTURE)
+    frame.moveUpButton = WINDOW_MANAGER:CreateControl(nil, frame, CT_TEXTURE)
+    frame.moveUpButton:SetTexture("/esoui/art/buttons/large_uparrow_up.dds")
+    frame.moveUpButton:SetDimensions(32, 32)
+    frame.moveUpButton:SetAnchor(TOPRIGHT, frame.barValue, TOPRIGHT, 185, 0)
+    frame.moveUpButton:SetMouseEnabled(true)
+    frame.moveUpButton:SetHandler(
+        "OnMouseDown",
+        function()
+            BS.OrderUp()
+        end
+    )
+
+    frame.moveDownButton = WINDOW_MANAGER:CreateControl(nil, frame, CT_TEXTURE)
+    frame.moveDownButton:SetTexture("/esoui/art/buttons/large_downarrow_up.dds")
+    frame.moveDownButton:SetDimensions(32, 32)
+    frame.moveDownButton:SetAnchor(RIGHT, frame.moveUpButton, LEFT, 10, 0)
+    frame.moveDownButton:SetMouseEnabled(true)
+    frame.moveDownButton:SetHandler(
+        "OnMouseDown",
+        function()
+            BS.OrderDown()
+        end
+    )
+
+    frame.divider2 = WINDOW_MANAGER:CreateControl(nil, frame, CT_TEXTURE)
     frame.divider2:SetDimensions(470, 4)
     frame.divider2:SetAnchor(TOPLEFT, frame.barValue, BOTTOMLEFT, -50, 10)
     frame.divider2:SetTexture("/esoui/art/campaign/campaignbrowser_divider_short.dds")
@@ -354,7 +399,7 @@ function BS.CreateWidgetOrderTool(bars)
     frame.scrollList = createScrollList(bars[1])
     frame.scrollList:SetAnchor(TOPLEFT, frame.divider2, BOTTOMLEFT, 50, 10)
 
-    frame.button = BS.CreateButton(name .. "_button", frame, 100, 32)
+    frame.button = BS.CreateButton(nil, frame, 100, 32)
     frame.button:SetText(GetString(_G.BARSTEWARD_REORDER))
     frame.button:SetAnchor(TOPLEFT, frame.scrollList, BOTTOMLEFT, 0, 40)
 
@@ -371,7 +416,7 @@ function BS.CreateWidgetOrderTool(bars)
 
     frame.button:SetHandler("OnClicked", onClick)
 
-    frame.close = BS.CreateButton(name .. "_close", frame, 100, 32)
+    frame.close = BS.CreateButton(nil, frame, 100, 32)
     frame.close:SetText(BS.Format(_G.SI_DIALOG_CLOSE))
     frame.close:SetAnchor(TOPLEFT, frame.button, TOPRIGHT, 170, 0)
     frame.close:SetHandler(
@@ -383,15 +428,16 @@ function BS.CreateWidgetOrderTool(bars)
 
     frame.fragment = ZO_HUDFadeSceneFragment:New(frame)
     frame.fragment:SetHiddenForReason("disabled", true)
+
     SCENE_MANAGER:GetScene("hud"):AddFragment(frame.fragment)
     SCENE_MANAGER:GetScene("hudui"):AddFragment(frame.fragment)
 
     return frame
 end
 
-local function findByName(widgetName)
+local function findByKey(key)
     for _, item in pairs(BS.dataItems) do
-        if (item.name == widgetName) then
+        if (item.key == key) then
             return item
         end
     end
@@ -413,9 +459,8 @@ local function setOrder(old, new)
     BS.dataItems[item2].order = old
 end
 
-function BS.OrderDown(control)
-    local widgetName = control:GetParent():GetNamedChild("Title"):GetText()
-    local widget = findByName(widgetName)
+function BS.OrderDown()
+    local widget = findByKey(selected)
 
     if (widget.order == #BS.dataItems) then
         return
@@ -425,9 +470,8 @@ function BS.OrderDown(control)
     BS.w_order.scrollList.Update(BS.w_order.scrollList, BS.dataItems)
 end
 
-function BS.OrderUp(control)
-    local widgetName = control:GetParent():GetNamedChild("Title"):GetText()
-    local widget = findByName(widgetName)
+function BS.OrderUp()
+    local widget = findByKey(selected)
 
     if (widget.order == 1) then
         return
@@ -442,11 +486,11 @@ local function setupFriendsDataRow(rowControl, data)
 
     ZO_CheckButton_SetLabelText(checkBox, data.name)
 
-    local function onClicked(checkButton, checked)
+    local function onCheckClicked(checkButton, checked)
         BS.Vars.FriendAnnounce[checkButton.label:GetText()] = checked
     end
 
-    ZO_CheckButton_SetToggleFunction(checkBox, onClicked)
+    ZO_CheckButton_SetToggleFunction(checkBox, onCheckClicked)
     ZO_CheckButton_SetCheckState(checkBox, BS.Vars.FriendAnnounce[checkBox.label:GetText()])
 end
 
@@ -679,7 +723,7 @@ local function setupGuildFriendsDataRow(rowControl, data)
 
     ZO_CheckButton_SetLabelText(checkBox, data.name)
 
-    local function onClicked(checkButton, checked)
+    local function onAnnounceClicked(checkButton, checked)
         if (checked) then
             BS.Vars.GuildFriendAnnounce[checkButton.label:GetText()] = BS.GetGuildId(BS.selectedGuild)
         else
@@ -687,7 +731,7 @@ local function setupGuildFriendsDataRow(rowControl, data)
         end
     end
 
-    ZO_CheckButton_SetToggleFunction(checkBox, onClicked)
+    ZO_CheckButton_SetToggleFunction(checkBox, onAnnounceClicked)
     ZO_CheckButton_SetCheckState(checkBox, BS.Vars.GuildFriendAnnounce[checkBox.label:GetText()])
 end
 
