@@ -6,7 +6,8 @@ max_line_length = 160
 read_globals = {
     ["CALLBACK_MANAGER"] = {
         fields = {
-            FireCallbacks = {read_only = true}
+            FireCallbacks = {read_only = true},
+            RegisterCallback = {read_only = true}
         }
     },
     ["CENTER_SCREEN_ANNOUNCE"] = {
@@ -419,6 +420,7 @@ read_globals = {
     "ZO_CheckButton_SetLabelText",
     "ZO_CheckButton_SetToggleFunction",
     "ZO_ClearNumericallyIndexedTable",
+    "ZO_ClearTable",
     ["ZO_ComboBox"] = {
         fields = {
             CreateItemEntry = {read_only = true}

@@ -616,11 +616,19 @@ local function getBarSettings()
                 return vars.ShowEverywhere or false
             end,
             setFunc = function(value)
+                local barObject = BS.BarObjectPool:GetActiveObject(BS.BarObjects[idx])
+
                 vars.ShowEverywhere = value
+
+                if (value and barObject) then
+                    barObject:RemoveFromScenes(true)
+                    barObject.bar:SetHidden(false)
+                else
+                    barObject:AddToScenes()
+                end
             end,
             width = "full",
-            default = false,
-            requiresReload = true
+            default = false
         }
 
         for varType, varName in pairs(showOptions) do
@@ -912,6 +920,9 @@ local function getBarSettings()
                 else
                     return "/esoui/art/compass/compass_waypoint.dds"
                 end
+            end,
+            disabled = function()
+                return BS.Vars.Bars[idx] == nil
             end
         }
     end

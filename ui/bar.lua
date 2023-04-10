@@ -359,8 +359,8 @@ function baseBar:AddToScenes()
     end
 end
 
-function baseBar:RemoveFromScenes()
-    if (not BS.Vars.Bars[self.index].ShowEverywhere) then
+function baseBar:RemoveFromScenes(override)
+    if ((not BS.Vars.Bars[self.index].ShowEverywhere) or override) then
         SCENE_MANAGER:GetScene("hud"):RemoveFragment(self.bar.fragment)
         SCENE_MANAGER:GetScene("hudui"):RemoveFragment(self.bar.fragment)
 
