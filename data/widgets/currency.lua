@@ -70,6 +70,7 @@ local function currencyWidget(currencyType, widgetIndex, text, eventList, hideWh
 
             -- update the tooltip
             local ttt = text.title .. BS.LF
+
             ttt = ttt .. "|cffd700" .. tostring(currencyInBag) .. "|r " .. GetString(text.bag) .. BS.LF
             ttt = ttt .. "|cffd700" .. tostring(currencyInBank) .. "|r " .. GetString(text.bank) .. BS.LF
             ttt = ttt .. "|cffd700" .. tostring(combined) .. "|r " .. GetString(text.combined) .. BS.LF .. BS.LF
