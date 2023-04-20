@@ -994,6 +994,7 @@ local function getBarSettings()
             exportFrame.heading:SetText(GetString(_G.BARSTEWARD_EXPORT_BAR))
             exportFrame.note:SetText(GetString(_G.BARSTEWARD_COPY))
             exportFrame.import:SetHidden(true)
+            exportFrame.replace:SetHidden(true)
             exportFrame.error:SetText("")
             exportFrame.fragment:SetHiddenForReason("disabled", false)
         end,
@@ -1015,8 +1016,10 @@ local function getBarSettings()
             importFrame.heading:SetText(GetString(_G.BARSTEWARD_IMPORT_BAR))
             importFrame.note:SetText(GetString(_G.BARSTEWARD_PASTE))
             importFrame.import:SetHidden(false)
+            importFrame.replace:SetHidden(false)
             importFrame.error:SetText("")
             importFrame.fragment:SetHiddenForReason("disabled", false)
+            BS.ReplaceMain = false
         end,
         width = "full"
     }

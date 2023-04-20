@@ -273,6 +273,8 @@ ZO_CreateStringId("BARSTEWARD_REMOVE_WARNING", "This will permanently delete the
 ZO_CreateStringId("BARSTEWARD_REORDER", "Reorder")
 ZO_CreateStringId("BARSTEWARD_REORDER_WIDGETS", "Reorder Widgets")
 ZO_CreateStringId("BARSTEWARD_REPAIR_COST", "Item Repair Cost")
+ZO_CreateStringId("BARSTEWARD_REPLACE", "Replace Main Bar")
+ZO_CreateStringId("BARSTEWARD_REPLACE_CONFIRM", "Are you sure you want to replace your Main Bar?")
 ZO_CreateStringId("BARSTEWARD_REQUIRES", "Requires <<1>>")
 ZO_CreateStringId("BARSTEWARD_RIGHT", "Right")
 ZO_CreateStringId("BARSTEWARD_RUNEBOX_FRAGMENTS", "Runebox Fragments")

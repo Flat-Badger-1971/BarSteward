@@ -194,6 +194,28 @@ local function Initialise()
         }
     }
 
+    local confirm = {
+        title = {text = GetString(_G.BARSTEWARD_REPLACE)},
+        mainText = {
+            text = GetString(_G.BARSTEWARD_REPLACE_CONFIRM)
+        },
+        buttons = {
+            {
+                text = BS.Format(_G.SI_DIALOG_YES),
+                callback = function()
+                    BS.ReplaceMain = true
+                    BS.DoImport()
+                end
+            },
+            {
+                text = BS.Format(_G.SI_DIALOG_NO),
+                callback = function()
+                    BS.ReplaceMain = false
+                end
+            }
+        }
+    }
+
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "NotEmpty", notempty)
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "NotEmptyGeneric", notemptyGeneric)
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "Exists", exists)
@@ -205,6 +227,7 @@ local function Initialise()
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "Resize", resize)
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "Delete", delete)
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "Import", import)
+    ZO_Dialogs_RegisterCustomDialog(BS.Name .. "Confirm", confirm)
 
     -- saved variables
     BS.Vars =

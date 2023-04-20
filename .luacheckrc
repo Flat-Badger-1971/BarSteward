@@ -416,9 +416,11 @@ read_globals = {
     "HUD_SCENE",
     "ZO_CachedStrFormat",
     "ZO_CallbackObject",
+    "ZO_CheckButton_IsChecked",
     "ZO_CheckButton_SetCheckState",
     "ZO_CheckButton_SetLabelText",
     "ZO_CheckButton_SetToggleFunction",
+    "ZO_CheckButtonLabel_SetTextColor",
     "ZO_ClearNumericallyIndexedTable",
     "ZO_ClearTable",
     ["ZO_ComboBox"] = {

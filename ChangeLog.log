@@ -3,6 +3,7 @@ Major code refactor
 Number of options that require a UI reload reduced by 80%
 Widget reordering tool ordering method changed to simplify moving widgets through multiple positions
 Bug fix for max research times
+Option added to replace the main bar when importing a bar
 
 [color=#ff9900][b]Version: 1.5.7 ---------------[/b][/color]
 Change anchoring on fullwidth bar to compensate for scale

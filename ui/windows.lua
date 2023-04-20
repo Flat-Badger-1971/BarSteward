@@ -840,9 +840,15 @@ function BS.CreateExportFrame()
     frame.import:SetHandler(
         "OnClicked",
         function()
-            BS.ImportBar(frame.content:GetText())
+            BS.ImportBar(frame.content:GetText(), frame.replace)
         end
     )
+
+    frame.replace = WINDOW_MANAGER:CreateControlFromVirtual(nil, frame, "ZO_CheckButton")
+    frame.replace:SetDimensions(32, 32)
+    frame.replace:SetAnchor(LEFT, frame.import, RIGHT, 20, -2)
+
+    ZO_CheckButtonLabel_SetTextColor(frame.replace, 1, 0, 0)
 
     frame.close = BS.CreateButton(name .. "_close", frame, 100, 32)
     frame.close:SetText(BS.Format(_G.SI_DIALOG_CLOSE))

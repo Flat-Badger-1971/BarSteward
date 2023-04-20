@@ -1270,6 +1270,20 @@ function BS.DoImport()
     local barname = zo_strformat(GetString(_G.BARSTEWARD_NEW_BAR_DEFAULT_NAME), newBarId)
     local x, y = GuiRoot:GetCenter()
 
+    if (BS.ReplaceMain) then
+        BS.DestroyBar(BS.MAIN_BAR)
+
+        local widgets = BS.Vars.Controls
+
+        for _, widgetData in pairs(widgets) do
+            if (widgetData.Bar == BS.MAIN_BAR) then
+                widgetData.Bar = 0
+            end
+        end
+
+        newBarId = BS.MAIN_BAR
+    end
+
     BS.Vars.Bars[newBarId] = {
         Orientation = GetString(_G.BARSTEWARD_HORIZONTAL),
         Position = {X = x, Y = y},
@@ -1305,7 +1319,7 @@ function BS.DoImport()
     )
 end
 
-function BS.ImportBar(data)
+function BS.ImportBar(data, replaceMain)
     local importTable = validate(data)
 
     if (importTable) then
@@ -1320,7 +1334,9 @@ function BS.ImportBar(data)
 
         BS.ImportData = importTable
 
-        if (widgetCount > 0) then
+        if (ZO_CheckButton_IsChecked(replaceMain)) then
+            ZO_Dialogs_ShowDialog(BS.Name .. "Confirm")
+        elseif (widgetCount > 0) then
             BS.MovingWidgets = widgetCount
             ZO_Dialogs_ShowDialog(BS.Name .. "Import")
         else
