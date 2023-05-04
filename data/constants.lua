@@ -340,16 +340,36 @@ BS.BOTH = 3
 BS.ACTIVE_BAR = 4
 
 BS.CURRENCIES = {
-    [_G.CURT_MONEY] = {icon = "currency_gold_64", crownStore = false},
-    [_G.CURT_CROWNS] = {icon = "currency_crowns_32", crownStore = true},
-    [_G.CURT_CROWN_GEMS] = {icon = "currency_crown_gems", crownStore = true},
-    [_G.CURT_WRIT_VOUCHERS] = {icon = "currency_writvoucher_64", crownStore = false},
-    [_G.CURT_TELVAR_STONES] = {icon = "currency_telvar_64", crownStore = false},
-    [_G.CURT_EVENT_TICKETS] = {icon = "currency_eventticket", crownStore = false},
-    [_G.CURT_ENDEAVOR_SEALS] = {icon = "currency_seals_of_endeavor_64", crownStore = true},
-    [_G.CURT_UNDAUNTED_KEYS] = {icon = "/esoui/art/icons/quest_key_002.dds", crownStore = false},
-    [_G.CURT_ALLIANCE_POINTS] = {icon = "alliancepoints_64", crownStore = false},
-    [_G.CURT_CHAOTIC_CREATIA] = {icon = "currency_seedcrystal_64", crownStore = false}
+    [_G.CURT_MONEY] = {icon = "currency_gold_64", crownStore = false, text = _G.SI_GAMEPAD_INVENTORY_AVAILABLE_FUNDS},
+    [_G.CURT_CROWNS] = {icon = "currency_crowns_32", crownStore = true, text = _G.BARSTEWARD_CROWNS},
+    [_G.CURT_CROWN_GEMS] = {icon = "currency_crown_gems", crownStore = true, text = _G.BARSTEWARD_CROWN_GEMS},
+    [_G.CURT_WRIT_VOUCHERS] = {icon = "currency_writvoucher_64", crownStore = false, text = _G.BARSTEWARD_WRIT_VOUCHERS},
+    [_G.CURT_TELVAR_STONES] = {
+        icon = "currency_telvar_64",
+        crownStore = false,
+        text = _G.SI_GAMEPAD_INVENTORY_TELVAR_STONES
+    },
+    [_G.CURT_EVENT_TICKETS] = {icon = "currency_eventticket", crownStore = false, text = _G.BARSTEWARD_EVENT_TICKETS},
+    [_G.CURT_ENDEAVOR_SEALS] = {
+        icon = "currency_seals_of_endeavor_64",
+        crownStore = true,
+        text = _G.SI_CROWN_STORE_MENU_SEALS_STORE_LABEL
+    },
+    [_G.CURT_UNDAUNTED_KEYS] = {
+        icon = "/esoui/art/icons/quest_key_002.dds",
+        crownStore = false,
+        text = _G.BARSTEWARD_UNDAUNTED_KEYS
+    },
+    [_G.CURT_ALLIANCE_POINTS] = {
+        icon = "alliancepoints_64",
+        crownStore = false,
+        text = _G.SI_GAMEPAD_INVENTORY_ALLIANCE_POINTS
+    },
+    [_G.CURT_CHAOTIC_CREATIA] = {
+        icon = "currency_seedcrystal_64",
+        crownStore = false,
+        text = _G.BARSTEWARD_TRANSMUTE_CRYSTALS
+    }
 }
 
 BS.FRAGMENT_TYPES = {
