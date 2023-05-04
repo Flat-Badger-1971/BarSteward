@@ -5,6 +5,9 @@ Widget reordering tool ordering method changed to simplify moving widgets throug
 Bug fix for max research times
 Option added to replace the main bar when importing a bar
 
+[color=#ff9900][b]Version: 1.5.8 ---------------[/b][/color]
+Currency tooltip updates
+
 [color=#ff9900][b]Version: 1.5.7 ---------------[/b][/color]
 Change anchoring on fullwidth bar to compensate for scale
 

@@ -1,5 +1,32 @@
 local BS = _G.BarSteward
 
+local function getcrownStoreCurrencies(invert)
+    local crownStoreInfo = ""
+
+    for currencyType, info in pairs(BS.CURRENCIES) do
+        if (currencyType ~= _G.CURT_MONEY) then
+            if ((invert and (not info.crownStore)) or ((not invert) and info.crownStore)) then
+                if (crownStoreInfo ~= "") then
+                    crownStoreInfo = crownStoreInfo .. BS.LF
+                end
+
+                local amount = GetCurrencyAmount(currencyType, _G.CURRENCY_LOCATION_ACCOUNT)
+                local icon = info.icon
+
+                if (not icon:find(".dds")) then
+                    icon = "/esoui/art/currency/" .. icon .. ".dds"
+                end
+
+                crownStoreInfo = crownStoreInfo .. zo_iconFormat(icon, 16, 16) .. " "
+                crownStoreInfo = crownStoreInfo .. "|cf9f9f9" .. BS.Format(info.text) .. " |r"
+                crownStoreInfo = crownStoreInfo .. amount
+            end
+        end
+    end
+
+    return crownStoreInfo
+end
+
 local function currencyWidget(currencyType, widgetIndex, text, eventList, hideWhenTrue)
     local name = "gold"
 
@@ -77,6 +104,10 @@ local function currencyWidget(currencyType, widgetIndex, text, eventList, hideWh
             ttt = ttt .. charactertt .. BS.LF
             ttt = ttt .. "|cffd700" .. tostring(allCharacters) .. "|r " .. GetString(text.everyWhere)
 
+            if (currencyType ~= _G.CURT_MONEY) then
+                ttt = ttt .. BS.LF .. BS.LF .. getcrownStoreCurrencies(true)
+            end
+
             widget.tooltip = ttt
 
             return widget:GetValue()
@@ -104,26 +135,6 @@ local function currencyWidget(currencyType, widgetIndex, text, eventList, hideWh
     end
 
     return widgetCode
-end
-
-local function getcrownStoreCurrencies()
-    local crownStoreInfo = ""
-
-    for currencyType, info in pairs(BS.CURRENCIES) do
-        if (info.crownStore) then
-            if (crownStoreInfo ~= "") then
-                crownStoreInfo = crownStoreInfo .. BS.LF
-            end
-
-            local amount = GetCurrencyAmount(currencyType, _G.CURRENCY_LOCATION_ACCOUNT)
-            local icon = "/esoui/art/currency/" .. info.icon .. ".dds"
-
-            crownStoreInfo = crownStoreInfo .. zo_iconFormat(icon, 16, 16) .. " "
-            crownStoreInfo = crownStoreInfo .. amount
-        end
-    end
-
-    return crownStoreInfo
 end
 
 BS.widgets[BS.W_ALLIANCE_POINTS] =
@@ -166,6 +177,7 @@ BS.widgets[BS.W_CROWN_GEMS] = {
         widget:SetColour(unpack(BS.Vars.Controls[this].Colour or BS.Vars.DefaultColour))
 
         local tt = GetString(_G.BARSTEWARD_CROWN_GEMS) .. BS.LF
+
         tt = tt .. getcrownStoreCurrencies()
 
         widget.tooltip = tt
@@ -194,6 +206,7 @@ BS.widgets[BS.W_CROWNS] = {
         widget:SetColour(unpack(BS.Vars.Controls[this].Colour or BS.Vars.DefaultColour))
 
         local tt = GetString(_G.BARSTEWARD_CROWNS) .. BS.LF
+
         tt = tt .. getcrownStoreCurrencies()
 
         widget.tooltip = tt
@@ -262,6 +275,10 @@ BS.widgets[BS.W_EVENT_TICKETS] = {
         widget:SetColour(unpack(colour))
         widget:SetValue(value, widthValue)
 
+        local tt = getcrownStoreCurrencies(true)
+
+        widget.tooltip = tt
+
         return value
     end,
     event = _G.EVENT_CURRENCY_UPDATE,
@@ -307,6 +324,7 @@ BS.widgets[BS.W_SEALS_OF_ENDEAVOUR] = {
         widget:SetColour(unpack(BS.Vars.Controls[this].Colour or BS.Vars.DefaultColour))
 
         local tt = BS.Format(_G.SI_CROWN_STORE_MENU_SEALS_STORE_LABEL) .. BS.LF
+
         tt = tt .. getcrownStoreCurrencies()
 
         widget.tooltip = tt
@@ -395,6 +413,10 @@ BS.widgets[BS.W_TRANSMUTE_CRYSTALS] = {
         widget:SetValue(value)
         widget:SetColour(unpack(colour))
 
+        local tt = getcrownStoreCurrencies(true)
+
+        widget.tooltip = tt
+
         return value
     end,
     event = {_G.EVENT_CURRENCY_UPDATE, _G.EVENT_QUEST_COMPLETE_DIALOG},
@@ -407,6 +429,10 @@ BS.widgets[BS.W_UNDAUNTED_KEYS] = {
     update = function(widget)
         widget:SetValue(GetCurrencyAmount(_G.CURT_UNDAUNTED_KEYS, _G.CURRENCY_LOCATION_ACCOUNT))
         widget:SetColour(unpack(BS.Vars.Controls[BS.W_UNDAUNTED_KEYS].Colour or BS.Vars.DefaultColour))
+
+        local tt = getcrownStoreCurrencies(true)
+
+        widget.tooltip = tt
 
         return widget:GetValue()
     end,
