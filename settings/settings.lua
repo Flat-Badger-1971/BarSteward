@@ -64,9 +64,13 @@ local function initialise()
         setFunc = function(value)
             BS.Vars.Movable = value
 
-            for _, bar in ipairs(BS.Bars) do
-                _G[bar]:SetMovable(value)
-                _G[bar].ref.bar.overlay:SetHidden(not value)
+            for index, _ in pairs(BS.Vars.Bars) do
+                local bar = BS.BarObjectPool:GetActiveObject(BS.BarObjects[index])
+
+                if (bar) then
+                    bar.bar:SetMovable(value)
+                    bar.bar.overlay:SetHidden(not value)
+                end
             end
 
             local frame = BS.lock or BS.CreateLockButton()

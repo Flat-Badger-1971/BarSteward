@@ -202,9 +202,13 @@ function BS.CreateLockButton()
         function()
             BS.Vars.Movable = false
 
-            for _, bar in ipairs(BS.Bars) do
-                _G[bar]:SetMovable(false)
-                _G[bar].ref.bar.overlay:SetHidden(true)
+            for index, _ in pairs(BS.Vars.Bars) do
+                local bar = BS.BarObjectPool:GetActiveObject(BS.BarObjects[index])
+
+                if (bar) then
+                    bar.bar:SetMovable(false)
+                    bar.bar.overlay:SetHidden(true)
+                end
             end
 
             BS.lock.fragment:SetHiddenForReason("disabled", true)
