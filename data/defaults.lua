@@ -473,6 +473,13 @@ BS.Defaults = {
         [BS.W_CHESTS_FOUND] = {Bar = 0, Order = 90, ColourValues = "c", Autohide = false},
         [BS.W_SHALIDORS_LIBRARY] = {Bar = 0, Order = 91, ColourValues = "c"},
         [BS.W_CRAFTING_MOTIFS] = {Bar = 0, Order = 92, ColourValues = "c"},
-        [BS.W_DAILY_PROGRESS] = {Bar = 0, Order = 93, Progress = true, HideWhenComplete = false, ColourValues = "c"}
+        [BS.W_DAILY_PROGRESS] = {Bar = 0, Order = 93, Progress = true, HideWhenComplete = false, ColourValues = "c"},
+        [BS.W_WEAPON_CHARGE] = {
+            Bar = 0,
+            Order = 94,
+            ColourValues = "okc,wv,wc,dv,dc",
+            DangerValue = 10,
+            WarningValue = 25
+        }
     }
 }

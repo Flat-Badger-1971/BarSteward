@@ -1868,3 +1868,127 @@ BS.widgets[BS.W_RECIPE_WATCH] = {
         BS.RefreshWidget(BS.W_RECIPE_WATCH)
     end
 }
+
+local function getCharges(slot)
+    local link = GetItemLink(_G.BAG_WORN, slot)
+
+    if (link and IsItemChargeable(_G.BAG_WORN, slot)) then
+        return GetItemLinkNumEnchantCharges(link), GetItemLinkMaxEnchantCharges(link)
+    else
+        return -1, -1
+    end
+end
+
+local function getMin(charges, slots, equipped)
+    local min = 101
+    local minWeapon = {}
+
+    equipped =
+        equipped or
+        {pc = GetString(_G.BARSTEWARD_NOT_APPLICABLE), name = BS.Format(_G.SI_GAMEPAD_INVENTORY_EMPTY_TOOLTIP)}
+
+    for slot, info in pairs(charges) do
+        if (ZO_IsElementInNumericallyIndexedTable(slots, slot)) then
+            if (type(info.pc) == "number") then
+                if (info.pc < min) then
+                    min = info.pc
+                    minWeapon = info
+                end
+            end
+        end
+    end
+
+    if (minWeapon.pc == nil) then
+        minWeapon = equipped
+    end
+
+    return minWeapon
+end
+
+local function getColour(value, vars)
+    local colour = vars.OkColour or BS.Vars.DefaultOkColour
+
+    if (value <= vars.WarningValue and value > vars.DangerValue) then
+        colour = vars.WarningColour or BS.Vars.DefaultWarningColour
+    elseif (value <= vars.DangerValue) then
+        colour = vars.DangerColour or BS.Vars.DefaultDangerColour
+    end
+
+    return colour
+end
+
+BS.widgets[BS.W_WEAPON_CHARGE] = {
+    -- v1.5.8
+    name = "weaponCharge",
+    update = function(widget)
+        local slots = {_G.EQUIP_SLOT_MAIN_HAND, _G.EQUIP_SLOT_OFF_HAND}
+        local backup = {_G.EQUIP_SLOT_BACKUP_MAIN, _G.EQUIP_SLOT_BACKUP_OFF}
+        local vars = BS.Vars.Controls[BS.W_WEAPON_CHARGE]
+        local activeWeaponPair = GetActiveWeaponPairInfo()
+        local weapons = BS.MergeTables(slots, backup)
+        local weaponCharges = {}
+        -- luacheck: push ignore 311
+        local min = {}
+        -- luacheck: pop
+
+        for _, slot in ipairs(weapons) do
+            local charges, maxCharges = getCharges(slot)
+            local pc = GetString(_G.BARSTEWARD_NOT_APPLICABLE)
+            local raw = 101
+
+            if (charges > -1) then
+                raw = math.floor((charges / maxCharges) * 100)
+                pc = string.format("%d%%", raw)
+            end
+
+            local name = BS.Format(GetItemName(_G.BAG_WORN, slot))
+
+            if (name ~= "") then
+                weaponCharges[slot] = {pc = pc, name = name, raw = raw}
+            end
+        end
+
+        if (activeWeaponPair == _G.ACTIVE_WEAPON_PAIR_BACKUP) then
+            min =
+                getMin(
+                weaponCharges,
+                backup,
+                weaponCharges[_G.EQUIP_SLOT_BACKUP_MAIN] or weaponCharges[_G.EQUIP_SLOT_BACKUP_OFF]
+            )
+        else
+            min =
+                getMin(
+                weaponCharges,
+                slots,
+                weaponCharges[_G.EQUIP_SLOT_MAIN_HAND] or weaponCharges[_G.EQUIP_SLOT_OFF_HAND]
+            )
+        end
+
+        local colour = getColour(min.raw, vars)
+
+        widget:SetValue(min.pc)
+        widget:SetColour(unpack(colour))
+
+        local tt = GetString(_G.BARSTEWARD_WEAPON_CHARGE)
+
+        for _, info in pairs(weaponCharges) do
+            local slotColour = BS.ARGBConvert(getColour(info.raw, vars))
+
+            tt = string.format("%s%s%s%s|r - %s", tt, BS.LF, slotColour, info.name, info.pc)
+        end
+
+        widget.tooltip = tt
+
+        return min.raw
+    end,
+    event = {_G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE, _G.EVENT_ACTIVE_WEAPON_PAIR_CHANGED},
+    icon = "/esoui/art/icons/alchemy/crafting_alchemy_trait_weaponcrit_match.dds",
+    tooltip = GetString(_G.BARSTEWARD_WEAPON_CHARGE),
+    onClick = function()
+        if (not IsInGamepadPreferredMode()) then
+            SCENE_MANAGER:Show("inventory")
+        else
+            SCENE_MANAGER:Show("gamepad_inventory_root")
+        end
+    end
+}

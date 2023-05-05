@@ -779,10 +779,10 @@ BS.widgets[BS.W_LOREBOOKS] = {
         local tt = GetString(_G.BARSTEWARD_LOREBOOKS)
 
         for _, category in pairs(categories) do
-            local metrics = category.numKnownBooks .. "/" .. category.totalBooks
+            local metrics = string.format("%d/%d", category.numKnownBooks, category.totalBooks)
 
-            tt = tt .. BS.LF .. "|cf9f9f9"
-            tt = tt .. category.name .. " " .. metrics .. "|r"
+            tt = string.format("%s%s|cf9f9f9", tt, BS.LF)
+            tt = string.format("%s%s|r %s", tt, category.name, metrics)
 
             if (BS.Vars.Controls[this].ShowCategory == category.name) then
                 value = metrics
