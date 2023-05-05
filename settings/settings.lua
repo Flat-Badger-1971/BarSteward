@@ -426,7 +426,7 @@ local function getBarSettings()
                     end
 
                     if (bar) then
-                        bar.ref.checkBackground()
+                        bar.checkBackground()
                     end
                 end,
                 disabled = function()
@@ -464,12 +464,12 @@ local function getBarSettings()
                     if (bar) then
                         if (vars.Border ~= 99) then
                             border = BS.BORDERS[vars.Border]
-                            bar.border:SetEdgeColor(1, 1, 1, 1)
+                            bar.bar.border:SetEdgeColor(1, 1, 1, 1)
                         else
-                            bar.border:SetEdgeColor(0, 0, 0, 0)
+                            bar.bar.border:SetEdgeColor(0, 0, 0, 0)
                         end
 
-                        bar.border:SetEdgeTexture(unpack(border))
+                        bar.bar.border:SetEdgeTexture(unpack(border))
                     end
                 end,
                 disabled = function()

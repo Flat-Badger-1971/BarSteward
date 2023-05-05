@@ -119,10 +119,12 @@ function BS.CreateAlignmentFrame(alignBars)
         for idx, barData in pairs(bars) do
             if (barData.Name == alignBarName and not alignBar) then
                 alignBar = BS.BarObjectPool:GetActiveObject(BS.BarObjects[idx])
+                alignBar.index = idx
             end
 
             if (barData.Name == relBarName and not relBar) then
                 relBar = BS.BarObjectPool:GetActiveObject(BS.BarObjects[idx])
+                relBar.index = idx
             end
         end
 
@@ -138,22 +140,22 @@ function BS.CreateAlignmentFrame(alignBars)
             end
 
             alignBar:ClearAnchors()
-            alignBar:SetAnchor(alignAnchor, relBar, relAnchor, 0, 0, constraint)
+            alignBar:SetAnchor(alignAnchor, relBar.bar, relAnchor, 0, 0, constraint)
 
-            local barAnchor = BS.GetAnchorFromText(BS.Vars.Bars[alignBar.ref.index].Anchor, true)
+            local barAnchor = BS.GetAnchorFromText(BS.Vars.Bars[alignBar.index].Anchor, true)
             local xPos, yPos
 
             if (barAnchor == CENTER) then
-                xPos, yPos = alignBar:GetCenter()
+                xPos, yPos = alignBar.bar:GetCenter()
             elseif (barAnchor == TOPLEFT) then
-                xPos, yPos = alignBar:GetLeft(), alignBar:GetTop()
+                xPos, yPos = alignBar.bar:GetLeft(), alignBar.bar:GetTop()
             elseif (barAnchor == TOPRIGHT) then
-                xPos, yPos = alignBar:GetRight(), alignBar:GetTop()
+                xPos, yPos = alignBar.bar:GetRight(), alignBar.bar:GetTop()
             end
 
             alignBar:ClearAnchors()
             alignBar:SetAnchor(barAnchor, GuiRoot, TOPLEFT, xPos, yPos)
-            BS.Vars.Bars[alignBar.ref.index].Position = {X = xPos, Y = yPos}
+            BS.Vars.Bars[alignBar.index].Position = {X = xPos, Y = yPos}
         end
     end
 
