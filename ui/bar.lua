@@ -61,8 +61,19 @@ function baseBar:Initialise()
 
     self.checkBackground = function()
         local vars = BS.Vars.Bars[self.index]
+        local hasBorder = (vars.Border or 99) ~= 99
 
         self.expand = vars.Expand and self.orientation == "horizontal"
+
+        if (self.expand and hasBorder) then
+            self.bar.border:SetParent(self.bar.expandtlc)
+            self.bar.border:ClearAnchors()
+            self.bar.border:SetAnchorFill()
+        elseif (hasBorder) then
+            self.bar.border:SetParent(self.bar)
+            self.bar.border:ClearAnchors()
+            self.bar.border:SetAnchorFill()
+        end
 
         if ((vars.Background or 99) ~= 99) then
             if (self.expand) then

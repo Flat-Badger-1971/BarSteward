@@ -470,6 +470,7 @@ local function getBarSettings()
                         end
 
                         bar.bar.border:SetEdgeTexture(unpack(border))
+                        bar.checkBackground()
                     end
                 end,
                 disabled = function()
