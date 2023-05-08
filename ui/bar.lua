@@ -60,6 +60,10 @@ function baseBar:Initialise()
     self.bar:SetHandler("OnMouseUp", onMouseUp)
 
     self.checkBackground = function()
+        if (BS.inCombat) then
+            return
+        end
+
         local vars = BS.Vars.Bars[self.index]
         local hasBorder = (vars.Border or 99) ~= 99
 
@@ -200,60 +204,6 @@ function baseBar:Initialise()
 
     -- prevent the bar from displaying when not in hud or hudui modes
     self.bar.fragment = ZO_HUDFadeSceneFragment:New(self.bar)
-
-    -- change the bar's colour during combat if required by the user
-    BS.RegisterForEvent(
-        _G.EVENT_PLAYER_COMBAT_STATE,
-        function(_, inCombat)
-            if (BS.Vars.Bars[self.index].CombatColourChange) then
-                if (inCombat == nil) then
-                    inCombat = IsUnitInCombat("player")
-                end
-
-                if (inCombat) then
-                    if ((self.background or 99) ~= 99) then
-                        if (self.Expand) then
-                            self.bar.expandbackground:SetCenterTexture("")
-                        else
-                            self.bar.background:SetCenterTexture("")
-                        end
-                    end
-
-                    if (self.Expand) then
-                        self.bar.expandbackground:SetCenterColor(
-                            unpack(BS.Vars.Bars[self.index].CombatColour or BS.Vars.DefaultCombatColour)
-                        )
-                    else
-                        self.bar.background:SetCenterColor(
-                            unpack(BS.Vars.Bars[self.index].CombatColour or BS.Vars.DefaultCombatColour)
-                        )
-                    end
-                else
-                    if ((self.background or 99) ~= 99) then
-                        if (self.expand) then
-                            self.bar.expandbackground:SetCenterColor(1, 1, 1, 1)
-                            self.bar.expandbackground:SetCenterTexture(BS.BACKGROUNDS[self.settings.Background])
-                        else
-                            self.bar.background:SetCenterColor(1, 1, 1, 1)
-                            self.bar.background:SetCenterTexture(BS.BACKGROUNDS[self.settings.Background])
-                        end
-                    else
-                        if (self.expand) then
-                            self.bar.expandbackground:SetCenterColor(unpack(self.settings.Backdrop.Colour))
-                        else
-                            self.bar.background:SetCenterColor(unpack(self.settings.Backdrop.Colour))
-                        end
-                    end
-                end
-            else
-                if (self.expand) then
-                    self.bar.expandbackground:SetCenterColor(unpack(self.settings.Backdrop.Colour))
-                else
-                    self.bar.background:SetCenterColor(unpack(self.settings.Backdrop.Colour))
-                end
-            end
-        end
-    )
 end
 
 function baseBar:NudgeCompass()
@@ -281,6 +231,54 @@ function baseBar:SetBackground()
     end
 
     self.bar.background:SetHidden(not self.settings.Backdrop.Show)
+end
+
+function baseBar:SetCombatFunction()
+    -- change the bar's colour during combat if required by the user
+    BS.RegisterForEvent(
+        _G.EVENT_PLAYER_COMBAT_STATE,
+        function()
+            if (BS.Vars.Bars[BS.MAIN_BAR].CombatColourChange) then
+                if (BS.inCombat) then
+                    d("Bar Steward - In Combat")
+                    if ((self.background or 99) ~= 99) then
+                        if (self.expand) then
+                            self.bar.expandbackground:SetCenterTexture("")
+                        else
+                            self.bar.background:SetCenterTexture("")
+                        end
+                    end
+
+                    if (self.expand) then
+                        self.bar.expandbackground:SetCenterColor(
+                            unpack(BS.Vars.Bars[self.index].CombatColour or BS.Vars.DefaultCombatColour)
+                        )
+                    else
+                        self.bar.background:SetCenterColor(
+                            unpack(BS.Vars.Bars[self.index].CombatColour or BS.Vars.DefaultCombatColour)
+                        )
+                    end
+                else
+                    d("Bar Steward - Out of Combat")
+                    if ((self.background or 99) ~= 99) then
+                        if (self.expand) then
+                            self.bar.expandbackground:SetCenterColor(1, 1, 1, 1)
+                            self.bar.expandbackground:SetCenterTexture(BS.BACKGROUNDS[self.settings.Background])
+                        else
+                            self.bar.background:SetCenterColor(1, 1, 1, 1)
+                            self.bar.background:SetCenterTexture(BS.BACKGROUNDS[self.settings.Background])
+                        end
+                    else
+                        if (self.expand) then
+                            self.bar.expandbackground:SetCenterColor(unpack(self.settings.Backdrop.Colour))
+                        else
+                            self.bar.background:SetCenterColor(unpack(self.settings.Backdrop.Colour))
+                        end
+                    end
+                end
+            end
+        end
+    )
 end
 
 function baseBar:SetAnchors()
@@ -787,6 +785,11 @@ function BS.CreateBar(barSettings)
     bar:SetAnchors()
     bar:SetBackground()
     bar:SetBorder()
+
+    if (barSettings.index == BS.MAIN_BAR) then
+        bar:SetCombatFunction()
+    end
+
     bar:NudgeCompass()
     bar:AddToScenes()
     bar:Show()

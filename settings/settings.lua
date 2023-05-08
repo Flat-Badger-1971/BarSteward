@@ -380,7 +380,7 @@ local function getBarSettings()
                 end,
                 setFunc = function(value)
                     vars.Backdrop.Show = value
-                    BS.BarObjectPool:GetActiveObject(BS.BarObjects[idx]).background:SetHidden(not value)
+                    BS.BarObjectPool:GetActiveObject(BS.BarObjects[idx]).bar.background:SetHidden(not value)
                 end,
                 default = BS.Defaults.Bars[1].Backdrop.Show
             },
@@ -392,7 +392,7 @@ local function getBarSettings()
                 end,
                 setFunc = function(r, g, b, a)
                     vars.Backdrop.Colour = {r, g, b, a}
-                    BS.BarObjectPool:GetActiveObject(BS.BarObjects[idx]).background:SetCenterColor(r, g, b, a)
+                    BS.BarObjectPool:GetActiveObject(BS.BarObjects[idx]).bar.background:SetCenterColor(r, g, b, a)
                 end,
                 width = "full",
                 disabled = function()
@@ -538,7 +538,7 @@ local function getBarSettings()
                 setFunc = function(value)
                     vars.Scale = value
 
-                    local barToScale = BS.BarObjectPool:GetActiveObject(BS.BarObjects[idx])
+                    local barToScale = BS.BarObjectPool:GetActiveObject(BS.BarObjects[idx]).bar
 
                     barToScale:SetScale(value * GetUIGlobalScale())
                     barToScale:SetResizeToFitDescendents(false)
