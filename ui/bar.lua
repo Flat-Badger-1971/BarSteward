@@ -240,7 +240,6 @@ function baseBar:SetCombatFunction()
         function()
             if (BS.Vars.Bars[BS.MAIN_BAR].CombatColourChange) then
                 if (BS.inCombat) then
-                    d("Bar Steward - In Combat")
                     if ((self.background or 99) ~= 99) then
                         if (self.expand) then
                             self.bar.expandbackground:SetCenterTexture("")
@@ -259,7 +258,6 @@ function baseBar:SetCombatFunction()
                         )
                     end
                 else
-                    d("Bar Steward - Out of Combat")
                     if ((self.background or 99) ~= 99) then
                         if (self.expand) then
                             self.bar.expandbackground:SetCenterColor(1, 1, 1, 1)
