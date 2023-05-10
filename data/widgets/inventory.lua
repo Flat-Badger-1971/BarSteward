@@ -59,7 +59,8 @@ BS.widgets[BS.W_BAG_SPACE] = {
 
         return pcUsed
     end,
-    event = {_G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE, _G.EVENT_INVENTORY_BAG_CAPACITY_CHANGED, _G.EVENT_PLAYER_ACTIVATED},
+    event = {_G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE, _G.EVENT_INVENTORY_BAG_CAPACITY_CHANGED, _G.EVENT_INVENTORY_FULL_UPDATE},
+    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
     tooltip = BS.Format(_G.SI_GAMEPAD_MAIL_INBOX_INVENTORY):gsub(":", ""),
     icon = "/esoui/art/tooltips/icon_bag.dds",
     onClick = function()
@@ -136,9 +137,9 @@ BS.widgets[BS.W_BANK_SPACE] = {
         _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
         _G.EVENT_CLOSE_BANK,
         _G.EVENT_INVENTORY_BAG_CAPACITY_CHANGED,
-        _G.EVENT_PLAYER_ACTIVATED,
         _G.EVENT_INVENTORY_BANK_CAPACITY_CHANGED
     },
+    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
     tooltip = GetString(_G.BARSTEWARD_BANK),
     icon = "/esoui/art/tooltips/icon_bank.dds"
 }
