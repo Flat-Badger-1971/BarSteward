@@ -59,7 +59,11 @@ BS.widgets[BS.W_BAG_SPACE] = {
 
         return pcUsed
     end,
-    event = {_G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE, _G.EVENT_INVENTORY_BAG_CAPACITY_CHANGED, _G.EVENT_INVENTORY_FULL_UPDATE},
+    event = {
+        _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
+        _G.EVENT_INVENTORY_BAG_CAPACITY_CHANGED,
+        _G.EVENT_INVENTORY_FULL_UPDATE
+    },
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
     tooltip = BS.Format(_G.SI_GAMEPAD_MAIL_INBOX_INVENTORY):gsub(":", ""),
     icon = "/esoui/art/tooltips/icon_bag.dds",
@@ -134,7 +138,6 @@ BS.widgets[BS.W_BANK_SPACE] = {
         return pcUsed
     end,
     event = {
-        _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
         _G.EVENT_CLOSE_BANK,
         _G.EVENT_INVENTORY_BAG_CAPACITY_CHANGED,
         _G.EVENT_INVENTORY_BANK_CAPACITY_CHANGED
@@ -1618,8 +1621,15 @@ BS.widgets[BS.W_FRAGMENTS] = {
         end
 
         tt = tt .. BS.LF .. collectedtt .. BS.LF
-        tt = tt .. GetString(_G.BARSTEWARD_ALREADY_COLLECTED) .. BS.LF .. unnecessarytt .. "|r" .. BS.LF
-        tt = tt .. GetString(_G.BARSTEWARD_NOT_COLLECTED) .. BS.LF .. uncollectedtt .. "|r"
+
+        if (unnecessarytt:len() > 8) then
+            tt = tt .. GetString(_G.BARSTEWARD_ALREADY_COLLECTED) .. BS.LF .. unnecessarytt .. "|r" .. BS.LF
+        end
+
+        if (uncollectedtt:len() > 8) then
+            tt = tt .. GetString(_G.BARSTEWARD_NOT_COLLECTED) .. BS.LF .. uncollectedtt .. "|r"
+        end
+
         widget.tooltip = tt
 
         return collected
@@ -1627,7 +1637,7 @@ BS.widgets[BS.W_FRAGMENTS] = {
     onClick = function()
         COLLECTIONS_BOOK:BrowseToCollectible(BS.CollectibleId)
     end,
-    callback = {[CALLBACK_MANAGER] = {"OnCollectionUpdated"}},
+    callback = {[ZO_COLLECTIBLE_DATA_MANAGER] = {"OnCollectionUpdated"}},
     tooltip = GetString(_G.BARSTEWARD_COLLECTIBLE_FRAGMENTS),
     icon = "/esoui/art/icons/antiquities_u30_museum_fragment07.dds"
 }
@@ -1752,7 +1762,10 @@ BS.widgets[BS.W_RUNEBOXES] = {
         end
 
         tt = tt .. BS.LF .. collectedtt .. "|r" .. BS.LF
-        tt = tt .. GetString(_G.BARSTEWARD_ALREADY_COLLECTED) .. BS.LF .. unnecessarytt .. "|r"
+
+        if (unnecessarytt:len() > 8) then
+            tt = tt .. GetString(_G.BARSTEWARD_ALREADY_COLLECTED) .. BS.LF .. unnecessarytt .. "|r"
+        end
 
         local uncollected = BS.GetNoneCollected(fragmentInfo)
 
