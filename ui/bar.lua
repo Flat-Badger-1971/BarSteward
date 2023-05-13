@@ -156,11 +156,8 @@ function baseBar:Initialise(barSettings)
         function()
             zo_callLater(
                 function()
-                    local height = self.bar:GetHeight()
-                    local newYPos = BS.Vars.Bars[barSettings.index].Position.Y
-
                     self.bar.expandtlc:ClearAnchors()
-                    self.bar.expandtlc:SetAnchor(TOPLEFT, GuiRoot, TOPLEFT, 0, newYPos - (height / 2))
+                    self.bar.expandtlc:SetAnchor(TOPLEFT, GuiRoot, TOPLEFT, 0, self.bar:GetTop())
 
                     self.checkBackground()
                     self.expand = true
