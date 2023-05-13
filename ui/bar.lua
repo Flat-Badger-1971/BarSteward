@@ -138,7 +138,7 @@ function baseBar:Initialise(barSettings)
             self.bar.expandtlc:SetHeight(height)
             self.bar.expandtlc:ClearAnchors()
             self.bar.expandtlc:SetAnchor(RIGHT, GuiRoot, RIGHT)
-            self.bar.expandtlc:SetAnchor(TOPLEFT, GuiRoot, TOPLEFT, 0, y - (height / 2))
+            self.bar.expandtlc:SetAnchor(TOPLEFT, GuiRoot, TOPLEFT, 0, self.bar:GetTop())
         end
     )
 
