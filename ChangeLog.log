@@ -5,6 +5,9 @@ Widget reordering tool ordering method changed to simplify moving widgets throug
 Bug fix for max research times
 Option added to replace the main bar when importing a bar
 
+[color=#ff9900][b]Version: 1.5.10 ---------------[/b][/color]
+Fixed bar expansion anchor offset
+
 [color=#ff9900][b]Version: 1.5.9 ---------------[/b][/color]
 Update bank/bag space on callback as well as events
 
