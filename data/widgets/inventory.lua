@@ -1881,6 +1881,7 @@ BS.widgets[BS.W_RECIPE_WATCH] = {
     onClick = function()
         BS.Vars.FoundRecipes = {}
         BS.Vars.FoundCount = 0
+        ZO_Tooltips_HideTextTooltip()
         BS.RefreshWidget(BS.W_RECIPE_WATCH)
     end
 }
