@@ -231,6 +231,7 @@ ZO_CreateStringId(
 )
 ZO_CreateStringId("BARSTEWARD_PLAYER_EXPERIENCE", "Player Experience")
 ZO_CreateStringId("BARSTEWARD_PLAYER_LOCATION", "Player Location")
+ZO_CreateStringId("BARSTEWARD_PORT_ALL", "All Houses")
 ZO_CreateStringId("BARSTEWARD_PORT_TO_HOUSE", "Port to House")
 ZO_CreateStringId("BARSTEWARD_PORT_TO_HOUSE_DESCRIPTION", "Create a new widget to port to one of your houses")
 ZO_CreateStringId("BARSTEWARD_PORT_TO_HOUSE_LOCATION_ONLY", "Show Location Only")

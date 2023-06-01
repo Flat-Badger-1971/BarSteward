@@ -1988,7 +1988,9 @@ local function getWidgetSettings()
     local ordered = {}
 
     for key, widget in ipairs(widgets) do
-        table.insert(ordered, {key = key, widget = widget})
+        if (not widget.Hidden) then
+            table.insert(ordered, {key = key, widget = widget})
+        end
     end
 
     if (BS.Vars.WidgetSortOrder) then

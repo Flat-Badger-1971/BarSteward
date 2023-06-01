@@ -1363,22 +1363,24 @@ local function getWidgets(barIndex)
 
     -- get the widgets for this bar
     for id, info in ipairs(BS.Vars.Controls) do
-        if (info.Bar == barIndex) then
-            local add = true
+        if (id ~= BS.W_PORT) then
+            if (info.Bar == barIndex) then
+                local add = true
 
-            if (info.Requires) then
-                local requiredLib = info.Requires
+                if (info.Requires) then
+                    local requiredLib = info.Requires
 
-                if (_G[requiredLib] == nil) then
-                    add = false
+                    if (_G[requiredLib] == nil) then
+                        add = false
+                    end
                 end
-            end
 
-            if (add) then
-                local widget = BS.widgets[id]
+                if (add) then
+                    local widget = BS.widgets[id]
 
-                widget.id = id
-                table.insert(widgets, {info.Order, widget})
+                    widget.id = id
+                    table.insert(widgets, {info.Order, widget})
+                end
             end
         end
     end

@@ -279,6 +279,11 @@ local function Initialise()
         BS.LibCK = _G.LibCharacterKnowledge
     end
 
+    -- get a reference to LibCustomMenu if it's installed
+    if(_G.LibCustomMenu) then
+        BS.LCM = _G.LibCustomMenu
+    end
+
     BS.RegisterSettings()
 
     -- create bars

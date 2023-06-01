@@ -1,4 +1,5 @@
 local BS = _G.BarSteward
+local ALL_HOUSES = "/esoui/art/icons/housing_ayl_duc_wayshrine001.dds"
 
 local function getPTFInfo(id)
     if (BS.PTF) then
@@ -54,9 +55,40 @@ function BS.GetHouseFromReferenceId(id)
     end
 end
 
+local function addAllHousesWidget(widgets)
+    local vars = BS.Vars.Controls[BS.W_PORT]
+    local tooltip = GetString(_G.BARSTEWARD_PORT_ALL)
+
+    local widget = {
+        name = "house_1999",
+        update = function(widget)
+            local colour = BS.Vars.Controls[BS.W_PORT].Colour or BS.Vars.DefaultColour
+
+            widget:SetColour(unpack(colour))
+            widget:SetValue(vars.Name, vars.RawName)
+        end,
+        tooltip = tooltip,
+        icon = ALL_HOUSES,
+        onClick = function()
+            -- if (house.ptfName) then
+            --     JumpToSpecificHouse(house.ptfName, id)
+            -- else
+            --     RequestJumpToHouse(id, vars.Outside)
+            -- end
+        end,
+        id = BS.W_PORT
+    }
+
+    table.insert(widgets, {BS.Vars.Controls[BS.W_PORT].Order, widget})
+end
+
 function BS.AddHousingWidgets(idx, widgets)
     if (BS.Vars.HouseWidgets) then
         BS.PTF = _G.PortToFriend
+
+        if (BS.LCM) then
+            --addAllHousesWidget(widgets)
+        end
 
         if (not BS.houses) then
             BS.houses = BS.GetHouses()
@@ -190,6 +222,127 @@ local function addHouseWidget()
     ZO_Dialogs_ShowDialog(BS.Name .. "Reload")
 end
 
+local function addSubmenu(barNames, vars, varId, house, id, controls)
+    local submenuControls = {
+        [1] = {
+            type = "dropdown",
+            name = GetString(_G.BARSTEWARD_BAR),
+            choices = barNames,
+            getFunc = function()
+                local barName = BS.Format(_G.SI_DAMAGETYPE0)
+
+                if (vars.Bar ~= 0) then
+                    barName = BS.Vars.Bars[vars.Bar].Name
+                end
+
+                return barName
+            end,
+            setFunc = function(value)
+                local tbars = BS.Vars.Bars
+                local barNum = 0
+
+                for bnum, bdata in ipairs(tbars) do
+                    if (bdata.Name == value) then
+                        barNum = bnum
+                    end
+                end
+
+                vars.Bar = barNum
+                BS.RegenerateBar(barNum)
+            end,
+            width = "full",
+            default = 0
+        },
+        [2] = {
+            type = "colorpicker",
+            name = GetString(_G.BARSTEWARD_DEFAULT_COLOUR),
+            getFunc = function()
+                return unpack(vars.Colour or BS.Vars.DefaultColour)
+            end,
+            setFunc = function(r, g, b, a)
+                vars.Colour = {r, g, b, a}
+                BS.RefreshWidget(varId)
+            end,
+            width = "full",
+            default = unpack(BS.Vars.DefaultColour)
+        }
+    }
+
+    if (house) then
+        if (house.ptfName == nil) then
+            submenuControls[#submenuControls + 1] = {
+                type = "checkbox",
+                name = BS.Format(_G.SI_HOUSING_BOOK_ACTION_TRAVEL_TO_HOUSE_OUTSIDE),
+                getFunc = function()
+                    return vars.Outside
+                end,
+                setFunc = function(value)
+                    vars.Outside = value
+                end,
+                width = "full",
+                default = false,
+                disabled = function()
+                    return house.ptfName ~= nil
+                end
+            }
+        end
+    end
+
+    if (id < 1999) then
+        submenuControls[#submenuControls + 1] = {
+            type = "editbox",
+            name = GetString(_G.BARSTEWARD_CHANGE),
+            getFunc = function()
+                local name = vars.Name
+
+                name = name:gsub("(%s+[|]t.+[|]t)", "")
+                return name
+            end,
+            setFunc = function(value)
+                vars.RawName = value
+
+                if (vars.Name:find("|t")) then
+                    value = value .. " " .. zo_iconFormat(BS.FRIENDS_ICON, 16, 16)
+                    vars.RawName = vars.RawName .. " XX"
+                end
+
+                vars.Name = value
+
+                if (vars.Bar ~= 0) then
+                    BS.RefreshWidget(1000 + id)
+                end
+            end,
+            isMultiLine = false,
+            width = "half"
+        }
+
+        submenuControls[#submenuControls + 1] = {
+            type = "button",
+            name = GetString(_G.BARSTEWARD_GENERIC_REMOVE),
+            tooltip = GetString(_G.BARSTEWARD_GENERIC_REMOVE_WARNING),
+            func = function()
+                BS.Vars.Controls[1000 + id] = nil
+                BS.Vars.HouseWidgets[id] = nil
+                BS.Vars.HouseBindings[id] = nil
+
+                ZO_Dialogs_ShowDialog(BS.Name .. "Reload")
+            end,
+            requiresReload = true,
+            width = "full"
+        }
+    end
+
+    local icon = house and BS.GetHouseFromReferenceId(id).icon or ALL_HOUSES
+
+    controls[#controls + 1] = {
+        type = "submenu",
+        name = vars.Name,
+        controls = submenuControls,
+        icon = icon,
+        reference = "house_submenu" .. id
+    }
+end
+
 function BS.GetPortToHouseSettings()
     BS.houses = BS.GetHouses()
 
@@ -318,122 +471,16 @@ function BS.GetPortToHouseSettings()
 
         table.insert(barNames, none)
 
+        if (BS.LCM) then
+            addSubmenu(barNames, BS.Vars.Controls[BS.W_PORT], BS.W_PORT, nil, 1999, controls)
+        end
+
         for id, _ in pairs(addedHouses) do
             local varId = 1000 + id
             local vars = BS.Vars.Controls[varId]
             local house = BS.GetHouseFromReferenceId(id)
-            local submenuControls = {
-                [1] = {
-                    type = "dropdown",
-                    name = GetString(_G.BARSTEWARD_BAR),
-                    choices = barNames,
-                    getFunc = function()
-                        local barName = BS.Format(_G.SI_DAMAGETYPE0)
 
-                        if (vars.Bar ~= 0) then
-                            barName = BS.Vars.Bars[vars.Bar].Name
-                        end
-
-                        return barName
-                    end,
-                    setFunc = function(value)
-                        local tbars = BS.Vars.Bars
-                        local barNum = 0
-
-                        for bnum, bdata in ipairs(tbars) do
-                            if (bdata.Name == value) then
-                                barNum = bnum
-                            end
-                        end
-
-                        vars.Bar = barNum
-                        BS.RegenerateBar(barNum)
-                    end,
-                    width = "full",
-                    default = 0
-                },
-                [2] = {
-                    type = "colorpicker",
-                    name = GetString(_G.BARSTEWARD_DEFAULT_COLOUR),
-                    getFunc = function()
-                        return unpack(vars.Colour or BS.Vars.DefaultColour)
-                    end,
-                    setFunc = function(r, g, b, a)
-                        vars.Colour = {r, g, b, a}
-                        BS.RefreshWidget(varId)
-                    end,
-                    width = "full",
-                    default = unpack(BS.Vars.DefaultColour)
-                }
-            }
-
-            if (house.ptfName == nil) then
-                submenuControls[#submenuControls + 1] = {
-                    type = "checkbox",
-                    name = BS.Format(_G.SI_HOUSING_BOOK_ACTION_TRAVEL_TO_HOUSE_OUTSIDE),
-                    getFunc = function()
-                        return vars.Outside
-                    end,
-                    setFunc = function(value)
-                        vars.Outside = value
-                    end,
-                    width = "full",
-                    default = false,
-                    disabled = function()
-                        return house.ptfName ~= nil
-                    end
-                }
-            end
-
-            submenuControls[#submenuControls + 1] = {
-                type = "editbox",
-                name = GetString(_G.BARSTEWARD_CHANGE),
-                getFunc = function()
-                    local name = vars.Name
-
-                    name = name:gsub("(%s+[|]t.+[|]t)", "")
-                    return name
-                end,
-                setFunc = function(value)
-                    vars.RawName = value
-
-                    if (vars.Name:find("|t")) then
-                        value = value .. " " .. zo_iconFormat(BS.FRIENDS_ICON, 16, 16)
-                        vars.RawName = vars.RawName .. " XX"
-                    end
-
-                    vars.Name = value
-
-                    if (vars.Bar ~= 0) then
-                        BS.RefreshWidget(1000 + id)
-                    end
-                end,
-                isMultiLine = false,
-                width = "half"
-            }
-
-            submenuControls[#submenuControls + 1] = {
-                type = "button",
-                name = GetString(_G.BARSTEWARD_GENERIC_REMOVE),
-                tooltip = GetString(_G.BARSTEWARD_GENERIC_REMOVE_WARNING),
-                func = function()
-                    BS.Vars.Controls[1000 + id] = nil
-                    BS.Vars.HouseWidgets[id] = nil
-                    BS.Vars.HouseBindings[id] = nil
-
-                    ZO_Dialogs_ShowDialog(BS.Name .. "Reload")
-                end,
-                requiresReload = true,
-                width = "full"
-            }
-
-            controls[#controls + 1] = {
-                type = "submenu",
-                name = vars.Name,
-                controls = submenuControls,
-                icon = BS.GetHouseFromReferenceId(id).icon,
-                reference = "house_submenu" .. id
-            }
+            addSubmenu(barNames, vars, varId, house, id, controls)
         end
     end
 
