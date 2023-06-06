@@ -480,7 +480,6 @@ BS.Defaults = {
             ColourValues = "okc,wv,wc,dv,dc",
             DangerValue = 10,
             WarningValue = 25
-        },
-        [BS.W_PORT] = {Bar = 0, Order = 95, ColourValues = "c", Hidden = true, Name=GetString(_G.BARSTEWARD_PORT_ALL) }
+        }
     }
 }

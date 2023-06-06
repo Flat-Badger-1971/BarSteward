@@ -6,7 +6,7 @@
 ## Version: 2.0.0
 ## SavedVariables: BarStewardSavedVars
 ## DependsOn: LibSavedVars>=60007 LibAddonMenu-2.0>=33
-## OptionalDependsOn: BanditsUserInterface WritWorthy>=70302 LibClockTST LibCombat>=62 PortToFriendsHouse>=92 LibCharacterKnowledge>=16 Taneth>=21 LibCustomMenu>=721
+## OptionalDependsOn: BanditsUserInterface WritWorthy>=70302 LibClockTST LibCombat>=62 PortToFriendsHouse>=92 LibCharacterKnowledge>=16 Taneth>=21
 
 # DISCLAIMER:
 #

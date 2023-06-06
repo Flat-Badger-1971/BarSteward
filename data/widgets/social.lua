@@ -219,14 +219,18 @@ BS.widgets[BS.W_GUILD_FRIENDS] = {
 
             local info = findDataByDisplayName(member)
 
-            if (info.online) then
-                table.insert(online, info)
-                oCount = oCount + 1
-            elseif (info.status == _G.PLAYER_STATUS_OFFLINE) then
-                table.insert(offline, info)
-            else
-                table.insert(other, info)
-                oCount = oCount + 1
+            if (info) then
+                if (info.online) then
+                    table.insert(online, info)
+                    oCount = oCount + 1
+                elseif (info.status == _G.PLAYER_STATUS_OFFLINE) then
+                    table.insert(offline, info)
+                else
+                    table.insert(other, info)
+                    oCount = oCount + 1
+                end
+
+                tCount = tCount + 1
             end
 
             tCount = tCount + 1

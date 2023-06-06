@@ -55,40 +55,9 @@ function BS.GetHouseFromReferenceId(id)
     end
 end
 
-local function addAllHousesWidget(widgets)
-    local vars = BS.Vars.Controls[BS.W_PORT]
-    local tooltip = GetString(_G.BARSTEWARD_PORT_ALL)
-
-    local widget = {
-        name = "house_1999",
-        update = function(widget)
-            local colour = BS.Vars.Controls[BS.W_PORT].Colour or BS.Vars.DefaultColour
-
-            widget:SetColour(unpack(colour))
-            widget:SetValue(vars.Name, vars.RawName)
-        end,
-        tooltip = tooltip,
-        icon = ALL_HOUSES,
-        onClick = function()
-            -- if (house.ptfName) then
-            --     JumpToSpecificHouse(house.ptfName, id)
-            -- else
-            --     RequestJumpToHouse(id, vars.Outside)
-            -- end
-        end,
-        id = BS.W_PORT
-    }
-
-    table.insert(widgets, {BS.Vars.Controls[BS.W_PORT].Order, widget})
-end
-
 function BS.AddHousingWidgets(idx, widgets)
     if (BS.Vars.HouseWidgets) then
         BS.PTF = _G.PortToFriend
-
-        if (BS.LCM) then
-            --addAllHousesWidget(widgets)
-        end
 
         if (not BS.houses) then
             BS.houses = BS.GetHouses()
@@ -470,10 +439,6 @@ function BS.GetPortToHouseSettings()
         end
 
         table.insert(barNames, none)
-
-        if (BS.LCM) then
-            addSubmenu(barNames, BS.Vars.Controls[BS.W_PORT], BS.W_PORT, nil, 1999, controls)
-        end
 
         for id, _ in pairs(addedHouses) do
             local varId = 1000 + id

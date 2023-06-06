@@ -943,6 +943,8 @@ function BS.ShowGrid(showGrid)
 
         BS.Grid:SetHidden(false)
     else
-        BS.Grid:SetHidden(true)
+        if (BS.Grid) then
+            BS.Grid:SetHidden(true)
+        end
     end
 end
