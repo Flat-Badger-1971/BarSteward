@@ -414,7 +414,9 @@ BS.widgets[BS.W_LEADS] = {
                 BS.Vars.Controls[BS.W_LEADS].ShowCount = value
                 BS.RefreshWidget(BS.W_LEADS)
             end,
-            disabled = function() return BS.Vars.Controls[BS.W_LEADS].HideTimer end,
+            disabled = function()
+                return BS.Vars.Controls[BS.W_LEADS].HideTimer
+            end,
             default = false
         },
         [2] = {
@@ -726,8 +728,8 @@ BS.widgets[BS.W_LFG_TIME] = {
 
 local function updateLoreBooks()
     local bypass =
-        BS.Vars.Controls[BS.W_LOREBOOKS].Bar + BS.Vars.Controls[BS.W_LOREBOOKS].Bar +
-        BS.Vars.Controls[BS.W_LOREBOOKS].Bar ==
+        BS.Vars.Controls[BS.W_LOREBOOKS].Bar + BS.Vars.Controls[BS.W_SHALIDORS_LIBRARY].Bar +
+        BS.Vars.Controls[BS.W_CRAFTING_MOTIFS].Bar ==
         0
 
     if (bypass) then

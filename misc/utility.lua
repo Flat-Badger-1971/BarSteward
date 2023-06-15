@@ -642,9 +642,11 @@ function BS.RefreshBar(widgetIndex)
         local widget = BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[widgetIndex])
 
         if (widget ~= nil) then
-            local bar = widget.ref.control:GetParent().ref
+            local barIndex = BS.Vars.Controls[widgetIndex].Bar
+            local bar = BS.BarObjectPool:GetActiveObject(BS.BarObjects[barIndex])
             local metadata = BS.widgets[widgetIndex]
-            metadata.widget = widget.ref
+
+            metadata.widget = widget
             bar:DoUpdate(metadata)
         end
     end
