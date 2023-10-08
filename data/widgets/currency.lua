@@ -10,7 +10,7 @@ local function getcrownStoreCurrencies(invert)
                     crownStoreInfo = crownStoreInfo .. BS.LF
                 end
 
-                local amount = GetCurrencyAmount(currencyType, _G.CURRENCY_LOCATION_ACCOUNT)
+                local amount = GetCurrencyAmount(currencyType, GetCurrencyPlayerStoredLocation(currencyType))
                 local icon = info.icon
 
                 if (not icon:find(".dds")) then
@@ -331,7 +331,7 @@ BS.widgets[BS.W_SEALS_OF_ENDEAVOUR] = {
 
         return widget:GetValue()
     end,
-    event = {_G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED, _G.EVENT_CROWN_UPDATE, _G.EVENT_CROWN_GEM_UPDATE},
+    event = {_G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED, _G.EVENT_CURRENCY_UPDATE},
     tooltip = BS.Format(_G.SI_CROWN_STORE_MENU_SEALS_STORE_LABEL),
     icon = "/esoui/art/currency/currency_seals_of_endeavor_64.dds",
     onClick = function()
@@ -436,7 +436,7 @@ BS.widgets[BS.W_UNDAUNTED_KEYS] = {
 
         return widget:GetValue()
     end,
-    event = _G.EVENT_QUEST_COMPLETE_DIALOG,
+    event = {_G.EVENT_CURRENCY_UPDATE, _G.EVENT_QUEST_COMPLETE_DIALOG},
     tooltip = GetString(_G.BARSTEWARD_UNDAUNTED_KEYS),
     icon = "/esoui/art/icons/quest_key_002.dds"
 }

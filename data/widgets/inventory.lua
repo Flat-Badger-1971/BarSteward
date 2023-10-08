@@ -1842,11 +1842,17 @@ end
 BS.widgets[BS.W_RECIPE_WATCH] = {
     -- v1.4.50
     name = "recipeWatch",
-    update = function(widget, event, _, itemName, quantity, _, _, _, _, _, itemId)
+    update = function(widget, event, receivedBy, itemName, quantity, _, _, _, _, _, itemId)
         local this = BS.W_RECIPE_WATCH
         local link = BS.MakeItemLink(itemId, itemName)
         local itemType = GetItemLinkItemType(link)
         local vars = BS.Vars.Controls[this]
+        local lootedBy = ZO_CachedStrFormat("<<C:1>>", receivedBy)
+        local player = GetUnitName("player")
+
+        if (player ~= lootedBy) then
+            return 0
+        end
 
         if (not BS.Vars.FoundRecipes) then
             BS.Vars.FoundRecipes = {}

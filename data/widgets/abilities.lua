@@ -11,7 +11,7 @@ local iconPaths = {
 }
 
 local ignoreTypes = {
-    [_G.INSTANCE_DISPLAY_TYPE_NONE] = true,
+   -- [_G.INSTANCE_DISPLAY_TYPE_NONE] = true,
     [_G.INSTANCE_DISPLAY_TYPE_HOUSING] = true,
     [_G.INSTANCE_DISPLAY_TYPE_ZONE_STORY] = true
 }
