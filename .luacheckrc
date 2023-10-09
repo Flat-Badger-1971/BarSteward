@@ -284,6 +284,7 @@ read_globals = {
     "GetCompanionCollectibleId",
     "GetCompanionName",
     "GetCurrencyAmount",
+    "GetCurrencyPlayerStoredLocation",
     "GetEarnedAchievementPoints",
     "GetEmoteInfo",
     "GetFenceLaunderTransactionInfo",

@@ -15,6 +15,7 @@ ZO_CreateStringId("BARSTEWARD_ANNOUNCEMENT", "Show Warning Announcement")
 ZO_CreateStringId("BARSTEWARD_ANNOUNCEMENT_FRIEND", "Show Friend Online Announcement")
 ZO_CreateStringId("BARSTEWARD_ANNOUNCEMENT_FRIEND_GUILD", "Show Guild Friend Online Announcement")
 ZO_CreateStringId("BARSTEWARD_ANNOUNCEMENTS", "Announcements")
+ZO_CreateStringId("BARSTEWARD_ARCHIVAL_FRAGMENTS", "Archival Fragments")
 ZO_CreateStringId("BARSTEWARD_AUTOHIDE", "Autohide")
 ZO_CreateStringId(
     "BARSTEWARD_AUTOHIDE_TOOLTIP",
@@ -67,6 +68,7 @@ ZO_CreateStringId("BARSTEWARD_COMBAT_COLOUR", "Change Colour During Combat")
 ZO_CreateStringId("BARSTEWARD_COMBAT_COLOUR_BACKDROP", "Combat Backdrop Colour")
 ZO_CreateStringId("BARSTEWARD_COMPLETED", "Completed")
 ZO_CreateStringId("BARSTEWARD_COMPANION_LEVEL", "Active Companion Level")
+ZO_CreateStringId("BARSTEWARD_COMPANION_WIDGET", "Companion - <<1>>")
 ZO_CreateStringId("BARSTEWARD_CONDITION", "Condition")
 ZO_CreateStringId("BARSTEWARD_CONFIGURE", "Configure")
 ZO_CreateStringId(

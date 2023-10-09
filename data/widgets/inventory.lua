@@ -3,7 +3,8 @@ local BS = _G.BarSteward
 BS.widgets[BS.W_BAG_SPACE] = {
     name = "bagSpace",
     update = function(widget, _, _, _, newItem)
-        local vars = BS.Vars.Controls[BS.W_BAG_SPACE]
+        local this = BS.W_BAG_SPACE
+        local vars = BS.Vars.Controls[this]
         local bagSize = GetBagSize(_G.BAG_BACKPACK)
         local bagUsed = GetNumBagUsedSlots(_G.BAG_BACKPACK)
         local noLimitColour = vars.NoLimitColour and "|cf9f9f9" or ""
@@ -19,7 +20,7 @@ BS.widgets[BS.W_BAG_SPACE] = {
 
             if (vars.Announce and newItem) then
                 local announce = true
-                local previousTime = BS.Vars.PreviousAnnounceTime[BS.W_BAG_SPACE] or (os.time() - 301)
+                local previousTime = BS.Vars.PreviousAnnounceTime[this] or (os.time() - 301)
                 local debounceTime = (vars.DebounceTime or 5) * 60
 
                 if (os.time() - previousTime <= debounceTime) then
@@ -27,8 +28,8 @@ BS.widgets[BS.W_BAG_SPACE] = {
                 end
 
                 if (announce == true) then
-                    BS.Vars.PreviousAnnounceTime[BS.W_BAG_SPACE] = os.time()
-                    BS.Announce(GetString(_G.BARSTEWARD_WARNING), GetString(_G.BARSTEWARD_WARNING_BAGS), BS.W_BAG_SPACE)
+                    BS.Vars.PreviousAnnounceTime[this] = os.time()
+                    BS.Announce(GetString(_G.BARSTEWARD_WARNING), GetString(_G.BARSTEWARD_WARNING_BAGS), this)
                 end
             end
         elseif (pcUsed >= vars.DangerValue) then
@@ -58,7 +59,11 @@ BS.widgets[BS.W_BAG_SPACE] = {
 
         return pcUsed
     end,
-    event = {_G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE, _G.EVENT_INVENTORY_BAG_CAPACITY_CHANGED, _G.EVENT_INVENTORY_FULL_UPDATE},
+    event = {
+        _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
+        _G.EVENT_INVENTORY_BAG_CAPACITY_CHANGED,
+        _G.EVENT_INVENTORY_FULL_UPDATE
+    },
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
     tooltip = BS.Format(_G.SI_GAMEPAD_MAIL_INBOX_INVENTORY):gsub(":", ""),
     icon = "/esoui/art/tooltips/icon_bag.dds",
@@ -133,7 +138,6 @@ BS.widgets[BS.W_BANK_SPACE] = {
         return pcUsed
     end,
     event = {
-        _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
         _G.EVENT_CLOSE_BANK,
         _G.EVENT_INVENTORY_BAG_CAPACITY_CHANGED,
         _G.EVENT_INVENTORY_BANK_CAPACITY_CHANGED
@@ -147,14 +151,15 @@ BS.widgets[BS.W_REPAIR_COST] = {
     name = "itemRepairCost",
     update = function(widget, _, _, _, _, _, updateReason)
         if (updateReason == nil or updateReason == _G.INVENTORY_UPDATE_REASON_DURABILITY_CHANGE) then
+            local this = BS.W_REPAIR_COST
             local repairCost = GetRepairAllCost()
 
-            if (BS.Vars.Controls[BS.W_REPAIR_COST].UseSeparators == true) then
+            if (BS.Vars.Controls[this].UseSeparators == true) then
                 repairCost = BS.AddSeparators(repairCost)
             end
 
             widget:SetValue(repairCost)
-            widget:SetColour(unpack(BS.Vars.Controls[BS.W_REPAIR_COST].Colour or BS.Vars.DefaultColour))
+            widget:SetColour(unpack(BS.Vars.Controls[this].Colour or BS.Vars.DefaultColour))
 
             return repairCost
         end
@@ -643,8 +648,9 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
     -- v1.3.14
     name = "itemWatcher",
     update = function(widget)
+        local this = BS.W_WATCHED_ITEMS
         local itemIds = BS.Vars.WatchedItems
-        local vars = BS.Vars.Controls[BS.W_WATCHED_ITEMS]
+        local vars = BS.Vars.Controls[this]
 
         for itemId, _ in pairs(itemIds) do
             if (not linkCache[itemId]) then
@@ -722,7 +728,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
             end
         end
 
-        local barNumber = BS.Vars.Controls[BS.W_WATCHED_ITEMS].Bar
+        local barNumber = BS.Vars.Controls[this].Bar
         local iconSize =
             BS.Vars.Bars[barNumber].Override and (BS.Vars.Bars[barNumber].IconSize or BS.Vars.IconSize) or
             BS.Vars.IconSize
@@ -763,7 +769,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
 
                 if (itemCount > previousCounts[itemId]) then
                     local announce = true
-                    local previousTime = BS.Vars.PreviousAnnounceTime[BS.W_WATCHED_ITEMS] or (os.time() - 301)
+                    local previousTime = BS.Vars.PreviousAnnounceTime[this] or (os.time() - 301)
                     local debounceTime = (vars.DebounceTime or 5) * 60
 
                     if (os.time() - previousTime <= debounceTime) then
@@ -771,7 +777,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
                     end
 
                     if (announce == true) then
-                        BS.Vars.PreviousAnnounceTime[BS.W_WATCHED_ITEMS] = os.time()
+                        BS.Vars.PreviousAnnounceTime[this] = os.time()
 
                         -- need a short delay so the announcement doesn't get quashed by any animations
                         if (itemId == BS.PERFECT_ROE) then
@@ -787,7 +793,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
                                     BS.Announce(
                                         GetString(_G.BARSTEWARD_WATCHED_ITEM_ALERT),
                                         BS.delayedAnnouncement.message,
-                                        BS.W_WATCHED_ITEMS,
+                                        this,
                                         nil,
                                         nil,
                                         BS.delayedAnnouncement.icon
@@ -799,7 +805,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
                             BS.Announce(
                                 GetString(_G.BARSTEWARD_WATCHED_ITEM_ALERT),
                                 zo_strformat(GetString(_G.BARSTEWARD_WATCHED_ITEM_MESSAGE), linkCache[itemId].name),
-                                BS.W_WATCHED_ITEMS,
+                                this,
                                 nil,
                                 nil,
                                 linkCache[itemId].icon
@@ -1056,6 +1062,7 @@ local function randomOnClick(collectibleTable, widgetIndex)
         local name = BS.Format(GetCollectibleName(collectibleId))
 
         local tt = BS.widgets[widgetIndex].tooltip .. BS.LF
+
         tt = tt .. "|cf9f9f9" .. GetString(_G.BARSTEWARD_RANDOM_RECENT) .. "|r" .. BS.LF
         tt = tt .. "|cffd700" .. name
 
@@ -1180,6 +1187,7 @@ BS.widgets[BS.W_RANDOM_EMOTE] = {
 
             local widget = _G[BS.Name .. "_Widget_" .. BS.widgets[BS.W_RANDOM_EMOTE].name].ref
             local tt = BS.widgets[BS.W_RANDOM_EMOTE].tooltip .. BS.LF
+
             tt = tt .. "|cf9f9f9" .. GetString(_G.BARSTEWARD_RANDOM_RECENT) .. "|r" .. BS.LF
             tt = tt .. "|cffd700" .. displayName
 
@@ -1631,8 +1639,15 @@ BS.widgets[BS.W_FRAGMENTS] = {
         end
 
         tt = tt .. BS.LF .. collectedtt .. BS.LF
-        tt = tt .. GetString(_G.BARSTEWARD_ALREADY_COLLECTED) .. BS.LF .. unnecessarytt .. "|r" .. BS.LF
-        tt = tt .. GetString(_G.BARSTEWARD_NOT_COLLECTED) .. BS.LF .. uncollectedtt .. "|r"
+
+        if (unnecessarytt:len() > 8) then
+            tt = tt .. GetString(_G.BARSTEWARD_ALREADY_COLLECTED) .. BS.LF .. unnecessarytt .. "|r" .. BS.LF
+        end
+
+        if (uncollectedtt:len() > 8) then
+            tt = tt .. GetString(_G.BARSTEWARD_NOT_COLLECTED) .. BS.LF .. uncollectedtt .. "|r"
+        end
+
         widget.tooltip = tt
 
         return collected
@@ -1640,7 +1655,7 @@ BS.widgets[BS.W_FRAGMENTS] = {
     onClick = function()
         COLLECTIONS_BOOK:BrowseToCollectible(BS.CollectibleId)
     end,
-    callback = {[CALLBACK_MANAGER] = {"OnCollectionUpdated"}},
+    callback = {[ZO_COLLECTIBLE_DATA_MANAGER] = {"OnCollectionUpdated"}},
     tooltip = GetString(_G.BARSTEWARD_COLLECTIBLE_FRAGMENTS),
     icon = "/esoui/art/icons/antiquities_u30_museum_fragment07.dds"
 }
@@ -1765,7 +1780,10 @@ BS.widgets[BS.W_RUNEBOXES] = {
         end
 
         tt = tt .. BS.LF .. collectedtt .. "|r" .. BS.LF
-        tt = tt .. GetString(_G.BARSTEWARD_ALREADY_COLLECTED) .. BS.LF .. unnecessarytt .. "|r"
+
+        if (unnecessarytt:len() > 8) then
+            tt = tt .. GetString(_G.BARSTEWARD_ALREADY_COLLECTED) .. BS.LF .. unnecessarytt .. "|r"
+        end
 
         local uncollected = BS.GetNoneCollected(fragmentInfo)
 
@@ -1824,10 +1842,17 @@ end
 BS.widgets[BS.W_RECIPE_WATCH] = {
     -- v1.4.50
     name = "recipeWatch",
-    update = function(widget, event, _, itemName, quantity, _, _, _, _, _, itemId)
+    update = function(widget, event, receivedBy, itemName, quantity, _, _, _, _, _, itemId)
+        local this = BS.W_RECIPE_WATCH
         local link = BS.MakeItemLink(itemId, itemName)
         local itemType = GetItemLinkItemType(link)
-        local vars = BS.Vars.Controls[BS.W_RECIPE_WATCH]
+        local vars = BS.Vars.Controls[this]
+        local lootedBy = ZO_CachedStrFormat("<<C:1>>", receivedBy)
+        local player = GetUnitName("player")
+
+        if (player ~= lootedBy) then
+            return 0
+        end
 
         if (not BS.Vars.FoundRecipes) then
             BS.Vars.FoundRecipes = {}
@@ -1858,11 +1883,11 @@ BS.widgets[BS.W_RECIPE_WATCH] = {
             local icolour = GetItemQualityColor(displayQuality)
             local iname = icolour:Colorize(BS.Format(itemName))
 
-            BS.Vars.PreviousAnnounceTime[BS.W_RECIPE_WATCH] = os.time()
+            BS.Vars.PreviousAnnounceTime[this] = os.time()
             BS.Announce(
                 GetString(_G.BARSTEWARD_RECIPES),
                 zo_strformat(GetString(_G.BARSTEWARD_WATCHED_ITEM_MESSAGE), iname),
-                BS.W_WATCHED_ITEMS
+                this
             )
         end
 

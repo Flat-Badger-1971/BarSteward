@@ -15,6 +15,7 @@ ZO_CreateStringId("BARSTEWARD_ANNOUNCEMENT", "Zeige Warnungen")
 ZO_CreateStringId("BARSTEWARD_ANNOUNCEMENT_FRIEND", "Zeige Online Freunde")
 ZO_CreateStringId("BARSTEWARD_ANNOUNCEMENT_FRIEND_GUILD", "Zeige Online Gildenfreunde")
 ZO_CreateStringId("BARSTEWARD_ANNOUNCEMENTS", "Anzeigen")
+ZO_CreateStringId("BARSTEWARD_ARCHIVAL_FRAGMENTS", "Archival Fragments")
 ZO_CreateStringId("BARSTEWARD_AUTOHIDE", "Automatisch verstecken")
 ZO_CreateStringId(
     "BARSTEWARD_AUTOHIDE_TOOLTIP",
@@ -67,6 +68,7 @@ ZO_CreateStringId("BARSTEWARD_COMBAT_COLOUR", "Wechsele die Farbe während des K
 ZO_CreateStringId("BARSTEWARD_COMBAT_COLOUR_BACKDROP", "Hintergrundfarbe während des Kampfes")
 ZO_CreateStringId("BARSTEWARD_COMPLETED", "Beendet")
 ZO_CreateStringId("BARSTEWARD_COMPANION_LEVEL", "Aktiver Gefährten Level")
+ZO_CreateStringId("BARSTEWARD_COMPANION_WIDGET", "Gefährten - <<1>>")
 ZO_CreateStringId("BARSTEWARD_CONDITION", "Zustand")
 ZO_CreateStringId("BARSTEWARD_CONFIGURE", "Einrichten")
 ZO_CreateStringId(
@@ -109,7 +111,10 @@ ZO_CreateStringId("BARSTEWARD_ENABLE_CONDITIONAL", "Ermögliche konditionale Lei
 ZO_CreateStringId("BARSTEWARD_EQUIPPED_POISON", "Ausgerüstetes Gift")
 ZO_CreateStringId("BARSTEWARD_EVENT_TICKETS", "Ereignisscheine")
 ZO_CreateStringId("BARSTEWARD_EXPAND", "Erweitere Leiste auf die volle Bildschirmbreite")
-ZO_CreateStringId("BARSTEWARD_EXPAND_TOOLTIP", "Funktioniert nur mit waagerechten Leisten und beeinflusst nicht den Widget Abstand.")
+ZO_CreateStringId(
+    "BARSTEWARD_EXPAND_TOOLTIP",
+    "Funktioniert nur mit waagerechten Leisten und beeinflusst nicht den Widget Abstand."
+)
 ZO_CreateStringId("BARSTEWARD_EXPORT", "Export")
 ZO_CreateStringId("BARSTEWARD_EXPORT_BAR", "Export Leiste")
 ZO_CreateStringId("BARSTEWARD_FENCE", "Hehler - Verkaufstransaktionen")
@@ -153,7 +158,10 @@ ZO_CreateStringId(
     "Verstecke wenn keine Eigenschaft mehr für diesen Handwerkstyp erforscht werden kann. Diese Einstellung überschreibt alle 'autom. verstecken' Einstellungen."
 )
 ZO_CreateStringId("BARSTEWARD_HIDE_WHEN_FULLY_USED", "Verstecke von vollständig genutzt")
-ZO_CreateStringId("BARSTEWARD_HIDE_WHEN_FULLY_USED_TOOLTIP","Verstecke wenn alle verfügbaren Optionen in Benutzung sind")
+ZO_CreateStringId(
+    "BARSTEWARD_HIDE_WHEN_FULLY_USED_TOOLTIP",
+    "Verstecke wenn alle verfügbaren Optionen in Benutzung sind"
+)
 ZO_CreateStringId("BARSTEWARD_HORIZONTAL", "Horizontal")
 ZO_CreateStringId("BARSTEWARD_HOURS", "Stunden")
 ZO_CreateStringId("BARSTEWARD_IMPORT", "Import")
@@ -164,7 +172,10 @@ ZO_CreateStringId("BARSTEWARD_IMPORT_ERROR_WIDGET", "Fehlende Widget Information
 ZO_CreateStringId("BARSTEWARD_IMPORT_ERROR_WIDGET_OR_BAR", "Fehlende Leisten- oder Widget Information")
 ZO_CreateStringId("BARSTEWARD_IN_PROGRESS", "im Gange")
 ZO_CreateStringId("BARSTEWARD_INVERT", "Drehe Warnung/Gefahr Logik")
-ZO_CreateStringId("BARSTEWARD_INVERT_TOOLTIP", "Ändere die Logik, sodass Werte höher als diese den Farbwechsel auslösen. Das Standard Verhalten ist, daß niedrigere Werte den Wechsel auslösen.")
+ZO_CreateStringId(
+    "BARSTEWARD_INVERT_TOOLTIP",
+    "Ändere die Logik, sodass Werte höher als diese den Farbwechsel auslösen. Das Standard Verhalten ist, daß niedrigere Werte den Wechsel auslösen."
+)
 ZO_CreateStringId("BARSTEWARD_ITEM_EXISTS", "Dieses Teil wurde bereits zur Beobachtungsliste hinzugefügt.")
 ZO_CreateStringId("BARSTEWARD_ITEM_ID", "Teilenummer")
 ZO_CreateStringId("BARSTEWARD_ITEM_INVALID", "Ungültige Teilenummer")
@@ -186,14 +197,20 @@ ZO_CreateStringId("BARSTEWARD_MEMORY", "Speichernutzung")
 ZO_CreateStringId("BARSTEWARD_MIDDLE", "Mitte")
 ZO_CreateStringId("BARSTEWARD_MINUTES", "Minuten")
 ZO_CreateStringId("BARSTEWARD_MOUNT_TRAINING", "Zeit - Reittraining")
-ZO_CreateStringId("BARSTEWARD_MOVE_WIDGETS", "Diese Leiste hat <<1[keine Widgets/1 Widget/$d Widgets]>> die auf die neue Leiste übertragen werden. Möchtest Du fortfahren?")
+ZO_CreateStringId(
+    "BARSTEWARD_MOVE_WIDGETS",
+    "Diese Leiste hat <<1[keine Widgets/1 Widget/$d Widgets]>> die auf die neue Leiste übertragen werden. Möchtest Du fortfahren?"
+)
 ZO_CreateStringId("BARSTEWARD_MOVEFRAME", "Bewegbare Leisten")
 ZO_CreateStringId("BARSTEWARD_MPH", "mph (Meilen pro Stunde)")
 ZO_CreateStringId("BARSTEWARD_NEW_BAR", "Erzeuge neue Leiste")
 ZO_CreateStringId("BARSTEWARD_NEW_BAR_DEFAULT_NAME", "Neue Leiste <<1>>")
 ZO_CreateStringId("BARSTEWARD_NEWBAR_ADD", "Erzeuge neue Leiste")
 ZO_CreateStringId("BARSTEWARD_NEWBAR_BLANK", "Der Leistename kann nicht leer sein.")
-ZO_CreateStringId("BARSTEWARD_NEWBAR_EXISTS","Dieser Leistenname wird bereits verwendet, bitte wähle einen anderen Namen.")
+ZO_CreateStringId(
+    "BARSTEWARD_NEWBAR_EXISTS",
+    "Dieser Leistenname wird bereits verwendet, bitte wähle einen anderen Namen."
+)
 ZO_CreateStringId("BARSTEWARD_NEWBAR_INVALID", "Ungültiger Leistenname")
 ZO_CreateStringId("BARSTEWARD_NEWBAR_NAME", "Neuer Leistenname (mit Enter bestätigen)")
 ZO_CreateStringId("BARSTEWARD_NEWBAR_WARNING", "Das Anlegen einer neuen Leiste erzwingt ein Neuladen der Oberfläche")
@@ -232,15 +249,18 @@ ZO_CreateStringId(
 ZO_CreateStringId("BARSTEWARD_PLAYER_EXPERIENCE", "Spieler Erfahrung")
 ZO_CreateStringId("BARSTEWARD_PLAYER_LOCATION", "Spieler Ort")
 ZO_CreateStringId("BARSTEWARD_PORT_TO_HOUSE", "Springe zum Haus")
-ZO_CreateStringId("BARSTEWARD_PORT_TO_HOUSE_DESCRIPTION", "Erzeugt ein neues Widget um zu einem Eurer Häuser zu springen")
+ZO_CreateStringId(
+    "BARSTEWARD_PORT_TO_HOUSE_DESCRIPTION",
+    "Erzeugt ein neues Widget um zu einem Eurer Häuser zu springen"
+)
 ZO_CreateStringId("BARSTEWARD_PORT_TO_HOUSE_LOCATION_ONLY", "Zeige nur die Lage")
 ZO_CreateStringId("BARSTEWARD_PORT_TO_HOUSE_LOCATION_TOO", "Zeige auch die Lage")
 ZO_CreateStringId(
-    "BARSTEWARD_PORT_TO_HOUSE_PTF", 
+    "BARSTEWARD_PORT_TO_HOUSE_PTF",
     "Sprung zu eimen Haus eines Freundes hat <<1>> am Widgetnamen angehängt."
 )
 ZO_CreateStringId(
-    "BARSTEWARD_PORT_TO_HOUSE_PTF_INFO", 
+    "BARSTEWARD_PORT_TO_HOUSE_PTF_INFO",
     "Neu hinzugefügte Häuser erfordern ein Neuladen der Oberfläche bevor sie hier erscheinen."
 )
 ZO_CreateStringId("BARSTEWARD_PORT_TO_HOUSE_PREVIEW", "Vorschau")
@@ -254,7 +274,7 @@ ZO_CreateStringId("BARSTEWARD_PROGRESS_GRADIENT_END", "Gradient Ende")
 ZO_CreateStringId("BARSTEWARD_PROGRESS_GRADIENT_START", "Gradient Start")
 ZO_CreateStringId("BARSTEWARD_PROGRESS_VALUE", "Fortschrittswert")
 ZO_CreateStringId("BARSTEWARD_PVP_ONLY", "Zeige nur im PvP")
-ZO_CreateStringId("BARSTEWARD_RANDOM_BATTLEGROUND", "Zufälliges Schlachtfeld") 
+ZO_CreateStringId("BARSTEWARD_RANDOM_BATTLEGROUND", "Zufälliges Schlachtfeld")
 ZO_CreateStringId("BARSTEWARD_RANDOM_DUNGEON", "Zufälliges Verlies")
 ZO_CreateStringId("BARSTEWARD_RANDOM_EMOTE", "Benutze zufälliges Aktion")
 ZO_CreateStringId("BARSTEWARD_RANDOM_MEMENTO", "Benutze zufälliges Andenken")
@@ -276,7 +296,7 @@ ZO_CreateStringId("BARSTEWARD_REORDER_WIDGETS", "Widgets umsortieren")
 ZO_CreateStringId("BARSTEWARD_REPAIR_COST", "Teilereparaturkosten")
 ZO_CreateStringId("BARSTEWARD_REQUIRES", "Benötigt <<1>>")
 ZO_CreateStringId("BARSTEWARD_RIGHT", "Rechts")
-ZO_CreateStringId("BARSTEWARD_RUNEBOX_FRAGMENTS", "Runenkistenfragmente") 
+ZO_CreateStringId("BARSTEWARD_RUNEBOX_FRAGMENTS", "Runenkistenfragmente")
 ZO_CreateStringId("BARSTEWARD_SAMPLE", " *** Beispieltext in der ausgewählten Schriftart ***")
 ZO_CreateStringId("BARSTEWARD_SCALE", "Vergrößerung")
 ZO_CreateStringId("BARSTEWARD_SCREEN", "Bildschirm")

@@ -414,7 +414,9 @@ BS.widgets[BS.W_LEADS] = {
                 BS.Vars.Controls[BS.W_LEADS].ShowCount = value
                 BS.RefreshWidget(BS.W_LEADS)
             end,
-            disabled = function() return BS.Vars.Controls[BS.W_LEADS].HideTimer end,
+            disabled = function()
+                return BS.Vars.Controls[BS.W_LEADS].HideTimer
+            end,
             default = false
         },
         [2] = {
@@ -565,12 +567,13 @@ BS.widgets[BS.W_ACHIEVEMENT_POINTS] = {
     -- v1.3.3
     name = "achievementPoints",
     update = function(widget)
+        local this = BS.W_ACHIEVEMENT_POINTS
         local totalPoints = GetTotalAchievementPoints()
         local earnedPoints = GetEarnedAchievementPoints()
-        local colour = BS.Vars.Controls[BS.W_ACHIEVEMENT_POINTS].Colour or BS.Vars.DefaultColour
+        local colour = BS.Vars.Controls[this].Colour or BS.Vars.DefaultColour
         local value = earnedPoints
 
-        if (BS.Vars.Controls[BS.W_ACHIEVEMENT_POINTS].ShowPercent) then
+        if (BS.Vars.Controls[this].ShowPercent) then
             value = math.floor((earnedPoints / totalPoints) * 100) .. "%"
         end
 
@@ -676,16 +679,15 @@ BS.widgets[BS.W_SHADOWY_VENDOR_TIME] = {
     -- v1.3.11
     name = "remainsSilentReset",
     update = function(widget)
+        local this = BS.W_SHADOWY_VENDOR_TIME
         local timeToReset = GetTimeToShadowyConnectionsResetInSeconds()
         local colour = BS.Vars.DefaultColour
-        local remaining =
-            BS.SecondsToTime(timeToReset, true, false, BS.Vars.Controls[BS.W_SHADOWY_VENDOR_TIME].HideSeconds)
+        local remaining = BS.SecondsToTime(timeToReset, true, false, BS.Vars.Controls[this].HideSeconds)
 
         widget:SetColour(unpack(colour))
         widget:SetValue(remaining)
 
-        widget.tooltip =
-            setTracker(BS.W_SHADOWY_VENDOR_TIME, timeToReset, GetString(_G.BARSTEWARD_SHADOWY_VENDOR_RESET))
+        widget.tooltip = setTracker(this, timeToReset, GetString(_G.BARSTEWARD_SHADOWY_VENDOR_RESET))
         return timeToReset
     end,
     timer = 1000,
@@ -700,14 +702,15 @@ BS.widgets[BS.W_LFG_TIME] = {
     -- v1.3.11
     name = "lfgTime",
     update = function(widget)
+        local this = BS.W_LFG_TIME
         local timeToReset = GetLFGCooldownTimeRemainingSeconds(_G.LFG_COOLDOWN_DUNGEON_REWARD_GRANTED)
         local colour = BS.Vars.DefaultColour
-        local remaining = BS.SecondsToTime(timeToReset, true, false, BS.Vars.Controls[BS.W_LFG_TIME].HideSeconds)
+        local remaining = BS.SecondsToTime(timeToReset, true, false, BS.Vars.Controls[this].HideSeconds)
 
         widget:SetColour(unpack(colour))
         widget:SetValue(remaining)
 
-        widget.tooltip = setTracker(BS.W_LFG_TIME, timeToReset, GetString(_G.BARSTEWARD_DUNGEON_REWARD_RESET))
+        widget.tooltip = setTracker(this, timeToReset, GetString(_G.BARSTEWARD_DUNGEON_REWARD_RESET))
 
         return timeToReset
     end,
@@ -725,8 +728,8 @@ BS.widgets[BS.W_LFG_TIME] = {
 
 local function updateLoreBooks()
     local bypass =
-        BS.Vars.Controls[BS.W_LOREBOOKS].Bar + BS.Vars.Controls[BS.W_LOREBOOKS].Bar +
-        BS.Vars.Controls[BS.W_LOREBOOKS].Bar ==
+        BS.Vars.Controls[BS.W_LOREBOOKS].Bar + BS.Vars.Controls[BS.W_SHALIDORS_LIBRARY].Bar +
+        BS.Vars.Controls[BS.W_CRAFTING_MOTIFS].Bar ==
         0
 
     if (bypass) then
@@ -772,18 +775,18 @@ BS.widgets[BS.W_LOREBOOKS] = {
             return
         end
 
-        local self = BS.W_LOREBOOKS
-        local colour = BS.Vars.Controls[self].Colour or BS.Vars.DefaultColour
+        local this = BS.W_LOREBOOKS
+        local colour = BS.Vars.Controls[this].Colour or BS.Vars.DefaultColour
         local value = ""
         local tt = GetString(_G.BARSTEWARD_LOREBOOKS)
 
         for _, category in pairs(categories) do
             local metrics = category.numKnownBooks .. "/" .. category.totalBooks
 
-            tt = tt .. BS.LF .. "|cf9f9f9"
-            tt = tt .. category.name .. " " .. metrics .. "|r"
+            tt = string.format("%s%s|cf9f9f9", tt, BS.LF)
+            tt = string.format("%s%s|r %s", tt, category.name, metrics)
 
-            if (BS.Vars.Controls[self].ShowCategory == category.name) then
+            if (BS.Vars.Controls[this].ShowCategory == category.name) then
                 value = metrics
             end
         end

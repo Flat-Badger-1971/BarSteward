@@ -10,17 +10,24 @@ local iconPaths = {
     "/esoui/art/tradinghouse/tradinghouse_weapons_1h_sword_up.dds"
 }
 
-local ignoreTypes = {
-    [_G.INSTANCE_DISPLAY_TYPE_NONE] = true,
-    [_G.INSTANCE_DISPLAY_TYPE_HOUSING] = true,
-    [_G.INSTANCE_DISPLAY_TYPE_ZONE_STORY] = true
-}
+local ignoreTypes = {}
+
+if (_G.INSTANCE_DISPLAY_TYPE_NONE) then
+    ignoreTypes[_G.INSTANCE_DISPLAY_TYPE_NONE] = true
+    ignoreTypes[_G.INSTANCE_DISPLAY_TYPE_HOUSING] = true
+    ignoreTypes[_G.INSTANCE_DISPLAY_TYPE_ZONE_STORY] = true
+else
+    ignoreTypes[_G.ZONE_DISPLAY_TYPE_NONE] = true
+    ignoreTypes[_G.ZONE_DISPLAY_TYPE_HOUSING] = true
+    ignoreTypes[_G.ZONE_DISPLAY_TYPE_ZONE_STORY] = true
+end
 
 BS.widgets[BS.W_ACTIVE_BAR] = {
     -- v1.3.18
     name = "activeBar",
     update = function(widget, event, _, _, _, instanceDisplayType)
-        local vars = BS.Vars.Controls[BS.W_ACTIVE_BAR]
+        local this = BS.W_ACTIVE_BAR
+        local vars = BS.Vars.Controls[this]
         local activeWeaponPair = GetActiveWeaponPairInfo()
         local mainIcon = vars.MainIcon or BS.Defaults.MainBarIcon
         local backIcon = vars.BackIcon or BS.Defaults.BackBarIcon
@@ -40,7 +47,7 @@ BS.widgets[BS.W_ACTIVE_BAR] = {
                             BS.Announce(
                                 GetString(_G.BARSTEWARD_WARNING),
                                 zo_strformat(GetString(_G.BARSTEWARD_WARN_INSTANCE_MESSAGE), text),
-                                BS.W_ACTIVE_BAR,
+                                this,
                                 nil,
                                 nil,
                                 icon
