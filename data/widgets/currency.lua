@@ -377,24 +377,24 @@ BS.widgets[BS.W_TRANSMUTE_CRYSTALS] = {
         local colour = vars.Colour or BS.Vars.DefaultColour
 
         if (vars.Invert) then
-            if ((vars.DangerValue or 0) > 0) then
-                if (crystals > vars.DangerValue) then
-                    colour = vars.DangerColour or BS.Vars.DefaultDangerColour
-                end
-            elseif ((vars.WarningValue or 0) > 0) then
-                if (crystals > vars.WarningValue) then
+            if ((vars.WarningValue or 0) > 0) then
+                if (crystals >= vars.WarningValue) then
                     colour = vars.WarningColour or BS.Vars.DefaultWarningColour
+                end
+            end
+            if ((vars.DangerValue or 0) > 0) then
+                if (crystals >= vars.DangerValue) then
+                    colour = vars.DangerColour or BS.Vars.DefaultDangerColour
                 end
             end
         else
             if ((vars.WarningValue or 0) > 0) then
-                if (crystals < vars.WarningValue) then
+                if (crystals <= vars.WarningValue) then
                     colour = vars.WarningColour or BS.Vars.DefaultWarningColour
                 end
             end
-
             if ((vars.DangerValue or 0) > 0) then
-                if (crystals < vars.DangerValue) then
+                if (crystals <= vars.DangerValue) then
                     colour = vars.DangerColour or BS.Vars.DefaultDangerColour
                 end
             end
