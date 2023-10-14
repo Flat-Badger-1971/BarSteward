@@ -2315,7 +2315,7 @@ local function getWidgetSettings()
             end
 
         )
-        for k, cat in pairs(categories) do
+        for _, cat in pairs(categories) do
             if (BS.Vars.CategoriesCount) then
                 cat.name =
                     string.format(
