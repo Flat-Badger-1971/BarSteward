@@ -405,3 +405,18 @@ BS.COMPANION_DEFIDS = {
     [BS.W_SHARP] = 8,
     [BS.W_AZANDAR] = 9
 }
+
+BS.CATEGORIES = {
+    [1] =  {name=_G.BARSTEWARD_CATEGORY_ABILITIES,icon="actionbar/stateoverlay_wound"},
+    [2] =  {name=_G.BARSTEWARD_CATEGORY_ACTIVITIES,icon="crafting/designs_tabicon_up"},
+    [3] =  {name=_G.BARSTEWARD_CATEGORY_CHARACTER,icon="charactercreate/charactercreate_bodyicon_up"},
+    [4] =  {name=_G.BARSTEWARD_CATEGORY_CLIENT,icon="login/gamepad/loading-ouroboros"},
+    [5] =  {name=_G.BARSTEWARD_CATEGORY_COMPANIONS,icon="companion/keyboard/category_u30_allies_up"},
+    [6] =  {name=_G.BARSTEWARD_CATEGORY_CRAFTING,icon="crafting/reconstruct_tabicon_up"},
+    [7] =  {name=_G.BARSTEWARD_CATEGORY_CURRENCY,icon="bank/bank_purchasenormal"},
+    -- [8] =  {name=_G.BARSTEWARD_CATEGORY_HOUSING,icon="icons/poi/poi_group_house_owned"},
+    [9] =  {name=_G.BARSTEWARD_CATEGORY_INVENTORY,icon="collections/collections_tabicon_outfitstyles_up"},
+    [10] = {name=_G.BARSTEWARD_CATEGORY_RIDING,icon="mounts/tabicon_ridingskills_up"},
+    [11] = {name=_G.BARSTEWARD_CATEGORY_SOCIAL,icon="friends/friends_tabicon_friends"},
+    [12] = {name=_G.BARSTEWARD_CATEGORY_THIEVERY,icon="icons/mapkey/mapkey_fence"}
+}
