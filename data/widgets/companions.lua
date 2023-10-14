@@ -121,14 +121,14 @@ BS.widgets[BS.W_COMPANION_LEVEL] = {
     }
 }
 
-BS.COMPANION_ICONS = {}
+local companionIcons = {}
 
 for k, v in pairs(BS.COMPANION_DEFIDS) do
-    BS.COMPANION_ICONS[k] = select(3, GetCollectibleInfo(GetCompanionCollectibleId(v)))
+    companionIcons[k] = select(3, GetCollectibleInfo(GetCompanionCollectibleId(v)))
 
     BS.widgets[k] = {
         --v1.7.0
-        name = "bastian",
+        name = string.format("companion%d", k),
         update = function(widget)
             local this = k
             local name =
@@ -150,7 +150,7 @@ for k, v in pairs(BS.COMPANION_DEFIDS) do
                 GetCollectibleInfo(GetCompanionCollectibleId(v))
             )
         ),
-        icon = BS.COMPANION_ICONS[k],
+        icon = companionIcons[k],
         onClick = function()
             UseCollectible(GetCompanionCollectibleId(v))
         end

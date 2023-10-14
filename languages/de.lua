@@ -16,6 +16,8 @@ ZO_CreateStringId("BARSTEWARD_ANNOUNCEMENT_FRIEND", "Zeige Online Freunde")
 ZO_CreateStringId("BARSTEWARD_ANNOUNCEMENT_FRIEND_GUILD", "Zeige Online Gildenfreunde")
 ZO_CreateStringId("BARSTEWARD_ANNOUNCEMENTS", "Anzeigen")
 ZO_CreateStringId("BARSTEWARD_ARCHIVAL_FRAGMENTS", "Archival Fragments")
+ZO_CreateStringId("BARSTEWARD_ASSISTANT_WIDGET", "Assistant - <<1>>")
+ZO_CreateStringId("BARSTEWARD_ASSISTANTS", "Assistants")
 ZO_CreateStringId("BARSTEWARD_AUTOHIDE", "Automatisch verstecken")
 ZO_CreateStringId(
     "BARSTEWARD_AUTOHIDE_TOOLTIP",

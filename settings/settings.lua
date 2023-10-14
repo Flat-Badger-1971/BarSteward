@@ -2307,14 +2307,8 @@ local function getWidgetSettings()
     end
 
     if (BS.Vars.Categories) then
-        -- sort the categories
-        table.sort(
-            categories,
-            function(a, b)
-                return a.name < b.name
-            end
+        local cats = {}
 
-        )
         for _, cat in pairs(categories) do
             if (BS.Vars.CategoriesCount) then
                 cat.name =
@@ -2326,7 +2320,13 @@ local function getWidgetSettings()
                 )
             end
 
-            controls[#controls + 1] = cat
+            table.insert(cats, {name = cat.name, value = cat})
+        end
+
+        table.sort(cats, function(a,b) return a.name < b.name end)
+
+        for _, v in ipairs(cats) do
+            controls[#controls + 1] = v.value
         end
     end
 

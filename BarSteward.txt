@@ -33,6 +33,7 @@ misc/version.lua
 data/widgets/client.lua
 data/widgets/abilities.lua
 data/widgets/activities.lua
+data/widgets/assistants.lua
 data/widgets/character.lua
 data/widgets/companions.lua
 data/widgets/crafting.lua

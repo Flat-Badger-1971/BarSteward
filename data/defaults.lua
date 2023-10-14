@@ -854,33 +854,135 @@ BS.Defaults = {
         },
         [BS.W_MIRRI] = {
             Bar = 0,
-            Order = 95,
+            Order = 96,
             ColourValues = "c",
             Cat = 5
         },
         [BS.W_EMBER] = {
             Bar = 0,
-            Order = 95,
+            Order = 97,
             ColourValues = "c",
             Cat = 5
         },
         [BS.W_ISOBEL] = {
             Bar = 0,
-            Order = 95,
+            Order = 98,
             ColourValues = "c",
             Cat = 5
         },
         [BS.W_SHARP] = {
             Bar = 0,
-            Order = 95,
+            Order = 99,
             ColourValues = "c",
             Cat = 5
         },
         [BS.W_AZANDAR] = {
             Bar = 0,
-            Order = 95,
+            Order = 100,
             ColourValues = "c",
             Cat = 5
+        },
+        [BS.W_EZABI] = {
+            Bar = 0,
+            Order = 101,
+            ColourValues = "c",
+            Cat = 13
+        },
+        [BS.W_GHRASHAROG] = {
+            Bar = 0,
+            Order = 102,
+            ColourValues = "c",
+            Cat = 13
+        },
+        [BS.W_GILADIL] = {
+            Bar = 0,
+            Order = 103,
+            ColourValues = "c",
+            Cat = 13
+        },
+        [BS.W_PIRHARRI] = {
+            Bar = 0,
+            Order = 104,
+            ColourValues = "c",
+            Cat = 13
+        },
+        [BS.W_TYTHIS] = {
+            Bar = 0,
+            Order = 105,
+            ColourValues = "c",
+            Cat = 13
+        },
+        [BS.W_NUZHIMEH] = {
+            Bar = 0,
+            Order = 106,
+            ColourValues = "c",
+            Cat = 13
+        },
+        [BS.W_ALLARIA] = {
+            Bar = 0,
+            Order = 107,
+            ColourValues = "c",
+            Cat = 13
+        },
+        [BS.W_CASSUS] = {
+            Bar = 0,
+            Order = 108,
+            ColourValues = "c",
+            Cat = 13
+        },
+        [BS.W_FEZEZ] = {
+            Bar = 0,
+            Order = 109,
+            ColourValues = "c",
+            Cat = 13
+        },
+        [BS.W_BARON] = {
+            Bar = 0,
+            Order = 110,
+            ColourValues = "c",
+            Cat = 13
+        },
+        [BS.W_FACTOTUM] = {
+            Bar = 0,
+            Order = 111,
+            ColourValues = "c",
+            Cat = 13
+        },
+        [BS.W_FACTOTUM2] = {
+            Bar = 0,
+            Order = 112,
+            ColourValues = "c",
+            Cat = 13
+        },
+        [BS.W_ADERENE] = {
+            Bar = 0,
+            Order = 113,
+            ColourValues = "c",
+            Cat = 13
+        },
+        [BS.W_ZUQOTH] = {
+            Bar = 0,
+            Order = 114,
+            ColourValues = "c",
+            Cat = 13
+        },
+        [BS.W_HOARFROST] = {
+            Bar = 0,
+            Order = 115,
+            ColourValues = "c",
+            Cat = 13
+        },
+        [BS.W_PYROCLAST] = {
+            Bar = 0,
+            Order = 116,
+            ColourValues = "c",
+            Cat = 13
+        },
+        [BS.W_PEDDLER] = {
+            Bar = 0,
+            Order = 117,
+            ColourValues = "c",
+            Cat = 13
         }
     }
 }

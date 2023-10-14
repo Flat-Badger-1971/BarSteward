@@ -106,6 +106,23 @@ BS.W_EMBER = 97
 BS.W_ISOBEL = 98
 BS.W_SHARP = 99
 BS.W_AZANDAR = 100
+BS.W_EZABI = 101
+BS.W_GHRASHAROG = 102
+BS.W_GILADIL = 103
+BS.W_PIRHARRI = 104
+BS.W_TYTHIS = 105
+BS.W_NUZHIMEH = 106
+BS.W_ALLARIA = 107
+BS.W_CASSUS = 108
+BS.W_FEZEZ = 109
+BS.W_BARON = 110
+BS.W_FACTOTUM = 111
+BS.W_FACTOTUM2 = 112
+BS.W_ADERENE = 113
+BS.W_ZUQOTH = 114
+BS.W_HOARFROST = 115
+BS.W_PYROCLAST = 116
+BS.W_PEDDLER = 117
 
 BS.WRITS = {
     [_G.CRAFTING_TYPE_ALCHEMY] = {
@@ -397,6 +414,7 @@ BS.FRAGMENT_TYPES = {
 BS.L_SHALIDORS_LIBRARY = 1
 BS.L_EIDETIC_MEMORY = 2
 BS.L_CRAFTING_MOTIFS = 4
+
 BS.COMPANION_DEFIDS = {
     [BS.W_BASTIAN] = 1,
     [BS.W_MIRRI] = 2,
@@ -407,16 +425,37 @@ BS.COMPANION_DEFIDS = {
 }
 
 BS.CATEGORIES = {
-    [1] =  {name=_G.BARSTEWARD_CATEGORY_ABILITIES,icon="actionbar/stateoverlay_wound"},
-    [2] =  {name=_G.BARSTEWARD_CATEGORY_ACTIVITIES,icon="crafting/designs_tabicon_up"},
-    [3] =  {name=_G.BARSTEWARD_CATEGORY_CHARACTER,icon="charactercreate/charactercreate_bodyicon_up"},
-    [4] =  {name=_G.BARSTEWARD_CATEGORY_CLIENT,icon="login/gamepad/loading-ouroboros"},
-    [5] =  {name=_G.BARSTEWARD_CATEGORY_COMPANIONS,icon="companion/keyboard/category_u30_allies_up"},
-    [6] =  {name=_G.BARSTEWARD_CATEGORY_CRAFTING,icon="crafting/reconstruct_tabicon_up"},
-    [7] =  {name=_G.BARSTEWARD_CATEGORY_CURRENCY,icon="bank/bank_purchasenormal"},
+    [1] = {name = _G.BARSTEWARD_CATEGORY_ABILITIES, icon = "actionbar/stateoverlay_wound"},
+    [2] = {name = _G.BARSTEWARD_CATEGORY_ACTIVITIES, icon = "crafting/designs_tabicon_up"},
+    [3] = {name = _G.BARSTEWARD_CATEGORY_CHARACTER, icon = "charactercreate/charactercreate_bodyicon_up"},
+    [4] = {name = _G.BARSTEWARD_CATEGORY_CLIENT, icon = "login/gamepad/loading-ouroboros"},
+    [5] = {name = _G.BARSTEWARD_CATEGORY_COMPANIONS, icon = "companion/keyboard/category_u30_allies_up"},
+    [6] = {name = _G.BARSTEWARD_CATEGORY_CRAFTING, icon = "crafting/reconstruct_tabicon_up"},
+    [7] = {name = _G.BARSTEWARD_CATEGORY_CURRENCY, icon = "bank/bank_purchasenormal"},
     -- [8] =  {name=_G.BARSTEWARD_CATEGORY_HOUSING,icon="icons/poi/poi_group_house_owned"},
-    [9] =  {name=_G.BARSTEWARD_CATEGORY_INVENTORY,icon="collections/collections_tabicon_outfitstyles_up"},
-    [10] = {name=_G.BARSTEWARD_CATEGORY_RIDING,icon="mounts/tabicon_ridingskills_up"},
-    [11] = {name=_G.BARSTEWARD_CATEGORY_SOCIAL,icon="friends/friends_tabicon_friends"},
-    [12] = {name=_G.BARSTEWARD_CATEGORY_THIEVERY,icon="icons/mapkey/mapkey_fence"}
+    [9] = {name = _G.BARSTEWARD_CATEGORY_INVENTORY, icon = "collections/collections_tabicon_outfitstyles_up"},
+    [10] = {name = _G.BARSTEWARD_CATEGORY_RIDING, icon = "mounts/tabicon_ridingskills_up"},
+    [11] = {name = _G.BARSTEWARD_CATEGORY_SOCIAL, icon = "friends/friends_tabicon_friends"},
+    [12] = {name = _G.BARSTEWARD_CATEGORY_THIEVERY, icon = "icons/mapkey/mapkey_fence"},
+    [13] = {name = _G.BARSTEWARD_ASSISTANTS, icon = "icons/assistant_premiumbanker_01"}
+}
+
+BS.ASSISTANTS = {
+    [BS.W_TYTHIS] = 267,
+    [BS.W_PIRHARRI] = 300,
+    [BS.W_NUZHIMEH] = 301,
+    [BS.W_ALLARIA] = 396,
+    [BS.W_CASSUS] = 397,
+    [BS.W_EZABI] = 6376,
+    [BS.W_FEZEZ] = 6378,
+    [BS.W_BARON] = 8994,
+    [BS.W_PEDDLER] = 8995,
+    [BS.W_FACTOTUM] = 9743,
+    [BS.W_FACTOTUM2] = 9744,
+    [BS.W_GHRASHAROG] = 9745,
+    [BS.W_GILADIL] = 10184,
+    [BS.W_ADERENE] = 10617,
+    [BS.W_ZUQOTH] = 10618,
+    [BS.W_HOARFROST] = 11059,
+    [BS.W_PYROCLAST] = 11097
 }
