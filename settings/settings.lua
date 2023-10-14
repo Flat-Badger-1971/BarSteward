@@ -1,7 +1,7 @@
 local BS = _G.BarSteward
 
 BS.LAM = _G.LibAddonMenu2
-BS.VERSION = "1.7.1"
+BS.VERSION = "1.7.2"
 
 local panel = {
     type = "panel",
@@ -348,6 +348,12 @@ local function getBarSettings()
         ["MENU"] = "ShowWhilstMenu",
         ["INTERACTING"] = "ShowWhilstInteracting",
         ["GUILDSTORE"] = "ShowWhilstGuildStore"
+    }
+
+    BS.options[#BS.options + 1] = {
+        type = "header",
+        name = GetString(_G.BARSTEWARD_BARS),
+        width = "full"
     }
 
     for idx, data in ipairs(bars) do
@@ -2088,6 +2094,35 @@ local function getWidgetSettings()
             width = "full",
             default = 0,
             requiresReload = true
+        },
+        [6] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_CATEGORY_USE),
+            getFunc = function()
+                return BS.Vars.Categories or false
+            end,
+            setFunc = function(value)
+                BS.Vars.Categories = value
+            end,
+            width = "full",
+            default = false,
+            requiresReload = true
+        },
+        [7] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_CATEGORY_INCLUDE),
+            getFunc = function()
+                return BS.Vars.CategoriesCount or false
+            end,
+            setFunc = function(value)
+                BS.Vars.CategoriesCount = value
+            end,
+            width = "full",
+            default = false,
+            disabled = function()
+                return not BS.Vars.Categories
+            end,
+            requiresReload = true
         }
     }
 
@@ -2135,6 +2170,22 @@ local function getWidgetSettings()
     }
 
     local numBaseControls = #controls
+    local categories = {}
+    local categoryIndex = {}
+
+    if (BS.Vars.Categories) then
+        for k, cat in pairs(BS.CATEGORIES) do
+            categories[k] = {
+                type = "submenu",
+                name = GetString(cat.name),
+                icon = string.format("esoui/art/%s.dds", cat.icon),
+                controls = {},
+                reference = "BarStewardCategory" .. k
+            }
+
+            categoryIndex[k] = 1
+        end
+    end
 
     for idx, w in ipairs(ordered) do
         local k = w.key
@@ -2232,14 +2283,51 @@ local function getWidgetSettings()
             widgetName = "|c4c9900" .. widgetName .. "|r"
         end
 
-        controls[idx + numBaseControls] = {
-            type = "submenu",
-            name = widgetName,
-            icon = BS.widgets[k].icon,
-            iconTextureCoords = textureCoords,
-            controls = widgetControls,
-            reference = "BarStewardWidgets" .. k
-        }
+        if (BS.Vars.Categories) then
+            categories[vars.Cat].controls[categoryIndex[vars.Cat]] = {
+                type = "submenu",
+                name = widgetName,
+                icon = BS.widgets[k].icon,
+                iconTextureCoords = textureCoords,
+                controls = widgetControls,
+                reference = "BarStewardCategoryWidgets" .. k
+            }
+
+            categoryIndex[vars.Cat] = categoryIndex[vars.Cat] + 1
+        else
+            controls[idx + numBaseControls] = {
+                type = "submenu",
+                name = widgetName,
+                icon = BS.widgets[k].icon,
+                iconTextureCoords = textureCoords,
+                controls = widgetControls,
+                reference = "BarStewardWidgets" .. k
+            }
+        end
+    end
+
+    if (BS.Vars.Categories) then
+        -- sort the categories
+        table.sort(
+            categories,
+            function(a, b)
+                return a.name < b.name
+            end
+
+        )
+        for k, cat in pairs(categories) do
+            if (BS.Vars.CategoriesCount) then
+                cat.name =
+                    string.format(
+                    "%s  %s %d|r",
+                    cat.name,
+                    BS.ARGBConvert(BS.Defaults.DefaultWarningColour),
+                    #cat.controls
+                )
+            end
+
+            controls[#controls + 1] = cat
+        end
     end
 
     BS.options[#BS.options + 1] = {
