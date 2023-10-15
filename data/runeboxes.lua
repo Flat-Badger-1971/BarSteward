@@ -23,7 +23,7 @@ local RUNEBOX_FRAGMENTS = {
     [167305] = {cid = 8043, total = 51, fragments = {151939, 167303}}, -- Timbercrow Wanderer Costume
     [171472] = {cid = 8198, total = 10, fragments = {171469}}, -- Daggerfall Breton Terrier Pet
     [183195] = {cid = 9718, total = 31, fragments = {138783, 183194}}, -- Siegestomper Emote
-    [171533] = {cid = 8655, total = 31, fragments = {151939, 171532}} -- Rage of the Reach Emote
+    [171533] = {cid = 8655, total = 31, fragments = {151939, 171532}}, -- Rage of the Reach Emote
 }
 
 local COLLECTIBLE_FRAGMENTS = {
@@ -34,7 +34,8 @@ local COLLECTIBLE_FRAGMENTS = {
     [9389] = 10, -- Witch-Tamed Bear-Dog
     [9523] = 50, -- Replica Zenithar Adytum Gate
     [9797] = 50, -- Coral Haj Mota (25 Lures and 25 Decoys)
-    [10235] = 5 -- Cadwell's Surprise Box
+    [10235] = 5, -- Cadwell's Surprise Box
+    [10912] = 50 -- Graht-Oak Squirrel
 }
 
 function BS.GetCollectibleId(bagId, slotIndex)
