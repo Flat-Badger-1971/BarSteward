@@ -38,6 +38,12 @@ local function currencyWidget(currencyType, widgetIndex, text, eventList, hideWh
         name = "writVouchers"
     end
 
+    if (_G.CURT_ENDLESS_DUNGEON) then
+        if (currencyType == _G.CURT_ENDLESS_DUNGEON) then
+            name = "archivalFragments"
+        end
+    end
+
     local ctype = (currencyType == _G.CURT_MONEY) and "GoldType" or "CurrencyType"
     local icon = BS.CURRENCIES[currencyType].icon
 
@@ -53,7 +59,7 @@ local function currencyWidget(currencyType, widgetIndex, text, eventList, hideWh
             local combined = currencyInBag + currencyInBank
             local allCharacters = combined
             local otherCharacterCurrency =
-                (currencyType == _G.CURT_MONEY) and BS.Vars.Gold or BS.Vars.OtherCurrencies[currencyType]
+                ((currencyType == _G.CURT_MONEY) and BS.Vars.Gold or BS.Vars.OtherCurrencies[currencyType]) or {}
             local thisCharacter = GetUnitName("player")
             local charactertt = ""
             local useSeparators = BS.Vars.Controls[widgetIndex].UseSeparators
@@ -456,3 +462,25 @@ BS.widgets[BS.W_WRIT_VOUCHERS] =
     },
     _G.EVENT_WRIT_VOUCHER_UPDATE
 )
+
+if (_G.CURT_ENDLESS_DUNGEON) then
+    BS.widgets[BS.W_ARCHIVAL_FRAGMENTS] =
+        currencyWidget(
+        _G.CURT_ENDLESS_DUNGEON,
+        BS.W_ARCHIVAL_FRAGMENTS,
+        {
+            bag = _G.BARSTEWARD_GOLD_BAG,
+            bank = _G.BARSTEWARD_GOLD_BANK,
+            combined = _G.BARSTEWARD_GOLD_COMBINED,
+            display = _G.BARSTEWARD_ARCHIVAL_FRAGMENTS,
+            everyWhere = _G.BARSTEWARD_GOLD_EVERYWHERE,
+            separated = _G.BARSTEWARD_GOLD_SEPARATED,
+            title = BS.Format(_G.BARSTEWARD_ARCHIVAL_FRAGMENTS)
+        }
+    )
+    BS.CURRENCIES[_G.CURT_ENDLESS_DUNGEON] = {
+        icon = "archivalfragments_mipmaps",
+        crownStore = false,
+        text = _G.BARSTEWARD_ARCHIVAL_FRAGMENTS
+    }
+end
