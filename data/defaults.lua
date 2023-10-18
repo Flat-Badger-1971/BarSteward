@@ -983,13 +983,16 @@ BS.Defaults = {
             Order = 117,
             ColourValues = "c",
             Cat = 13
-        },
-        [BS.W_ARCHIVAL_FRAGMENTS] = {
-            Bar = 0,
-            Order = 118,
-            UseSeparators = false,
-            ColourValues = "c",
-            Cat = 7
-        },
+        }
     }
 }
+
+if (_G.CURT_ENDLESS_DUNGEON) then
+    BS.Defaults.Controls[BS.W_ARCHIVAL_FRAGMENTS] = {
+        Bar = 0,
+        Order = 118,
+        UseSeparators = false,
+        ColourValues = "c",
+        Cat = 7
+    }
+end

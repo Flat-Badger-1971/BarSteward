@@ -194,77 +194,79 @@ local ignoreSlots = {
 BS.widgets[BS.W_DURABILITY] = {
     -- v1.0.1
     name = "durability",
-    update = function(widget)
-        -- add a short delay to allow for server sync time
-        zo_callLater(
-            function()
-                -- find item with lowest durability
-                local lowest = 100
-                local lowestType = _G.ITEMTYPE_ARMOR
-                local items = {}
-                local vars = BS.Vars.Controls[BS.W_DURABILITY]
+    update = function(widget, bagId)
+        if (bagId ~= _G.BAG_WORN and bagId ~= "initial") then
+            return
+        end
 
-                for _, item in pairs(_G.SHARED_INVENTORY.bagCache[_G.BAG_WORN]) do
-                    if (not ignoreSlots[item.slotIndex]) then
-                        local colour = BS.ARGBConvert(vars.OkColour or BS.Vars.DefaultOkColour)
+        -- find item with lowest durability
+        local lowest = 100
+        local lowestType = _G.ITEMTYPE_ARMOR
+        local items = {}
+        local vars = BS.Vars.Controls[BS.W_DURABILITY]
 
-                        if (item.name ~= "") then
-                            if (item.condition <= vars.OkValue and item.condition >= vars.DangerValue) then
-                                colour = BS.ARGBConvert(vars.WarningColour or BS.Vars.DefaultWarningColour)
-                            elseif (item.condition < vars.DangerValue) then
-                                colour = BS.ARGBConvert(vars.DangerColour or BS.Vars.DefaultDangerColour)
-                            end
+        for slot = 0, GetBagSize(_G.BAG_WORN) do
+            if (not ignoreSlots[slot]) then
+                local colour = BS.ARGBConvert(vars.OkColour or BS.Vars.DefaultOkColour)
+                local itemName = GetItemName(_G.BAG_WORN, slot)
+                local condition = GetItemCondition(_G.BAG_WORN, slot)
 
-                            table.insert(items, string.format("%s%s - %s%%|r", colour, item.name, item.condition))
-
-                            if (lowest > item.condition) then
-                                lowest = item.condition
-                                lowestType = item.itemType
-                            end
-                        end
-                    end
-                end
-
-                widget:SetValue(lowest .. "%")
-
-                local colour
-
-                if (lowest >= vars.OkValue) then
-                    colour = vars.OkColour or BS.Vars.DefaultOkColour
-                elseif (vars.DangerValue) then
-                    colour = vars.WarningColour or BS.Vars.DefaultWarningColour
-                else
-                    colour = vars.DangerColour or BS.Vars.DefaultDangerColour
-                end
-
-                widget:SetColour(unpack(colour))
-
-                if (lowest <= vars.DangerValue) then
-                    if (lowestType == _G.ITEMTYPE_WEAPON) then
-                        widget:SetIcon("/esoui/art/hud/broken_weapon.dds")
-                    else
-                        widget:SetIcon("/esoui/art/hud/broken_armor.dds")
-                    end
-                else
-                    widget:SetIcon("/esoui/art/inventory/inventory_tabicon_armor_up.dds")
-                end
-
-                if (#items > 0) then
-                    local tooltipText = GetString(_G.BARSTEWARD_DURABILITY)
-
-                    for _, i in ipairs(items) do
-                        tooltipText = tooltipText .. BS.LF .. i
+                if (itemName ~= "") then
+                    if (condition <= vars.OkValue and condition >= vars.DangerValue) then
+                        colour = BS.ARGBConvert(vars.WarningColour or BS.Vars.DefaultWarningColour)
+                    elseif (condition < vars.DangerValue) then
+                        colour = BS.ARGBConvert(vars.DangerColour or BS.Vars.DefaultDangerColour)
                     end
 
-                    widget.tooltip = tooltipText
-                end
+                    table.insert(items, string.format("%s%s - %s%%|r", colour, itemName, condition))
 
-                return lowest
-            end,
-            400
-        )
+                    if (lowest > condition) then
+                        lowest = condition
+                        lowestType = GetItemType(_G.BAG_WORN, slot)
+                    end
+                end
+            end
+        end
+
+        widget:SetValue(lowest .. "%")
+
+        local colour
+
+        if (lowest >= vars.OkValue) then
+            colour = vars.OkColour or BS.Vars.DefaultOkColour
+        elseif (vars.DangerValue) then
+            colour = vars.WarningColour or BS.Vars.DefaultWarningColour
+        else
+            colour = vars.DangerColour or BS.Vars.DefaultDangerColour
+        end
+
+        widget:SetColour(unpack(colour))
+
+        if (lowest <= vars.DangerValue) then
+            if (lowestType == _G.ITEMTYPE_WEAPON) then
+                widget:SetIcon("/esoui/art/hud/broken_weapon.dds")
+            else
+                widget:SetIcon("/esoui/art/hud/broken_armor.dds")
+            end
+        else
+            widget:SetIcon("/esoui/art/inventory/inventory_tabicon_armor_up.dds")
+        end
+
+        if (#items > 0) then
+            local tooltipText = GetString(_G.BARSTEWARD_DURABILITY)
+
+            for _, i in ipairs(items) do
+                tooltipText = tooltipText .. BS.LF .. i
+            end
+
+            widget.tooltip = tooltipText
+        end
+
+        return lowest
     end,
-    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}, [SHARED_INVENTORY] = {"ItemRepaired"}},
+    callback = {
+        [SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}
+    },
     icon = "/esoui/art/inventory/inventory_tabicon_armor_up.dds",
     tooltip = GetString(_G.BARSTEWARD_DURABILITY),
     onClick = function()
