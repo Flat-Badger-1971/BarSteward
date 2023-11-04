@@ -6,7 +6,7 @@ BS.VERSION = "2.0.0"
 local panel = {
     type = "panel",
     name = "Bar Steward",
-    displayName = "|cff9900Bar Steward|r",
+    displayName = "|cff9900Bar |r|c4f34ebSteward|r",
     author = "Flat Badger",
     version = BS.VERSION,
     registerForDefaults = true,
@@ -54,6 +54,13 @@ end
 
 local function initialise()
     BS.options = {}
+    BS.options[#BS.options + 1] = {
+        type = "divider",
+        height = 15,
+        alpha = 0.5,
+        width = "full"
+    }
+
     BS.options[#BS.options + 1] = BS.Vars:GetLibAddonMenuAccountCheckbox()
     BS.options[#BS.options + 1] = {
         type = "checkbox",
