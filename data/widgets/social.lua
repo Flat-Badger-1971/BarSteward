@@ -155,7 +155,6 @@ end
 local guildMasterList = {}
 
 local function getMasterList()
-    --ZO_ClearNumericallyIndexedTable(guildMasterList)
     guildMasterList = {}
 
     local guildId = BS.guildId
@@ -233,8 +232,6 @@ BS.widgets[BS.W_GUILD_FRIENDS] = {
 
                 tCount = tCount + 1
             end
-
-            tCount = tCount + 1
         end
 
         tt = tt .. addToTooltip(online, textureFunctions)

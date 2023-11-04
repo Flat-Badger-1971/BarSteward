@@ -301,6 +301,8 @@ read_globals = {
     "GetItemLinkMaxEnchantCharges",
     "GetItemLinkNumEnchantCharges",
     "GetItemName",
+    "GetItemLinkMaxEnchantCharges",
+    "GetItemLinkNumEnchantCharges",
     "GetItemPairedPoisonInfo",
     "GetItemQualityColor",
     "GetItemSellValueWithBonuses",

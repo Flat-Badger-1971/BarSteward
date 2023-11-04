@@ -1107,7 +1107,7 @@ local function getCV(index)
     local var = BS.Vars.Controls[index].ColourValues
     local lookup = {}
 
-    if (var or "" ~= "") then
+    if ((var or "") ~= "") then
         for _, val in ipairs(BS.Split(var)) do
             lookup[val] = true
         end
@@ -1152,6 +1152,25 @@ local function checkAutoHide(defaults, widgetControls, vars, key)
             end,
             width = "full",
             default = defaults.Autohide
+        }
+    end
+end
+
+local function checkInvert(defaults, widgetControls, vars, key)
+    if (defaults.Invert ~= nil) then
+        widgetControls[#widgetControls + 1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_INVERT),
+            tooltip = GetString(_G.BARSTEWARD_INVERT_TOOLTIP),
+            getFunc = function()
+                return vars.Invert or false
+            end,
+            setFunc = function(value)
+                vars.Invert = value
+                BS.RefreshWidget(key)
+            end,
+            width = "full",
+            default = false
         }
     end
 end
@@ -2156,6 +2175,35 @@ local function getWidgetSettings()
                 return not BS.Vars.Categories
             end,
             requiresReload = true
+        },
+        [6] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_CATEGORY_USE),
+            getFunc = function()
+                return BS.Vars.Categories or false
+            end,
+            setFunc = function(value)
+                BS.Vars.Categories = value
+            end,
+            width = "full",
+            default = false,
+            requiresReload = true
+        },
+        [7] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_CATEGORY_INCLUDE),
+            getFunc = function()
+                return BS.Vars.CategoriesCount or false
+            end,
+            setFunc = function(value)
+                BS.Vars.CategoriesCount = value
+            end,
+            width = "full",
+            default = false,
+            disabled = function()
+                return not BS.Vars.Categories
+            end,
+            requiresReload = true
         }
     }
 
@@ -2306,6 +2354,7 @@ local function getWidgetSettings()
             checkPrint(defaults, widgetControls, vars)
             checkInvert(defaults, widgetControls, vars, k)
         end
+
         local textureCoords = nil
 
         if (k == BS.W_ALLIANCE) then
