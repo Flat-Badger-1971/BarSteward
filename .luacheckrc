@@ -244,6 +244,7 @@ read_globals = {
     "GetAntiquityQuality",
     "GetAntiquityZoneId",
     "GetAvailableSkillPoints",
+    "GetBankedCurrencyAmount",
     "GetChampionDisciplineId",
     "GetChampionDisciplineName",
     "GetChampionPointPoolForRank",

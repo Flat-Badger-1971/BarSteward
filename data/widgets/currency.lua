@@ -52,6 +52,8 @@ local function currencyWidget(currencyType, widgetIndex, text, eventList, hideWh
         name = "telvarStones"
     elseif (currencyType == _G.CURT_WRIT_VOUCHERS) then
         name = "writVouchers"
+    elseif (currencyType == _G.CURT_ENDLESS_DUNGEON) then
+        name = "archivalFortunes"
     end
 
     local ctype = (currencyType == _G.CURT_MONEY) and "GoldType" or "CurrencyType"
@@ -64,8 +66,8 @@ local function currencyWidget(currencyType, widgetIndex, text, eventList, hideWh
     local widgetCode = {
         name = name,
         update = function(widget)
-            local currencyInBag = GetCurrencyAmount(currencyType, _G.CURRENCY_LOCATION_CHARACTER)
-            local currencyInBank = GetCurrencyAmount(currencyType, _G.CURRENCY_LOCATION_BANK)
+            local currencyInBag = GetCurrencyAmount(currencyType, GetCurrencyPlayerStoredLocation(currencyType))
+            local currencyInBank = GetBankedCurrencyAmount(currencyType)
             local combined = currencyInBag + currencyInBank
             local allCharacters = combined
             local otherCharacterCurrency =
@@ -478,5 +480,6 @@ BS.widgets[BS.W_ARCHIVAL_FRAGMENTS] =
         everyWhere = _G.BARSTEWARD_GOLD_EVERYWHERE,
         separated = _G.BARSTEWARD_GOLD_SEPARATED,
         title = BS.Format(_G.BARSTEWARD_ARCHIVAL_FRAGMENTS)
-    }
+    },
+    _G.EVENT_CURRENCY_UPDATE
 )
