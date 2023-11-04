@@ -649,12 +649,21 @@ function baseBar:AddWidgets(widgets)
         if (metadata.callback) then
             for object, events in pairs(metadata.callback) do
                 for _, event in ipairs(events) do
-                    object:RegisterCallback(
-                        event,
-                        function(...)
-                            self:DoUpdate(metadata, ...)
-                        end
-                    )
+                    if (type(event) == "table") then
+                        object:RegisterCallback(
+                            event.event,
+                            function(...)
+                                self:DoUpdate(metadata, event.label, ...)
+                            end
+                        )
+                    else
+                        object:RegisterCallback(
+                            event,
+                            function(...)
+                                self:DoUpdate(metadata, ...)
+                            end
+                        )
+                    end
                 end
             end
         end

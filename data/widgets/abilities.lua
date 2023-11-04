@@ -11,9 +11,9 @@ local iconPaths = {
 }
 
 local ignoreTypes = {
-   -- [_G.INSTANCE_DISPLAY_TYPE_NONE] = true,
-    [_G.INSTANCE_DISPLAY_TYPE_HOUSING] = true,
-    [_G.INSTANCE_DISPLAY_TYPE_ZONE_STORY] = true
+    [_G.ZONE_DISPLAY_TYPE_NONE] = true,
+    [_G.ZONE_DISPLAY_TYPE_HOUSING] = true,
+    [_G.ZONE_DISPLAY_TYPE_ZONE_STORY] = true
 }
 
 BS.widgets[BS.W_ACTIVE_BAR] = {

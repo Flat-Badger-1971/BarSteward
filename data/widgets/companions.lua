@@ -120,3 +120,39 @@ BS.widgets[BS.W_COMPANION_LEVEL] = {
         }
     }
 }
+
+local companionIcons = {}
+
+for k, v in pairs(BS.COMPANION_DEFIDS) do
+    companionIcons[k] = select(3, GetCollectibleInfo(GetCompanionCollectibleId(v)))
+
+    BS.widgets[k] = {
+        --v1.7.0
+        name = string.format("companion%d", k),
+        update = function(widget)
+            local this = k
+            local name =
+                ZO_CachedStrFormat(
+                _G.SI_UNIT_NAME,
+                GetCollectibleInfo(GetCompanionCollectibleId(v))
+            )
+
+            widget:SetValue(name)
+            widget:SetColour(unpack(BS.Vars.Controls[this].Colour or BS.Vars.DefaultColour))
+
+            return name
+        end,
+        event = _G.EVENT_PLAYER_ACTIVATED,
+        tooltip = zo_strformat(
+            GetString(_G.BARSTEWARD_COMPANION_WIDGET),
+            ZO_CachedStrFormat(
+                _G.SI_UNIT_NAME,
+                GetCollectibleInfo(GetCompanionCollectibleId(v))
+            )
+        ),
+        icon = companionIcons[k],
+        onClick = function()
+            UseCollectible(GetCompanionCollectibleId(v))
+        end
+    }
+end

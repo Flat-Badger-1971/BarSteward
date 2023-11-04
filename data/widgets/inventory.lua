@@ -194,29 +194,35 @@ local ignoreSlots = {
 BS.widgets[BS.W_DURABILITY] = {
     -- v1.0.1
     name = "durability",
-    update = function(widget)
+    update = function(widget, bagId)
+        if (bagId ~= _G.BAG_WORN and bagId ~= "initial") then
+            return
+        end
+
         -- find item with lowest durability
         local lowest = 100
         local lowestType = _G.ITEMTYPE_ARMOR
         local items = {}
         local vars = BS.Vars.Controls[BS.W_DURABILITY]
 
-        for _, item in pairs(_G.SHARED_INVENTORY.bagCache[_G.BAG_WORN]) do
-            if (not ignoreSlots[item.slotIndex]) then
+        for slot = 0, GetBagSize(_G.BAG_WORN) do
+            if (not ignoreSlots[slot]) then
                 local colour = BS.ARGBConvert(vars.OkColour or BS.Vars.DefaultOkColour)
+                local itemName = GetItemName(_G.BAG_WORN, slot)
+                local condition = GetItemCondition(_G.BAG_WORN, slot)
 
-                if (item.name ~= "") then
-                    if (item.condition <= vars.OkValue and item.condition >= vars.DangerValue) then
+                if (itemName ~= "") then
+                    if (condition <= vars.OkValue and condition >= vars.DangerValue) then
                         colour = BS.ARGBConvert(vars.WarningColour or BS.Vars.DefaultWarningColour)
-                    elseif (item.condition < vars.DangerValue) then
+                    elseif (condition < vars.DangerValue) then
                         colour = BS.ARGBConvert(vars.DangerColour or BS.Vars.DefaultDangerColour)
                     end
 
-                    table.insert(items, string.format("%s%s - %s%%|r", colour, item.name, item.condition))
+                    table.insert(items, string.format("%s%s - %s%%|r", colour, itemName, condition))
 
-                    if (lowest > item.condition) then
-                        lowest = item.condition
-                        lowestType = item.itemType
+                    if (lowest > condition) then
+                        lowest = condition
+                        lowestType = GetItemType(_G.BAG_WORN, slot)
                     end
                 end
             end

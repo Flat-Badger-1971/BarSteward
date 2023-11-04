@@ -5,6 +5,29 @@ Widget reordering tool ordering method changed to simplify moving widgets throug
 Bug fix for max research times
 Option added to replace the main bar when importing a bar
 
+[color=#ff9900][b]Version: 1.7.4 ---------------[/b][/color]
+Minor code refactor
+Change currency tooltip to function
+
+[color=#ff9900][b]Version: 1.7.3 ---------------[/b][/color]
+Added Necrom fragments
+Archival Fragments widget added (update 40 only)
+Fixed durability widget not updating
+
+[color=#ff9900][b]Version: 1.7.2 ---------------[/b][/color]
+New option added to group widget settings into categories
+Companion buttons bugfix
+Assistant widgets added
+
+[color=#ff9900][b]Version: 1.7.1 ---------------[/b][/color]
+Bugfix for item durability widget when repairing at a vendor
+
+[color=#ff9900][b]Version: 1.7.0 ---------------[/b][/color]
+Various bugfixes
+Update for patch 40
+Added companion widgets
+Transmute crystal logic fix courtesy of Zeratoxx
+
 [color=#ff9900][b]Version: 1.6.0 ---------------[/b][/color]
 Necrom update and bugfixes
 

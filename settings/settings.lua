@@ -355,6 +355,12 @@ local function getBarSettings()
         ["GUILDSTORE"] = "ShowWhilstGuildStore"
     }
 
+    BS.options[#BS.options + 1] = {
+        type = "header",
+        name = GetString(_G.BARSTEWARD_BARS),
+        width = "full"
+    }
+
     for idx, data in ipairs(bars) do
         local vars = BS.Vars.Bars[idx]
         local controls = {
@@ -1101,7 +1107,7 @@ local function getCV(index)
     local var = BS.Vars.Controls[index].ColourValues
     local lookup = {}
 
-    if (var ~= nil) then
+    if (var or "" ~= "") then
         for _, val in ipairs(BS.Split(var)) do
             lookup[val] = true
         end
@@ -1977,13 +1983,11 @@ local function getWidgetSettings()
     local widgets = BS.Vars.Controls
     local bars = BS.Vars.Bars
     local none = GetString(_G.BARSTEWARD_NONE_BAR)
-    local barNames = {}
+    local barNames = {none}
 
     for _, v in ipairs(bars) do
         table.insert(barNames, v.Name)
     end
-
-    table.insert(barNames, none)
 
     local ordered = {}
 
@@ -2123,6 +2127,35 @@ local function getWidgetSettings()
             max = 64,
             width = "full",
             default = 0
+        },
+        [6] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_CATEGORY_USE),
+            getFunc = function()
+                return BS.Vars.Categories or false
+            end,
+            setFunc = function(value)
+                BS.Vars.Categories = value
+            end,
+            width = "full",
+            default = false,
+            requiresReload = true
+        },
+        [7] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_CATEGORY_INCLUDE),
+            getFunc = function()
+                return BS.Vars.CategoriesCount or false
+            end,
+            setFunc = function(value)
+                BS.Vars.CategoriesCount = value
+            end,
+            width = "full",
+            default = false,
+            disabled = function()
+                return not BS.Vars.Categories
+            end,
+            requiresReload = true
         }
     }
 
@@ -2170,6 +2203,22 @@ local function getWidgetSettings()
     }
 
     local numBaseControls = #controls
+    local categories = {}
+    local categoryIndex = {}
+
+    if (BS.Vars.Categories) then
+        for k, cat in pairs(BS.CATEGORIES) do
+            categories[k] = {
+                type = "submenu",
+                name = GetString(cat.name),
+                icon = string.format("esoui/art/%s.dds", cat.icon),
+                controls = {},
+                reference = "BarStewardCategory" .. k
+            }
+
+            categoryIndex[k] = 1
+        end
+    end
 
     for idx, w in ipairs(ordered) do
         local k = w.key
@@ -2269,14 +2318,56 @@ local function getWidgetSettings()
             widgetName = "|c4c9900" .. widgetName .. "|r"
         end
 
-        controls[idx + numBaseControls] = {
-            type = "submenu",
-            name = widgetName,
-            icon = BS.widgets[k].icon,
-            iconTextureCoords = textureCoords,
-            controls = widgetControls,
-            reference = "BarStewardWidgets" .. k
-        }
+        if (BS.Vars.Categories) then
+            categories[vars.Cat].controls[categoryIndex[vars.Cat]] = {
+                type = "submenu",
+                name = widgetName,
+                icon = BS.widgets[k].icon,
+                iconTextureCoords = textureCoords,
+                controls = widgetControls,
+                reference = "BarStewardCategoryWidgets" .. k
+            }
+
+            categoryIndex[vars.Cat] = categoryIndex[vars.Cat] + 1
+        else
+            controls[idx + numBaseControls] = {
+                type = "submenu",
+                name = widgetName,
+                icon = BS.widgets[k].icon,
+                iconTextureCoords = textureCoords,
+                controls = widgetControls,
+                reference = "BarStewardWidgets" .. k
+            }
+        end
+    end
+
+    if (BS.Vars.Categories) then
+        local cats = {}
+
+        for _, cat in pairs(categories) do
+            if (BS.Vars.CategoriesCount) then
+                cat.name =
+                    string.format(
+                    "%s  %s %d|r",
+                    cat.name,
+                    BS.ARGBConvert(BS.Defaults.DefaultWarningColour),
+                    #cat.controls
+                )
+            end
+
+            table.insert(cats, {name = cat.name, value = cat})
+        end
+
+        table.sort(
+            cats,
+            function(a, b)
+                return a.name < b.name
+            end
+        )
+
+        for _, v in ipairs(cats) do
+            controls[#controls + 1] = v.value
+        end
     end
 
     BS.options[#BS.options + 1] = {

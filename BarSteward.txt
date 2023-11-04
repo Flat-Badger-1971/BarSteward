@@ -1,11 +1,11 @@
 ## Title: Bar Steward
 ## Description: Data broker style bar for easy display of in-game metrics
 ## Author: Flat Badger
-## APIVersion: 101038
+## APIVersion: 101040
 ## AddOnVersion: 2000
 ## Version: 2.0.0
 ## SavedVariables: BarStewardSavedVars
-## DependsOn: LibSavedVars>=60007 LibAddonMenu-2.0>=33
+## DependsOn: LibSavedVars>=60007 LibAddonMenu-2.0>=35
 ## OptionalDependsOn: BanditsUserInterface WritWorthy>=70302 LibClockTST LibCombat>=62 PortToFriendsHouse>=92 LibCharacterKnowledge>=16 Taneth>=21
 
 # DISCLAIMER:
@@ -33,6 +33,7 @@ misc/version.lua
 data/widgets/client.lua
 data/widgets/abilities.lua
 data/widgets/activities.lua
+data/widgets/assistants.lua
 data/widgets/character.lua
 data/widgets/companions.lua
 data/widgets/crafting.lua
