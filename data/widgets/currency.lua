@@ -52,8 +52,6 @@ local function currencyWidget(currencyType, widgetIndex, text, eventList, hideWh
         name = "telvarStones"
     elseif (currencyType == _G.CURT_WRIT_VOUCHERS) then
         name = "writVouchers"
-    elseif (currencyType == _G.CURT_ENDLESS_DUNGEON) then
-        name = "archivalFortunes"
     end
 
     local ctype = (currencyType == _G.CURT_MONEY) and "GoldType" or "CurrencyType"
@@ -468,18 +466,32 @@ BS.widgets[BS.W_WRIT_VOUCHERS] =
     _G.EVENT_WRIT_VOUCHER_UPDATE
 )
 
-BS.widgets[BS.W_ARCHIVAL_FRAGMENTS] =
-    currencyWidget(
-    _G.CURT_ENDLESS_DUNGEON,
-    BS.W_ARCHIVAL_FRAGMENTS,
-    {
-        bag = _G.BARSTEWARD_GOLD_BAG,
-        bank = _G.BARSTEWARD_GOLD_BANK,
-        combined = _G.BARSTEWARD_GOLD_COMBINED,
-        display = _G.BARSTEWARD_ARCHIVAL_FRAGMENTS,
-        everyWhere = _G.BARSTEWARD_GOLD_EVERYWHERE,
-        separated = _G.BARSTEWARD_GOLD_SEPARATED,
-        title = BS.Format(_G.BARSTEWARD_ARCHIVAL_FRAGMENTS)
-    },
-    _G.EVENT_CURRENCY_UPDATE
-)
+BS.widgets[BS.W_ARCHIVAL_FRAGMENTS] = {
+    name = "archivalFragments",
+    update = function(widget)
+        local this = BS.W_ARCHIVAL_FRAGMENTS
+        local qty = GetCurrencyAmount(_G.CURT_ENDLESS_DUNGEON, GetCurrencyPlayerStoredLocation(_G.CURT_ENDLESS_DUNGEON))
+
+        if (BS.Vars.Controls[this].UseSeparators == true) then
+            qty = BS.AddSeparators(qty)
+        end
+
+        widget:SetValue(qty)
+        widget:SetColour(unpack(BS.Vars.Controls[this].Colour or BS.Vars.DefaultColour))
+
+        local tt = GetString(_G.BARSTEWARD_ARCHIVAL_FRAGMENTS) .. BS.LF
+
+        tt = tt .. getcrownStoreCurrencies()
+
+        widget.tooltip = tt
+
+        return widget:GetValue()
+    end,
+    event = _G.EVENT_CURRENCY_UPDATE,
+    tooltip = GetString(_G.BARSTEWARD_ARCHIVAL_FRAGMENTS),
+    icon = "/esoui/art/currency/archivalfragments_mipmaps.dds",
+    onClick = function()
+        SCENE_MANAGER:Show("show_market")
+    end
+}
+
