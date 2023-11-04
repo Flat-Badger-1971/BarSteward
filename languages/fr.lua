@@ -248,7 +248,7 @@ ZO_CreateStringId(
 )
 ZO_CreateStringId(
     "BARSTEWARD_PORT_TO_HOUSE_PTF_INFO",
-    "Les nouvelles maisons ajoutées nécessiteront un rechargement de l'interface utilisateur avant d'apparaître ici."
+    "Les maisons ajoutées/suprimées nécessiteront un rechargement de l'interface utilisateur."
 )
 ZO_CreateStringId("BARSTEWARD_PORT_TO_HOUSE_SELECT", "Sélectionner une maison")
 ZO_CreateStringId("BARSTEWARD_PREVIOUS_ENCOUNTER", "Combat précédent")

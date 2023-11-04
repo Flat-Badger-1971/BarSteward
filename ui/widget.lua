@@ -10,106 +10,68 @@ function baseWidget:New(...)
     return widget
 end
 
-function baseWidget:Initialise(metadata, parent, tooltipAnchor, valueSide, noValue, barSettings)
-    local name = BS.Name .. "_Widget_" .. metadata.name
-
-    self.name = metadata.name
-    self.minWidthChars = metadata.minWidthChars
-    self.control = WINDOW_MANAGER:CreateControl(name, parent, CT_CONTROL)
+function baseWidget:Initialise()
+    self.control = self.control or WINDOW_MANAGER:CreateControl(nil, GuiRoot, CT_CONTROL)
     self.control:SetResizeToFitDescendents(true)
     self.control.ref = self
-    self.noValue = noValue
-    self.id = metadata.id
 
-    local texture
+    if (DEBUG) then
+        self.overlay = self.overlay or WINDOW_MANAGER:CreateControl(nil, self.control, CT_CONTROL)
+        self.overlay:SetDrawTier(_G.DT_HIGH)
+        self.overlay:ClearAnchors()
+        self.overlay:SetAnchorFill(self.bar)
 
-    if (type(metadata.icon) == "function") then
-        texture = metadata.icon()
-    else
-        texture = metadata.icon
+        self.overlay.background = self.overlay.background or WINDOW_MANAGER:CreateControl(nil, self.overlay, CT_TEXTURE)
+        self.overlay.background:ClearAnchors()
+        self.overlay.background:SetAnchorFill(self.overlay)
+        self.overlay.background:SetTexture("/esoui/art/itemupgrade/eso_itemupgrade_blueslot.dds")
     end
+end
 
-    local iconSize = barSettings.Override and barSettings.IconSize or BS.Vars.IconSize
+function baseWidget:ApplyFontCorrection()
+    if (BS.Vars.FontCorrection and not self.fontCheckApplied) then
+        -- create an invisible label for width testing so it doesn't mess with the visible one
+        local parent = self:GetParent()
 
-    if (iconSize == nil) then
-        iconSize = BS.Vars.IconSize
-    end
-
-    local horizontalPadding = (barSettings.Override and (barSettings.HorizontalPadding or 0) or 0) + 10
-    local minVertical = iconSize
-    local verticalPadding = (barSettings.Override and (barSettings.VerticalPadding or 0) or 0) + minVertical
-
-    self.icon = WINDOW_MANAGER:CreateControl(name .. "_icon", self.control, CT_TEXTURE)
-    self.icon:SetTexture(texture)
-    self.icon:SetDimensions(iconSize, iconSize)
-    self.icon:SetAnchor(valueSide == LEFT and RIGHT or LEFT)
-
-    if (metadata.cooldown) then
-        self.icon.cooldown = WINDOW_MANAGER:CreateControl(name .. "_icon_cooldown", self.icon, CT_COOLDOWN)
-        self.icon.cooldown:SetDimensions(self.icon:GetWidth(), self.icon:GetHeight())
-        self.icon.cooldown:SetAnchor(CENTER, self.icon, CENTER, 0, 0)
-        self.icon.cooldown:SetFillColor(0, 0.1, 0.1, 0.6)
-        self.icon.cooldown:SetHidden(true)
-    end
-
-    local font = BS.GetFont(barSettings.Override and barSettings)
-
-    if (font == nil) then
-        font = BS.Vars.Font
-    end
-
-    if (BS.Vars.Controls[self.id].Progress) then
-        self.value = BS.CreateProgressBar(name .. "_progress", self.control)
-        self.value:SetAnchor(
-            valueSide == LEFT and RIGHT or LEFT,
-            self.icon,
-            valueSide,
-            valueSide == LEFT and -10 or 10,
-            0
-        )
-        self.value:SetDimensions(200, 32)
-        self.value:SetMinMax(0, 100)
-        self.value.progress:SetColor(
-            unpack(BS.Vars.Controls[metadata.id].ProgressColour or BS.Vars.DefaultWarningColour)
-        )
-        self.value.progress:SetFont(font)
-
-        if (metadata.gradient) then
-            local startg, endg = metadata.gradient()
-            local sr, sg, sb = unpack(startg)
-            local er, eg, eb = unpack(endg)
-
-            self.value:SetGradientColors(sr, sg, sb, 1, er, eg, eb, 1)
+        if (not parent.ref.fontCheck) then
+            parent.ref.fontCheck =
+                WINDOW_MANAGER:CreateControl(BS.Name .. "_FONT_CHECKER_" .. parent.ref.index, parent, CT_LABEL)
+            parent.ref.fontCheck:SetFont(self.font)
+            parent.ref.fontCheck:SetAnchor(TOPLEFT)
+            parent.ref.fontCheck:SetDimensions(50, 32)
+            parent.ref.fontCheck:SetVerticalAlignment(TEXT_ALIGN_CENTER)
+            parent.ref.fontCheck:SetHidden(true)
         end
-    else
-        if (not noValue) then
-            self.value = WINDOW_MANAGER:CreateControl(name .. "_value", self.control, CT_LABEL)
-            self.value:SetFont(font)
-            self.value:SetColor(unpack(BS.Vars.DefaultColour))
-            self.value:SetAnchor(
-                valueSide == LEFT and RIGHT or LEFT,
-                self.icon,
-                valueSide,
-                valueSide == LEFT and -10 or 10,
-                0
-            )
-            self.value:SetDimensions(metadata.valueWidth or 50, 32)
-            self.value:SetVerticalAlignment(TEXT_ALIGN_CENTER)
-        end
+
+        self.fontCheck = parent.ref.fontCheck
+        self.fontCheckApplied = true
     end
+end
 
-    self.tooltip = metadata.tooltip
+function baseWidget:CreateSpacer()
+    self.spacer = self.spacer or WINDOW_MANAGER:CreateControl(nil, self.control, CT_LABEL)
+    self.spacer:SetDimensions(self.horizontalPadding, self.verticalPadding)
+    self.spacer:ClearAnchors()
+    self.spacer:SetAnchor(
+        self.valueSide == LEFT and RIGHT or LEFT,
+        (self.noValue and self.icon or self.value),
+        self.valueSide
+    )
+end
 
-    if (metadata.tooltip) then
-        local anchorControl = noValue and self.icon or self.value
+function baseWidget:CreateTooltip(tooltip)
+    if (tooltip) then
+        local anchorControl = self.noValue and self.icon or self.value
 
-        if (tooltipAnchor == LEFT) then
+        self.tooltip = tooltip
+
+        if (self.tooltipAnchor == LEFT) then
             anchorControl = self.icon
         end
 
         local function getTooltip()
             if (not BS.Vars.HideMouse) then
-                if (metadata.onClick) then
+                if (self:HasOnClick()) then
                     if (self.tooltip:sub(1, 2) ~= "|t") then
                         self.tooltip = zo_iconFormat(BS.CLICK, 32, 32) .. " " .. self.tooltip
                     end
@@ -123,7 +85,7 @@ function baseWidget:Initialise(metadata, parent, tooltipAnchor, valueSide, noVal
         self.control:SetHandler(
             "OnMouseEnter",
             function()
-                local tooltip = getTooltip()
+                local tooltiptext = getTooltip()
 
                 if (not IsInGamepadPreferredMode()) then
                     BS.InfoTTDims = {_G.InformationTooltip:GetDimensionConstraints()}
@@ -135,7 +97,7 @@ function baseWidget:Initialise(metadata, parent, tooltipAnchor, valueSide, noVal
                     )
                 end
 
-                ZO_Tooltips_ShowTextTooltip(anchorControl, tooltipAnchor or BOTTOM, tooltip)
+                ZO_Tooltips_ShowTextTooltip(anchorControl, self.tooltipAnchor or BOTTOM, tooltiptext)
             end
         )
 
@@ -156,48 +118,197 @@ function baseWidget:Initialise(metadata, parent, tooltipAnchor, valueSide, noVal
             end
         )
     end
+end
 
-    if (metadata.onClick) then
+function baseWidget:SetOnClick(onClick)
+    if (onClick) then
+        self.hasOnClick = true
         self.control:SetMouseEnabled(true)
         self.control:SetHandler(
             "OnMouseDown",
             function()
-                metadata.onClick()
+                onClick()
             end
         )
-    end
-
-    self.spacer = WINDOW_MANAGER:CreateControl(name .. "_spacer", self.control, CT_LABEL)
-    self.spacer:SetDimensions(horizontalPadding, verticalPadding)
-    self.spacer:SetAnchor(valueSide == LEFT and RIGHT or LEFT, (noValue and self.icon or self.value), valueSide)
-
-    if (BS.Vars.FontCorrection) then
-        -- create an invisible label for width testing so it doesn't mess with the visible one
-        if (not parent.ref.fontCheck) then
-            parent.ref.fontCheck =
-                WINDOW_MANAGER:CreateControl(BS.Name .. "_FONT_CHECKER_" .. parent.ref.index, parent, CT_LABEL)
-            parent.ref.fontCheck:SetFont(font)
-            parent.ref.fontCheck:SetAnchor(TOPLEFT)
-            parent.ref.fontCheck:SetDimensions(50, 32)
-            parent.ref.fontCheck:SetVerticalAlignment(TEXT_ALIGN_CENTER)
-            parent.ref.fontCheck:SetHidden(true)
-        end
-        self.fontCheck = parent.ref.fontCheck
-    end
-
-    if (DEBUG) then
-        self.overlay = WINDOW_MANAGER:CreateControl(name .. "_overlay", self.control, CT_CONTROL)
-        self.overlay:SetDrawTier(_G.DT_HIGH)
-        self.overlay:SetAnchorFill(self.bar)
-
-        self.overlay.background = WINDOW_MANAGER:CreateControl(name .. "_overlay_background", self.overlay, CT_TEXTURE)
-        self.overlay.background:SetAnchorFill(self.overlay)
-        self.overlay.background:SetTexture("/esoui/art/itemupgrade/eso_itemupgrade_blueslot.dds")
+    else
+        self.hasOnClick = false
     end
 end
 
--- add functions to the widget to mimic a standard control
--- set the widget value and adjust the value control's width accordingly
+function baseWidget:HasOnClick()
+    return self.hasOnClick == true
+end
+
+function baseWidget:SetTooltipAnchor(anchor)
+    self.tooltipAnchor = anchor
+end
+
+function baseWidget:GetTooltipAnchor()
+    return self.tooltipAnchor
+end
+
+BS.ProgressIndex = 0
+
+function baseWidget:CreateProgress(progress, gradient)
+    if (progress) then
+        local name = BS.Name .. "_progress_" .. BS.ProgressIndex
+
+        BS.ProgressIndex = BS.ProgressIndex + 1
+        self.value = self.value or BS.CreateProgressBar(name, self.control)
+        self.value:ClearAnchors()
+        self.value:SetAnchor(
+            self.valueSide == LEFT and RIGHT or LEFT,
+            self.icon,
+            self.valueSide,
+            self.valueSide == LEFT and -10 or 10,
+            0
+        )
+        self.value:SetDimensions(200, 32)
+        self.value:SetMinMax(0, 100)
+        self.value.progress:SetColor(unpack(BS.Vars.Controls[self.id].ProgressColour or BS.Vars.DefaultWarningColour))
+        self.value.progress:SetFont(self.font)
+
+        if (gradient) then
+            local startg, endg = gradient()
+            local sr, sg, sb = unpack(startg)
+            local er, eg, eb = unpack(endg)
+
+            self.value:SetGradientColors(sr, sg, sb, 1, er, eg, eb, 1)
+        end
+    else
+        if (not self:HasNoValue()) then
+            self.value = self.value or WINDOW_MANAGER:CreateControl(nil, self.control, CT_LABEL)
+            self.value:SetFont(self.font)
+            self.value:SetColor(unpack(BS.Vars.DefaultColour))
+            self.value:ClearAnchors()
+            self.value:SetAnchor(
+                self.valueSide == LEFT and RIGHT or LEFT,
+                self.icon,
+                self.valueSide,
+                self.valueSide == LEFT and -10 or 10,
+                0
+            )
+            self.value:SetDimensions(50, 32)
+            self.value:SetVerticalAlignment(TEXT_ALIGN_CENTER)
+        end
+    end
+end
+
+function baseWidget:SetInitialFont()
+    if (self.barSettings.Override and self.barSettings.Font) then
+        self.font = BS.GetFont(self.barSettings)
+    else
+        self.font = BS.GetFont()
+    end
+end
+
+function baseWidget:GetInitialFont()
+    return self.font
+end
+
+function baseWidget:CreateCooldown()
+    self.icon.cooldown = self.icon.cooldown or WINDOW_MANAGER:CreateControl(nil, self.icon, CT_COOLDOWN)
+    self.icon.cooldown:SetDimensions(self.icon:GetWidth(), self.icon:GetHeight())
+    self.icon.cooldown:ClearAnchors()
+    self.icon.cooldown:SetAnchor(CENTER, self.icon, CENTER, 0, 0)
+    self.icon.cooldown:SetFillColor(0, 0.1, 0.1, 0.6)
+    self.icon.cooldown:SetHidden(true)
+end
+
+function baseWidget:CreateIcon(icon)
+    local texture
+
+    if (type(icon) == "function") then
+        texture = icon()
+    else
+        texture = icon
+    end
+
+    self.icon = self.icon or WINDOW_MANAGER:CreateControl(nil, self.control, CT_TEXTURE)
+    self.icon:SetTexture(texture)
+    self.icon:SetDimensions(self.iconSize, self.iconSize)
+    self.icon:ClearAnchors()
+    self.icon:SetAnchor(self.valueSide == LEFT and RIGHT or LEFT)
+end
+
+function baseWidget:SetValueSide(valueSide)
+    self.valueSide = valueSide
+end
+
+function baseWidget:GetValueSide()
+    return self.valueSide
+end
+
+function baseWidget:SetPadding()
+    local horizontalPadding = BS.Vars.HorizontalPadding or 0
+    local verticalPadding = BS.Vars.VerticalPadding or 0
+
+    if (self.barSettings.Override) then
+        horizontalPadding = self.barSettings.HorizontalPadding or 0
+        verticalPadding = self.barSettings.VerticalPadding or 0
+    end
+
+    self.horizontalPadding = horizontalPadding + 10
+    self.minVertical = self.iconSize
+    self.verticalPadding = verticalPadding + self.minVertical
+end
+
+function baseWidget:GetPadding()
+    return self.horizontalPadding, self.verticalPadding
+end
+
+function baseWidget:SetIconSize()
+    self.iconSize = self.barSettings.Override and self.barSettings.IconSize or BS.Vars.IconSize
+
+    if (self.iconSize == nil) then
+        self.iconSize = BS.Vars.IconSize
+    end
+end
+
+function baseWidget:GetIconSize()
+    return self.iconSize
+end
+
+function baseWidget:SetBarSettings(settings)
+    self.barSettings = settings
+end
+
+function baseWidget:GetBarSettings()
+    return self.barSettings
+end
+
+function baseWidget:SetId(id)
+    self.id = id
+end
+
+function baseWidget:GetId()
+    return self.id
+end
+
+function baseWidget:SetNoValue(noValue)
+    self.noValue = noValue
+end
+
+function baseWidget:HasNoValue()
+    return self.noValue == true
+end
+
+function baseWidget:SetParent(parent)
+    self.control:SetParent(parent)
+end
+
+function baseWidget:GetParent()
+    return self.control:GetParent()
+end
+
+function baseWidget:SetMinWidthChars(minWidthChars)
+    self.minWidthChars = minWidthChars
+end
+
+function baseWidget:GetMinWidthChars()
+    return self.minWidthChars
+end
+
 function baseWidget:SetProgress(value, min, max)
     if (self.noValue) then
         return
@@ -212,10 +323,6 @@ end
 
 function baseWidget:SetValue(value, plainValue)
     if (self.noValue) then
-        return
-    end
-
-    if (self.value:GetText() == value) then
         return
     end
 
@@ -258,10 +365,12 @@ function baseWidget:SetFont(font)
         return
     end
 
-    if (self.value.progress) then
-        self.value.progress:SetFont(font)
-    else
-        self.value:SetFont(font)
+    if (self.value) then
+        if (self.value.progress) then
+            self.value.progress:SetFont(font)
+        else
+            self.value:SetFont(font)
+        end
     end
 end
 
@@ -347,7 +456,63 @@ function baseWidget:IsHidden()
     return self.isHidden or false
 end
 
-function BS.CreateWidget(...)
-    local widget = baseWidget:New(...)
+local function checkOrCreatePool()
+    if (not BS.WidgetObjectPool) then
+        BS.WidgetObjects = {}
+        BS.WidgetObjectPool =
+            ZO_ObjectPool:New(
+            -- factory
+            function()
+                return baseWidget:New()
+            end,
+            --reset
+            function(widget)
+                widget.control:SetHidden(true)
+                widget:SetParent(GuiRoot)
+                widget:ClearAnchors()
+
+                widget.destroyed = true
+            end
+        )
+    end
+end
+
+function BS.CreateWidget(metadata, parent, tooltipAnchor, valueSide, noValue, barSettings)
+    checkOrCreatePool()
+
+    -- try to resuse the original widget
+    local widgetKey = BS.WidgetObjects[metadata.id]
+    local widget, key = BS.WidgetObjectPool:AcquireObject(widgetKey)
+    local extant = BS.GetByValue(BS.WidgetObjects, key)
+
+    -- if this object was being used by something else previously, clear it
+    -- so a new one will be created
+    if (extant) then
+        BS.WidgetObjects[extant] = nil
+    end
+
+    BS.WidgetObjects[metadata.id] = key
+
+    widget:SetMinWidthChars(metadata.minWidthChars)
+    widget:SetParent(parent)
+    widget:SetNoValue(noValue)
+    widget:SetId(metadata.id)
+    widget:SetBarSettings(barSettings)
+    widget:SetIconSize()
+    widget:SetPadding()
+    widget:SetValueSide(valueSide)
+    widget:CreateIcon(metadata.icon)
+    widget:CreateCooldown()
+    widget:SetInitialFont()
+    widget:CreateProgress(metadata.progress, metadata.gradient)
+    widget:SetTooltipAnchor(tooltipAnchor)
+    widget:SetOnClick(metadata.onClick)
+    widget:CreateTooltip(metadata.tooltip)
+    widget:CreateSpacer()
+    widget:ApplyFontCorrection()
+    widget:SetHidden(false)
+
+    widget.destroyed = false
+
     return widget
 end

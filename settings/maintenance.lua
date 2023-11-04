@@ -45,8 +45,7 @@ function BS.GetMaintenanceSettings()
                 ZO_Dialogs_ShowDialog(BS.Name .. "Delete")
             end
         end,
-        width = "full",
-        requiresReload = true
+        width = "full"
     }
 
     BS.options[#BS.options + 1] = {
@@ -92,7 +91,7 @@ function BS.DeleteTrackedData()
 
     zo_callLater(
         function()
-            ZO_Dialogs_ShowDialog(BS.Name .. "Reload")
+            BS.RegenerateAllBars()
         end,
         500
     )

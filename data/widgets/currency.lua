@@ -52,6 +52,8 @@ local function currencyWidget(currencyType, widgetIndex, text, eventList, hideWh
         name = "telvarStones"
     elseif (currencyType == _G.CURT_WRIT_VOUCHERS) then
         name = "writVouchers"
+    elseif (currencyType == _G.CURT_ENDLESS_DUNGEON) then
+        name = "archivalFortunes"
     end
 
     if (_G.CURT_ENDLESS_DUNGEON) then
@@ -70,8 +72,8 @@ local function currencyWidget(currencyType, widgetIndex, text, eventList, hideWh
     local widgetCode = {
         name = name,
         update = function(widget)
-            local currencyInBag = GetCurrencyAmount(currencyType, _G.CURRENCY_LOCATION_CHARACTER)
-            local currencyInBank = GetCurrencyAmount(currencyType, _G.CURRENCY_LOCATION_BANK)
+            local currencyInBag = GetCurrencyAmount(currencyType, GetCurrencyPlayerStoredLocation(currencyType))
+            local currencyInBank = GetBankedCurrencyAmount(currencyType)
             local combined = currencyInBag + currencyInBank
             local allCharacters = combined
             local otherCharacterCurrency =
@@ -117,7 +119,7 @@ local function currencyWidget(currencyType, widgetIndex, text, eventList, hideWh
             widget:SetValue(toDisplay)
             widget:SetColour(unpack(BS.Vars.Controls[widgetIndex].Colour or BS.Vars.DefaultColour))
 
-            --- update the tooltip
+            -- update the tooltip
             local ttt =
                 updateTooltip(text, currencyInBag, currencyInBank, combined, charactertt, allCharacters, currencyType)
             widget.tooltip = ttt
@@ -484,10 +486,6 @@ BS.widgets[BS.W_ARCHIVAL_FRAGMENTS] =
         everyWhere = _G.BARSTEWARD_GOLD_EVERYWHERE,
         separated = _G.BARSTEWARD_GOLD_SEPARATED,
         title = BS.Format(_G.BARSTEWARD_ARCHIVAL_FRAGMENTS)
-    }
+    },
+    _G.EVENT_CURRENCY_UPDATE
 )
-BS.CURRENCIES[_G.CURT_ENDLESS_DUNGEON] = {
-    icon = "archivalfragments_mipmaps",
-    crownStore = false,
-    text = _G.BARSTEWARD_ARCHIVAL_FRAGMENTS
-}

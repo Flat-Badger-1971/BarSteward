@@ -143,7 +143,7 @@ BS.widgets[BS.W_FRIENDS] = {
 local function isFriend(displayName)
     local friends = BS.Vars.GuildFriendAnnounce
 
-    for member, _ in pairs(friends) do
+    for member, _ in pairs(friends) do              
         if (member == displayName) then
             return true
         end
@@ -156,7 +156,6 @@ local guildMasterList = {}
 
 local function getMasterList()
     guildMasterList = {}
-
 
     local guildId = BS.guildId
     local localPlayerIndex = GetPlayerGuildMemberIndex(guildId)

@@ -19,33 +19,11 @@ local function getPosition(bar, anchor)
     end
 end
 
-function baseBar:Initialise(barSettings)
-    local barName = BS.Name .. "_bar_" .. barSettings.index
-    local settings = barSettings.settings
-
-    self.name = barName
-    self.index = barSettings.index
-    self.position = barSettings.position
-    self.orientation = (barSettings.position == TOP or barSettings == BOTTOM) and "horizontal" or "vertical"
-    self.defaultHeight = barSettings.iconSize or BS.Vars.IconSize
-    self.settings = barSettings
-
-    self.bar = WINDOW_MANAGER:CreateTopLevelWindow(barName)
+function baseBar:Initialise()
+    self.bar = WINDOW_MANAGER:CreateTopLevelWindow()
     self.bar.ref = self
-    self.bar:SetScale(barSettings.scale * GetUIGlobalScale())
     self.bar:SetResizeToFitDescendents(true)
     self.bar:SetDrawLayer(_G.DL_CONTROLS)
-
-    local valueSide = BS.Vars.Bars[barSettings.index].ValueSide
-
-    self.valueSide = BS.GetAnchorFromText(valueSide)
-
-    local x = settings.Position.X
-    local y = settings.Position.Y
-
-    local barAnchor = BS.GetAnchorFromText(BS.Vars.Bars[barSettings.index].Anchor, true)
-
-    self.bar:SetAnchor(barAnchor, GuiRoot, TOPLEFT, x, y)
     self.bar:SetMouseEnabled(true)
 
     if (BS.Vars.Movable) then
@@ -54,11 +32,11 @@ function baseBar:Initialise(barSettings)
 
     -- save the bar position after it's moved
     local onMouseUp = function()
-        if (BS.Vars.Bars[self.index].NudgeCompass == true and barSettings.index == 1) then
+        if (BS.Vars.Bars[self.index].NudgeCompass == true and self.index == 1) then
             BS.NudgeCompass()
         end
 
-        local anchor = BS.GetAnchorFromText(BS.Vars.Bars[barSettings.index].Anchor)
+        local anchor = BS.GetAnchorFromText(BS.Vars.Bars[self.index].Anchor)
         local xPos, yPos = getPosition(self.bar, anchor)
         local snapX, snapY
         local gridSize = BS.Vars.GridSize
@@ -68,12 +46,12 @@ function baseBar:Initialise(barSettings)
             snapY = BS.GetNearest(yPos, gridSize)
 
             self.bar:ClearAnchors()
-            self.bar:SetAnchor(barAnchor, GuiRoot, TOPLEFT, snapX, snapY)
+            self.bar:SetAnchor(self.barAnchor, GuiRoot, TOPLEFT, snapX, snapY)
 
             xPos, yPos = snapX, snapY
         end
 
-        BS.Vars.Bars[barSettings.index].Position = {X = xPos, Y = yPos}
+        BS.Vars.Bars[self.index].Position = {X = xPos, Y = yPos}
 
         -- stop UI mode being reset too soon
         SetGameCameraUIMode(true)
@@ -81,12 +59,25 @@ function baseBar:Initialise(barSettings)
 
     self.bar:SetHandler("OnMouseUp", onMouseUp)
 
-    self.expand = settings.Expand and self.orientation == "horizontal"
-
     self.checkBackground = function()
-        local vars = BS.Vars.Bars[barSettings.index]
+        if (BS.inCombat) then
+            return
+        end
+
+        local vars = BS.Vars.Bars[self.index]
+        local hasBorder = (vars.Border or 99) ~= 99
 
         self.expand = vars.Expand and self.orientation == "horizontal"
+
+        if (self.expand and hasBorder) then
+            self.bar.border:SetParent(self.bar.expandtlc)
+            self.bar.border:ClearAnchors()
+            self.bar.border:SetAnchorFill()
+        elseif (hasBorder) then
+            self.bar.border:SetParent(self.bar)
+            self.bar.border:ClearAnchors()
+            self.bar.border:SetAnchorFill()
+        end
 
         if ((vars.Background or 99) ~= 99) then
             if (self.expand) then
@@ -119,7 +110,6 @@ function baseBar:Initialise(barSettings)
         end
     end
 
-    self.expand = settings.Expand and self.orientation == "horizontal"
     self.bar.expandtlc = WINDOW_MANAGER:CreateTopLevelWindow()
     self.bar.expandtlc:SetScale(self.bar:GetScale())
     self.bar.expandtlc:SetDrawLayer(_G.DL_BACKGROUND)
@@ -130,17 +120,19 @@ function baseBar:Initialise(barSettings)
     self.bar.expandbackground:SetEdgeColor(0, 0, 0, 0)
     self.bar.expandtlc:SetHidden(true)
 
-    self.bar:SetHandler(
-        "OnRectChanged",
-        function()
+    self.OnRectChanged = function()
+        if (self.expand) then
             local height = self.bar:GetHeight()
 
             self.bar.expandtlc:SetHeight(height)
             self.bar.expandtlc:ClearAnchors()
             self.bar.expandtlc:SetAnchor(RIGHT, GuiRoot, RIGHT)
             self.bar.expandtlc:SetAnchor(TOPLEFT, GuiRoot, TOPLEFT, 0, self.bar:GetTop())
+            self.checkBackground()
         end
-    )
+    end
+
+    self.bar:SetHandler("OnRectChanged", self.OnRectChanged)
 
     self.bar:SetHandler(
         "OnMoveStart",
@@ -168,13 +160,9 @@ function baseBar:Initialise(barSettings)
         end
     )
 
-    self.bar.background = WINDOW_MANAGER:CreateControl(barName .. "_background", self.bar, CT_BACKDROP)
+    self.bar.background = WINDOW_MANAGER:CreateControl(nil, self.bar, CT_BACKDROP)
     self.bar.background:SetAnchorFill(self.bar)
     self.bar.background:SetEdgeColor(0, 0, 0, 0)
-
-    self.checkBackground()
-
-    self.bar.background:SetHidden(not settings.Backdrop.Show)
 
     local borderParent = self.bar
 
@@ -182,19 +170,12 @@ function baseBar:Initialise(barSettings)
         borderParent = self.bar.expandtlc
     end
 
-    self.bar.border = WINDOW_MANAGER:CreateControl(barName .. "_border", borderParent, CT_BACKDROP)
+    self.bar.border = WINDOW_MANAGER:CreateControl(nil, borderParent, CT_BACKDROP)
     self.bar.border:SetDrawTier(_G.DT_MEDIUM)
     self.bar.border:SetCenterTexture(0, 0, 0, 0)
     self.bar.border:SetAnchorFill()
 
-    if ((settings.Border or 99) ~= 99) then
-        self.bar.border:SetEdgeTexture(unpack(BS.BORDERS[settings.Border]))
-    else
-        self.bar.border:SetEdgeTexture("", 128, 2)
-        self.bar.border:SetEdgeColor(0, 0, 0, 0)
-    end
-
-    self.bar.overlay = WINDOW_MANAGER:CreateControl(barName .. "_overlay", self.bar, CT_CONTROL)
+    self.bar.overlay = WINDOW_MANAGER:CreateControl(nil, self.bar, CT_CONTROL)
     self.bar.overlay:SetDrawTier(_G.DT_HIGH)
     self.bar.overlay:SetAnchorFill(self.bar)
     self.bar.overlay:SetHidden(true)
@@ -206,111 +187,184 @@ function baseBar:Initialise(barSettings)
         end
     )
 
-    self.bar.overlay:SetHandler(
-        "OnMouseUp",
-        function()
-            onMouseUp()
-        end
-    )
+    self.bar.overlay:SetHandler("OnMouseUp", onMouseUp)
 
-    self.bar.overlay.background =
-        WINDOW_MANAGER:CreateControl(barName .. "_overlay_background", self.bar.overlay, CT_TEXTURE)
+    self.bar.overlay.background = WINDOW_MANAGER:CreateControl(nil, self.bar.overlay, CT_TEXTURE)
     self.bar.overlay.background:SetAnchorFill(self.bar.overlay)
     self.bar.overlay.background:SetTexture("/esoui/art/itemupgrade/eso_itemupgrade_wildslot.dds")
 
-    if (BS.Vars.Bars[self.index].NudgeCompass == true and barSettings.index == 1) then
-        BS.NudgeCompass()
-    end
-
     -- prevent the bar from displaying when not in hud or hudui modes
     self.bar.fragment = ZO_HUDFadeSceneFragment:New(self.bar)
-    self:AddToScenes()
+end
 
+function baseBar:NudgeCompass()
+    if (BS.Vars.Bars[self.index].NudgeCompass == true and self.index == 1) then
+        BS.NudgeCompass(self.index)
+    end
+end
+
+function baseBar:SetBorder()
+    if ((self.settings.Border or 99) ~= 99) then
+        self.bar.border:SetEdgeTexture(unpack(BS.BORDERS[self.settings.Border]))
+    else
+        self.bar.border:SetEdgeTexture("", 128, 2)
+        self.bar.border:SetEdgeColor(0, 0, 0, 0)
+    end
+end
+
+function baseBar:SetBackground()
+    self.backdropColour = self.settings.Backdrop.Colour
+
+    if ((self.settings.Background or 99) ~= 99) then
+        self.bar.background:SetCenterTexture(BS.BACKGROUNDS[self.settings.Background])
+    else
+        self.bar.background:SetCenterColor(unpack(self.settings.Backdrop.Colour))
+    end
+
+    self.bar.background:SetHidden(not self.settings.Backdrop.Show)
+end
+
+function baseBar:SetCombatFunction()
     -- change the bar's colour during combat if required by the user
     BS.RegisterForEvent(
         _G.EVENT_PLAYER_COMBAT_STATE,
-        function(_, inCombat)
-            if (BS.Vars.Bars[barSettings.index].CombatColourChange) then
-                if (inCombat == nil) then
-                    inCombat = IsUnitInCombat("player")
-                end
-
-                if (inCombat) then
-                    if ((self.settings.settings.Background or 99) ~= 99) then
-                        if (self.Expand) then
+        function()
+            if (BS.Vars.Bars[BS.MAIN_BAR].CombatColourChange) then
+                if (BS.inCombat) then
+                    if ((self.background or 99) ~= 99) then
+                        if (self.expand) then
                             self.bar.expandbackground:SetCenterTexture("")
                         else
                             self.bar.background:SetCenterTexture("")
                         end
                     end
 
-                    if (self.Expand) then
+                    if (self.expand) then
                         self.bar.expandbackground:SetCenterColor(
-                            unpack(BS.Vars.Bars[barSettings.index].CombatColour or BS.Vars.DefaultCombatColour)
+                            unpack(BS.Vars.Bars[self.index].CombatColour or BS.Vars.DefaultCombatColour)
                         )
                     else
                         self.bar.background:SetCenterColor(
-                            unpack(BS.Vars.Bars[barSettings.index].CombatColour or BS.Vars.DefaultCombatColour)
+                            unpack(BS.Vars.Bars[self.index].CombatColour or BS.Vars.DefaultCombatColour)
                         )
                     end
                 else
-                    if ((self.settings.settings.Background or 99) ~= 99) then
+                    if ((self.background or 99) ~= 99) then
                         if (self.expand) then
                             self.bar.expandbackground:SetCenterColor(1, 1, 1, 1)
-                            self.bar.expandbackground:SetCenterTexture(BS.BACKGROUNDS[settings.Background])
+                            self.bar.expandbackground:SetCenterTexture(BS.BACKGROUNDS[self.settings.Background])
                         else
                             self.bar.background:SetCenterColor(1, 1, 1, 1)
-                            self.bar.background:SetCenterTexture(BS.BACKGROUNDS[settings.Background])
+                            self.bar.background:SetCenterTexture(BS.BACKGROUNDS[self.settings.Background])
                         end
                     else
                         if (self.expand) then
-                            self.bar.expandbackground:SetCenterColor(unpack(settings.Backdrop.Colour))
+                            self.bar.expandbackground:SetCenterColor(unpack(self.settings.Backdrop.Colour))
                         else
-                            self.bar.background:SetCenterColor(unpack(settings.Backdrop.Colour))
+                            self.bar.background:SetCenterColor(unpack(self.settings.Backdrop.Colour))
                         end
                     end
-                end
-            else
-                if (self.expand) then
-                    self.bar.expandbackground:SetCenterColor(unpack(settings.Backdrop.Colour))
-                else
-                    self.bar.background:SetCenterColor(unpack(settings.Backdrop.Colour))
                 end
             end
         end
     )
 end
 
+function baseBar:SetAnchors()
+    local x = BS.Vars.Bars[self.index].Position.X
+    local y = BS.Vars.Bars[self.index].Position.Y
+
+    self.barAnchor = BS.GetAnchorFromText(BS.Vars.Bars[self.index].Anchor, true)
+
+    self.bar:SetAnchor(self.barAnchor, GuiRoot, TOPLEFT, x, y)
+end
+
+function baseBar:GetAnchor(index)
+    return self.bar:GetAnchor(index)
+end
+
+function baseBar:ClearAnchors()
+    self.bar:ClearAnchors()
+end
+
+function baseBar:SetValueSide()
+    local valueSide = BS.Vars.Bars[self.index].ValueSide
+
+    self.valueSide = BS.GetAnchorFromText(valueSide)
+end
+
+function baseBar:GetValueSize()
+    return self.valueSide
+end
+
+function baseBar:SetScale(scale)
+    self.bar:SetScale(scale * GetUIGlobalScale())
+end
+
+function baseBar:GetScale()
+    return self.bar:GetScale()
+end
+
+function baseBar:SetSettings(settings)
+    self.settings = settings
+end
+
+function baseBar:GetSettings()
+    return self.settings
+end
+
+function baseBar:SetIconSize(iconSize)
+    self.defaultHeight = iconSize or BS.Vars.IconSize
+end
+
+function baseBar:GetDefaultHeight()
+    return self.defaultHeight
+end
+
+function baseBar:SetPositionAndOrientation(position)
+    self.position = position
+    self.orientation = (self.position == TOP or self.position == BOTTOM) and "horizontal" or "vertical"
+end
+
+function baseBar:GetPosition()
+    return self.position
+end
+
+function baseBar:SetExpand(expand)
+    self.expand = expand and self.orientation == "horizontal"
+end
+
+function baseBar:GetOrientation()
+    return self.orientation
+end
+
+function baseBar:SetIndex(index)
+    self.index = index
+end
+
+function baseBar:GetIndex()
+    return self.index
+end
+
 function baseBar:AddToScenes()
-    if (not BS.Vars.Bars[self.settings.index].ShowEverywhere) then
+    if (not BS.Vars.Bars[self.index].ShowEverywhere) then
         SCENE_MANAGER:GetScene("hud"):AddFragment(self.bar.fragment)
         SCENE_MANAGER:GetScene("hudui"):AddFragment(self.bar.fragment)
 
-        BS.AddToScenes("Crafting", self.settings.index, self.bar)
-        BS.AddToScenes("Banking", self.settings.index, self.bar)
-        BS.AddToScenes("Inventory", self.settings.index, self.bar)
-        BS.AddToScenes("Mail", self.settings.index, self.bar)
-        BS.AddToScenes("Siege", self.settings.index, self.bar)
-        BS.AddToScenes("Menu", self.settings.index, self.bar)
-        BS.AddToScenes("Interacting", self.settings.index, self.bar)
-        BS.AddToScenes("GuildStore", self.settings.index, self.bar)
-        BS.AddToScenes("CrownStore", self.settings.index, self.bar)
+        for _, scene in ipairs(BS.SCENES) do
+            BS.AddToScenes(BS.SentenceCase(scene), self.index, self.bar)
+        end
     end
 end
 
-function baseBar:RemoveFromScenes()
-    if (not BS.Vars.Bars[self.settings.index].ShowEverywhere) then
+function baseBar:RemoveFromScenes(override)
+    if ((not BS.Vars.Bars[self.index].ShowEverywhere) or override) then
         SCENE_MANAGER:GetScene("hud"):RemoveFragment(self.bar.fragment)
         SCENE_MANAGER:GetScene("hudui"):RemoveFragment(self.bar.fragment)
 
-        BS.RemoveFromScenes("Crafting", self.bar)
-        BS.RemoveFromScenes("Banking", self.bar)
-        BS.RemoveFromScenes("Inventory", self.bar)
-        BS.RemoveFromScenes("Mail", self.bar)
-        BS.RemoveFromScenes("Siege", self.bar)
-        BS.RemoveFromScenes("Menu", self.bar)
-        BS.RemoveFromScenes("Interacting", self.bar)
-        BS.RemoveFromScenes("GuildStore", self.bar)
+        for _, scene in ipairs(BS.SCENES) do
+            BS.RemoveFromScenes(BS.SentenceCase(scene), self.bar)
+        end
     end
 end
 
@@ -401,6 +455,18 @@ end
 
 function baseBar:DoUpdate(metadata, ...)
     -- update the widget and capture the raw value for use in HideWhen
+
+    if (self.destroyed) then
+        return
+    end
+
+    local widgetKey = BS.WidgetObjects[metadata.id]
+    local widget = BS.WidgetObjectPool:AcquireObject(widgetKey)
+
+    if (widget.destroyed) then
+        return
+    end
+
     -- get the widget's current (new) value
     local value = metadata.update(metadata.widget, ...)
     local hidecheck = false
@@ -531,8 +597,7 @@ function baseBar:AddWidgets(widgets)
 
         local noValue = BS.Vars.Controls[metadata.id].NoValue or false
 
-        metadata.widget =
-            BS.CreateWidget(metadata, self.bar, tooltipAnchor, self.valueSide, noValue, self.settings.settings)
+        metadata.widget = BS.CreateWidget(metadata, self.bar, tooltipAnchor, self.valueSide, noValue, self.settings)
 
         -- register widgets that need to watch for events
         if (metadata.event) then
@@ -672,11 +737,66 @@ function baseBar:Toggle()
     end
 end
 
-function BS.CreateBar(...)
-    local bar = baseBar:New(...)
+local function checkOrCreatePool()
+    if (not BS.BarObjectPool) then
+        BS.BarObjects = {}
+        BS.BarObjectPool =
+            ZO_ObjectPool:New(
+            -- factory
+            function()
+                return baseBar:New()
+            end,
+            --reset
+            function(bar)
+                bar.destroyed = true
+                bar:RemoveFromScenes()
+                bar:Hide()
+                bar.bar:SetHidden(true)
+                bar:ClearAnchors()
+            end
+        )
+    end
+end
 
-    BS.Bars = BS.Bars or {}
-    table.insert(BS.Bars, bar.name)
+function BS.CreateBar(barSettings)
+    checkOrCreatePool()
+
+    local barKey = BS.BarObjects[barSettings.index]
+    local bar, key = BS.BarObjectPool:AcquireObject(barKey)
+    local extant = BS.GetByValue(BS.BarObjects, key)
+
+    -- if this object was being used by something else previously, clear it
+    -- so a new one will be created
+    if (extant) then
+        BS.BarObjects[extant] = nil
+    end
+
+    BS.BarObjects[barSettings.index] = key
+
+    bar:SetIndex(barSettings.index)
+    bar:SetPositionAndOrientation(barSettings.position)
+    bar:SetExpand(barSettings.settings.Expand)
+    bar:SetIconSize(barSettings.iconSize)
+    bar:SetSettings(barSettings.settings)
+    bar:SetScale(barSettings.scale)
+    bar:SetValueSide()
+    bar:SetAnchors()
+    bar:SetBackground()
+    bar:SetBorder()
+
+    if (barSettings.index == BS.MAIN_BAR) then
+        bar:SetCombatFunction()
+    end
+
+    bar:NudgeCompass()
+    bar:AddToScenes()
+    bar:Show()
+
+    bar.destroyed = false
+
+    if (bar.bar:IsHidden()) then
+        bar.bar:SetHidden(false)
+    end
 
     return bar
 end

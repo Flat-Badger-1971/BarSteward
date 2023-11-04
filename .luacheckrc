@@ -6,7 +6,8 @@ max_line_length = 160
 read_globals = {
     ["CALLBACK_MANAGER"] = {
         fields = {
-            FireCallbacks = {read_only = true}
+            FireCallbacks = {read_only = true},
+            RegisterCallback = {read_only = true}
         }
     },
     ["CENTER_SCREEN_ANNOUNCE"] = {
@@ -174,30 +175,6 @@ read_globals = {
             GetCollectibleDataById = {read_only = true}
         }
     },
-    ["ZO_ComboBox"] = {
-        fields = {
-            CreateItemEntry = {read_only = true}
-        }
-    },
-    ["ZO_CompassFrame"] = {
-        fields = {
-            GetTop = {read_only = true},
-            ClearAnchors = {read_only = true},
-            SetAnchor = {read_only = true}
-        }
-    },
-    ["ZO_Object"] = {
-        fields = {
-            New = {read_only = true},
-            Subclass = {read_only = true}
-        }
-    },
-    ["ZO_TargetUnitFramereticleover"] = {
-        fields = {
-            ClearAnchors = {read_only = true},
-            SetAnchor = {read_only = true}
-        }
-    },
     -- constants
     "BOTTOM",
     "BOTTOMLEFT",
@@ -267,6 +244,7 @@ read_globals = {
     "GetAntiquityQuality",
     "GetAntiquityZoneId",
     "GetAvailableSkillPoints",
+    "GetBankedCurrencyAmount",
     "GetChampionDisciplineId",
     "GetChampionDisciplineName",
     "GetChampionPointPoolForRank",
@@ -320,6 +298,8 @@ read_globals = {
     "GetItemLinkItemId",
     "GetItemLinkItemType",
     "GetItemLinkName",
+    "GetItemLinkMaxEnchantCharges",
+    "GetItemLinkNumEnchantCharges",
     "GetItemName",
     "GetItemLinkMaxEnchantCharges",
     "GetItemLinkNumEnchantCharges",
@@ -443,11 +423,26 @@ read_globals = {
     "HUD_SCENE",
     "ZO_CachedStrFormat",
     "ZO_CallbackObject",
+    "ZO_CheckButton_IsChecked",
     "ZO_CheckButton_SetCheckState",
     "ZO_CheckButton_SetLabelText",
     "ZO_CheckButton_SetToggleFunction",
+    "ZO_CheckButtonLabel_SetTextColor",
     "ZO_ClearNumericallyIndexedTable",
+    "ZO_ClearTable",
+    ["ZO_ComboBox"] = {
+        fields = {
+            CreateItemEntry = {read_only = true}
+        }
+    },
     "ZO_CommaDelimitNumber",
+    ["ZO_CompassFrame"] = {
+        fields = {
+            GetTop = {read_only = true},
+            ClearAnchors = {read_only = true},
+            SetAnchor = {read_only = true}
+        }
+    },
     "ZO_CreateStringId",
     "ZO_DeepTableCopy",
     "ZO_Dialogs_RegisterCustomDialog",
@@ -473,6 +468,12 @@ read_globals = {
     "ZO_MailSendBodyField",
     "ZO_MailSendSubjectField",
     "ZO_MailSendToField",
+    ["ZO_Object"] = {
+        fields = {
+            New = {read_only = true},
+            Subclass = {read_only = true}
+        }
+    },
     ["ZO_ObjectPool"] = {
         fields = {
             New = {read_only = true}
@@ -499,6 +500,12 @@ read_globals = {
     "ZO_SocialList_GetPlatformTextureFunctions",
     "ZO_SocialList_GetRowColors",
     "ZO_StatusBar_InitializeDefaultColors",
+    ["ZO_TargetUnitFramereticleover"] = {
+        fields = {
+            ClearAnchors = {read_only = true},
+            SetAnchor = {read_only = true}
+        }
+    },
     "ZO_TimerBar",
     "ZO_Tooltips_HideTextTooltip",
     "ZO_Tooltips_ShowTextTooltip",

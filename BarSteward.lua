@@ -194,6 +194,28 @@ local function Initialise()
         }
     }
 
+    local confirm = {
+        title = {text = GetString(_G.BARSTEWARD_REPLACE)},
+        mainText = {
+            text = GetString(_G.BARSTEWARD_REPLACE_CONFIRM)
+        },
+        buttons = {
+            {
+                text = BS.Format(_G.SI_DIALOG_YES),
+                callback = function()
+                    BS.ReplaceMain = true
+                    BS.DoImport()
+                end
+            },
+            {
+                text = BS.Format(_G.SI_DIALOG_NO),
+                callback = function()
+                    BS.ReplaceMain = false
+                end
+            }
+        }
+    }
+
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "NotEmpty", notempty)
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "NotEmptyGeneric", notemptyGeneric)
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "Exists", exists)
@@ -205,6 +227,7 @@ local function Initialise()
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "Resize", resize)
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "Delete", delete)
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "Import", import)
+    ZO_Dialogs_RegisterCustomDialog(BS.Name .. "Confirm", confirm)
 
     -- saved variables
     BS.Vars =
@@ -260,96 +283,13 @@ local function Initialise()
 
     -- create bars
     local bars = BS.Vars.Bars
+
+    BS.Bars = {}
     BS.alignBars = {}
 
-    for idx, barData in pairs(bars) do
-        if (not BS.Vars.Bars[idx].Disable) then
-            if (idx < BS.MAX_BINDINGS) then
-                ZO_CreateStringId(
-                    "SI_BINDING_NAME_BARSTEWARD_KEYBIND_TOGGLE_BAR_" .. idx,
-                    ZO_CachedStrFormat(_G.BARSTEWARD_TOGGLE, barData.Name)
-                )
-            end
-
-            local widgets = {}
-            local orderedWidgets = {}
-
-            table.insert(BS.alignBars, barData.Name)
-
-            -- get the widgets for this bar
-            for id, info in ipairs(BS.Vars.Controls) do
-                if (info.Bar == idx) then
-                    local add = true
-                    if (info.Requires) then
-                        local requiredLib = info.Requires
-                        if (_G[requiredLib] == nil) then
-                            add = false
-                        end
-                    end
-
-                    if (add) then
-                        local widget = BS.widgets[id]
-                        widget.id = id
-                        table.insert(widgets, {info.Order, widget})
-                    end
-                end
-            end
-
-            -- add any housing widgets
-            BS.AddHousingWidgets(idx, widgets)
-
-            -- ensure the widgets are in the order we want them drawn
-            table.sort(
-                widgets,
-                function(a, b)
-                    return a[1] < b[1]
-                end
-            )
-
-            if (#widgets > 0) then
-                -- ensure there are no gaps in the array sequence
-                local widgetIndex = 1
-                for _, v in ipairs(widgets) do
-                    orderedWidgets[widgetIndex] = v[2]
-                    widgetIndex = widgetIndex + 1
-                end
-
-                local bar =
-                    BS.CreateBar(
-                    {
-                        index = idx,
-                        position = barData.Orientation == GetString(_G.BARSTEWARD_HORIZONTAL) and TOP or LEFT,
-                        scale = barData.Scale or GuiRoot:GetScale(),
-                        settings = BS.Vars.Bars[idx]
-                    }
-                )
-
-                bar:AddWidgets(orderedWidgets)
-
-                if (BS.Vars.Bars[idx].ToggleState == "hidden") then
-                    zo_callLater(
-                        function()
-                            bar:Hide()
-                        end,
-                        500
-                    )
-                end
-            end
-
-            if (BS.Vars.Bars[idx].NudgeCompass) then
-                BS.NudgeCompass()
-                -- from Bandits UI
-                -- stop the game move the compass back to its original position
-                local block = {ZO_CompassFrame_Keyboard_Template = true, ZO_CompassFrame_Gamepad_Template = true}
-                local ZO_ApplyTemplateToControl = _G.ApplyTemplateToControl
-                _G.ApplyTemplateToControl = function(control, templateName)
-                    if block[templateName] then
-                        return
-                    else
-                        ZO_ApplyTemplateToControl(control, templateName)
-                    end
-                end
-            end
+    for barIndex in pairs(bars) do
+        if (not BS.Vars.Bars[barIndex].Disable) then
+            BS.GenerateBar(barIndex)
         end
     end
 
@@ -396,7 +336,11 @@ local function Initialise()
 end
 
 function BS.ToggleBar(index)
-    _G[BS.Name .. "_bar_" .. index].ref:Toggle()
+    local bar = BS.BarObjectPool:GetActiveObject(BS.BarObjects[index])
+
+    if (bar) then
+        bar.ref:Toggle()
+    end
 end
 
 function BS.OnAddonLoaded(_, addonName)

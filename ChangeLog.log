@@ -1,3 +1,11 @@
+[color=#ff9900][b]Version: 2.0.0 ---------------[/b][/color]
+Major code refactor
+Number of options that require a UI reload reduced by 80%
+Widget reordering tool ordering method changed to simplify moving widgets through multiple positions
+Bug fix for max research times
+Option added to replace the main bar when importing a bar
+Bug fix for Archival Fragments widget
+
 [color=#ff9900][b]Version: 1.7.4 ---------------[/b][/color]
 Minor code refactor
 Change currency tooltip to function

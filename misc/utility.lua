@@ -449,8 +449,17 @@ function BS.AddSeparators(number)
 end
 
 -- based on Wykkyd toolbar
+function BS.ResetNudge()
+    if (ZO_CompassFrame:GetTop()) ~= 40 then
+        ZO_CompassFrame:ClearAnchors()
+        ZO_CompassFrame:SetAnchor(TOP, GuiRoot, TOP, 0, 40)
+        ZO_TargetUnitFramereticleover:ClearAnchors()
+        ZO_TargetUnitFramereticleover:SetAnchor(TOP, GuiRoot, TOP, 0, 88)
+    end
+end
+
 function BS.NudgeCompass()
-    local bar1Top = _G[BS.Name .. "_bar_1"]:GetTop()
+    local bar1Top = BS.BarObjectPool:GetActiveObject(BS.BarObjects[1]).bar:GetTop()
 
     if (bar1Top <= 80) then
         if (ZO_CompassFrame:GetTop() ~= bar1Top + 70) then
@@ -463,12 +472,7 @@ function BS.NudgeCompass()
         ZO_TargetUnitFramereticleover:ClearAnchors()
         ZO_TargetUnitFramereticleover:SetAnchor(TOP, GuiRoot, TOP, 0, bar1Top + 50)
     else
-        if ZO_CompassFrame:GetTop() ~= 40 then
-            ZO_CompassFrame:ClearAnchors()
-            ZO_CompassFrame:SetAnchor(TOP, GuiRoot, TOP, 0, 40)
-            ZO_TargetUnitFramereticleover:ClearAnchors()
-            ZO_TargetUnitFramereticleover:SetAnchor(TOP, GuiRoot, TOP, 0, 88)
-        end
+        BS.ResetNudge()
     end
 end
 
@@ -581,6 +585,10 @@ function BS.GetFont(vars)
 end
 
 function BS.AddToScenes(sceneType, barIndex, bar, override)
+    if (sceneType == "Default") then
+        return
+    end
+
     local group = BS[sceneType:upper() .. "_SCENES"]
 
     sceneType = "ShowWhilst" .. sceneType
@@ -593,10 +601,22 @@ function BS.AddToScenes(sceneType, barIndex, bar, override)
 end
 
 function BS.RemoveFromScenes(sceneType, bar)
+    if (sceneType == "Default") then
+        return
+    end
+
     local group = BS[sceneType:upper() .. "_SCENES"]
 
     for _, scene in ipairs(group) do
         SCENE_MANAGER:GetScene(scene):RemoveFragment(bar.fragment)
+    end
+end
+
+function BS.RemoveFromAllScenes(barIndex)
+    local bar = BS.BarObjectPool:GetActiveObject(BS.BarObjects[barIndex])
+
+    for _, scene in ipairs(BS.SCENES) do
+        BS.RemoveFromScenes(scene, bar)
     end
 end
 
@@ -609,22 +629,24 @@ end
 
 function BS.RefreshWidget(widgetIndex)
     if (BS.Vars.Controls[widgetIndex].Bar ~= 0) then
-        local widget = _G[BS.Name .. "_Widget_" .. BS.widgets[widgetIndex].name]
+        local widget = BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[widgetIndex])
 
         if (widget ~= nil) then
-            BS.widgets[widgetIndex].update(widget.ref, "initial")
+            BS.widgets[widgetIndex].update(widget, "initial")
         end
     end
 end
 
 function BS.RefreshBar(widgetIndex)
     if (BS.Vars.Controls[widgetIndex].Bar ~= 0) then
-        local widget = _G[BS.Name .. "_Widget_" .. BS.widgets[widgetIndex].name]
+        local widget = BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[widgetIndex])
 
         if (widget ~= nil) then
-            local bar = widget.ref.control:GetParent().ref
+            local barIndex = BS.Vars.Controls[widgetIndex].Bar
+            local bar = BS.BarObjectPool:GetActiveObject(BS.BarObjects[barIndex])
             local metadata = BS.widgets[widgetIndex]
-            metadata.widget = widget.ref
+
+            metadata.widget = widget
             bar:DoUpdate(metadata)
         end
     end
@@ -685,34 +707,38 @@ function BS.ResizeBar(barIndex)
         return
     end
 
-    local bar = _G[BS.Name .. "_bar_" .. barIndex].ref.bar
+    local barObject = BS.BarObjectPool:GetActiveObject(BS.BarObjects[barIndex])
 
-    bar:SetResizeToFitDescendents(false)
-    bar:SetDimensions(0, 0)
-    bar:SetResizeToFitDescendents(true)
+    if (barObject) then
+        local bar = barObject.bar
 
-    -- check for hidden widgets
-    local allHidden = true
+        bar:SetResizeToFitDescendents(false)
+        bar:SetDimensions(0, 0)
+        bar:SetResizeToFitDescendents(true)
 
-    for index, widget in pairs(BS.Vars.Controls) do
-        if (widget.Bar == barIndex) then
-            local w = _G[string.format("%s_Widget_%s", BS.Name, BS.widgets[index].name)]
+        -- check for hidden widgets
+        local allHidden = true
 
-            if (w and not w.ref.isHidden) then
-                allHidden = false
-                break
+        for index, widget in pairs(BS.Vars.Controls) do
+            if (widget.Bar == barIndex) then
+                local w = BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[index])
+
+                if (w and not w:IsHidden()) then
+                    allHidden = false
+                    break
+                end
             end
         end
-    end
 
-    -- if the bar is hidden, hide the border
-    if (allHidden) then
-        bar.border:SetEdgeTexture("", 128, 2)
-        bar.border:SetEdgeColor(0, 0, 0, 0)
-    elseif (bar.ToggleState ~= "hidden") then
-        if ((BS.Vars.Bars[barIndex].Border or 99) ~= 99) then
-            bar.border:SetEdgeTexture(unpack(BS.BORDERS[BS.Vars.Bars[barIndex].Border]))
-            bar.border:SetEdgeColor(1, 1, 1, 1)
+        -- if the bar is hidden, hide the border
+        if (allHidden) then
+            bar.border:SetEdgeTexture("", 128, 2)
+            bar.border:SetEdgeColor(0, 0, 0, 0)
+        elseif (bar.ToggleState ~= "hidden") then
+            if ((BS.Vars.Bars[barIndex].Border or 99) ~= 99) then
+                bar.border:SetEdgeTexture(unpack(BS.BORDERS[BS.Vars.Bars[barIndex].Border]))
+                bar.border:SetEdgeColor(1, 1, 1, 1)
+            end
         end
     end
 end
@@ -1246,6 +1272,20 @@ function BS.DoImport()
     local barname = zo_strformat(GetString(_G.BARSTEWARD_NEW_BAR_DEFAULT_NAME), newBarId)
     local x, y = GuiRoot:GetCenter()
 
+    if (BS.ReplaceMain) then
+        BS.DestroyBar(BS.MAIN_BAR)
+
+        local widgets = BS.Vars.Controls
+
+        for _, widgetData in pairs(widgets) do
+            if (widgetData.Bar == BS.MAIN_BAR) then
+                widgetData.Bar = 0
+            end
+        end
+
+        newBarId = BS.MAIN_BAR
+    end
+
     BS.Vars.Bars[newBarId] = {
         Orientation = GetString(_G.BARSTEWARD_HORIZONTAL),
         Position = {X = x, Y = y},
@@ -1273,7 +1313,6 @@ function BS.DoImport()
         end
     end
 
-    --reload ui
     zo_callLater(
         function()
             ZO_Dialogs_ShowDialog(BS.Name .. "Reload")
@@ -1282,7 +1321,7 @@ function BS.DoImport()
     )
 end
 
-function BS.ImportBar(data)
+function BS.ImportBar(data, replaceMain)
     local importTable = validate(data)
 
     if (importTable) then
@@ -1297,7 +1336,9 @@ function BS.ImportBar(data)
 
         BS.ImportData = importTable
 
-        if (widgetCount > 0) then
+        if (ZO_CheckButton_IsChecked(replaceMain)) then
+            ZO_Dialogs_ShowDialog(BS.Name .. "Confirm")
+        elseif (widgetCount > 0) then
             BS.MovingWidgets = widgetCount
             ZO_Dialogs_ShowDialog(BS.Name .. "Import")
         else
@@ -1317,4 +1358,229 @@ function BS.GetNearest(input, factor)
     end
 
     return result
+end
+
+local function getWidgets(barIndex)
+    local widgets = {}
+
+    -- get the widgets for this bar
+    for id, info in ipairs(BS.Vars.Controls) do
+        if (id ~= BS.W_PORT) then
+            if (info.Bar == barIndex) then
+                local add = true
+
+                if (info.Requires) then
+                    local requiredLib = info.Requires
+
+                    if (_G[requiredLib] == nil) then
+                        add = false
+                    end
+                end
+
+                if (add) then
+                    local widget = BS.widgets[id]
+
+                    widget.id = id
+                    table.insert(widgets, {info.Order, widget})
+                end
+            end
+        end
+    end
+
+    -- add any housing widgets
+    BS.AddHousingWidgets(barIndex, widgets)
+
+    -- ensure the widgets are in the order we want them drawn
+    table.sort(
+        widgets,
+        function(a, b)
+            return a[1] < b[1]
+        end
+    )
+
+    local orderedWidgets = {}
+
+    if (#widgets > 0) then
+        -- ensure there are no gaps in the array sequence
+        local widgetIndex = 1
+
+        for _, v in ipairs(widgets) do
+            orderedWidgets[widgetIndex] = v[2]
+            widgetIndex = widgetIndex + 1
+        end
+    end
+
+    return orderedWidgets
+end
+
+local function setBinding(barIndex, barName)
+    local stringId = "SI_BINDING_NAME_BARSTEWARD_KEYBIND_TOGGLE_BAR_" .. barIndex
+
+    if (not _G[stringId]) then
+        if (barIndex < BS.MAX_BINDINGS) then
+            ZO_CreateStringId(stringId, ZO_CachedStrFormat(_G.BARSTEWARD_TOGGLE, barName))
+        end
+    -- else
+    --     local id = _G[stringId]
+    --     _G[stringId] = nil
+    --     _G.EsoStrings[id] = nil
+    end
+end
+
+function BS.GenerateBar(barIndex)
+    if ((barIndex or 0) == 0) then
+        return
+    end
+
+    local barData = BS.Vars.Bars[barIndex]
+    local bar =
+        BS.CreateBar(
+        {
+            index = barIndex,
+            position = barData.Orientation == GetString(_G.BARSTEWARD_HORIZONTAL) and TOP or LEFT,
+            scale = barData.Scale or GuiRoot:GetScale(),
+            settings = BS.Vars.Bars[barIndex]
+        }
+    )
+
+    local widgets = getWidgets(barIndex)
+
+    if (#widgets > 0) then
+        bar:AddWidgets(widgets)
+
+        if (BS.Vars.Bars[barIndex].ToggleState == "hidden") then
+            zo_callLater(
+                function()
+                    bar:Hide()
+                end,
+                500
+            )
+        end
+    end
+
+    if (BS.Vars.Bars[barIndex].NudgeCompass) then
+        BS.NudgeCompass()
+        -- from Bandits UI
+        -- stop the game move the compass back to its original position
+        local block = {ZO_CompassFrame_Keyboard_Template = true, ZO_CompassFrame_Gamepad_Template = true}
+        local ZO_ApplyTemplateToControl = _G.ApplyTemplateToControl
+
+        _G.ApplyTemplateToControl = function(control, templateName)
+            if block[templateName] then
+                return
+            else
+                ZO_ApplyTemplateToControl(control, templateName)
+            end
+        end
+    end
+
+    setBinding(barIndex)
+
+    local barName = BS.Vars.Bars[barIndex].Name
+
+    if (not ZO_IsElementInNumericallyIndexedTable(BS.alignBars, barName)) then
+        table.insert(BS.alignBars, barName)
+        table.insert(BS.Bars, barName)
+    end
+end
+
+function BS.DestroyBar(barIndex)
+    if ((barIndex or 0) == 0) then
+        return
+    end
+
+    -- remove the bar from all scenes
+    BS.RemoveFromAllScenes(barIndex)
+
+    -- return widgets to the pool
+    local widgets = getWidgets(barIndex)
+
+    for widgetIndex = #widgets, 1, -1 do
+        local keyIndex = widgets[widgetIndex].id
+        local widgetKey = BS.WidgetObjects[keyIndex]
+
+        BS.WidgetObjectPool:ReleaseObject(widgetKey)
+    end
+
+    -- return bar to the pool
+    local barKey = BS.BarObjects[barIndex]
+
+    BS.BarObjectPool:ReleaseObject(barKey)
+
+    -- unset the binding
+    --setBinding(barIndex)
+
+    -- remove the bar name from the list of alignment bars
+    local barName = BS.Vars.Bars[barIndex].Name
+
+    BS.alignBars =
+        BS.Filter(
+        BS.alignBars,
+        function(v)
+            return v ~= barName
+        end
+    )
+
+    BS.Bars =
+        BS.Filter(
+        BS.Bars,
+        function(v)
+            return v ~= barName
+        end
+    )
+end
+
+local function refreshBarWidgets(barIndex)
+    local widgets = getWidgets(barIndex)
+
+    for _, widget in pairs(widgets) do
+        BS.RefreshWidget(widget.id)
+    end
+end
+
+function BS.RegenerateBar(barIndex, destroyWidget)
+    if ((barIndex or 0) == 0) then
+        return
+    end
+
+    if (destroyWidget) then
+        local widgetKey = BS.WidgetObjects[destroyWidget]
+
+        if (widgetKey) then
+            BS.WidgetObjectPool:ReleaseObject(widgetKey)
+        end
+    end
+
+    if (not BS.Vars.Bars[barIndex].Disable) then
+        BS.DestroyBar(barIndex)
+        BS.GenerateBar(barIndex)
+        refreshBarWidgets(barIndex)
+        BS.ResizeBar(barIndex)
+    end
+end
+
+function BS.RegenerateAllBars(barsToRegenerate)
+    local bars = BS.Vars.Bars
+    local regenerate = true
+
+    for barIndex, barInfo in pairs(bars) do
+        if (barsToRegenerate) then
+            if (barsToRegenerate[barIndex]) then
+                regenerate = true
+            else
+                regenerate = false
+            end
+        end
+
+        if ((not barInfo.Disable) and regenerate) then
+            BS.RegenerateBar(barIndex)
+        end
+    end
+end
+
+function BS.SentenceCase(text)
+    local initial = text:sub(1, 1):upper()
+    local rest = text:sub(2)
+
+    return initial .. rest
 end

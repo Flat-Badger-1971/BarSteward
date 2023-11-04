@@ -13,24 +13,18 @@
                     <Dimensions x="300" y="32" />
                     <Anchor point="LEFT" relativeTo="$(parent)Icon" relativePoint="RIGHT" offsetX="10" offsetY="0" />
                 </Label>
-                <Texture name="$(parent)MoveUp" tier="HIGH" textureFile="/esoui/art/buttons/large_uparrow_up.dds" mouseEnabled="true">
+                <Control name="$(parent)CheckBox" resizeToFitDescendents="true">
                     <Dimensions x="32" y="32" />
-                    <Anchor point="RIGHT" />
-                    <OnMouseDown>
-                        BarSteward.OrderUp(self)
-                    </OnMouseDown>
-                </Texture>
-                <Texture name="$(parent)MoveDown" tier="HIGH" textureFile="/esoui/art/buttons/large_downarrow_up.dds" mouseEnabled="true">
-                    <Dimensions x="32" y="32" />
-                    <Anchor point="RIGHT" relativeTo="$(parent)MoveUp" relativePoint="LEFT" offsetX="10" offsetY="0" />
-                    <OnMouseDown>
-                        BarSteward.OrderDown(self)
-                    </OnMouseDown>
-                </Texture>
-                <!-- <Label name="$(parent)Sequence" font="ZoFontGame">
-                    <Dimensions x="20" y="32" />
-                    <Anchor point="RIGHT" relativeTo="$(parent)MoveDown" relativePoint="LEFT" offsetX="10" offsetY="0" />
-                </Label> -->
+                    <Anchor point="RIGHT"/>
+                    <OnInitialized>
+                        <!-- self.checkButton = self:GetNamedChild("Check") -->
+                    </OnInitialized>
+                    <Controls>
+                        <Button name="$(parent)Check" inherits="ZO_CheckButton">
+                            <Anchor point="LEFT"/>
+                        </Button>
+                    </Controls>
+                </Control>
             </Controls>
         </Control>
     </Controls>

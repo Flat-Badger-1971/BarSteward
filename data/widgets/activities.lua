@@ -201,6 +201,7 @@ BS.widgets[BS.W_ENDEAVOUR_PROGRESS] = {
     -- v1.2.14
     name = "weeklyEndeavourBar",
     update = function(widget)
+        local this = BS.W_ENDEAVOUR_PROGRESS
         local _, maxTask = getTimedActivityProgress(_G.TIMED_ACTIVITY_TYPE_WEEKLY, nil)
         local this = BS.W_ENDEAVOUR_PROGRESS
 
@@ -781,7 +782,7 @@ BS.widgets[BS.W_LOREBOOKS] = {
         local tt = GetString(_G.BARSTEWARD_LOREBOOKS)
 
         for _, category in pairs(categories) do
-            local metrics = category.numKnownBooks .. "/" .. category.totalBooks
+            local metrics = string.format("%d/%d", category.numKnownBooks, category.totalBooks)
 
             tt = string.format("%s%s|cf9f9f9", tt, BS.LF)
             tt = string.format("%s%s|r %s", tt, category.name, metrics)

@@ -259,7 +259,7 @@ ZO_CreateStringId(
 )
 ZO_CreateStringId(
     "BARSTEWARD_PORT_TO_HOUSE_PTF_INFO",
-    "Newly added houses will require a UI reload before they appear here."
+    "Newly added/removed houses will require a UI reload."
 )
 ZO_CreateStringId("BARSTEWARD_PORT_TO_HOUSE_PREVIEW", "Preview")
 ZO_CreateStringId("BARSTEWARD_PORT_TO_HOUSE_SELECT", "Select House")

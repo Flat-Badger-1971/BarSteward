@@ -1,7 +1,7 @@
 local BS = _G.BarSteward
 
 BS.LAM = _G.LibAddonMenu2
-BS.VERSION = "1.7.4"
+BS.VERSION = "2.0.0"
 
 local panel = {
     type = "panel",
@@ -64,9 +64,13 @@ local function initialise()
         setFunc = function(value)
             BS.Vars.Movable = value
 
-            for _, bar in ipairs(BS.Bars) do
-                _G[bar]:SetMovable(value)
-                _G[bar].ref.bar.overlay:SetHidden(not value)
+            for index, _ in pairs(BS.Vars.Bars) do
+                local bar = BS.BarObjectPool:GetActiveObject(BS.BarObjects[index])
+
+                if (bar) then
+                    bar.bar:SetMovable(value)
+                    bar.bar.overlay:SetHidden(not value)
+                end
             end
 
             local frame = BS.lock or BS.CreateLockButton()
@@ -155,9 +159,9 @@ local function initialise()
         setFunc = function(value)
             BS.Vars.Font = value
 
+            BS.RegenerateAllBars()
             _G.BarSteward_SampleText.desc:SetFont(BS.GetFont(value))
         end,
-        requiresReload = true,
         default = BS.Defaults.Font
     }
 
@@ -171,9 +175,10 @@ local function initialise()
         end,
         setFunc = function(value)
             BS.Vars.FontSize = value
+
+            BS.RegenerateAllBars()
             _G.BarSteward_SampleText.desc:SetFont(BS.GetFont())
         end,
-        requiresReload = true,
         default = BS.Defaults.FontSize
     }
 
@@ -197,8 +202,8 @@ local function initialise()
         end,
         setFunc = function(value)
             BS.Vars.FontCorrection = value
+            BS.RegenerateAllBars()
         end,
-        requiresReload = true,
         default = false
     }
 
@@ -309,7 +314,7 @@ function BS.RemoveBar()
 
     zo_callLater(
         function()
-            ZO_Dialogs_ShowDialog(BS.Name .. "Reload")
+            BS.DestroyBar(BS.BarIndex)
         end,
         200
     )
@@ -368,9 +373,9 @@ local function getBarSettings()
                 end,
                 setFunc = function(value)
                     vars.Orientation = value
+                    BS.RegenerateBar(idx)
                 end,
                 width = "full",
-                requiresReload = true,
                 default = BS.Defaults.Bars[1].Orientation
             },
             [2] = {
@@ -381,7 +386,7 @@ local function getBarSettings()
                 end,
                 setFunc = function(value)
                     vars.Backdrop.Show = value
-                    _G[BS.Name .. "_bar_" .. idx].background:SetHidden(not value)
+                    BS.BarObjectPool:GetActiveObject(BS.BarObjects[idx]).bar.background:SetHidden(not value)
                 end,
                 default = BS.Defaults.Bars[1].Backdrop.Show
             },
@@ -393,7 +398,7 @@ local function getBarSettings()
                 end,
                 setFunc = function(r, g, b, a)
                     vars.Backdrop.Colour = {r, g, b, a}
-                    _G[BS.Name .. "_bar_" .. idx].background:SetCenterColor(r, g, b, a)
+                    BS.BarObjectPool:GetActiveObject(BS.BarObjects[idx]).bar.background:SetCenterColor(r, g, b, a)
                 end,
                 width = "full",
                 disabled = function()
@@ -413,7 +418,7 @@ local function getBarSettings()
                     end
                 end,
                 setFunc = function(value)
-                    local bar = _G[BS.Name .. "_bar_" .. idx]
+                    local bar = BS.BarObjectPool:GetActiveObject(BS.BarObjects[idx])
 
                     if (value == " ") then
                         vars.Background = 99
@@ -427,7 +432,7 @@ local function getBarSettings()
                     end
 
                     if (bar) then
-                        bar.ref.checkBackground()
+                        bar.checkBackground()
                     end
                 end,
                 disabled = function()
@@ -447,7 +452,7 @@ local function getBarSettings()
                     end
                 end,
                 setFunc = function(value)
-                    local bar = _G[BS.Name .. "_bar_" .. idx]
+                    local bar = BS.BarObjectPool:GetActiveObject(BS.BarObjects[idx])
 
                     if (value == " ") then
                         vars.Border = 99
@@ -465,12 +470,13 @@ local function getBarSettings()
                     if (bar) then
                         if (vars.Border ~= 99) then
                             border = BS.BORDERS[vars.Border]
-                            bar.border:SetEdgeColor(1, 1, 1, 1)
+                            bar.bar.border:SetEdgeColor(1, 1, 1, 1)
                         else
-                            bar.border:SetEdgeColor(0, 0, 0, 0)
+                            bar.bar.border:SetEdgeColor(0, 0, 0, 0)
                         end
 
-                        bar.border:SetEdgeTexture(unpack(border))
+                        bar.bar.border:SetEdgeTexture(unpack(border))
+                        bar.checkBackground()
                     end
                 end,
                 disabled = function()
@@ -492,8 +498,8 @@ local function getBarSettings()
                 end,
                 setFunc = function(value)
                     vars.TooltipAnchor = value
+                    BS.RegenerateBar(idx)
                 end,
-                requiresReload = true,
                 default = BS.Defaults.Bars[1].TooltipAnchor
             },
             [7] = {
@@ -508,8 +514,8 @@ local function getBarSettings()
                 end,
                 setFunc = function(value)
                     vars.ValueSide = value
+                    BS.RegenerateBar(idx)
                 end,
-                requiresReload = true,
                 default = BS.Defaults.Bars[1].ValueSide
             },
             [8] = {
@@ -525,8 +531,8 @@ local function getBarSettings()
                 end,
                 setFunc = function(value)
                     vars.Anchor = value
+                    BS.RegenerateBar(idx)
                 end,
-                requiresReload = true,
                 default = BS.Defaults.Bars[1].Anchor
             },
             [9] = {
@@ -538,7 +544,7 @@ local function getBarSettings()
                 setFunc = function(value)
                     vars.Scale = value
 
-                    local barToScale = _G[BS.Name .. "_bar_" .. idx]
+                    local barToScale = BS.BarObjectPool:GetActiveObject(BS.BarObjects[idx]).bar
 
                     barToScale:SetScale(value * GetUIGlobalScale())
                     barToScale:SetResizeToFitDescendents(false)
@@ -560,12 +566,13 @@ local function getBarSettings()
                     return vars.Expand
                 end,
                 setFunc = function(value)
+                    local barObject = BS.BarObjectPool:GetActiveObject(BS.BarObjects[idx])
+                    local bar = barObject.bar
+
                     vars.Expand = value
 
-                    local bar = _G[BS.Name .. "_bar_" .. idx]
-
-                    if (bar) then
-                        bar.ref.checkBackground()
+                    if (barObject) then
+                        barObject:SetExpand(value)
 
                         if (value) then
                             bar.border:SetParent(bar.expandtlc)
@@ -576,6 +583,9 @@ local function getBarSettings()
                             bar.border:ClearAnchors()
                             bar.border:SetAnchorFill()
                         end
+
+                        barObject.checkBackground()
+                        barObject.OnRectChanged()
                     end
                 end,
                 default = false,
@@ -598,10 +608,15 @@ local function getBarSettings()
                 end,
                 setFunc = function(value)
                     vars.Disable = value
+
+                    if (value) then
+                        BS.DestroyBar(idx)
+                    else
+                        BS.GenerateBar(idx)
+                    end
                 end,
                 width = "full",
-                default = false,
-                requiresReload = true
+                default = false
             }
         end
 
@@ -612,11 +627,19 @@ local function getBarSettings()
                 return vars.ShowEverywhere or false
             end,
             setFunc = function(value)
+                local barObject = BS.BarObjectPool:GetActiveObject(BS.BarObjects[idx])
+
                 vars.ShowEverywhere = value
+
+                if (value and barObject) then
+                    barObject:RemoveFromScenes(true)
+                    barObject.bar:SetHidden(false)
+                else
+                    barObject:AddToScenes()
+                end
             end,
             width = "full",
-            default = false,
-            requiresReload = true
+            default = false
         }
 
         for varType, varName in pairs(showOptions) do
@@ -629,10 +652,10 @@ local function getBarSettings()
                 setFunc = function(value)
                     vars[varName] = value
 
-                    local barname = _G[BS.Name .. "_bar_" .. idx]
+                    local barObject = BS.BarObjectPool:GetActiveObject(BS.BarObjects[idx])
 
-                    if (barname) then
-                        local bar = barname.ref.bar
+                    if (barObject) then
+                        local bar = barObject.ref.bar
 
                         BS.AddToScenes(varType, idx, bar)
 
@@ -695,9 +718,9 @@ local function getBarSettings()
             end,
             setFunc = function(value)
                 vars.Override = value
+                BS.RegenerateBar(idx)
             end,
             default = false,
-            requiresReload = true,
             width = "full"
         }
 
@@ -709,12 +732,12 @@ local function getBarSettings()
             end,
             setFunc = function(value)
                 vars.IconSize = value
+                BS.RegenerateBar(idx)
             end,
             min = 8,
             max = 64,
             width = "full",
             default = BS.Defaults.IconSize,
-            requiresReload = true,
             disabled = function()
                 return not vars.Override
             end
@@ -731,10 +754,9 @@ local function getBarSettings()
             end,
             setFunc = function(value)
                 vars.Font = value
-
+                BS.RegenerateBar(idx)
                 _G[ref].desc:SetFont(BS.GetFont(vars))
             end,
-            requiresReload = true,
             default = BS.Defaults.Font,
             disabled = function()
                 return not vars.Override
@@ -751,10 +773,9 @@ local function getBarSettings()
             end,
             setFunc = function(value)
                 vars.FontSize = value
-
+                BS.RegenerateBar(idx)
                 _G[ref].desc:SetFont(BS.GetFont(vars))
             end,
-            requiresReload = true,
             default = BS.Defaults.FontSize,
             disabled = function()
                 return not vars.Override
@@ -779,12 +800,12 @@ local function getBarSettings()
             end,
             setFunc = function(value)
                 vars.HorizontalPadding = value
+                BS.RegenerateBar(idx)
             end,
             min = 0,
             max = 64,
             width = "full",
             default = 0,
-            requiresReload = true,
             disabled = function()
                 return not vars.Override
             end
@@ -798,12 +819,12 @@ local function getBarSettings()
             end,
             setFunc = function(value)
                 vars.VerticalPadding = value
+                BS.RegenerateBar(idx)
             end,
             min = 0,
             max = 64,
             width = "full",
             default = 0,
-            requiresReload = true,
             disabled = function()
                 return not vars.Override
             end
@@ -862,9 +883,14 @@ local function getBarSettings()
                 end,
                 setFunc = function(value)
                     vars.NudgeCompass = value
+
+                    if (value) then
+                        BS.NudgeCompass()
+                    else
+                        BS.ResetNudge()
+                    end
                 end,
                 width = "full",
-                requiresReload = true,
                 default = BS.Defaults.Bars[1].NudgeCompass,
                 warning = GetString(_G.BARSTEWARD_NUDGE_WARNING)
             }
@@ -874,7 +900,7 @@ local function getBarSettings()
             type = "button",
             name = GetString(_G.BARSTEWARD_ALIGN),
             func = function()
-                local bar = _G[BS.Name .. "_bar_" .. idx]
+                local bar = BS.BarObjectPool:GetActiveObject(BS.BarObjects[idx]).bar
                 local _, posY = bar:GetCenter()
                 local guiHeight = GuiRoot:GetHeight() / 2
                 local centre
@@ -885,7 +911,7 @@ local function getBarSettings()
                     centre = (guiHeight - posY) * -1
                 end
 
-                _G[BS.Name .. "_bar_" .. idx]:SetAnchor(CENTER, GuiRoot, CENTER, 0, centre)
+                bar:SetAnchor(CENTER, GuiRoot, CENTER, 0, centre)
                 local xPos, yPos = bar:GetCenter()
 
                 BS.Vars.Bars[idx].Anchor = GetString(_G.BARSTEWARD_MIDDLE)
@@ -905,6 +931,9 @@ local function getBarSettings()
                 else
                     return "/esoui/art/compass/compass_waypoint.dds"
                 end
+            end,
+            disabled = function()
+                return BS.Vars.Bars[idx] == nil
             end
         }
     end
@@ -976,6 +1005,7 @@ local function getBarSettings()
             exportFrame.heading:SetText(GetString(_G.BARSTEWARD_EXPORT_BAR))
             exportFrame.note:SetText(GetString(_G.BARSTEWARD_COPY))
             exportFrame.import:SetHidden(true)
+            exportFrame.replace:SetHidden(true)
             exportFrame.error:SetText("")
             exportFrame.fragment:SetHiddenForReason("disabled", false)
         end,
@@ -997,8 +1027,10 @@ local function getBarSettings()
             importFrame.heading:SetText(GetString(_G.BARSTEWARD_IMPORT_BAR))
             importFrame.note:SetText(GetString(_G.BARSTEWARD_PASTE))
             importFrame.import:SetHidden(false)
+            importFrame.replace:SetHidden(false)
             importFrame.error:SetText("")
             importFrame.fragment:SetHiddenForReason("disabled", false)
+            BS.ReplaceMain = false
         end,
         width = "full"
     }
@@ -1084,6 +1116,25 @@ local function getCV(index)
     end
 
     return nil
+end
+
+local function checkInvert(defaults, widgetControls, vars, key)
+    if (defaults.Invert ~= nil) then
+        widgetControls[#widgetControls + 1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_INVERT),
+            tooltip = GetString(_G.BARSTEWARD_INVERT_TOOLTIP),
+            getFunc = function()
+                return vars.Invert or false
+            end,
+            setFunc = function(value)
+                vars.Invert = value
+                BS.RefreshWidget(key)
+            end,
+            width = "full",
+            default = false
+        }
+    end
 end
 
 local function checkAutoHide(defaults, widgetControls, vars, key)
@@ -1515,7 +1566,8 @@ local function checkProgressBar(_, widgetControls, vars, key)
             setFunc = function(r, g, b, a)
                 vars.ProgressColour = {r, g, b, a}
 
-                local widget = _G[BS.Name .. "_Widget_" .. BS.widgets[key].name].ref
+                local widget = BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[key]).ref
+
                 widget.value.progress:SetColor(r, g, b, a)
             end,
             width = "full",
@@ -1539,7 +1591,7 @@ local function checkProgressBar(_, widgetControls, vars, key)
             setFunc = function(r, g, b)
                 vars.GradientStart = {r, g, b}
 
-                local widget = _G[BS.Name .. "_Widget_" .. BS.widgets[key].name].ref
+                local widget = BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[key]).ref
                 local endg = {
                     GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, _G.INTERFACE_GENERAL_COLOR_STATUS_BAR_END)
                 }
@@ -1568,7 +1620,7 @@ local function checkProgressBar(_, widgetControls, vars, key)
             setFunc = function(r, g, b)
                 vars.GradientEnd = {r, g, b}
 
-                local widget = _G[BS.Name .. "_Widget_" .. BS.widgets[key].name].ref
+                local widget = BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[key]).ref
                 local startg = {
                     GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, _G.INTERFACE_GENERAL_COLOR_STATUS_BAR_START)
                 }
@@ -1959,7 +2011,9 @@ local function getWidgetSettings()
     local ordered = {}
 
     for key, widget in ipairs(widgets) do
-        table.insert(ordered, {key = key, widget = widget})
+        if (not widget.Hidden) then
+            table.insert(ordered, {key = key, widget = widget})
+        end
     end
 
     if (BS.Vars.WidgetSortOrder) then
@@ -2056,12 +2110,12 @@ local function getWidgetSettings()
             end,
             setFunc = function(value)
                 BS.Vars.IconSize = value
+                BS.RegenerateAllBars()
             end,
             min = 8,
             max = 64,
             width = "full",
-            default = BS.Defaults.IconSize,
-            requiresReload = true
+            default = BS.Defaults.IconSize
         },
         [4] = {
             type = "slider",
@@ -2071,12 +2125,12 @@ local function getWidgetSettings()
             end,
             setFunc = function(value)
                 BS.Vars.HorizontalPadding = value
+                BS.RegenerateAllBars()
             end,
             min = 0,
             max = 64,
             width = "full",
-            default = 0,
-            requiresReload = true
+            default = 0
         },
         [5] = {
             type = "slider",
@@ -2086,11 +2140,40 @@ local function getWidgetSettings()
             end,
             setFunc = function(value)
                 BS.Vars.VerticalPadding = value
+                BS.RegenerateAllBars()
             end,
             min = 0,
             max = 64,
             width = "full",
-            default = 0,
+            default = 0
+        },
+        [6] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_CATEGORY_USE),
+            getFunc = function()
+                return BS.Vars.Categories or false
+            end,
+            setFunc = function(value)
+                BS.Vars.Categories = value
+            end,
+            width = "full",
+            default = false,
+            requiresReload = true
+        },
+        [7] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_CATEGORY_INCLUDE),
+            getFunc = function()
+                return BS.Vars.CategoriesCount or false
+            end,
+            setFunc = function(value)
+                BS.Vars.CategoriesCount = value
+            end,
+            width = "full",
+            default = false,
+            disabled = function()
+                return not BS.Vars.Categories
+            end,
             requiresReload = true
         },
         [6] = {
@@ -2222,10 +2305,13 @@ local function getWidgetSettings()
                         end
                     end
 
+                    local oldBarNum = BS.Vars.Controls[k].Bar
+
                     BS.Vars.Controls[k].Bar = barNum
+                    BS.RegenerateBar(oldBarNum, k)
+                    BS.RegenerateBar(barNum)
                 end,
                 width = "full",
-                requiresReload = true,
                 default = BS.Defaults.Controls[k].Bar,
                 disabled = function()
                     if (k ~= BS.W_TAMRIEL_TIME) then

@@ -9,6 +9,8 @@ local BS = _G.BarSteward
 
 BS.Defaults = {
     BackBarIcon = "/esoui/art/tradinghouse/tradinghouse_weapons_1h_sword_up.dds",
+    Categories = true,
+    CategoriesCount = true,
     DefaultCombatColour = {0.3686274588, 0, 0, 1},
     DefaultColour = {(230 / 255), (230 / 255), (230 / 255), 1},
     DefaultDangerColour = {(204 / 255), 0, 0, 1},
