@@ -394,16 +394,13 @@ BS.CURRENCIES = {
         icon = "currency_seedcrystal_64",
         crownStore = false,
         text = _G.BARSTEWARD_TRANSMUTE_CRYSTALS
-    }
-}
-
-if (_G.CURT_ENDLESS_DUNGEON) then
-    BS.CURRENCIES[_G.CURT_ENDLESS_DUNGEON] = {
+    },
+    [_G.CURT_ENDLESS_DUNGEON] = {
         icon = "archivalfragments_mipmaps",
         crownStore = false,
         text = _G.BARSTEWARD_ARCHIVAL_FRAGMENTS
     }
-end
+}
 
 BS.FRAGMENT_TYPES = {
     _G.SPECIALIZED_ITEMTYPE_TROPHY_KEY_FRAGMENT,

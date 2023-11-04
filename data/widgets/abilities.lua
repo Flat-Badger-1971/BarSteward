@@ -10,17 +10,11 @@ local iconPaths = {
     "/esoui/art/tradinghouse/tradinghouse_weapons_1h_sword_up.dds"
 }
 
-local ignoreTypes = {}
-
-if (_G.INSTANCE_DISPLAY_TYPE_NONE) then
-    ignoreTypes[_G.INSTANCE_DISPLAY_TYPE_NONE] = true
-    ignoreTypes[_G.INSTANCE_DISPLAY_TYPE_HOUSING] = true
-    ignoreTypes[_G.INSTANCE_DISPLAY_TYPE_ZONE_STORY] = true
-else
-    ignoreTypes[_G.ZONE_DISPLAY_TYPE_NONE] = true
-    ignoreTypes[_G.ZONE_DISPLAY_TYPE_HOUSING] = true
-    ignoreTypes[_G.ZONE_DISPLAY_TYPE_ZONE_STORY] = true
-end
+local ignoreTypes = {
+    [_G.ZONE_DISPLAY_TYPE_NONE] = true,
+    [_G.ZONE_DISPLAY_TYPE_HOUSING] = true,
+    [_G.ZONE_DISPLAY_TYPE_ZONE_STORY] = true
+}
 
 BS.widgets[BS.W_ACTIVE_BAR] = {
     -- v1.3.18

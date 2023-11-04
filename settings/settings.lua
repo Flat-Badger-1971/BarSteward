@@ -1,7 +1,7 @@
 local BS = _G.BarSteward
 
 BS.LAM = _G.LibAddonMenu2
-BS.VERSION = "1.7.3"
+BS.VERSION = "1.7.4"
 
 local panel = {
     type = "panel",
@@ -1075,7 +1075,7 @@ local function getCV(index)
     local var = BS.Vars.Controls[index].ColourValues
     local lookup = {}
 
-    if (var ~= nil) then
+    if ((var or "") ~= "") then
         for _, val in ipairs(BS.Split(var)) do
             lookup[val] = true
         end
@@ -1950,13 +1950,11 @@ local function getWidgetSettings()
     local widgets = BS.Vars.Controls
     local bars = BS.Vars.Bars
     local none = GetString(_G.BARSTEWARD_NONE_BAR)
-    local barNames = {}
+    local barNames = {none}
 
     for _, v in ipairs(bars) do
         table.insert(barNames, v.Name)
     end
-
-    table.insert(barNames, none)
 
     local ordered = {}
 
@@ -2323,7 +2321,12 @@ local function getWidgetSettings()
             table.insert(cats, {name = cat.name, value = cat})
         end
 
-        table.sort(cats, function(a,b) return a.name < b.name end)
+        table.sort(
+            cats,
+            function(a, b)
+                return a.name < b.name
+            end
+        )
 
         for _, v in ipairs(cats) do
             controls[#controls + 1] = v.value

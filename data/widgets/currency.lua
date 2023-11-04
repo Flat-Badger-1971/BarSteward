@@ -27,6 +27,22 @@ local function getcrownStoreCurrencies(invert)
     return crownStoreInfo
 end
 
+local function updateTooltip(text, currencyInBag, currencyInBank, combined, charactertt, allCharacters, currencyType)
+    local ttt = text.title .. BS.LF
+
+    ttt = ttt .. "|cffd700" .. tostring(currencyInBag) .. "|r " .. GetString(text.bag) .. BS.LF
+    ttt = ttt .. "|cffd700" .. tostring(currencyInBank) .. "|r " .. GetString(text.bank) .. BS.LF
+    ttt = ttt .. "|cffd700" .. tostring(combined) .. "|r " .. GetString(text.combined) .. BS.LF .. BS.LF
+    ttt = ttt .. charactertt .. BS.LF
+    ttt = ttt .. "|cffd700" .. tostring(allCharacters) .. "|r " .. GetString(text.everyWhere)
+
+    if (currencyType ~= _G.CURT_MONEY) then
+        ttt = ttt .. BS.LF .. BS.LF .. getcrownStoreCurrencies(true)
+    end
+
+    return ttt
+end
+
 local function currencyWidget(currencyType, widgetIndex, text, eventList, hideWhenTrue)
     local name = "gold"
 
@@ -102,19 +118,12 @@ local function currencyWidget(currencyType, widgetIndex, text, eventList, hideWh
             widget:SetColour(unpack(BS.Vars.Controls[widgetIndex].Colour or BS.Vars.DefaultColour))
 
             --- update the tooltip
-            local ttt = text.title .. BS.LF
-
-            ttt = ttt .. "|cffd700" .. tostring(currencyInBag) .. "|r " .. GetString(text.bag) .. BS.LF
-            ttt = ttt .. "|cffd700" .. tostring(currencyInBank) .. "|r " .. GetString(text.bank) .. BS.LF
-            ttt = ttt .. "|cffd700" .. tostring(combined) .. "|r " .. GetString(text.combined) .. BS.LF .. BS.LF
-            ttt = ttt .. charactertt .. BS.LF
-            ttt = ttt .. "|cffd700" .. tostring(allCharacters) .. "|r " .. GetString(text.everyWhere)
-
-            if (currencyType ~= _G.CURT_MONEY) then
-                ttt = ttt .. BS.LF .. BS.LF .. getcrownStoreCurrencies(true)
-            end
-
+            local ttt =
+                updateTooltip(text, currencyInBag, currencyInBank, combined, charactertt, allCharacters, currencyType)
             widget.tooltip = ttt
+            widget.tooltipFunc = function()
+                updateTooltip(text, currencyInBag, currencyInBank, combined, charactertt, allCharacters, currencyType)
+            end
 
             return widget:GetValue()
         end,
@@ -463,24 +472,22 @@ BS.widgets[BS.W_WRIT_VOUCHERS] =
     _G.EVENT_WRIT_VOUCHER_UPDATE
 )
 
-if (_G.CURT_ENDLESS_DUNGEON) then
-    BS.widgets[BS.W_ARCHIVAL_FRAGMENTS] =
-        currencyWidget(
-        _G.CURT_ENDLESS_DUNGEON,
-        BS.W_ARCHIVAL_FRAGMENTS,
-        {
-            bag = _G.BARSTEWARD_GOLD_BAG,
-            bank = _G.BARSTEWARD_GOLD_BANK,
-            combined = _G.BARSTEWARD_GOLD_COMBINED,
-            display = _G.BARSTEWARD_ARCHIVAL_FRAGMENTS,
-            everyWhere = _G.BARSTEWARD_GOLD_EVERYWHERE,
-            separated = _G.BARSTEWARD_GOLD_SEPARATED,
-            title = BS.Format(_G.BARSTEWARD_ARCHIVAL_FRAGMENTS)
-        }
-    )
-    BS.CURRENCIES[_G.CURT_ENDLESS_DUNGEON] = {
-        icon = "archivalfragments_mipmaps",
-        crownStore = false,
-        text = _G.BARSTEWARD_ARCHIVAL_FRAGMENTS
+BS.widgets[BS.W_ARCHIVAL_FRAGMENTS] =
+    currencyWidget(
+    _G.CURT_ENDLESS_DUNGEON,
+    BS.W_ARCHIVAL_FRAGMENTS,
+    {
+        bag = _G.BARSTEWARD_GOLD_BAG,
+        bank = _G.BARSTEWARD_GOLD_BANK,
+        combined = _G.BARSTEWARD_GOLD_COMBINED,
+        display = _G.BARSTEWARD_ARCHIVAL_FRAGMENTS,
+        everyWhere = _G.BARSTEWARD_GOLD_EVERYWHERE,
+        separated = _G.BARSTEWARD_GOLD_SEPARATED,
+        title = BS.Format(_G.BARSTEWARD_ARCHIVAL_FRAGMENTS)
     }
-end
+)
+BS.CURRENCIES[_G.CURT_ENDLESS_DUNGEON] = {
+    icon = "archivalfragments_mipmaps",
+    crownStore = false,
+    text = _G.BARSTEWARD_ARCHIVAL_FRAGMENTS
+}
