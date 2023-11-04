@@ -30,8 +30,7 @@ Added companion widgets
 Transmute crystal logic fix courtesy of Zeratoxx
 
 [color=#ff9900][b]Version: 1.6.0 ---------------[/b][/color]
-Necrom update with bugfixes
-German translation updates
+Necrom update and bugfixes
 
 [color=#ff9900][b]Version: 1.5.10 ---------------[/b][/color]
 Fixed bar expansion anchor offset
@@ -41,7 +40,6 @@ Update bank/bag space on callback as well as events
 
 [color=#ff9900][b]Version: 1.5.8 ---------------[/b][/color]
 Currency tooltip updates
-Weapon charges widget added
 
 [color=#ff9900][b]Version: 1.5.7 ---------------[/b][/color]
 Change anchoring on fullwidth bar to compensate for scale

@@ -143,7 +143,7 @@ BS.widgets[BS.W_FRIENDS] = {
 local function isFriend(displayName)
     local friends = BS.Vars.GuildFriendAnnounce
 
-    for member, _ in pairs(friends) do              
+    for member, _ in pairs(friends) do
         if (member == displayName) then
             return true
         end
@@ -155,6 +155,7 @@ end
 local guildMasterList = {}
 
 local function getMasterList()
+    --ZO_ClearNumericallyIndexedTable(guildMasterList)
     guildMasterList = {}
 
     local guildId = BS.guildId
@@ -232,6 +233,8 @@ BS.widgets[BS.W_GUILD_FRIENDS] = {
 
                 tCount = tCount + 1
             end
+
+            tCount = tCount + 1
         end
 
         tt = tt .. addToTooltip(online, textureFunctions)

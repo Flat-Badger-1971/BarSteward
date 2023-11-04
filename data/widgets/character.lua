@@ -629,15 +629,15 @@ end
 BS.RegisterForEvent(
     _G.EVENT_PLAYER_COMBAT_STATE,
     function(_, inCombat)
-		if (inCombat ~= BS.inCombat) then
-			if (inCombat) then
-				BS.inCombat = true
-				maxDamage = 0
-				damage = {}
-			else
-				BS.inCombat = false
-			end
-		end
+        if (inCombat ~= BS.inCombat) then
+            if (inCombat) then
+                BS.inCombat = true
+                maxDamage = 0
+                damage = {}
+            else
+                BS.inCombat = false
+            end
+        end
     end
 )
 

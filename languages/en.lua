@@ -182,7 +182,10 @@ ZO_CreateStringId("BARSTEWARD_IMPORT_ERROR_WIDGET", "Missing widget information"
 ZO_CreateStringId("BARSTEWARD_IMPORT_ERROR_WIDGET_OR_BAR", "Missing bar or widget information")
 ZO_CreateStringId("BARSTEWARD_IN_PROGRESS", "In progress")
 ZO_CreateStringId("BARSTEWARD_INVERT", "Invert Warning/Danger logic")
-ZO_CreateStringId("BARSTEWARD_INVERT_TOOLTIP", "Change the logic so values higher than those entered trigger the colour change. Default behaviour triggers on lower values.")
+ZO_CreateStringId(
+    "BARSTEWARD_INVERT_TOOLTIP",
+    "Change the logic so values higher than those entered trigger the colour change. Default behaviour triggers on lower values."
+)
 ZO_CreateStringId("BARSTEWARD_ITEM_EXISTS", "This item has already been added to the watchlist.")
 ZO_CreateStringId("BARSTEWARD_ITEM_ID", "Item id")
 ZO_CreateStringId("BARSTEWARD_ITEM_INVALID", "Invalid Item Id")
@@ -204,7 +207,10 @@ ZO_CreateStringId("BARSTEWARD_MEMORY", "Memory Usage")
 ZO_CreateStringId("BARSTEWARD_MIDDLE", "Middle")
 ZO_CreateStringId("BARSTEWARD_MINUTES", "Minutes")
 ZO_CreateStringId("BARSTEWARD_MOUNT_TRAINING", "Time until next mount training")
-ZO_CreateStringId("BARSTEWARD_MOVE_WIDGETS", "This bar contains <<1[no widgets/1 widget/$d widgets]>> that will be moved to the new bar from their current bar. Do you want to proceed?")
+ZO_CreateStringId(
+    "BARSTEWARD_MOVE_WIDGETS",
+    "This bar contains <<1[no widgets/1 widget/$d widgets]>> that will be moved to the new bar from their current bar. Do you want to proceed?"
+)
 ZO_CreateStringId("BARSTEWARD_MOVEFRAME", "Movable Bars")
 ZO_CreateStringId("BARSTEWARD_MPH", "mph")
 ZO_CreateStringId("BARSTEWARD_NEW_BAR", "Create New Bar")
@@ -257,10 +263,7 @@ ZO_CreateStringId(
     "BARSTEWARD_PORT_TO_HOUSE_PTF",
     "Port To Friend's House locations will  have <<1>> appended to their widget."
 )
-ZO_CreateStringId(
-    "BARSTEWARD_PORT_TO_HOUSE_PTF_INFO",
-    "Newly added/removed houses will require a UI reload."
-)
+ZO_CreateStringId("BARSTEWARD_PORT_TO_HOUSE_PTF_INFO", "Newly added/removed houses will require a UI reload.")
 ZO_CreateStringId("BARSTEWARD_PORT_TO_HOUSE_PREVIEW", "Preview")
 ZO_CreateStringId("BARSTEWARD_PORT_TO_HOUSE_SELECT", "Select House")
 ZO_CreateStringId("BARSTEWARD_PREVIOUS_ENCOUNTER", "Previous Encounter")

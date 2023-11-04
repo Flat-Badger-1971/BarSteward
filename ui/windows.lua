@@ -250,7 +250,12 @@ local function setupDataRow(rowControl, data)
     local cb = rowControl:GetNamedChild("CheckBox")
     local c = cb:GetNamedChild("Check")
 
-    c:SetHandler("OnClicked", function() onClicked(data.key) end)
+    c:SetHandler(
+        "OnClicked",
+        function()
+            onClicked(data.key)
+        end
+    )
 
     if (data.key ~= selected) then
         ZO_CheckButton_SetCheckState(c, false)

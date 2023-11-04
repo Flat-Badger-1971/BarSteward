@@ -264,9 +264,7 @@ BS.widgets[BS.W_DURABILITY] = {
 
         return lowest
     end,
-    callback = {
-        [SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}
-    },
+    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
     icon = "/esoui/art/inventory/inventory_tabicon_armor_up.dds",
     tooltip = GetString(_G.BARSTEWARD_DURABILITY),
     onClick = function()

@@ -56,12 +56,6 @@ local function currencyWidget(currencyType, widgetIndex, text, eventList, hideWh
         name = "archivalFortunes"
     end
 
-    if (_G.CURT_ENDLESS_DUNGEON) then
-        if (currencyType == _G.CURT_ENDLESS_DUNGEON) then
-            name = "archivalFragments"
-        end
-    end
-
     local ctype = (currencyType == _G.CURT_MONEY) and "GoldType" or "CurrencyType"
     local icon = BS.CURRENCIES[currencyType].icon
 

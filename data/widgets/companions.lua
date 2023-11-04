@@ -131,11 +131,7 @@ for k, v in pairs(BS.COMPANION_DEFIDS) do
         name = string.format("companion%d", k),
         update = function(widget)
             local this = k
-            local name =
-                ZO_CachedStrFormat(
-                _G.SI_UNIT_NAME,
-                GetCollectibleInfo(GetCompanionCollectibleId(v))
-            )
+            local name = ZO_CachedStrFormat(_G.SI_UNIT_NAME, GetCollectibleInfo(GetCompanionCollectibleId(v)))
 
             widget:SetValue(name)
             widget:SetColour(unpack(BS.Vars.Controls[this].Colour or BS.Vars.DefaultColour))
@@ -145,10 +141,7 @@ for k, v in pairs(BS.COMPANION_DEFIDS) do
         event = _G.EVENT_PLAYER_ACTIVATED,
         tooltip = zo_strformat(
             GetString(_G.BARSTEWARD_COMPANION_WIDGET),
-            ZO_CachedStrFormat(
-                _G.SI_UNIT_NAME,
-                GetCollectibleInfo(GetCompanionCollectibleId(v))
-            )
+            ZO_CachedStrFormat(_G.SI_UNIT_NAME, GetCollectibleInfo(GetCompanionCollectibleId(v)))
         ),
         icon = companionIcons[k],
         onClick = function()

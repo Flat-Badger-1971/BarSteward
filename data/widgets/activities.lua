@@ -203,7 +203,6 @@ BS.widgets[BS.W_ENDEAVOUR_PROGRESS] = {
     update = function(widget)
         local this = BS.W_ENDEAVOUR_PROGRESS
         local _, maxTask = getTimedActivityProgress(_G.TIMED_ACTIVITY_TYPE_WEEKLY, nil)
-        local this = BS.W_ENDEAVOUR_PROGRESS
 
         if (maxTask.name and maxTask.maxProgress) then
             if (BS.Vars.Controls[this].Progress) then
