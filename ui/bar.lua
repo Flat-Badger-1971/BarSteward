@@ -591,8 +591,14 @@ function baseBar:AddWidgets(widgets)
         -- draw the widget
         local controlDefaults = BS.Defaults.Controls[metadata.id]
 
-        if (controlDefaults) then
+        if (controlDefaults and (controlDefaults.Progress ~= nil)) then
             metadata.progress = controlDefaults.Progress
+
+            local vars = BS.Vars.Controls[metadata.id]
+
+            if (vars and (vars.Progress ~= nil)) then
+                metadata.progress = vars.Progress
+            end
         end
 
         local noValue = BS.Vars.Controls[metadata.id].NoValue or false
