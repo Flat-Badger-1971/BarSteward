@@ -1474,9 +1474,9 @@ function BS.GenerateBar(barIndex)
         end
     end
 
-    setBinding(barIndex)
-
     local barName = BS.Vars.Bars[barIndex].Name
+    setBinding(barIndex, barName)
+
 
     if (not ZO_IsElementInNumericallyIndexedTable(BS.alignBars, barName)) then
         table.insert(BS.alignBars, barName)

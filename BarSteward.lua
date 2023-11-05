@@ -339,7 +339,7 @@ function BS.ToggleBar(index)
     local bar = BS.BarObjectPool:GetActiveObject(BS.BarObjects[index])
 
     if (bar) then
-        bar.ref:Toggle()
+        bar:Toggle()
     end
 end
 
