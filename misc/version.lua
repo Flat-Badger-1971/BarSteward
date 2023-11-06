@@ -12,5 +12,6 @@ function BS.VersionCheck()
     if (needsUpdate(2000)) then
         BS.Vars.Categories = true
         BS.Vars.CategoriesCount = true
+        BS.Vars.Updates[2000] = true
     end
 end
