@@ -223,6 +223,7 @@ read_globals = {
     "DoesAntiquityHaveLead",
     "DoesUnitExist",
     "EndInteraction",
+    "FastTravelToNode",
     "GetAbilityDescription",
     "GetAbilityIcon",
     "GetAbilityName",

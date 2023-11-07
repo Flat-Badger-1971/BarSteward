@@ -711,6 +711,9 @@ BS.Defaults = {
         [BS.W_ARCHIVAL_FRAGMENTS] = {
             UseSeparators = false,
             Cat = 7
+        },
+        [BS.W_ARCHIVE_PORT] = {
+            Cat = 1
         }
     }
 }

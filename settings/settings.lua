@@ -1986,6 +1986,16 @@ local function checkPrint(defaults, widgetControls, vars)
     end
 end
 
+local function getWidgetName(id)
+    local widgetName = BS.widgets[id].tooltip:gsub(":", "")
+
+    if (BS.Vars.Controls[id].Bar ~= 0) then
+        widgetName = "|c4c9900" .. widgetName .. "|r"
+    end
+
+    return widgetName
+end
+
 local function getWidgetSettings()
     local widgets = BS.Vars.Controls
     local bars = BS.Vars.Bars
@@ -2319,32 +2329,20 @@ local function getWidgetSettings()
             textureCoords = {0, 1, 0, 0.6}
         end
 
-        local widgetName = BS.widgets[k].tooltip:gsub(":", "")
-
-        if (vars.Bar ~= 0) then
-            widgetName = "|c4c9900" .. widgetName .. "|r"
-        end
+        local widgetData = {
+            type = "submenu",
+            name = function() return getWidgetName(k) end,
+            icon = BS.widgets[k].icon,
+            iconTextureCoords = textureCoords,
+            controls = widgetControls,
+            reference = "BarStewardWidgets" .. k
+        }
 
         if (BS.Vars.Categories) then
-            categories[vars.Cat].controls[categoryIndex[vars.Cat]] = {
-                type = "submenu",
-                name = widgetName,
-                icon = BS.widgets[k].icon,
-                iconTextureCoords = textureCoords,
-                controls = widgetControls,
-                reference = "BarStewardCategoryWidgets" .. k
-            }
-
+            categories[vars.Cat].controls[categoryIndex[vars.Cat]] = widgetData
             categoryIndex[vars.Cat] = categoryIndex[vars.Cat] + 1
         else
-            controls[idx + numBaseControls] = {
-                type = "submenu",
-                name = widgetName,
-                icon = BS.widgets[k].icon,
-                iconTextureCoords = textureCoords,
-                controls = widgetControls,
-                reference = "BarStewardWidgets" .. k
-            }
+            controls[idx + numBaseControls] = widgetData
         end
     end
 

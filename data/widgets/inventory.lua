@@ -1105,7 +1105,7 @@ BS.widgets[BS.W_RANDOM_MEMENTO] = {
 
         return 0
     end,
-    event = {_G.EVENT_COLLECTION_UPDATED},
+    event = _G.EVENT_COLLECTION_UPDATED,
     tooltip = GetString(_G.BARSTEWARD_RANDOM_MEMENTO),
     icon = "/esoui/art/icons/collectible_memento_blizzard.dds",
     cooldown = true,
@@ -1126,7 +1126,7 @@ BS.widgets[BS.W_RANDOM_PET] = {
 
         return 0
     end,
-    event = {_G.EVENT_COLLECTION_UPDATED},
+    event = _G.EVENT_COLLECTION_UPDATED,
     tooltip = GetString(_G.BARSTEWARD_RANDOM_PET),
     icon = "/esoui/art/icons/pet_sphynxlynx.dds",
     cooldown = true,
@@ -1147,7 +1147,7 @@ BS.widgets[BS.W_RANDOM_MOUNT] = {
 
         return 0
     end,
-    event = {_G.EVENT_COLLECTION_UPDATED},
+    event = _G.EVENT_COLLECTION_UPDATED,
     tooltip = GetString(_G.BARSTEWARD_RANDOM_MOUNT),
     icon = "/esoui/art/icons/mounticon_horse_zenithauroran.dds",
     onClick = function()
@@ -1167,7 +1167,7 @@ BS.widgets[BS.W_RANDOM_EMOTE] = {
 
         return 0
     end,
-    event = {_G.EVENT_COLLECTION_UPDATED},
+    event = _G.EVENT_COLLECTION_UPDATED,
     tooltip = GetString(_G.BARSTEWARD_RANDOM_EMOTE),
     icon = "/esoui/art/icons/emotes/emotecategoryicon_fidget_personality.dds",
     onClick = function()

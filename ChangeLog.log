@@ -1,5 +1,7 @@
 [color=#ff9900][b]Version: 2.0.3 ---------------[/b][/color]
 Version check fix
+Widget settings title now changes colour as soon as it is added/removed from a bar
+Added Endless Archive travel widget
 
 [color=#ff9900][b]Version: 2.0.2 ---------------[/b][/color]
 Bugfix for bar toggle keybinds
