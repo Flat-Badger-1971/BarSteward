@@ -207,6 +207,7 @@ local function addSubmenu(barNames, vars, varId, house, id, controls)
                 return barName
             end,
             setFunc = function(value)
+
                 local tbars = BS.Vars.Bars
                 local barNum = 0
 
@@ -216,7 +217,10 @@ local function addSubmenu(barNames, vars, varId, house, id, controls)
                     end
                 end
 
+                local oldBarNum = BS.Vars.Controls[varId].Bar
+
                 vars.Bar = barNum
+                BS.RegenerateBar(oldBarNum, varId)
                 BS.RegenerateBar(barNum)
             end,
             width = "full",
