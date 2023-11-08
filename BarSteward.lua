@@ -236,6 +236,7 @@ local function Initialise()
         "Characters"
     )
 
+    BS.CheckVars(BS.Vars)
     BS.VersionCheck()
 
     -- gold tracker

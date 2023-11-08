@@ -1,3 +1,6 @@
+[color=#ff9900][b]Version: 2.0.4 ---------------[/b][/color]
+Fixed bug with default values
+
 [color=#ff9900][b]Version: 2.0.3 ---------------[/b][/color]
 Version check fix
 Widget settings title now changes colour as soon as it is added/removed from a bar

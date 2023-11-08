@@ -718,16 +718,22 @@ BS.Defaults = {
     }
 }
 
-for widgetId, widgetData in pairs(BS.Defaults.Controls) do
-    if (not widgetData.Bar) then
-        widgetData.Bar = 0
-    end
+function BS.CheckVars(vars)
+    for widgetId, widgetData in pairs(vars.Controls) do
+        if (not widgetData.Bar) then
+            widgetData.Bar = 0
+        end
 
-    if (not widgetData.Order) then
-        widgetData.Order = widgetId
-    end
+        if (not widgetData.Order) then
+            widgetData.Order = widgetId
+        end
 
-    if ((widgetData.ColourValues or "") ~= "") then
-        widgetData.ColourValues = "c"
+        if ((not widgetData.ColourValues or "") ~= "") then
+            widgetData.ColourValues = "c"
+        end
     end
+end
+
+do
+    BS.CheckVars(BS.Defaults)
 end
