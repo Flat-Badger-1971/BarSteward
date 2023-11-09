@@ -208,7 +208,7 @@ BS.widgets[BS.W_DURABILITY] = {
         for slot = 0, GetBagSize(_G.BAG_WORN) do
             if (not ignoreSlots[slot]) then
                 local colour = BS.ARGBConvert(vars.OkColour or BS.Vars.DefaultOkColour)
-                local itemName = GetItemName(_G.BAG_WORN, slot)
+                local itemName = ZO_CachedStrFormat("<<C:1>>", GetItemName(_G.BAG_WORN, slot))
                 local condition = GetItemCondition(_G.BAG_WORN, slot)
 
                 if (itemName ~= "") then
