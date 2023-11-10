@@ -6,6 +6,7 @@
 ]]
 local x, y = GuiRoot:GetCenter()
 local BS = _G.BarSteward
+local cat = BS.CATNAMES
 
 BS.Defaults = {
     BackBarIcon = "/esoui/art/tradinghouse/tradinghouse_weapons_1h_sword_up.dds",
@@ -61,29 +62,29 @@ BS.Defaults = {
     Controls = {
         [BS.W_TIME] = {
             Bar = 1,
-            Cat = 2,
+            Cat = cat.Activities,
             SoundWhenEquals = false,
             SoundWhenEqualsSound = "Daily Login Reward Claim Fanfare"
         },
         [BS.W_ALLIANCE_POINTS] = {
             Bar = 1,
-            Cat = 7,
+            Cat = cat.Currency,
             PvPOnly = false,
             SoundWhenEquals = false,
             UseSeparators = false
         },
         [BS.W_CROWN_GEMS] = {
-            Cat = 7,
+            Cat = cat.Currency,
             UseSeparators = false
         },
         [BS.W_CROWNS] = {
-            Cat = 7,
+            Cat = cat.Currency,
             UseSeparators = false
         },
         [BS.W_EVENT_TICKETS] = {
             Announce = false,
             Bar = 1,
-            Cat = 7,
+            Cat = cat.Currency,
             ColourValues = "c,dv,dc,mv,mc",
             DangerValue = 8,
             HideLimit = false,
@@ -96,26 +97,26 @@ BS.Defaults = {
         },
         [BS.W_GOLD] = {
             Bar = 1,
-            Cat = 7,
+            Cat = cat.Currency,
             UseSeparators = false
         },
         [BS.W_SEALS_OF_ENDEAVOUR] = {
             Bar = 1,
-            Cat = 7,
+            Cat = cat.Currency,
             SoundWhenEquals = false,
             SoundWhenEqualsSound = "Daily Login Reward Claim Fanfare",
             UseSeparators = false
         },
         [BS.W_TELVAR_STONES] = {
             Bar = 1,
-            Cat = 7,
+            Cat = cat.Currency,
             PvPOnly = false,
             SoundWhenEquals = false,
             SoundWhenEqualsSound = "Daily Login Reward Claim Fanfare",
             UseSeparators = false
         },
         [BS.W_TRANSMUTE_CRYSTALS] = {
-            Cat = 7,
+            Cat = cat.Currency,
             ColourValues = "c,wv,wc,dv,dc,mv,mc",
             DangerValue = 50,
             HideLimit = false,
@@ -125,19 +126,19 @@ BS.Defaults = {
         },
         [BS.W_UNDAUNTED_KEYS] = {
             Bar = 1,
-            Cat = 7,
+            Cat = cat.Currency,
             SoundWhenEquals = false,
             SoundWhenEqualsSound = "Daily Login Reward Claim Fanfare"
         },
         [BS.W_WRIT_VOUCHERS] = {
             Bar = 1,
-            Cat = 7,
+            Cat = cat.Currency,
             UseSeparators = false
         },
         [BS.W_BAG_SPACE] = {
             Announce = false,
             Bar = 1,
-            Cat = 9,
+            Cat = cat.Inventory,
             ColourValues = "okc,wv,wc,dv,dc,mv,mc",
             DangerValue = 95,
             HideLimit = false,
@@ -151,7 +152,7 @@ BS.Defaults = {
         },
         [BS.W_BANK_SPACE] = {
             Bar = 1,
-            Cat = 9,
+            Cat = cat.Inventory,
             ColourValues = "okc,wv,wc,dv,dc,mv,mc",
             DangerValue = 95,
             HideLimit = false,
@@ -164,17 +165,17 @@ BS.Defaults = {
             WarningValue = 85
         },
         [BS.W_FPS] = {
-            Cat = 4
+            Cat = cat.Client
         },
         [BS.W_LATENCY] = {
             Bar = 1,
-            Cat = 4,
+            Cat = cat.Client,
             ColourValues = "c,wv,wc,dc,dv"
         },
         [BS.W_BLACKSMITHING] = {
             Autohide = true,
             Bar = 1,
-            Cat = 6,
+            Cat = cat.Crafting,
             ColourValues = "okc,wv,wc,dv,dc",
             DangerValue = 24,
             HideSeconds = false,
@@ -188,7 +189,7 @@ BS.Defaults = {
         [BS.W_WOODWORKING] = {
             Autohide = true,
             Bar = 1,
-            Cat = 6,
+            Cat = cat.Crafting,
             ColourValues = "okc,wv,wc,dv,dc",
             DangerValue = 24,
             HideSeconds = false,
@@ -202,7 +203,7 @@ BS.Defaults = {
         [BS.W_CLOTHING] = {
             Autohide = true,
             Bar = 1,
-            Cat = 6,
+            Cat = cat.Crafting,
             ColourValues = "okc,wv,wc,dv,dc",
             DangerValue = 24,
             HideSeconds = false,
@@ -216,7 +217,7 @@ BS.Defaults = {
         [BS.W_JEWELCRAFTING] = {
             Autohide = true,
             Bar = 1,
-            Cat = 6,
+            Cat = cat.Crafting,
             ColourValues = "okc,wv,wc,dv,dc",
             DangerValue = 24,
             HideSeconds = false,
@@ -230,12 +231,12 @@ BS.Defaults = {
         [BS.W_REPAIR_COST] = {
             Autohide = true,
             Bar = 1,
-            Cat = 9,
+            Cat = cat.Inventory,
             UseSeparators = false
         },
         [BS.W_MOUNT_TRAINING] = {
             Bar = 1,
-            Cat = 10,
+            Cat = cat.Riding,
             ColourValues = "okc,wv,wc,dv,dc",
             DangerValue = 3,
             HideSeconds = false,
@@ -247,24 +248,24 @@ BS.Defaults = {
         [BS.W_RAPPORT] = {
             Autohide = true,
             Bar = 1,
-            Cat = 5,
+            Cat = cat.Companions,
             ColourValues = ""
         },
         [BS.W_CHAMPION_POINTS] = {
             Autohide = true,
             Bar = 1,
-            Cat = 3,
+            Cat = cat.Character,
             SoundWhenEquals = false,
             SoundWhenEqualsSound = "Daily Login Reward Claim Fanfare",
             UseSeparators = false
         },
         [BS.W_MUNDUS_STONE] = {
             Autohide = true,
-            Cat = 3,
+            Cat = cat.Character,
             ColourValues = "c,dc"
         },
         [BS.W_DURABILITY] = {
-            Cat = 9,
+            Cat = cat.Inventory,
             ColourValues = "okc,okv,dc,dv,wc",
             DangerValue = 15,
             OkValue = 75,
@@ -273,17 +274,17 @@ BS.Defaults = {
             Units = "%"
         },
         [BS.W_DAILY_ENDEAVOURS] = {
-            Cat = 2,
+            Cat = cat.Activities,
             HideLimit = false,
             HideWhenCompleted = false
         },
         [BS.W_WEEKLY_ENDEAVOURS] = {
-            Cat = 2,
+            Cat = cat.Activities,
             HideLimit = false,
             HideWhenCompleted = false
         },
         [BS.W_REPAIRS_KITS] = {
-            Cat = 9,
+            Cat = cat.Inventory,
             ColourValues = "okc,dv,dc,wv,wc",
             DangerValue = 6,
             SoundWhenUnder = false,
@@ -292,15 +293,15 @@ BS.Defaults = {
         },
         [BS.W_STOLEN_ITEMS] = {
             Autohide = true,
-            Cat = 12
+            Cat = cat.Thievery
         },
         [BS.W_RECALL_COOLDOWN] = {
             Autohide = true,
-            Cat = 3
+            Cat = cat.Character
         },
         [BS.W_FENCE_TRANSACTIONS] = {
             Autohide = false,
-            Cat = 12,
+            Cat = cat.Thievery,
             ColourValues = "okc,wv,wc,dv,dc",
             DangerValue = 95,
             HideLimit = false,
@@ -311,25 +312,25 @@ BS.Defaults = {
             WarningValue = 85
         },
         [BS.W_ZONE] = {
-            Cat = 3
+            Cat = cat.Character
         },
         [BS.W_PLAYER_NAME] = {
-            Cat = 3
+            Cat = cat.Character
         },
         [BS.W_RACE] = {
-            Cat = 3
+            Cat = cat.Character
         },
         [BS.W_CLASS] = {
-            Cat = 3
+            Cat = cat.Character
         },
         [BS.W_ALLIANCE] = {
-            Cat = 3,
+            Cat = cat.Character,
             ColourValues = "",
             NoValue = false
         },
         [BS.W_LEADS] = {
             Autohide = true,
-            Cat = 2,
+            Cat = cat.Activities,
             ColourValues = "okc,wv,wc,dv,dc",
             DangerValue = 24,
             HideDaysWhenZero = false,
@@ -338,16 +339,16 @@ BS.Defaults = {
             WarningValue = 72
         },
         [BS.W_SOUL_GEMS] = {
-            Cat = 9,
+            Cat = cat.Inventory,
             UseSeparators = false
         },
         [BS.W_FRIENDS] = {
             Announce = false,
-            Cat = 11,
+            Cat = cat.Social,
             HideLimit = false
         },
         [BS.W_MEMORY] = {
-            Cat = 4,
+            Cat = cat.Client,
             ColourValues = "okc,wv,wc,dv,dc",
             DangerValue = 600,
             Precision = 1,
@@ -355,41 +356,41 @@ BS.Defaults = {
             WarningValue = 450
         },
         [BS.W_SKYSHARDS] = {
-            Cat = 3
+            Cat = cat.Character
         },
         [BS.W_SKILL_POINTS] = {
             Autohide = true,
-            Cat = 3,
+            Cat = cat.Character,
             Colour = {0, 1, 0, 1}
         },
         [BS.W_WRITS_SURVEYS] = {
-            Cat = 9
+            Cat = cat.Inventory
         },
         [BS.W_FENCE_RESET] = {
             Autohide = true,
-            Cat = 12,
+            Cat = cat.Thievery,
             ColourValues = "",
             HideSeconds = false,
             Timer = true
         },
         [BS.W_ENDEAVOUR_PROGRESS] = {
-            Cat = 2,
+            Cat = cat.Activities,
             HideWhenComplete = false,
             Progress = true
         },
         [BS.W_TROPHY_VAULT_KEYS] = {
             Autohide = true,
-            Cat = 9
+            Cat = cat.Inventory
         },
         [BS.W_LOCKPICKS] = {
-            Cat = 9,
+            Cat = cat.Inventory,
             ColourValues = "okc,wv,wc,dv,dc",
             DangerValue = 10,
             WarningValue = 50
         },
         [BS.W_LAUNDER_TRANSACTIONS] = {
             Autohide = false,
-            Cat = 12,
+            Cat = cat.Thievery,
             ColourValues = "okc,wv,wc,dv,dc",
             DangerValue = 95,
             HideLimit = false,
@@ -400,21 +401,21 @@ BS.Defaults = {
             WarningValue = 85
         },
         [BS.W_SPEED] = {
-            Cat = 3,
+            Cat = cat.Character,
             ShowPercent = false,
             Units = "mph"
         },
         [BS.W_CRAFTING_DAILIES] = {
-            Cat = 6,
+            Cat = cat.Crafting,
             ColourValues = ""
         },
         [BS.W_GUILD_FRIENDS] = {
             Announce = false,
-            Cat = 11,
+            Cat = cat.Social,
             HideLimit = false
         },
         [BS.W_DAILY_ENDEAVOUR_TIME] = {
-            Cat = 2,
+            Cat = cat.Activities,
             ColourValues = "okc,wv,wc,dv,dc",
             DangerValue = 2,
             HideDaysWhenZero = true,
@@ -424,7 +425,7 @@ BS.Defaults = {
             WarningValue = 6
         },
         [BS.W_WEEKLY_ENDEAVOUR_TIME] = {
-            Cat = 2,
+            Cat = cat.Activities,
             ColourValues = "okc,wv,wc,dv,dc",
             DangerValue = 48,
             HideDaysWhenZero = false,
@@ -435,23 +436,23 @@ BS.Defaults = {
         },
         [BS.W_COMPANION_LEVEL] = {
             Autohide = true,
-            Cat = 5,
+            Cat = cat.Companions,
             HideWhenMaxLevel = false,
             ShowXPPC = true
         },
         [BS.W_TRIBUTE_CLUB_RANK] = {
-            Cat = 2
+            Cat = cat.Activities
         },
         [BS.W_PLAYER_LEVEL] = {
             Autohide = true,
-            Cat = 3
+            Cat = cat.Character
         },
         [BS.W_ACHIEVEMENT_POINTS] = {
-            Cat = 2,
+            Cat = cat.Activities,
             ShowPercent = false
         },
         [BS.W_PLEDGES_TIME] = {
-            Cat = 2,
+            Cat = cat.Activities,
             ColourValues = "okc,wv,wc,dv,dc",
             DangerValue = 2,
             HideDaysWhenZero = false,
@@ -461,19 +462,19 @@ BS.Defaults = {
             WarningValue = 6
         },
         [BS.W_SHADOWY_VENDOR_TIME] = {
-            Cat = 2,
+            Cat = cat.Activities,
             ColourValues = "",
             HideSeconds = false,
             Timer = true
         },
         [BS.W_LFG_TIME] = {
-            Cat = 2,
+            Cat = cat.Activities,
             ColourValues = "",
             HideSeconds = false,
             Timer = true
         },
         [BS.W_CRAFTING_DAILY_TIME] = {
-            Cat = 6,
+            Cat = cat.Crafting,
             ColourValues = "okc,wv,wc,dv,dc",
             DangerValue = 2,
             HideDaysWhenZero = true,
@@ -484,111 +485,111 @@ BS.Defaults = {
         },
         [BS.W_WATCHED_ITEMS] = {
             Announce = false,
-            Cat = 9,
+            Cat = cat.Inventory,
             [BS.PERFECT_ROE] = true,
             [BS.POTENT_NIRNCRUX] = true
         },
         [BS.W_TAMRIEL_TIME] = {
-            Cat = 4,
+            Cat = cat.Client,
             Requires = "LibClockTST"
         },
         [BS.W_ACTIVE_BAR] = {
-            Cat = 1,
+            Cat = cat.Abilities,
             ColourValues = ""
         },
         [BS.W_DPS] = {
-            Cat = 3,
+            Cat = cat.Character,
             Requires = "LibCombat",
             UseSeparators = false
         },
         [BS.W_LOREBOOKS] = {
-            Cat = 2,
+            Cat = cat.Activities,
             ShowCategory = GetLoreCategoryInfo(1)
         },
         [BS.W_RECIPES] = {
-            Cat = 6
+            Cat = cat.Crafting
         },
         [BS.W_RANDOM_MEMENTO] = {
-            Cat = 9,
+            Cat = cat.Inventory,
             ColourValues = "",
             Print = true
         },
         [BS.W_RANDOM_PET] = {
-            Cat = 9,
+            Cat = cat.Inventory,
             ColourValues = "",
             Print = true
         },
         [BS.W_RANDOM_MOUNT] = {
-            Cat = 9,
+            Cat = cat.Inventory,
             ColourValues = "",
             Print = true
         },
         [BS.W_RANDOM_EMOTE] = {
-            Cat = 9,
+            Cat = cat.Inventory,
             ColourValues = "",
             Print = true
         },
         [BS.W_CONTAINERS] = {
             Autohide = false,
-            Cat = 9
+            Cat = cat.Inventory
         },
         [BS.W_TREASURE] = {
             Autohide = false,
-            Cat = 9
+            Cat = cat.Inventory
         },
         [BS.W_RANDOM_DUNGEON] = {
             Autohide = false,
-            Cat = 2,
+            Cat = cat.Activities,
             ColourValues = ""
         },
         [BS.W_PLAYER_LOCATION] = {
-            Cat = 3
+            Cat = cat.Character
         },
         [BS.W_RANDOM_BATTLEGROUND] = {
             Autohide = false,
-            Cat = 2,
+            Cat = cat.Activities,
             ColourValues = ""
         },
         [BS.W_RANDOM_TRIBUTE] = {
             Autohide = false,
-            Cat = 2,
+            Cat = cat.Activities,
             ColourValues = ""
         },
         [BS.W_PLAYER_EXPERIENCE] = {
-            Cat = 3,
+            Cat = cat.Character,
             UseSeparators = false
         },
         [BS.W_UNKNOWN_WRIT_MOTIFS] = {
             Autohide = false,
-            Cat = 6,
+            Cat = cat.Crafting,
             Requires = "LibCharacterKnowledge"
         },
         [BS.W_FURNISHINGS] = {
-            Cat = 9,
+            Cat = cat.Inventory,
             Autohide = false
         },
         [BS.W_COMPANION_GEAR] = {
-            Cat = 9,
+            Cat = cat.Inventory,
             Autohide = false
         },
         [BS.W_MUSEUM] = {
-            Cat = 9,
+            Cat = cat.Inventory,
             Autohide = false
         },
         [BS.W_EQUIPPED_POISON] = {
             Autohide = false,
-            Cat = 9,
+            Cat = cat.Inventory,
             ColourValues = "okc,wv,wc,dv,dc",
             DangerValue = 10,
             WarningValue = 50
         },
         [BS.W_VAMPIRISM] = {
             Autohide = true,
-            Cat = 3
+            Cat = cat.Character
         },
         [BS.W_VAMPIRISM_TIMER] = {
             Autohide = true,
-            Cat = 3,
+            Cat = cat.Character,
             ColourValues = "okc,wv,wc,dv,dc",
             DangerValue = 5,
             HideSeconds = false,
@@ -598,7 +599,7 @@ BS.Defaults = {
         },
         [BS.W_VAMPIRISM_FEED_TIMER] = {
             Autohide = true,
-            Cat = 3,
+            Cat = cat.Character,
             ColourValues = "okc,wv,wc,dv,dc",
             DangerValue = 5,
             HideDaysWhenZero = false,
@@ -608,112 +609,112 @@ BS.Defaults = {
             WarningValue = 10
         },
         [BS.W_FRAGMENTS] = {
-            Cat = 9
+            Cat = cat.Inventory
         },
         [BS.W_RUNEBOXES] = {
-            Cat = 9
+            Cat = cat.Inventory
         },
         [BS.W_RECIPE_WATCH] = {
             Announce = true,
             Autohide = false,
-            Cat = 9
+            Cat = cat.Inventory
         },
         [BS.W_CHESTS_FOUND] = {
             Autohide = false,
-            Cat = 2
+            Cat = cat.Activities
         },
         [BS.W_SHALIDORS_LIBRARY] = {
-            Cat = 2
+            Cat = cat.Activities
         },
         [BS.W_CRAFTING_MOTIFS] = {
-            Cat = 2
+            Cat = cat.Activities
         },
         [BS.W_DAILY_PROGRESS] = {
-            Cat = 2,
+            Cat = cat.Activities,
             HideWhenComplete = false,
             Progress = true
         },
         [BS.W_WEAPON_CHARGE] = {
-            Cat = 9,
+            Cat = cat.Inventory,
             ColourValues = "okc,wv,wc,dv,dc",
             DangerValue = 10,
             WarningValue = 25
         },
         [BS.W_BASTIAN] = {
-            Cat = 5
+            Cat = cat.Companions
         },
         [BS.W_MIRRI] = {
-            Cat = 5
+            Cat = cat.Companions
         },
         [BS.W_EMBER] = {
-            Cat = 5
+            Cat = cat.Companions
         },
         [BS.W_ISOBEL] = {
-            Cat = 5
+            Cat = cat.Companions
         },
         [BS.W_SHARP] = {
-            Cat = 5
+            Cat = cat.Companions
         },
         [BS.W_AZANDAR] = {
-            Cat = 5
+            Cat = cat.Companions
         },
         [BS.W_EZABI] = {
-            Cat = 13
+            Cat = cat.Assistants
         },
         [BS.W_GHRASHAROG] = {
-            Cat = 13
+            Cat = cat.Assistants
         },
         [BS.W_GILADIL] = {
-            Cat = 13
+            Cat = cat.Assistants
         },
         [BS.W_PIRHARRI] = {
-            Cat = 13
+            Cat = cat.Assistants
         },
         [BS.W_TYTHIS] = {
-            Cat = 13
+            Cat = cat.Assistants
         },
         [BS.W_NUZHIMEH] = {
-            Cat = 13
+            Cat = cat.Assistants
         },
         [BS.W_ALLARIA] = {
-            Cat = 13
+            Cat = cat.Assistants
         },
         [BS.W_CASSUS] = {
-            Cat = 13
+            Cat = cat.Assistants
         },
         [BS.W_FEZEZ] = {
-            Cat = 13
+            Cat = cat.Assistants
         },
         [BS.W_BARON] = {
-            Cat = 13
+            Cat = cat.Assistants
         },
         [BS.W_FACTOTUM] = {
-            Cat = 13
+            Cat = cat.Assistants
         },
         [BS.W_FACTOTUM2] = {
-            Cat = 13
+            Cat = cat.Assistants
         },
         [BS.W_ADERENE] = {
-            Cat = 13
+            Cat = cat.Assistants
         },
         [BS.W_ZUQOTH] = {
-            Cat = 13
+            Cat = cat.Assistants
         },
         [BS.W_HOARFROST] = {
-            Cat = 13
+            Cat = cat.Assistants
         },
         [BS.W_PYROCLAST] = {
-            Cat = 13
+            Cat = cat.Assistants
         },
         [BS.W_PEDDLER] = {
-            Cat = 13
+            Cat = cat.Assistants
         },
         [BS.W_ARCHIVAL_FRAGMENTS] = {
             UseSeparators = false,
-            Cat = 7
+            Cat = cat.Currency
         },
         [BS.W_ARCHIVE_PORT] = {
-            Cat = 1
+            Cat = cat.Abilities
         }
     }
 }

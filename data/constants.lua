@@ -394,20 +394,35 @@ BS.COMPANION_DEFIDS = {
     [BS.W_AZANDAR] = 9
 }
 
+BS.CATNAMES = {
+    Abilities = 1,
+    Activities = 2,
+    Character = 3,
+    Client = 4,
+    Companions = 5,
+    Crafting = 6,
+    Currency = 7,
+    Housing = 8,
+    Inventory = 9,
+    Riding = 10,
+    Social = 11,
+    Thievery = 12,
+    Assistants = 13
+}
 BS.CATEGORIES = {
-    [1] = {name = _G.BARSTEWARD_CATEGORY_ABILITIES, icon = "actionbar/stateoverlay_wound"},
-    [2] = {name = _G.BARSTEWARD_CATEGORY_ACTIVITIES, icon = "crafting/designs_tabicon_up"},
-    [3] = {name = _G.BARSTEWARD_CATEGORY_CHARACTER, icon = "charactercreate/charactercreate_bodyicon_up"},
-    [4] = {name = _G.BARSTEWARD_CATEGORY_CLIENT, icon = "login/gamepad/loading-ouroboros"},
-    [5] = {name = _G.BARSTEWARD_CATEGORY_COMPANIONS, icon = "companion/keyboard/category_u30_allies_up"},
-    [6] = {name = _G.BARSTEWARD_CATEGORY_CRAFTING, icon = "crafting/reconstruct_tabicon_up"},
-    [7] = {name = _G.BARSTEWARD_CATEGORY_CURRENCY, icon = "bank/bank_purchasenormal"},
-    -- [8] =  {name=_G.BARSTEWARD_CATEGORY_HOUSING,icon="icons/poi/poi_group_house_owned"},
-    [9] = {name = _G.BARSTEWARD_CATEGORY_INVENTORY, icon = "collections/collections_tabicon_outfitstyles_up"},
-    [10] = {name = _G.BARSTEWARD_CATEGORY_RIDING, icon = "mounts/tabicon_ridingskills_up"},
-    [11] = {name = _G.BARSTEWARD_CATEGORY_SOCIAL, icon = "friends/friends_tabicon_friends"},
-    [12] = {name = _G.BARSTEWARD_CATEGORY_THIEVERY, icon = "icons/mapkey/mapkey_fence"},
-    [13] = {name = _G.BARSTEWARD_ASSISTANTS, icon = "icons/assistant_premiumbanker_01"}
+    [BS.CATNAMES.Abilities] = {name = _G.BARSTEWARD_CATEGORY_ABILITIES, icon = "actionbar/stateoverlay_wound"},
+    [BS.CATNAMES.Activities] = {name = _G.BARSTEWARD_CATEGORY_ACTIVITIES, icon = "crafting/designs_tabicon_up"},
+    [BS.CATNAMES.Character] = {name = _G.BARSTEWARD_CATEGORY_CHARACTER, icon = "charactercreate/charactercreate_bodyicon_up"},
+    [BS.CATNAMES.Client] = {name = _G.BARSTEWARD_CATEGORY_CLIENT, icon = "login/gamepad/loading-ouroboros"},
+    [BS.CATNAMES.Companions] = {name = _G.BARSTEWARD_CATEGORY_COMPANIONS, icon = "companion/keyboard/category_u30_allies_up"},
+    [BS.CATNAMES.Crafting] = {name = _G.BARSTEWARD_CATEGORY_CRAFTING, icon = "crafting/reconstruct_tabicon_up"},
+    [BS.CATNAMES.Currency] = {name = _G.BARSTEWARD_CATEGORY_CURRENCY, icon = "bank/bank_purchasenormal"},
+    -- [BS.CATNAMES.Housing] =  {name=_G.BARSTEWARD_CATEGORY_HOUSING,icon="icons/poi/poi_group_house_owned"},
+    [BS.CATNAMES.Inventory] = {name = _G.BARSTEWARD_CATEGORY_INVENTORY, icon = "collections/collections_tabicon_outfitstyles_up"},
+    [BS.CATNAMES.Riding] = {name = _G.BARSTEWARD_CATEGORY_RIDING, icon = "mounts/tabicon_ridingskills_up"},
+    [BS.CATNAMES.Social] = {name = _G.BARSTEWARD_CATEGORY_SOCIAL, icon = "friends/friends_tabicon_friends"},
+    [BS.CATNAMES.Thievery] = {name = _G.BARSTEWARD_CATEGORY_THIEVERY, icon = "icons/mapkey/mapkey_fence"},
+    [BS.CATNAMES.Assistants] = {name = _G.BARSTEWARD_ASSISTANTS, icon = "icons/assistant_premiumbanker_01"}
 }
 
 BS.ASSISTANTS = {
