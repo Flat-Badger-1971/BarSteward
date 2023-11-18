@@ -1583,3 +1583,22 @@ function BS.SentenceCase(text)
 
     return initial .. rest
 end
+
+
+function BS.FindItem(text)
+    local filteredItems =
+            SHARED_INVENTORY:GenerateFullSlotData(
+            function(itemdata)
+                local match = itemdata.name:find(text)
+                return match ~= nil
+            end,
+            _G.BAG_BACKPACK
+        )
+
+        for _, item in ipairs(filteredItems) do
+            d(item.name)
+            d(item.bagId, item.slotIndex)
+            d(GetItemId(item.bagId, item.slotIndex))
+            d(GetItemType(item.bagId, item.slotIndex))
+        end
+end

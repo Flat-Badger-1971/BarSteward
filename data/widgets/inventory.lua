@@ -64,7 +64,7 @@ BS.widgets[BS.W_BAG_SPACE] = {
         _G.EVENT_INVENTORY_BAG_CAPACITY_CHANGED,
         _G.EVENT_INVENTORY_FULL_UPDATE
     },
-    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
+    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
     tooltip = BS.Format(_G.SI_GAMEPAD_MAIL_INBOX_INVENTORY):gsub(":", ""),
     icon = "/esoui/art/tooltips/icon_bag.dds",
     onClick = function()
@@ -142,7 +142,7 @@ BS.widgets[BS.W_BANK_SPACE] = {
         _G.EVENT_INVENTORY_BAG_CAPACITY_CHANGED,
         _G.EVENT_INVENTORY_BANK_CAPACITY_CHANGED
     },
-    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
+    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
     tooltip = GetString(_G.BARSTEWARD_BANK),
     icon = "/esoui/art/tooltips/icon_bank.dds"
 }
@@ -264,7 +264,7 @@ BS.widgets[BS.W_DURABILITY] = {
 
         return lowest
     end,
-    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
+    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
     icon = "/esoui/art/inventory/inventory_tabicon_armor_up.dds",
     tooltip = GetString(_G.BARSTEWARD_DURABILITY),
     onClick = function()
@@ -308,7 +308,7 @@ BS.widgets[BS.W_REPAIRS_KITS] = {
 
         return count
     end,
-    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
+    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
     icon = "/esoui/art/inventory/inventory_tabicon_repair_up.dds",
     tooltip = BS.Format(_G.SI_HOOK_POINT_STORE_REPAIR_KIT_HEADER):gsub(":", "")
 }
@@ -535,7 +535,7 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
 
         return widget:GetValue()
     end,
-    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
+    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
     icon = "/esoui/art/journal/journal_tabicon_cadwell_up.dds",
     tooltip = GetString(_G.BARSTEWARD_WRITS),
     customSettings = {
@@ -616,7 +616,7 @@ BS.widgets[BS.W_TROPHY_VAULT_KEYS] = {
 
         return count
     end,
-    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
+    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
     icon = "/esoui/art/icons/quest_grinddoorkey_shackles.dds",
     tooltip = GetString(_G.BARSTEWARD_TROPHY_VAULT_KEYS),
     hideWhenEqual = 0
@@ -826,7 +826,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
 
         return count
     end,
-    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
+    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
     tooltip = GetString(_G.BARSTEWARD_WATCHED_ITEMS),
     icon = "/esoui/art/icons/crafting_critter_snake_eyes.dds",
     customOptions = {
@@ -1269,7 +1269,7 @@ BS.widgets[BS.W_CONTAINERS] = {
 
         return itemScan(widget, filteredItems, BS.W_CONTAINERS, BS.Format(_G.SI_ITEMTYPEDISPLAYCATEGORY26))
     end,
-    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
+    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
     icon = "/esoui/art/inventory/inventory_tabicon_container_up.dds",
     tooltip = BS.Format(_G.SI_ITEMTYPEDISPLAYCATEGORY26),
     hideWhenEqual = 0,
@@ -1296,7 +1296,7 @@ BS.widgets[BS.W_TREASURE] = {
 
         return itemScan(widget, filteredItems, BS.W_TREASURE, BS.Format(_G.SI_ITEMTYPE56))
     end,
-    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
+    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
     icon = "/esoui/art/icons/quest_strosmkai_open_treasure_chest.dds",
     tooltip = BS.Format(_G.SI_ITEMTYPE56),
     hideWhenEqual = 0,
@@ -1661,7 +1661,7 @@ BS.widgets[BS.W_FRAGMENTS] = {
     onClick = function()
         COLLECTIONS_BOOK:BrowseToCollectible(BS.CollectibleId)
     end,
-    callback = {[ZO_COLLECTIBLE_DATA_MANAGER] = {"OnCollectionUpdated"}},
+    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
     tooltip = GetString(_G.BARSTEWARD_COLLECTIBLE_FRAGMENTS),
     icon = "/esoui/art/icons/antiquities_u30_museum_fragment07.dds"
 }
@@ -1811,7 +1811,7 @@ BS.widgets[BS.W_RUNEBOXES] = {
             SCENE_MANAGER:Show("gamepad_inventory_root")
         end
     end,
-    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
+    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
     tooltip = GetString(_G.BARSTEWARD_RUNEBOX_FRAGMENTS),
     icon = "/esoui/art/tradinghouse/tradinghouse_trophy_runebox_fragment_up.dds"
 }
