@@ -347,14 +347,49 @@ local function checkReset()
     end
 end
 
+local conditionInfo = {}
+
+local function getReadyForHandIn(character)
+    local update = false
+    local questList = QUEST_JOURNAL_MANAGER:GetQuestListData()
+
+    for _, quest in ipairs(questList) do
+        if (quest.questType == _G.QUEST_TYPE_CRAFTING and quest.repeatableType == _G.QUEST_REPEAT_DAILY) then
+            ZO_ClearNumericallyIndexedTable(conditionInfo)
+            local numConditions = GetJournalQuestNumConditions(quest.questIndex)
+
+            QUEST_JOURNAL_MANAGER:BuildTextForConditions(
+                quest.questIndex,
+                _G.QUEST_MAIN_STEP_INDEX,
+                numConditions,
+                conditionInfo
+            )
+
+            for info = 1, #conditionInfo do
+                local conditionText = zo_strformat("<<z:1>>", conditionInfo[info].name)
+
+                if (string.find(conditionText, GetString(_G.BARSTEWARD_DELIVER))) then
+                    if (BS.Vars.dailyQuests[character][quest.name] ~= "ready") then
+                        BS.Vars.dailyQuests[character][quest.name] = "ready"
+                        update = true
+                        break
+                    end
+                end
+            end
+        end
+    end
+
+    return update
+end
+
 -- check once a minute for daily reset
 BS.RegisterForUpdate(60000, checkReset)
 
 BS.widgets[BS.W_CRAFTING_DAILIES] = {
     name = "craftingDailies",
-    update = function(widget, _, completeName, addedName, removedName)
+    update = function(widget, event, completeName, addedName, removedName)
         local update = true
-        local added, done
+        local added, done, ready
         local character = GetUnitName("player")
 
         checkReset()
@@ -365,6 +400,10 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
 
         BS.Vars.dailyQuests = BS.Vars.dailyQuests or {}
         BS.Vars.dailyQuests[character] = BS.Vars.dailyQuests[character] or {}
+
+        if (event == _G.EVENT_QUEST_CONDITION_COUNTER_CHANGED) then
+            addedName = 1
+        end
 
         completeName = (type(completeName) == "string") and completeName or "null"
         addedName = (type(addedName) == "string") and addedName or "null"
@@ -383,6 +422,8 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
             update = false
         end
 
+        update = update or getReadyForHandIn(character)
+
         if (completeName == "null" and addedName == "null" and removedName == "null") then
             -- initial load
             update = true
@@ -391,18 +432,21 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
         if (update) then
             added = countState("added", character)
             done = countState("done", character)
+            ready = countState("ready", character)
 
             local colour = BS.Vars.DefaultColour
 
             if (done == qualifiedCount) then
                 colour = BS.Vars.DefaultOkColour
                 BS.Vars.dailyQuests[character].complete = true
+            elseif (ready == qualifiedCount) then
+                colour = {(255 / 52), (255 / 164), (255 / 2350), 1}
             elseif (added == qualifiedCount) then
                 colour = BS.Vars.DefaultWarningColour
                 BS.Vars.dailyQuests[character].pickedup = true
             end
 
-            widget:SetValue(added .. "/" .. done .. "/" .. qualifiedCount)
+            widget:SetValue(added .. "/" .. ready .. "/" .. done .. "/" .. qualifiedCount)
             widget:SetColour(unpack(colour))
 
             local ttt = GetString(_G.BARSTEWARD_DAILY_CRAFTING) .. BS.LF
@@ -410,9 +454,13 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
             for name, _ in pairs(qualifiedQuestNames) do
                 local tdone = BS.Vars.dailyQuests[character][name] == "done"
                 local tadded = BS.Vars.dailyQuests[character][name] == "added"
+                local tready = BS.Vars.dailyQuests[character][name] == "ready"
                 local tcolour = BS.ARGBConvert(BS.Vars.DefaultColour)
 
-                if (tdone) then
+                if (tready) then
+                    ttt = ttt .. BS.LF .. "|c34a4eb"
+                    ttt = ttt .. name .. " - " .. GetString(_G.BARSTEWARD_READY) .. "|r"
+                elseif (tdone) then
                     ttt = ttt .. BS.LF .. BS.ARGBConvert(BS.Vars.DefaultOkColour)
                     ttt = ttt .. name .. " - " .. GetString(_G.BARSTEWARD_COMPLETED) .. "|r"
                 elseif (tadded) then
@@ -453,7 +501,12 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
 
         return done
     end,
-    event = {_G.EVENT_QUEST_ADDED, _G.EVENT_QUEST_REMOVED, _G.EVENT_QUEST_COMPLETE},
+    event = {
+        _G.EVENT_QUEST_ADDED,
+        _G.EVENT_QUEST_REMOVED,
+        _G.EVENT_QUEST_COMPLETE,
+        _G.EVENT_QUEST_CONDITION_COUNTER_CHANGED
+    },
     icon = "/esoui/art/floatingmarkers/repeatablequest_available_icon.dds",
     tooltip = GetString(_G.BARSTEWARD_DAILY_CRAFTING)
 }

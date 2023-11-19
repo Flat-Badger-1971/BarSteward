@@ -100,6 +100,12 @@ read_globals = {
             GetEmoteListForType = {read_only = true}
         }
     },
+    ["QUEST_JOURNAL_MANAGER"] = {
+        fields = {
+            GetQuestListData = {read_only = true},
+            BuildTextForConditions = {read_only = true}
+        }
+    },
     ["REWARDS_MANAGER"] = {
         fields = {
             GetInfoForReward = {read_only = true}
@@ -307,6 +313,10 @@ read_globals = {
     "GetItemSellValueWithBonuses",
     "GetItemStyleName",
     "GetItemType",
+    "GetJournalQuestConditionInfo",
+    "GetJournalQuestInfo",
+    "GetJournalQuestNumConditions",
+    "GetJournalQuestRepeatType",
     "GetLatency",
     "GetLFGCooldownTimeRemainingSeconds",
     "GetLoreBookInfo",
@@ -331,6 +341,7 @@ read_globals = {
     "GetNumFriends",
     "GetNumGuildMembers",
     "GetNumGuilds",
+    "GetNumJournalQuests",
     "GetNumLFGActivityRewardUINodes",
     "GetNumLockpicksLeft",
     "GetNumLoreCategories",
