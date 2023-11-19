@@ -347,15 +347,13 @@ local function checkReset()
     end
 end
 
-local conditionInfo = {}
-
 local function getReadyForHandIn(character)
     local update = false
     local questList = QUEST_JOURNAL_MANAGER:GetQuestListData()
 
     for _, quest in ipairs(questList) do
         if (quest.questType == _G.QUEST_TYPE_CRAFTING and quest.repeatableType == _G.QUEST_REPEAT_DAILY) then
-            ZO_ClearNumericallyIndexedTable(conditionInfo)
+            local conditionInfo = {}
             local numConditions = GetJournalQuestNumConditions(quest.questIndex)
 
             QUEST_JOURNAL_MANAGER:BuildTextForConditions(
