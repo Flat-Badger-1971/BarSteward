@@ -383,12 +383,20 @@ end
 -- check once a minute for daily reset
 BS.RegisterForUpdate(60000, checkReset)
 
+local DAILY_COLOURS = {
+    ["done"] = BS.COLOURS.GREEN,
+    ["ready"] = BS.COLOURS.BLUE,
+    ["added"] = BS.COLOURS.YELLOW
+}
+
 BS.widgets[BS.W_CRAFTING_DAILIES] = {
     name = "craftingDailies",
     update = function(widget, event, completeName, addedName, removedName)
+        local this = BS.W_CRAFTING_DAILIES
         local update = true
         local added, done, ready
         local character = GetUnitName("player")
+        local iconString = "/esoui/art/icons/mapkey/mapkey_%s.dds"
 
         checkReset()
 
@@ -427,25 +435,42 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
             update = true
         end
 
+        added = countState("added", character)
+        done = countState("done", character)
+        ready = countState("ready", character)
+
+        local colour = BS.Vars.DefaultColour
+
+        if (done == qualifiedCount) then
+            colour = BS.Vars.DefaultOkColour
+            BS.Vars.dailyQuests[character].complete = true
+        elseif (ready == qualifiedCount) then
+            colour = {(255 / 52), (255 / 164), (255 / 2350), 1}
+        elseif (added == qualifiedCount) then
+            colour = BS.Vars.DefaultWarningColour
+            BS.Vars.dailyQuests[character].pickedup = true
+        end
+
         if (update) then
-            added = countState("added", character)
-            done = countState("done", character)
-            ready = countState("ready", character)
+            local tName
+            if (BS.Vars.Controls[this].UseIcons) then
+                local output = ""
 
-            local colour = BS.Vars.DefaultColour
+                for craftingType, info in pairs(BS.CRAFTING_ACHIEVEMENT) do
+                    local cname = BS.CRAFTING_DAILY[craftingType]
+                    local cvar = BS.Vars.dailyQuests[character][cname]
+                    local ciconName = iconString:format(info.icon)
+                    colour = cvar and DAILY_COLOURS[cvar] or BS.COLOURS.GREY
 
-            if (done == qualifiedCount) then
-                colour = BS.Vars.DefaultOkColour
-                BS.Vars.dailyQuests[character].complete = true
-            elseif (ready == qualifiedCount) then
-                colour = {(255 / 52), (255 / 164), (255 / 2350), 1}
-            elseif (added == qualifiedCount) then
-                colour = BS.Vars.DefaultWarningColour
-                BS.Vars.dailyQuests[character].pickedup = true
+                    tName = string.format("|c%s|t18:18:%s:inheritColor|t|r", colour, ciconName)
+                    output = string.format("%s %s", output, tName)
+                end
+
+                widget:SetValue(output)
+            else
+                widget:SetValue(added .. "/" .. ready .. "/" .. done .. "/" .. qualifiedCount)
+                widget:SetColour(unpack(colour))
             end
-
-            widget:SetValue(added .. "/" .. ready .. "/" .. done .. "/" .. qualifiedCount)
-            widget:SetColour(unpack(colour))
 
             local ttt = GetString(_G.BARSTEWARD_DAILY_CRAFTING) .. BS.LF
 
@@ -456,7 +481,7 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
                 local tcolour = BS.ARGBConvert(BS.Vars.DefaultColour)
 
                 if (tready) then
-                    ttt = ttt .. BS.LF .. "|c34a4eb"
+                    ttt = ttt .. BS.LF .. "|c" .. BS.COLOURS.BLUE
                     ttt = ttt .. name .. " - " .. GetString(_G.BARSTEWARD_READY) .. "|r"
                 elseif (tdone) then
                     ttt = ttt .. BS.LF .. BS.ARGBConvert(BS.Vars.DefaultOkColour)
@@ -497,7 +522,7 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
             widget.tooltip = ttt
         end
 
-        return done
+        return done == qualifiedCount
     end,
     event = {
         _G.EVENT_QUEST_ADDED,
@@ -506,7 +531,23 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
         _G.EVENT_QUEST_CONDITION_COUNTER_CHANGED
     },
     icon = "/esoui/art/floatingmarkers/repeatablequest_available_icon.dds",
-    tooltip = GetString(_G.BARSTEWARD_DAILY_CRAFTING)
+    tooltip = GetString(_G.BARSTEWARD_DAILY_CRAFTING),
+    hideWhenEqual = true,
+    customSettings = {
+        [1] = {
+            name = GetString(_G.BARSTEWARD_USE_ICONS),
+            type = "checkbox",
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_CRAFTING_DAILIES].UseIcons
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_CRAFTING_DAILIES].UseIcons = value
+                BS.RefreshWidget(BS.W_CRAFTING_DAILIES)
+            end,
+            width = "full",
+            default = false
+        }
+    }
 }
 
 BS.widgets[BS.W_CRAFTING_DAILY_TIME] = {

@@ -440,6 +440,11 @@ read_globals = {
     "ZO_CheckButtonLabel_SetTextColor",
     "ZO_ClearNumericallyIndexedTable",
     "ZO_ClearTable",
+    ["ZO_ColorDef"] = {
+        fields = {
+            New = {read_only = true}
+        }
+    },
     ["ZO_ComboBox"] = {
         fields = {
             CreateItemEntry = {read_only = true}

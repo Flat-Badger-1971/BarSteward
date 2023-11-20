@@ -407,7 +407,8 @@ BS.Defaults = {
         },
         [BS.W_CRAFTING_DAILIES] = {
             Cat = cat.Crafting,
-            ColourValues = ""
+            ColourValues = "",
+            Autohide = false
         },
         [BS.W_GUILD_FRIENDS] = {
             Announce = false,

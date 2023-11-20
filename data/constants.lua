@@ -207,13 +207,13 @@ BS.CRAFTING_ACHIEVEMENT_IDS = {
 }
 
 BS.CRAFTING_ACHIEVEMENT = {
-    [_G.CRAFTING_TYPE_ALCHEMY] = {achievementId = 1145, criterionIndex = 1},
-    [_G.CRAFTING_TYPE_BLACKSMITHING] = {achievementId = 1145, criterionIndex = 2},
-    [_G.CRAFTING_TYPE_CLOTHIER] = {achievementId = 1145, criterionIndex = 3},
-    [_G.CRAFTING_TYPE_ENCHANTING] = {achievementId = 1145, criterionIndex = 4},
-    [_G.CRAFTING_TYPE_JEWELRYCRAFTING] = {achievementId = 2225, criterionIndex = 1},
-    [_G.CRAFTING_TYPE_PROVISIONING] = {achievementId = 1145, criterionIndex = 5},
-    [_G.CRAFTING_TYPE_WOODWORKING] = {achievementId = 1145, criterionIndex = 6}
+    [_G.CRAFTING_TYPE_ALCHEMY] = {achievementId = 1145, criterionIndex = 1, icon = "alchemist"},
+    [_G.CRAFTING_TYPE_BLACKSMITHING] = {achievementId = 1145, criterionIndex = 2, icon = "smithy"},
+    [_G.CRAFTING_TYPE_CLOTHIER] = {achievementId = 1145, criterionIndex = 3, icon = "clothier"},
+    [_G.CRAFTING_TYPE_ENCHANTING] = {achievementId = 1145, criterionIndex = 4, icon = "enchanter"},
+    [_G.CRAFTING_TYPE_JEWELRYCRAFTING] = {achievementId = 2225, criterionIndex = 1, icon = "jewelrycrafting"},
+    [_G.CRAFTING_TYPE_PROVISIONING] = {achievementId = 1145, criterionIndex = 5, icon = "inn"},
+    [_G.CRAFTING_TYPE_WOODWORKING] = {achievementId = 1145, criterionIndex = 6, icon = "woodworker"}
 }
 
 BS.CRAFTING_DAILY = {
@@ -412,13 +412,22 @@ BS.CATNAMES = {
 BS.CATEGORIES = {
     [BS.CATNAMES.Abilities] = {name = _G.BARSTEWARD_CATEGORY_ABILITIES, icon = "actionbar/stateoverlay_wound"},
     [BS.CATNAMES.Activities] = {name = _G.BARSTEWARD_CATEGORY_ACTIVITIES, icon = "crafting/designs_tabicon_up"},
-    [BS.CATNAMES.Character] = {name = _G.BARSTEWARD_CATEGORY_CHARACTER, icon = "charactercreate/charactercreate_bodyicon_up"},
+    [BS.CATNAMES.Character] = {
+        name = _G.BARSTEWARD_CATEGORY_CHARACTER,
+        icon = "charactercreate/charactercreate_bodyicon_up"
+    },
     [BS.CATNAMES.Client] = {name = _G.BARSTEWARD_CATEGORY_CLIENT, icon = "login/gamepad/loading-ouroboros"},
-    [BS.CATNAMES.Companions] = {name = _G.BARSTEWARD_CATEGORY_COMPANIONS, icon = "companion/keyboard/category_u30_allies_up"},
+    [BS.CATNAMES.Companions] = {
+        name = _G.BARSTEWARD_CATEGORY_COMPANIONS,
+        icon = "companion/keyboard/category_u30_allies_up"
+    },
     [BS.CATNAMES.Crafting] = {name = _G.BARSTEWARD_CATEGORY_CRAFTING, icon = "crafting/reconstruct_tabicon_up"},
     [BS.CATNAMES.Currency] = {name = _G.BARSTEWARD_CATEGORY_CURRENCY, icon = "bank/bank_purchasenormal"},
     -- [BS.CATNAMES.Housing] =  {name=_G.BARSTEWARD_CATEGORY_HOUSING,icon="icons/poi/poi_group_house_owned"},
-    [BS.CATNAMES.Inventory] = {name = _G.BARSTEWARD_CATEGORY_INVENTORY, icon = "collections/collections_tabicon_outfitstyles_up"},
+    [BS.CATNAMES.Inventory] = {
+        name = _G.BARSTEWARD_CATEGORY_INVENTORY,
+        icon = "collections/collections_tabicon_outfitstyles_up"
+    },
     [BS.CATNAMES.Riding] = {name = _G.BARSTEWARD_CATEGORY_RIDING, icon = "mounts/tabicon_ridingskills_up"},
     [BS.CATNAMES.Social] = {name = _G.BARSTEWARD_CATEGORY_SOCIAL, icon = "friends/friends_tabicon_friends"},
     [BS.CATNAMES.Thievery] = {name = _G.BARSTEWARD_CATEGORY_THIEVERY, icon = "icons/mapkey/mapkey_fence"},
@@ -446,3 +455,10 @@ BS.ASSISTANTS = {
 }
 
 BS.ENDLESS_ARCHIVE_NODE_INDEX = 550
+
+BS.COLOURS = {
+    GREY = "bababa",
+    YELLOW = "ffff00",
+    GREEN = "00ff00",
+    BLUE = "34a4eb"
+}

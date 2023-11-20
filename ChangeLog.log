@@ -2,6 +2,7 @@
 Inventory widget tweaks
 Removed old verison updates
 Added quest ready for hand-in to daily crafting widget
+Autohide and Icons options added to daily crafting widget
 
 [color=#ff9900][b]Version: 2.0.5 ---------------[/b][/color]
 Fix bug when removing a house widget from a bar not taking effect until after a reload
