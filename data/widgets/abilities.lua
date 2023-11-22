@@ -64,7 +64,7 @@ BS.widgets[BS.W_ACTIVE_BAR] = {
         return activeWeaponPair
     end,
     event = {_G.EVENT_ACTIVE_WEAPON_PAIR_CHANGED, _G.EVENT_PREPARE_FOR_JUMP},
-    icon = "/esoui/art/tradinghouse/category_u30_equipment_up.dds",
+    icon = "tradinghouse/category_u30_equipment_up",
     tooltip = GetString(_G.BARSTEWARD_ACTIVE_BAR),
     customSettings = {
         [1] = {
@@ -157,13 +157,13 @@ BS.widgets[BS.W_ARCHIVE_PORT] = {
     -- v2.0.3
     name = "archivePort",
     update = function(widget)
-        widget:SetValue(zo_iconFormat("/esoui/art/ava/ava_ram_slot_green.dds", 16, 16), "___")
+        widget:SetValue(BS.Icon("ava/ava_ram_slot_green"), "___")
 
         return 0
     end,
     event = _G.EVENT_PLAYER_ACTIVATED,
     tooltip = GetString(_G.BARSTEWARD_ENDLESS_ARCHIVE_PORT),
-    icon = "/esoui/art/icons/poi/poi_endlessdungeon_complete.dds",
+    icon = "icons/poi/poi_endlessdungeon_complete",
     cooldown = true,
     onClick = function()
         FastTravelToNode(BS.ENDLESS_ARCHIVE_NODE_INDEX)

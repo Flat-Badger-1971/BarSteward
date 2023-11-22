@@ -13,9 +13,9 @@ local function addToTooltip(friendList, textureFunctions)
             end
         end
 
-        tt = string.format("%s%s%s", tt, BS.LF, zo_iconFormat(textureFunctions.playerStatusIcon(friend.status)))
+        tt = string.format("%s%s%s", tt, BS.LF, BS.Icon(textureFunctions.playerStatusIcon(friend.status)))
         tt = string.format("%s%s", tt, textColour)
-        tt = string.format("%s%s", tt, noChar and "" or zo_iconFormat(textureFunctions.allianceIcon(friend.alliance)))
+        tt = string.format("%s%s", tt, noChar and "" or BS.Icon(textureFunctions.allianceIcon(friend.alliance)))
         tt = string.format("%s%s", tt, ZO_FormatUserFacingDisplayName(friend.displayName))
         tt = string.format("%s%s|r", tt, noChar and "" or (" - " .. friend.formattedZone))
     end
@@ -95,7 +95,7 @@ BS.widgets[BS.W_FRIENDS] = {
         _G.EVENT_FRIEND_CHARACTER_ZONE_CHANGED
     },
     tooltip = BS.Format(_G.SI_GAMEPAD_SOCIAL_FOOTER_NUM_ONLINE),
-    icon = "/esoui/art/chatwindow/chat_friendsonline_up.dds",
+    icon = "chatwindow/chat_friendsonline_up",
     onClick = function()
         if (not IsInGamepadPreferredMode()) then
             SYSTEMS:GetObject("mainMenu"):ToggleCategory(_G.MENU_CATEGORY_CONTACTS)
@@ -282,7 +282,7 @@ BS.widgets[BS.W_GUILD_FRIENDS] = {
         _G.EVENT_GUILD_MEMBER_PLAYER_STATUS_CHANGED
     },
     tooltip = BS.Format(_G.BARSTEWARD_GUILD_FRIENDS_ONLINE),
-    icon = "/esoui/art/guild/guildheraldry_indexicon_crest_up.dds",
+    icon = "guild/guildheraldry_indexicon_crest_up",
     onClick = function()
         if (not IsInGamepadPreferredMode()) then
             SYSTEMS:GetObject("mainMenu"):ToggleCategory(_G.MENU_CATEGORY_GUILDS)

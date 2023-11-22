@@ -17,7 +17,7 @@ local function getcrownStoreCurrencies(invert)
                     icon = "/esoui/art/currency/" .. icon .. ".dds"
                 end
 
-                crownStoreInfo = crownStoreInfo .. zo_iconFormat(icon, 16, 16) .. " "
+                crownStoreInfo = crownStoreInfo .. BS.Icon(icon) .. " "
                 crownStoreInfo = crownStoreInfo .. "|cf9f9f9" .. BS.Format(info.text) .. " |r"
                 crownStoreInfo = crownStoreInfo .. amount
             end
@@ -195,7 +195,7 @@ BS.widgets[BS.W_CROWN_GEMS] = {
     end,
     event = {_G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED, _G.EVENT_CROWN_UPDATE, _G.EVENT_CROWN_GEM_UPDATE},
     tooltip = GetString(_G.BARSTEWARD_CROWN_GEMS),
-    icon = "/esoui/art/currency/currency_crown_gems.dds",
+    icon = "currency/currency_crown_gems",
     onClick = function()
         SCENE_MANAGER:Show("show_market")
     end
@@ -224,7 +224,7 @@ BS.widgets[BS.W_CROWNS] = {
     end,
     event = {_G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED, _G.EVENT_CROWN_UPDATE, _G.EVENT_CROWN_GEM_UPDATE},
     tooltip = GetString(_G.BARSTEWARD_CROWNS),
-    icon = "/esoui/art/currency/currency_crowns_32.dds",
+    icon = "currency/currency_crowns_32",
     onClick = function()
         SCENE_MANAGER:Show("show_market")
     end
@@ -292,7 +292,7 @@ BS.widgets[BS.W_EVENT_TICKETS] = {
     end,
     event = _G.EVENT_CURRENCY_UPDATE,
     tooltip = GetString(_G.BARSTEWARD_EVENT_TICKETS),
-    icon = "/esoui/art/currency/currency_eventticket.dds",
+    icon = "currency/currency_eventticket",
     customOptions = {
         name = GetString(_G.BARSTEWARD_DEBOUNCE),
         tooltip = GetString(_G.BARSTEWARD_DEBOUNCE_DESC),
@@ -342,7 +342,7 @@ BS.widgets[BS.W_SEALS_OF_ENDEAVOUR] = {
     end,
     event = {_G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED, _G.EVENT_CURRENCY_UPDATE},
     tooltip = BS.Format(_G.SI_CROWN_STORE_MENU_SEALS_STORE_LABEL),
-    icon = "/esoui/art/currency/currency_seals_of_endeavor_64.dds",
+    icon = "currency/currency_seals_of_endeavor_64",
     onClick = function()
         SCENE_MANAGER:Show("show_market")
         ZO_ShowSealStore()
@@ -430,7 +430,7 @@ BS.widgets[BS.W_TRANSMUTE_CRYSTALS] = {
     end,
     event = {_G.EVENT_CURRENCY_UPDATE, _G.EVENT_QUEST_COMPLETE_DIALOG},
     tooltip = GetString(_G.BARSTEWARD_TRANSMUTE_CRYSTALS),
-    icon = "/esoui/art/currency/currency_seedcrystal_64.dds"
+    icon = "currency/currency_seedcrystal_64"
 }
 
 BS.widgets[BS.W_UNDAUNTED_KEYS] = {
@@ -447,7 +447,7 @@ BS.widgets[BS.W_UNDAUNTED_KEYS] = {
     end,
     event = {_G.EVENT_CURRENCY_UPDATE, _G.EVENT_QUEST_COMPLETE_DIALOG},
     tooltip = GetString(_G.BARSTEWARD_UNDAUNTED_KEYS),
-    icon = "/esoui/art/icons/quest_key_002.dds"
+    icon = "icons/quest_key_002"
 }
 
 BS.widgets[BS.W_WRIT_VOUCHERS] =
@@ -489,7 +489,7 @@ BS.widgets[BS.W_ARCHIVAL_FRAGMENTS] = {
     end,
     event = _G.EVENT_CURRENCY_UPDATE,
     tooltip = GetString(_G.BARSTEWARD_ARCHIVAL_FRAGMENTS),
-    icon = "/esoui/art/currency/archivalfragments_mipmaps.dds",
+    icon = "currency/archivalfragments_mipmaps",
     onClick = function()
         SCENE_MANAGER:Show("show_market")
     end

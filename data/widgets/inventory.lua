@@ -66,7 +66,7 @@ BS.widgets[BS.W_BAG_SPACE] = {
     },
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
     tooltip = BS.Format(_G.SI_GAMEPAD_MAIL_INBOX_INVENTORY):gsub(":", ""),
-    icon = "/esoui/art/tooltips/icon_bag.dds",
+    icon = "tooltips/icon_bag",
     onClick = function()
         if (not IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("inventory")
@@ -144,7 +144,7 @@ BS.widgets[BS.W_BANK_SPACE] = {
     },
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
     tooltip = GetString(_G.BARSTEWARD_BANK),
-    icon = "/esoui/art/tooltips/icon_bank.dds"
+    icon = "tooltips/icon_bank"
 }
 
 BS.widgets[BS.W_REPAIR_COST] = {
@@ -167,7 +167,7 @@ BS.widgets[BS.W_REPAIR_COST] = {
         return widget:GetValue()
     end,
     event = _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
-    icon = "/esoui/art/ava/ava_resourcestatus_tabicon_defense_inactive.dds",
+    icon = "ava/ava_resourcestatus_tabicon_defense_inactive",
     tooltip = GetString(_G.BARSTEWARD_REPAIR_COST),
     hideWhenEqual = 0,
     onClick = function()
@@ -244,12 +244,12 @@ BS.widgets[BS.W_DURABILITY] = {
 
         if (lowest <= vars.DangerValue) then
             if (lowestType == _G.ITEMTYPE_WEAPON) then
-                widget:SetIcon("/esoui/art/hud/broken_weapon.dds")
+                widget:SetIcon("hud/broken_weapon")
             else
-                widget:SetIcon("/esoui/art/hud/broken_armor.dds")
+                widget:SetIcon("hud/broken_armor")
             end
         else
-            widget:SetIcon("/esoui/art/inventory/inventory_tabicon_armor_up.dds")
+            widget:SetIcon("inventory/inventory_tabicon_armor_up")
         end
 
         if (#items > 0) then
@@ -265,7 +265,7 @@ BS.widgets[BS.W_DURABILITY] = {
         return lowest
     end,
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
-    icon = "/esoui/art/inventory/inventory_tabicon_armor_up.dds",
+    icon = "inventory/inventory_tabicon_armor_up",
     tooltip = GetString(_G.BARSTEWARD_DURABILITY),
     onClick = function()
         if (not IsInGamepadPreferredMode()) then
@@ -309,7 +309,7 @@ BS.widgets[BS.W_REPAIRS_KITS] = {
         return count
     end,
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
-    icon = "/esoui/art/inventory/inventory_tabicon_repair_up.dds",
+    icon = "inventory/inventory_tabicon_repair_up",
     tooltip = BS.Format(_G.SI_HOOK_POINT_STORE_REPAIR_KIT_HEADER):gsub(":", "")
 }
 
@@ -347,15 +347,15 @@ BS.widgets[BS.W_SOUL_GEMS] = {
 
         -- update the tooltip
         local ttt = GetString(_G.BARSTEWARD_SOUL_GEMS) .. BS.LF
-        ttt = ttt .. zo_iconFormat(filledIcon, 16, 16) .. " " .. filledCount .. BS.LF
-        ttt = ttt .. zo_iconFormat(emptyIcon, 16, 16) .. " " .. emptyCount
+        ttt = ttt .. BS.Icon(filledIcon) .. " " .. filledCount .. BS.LF
+        ttt = ttt .. BS.Icon(emptyIcon) .. " " .. emptyCount
 
         widget.tooltip = ttt
 
         return widget:GetValue()
     end,
     event = _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
-    icon = "/esoui/art/icons/soulgem_006_filled.dds",
+    icon = "icons/soulgem_006_filled",
     tooltip = GetString(_G.BARSTEWARD_SOUL_GEMS),
     customOptions = {
         name = GetString(_G.BARSTEWARD_SOUL_GEMS_TYPE),
@@ -536,7 +536,7 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
         return widget:GetValue()
     end,
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
-    icon = "/esoui/art/journal/journal_tabicon_cadwell_up.dds",
+    icon = "journal/journal_tabicon_cadwell_up",
     tooltip = GetString(_G.BARSTEWARD_WRITS),
     customSettings = {
         [1] = {
@@ -601,7 +601,7 @@ BS.widgets[BS.W_TROPHY_VAULT_KEYS] = {
 
             for _, bagType in pairs({"bag", "bank"}) do
                 for _, key in pairs(keys[bagType]) do
-                    local zoIcon = zo_iconFormat(key.icon, 16, 16)
+                    local zoIcon = BS.Icon(key.icon)
 
                     ttt = ttt .. BS.LF .. BS.BAGICON .. " " .. zoIcon .. " " .. "|cf9f9f9" .. key.name .. "|r"
 
@@ -617,7 +617,7 @@ BS.widgets[BS.W_TROPHY_VAULT_KEYS] = {
         return count
     end,
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
-    icon = "/esoui/art/icons/quest_grinddoorkey_shackles.dds",
+    icon = "icons/quest_grinddoorkey_shackles",
     tooltip = GetString(_G.BARSTEWARD_TROPHY_VAULT_KEYS),
     hideWhenEqual = 0
 }
@@ -643,7 +643,7 @@ BS.widgets[BS.W_LOCKPICKS] = {
     end,
     event = {_G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE, _G.EVENT_LOCKPICK_BROKE},
     tooltip = BS.Format(_G.SI_GAMEPAD_LOCKPICK_PICKS_REMAINING),
-    icon = "/esoui/art/icons/lockpick.dds"
+    icon = "icons/lockpick"
 }
 
 local linkCache = {}
@@ -723,7 +723,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
 
         for _, bagType in pairs({"bag", "bank"}) do
             for itemId, key in pairs(keys[bagType]) do
-                local zoIcon = zo_iconFormat(key.icon, 16, 16)
+                local zoIcon = BS.Icon(key.icon)
 
                 foundIds[itemId] = true
 
@@ -749,12 +749,12 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
                     itemCount = 100
                 end
 
-                local countItem = zo_iconFormat(data.icon, iconSize, iconSize)
+                local countItem = BS.Icon(data.icon, nil, iconSize, iconSize)
                 countText = countText .. countItem .. " " .. itemCount .. " "
                 plainCountText = plainCountText .. minSize .. " " .. itemCount .. " "
 
                 if (not foundIds[itemId]) then
-                    local zoIcon = zo_iconFormat(data.icon, 16, 16)
+                    local zoIcon = BS.Icon(data.icon)
 
                     ttt = ttt .. BS.LF .. BS.BAGICON .. " " .. zoIcon .. " " .. "|cf9f9f9" .. data.name .. "|r"
                     ttt = ttt .. " (0)"
@@ -828,7 +828,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
     end,
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
     tooltip = GetString(_G.BARSTEWARD_WATCHED_ITEMS),
-    icon = "/esoui/art/icons/crafting_critter_snake_eyes.dds",
+    icon = "icons/crafting_critter_snake_eyes",
     customOptions = {
         name = GetString(_G.BARSTEWARD_DEBOUNCE),
         tooltip = GetString(_G.BARSTEWARD_DEBOUNCE_DESC),
@@ -860,7 +860,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
             if (data.name ~= "") then
                 settings[#settings + 1] = {
                     name = function()
-                        local name = zo_iconFormat(data.icon) .. " " .. data.name
+                        local name = BS.Icon(data.icon) .. " " .. data.name
 
                         if (BS.Defaults.WatchedItems[itemId] == nil) then
                             name = name .. " (" .. itemId .. ")"
@@ -907,7 +907,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
 
                 if (name ~= "") then
                     local icon = GetItemLinkIcon(link)
-                    name = zo_iconFormat(icon) .. " " .. BS.Format(name)
+                    name = BS.Icon(icon) .. " " .. BS.Format(name)
                 end
 
                 return name
@@ -1101,13 +1101,13 @@ BS.widgets[BS.W_RANDOM_MEMENTO] = {
             getCollectibles(_G.COLLECTIBLE_CATEGORY_TYPE_MEMENTO, mementos)
         end
 
-        widget:SetValue(zo_iconFormat("/esoui/art/buttons/pointsplus_highlight.dds", 16, 16), "___")
+        widget:SetValue(BS.Icon("buttons/pointsplus_highlight"), "___")
 
         return 0
     end,
     event = _G.EVENT_COLLECTION_UPDATED,
     tooltip = GetString(_G.BARSTEWARD_RANDOM_MEMENTO),
-    icon = "/esoui/art/icons/collectible_memento_blizzard.dds",
+    icon = "icons/collectible_memento_blizzard",
     cooldown = true,
     onClick = function()
         randomOnClick(mementos, BS.W_RANDOM_MEMENTO)
@@ -1122,13 +1122,13 @@ BS.widgets[BS.W_RANDOM_PET] = {
             getCollectibles(_G.COLLECTIBLE_CATEGORY_TYPE_VANITY_PET, pets)
         end
 
-        widget:SetValue(zo_iconFormat("/esoui/art/buttons/pointsplus_highlight.dds", 16, 16), "___")
+        widget:SetValue(BS.Icon("buttons/pointsplus_highlight"), "___")
 
         return 0
     end,
     event = _G.EVENT_COLLECTION_UPDATED,
     tooltip = GetString(_G.BARSTEWARD_RANDOM_PET),
-    icon = "/esoui/art/icons/pet_sphynxlynx.dds",
+    icon = "icons/pet_sphynxlynx",
     cooldown = true,
     onClick = function()
         randomOnClick(pets, BS.W_RANDOM_PET)
@@ -1143,13 +1143,13 @@ BS.widgets[BS.W_RANDOM_MOUNT] = {
             getCollectibles(_G.COLLECTIBLE_CATEGORY_TYPE_MOUNT, mounts)
         end
 
-        widget:SetValue(zo_iconFormat("/esoui/art/buttons/pointsplus_highlight.dds", 16, 16), "___")
+        widget:SetValue(BS.Icon("buttons/pointsplus_highlight"), "___")
 
         return 0
     end,
     event = _G.EVENT_COLLECTION_UPDATED,
     tooltip = GetString(_G.BARSTEWARD_RANDOM_MOUNT),
-    icon = "/esoui/art/icons/mounticon_horse_zenithauroran.dds",
+    icon = "icons/mounticon_horse_zenithauroran",
     onClick = function()
         randomOnClick(mounts, BS.W_RANDOM_MOUNT)
     end
@@ -1163,13 +1163,13 @@ BS.widgets[BS.W_RANDOM_EMOTE] = {
             getEmotes()
         end
 
-        widget:SetValue(zo_iconFormat("/esoui/art/buttons/pointsplus_highlight.dds", 16, 16), "___")
+        widget:SetValue(BS.Icon("buttons/pointsplus_highlight"), "___")
 
         return 0
     end,
     event = _G.EVENT_COLLECTION_UPDATED,
     tooltip = GetString(_G.BARSTEWARD_RANDOM_EMOTE),
-    icon = "/esoui/art/icons/emotes/emotecategoryicon_fidget_personality.dds",
+    icon = "icons/emotes/emotecategoryicon_fidget_personality",
     onClick = function()
         if (#emotes == 0) then
             return
@@ -1219,8 +1219,7 @@ local function itemScan(widget, filteredItems, widgetIndex, name)
         local filteredName = colour:Colorize(item.name)
 
         if (IsItemStolen(item.bagId, item.slotIndex)) then
-            filteredName =
-                zo_iconFormat("/esoui/art/inventory/inventory_stolenitem_icon.dds", 16, 16) .. " " .. filteredName
+            filteredName = BS.Icon("inventory/inventory_stolenitem_icon") .. " " .. filteredName
         end
 
         if (not items[filteredName]) then
@@ -1270,7 +1269,7 @@ BS.widgets[BS.W_CONTAINERS] = {
         return itemScan(widget, filteredItems, BS.W_CONTAINERS, BS.Format(_G.SI_ITEMTYPEDISPLAYCATEGORY26))
     end,
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
-    icon = "/esoui/art/inventory/inventory_tabicon_container_up.dds",
+    icon = "inventory/inventory_tabicon_container_up",
     tooltip = BS.Format(_G.SI_ITEMTYPEDISPLAYCATEGORY26),
     hideWhenEqual = 0,
     onClick = function()
@@ -1297,7 +1296,7 @@ BS.widgets[BS.W_TREASURE] = {
         return itemScan(widget, filteredItems, BS.W_TREASURE, BS.Format(_G.SI_ITEMTYPE56))
     end,
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
-    icon = "/esoui/art/icons/quest_strosmkai_open_treasure_chest.dds",
+    icon = "icons/quest_strosmkai_open_treasure_chest",
     tooltip = BS.Format(_G.SI_ITEMTYPE56),
     hideWhenEqual = 0,
     onClick = function()
@@ -1324,7 +1323,7 @@ BS.widgets[BS.W_FURNISHINGS] = {
         return itemScan(widget, filteredItems, BS.W_FURNISHINGS, BS.Format(_G.SI_ITEMFILTERTYPE21))
     end,
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
-    icon = "/esoui/art/icons/servicemappins/servicepin_furnishings.dds",
+    icon = "icons/servicemappins/servicepin_furnishings",
     tooltip = BS.Format(_G.SI_ITEMFILTERTYPE21),
     hideWhenEqual = 0,
     onClick = function()
@@ -1354,7 +1353,7 @@ BS.widgets[BS.W_COMPANION_GEAR] = {
     end,
     event = _G.EVENT_PLAYER_ACTIVATED,
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
-    icon = "/esoui/art/inventory/inventory_trait_companionequipment_icon.dds",
+    icon = "inventory/inventory_trait_companionequipment_icon",
     tooltip = BS.Format(_G.SI_ITEMFILTERTYPE27),
     hideWhenEqual = 0,
     onClick = function()
@@ -1384,7 +1383,7 @@ BS.widgets[BS.W_MUSEUM] = {
     end,
     event = _G.EVENT_PLAYER_ACTIVATED,
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
-    icon = "/esoui/art/icons/servicemappins/servicepin_museum.dds",
+    icon = "icons/servicemappins/servicepin_museum",
     tooltip = BS.Format(_G.SI_SPECIALIZEDITEMTYPE103),
     hideWhenEqual = 0,
     onClick = function()
@@ -1473,8 +1472,8 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
                     ZO_IsElementInNumericallyIndexedTable(backup, poison.slot) and GetString(_G.BARSTEWARD_BACK_BAR) or
                     GetString(_G.BARSTEWARD_MAIN_BAR)
 
-                tt = tt .. BS.LF .. zo_iconFormat(poison.icon, 16, 16) .. " "
-                tt = tt .. "|cf9f9f9" .. poison.name .. "|r " .. slotName .. " (" .. poison.count .. ")"
+                tt = string.format("%s%s%s ", tt, BS.LF, BS.Icon(poison.icon))
+                tt = string.format("%s|cf9f9f9%s|r %s (%d)", tt, poison.name, slotName, poison.count)
 
                 if (selected == BS.ACTIVE_BAR) then
                     if
@@ -1504,7 +1503,7 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
     callback = {[CALLBACK_MANAGER] = {"WornSlotUpdate"}},
     event = _G.EVENT_ACTIVE_WEAPON_PAIR_CHANGED,
     tooltip = GetString(_G.BARSTEWARD_EQUIPPED_POISON),
-    icon = "/esoui/art/icons/crafting_poison_001_cyan_003.dds",
+    icon = "icons/crafting_poison_001_cyan_003",
     hideWhenEqual = 0,
     onClick = function()
         if (not IsInGamepadPreferredMode()) then
@@ -1619,21 +1618,21 @@ BS.widgets[BS.W_FRAGMENTS] = {
 
             if (info.collected + info.uncollected + info.unnecessary > 0) then
                 if (info.collected and (info.unnecessary == 0) and info.collected > 0) then
-                    collectedtt = string.format("%s%s ", collectedtt, zo_iconFormat(info.icon, 16, 16))
+                    collectedtt = string.format("%s%s ", collectedtt, BS.Icon(info.icon))
                     collectedtt = string.format("%s|cf9f9f9%s ", collectedtt, collectibleName)
                     collectedtt = string.format("%s|r|c00ff00%d", collectedtt, info.collected)
                     collectedtt = string.format("%s / %d|r%s", collectedtt, info.collected + info.uncollected, BS.LF)
                 end
 
                 if (info.unnecessary > 0) then
-                    unnecessarytt = string.format("%s%s ", unnecessarytt, zo_iconFormat(info.icon, 16, 16))
+                    unnecessarytt = string.format("%s%s ", unnecessarytt, BS.Icon(info.icon))
                     unnecessarytt = string.format("%s%s %d", unnecessarytt, collectibleName, info.unnecessary)
                     unnecessarytt =
                         string.format("%s / %d%s", unnecessarytt, info.unnecessary + info.uncollected, BS.LF)
                 end
 
                 if (info.collected and (info.unnecessary == 0) and info.collected == 0) then
-                    uncollectedtt = string.format("%s%s ", uncollectedtt, zo_iconFormat(info.icon, 16, 16))
+                    uncollectedtt = string.format("%s%s ", uncollectedtt, BS.Icon(info.icon))
                     uncollectedtt = string.format("%s%s 0/", uncollectedtt, collectibleName)
                     uncollectedtt = string.format("%s%d%s", uncollectedtt, info.collected + info.uncollected, BS.LF)
                 end
@@ -1663,7 +1662,7 @@ BS.widgets[BS.W_FRAGMENTS] = {
     end,
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
     tooltip = GetString(_G.BARSTEWARD_COLLECTIBLE_FRAGMENTS),
-    icon = "/esoui/art/icons/antiquities_u30_museum_fragment07.dds"
+    icon = "icons/antiquities_u30_museum_fragment07"
 }
 
 BS.widgets[BS.W_RUNEBOXES] = {
@@ -1771,14 +1770,14 @@ BS.widgets[BS.W_RUNEBOXES] = {
         for _, info in ipairs(tttable) do
             if (info.collected + info.required + info.unnecessary > 0) then
                 if (info.collected and (info.unnecessary == 0)) then
-                    collectedtt = string.format("%s%s ", collectedtt, zo_iconFormat(info.icon, 16, 16))
+                    collectedtt = string.format("%s%s ", collectedtt, BS.Icon(info.icon))
                     collectedtt = string.format("%s|cf9f9f9%s ", collectedtt, info.name)
                     collectedtt = string.format("%s|r|c00ff00%d", collectedtt, info.collected)
                     collectedtt = string.format("%s / %d|r%s", collectedtt, info.required, BS.LF)
                 end
 
                 if (info.unnecessary > 0) then
-                    unnecessarytt = string.format("%s%s ", unnecessarytt, zo_iconFormat(info.icon, 16, 16))
+                    unnecessarytt = string.format("%s%s ", unnecessarytt, BS.Icon(info.icon))
                     unnecessarytt = string.format("%s%s %d", unnecessarytt, info.name, info.unnecessary)
                     unnecessarytt = string.format("%s / %d%s", unnecessarytt, info.required, BS.LF)
                 end
@@ -1796,7 +1795,7 @@ BS.widgets[BS.W_RUNEBOXES] = {
         tt = tt .. BS.LF .. GetString(_G.BARSTEWARD_NOT_COLLECTED) .. "|cababab"
 
         for _, info in ipairs(uncollected) do
-            tt = string.format("%s%s%s ", tt, BS.LF, zo_iconFormat(info.icon, 16, 16))
+            tt = string.format("%s%s%s ", tt, BS.LF, BS.Icon(info.icon))
             tt = string.format("%s%s 0/%d", tt, BS.Format(info.name), info.quantity)
         end
 
@@ -1813,7 +1812,7 @@ BS.widgets[BS.W_RUNEBOXES] = {
     end,
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
     tooltip = GetString(_G.BARSTEWARD_RUNEBOX_FRAGMENTS),
-    icon = "/esoui/art/tradinghouse/tradinghouse_trophy_runebox_fragment_up.dds"
+    icon = "tradinghouse/tradinghouse_trophy_runebox_fragment_up"
 }
 
 local function getFoundRecipesTooltip()
@@ -1838,7 +1837,7 @@ local function getFoundRecipesTooltip()
         tt = tt .. BS.LF .. name .. "|r" .. ((info.qty > 1) and (" (" .. info.qty .. ")") or "")
 
         if (info.known) then
-            tt = tt .. " " .. zo_iconFormat("/esoui/art/miscellaneous/check.dds", 16, 16)
+            tt = tt .. " " .. BS.Icon("miscellaneous/check")
         end
     end
 
@@ -1905,7 +1904,7 @@ BS.widgets[BS.W_RECIPE_WATCH] = {
         return BS.Vars.FoundCount
     end,
     event = _G.EVENT_LOOT_RECEIVED,
-    icon = "/esoui/art/icons/event_newlifefestival_2016_recipe.dds",
+    icon = "icons/event_newlifefestival_2016_recipe",
     tooltip = GetString(_G.BARSTEWARD_RECIPES),
     hideWhenEqual = 0,
     onClick = function()
@@ -2029,7 +2028,7 @@ BS.widgets[BS.W_WEAPON_CHARGE] = {
         return min.raw
     end,
     event = {_G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE, _G.EVENT_ACTIVE_WEAPON_PAIR_CHANGED},
-    icon = "/esoui/art/icons/alchemy/crafting_alchemy_trait_weaponcrit_match.dds",
+    icon = "icons/alchemy/crafting_alchemy_trait_weaponcrit_match",
     tooltip = GetString(_G.BARSTEWARD_WEAPON_CHARGE),
     onClick = function()
         if (not IsInGamepadPreferredMode()) then

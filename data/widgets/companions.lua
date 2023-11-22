@@ -30,7 +30,7 @@ BS.widgets[BS.W_RAPPORT] = {
         return rapportValue
     end,
     event = {_G.EVENT_COMPANION_RAPPORT_UPDATE, _G.EVENT_ACTIVE_COMPANION_STATE_CHANGED},
-    icon = "/esoui/art/hud/lootHistory_icon_rapportincrease_generic.dds",
+    icon = "hud/lootHistory_icon_rapportincrease_generic",
     tooltip = GetString(_G.BARSTEWARD_RAPPORT),
     hideWhenEqual = function()
         if (HasActiveCompanion()) then
@@ -90,7 +90,7 @@ BS.widgets[BS.W_COMPANION_LEVEL] = {
         return companionLevel
     end,
     event = {_G.EVENT_ACTIVE_COMPANION_STATE_CHANGED, _G.EVENT_COMPANION_EXPERIENCE_GAIN},
-    icon = "/esoui/art/companion/keyboard/category_u30_companions_up.dds",
+    icon = "companion/keyboard/category_u30_companions_up",
     tooltip = GetString(_G.BARSTEWARD_COMPANION_LEVEL),
     hideWhenEqual = 0,
     hideWhenMaxLevel = function()

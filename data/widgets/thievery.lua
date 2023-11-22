@@ -1,5 +1,5 @@
 local BS = _G.BarSteward
-local goldIcon = zo_iconFormat("/esoui/art/currency/currency_gold.dds", 16, 16) .. " "
+local goldIcon = BS.Icon("currency/currency_gold") .. " "
 
 BS.widgets[BS.W_STOLEN_ITEMS] = {
     -- v1.0.1
@@ -36,7 +36,7 @@ BS.widgets[BS.W_STOLEN_ITEMS] = {
                 {
                     name = BS.Format(GetItemName(item.bagId, item.slotIndex)),
                     count = item.stackCount,
-                    icon = zo_iconFormat(icon, 16, 16),
+                    icon = BS.Icon(icon),
                     sellPrice = GetItemSellValueWithBonuses(item.bagId, item.slotIndex)
                 }
             )
@@ -84,7 +84,7 @@ BS.widgets[BS.W_STOLEN_ITEMS] = {
         return count
     end,
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
-    icon = "/esoui/art/inventory/inventory_stolenitem_icon.dds",
+    icon = "inventory/inventory_stolenitem_icon",
     tooltip = GetString(_G.BARSTEWARD_STOLEN),
     hideWhenEqual = 0,
     onClick = function()
@@ -138,7 +138,7 @@ BS.widgets[BS.W_FENCE_TRANSACTIONS] = {
     end,
     event = _G.EVENT_CLOSE_STORE,
     hideWhenEqual = 0,
-    icon = "/esoui/art/vendor/vendor_tabicon_sell_up.dds",
+    icon = "vendor/vendor_tabicon_sell_up",
     tooltip = GetString(_G.BARSTEWARD_FENCE)
 }
 
@@ -169,7 +169,7 @@ BS.widgets[BS.W_LAUNDER_TRANSACTIONS] = {
     end,
     event = _G.EVENT_CLOSE_STORE,
     hideWhenEqual = 0,
-    icon = "/esoui/art/vendor/vendor_tabicon_fence_up.dds",
+    icon = "vendor/vendor_tabicon_fence_up",
     tooltip = GetString(_G.BARSTEWARD_LAUNDER)
 }
 
@@ -188,6 +188,6 @@ BS.widgets[BS.W_FENCE_RESET] = {
     end,
     timer = 1000,
     hideWhenEqual = 0,
-    icon = "/esoui/art/vendor/vendor_tabicon_fence_over.dds",
+    icon = "vendor/vendor_tabicon_fence_over",
     tooltip = GetString(_G.BARSTEWARD_FENCE_RESET)
 }

@@ -218,7 +218,7 @@ function BS.CreateLockButton()
         end
     )
 
-    local icon = zo_iconFormat("/esoui/art/miscellaneous/locked_up.dds", 24, 24)
+    local icon = BS.Icon("miscellaneous/locked_up", nil, 24, 24)
 
     BS.lock.label = WINDOW_MANAGER:CreateControl(name .. "_label", BS.lock, CT_LABEL)
     BS.lock.label:SetFont("EsoUi/Common/Fonts/Univers67.otf|36|soft-shadow-thick")
@@ -245,7 +245,7 @@ end
 
 local function setupDataRow(rowControl, data)
     rowControl:GetNamedChild("Title"):SetText(data.name)
-    rowControl:GetNamedChild("Icon"):SetTexture(data.icon)
+    rowControl:GetNamedChild("Icon"):SetTexture(BS.FormatIcon(data.icon))
 
     local cb = rowControl:GetNamedChild("CheckBox")
     local c = cb:GetNamedChild("Check")

@@ -2228,7 +2228,7 @@ local function getWidgetSettings()
             categories[k] = {
                 type = "submenu",
                 name = GetString(cat.name),
-                icon = string.format("esoui/art/%s.dds", cat.icon),
+                icon = BS.FormatIcon(cat.icon),
                 controls = {},
                 reference = "BarStewardCategory" .. k
             }
@@ -2332,7 +2332,7 @@ local function getWidgetSettings()
         local widgetData = {
             type = "submenu",
             name = function() return getWidgetName(k) end,
-            icon = BS.widgets[k].icon,
+            icon = BS.FormatIcon(BS.widgets[k].icon),
             iconTextureCoords = textureCoords,
             controls = widgetControls,
             reference = "BarStewardWidgets" .. k

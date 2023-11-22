@@ -526,8 +526,7 @@ function BS.Announce(header, message, widgetIconNumber, lifespan, sound, otherIc
 
     if (widgetIconNumber) then
         messageParams:SetIconData(
-            otherIcon or BS.widgets[widgetIconNumber].icon,
-            "/esoui/art/achievements/achievements_iconbg.dds"
+            BS.FormatIcon(otherIcon or BS.widgets[widgetIconNumber].icon, "achievements/achievements_iconbg")
         )
     end
 
@@ -765,7 +764,7 @@ end
 function BS.ColourToIcon(r, g, b)
     local quality = BS.ColourToQuality(r, g, b, 1)
 
-    return BS.ITEM_COLOUR_ICON[quality or 1]
+    return BS.FormatIcon(BS.ITEM_COLOUR_ICON[quality or 1])
 end
 
 local function setSubjectAndBody(subject, body, recipient)
@@ -1584,21 +1583,53 @@ function BS.SentenceCase(text)
     return initial .. rest
 end
 
+function BS.FormatIcon(path)
+    if (path:find("BarSteward")) then
+        return path
+    end
 
-function BS.FindItem(text)
-    local filteredItems =
-            SHARED_INVENTORY:GenerateFullSlotData(
-            function(itemdata)
-                local match = itemdata.name:find(text)
-                return match ~= nil
-            end,
-            _G.BAG_BACKPACK
-        )
+    if (not path:lower():find("esoui")) then
+        path = "/esoui/art/" .. path
+    end
 
-        for _, item in ipairs(filteredItems) do
-            d(item.name)
-            d(item.bagId, item.slotIndex)
-            d(GetItemId(item.bagId, item.slotIndex))
-            d(GetItemType(item.bagId, item.slotIndex))
-        end
+    if (not path:find(".dds")) then
+        path = path .. ".dds"
+    end
+
+    return path
 end
+
+function BS.Icon(path, colour, width, height)
+    width = width or 16
+    height = height or 16
+
+    if (not path:find("BarSteward")) then
+        path = BS.FormatIcon(path)
+    end
+
+    local texture = zo_iconFormat(path, width, height)
+
+    if (colour) then
+        texture = string.format("|c%s%s|r", colour, texture:gsub("|t$", ":inheritColor|t"))
+    end
+
+    return texture
+end
+
+-- function BS.FindItem(text)
+--     local filteredItems =
+--             SHARED_INVENTORY:GenerateFullSlotData(
+--             function(itemdata)
+--                 local match = itemdata.name:find(text)
+--                 return match ~= nil
+--             end,
+--             _G.BAG_BACKPACK
+--         )
+
+--         for _, item in ipairs(filteredItems) do
+--             d(item.name)
+--             d(item.bagId, item.slotIndex)
+--             d(GetItemId(item.bagId, item.slotIndex))
+--             d(GetItemType(item.bagId, item.slotIndex))
+--         end
+-- end

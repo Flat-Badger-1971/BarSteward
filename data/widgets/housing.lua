@@ -1,5 +1,5 @@
 local BS = _G.BarSteward
-local ALL_HOUSES = "/esoui/art/icons/housing_ayl_duc_wayshrine001.dds"
+local ALL_HOUSES = "icons/housing_ayl_duc_wayshrine001"
 
 local function getPTFInfo(id)
     if (BS.PTF) then
@@ -152,7 +152,7 @@ local function getHouseWidgetName()
     rawName = widgetName
 
     if (house.ptfName) then
-        widgetName = widgetName .. " " .. zo_iconFormat(BS.FRIENDS_ICON, 16, 16)
+        widgetName = widgetName .. " " .. BS.Icon(BS.FRIENDS_ICON)
         rawName = rawName .. " XX"
     end
 
@@ -275,7 +275,7 @@ local function addSubmenu(barNames, vars, varId, house, id, controls)
                 vars.RawName = value
 
                 if (vars.Name:find("|t")) then
-                    value = value .. " " .. zo_iconFormat(BS.FRIENDS_ICON, 16, 16)
+                    value = value .. " " .. BS.Icon(BS.FRIENDS_ICON)
                     vars.RawName = vars.RawName .. " XX"
                 end
 
@@ -311,7 +311,7 @@ local function addSubmenu(barNames, vars, varId, house, id, controls)
         type = "submenu",
         name = vars.Name,
         controls = submenuControls,
-        icon = icon,
+        icon = BS.FormatIcon(icon),
         reference = "house_submenu" .. id
     }
 end
@@ -339,7 +339,7 @@ function BS.GetPortToHouseSettings()
     }
 
     if (_G.PortToFriend) then
-        local ptfIcon = zo_iconFormat(BS.FRIENDS_ICON, 16, 16)
+        local ptfIcon = BS.Icon(BS.FRIENDS_ICON)
         local ptfText = "|c00994c" .. zo_strformat(GetString(_G.BARSTEWARD_PORT_TO_HOUSE_PTF), ptfIcon) .. "|r"
 
         controls[#controls + 1] = {
@@ -410,7 +410,7 @@ function BS.GetPortToHouseSettings()
 
             if (BS.House_SelectedHouse) then
                 local selectedHouse = BS.houses[BS.House_SelectedHouse]
-                icon = zo_iconFormat(selectedHouse.icon, 32, 32) .. " "
+                icon = BS.Icon(selectedHouse.icon, nil, 32, 32) .. " "
                 text = getHouseWidgetName()
             end
 

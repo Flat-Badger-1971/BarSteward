@@ -144,7 +144,7 @@ BS.widgets[BS.W_BLACKSMITHING] = {
         return timeRemaining
     end,
     timer = 1000,
-    icon = "/esoui/art/icons/servicemappins/servicepin_smithy.dds",
+    icon = "icons/servicemappins/servicepin_smithy",
     tooltip = BS.Format(_G.SI_TRADESKILLTYPE1),
     hideWhenEqual = 0,
     fullyUsed = function()
@@ -190,7 +190,7 @@ BS.widgets[BS.W_WOODWORKING] = {
         return timeRemaining
     end,
     timer = 1000,
-    icon = "/esoui/art/icons/servicemappins/servicepin_woodworking.dds",
+    icon = "icons/servicemappins/servicepin_woodworking",
     tooltip = BS.Format(_G.SI_TRADESKILLTYPE6),
     hideWhenEqual = 0,
     fullyUsed = function()
@@ -235,7 +235,7 @@ BS.widgets[BS.W_CLOTHING] = {
         return timeRemaining
     end,
     timer = 1000,
-    icon = "/esoui/art/icons/servicemappins/servicepin_outfitter.dds",
+    icon = "icons/servicemappins/servicepin_outfitter",
     tooltip = BS.Format(_G.SI_TRADESKILLTYPE2),
     hideWhenEqual = 0,
     fullyUsed = function()
@@ -281,7 +281,7 @@ BS.widgets[BS.W_JEWELCRAFTING] = {
         return timeRemaining
     end,
     timer = 1000,
-    icon = "/esoui/art/icons/icon_jewelrycrafting_symbol.dds",
+    icon = "icons/icon_jewelrycrafting_symbol",
     tooltip = BS.Format(_G.SI_TRADESKILLTYPE7),
     hideWhenEqual = 0,
     fullyUsed = function()
@@ -396,7 +396,7 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
         local update = true
         local added, done, ready
         local character = GetUnitName("player")
-        local iconString = "/esoui/art/icons/mapkey/mapkey_%s.dds"
+        local iconString = "icons/mapkey/mapkey_%s"
 
         checkReset()
 
@@ -457,13 +457,15 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
                 local output = ""
 
                 for craftingType, info in pairs(BS.CRAFTING_ACHIEVEMENT) do
-                    local cname = BS.CRAFTING_DAILY[craftingType]
-                    local cvar = BS.Vars.dailyQuests[character][cname]
-                    local ciconName = iconString:format(info.icon)
-                    colour = cvar and DAILY_COLOURS[cvar] or BS.COLOURS.GREY
+                    if (qualifiedQuestNames[BS.CRAFTING_DAILY[craftingType]]) then
+                        local cname = BS.CRAFTING_DAILY[craftingType]
+                        local cvar = BS.Vars.dailyQuests[character][cname]
+                        local ciconName = iconString:format(info.icon)
+                        colour = cvar and DAILY_COLOURS[cvar] or BS.COLOURS.GREY
 
-                    tName = string.format("|c%s|t18:18:%s:inheritColor|t|r", colour, ciconName)
-                    output = string.format("%s %s", output, tName)
+                        tName = BS.Icon(ciconName, colour, 18, 18)
+                        output = string.format("%s %s", output, tName)
+                    end
                 end
 
                 widget:SetValue(output)
@@ -481,16 +483,16 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
                 local tcolour = BS.ARGBConvert(BS.Vars.DefaultColour)
 
                 if (tready) then
-                    ttt = ttt .. BS.LF .. "|c" .. BS.COLOURS.BLUE
-                    ttt = ttt .. name .. " - " .. GetString(_G.BARSTEWARD_READY) .. "|r"
+                    ttt = string.format("%s%s|c%s", ttt, BS.LF, BS.COLOURS.BLUE)
+                    ttt = string.format("%s%s - %s|r", ttt, name, GetString(_G.BARSTEWARD_READY))
                 elseif (tdone) then
-                    ttt = ttt .. BS.LF .. BS.ARGBConvert(BS.Vars.DefaultOkColour)
-                    ttt = ttt .. name .. " - " .. GetString(_G.BARSTEWARD_COMPLETED) .. "|r"
+                    ttt = string.format("%s%s%s", ttt, BS.LF, BS.ARGBConvert(BS.Vars.DefaultOkColour))
+                    ttt = string.format("%s%s - %s|r", ttt, name, GetString(_G.BARSTEWARD_COMPLETED))
                 elseif (tadded) then
-                    ttt = ttt .. BS.LF .. BS.ARGBConvert(BS.Vars.DefaultWarningColour)
-                    ttt = ttt .. name .. " - " .. GetString(_G.BARSTEWARD_PICKED_UP) .. "|r"
+                    ttt = string.format("%s%s%s", ttt, BS.LF, BS.ARGBConvert(BS.Vars.DefaultWarningColour))
+                    ttt = string.format("%s%s - %s|r", ttt, name, GetString(_G.BARSTEWARD_PICKED_UP))
                 else
-                    ttt = ttt .. BS.LF .. tcolour .. name .. " - " .. GetString(_G.BARSTEWARD_NOT_PICKED_UP) .. "|r"
+                    ttt = string.format("%s%s%s%s - %s|r", ttt, BS.LF, tcolour, name, GetString(_G.BARSTEWARD_NOT_PICKED_UP))
                 end
             end
 
@@ -511,9 +513,9 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
                                 dccolour = BS.ARGBConvert(BS.Vars.DefaultWarningColour)
                             end
 
-                            ttt = ttt .. BS.LF .. dccolour .. char .. "|r"
+                            ttt = string.format("%s%s%s%s|r", ttt, BS.LF, dccolour, char)
                         else
-                            ttt = ttt .. BS.LF .. ccolour .. char .. "|r"
+                            ttt = string.format("%s%s%s%s|r", ttt, BS.LF, ccolour, char)
                         end
                     end
                 end
@@ -530,7 +532,7 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
         _G.EVENT_QUEST_COMPLETE,
         _G.EVENT_QUEST_CONDITION_COUNTER_CHANGED
     },
-    icon = "/esoui/art/floatingmarkers/repeatablequest_available_icon.dds",
+    icon = "floatingmarkers/repeatablequest_available_icon",
     tooltip = GetString(_G.BARSTEWARD_DAILY_CRAFTING),
     hideWhenEqual = true,
     customSettings = {
@@ -558,7 +560,7 @@ BS.widgets[BS.W_CRAFTING_DAILY_TIME] = {
         return BS.GetTimedActivityTimeRemaining(_G.TIMED_ACTIVITY_TYPE_DAILY, BS.W_CRAFTING_DAILY_TIME, widget)
     end,
     timer = 1000,
-    icon = "/esoui/art/icons/crafting_outfitter_logo.dds",
+    icon = "icons/crafting_outfitter_logo",
     tooltip = GetString(_G.BARSTEWARD_DAILY_WRITS_TIME)
 }
 
@@ -662,7 +664,7 @@ BS.widgets[BS.W_RECIPES] = {
         return widget:GetValue()
     end,
     event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_RECIPE_LEARNED, _G.EVENT_MULTIPLE_RECIPES_LEARNED},
-    icon = "/esoui/art/tradinghouse/tradinghouse_trophy_recipe_fragment_up.dds",
+    icon = "tradinghouse/tradinghouse_trophy_recipe_fragment_up",
     tooltip = recipes,
     onClick = function()
         local vars = BS.Vars.Controls[BS.W_RECIPES]
@@ -775,6 +777,6 @@ BS.widgets[BS.W_UNKNOWN_WRIT_MOTIFS] = {
     event = {_G.EVENT_LORE_BOOK_LEARNED},
     callbackLCK = true,
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
-    icon = "/esoui/art/icons/crafting_motif_binding_welkynar.dds",
+    icon = "icons/crafting_motif_binding_welkynar",
     tooltip = GetString(_G.BARSTEWARD_UNKNOWN_WRIT_MOTIFS)
 }

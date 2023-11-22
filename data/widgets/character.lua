@@ -47,7 +47,7 @@ BS.widgets[BS.W_MUNDUS_STONE] = {
     end,
     event = _G.EVENT_EFFECT_CHANGED,
     filter = {[_G.EVENT_EFFECT_CHANGED] = {_G.REGISTER_FILTER_UNIT_TAG, "player"}},
-    icon = "/esoui/art/icons/ability_mundusstones_002.dds",
+    icon = "icons/ability_mundusstones_002",
     tooltip = BS.Format(_G.SI_CONFIRM_MUNDUS_STONE_TITLE),
     hideWhenEqual = "",
     customSettings = {
@@ -79,7 +79,7 @@ BS.widgets[BS.W_RECALL_COOLDOWN] = {
         return cooldownTime
     end,
     timer = 1000,
-    icon = "/esoui/art/zonestories/completiontypeicon_wayshrine.dds",
+    icon = "zonestories/completiontypeicon_wayshrine",
     tooltip = GetString(_G.BARSTEWARD_RECALL),
     hideWhenEqual = 0
 }
@@ -94,7 +94,7 @@ BS.widgets[BS.W_ZONE] = {
         return widget:GetValue()
     end,
     event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_ZONE_CHANGED},
-    icon = "/esoui/art/tradinghouse/gamepad/gp_tradinghouse_trophy_treasure_map.dds",
+    icon = "tradinghouse/gamepad/gp_tradinghouse_trophy_treasure_map",
     tooltip = BS.Format(_G.SI_ANTIQUITY_SCRYABLE_CURRENT_ZONE_SUBCATEGORY),
     onClick = function()
         if (not IsInGamepadPreferredMode()) then
@@ -122,7 +122,7 @@ BS.widgets[BS.W_PLAYER_NAME] = {
         return widget:GetValue()
     end,
     event = _G.EVENT_PLAYER_ACTIVATED,
-    icon = "/esoui/art/charactercreate/charactercreate_faceicon_up.dds",
+    icon = "charactercreate/charactercreate_faceicon_up",
     tooltip = BS.Format(_G.SI_CUSTOMER_SERVICE_ASK_FOR_HELP_PLAYER_NAME),
     onClick = function()
         if (not IsInGamepadPreferredMode()) then
@@ -143,7 +143,7 @@ BS.widgets[BS.W_RACE] = {
         return widget:GetValue()
     end,
     event = _G.EVENT_PLAYER_ACTIVATED,
-    icon = "/esoui/art/charactercreate/charactercreate_raceicon_up.dds",
+    icon = "charactercreate/charactercreate_raceicon_up",
     tooltip = BS.Format(_G.SI_COLLECTIBLERESTRICTIONTYPE1)
 }
 
@@ -165,7 +165,7 @@ BS.widgets[BS.W_CLASS] = {
         return widget:GetValue()
     end,
     event = _G.EVENT_PLAYER_ACTIVATED,
-    icon = "/esoui/art/charactercreate/charactercreate_classicon_up.dds",
+    icon = "charactercreate/charactercreate_classicon_up",
     tooltip = BS.Format(_G.SI_COLLECTIBLERESTRICTIONTYPE3),
     customSettings = {
         [1] = {
@@ -193,11 +193,11 @@ BS.widgets[BS.W_ALLIANCE] = {
         local colour = GetAllianceColor(alliance)
 
         if (icon:find("daggerfall")) then
-            icon = "/esoui/art/scoredisplay/blueflag.dds"
+            icon = "scoredisplay/blueflag"
         elseif (icon:find("aldmeri")) then
-            icon = "/esoui/art/scoredisplay/yellowflag.dds"
+            icon = "scoredisplay/yellowflag"
         else
-            icon = "/esoui/art/scoredisplay/redflag.dds"
+            icon = "scoredisplay/redflag"
         end
 
         if (not BS.Vars.Controls[BS.W_ALLIANCE].NoValue) then
@@ -213,7 +213,7 @@ BS.widgets[BS.W_ALLIANCE] = {
         return widget:GetValue()
     end,
     event = _G.EVENT_PLAYER_ACTIVATED,
-    icon = "/esoui/art/scoredisplay/blueflag.dds",
+    icon = "scoredisplay/blueflag",
     tooltip = BS.Format(_G.SI_COLLECTIBLERESTRICTIONTYPE2),
     onClick = function()
         if (not IsInGamepadPreferredMode()) then
@@ -275,7 +275,7 @@ BS.widgets[BS.W_SKYSHARDS] = {
         return discoveredInZone
     end,
     event = _G.EVENT_SKYSHARDS_UPDATED,
-    icon = "/esoui/art/mappins/skyshard_complete.dds",
+    icon = "mappins/skyshard_complete",
     tooltip = BS.Format(_G.SI_MAPFILTER15)
 }
 
@@ -291,7 +291,7 @@ BS.widgets[BS.W_SKILL_POINTS] = {
         return unspent
     end,
     event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_SKILL_POINTS_CHANGED},
-    icon = "/esoui/art/campaign/campaignbrowser_indexicon_normal_up.dds",
+    icon = "campaign/campaignbrowser_indexicon_normal_up",
     tooltip = GetString(_G.BARSTEWARD_SKILL_POINTS),
     hideWhenEqual = 0,
     onClick = function()
@@ -381,7 +381,7 @@ BS.widgets[BS.W_SPEED] = {
         return getSpeed(widget)
     end,
     timer = 300,
-    icon = "/esoui/art/icons/emotes/keyboard/emotecategoryicon_physical_up.dds",
+    icon = "icons/emotes/keyboard/emotecategoryicon_physical_up",
     tooltip = GetString(_G.BARSTEWARD_SPEED),
     customSettings = {
         [1] = {
@@ -425,7 +425,7 @@ BS.widgets[BS.W_PLAYER_LEVEL] = {
         return level
     end,
     event = {_G.EVENT_EXPERIENCE_UPDATE, _G.EVENT_LEVEL_UPDATE},
-    icon = "/esoui/art/icons/alchemy/crafting_alchemy_trait_heroism_match.dds",
+    icon = "icons/alchemy/crafting_alchemy_trait_heroism_match",
     tooltip = BS.Format(_G.SI_CAMPAIGNLEVELREQUIREMENTTYPE1),
     hideWhenEqual = GetMaxLevel()
 }
@@ -539,8 +539,8 @@ local function getCombatTime()
     return string.format("%d:%04.1f", maxTime / 60, maxTime % 60)
 end
 
-local bossIcon = "/esoui/art/actionbar/stateoverlay_disease.dds"
-local dpsIcon = "/esoui/art/compass/ava_daggerfallvaldmeri.dds"
+local bossIcon = "actionbar/stateoverlay_disease"
+local dpsIcon = "compass/ava_daggerfallvaldmeri"
 
 local function updateWidget()
     if ((combatInfo.DPSOut + combatInfo.HPSOut) == 0) then
@@ -703,7 +703,7 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
 
             disciplineData = CHAMPION_DATA_MANAGER:FindChampionDisciplineDataById(id)
 
-            local icon = zo_iconFormat(disciplineData:GetHUDIcon(), 16, 16)
+            local icon = BS.Icon(disciplineData:GetHUDIcon())
             local disciplineName = GetChampionDisciplineName(id)
 
             icons[disciplineName] = icon
@@ -772,7 +772,7 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
         return earned
     end,
     event = {_G.EVENT_EXPERIENCE_UPDATE, _G.EVENT_UNSPENT_CHAMPION_POINTS_CHANGED},
-    icon = "/esoui/art/champion/champion_points_magicka_icon-hud.dds",
+    icon = "champion/champion_points_magicka_icon-hud",
     tooltip = BS.Format(_G.SI_STAT_GAMEPAD_CHAMPION_POINTS_LABEL),
     hideWhenEqual = 0,
     onClick = function()
@@ -829,7 +829,7 @@ BS.widgets[BS.W_PLAYER_LOCATION] = {
         return widget:GetValue()
     end,
     event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_ZONE_CHANGED},
-    icon = "/esoui/art/icons/mapkey/mapkey_player.dds",
+    icon = "icons/mapkey/mapkey_player",
     tooltip = GetString(_G.BARSTEWARD_PLAYER_LOCATION),
     onClick = function()
         if (not IsInGamepadPreferredMode()) then
@@ -866,8 +866,8 @@ BS.widgets[BS.W_PLAYER_EXPERIENCE] = {
 
         return xp
     end,
-    event = {_G.EVENT_EXPERIENCE_UPDATE},
-    icon = "/esoui/art/icons/icon_experience.dds",
+    event = _G.EVENT_EXPERIENCE_UPDATE,
+    icon = "icons/icon_experience",
     tooltip = GetString(_G.BARSTEWARD_PLAYER_EXPERIENCE)
 }
 
@@ -918,7 +918,7 @@ BS.widgets[BS.W_VAMPIRISM] = {
     end,
     event = _G.EVENT_EFFECT_CHANGED,
     filter = {[_G.EVENT_EFFECT_CHANGED] = {_G.REGISTER_FILTER_UNIT_TAG, "player"}},
-    icon = "/esoui/art/icons/ability_u26_vampire_infection_stage4.dds",
+    icon = "icons/ability_u26_vampire_infection_stage4",
     tooltip = BS.Format(_G.SI_CURSETYPE1),
     cooldown = true,
     hideWhenEqual = ""
@@ -995,7 +995,7 @@ BS.widgets[BS.W_VAMPIRISM_TIMER] = {
     timer = 1000,
     event = _G.EVENT_EFFECT_CHANGED,
     filter = {[_G.EVENT_EFFECT_CHANGED] = {_G.REGISTER_FILTER_UNIT_TAG, "player"}},
-    icon = "/esoui/art/icons/store_vampirebite_01.dds",
+    icon = "icons/store_vampirebite_01",
     tooltip = GetString(_G.BARSTEWARD_VAMPIRE_STAGE_TIMER),
     hideWhenEqual = 0,
     customSettings = {
@@ -1074,7 +1074,7 @@ BS.widgets[BS.W_VAMPIRISM_FEED_TIMER] = {
     timer = 1000,
     event = _G.EVENT_EFFECT_CHANGED,
     filter = {[_G.EVENT_EFFECT_CHANGED] = {_G.REGISTER_FILTER_UNIT_TAG, "player"}},
-    icon = "/esoui/art/icons/ability_u26_vampire_synergy_feed.dds",
+    icon = "icons/ability_u26_vampire_synergy_feed",
     tooltip = GetString(_G.BARSTEWARD_VAMPIRE_FEED_TIMER),
     hideWhenEqual = 0
 }

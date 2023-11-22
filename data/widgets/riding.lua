@@ -51,7 +51,7 @@ BS.widgets[BS.W_MOUNT_TRAINING] = {
         ttt = ttt .. GetString(_G.BARSTEWARD_TRAINING_PROGRESS)
 
         for trainingType, texture in pairs(_G.STABLE_TRAINING_TEXTURES) do
-            local icon = string.format("%s|cf9f9f9%s ", BS.LF, zo_iconFormat(texture, 16, 16))
+            local icon = string.format("%s|cf9f9f9%s ", BS.LF, BS.Icon(texture))
             local ttype = string.format("%s ", BS.Format(GetString("SI_RIDINGTRAINTYPE", trainingType)))
             local val, maxVal = STABLE_MANAGER:GetStats(trainingType)
             local tcol = ((val == maxVal) and BS.Vars.DefaultOkColour or BS.Vars.DefaultWarningColour)
@@ -65,7 +65,7 @@ BS.widgets[BS.W_MOUNT_TRAINING] = {
         return remaining
     end,
     timer = 1000,
-    icon = "/esoui/art/mounts/tabicon_mounts_up.dds",
+    icon = "mounts/tabicon_mounts_up",
     tooltip = GetString(_G.BARSTEWARD_MOUNT_TRAINING),
     hideWhenEqual = 0,
     fullyUsed = function()

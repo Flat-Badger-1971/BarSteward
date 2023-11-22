@@ -238,25 +238,25 @@ BS.IGNORE_RECIPE = {
     [132179] = true -- Blueprint: Witches Totem, Antler Charms
 }
 
-BS.COLLAPSE = "/esoui/art/buttons/large_leftdoublearrow_up.dds"
-BS.EXPAND = "/esoui/art/buttons/large_rightdoublearrow_up.dds"
+BS.COLLAPSE = "buttons/large_leftdoublearrow_up"
+BS.EXPAND = "buttons/large_rightdoublearrow_up"
 
 BS.FADE_IN_TIME = 250
 BS.FADE_OUT_TIME = 750
 
-BS.CLICK = "/esoui/art/miscellaneous/icon_lmb.dds"
+BS.CLICK = "miscellaneous/icon_lmb"
 
 BS.DUNGEON = {
-    [_G.LFG_ACTIVITY_DUNGEON] = "/esoui/art/leveluprewards/levelup_dungeon_64.dds",
-    [_G.LFG_ACTIVITY_MASTER_DUNGEON] = "/esoui/art/leveluprewards/levelup_veteran_dungeon_64.dds"
+    [_G.LFG_ACTIVITY_DUNGEON] = "leveluprewards/levelup_dungeon_64",
+    [_G.LFG_ACTIVITY_MASTER_DUNGEON] = "leveluprewards/levelup_veteran_dungeon_64"
 }
 
-BS.INELIGIBLE_ICON = "/esoui/art/castbar/forbiddenaction.dds"
-BS.NORMAL_ICON = "/esoui/art/ava/ava_hud_emblem_neutral.dds"
-BS.MAGIC_ICON = "/esoui/art/progression/stamina_points_frame.dds"
-BS.ARCANE_ICON = "/esoui/art/scrying/crystal_on.dds"
-BS.ARTIFACT_ICON = "/esoui/art/battlegrounds/battlegrounds_teamicon_purple_64.dds"
-BS.LEGENDARY_ICON = "/esoui/art/market/keyboard/esoplus_chalice_gold2_64.dds"
+BS.INELIGIBLE_ICON = "castbar/forbiddenaction"
+BS.NORMAL_ICON = "ava/ava_hud_emblem_neutral"
+BS.MAGIC_ICON = "progression/stamina_points_frame"
+BS.ARCANE_ICON = "scrying/crystal_on"
+BS.ARTIFACT_ICON = "battlegrounds/battlegrounds_teamicon_purple_64"
+BS.LEGENDARY_ICON = "market/keyboard/esoplus_chalice_gold2_64"
 
 BS.ITEM_COLOUR_ICON = {
     [_G.ITEM_DISPLAY_QUALITY_NORMAL] = BS.NORMAL_ICON,
@@ -268,14 +268,14 @@ BS.ITEM_COLOUR_ICON = {
 }
 
 BS.BATTLEGROUND_ICON = {
-    [_G.LFG_ACTIVITY_BATTLE_GROUND_LOW_LEVEL] = "/esoui/art/icons/battleground_medal_murderballcarry_001.dds",
-    [_G.LFG_ACTIVITY_BATTLE_GROUND_NON_CHAMPION] = "/esoui/art/icons/battleground_medal_murderballcarry_002.dds",
-    [_G.LFG_ACTIVITY_BATTLE_GROUND_CHAMPION] = "/esoui/art/icons/battleground_medal_murderballcarry_003.dds"
+    [_G.LFG_ACTIVITY_BATTLE_GROUND_LOW_LEVEL] = "icons/battleground_medal_murderballcarry_001",
+    [_G.LFG_ACTIVITY_BATTLE_GROUND_NON_CHAMPION] = "icons/battleground_medal_murderballcarry_002",
+    [_G.LFG_ACTIVITY_BATTLE_GROUND_CHAMPION] = "icons/battleground_medal_murderballcarry_003"
 }
 
 BS.TRIBUTE_ICON = {
-    [_G.LFG_ACTIVITY_TRIBUTE_CASUAL] = "/esoui/art/icons/u34_tribute_quest3.dds",
-    [_G.LFG_ACTIVITY_TRIBUTE_COMPETITIVE] = "/esoui/art/icons/u34_tribute_pvedaily30.dds"
+    [_G.LFG_ACTIVITY_TRIBUTE_CASUAL] = "icons/u34_tribute_quest3",
+    [_G.LFG_ACTIVITY_TRIBUTE_COMPETITIVE] = "icons/u34_tribute_pvedaily30"
 }
 
 BS.FRIENDS_ICON = "/esoui/art/chatwindow/chat_friendsonline_up.dds"
@@ -305,20 +305,20 @@ BS.VAMPIRE_STAGES = {[135397] = 1, [135399] = 2, [135400] = 3, [135402] = 4, [13
 BS.VAMPIRE_FEED = {[40359] = true}
 
 BS.BACKGROUNDS = {
-    [1] = "/esoui/art/actionbar/quickslotbg.dds",
-    [2] = "/esoui/art/announcewindow/blackfade.dds",
-    [3] = "/esoui/art/antiquities/codex_missing_document.dds",
-    [4] = "/esoui/art/antiquities/icon_backdrop.dds",
-    [5] = "/esoui/art/interaction/conversation_textbg.dds",
-    [6] = "/esoui/art/interaction/conversationwindow_overlay_important.dds",
-    [7] = "/esoui/art/miscellaneous/dialog_scrollinset_left.dds",
-    [8] = "/esoui/art/achievements/achievements_iconbg.dds",
-    [9] = "/esoui/art/actionbar/abilitycooldowninsert.dds",
-    [10] = "/esoui/art/ava/ava_bonuses_left.dds",
-    [11] = "/esoui/art/campaign/overview_scoringbg_aldmeri_left.dds",
-    [12] = "/esoui/art/campaign/overview_scoringbg_daggerfall_left.dds",
-    [13] = "/esoui/art/campaign/overview_scoringbg_ebonheart_left.dds",
-    [14] = "/esoui/art/champion/champion_sky_cloud1.dds"
+    [1] = "actionbar/quickslotbg",
+    [2] = "announcewindow/blackfade",
+    [3] = "antiquities/codex_missing_document",
+    [4] = "antiquities/icon_backdrop",
+    [5] = "interaction/conversation_textbg",
+    [6] = "interaction/conversationwindow_overlay_important",
+    [7] = "miscellaneous/dialog_scrollinset_left",
+    [8] = "achievements/achievements_iconbg",
+    [9] = "actionbar/abilitycooldowninsert",
+    [10] = "ava/ava_bonuses_left",
+    [11] = "campaign/overview_scoringbg_aldmeri_left",
+    [12] = "campaign/overview_scoringbg_daggerfall_left",
+    [13] = "campaign/overview_scoringbg_ebonheart_left",
+    [14] = "art/champion/champion_sky_cloud1"
 }
 
 BS.BORDERS = {
@@ -409,6 +409,7 @@ BS.CATNAMES = {
     Thievery = 12,
     Assistants = 13
 }
+
 BS.CATEGORIES = {
     [BS.CATNAMES.Abilities] = {name = _G.BARSTEWARD_CATEGORY_ABILITIES, icon = "actionbar/stateoverlay_wound"},
     [BS.CATNAMES.Activities] = {name = _G.BARSTEWARD_CATEGORY_ACTIVITIES, icon = "crafting/designs_tabicon_up"},

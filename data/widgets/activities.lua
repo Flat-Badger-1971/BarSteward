@@ -76,7 +76,7 @@ local function getTimedActivityProgress(activityType, widget, hideLimit, default
                     reward = reward .. ", "
                 end
 
-                reward = reward .. zo_iconFormat(rewardData.lootIcon or rewardData.icon, 16, 16) .. quantity
+                reward = reward .. BS.Icon(rewardData.lootIcon or rewardData.icon) .. quantity
             end
 
             ttext = colour .. ttext .. "|r" .. " " .. reward
@@ -125,7 +125,7 @@ BS.widgets[BS.W_DAILY_ENDEAVOURS] = {
         )
     end,
     event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED},
-    icon = "/esoui/art/journal/u26_progress_digsite_checked_incomplete.dds",
+    icon = "journal/u26_progress_digsite_checked_incomplete",
     tooltip = GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS),
     onClick = function()
         if (not IsInGamepadPreferredMode()) then
@@ -167,7 +167,7 @@ BS.widgets[BS.W_WEEKLY_ENDEAVOURS] = {
         )
     end,
     event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED},
-    icon = "/esoui/art/journal/u26_progress_digsite_checked_complete.dds",
+    icon = "journal/u26_progress_digsite_checked_complete",
     tooltip = GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS),
     onClick = function()
         if (not IsInGamepadPreferredMode()) then
@@ -235,7 +235,7 @@ BS.widgets[BS.W_ENDEAVOUR_PROGRESS] = {
         return s, e
     end,
     event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED},
-    icon = "/esoui/art/journal/u26_progress_digsite_marked_complete.dds",
+    icon = "journal/u26_progress_digsite_marked_complete",
     tooltip = GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS_BEST),
     onClick = function()
         if (not IsInGamepadPreferredMode()) then
@@ -487,7 +487,7 @@ BS.widgets[BS.W_DAILY_ENDEAVOUR_TIME] = {
         return getTimedActivityTimeRemaining(_G.TIMED_ACTIVITY_TYPE_DAILY, BS.W_DAILY_ENDEAVOUR_TIME, widget)
     end,
     timer = 1000,
-    icon = "/esoui/art/journal/u26_progress_digsite_unknown_incomplete.dds",
+    icon = "journal/u26_progress_digsite_unknown_incomplete",
     tooltip = GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_TIME),
     onClick = function()
         if (not IsInGamepadPreferredMode()) then
@@ -505,7 +505,7 @@ BS.widgets[BS.W_WEEKLY_ENDEAVOUR_TIME] = {
         return getTimedActivityTimeRemaining(_G.TIMED_ACTIVITY_TYPE_WEEKLY, BS.W_WEEKLY_ENDEAVOUR_TIME, widget)
     end,
     timer = 1000,
-    icon = "/esoui/art/journal/u26_progress_digsite_unknown_complete.dds",
+    icon = "journal/u26_progress_digsite_unknown_complete",
     tooltip = GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_TIME),
     onClick = function()
         if (not IsInGamepadPreferredMode()) then
@@ -533,7 +533,7 @@ BS.widgets[BS.W_TRIBUTE_CLUB_RANK] = {
             local rank = GetTributePlayerClubRank()
             local xp, totalxp = GetTributePlayerExperienceInCurrentClubRank()
             local percent = zo_floor(xp / totalxp * 100)
-            local icon = string.format("EsoUI/Art/Tribute/tributeClubRank_%d.dds", rank)
+            local icon = string.format("Tribute/tributeClubRank_%d", rank)
             local rankName = zo_strformat(GetString("SI_TRIBUTECLUBRANK", rank))
             local displayRank = rank + 1
 
@@ -559,7 +559,7 @@ BS.widgets[BS.W_TRIBUTE_CLUB_RANK] = {
         _G.EVENT_TRIBUTE_CLUB_EXPERIENCE_GAINED,
         _G.EVENT_TRIBUTE_CLUB_INIT
     },
-    icon = "/esoui/art/tribute/tributeclubrank_7.dds",
+    icon = "tribute/tributeclubrank_7",
     tooltip = GetString(_G.BARSTEWARD_TRIBUTE_RANK)
 }
 
@@ -593,7 +593,7 @@ BS.widgets[BS.W_ACHIEVEMENT_POINTS] = {
         _G.EVENT_ACHIEVEMENT_AWARDED,
         _G.EVENT_ACHIEVEMENTS_UPDATED
     },
-    icon = "/esoui/art/journal/journal_tabicon_achievements_up.dds",
+    icon = "journal/journal_tabicon_achievements_up",
     tooltip = BS.Format(_G.SI_ACHIEVEMENTS_OVERALL),
     onClick = function()
         if (not IsInGamepadPreferredMode()) then
@@ -612,7 +612,7 @@ BS.widgets[BS.W_PLEDGES_TIME] = {
         return getTimedActivityTimeRemaining(_G.TIMED_ACTIVITY_TYPE_DAILY, BS.W_PLEDGES_TIME, widget)
     end,
     timer = 1000,
-    icon = "/esoui/art/icons/undaunted_bigcoffer.dds",
+    icon = "icons/undaunted_bigcoffer",
     tooltip = GetString(_G.BARSTEWARD_DAILY_PLEDGES_TIME)
 }
 
@@ -691,7 +691,7 @@ BS.widgets[BS.W_SHADOWY_VENDOR_TIME] = {
         return timeToReset
     end,
     timer = 1000,
-    icon = "/esoui/art/icons/rep_darkbrotherhood_64.dds",
+    icon = "icons/rep_darkbrotherhood_64",
     tooltip = GetString(_G.BARSTEWARD_SHADOWY_VENDOR_RESET),
     hideWhenTrue = function()
         return not BS.isShadowyVendorUnlocked
@@ -715,7 +715,7 @@ BS.widgets[BS.W_LFG_TIME] = {
         return timeToReset
     end,
     timer = 1000,
-    icon = "/esoui/art/lfg/lfg_indexicon_dungeon_up.dds",
+    icon = "lfg/lfg_indexicon_dungeon_up",
     tooltip = GetString(_G.BARSTEWARD_DUNGEON_REWARD_RESET),
     onClick = function()
         if (IsInGamepadPreferredMode()) then
@@ -799,7 +799,7 @@ BS.widgets[BS.W_LOREBOOKS] = {
         return #categories
     end,
     callback = {[CALLBACK_MANAGER] = {BS.Name .. "CB_Lorebooks_Updated"}},
-    icon = "/esoui/art/icons/quest_book_001.dds",
+    icon = "icons/quest_book_001",
     tooltip = GetString(_G.BARSTEWARD_LOREBOOKS),
     onClick = function()
         if (IsInGamepadPreferredMode()) then
@@ -861,7 +861,7 @@ BS.widgets[BS.W_SHALIDORS_LIBRARY] = {
         return known
     end,
     callback = {[CALLBACK_MANAGER] = {BS.Name .. "CB_Lorebooks_Updated"}},
-    icon = "/esoui/art/icons/housing_sum_fur_booksfloatingset003.dds",
+    icon = "icons/housing_sum_fur_booksfloatingset003",
     tooltip = BS.Format(_G.SI_ZONECOMPLETIONTYPE11),
     onClick = function()
         if (IsInGamepadPreferredMode()) then
@@ -898,7 +898,7 @@ BS.widgets[BS.W_CRAFTING_MOTIFS] = {
         return known
     end,
     callback = {[CALLBACK_MANAGER] = {BS.Name .. "CB_Lorebooks_Updated"}},
-    icon = "/esoui/art/icons/u34_crafting_style_item_sybranic_marine.dds",
+    icon = "icons/u34_crafting_style_item_sybranic_marine",
     tooltip = GetString(_G.BARSTEWARD_CRAFTING_MOTIFS),
     onClick = function()
         if (IsInGamepadPreferredMode()) then
@@ -926,7 +926,6 @@ local function getActivityRewardInfo(activityTypes)
                                 GetLFGActivityRewardUINodeInfo(rewardUIDataId, nodeIndex)
 
                             if (icon) then
-                                --d(location:GetSetTypesListText())
                                 result[activityType] = {
                                     typeName = location:GetNameKeyboard(),
                                     xpReward = xpReward,
@@ -954,14 +953,14 @@ local function getActvityOutput(data)
         data.normalisedOutput = data.normalisedOutput .. " "
     end
 
-    data.output = data.output .. zo_iconFormat(data.icon, 32, 32)
+    data.output = data.output .. BS.Icon(data.icon, nil, 32, 32)
 
     if (data.activityData.meetsRequirements) then
         local icon = BS.ColourToIcon(data.activityData.colour.r, data.activityData.colour.g, data.activityData.colour.b)
-        data.output = data.output .. " " .. zo_iconFormat(icon, 32, 32)
+        data.output = data.output .. " " .. BS.Icon(icon, nil, 32, 32)
         data.eligibleCount = data.eligibleCount + 1
     else
-        data.output = data.output .. " " .. zo_iconFormat(BS.INELIGIBLE_ICON, 16, 16)
+        data.output = data.output .. " " .. BS.Icon(BS.INELIGIBLE_ICON)
     end
 
     data.normalisedOutput = data.normalisedOutput .. "XXXXXXX"
@@ -1017,7 +1016,7 @@ BS.widgets[BS.W_RANDOM_DUNGEON] = {
         return data.eligibleCount
     end,
     event = _G.EVENT_PLAYER_ACTIVATED,
-    icon = "/esoui/art/icons/achievement_update11_dungeons_019.dds",
+    icon = "icons/achievement_update11_dungeons_019",
     hideWhenEqual = 0,
     tooltip = GetString(_G.BARSTEWARD_RANDOM_DUNGEON),
     onClick = function()
@@ -1068,7 +1067,7 @@ BS.widgets[BS.W_RANDOM_BATTLEGROUND] = {
         return data.eligibleCount
     end,
     event = _G.EVENT_PLAYER_ACTIVATED,
-    icon = "/esoui/art/icons/store_battleground.dds",
+    icon = "icons/store_battleground",
     hideWhenEqual = 0,
     tooltip = BS.Format(_G.SI_BATTLEGROUND_FINDER_RANDOM_FILTER_TEXT),
     onClick = function()
@@ -1115,7 +1114,7 @@ BS.widgets[BS.W_RANDOM_TRIBUTE] = {
         return data.eligibleCount
     end,
     event = _G.EVENT_PLAYER_ACTIVATED,
-    icon = "/esoui/art/icons/u34_tribute_tutorial.dds",
+    icon = "icons/u34_tribute_tutorial",
     hideWhenEqual = 0,
     tooltip = GetString(_G.BARSTEWARD_RANDOM_TRIBUTE),
     onClick = function()
@@ -1166,7 +1165,7 @@ BS.widgets[BS.W_CHESTS_FOUND] = {
     hideWhenTrue = function()
         return not IsUnitInDungeon("player")
     end,
-    icon = "/esoui/art/icons/quest_strosmkai_open_treasure_chest.dds",
+    icon = "icons/quest_strosmkai_open_treasure_chest",
     tooltip = GetString(_G.BARSTEWARD_FOUND_CHESTS)
 }
 
@@ -1208,7 +1207,7 @@ BS.widgets[BS.W_DAILY_PROGRESS] = {
         return s, e
     end,
     event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED},
-    icon = "/esoui/art/journal/u26_progress_digsite_marked_incomplete.dds",
+    icon = "journal/u26_progress_digsite_marked_incomplete",
     tooltip = GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS_BEST),
     onClick = function()
         if (not IsInGamepadPreferredMode()) then

@@ -33,7 +33,7 @@ BS.widgets = {
         end,
         timer = 1000,
         tooltip = BS.Format(_G.SI_TRADINGHOUSELISTINGSORTTYPE0),
-        icon = "/esoui/art/lfg/lfg_indexicon_timedactivities_up.dds"
+        icon = "lfg/lfg_indexicon_timedactivities_up"
     },
     [BS.W_FPS] = {
         name = "fps",
@@ -46,7 +46,7 @@ BS.widgets = {
             return widget:GetValue()
         end,
         timer = 1000,
-        icon = "/esoui/art/champion/actionbar/champion_bar_combat_selection.dds",
+        icon = "champion/actionbar/champion_bar_combat_selection",
         tooltip = GetString(_G.BARSTEWARD_FPS),
         minWidthChars = "___"
     },
@@ -75,7 +75,7 @@ BS.widgets = {
             return widget:GetValue()
         end,
         timer = 1000,
-        icon = "/esoui/art/ava/overview_icon_underdog_score.dds",
+        icon = "ava/overview_icon_underdog_score",
         tooltip = GetString(_G.BARSTEWARD_LATENCY),
         minWidthChars = "____"
     },
@@ -104,7 +104,7 @@ BS.widgets = {
             return usedMiB
         end,
         timer = 5000,
-        icon = "/esoui/art/enchanting/enchanting_highlight.dds",
+        icon = "enchanting/enchanting_highlight",
         tooltip = GetString(_G.BARSTEWARD_MEMORY),
         customOptions = {
             name = GetString(_G.BARSTEWARD_DECIMAL_PLACES),

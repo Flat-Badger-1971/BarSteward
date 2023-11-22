@@ -82,7 +82,7 @@ function baseBar:Initialise()
         if ((vars.Background or 99) ~= 99) then
             if (self.expand) then
                 self.bar.expandbackground:SetCenterColor(1, 1, 1, 1)
-                self.bar.expandbackground:SetCenterTexture(BS.BACKGROUNDS[vars.Background])
+                self.bar.expandbackground:SetCenterTexture(BS.FormatIcon(BS.BACKGROUNDS[vars.Background]))
                 self.bar.background:SetCenterColor(0, 0, 0, 0)
                 self.bar.expandtlc:SetHidden(false)
             else
@@ -91,7 +91,7 @@ function baseBar:Initialise()
                 end
 
                 self.bar.background:SetCenterColor(1, 1, 1, 1)
-                self.bar.background:SetCenterTexture(BS.BACKGROUNDS[vars.Background])
+                self.bar.background:SetCenterTexture(BS.FormatIcon(BS.BACKGROUNDS[vars.Background]))
             end
         else
             if (self.expand) then
@@ -216,7 +216,7 @@ function baseBar:SetBackground()
     self.backdropColour = self.settings.Backdrop.Colour
 
     if ((self.settings.Background or 99) ~= 99) then
-        self.bar.background:SetCenterTexture(BS.BACKGROUNDS[self.settings.Background])
+        self.bar.background:SetCenterTexture(BS.FormatIcon(BS.BACKGROUNDS[self.settings.Background]))
     else
         self.bar.background:SetCenterColor(unpack(self.settings.Backdrop.Colour))
     end
@@ -252,10 +252,10 @@ function baseBar:SetCombatFunction()
                     if ((self.background or 99) ~= 99) then
                         if (self.expand) then
                             self.bar.expandbackground:SetCenterColor(1, 1, 1, 1)
-                            self.bar.expandbackground:SetCenterTexture(BS.BACKGROUNDS[self.settings.Background])
+                            self.bar.expandbackground:SetCenterTexture(BS.FormatIcon(BS.BACKGROUNDS[self.settings.Background]))
                         else
                             self.bar.background:SetCenterColor(1, 1, 1, 1)
-                            self.bar.background:SetCenterTexture(BS.BACKGROUNDS[self.settings.Background])
+                            self.bar.background:SetCenterTexture(BS.FormatIcon(BS.BACKGROUNDS[self.settings.Background]))
                         end
                     else
                         if (self.expand) then

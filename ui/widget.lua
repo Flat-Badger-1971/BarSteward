@@ -73,7 +73,7 @@ function baseWidget:CreateTooltip(tooltip)
             if (not BS.Vars.HideMouse) then
                 if (self:HasOnClick()) then
                     if (self.tooltip:sub(1, 2) ~= "|t") then
-                        self.tooltip = zo_iconFormat(BS.CLICK, 32, 32) .. " " .. self.tooltip
+                        self.tooltip = BS.Icon(BS.CLICK, nil, 32, 32) .. " " .. self.tooltip
                     end
                 end
             end
@@ -225,7 +225,7 @@ function baseWidget:CreateIcon(icon)
     end
 
     self.icon = self.icon or WINDOW_MANAGER:CreateControl(nil, self.control, CT_TEXTURE)
-    self.icon:SetTexture(texture)
+    self.icon:SetTexture(BS.FormatIcon(texture))
     self.icon:SetDimensions(self.iconSize, self.iconSize)
     self.icon:ClearAnchors()
     self.icon:SetAnchor(self.valueSide == LEFT and RIGHT or LEFT)
@@ -375,7 +375,7 @@ function baseWidget:SetFont(font)
 end
 
 function baseWidget:SetIcon(value)
-    self.icon:SetTexture(value)
+    self.icon:SetTexture(BS.FormatIcon(value))
 end
 
 function baseWidget:GetValue()
