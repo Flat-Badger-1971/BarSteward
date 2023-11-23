@@ -463,7 +463,7 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
                         local ciconName = iconString:format(info.icon)
                         colour = cvar and DAILY_COLOURS[cvar] or BS.COLOURS.GREY
 
-                        tName = BS.Icon(ciconName, colour, 18, 18)
+                        tName = BS.Icon(ciconName, colour, 20, 20)
                         output = string.format("%s %s", output, tName)
                     end
                 end
