@@ -1235,3 +1235,191 @@ BS.widgets[BS.W_DAILY_PROGRESS] = {
         }
     }
 }
+
+--[[
+    BS.ENDLESS_ARCHIVE_MAX_COUNTS = {
+    [_G.ENDLESS_DUNGEON_COUNTER_TYPE_STAGE] = 3,
+    [_G.ENDLESS_DUNGEON_COUNTER_TYPE_CYCLE] = 3,
+    [_G.ENDLESS_DUNGEON_COUNTER_TYPE_ARC] = 5
+}
+]]
+-- menubar/menubar_character_down
+
+local function wrap(value)
+    return "|cf9f9f9" .. value .. "|r"
+end
+
+local function getBuffs()
+    local buffTypes = {_G.ENDLESS_DUNGEON_BUFF_TYPE_VERSE, _G.ENDLESS_DUNGEON_BUFF_TYPE_VISION}
+    local buffEntries = {}
+
+    for _, buffTypeV in ipairs(buffTypes) do
+        local buffTable = ENDLESS_DUNGEON_MANAGER:GetAbilityStackCountTable(buffTypeV)
+        local buffTypeTable = {}
+
+        if (buffTable and next(buffTable)) then
+            for abilityId, stackCount in pairs(buffTable) do
+                local buffType, isAvatarVision = GetAbilityEndlessDungeonBuffType(abilityId)
+                local buffData = {
+                    abilityId = abilityId,
+                    abilityName = GetAbilityName(abilityId),
+                    buffType = buffType,
+                    iconTexture = GetAbilityIcon(abilityId),
+                    isAvatarVision = isAvatarVision,
+                    stackCount = stackCount
+                }
+
+                table.insert(buffTypeTable, buffData)
+                table.sort(
+                    buffTypeTable,
+                    function(a, b)
+                        return a.abilityName > b.abilityName
+                    end
+                )
+            end
+        end
+
+        buffEntries[buffTypeV] = buffTypeTable
+    end
+
+    return buffEntries
+end
+
+local arc = BS.Format(_G["SI_ENDLESSDUNGEONCOUNTERTYPE" .. _G.ENDLESS_DUNGEON_COUNTER_TYPE_ARC])
+
+BS.widgets[BS.W_ENDLESS_ARCHIVE_PROGRESS] = {
+    -- v2.0.9
+    name = "endlessArchiveBar",
+    update = function(widget)
+        local this = BS.W_ENDLESS_ARCHIVE_PROGRESS
+        if (not ENDLESS_DUNGEON_MANAGER:IsPlayerInEndlessDungeon()) then
+            if (BS.Vars.Controls[this].Progress) then
+                widget:SetProgress(0, 0, 1, "")
+            else
+                local colour = BS.Vars.Controls[this].Colour or BS.Vars.DefaultColour
+
+                widget:SetValue("0%")
+                widget:SetColour(unpack(colour))
+            end
+
+            return
+        end
+
+        local stageCounter, cycleCounter, arcCounter = ENDLESS_DUNGEON_MANAGER:GetProgression()
+        local maxProgressPerArc =
+            BS.ENDLESS_ARCHIVE_MAX_COUNTS[_G.ENDLESS_DUNGEON_COUNTER_TYPE_CYCLE] *
+            BS.ENDLESS_ARCHIVE_MAX_COUNTS[_G.ENDLESS_DUNGEON_COUNTER_TYPE_ARC]
+        local currentProgress =
+            (stageCounter - 1) +
+            ((cycleCounter - 1) * BS.ENDLESS_ARCHIVE_MAX_COUNTS[_G.ENDLESS_DUNGEON_COUNTER_TYPE_CYCLE])
+
+        if (BS.Vars.Controls[this].Progress) then
+            widget:SetProgress(currentProgress, 0, maxProgressPerArc, string.format("%s %d", arc, arcCounter))
+        else
+            local colour = BS.Vars.Controls[this].Colour or BS.Vars.DefaultColour
+            local pc = math.ceil((currentProgress / maxProgressPerArc) * 100)
+
+            widget:SetValue(string.format("%s %d: |c%s%d%%|r", arc, arcCounter, BS.COLOURS.YELLOW, pc))
+            widget:SetColour(unpack(colour))
+        end
+
+        local ttt = GetString(_G.BARSTEWARD_ENDLESS_ARCHIVE_PROGRESS) .. BS.LF .. BS.LF
+
+        local threads = ENDLESS_DUNGEON_MANAGER:GetAttemptsRemaining()
+        ttt =
+            ttt ..
+            wrap(
+                ZO_CachedStrFormat(
+                    GetString(_G.SI_ENDLESS_DUNGEON_ATTEMPTS_REMAINING_CHANGED_ANNOUNCEMENT_SUBTITLE),
+                    threads
+                )
+            )
+        ttt = ttt .. BS.LF .. BS.LF
+        ttt =
+            ttt .. wrap(BS.Format(_G["SI_ENDLESSDUNGEONCOUNTERTYPE" .. _G.ENDLESS_DUNGEON_COUNTER_TYPE_STAGE]) .. ": ")
+        ttt = ttt .. stageCounter .. BS.LF
+        ttt =
+            ttt .. wrap(BS.Format(_G["SI_ENDLESSDUNGEONCOUNTERTYPE" .. _G.ENDLESS_DUNGEON_COUNTER_TYPE_CYCLE]) .. ": ")
+        ttt = ttt .. cycleCounter .. BS.LF
+        ttt = ttt .. wrap(arc .. ": ")
+        ttt = ttt .. arcCounter .. BS.LF
+
+        local buffs = getBuffs()
+        local function addBuffs(buffData)
+            local text = ""
+            for _, buff in ipairs(buffData) do
+                text = string.format("%s%s ", text, BS.Icon(buff.iconTexture))
+                text = string.format("%s%s", text, wrap(buff.abilityName))
+
+                if (buff.stackCount > 1) then
+                    text = string.format("%s (%d)", text, buff.stackCount)
+                end
+
+                text = text .. BS.LF
+            end
+
+            -- remove the trailing LF
+            return text:sub(1, #text - 1)
+        end
+
+        if (#buffs > 0) then
+            local visions = buffs[_G.ENDLESS_DUNGEON_BUFF_TYPE_VISION]
+            local verses = buffs[_G.ENDLESS_DUNGEON_BUFF_TYPE_VERSE]
+
+            if (#visions + #verses > 0) then
+                ttt = ttt .. BS.LF
+            end
+
+            if (#visions > 0) then
+                ttt = ttt .. BS.Format(_G.SI_ENDLESS_DUNGEON_SUMMARY_VISIONS_HEADER) .. BS.LF
+                ttt = ttt .. addBuffs(visions) .. (#verses > 0 and BS.LF or "")
+            end
+
+            if (#verses > 0) then
+                ttt = ttt .. BS.Format(_G.SI_ENDLESS_DUNGEON_SUMMARY_VERSES_HEADER) .. BS.LF
+                ttt = ttt .. addBuffs(verses)
+            end
+        end
+
+        widget.tooltip = ttt
+
+        --return maxTask.progress == maxTask.maxProgress
+    end,
+    gradient = function()
+        local startg = {GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, _G.INTERFACE_GENERAL_COLOR_STATUS_BAR_START)}
+        local endg = {GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, _G.INTERFACE_GENERAL_COLOR_STATUS_BAR_END)}
+        local s = BS.Vars.Controls[BS.W_ENDLESS_ARCHIVE_PROGRESS].GradientStart or startg
+        local e = BS.Vars.Controls[BS.W_ENDLESS_ARCHIVE_PROGRESS].GradientEnd or endg
+
+        return s, e
+    end,
+    events = _G.EVENT_PLAYER_ACTIVATED,
+    callback = {
+        [ENDLESS_DUNGEON_MANAGER] = {
+            "DungeonStarted",
+            "AttemptsRemainingChanged",
+            "ProgressionChanged",
+            "BuffStackCountChanged"
+        }
+    },
+    icon = "endlessdungeon/icon_progression_arc",
+    tooltip = GetString(_G.BARSTEWARD_ENDLESS_ARCHIVE_PROGRESS),
+    hideWhenTrue = function()
+        return not ENDLESS_DUNGEON_MANAGER:IsPlayerInEndlessDungeon()
+    end,
+    customSettings = {
+        [1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_USE_PROGRESS),
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_ENDLESS_ARCHIVE_PROGRESS].Progress or false
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_ENDLESS_ARCHIVE_PROGRESS].Progress = value
+            end,
+            requiresReload = true,
+            default = false,
+            width = "full"
+        }
+    }
+}

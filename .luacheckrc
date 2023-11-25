@@ -37,6 +37,14 @@ read_globals = {
             BrowseToCollectible = {read_only = true}
         }
     },
+    ["ENDLESS_DUNGEON_MANAGER"] = {
+        fields = {
+            GetAbilityStackCountTable = {read_only = true},
+            GetAttemptsRemaining = {read_only = true},
+            GetProgression = {read_only = true},
+            IsPlayerInEndlessDungeon = {read_only = true}
+        }
+    },
     ["EVENT_MANAGER"] = {
         fields = {
             AddFilterForEvent = {read_only = true},
@@ -216,21 +224,17 @@ read_globals = {
         }
     },
     -- lua
-    "EndPendingInteraction",
-    "FormatIntegerWithDigitGrouping",
-    "GetBagSize",
-    "GetNumBagUsedSlots",
-    "GetCVar",
-    "GetString",
-    "GuiRoot",
     "unpack",
     --API
     "CreateSimpleAnimation",
     "DoesAntiquityHaveLead",
     "DoesUnitExist",
     "EndInteraction",
+    "EndPendingInteraction",
     "FastTravelToNode",
+    "FormatIntegerWithDigitGrouping",
     "GetAbilityDescription",
+    "GetAbilityEndlessDungeonBuffType",
     "GetAbilityIcon",
     "GetAbilityName",
     "GetAchievementCriterion",
@@ -251,6 +255,7 @@ read_globals = {
     "GetAntiquityQuality",
     "GetAntiquityZoneId",
     "GetAvailableSkillPoints",
+    "GetBagSize",
     "GetBankedCurrencyAmount",
     "GetChampionDisciplineId",
     "GetChampionDisciplineName",
@@ -270,6 +275,7 @@ read_globals = {
     "GetCompanionName",
     "GetCurrencyAmount",
     "GetCurrencyPlayerStoredLocation",
+    "GetCVar",
     "GetEarnedAchievementPoints",
     "GetEmoteInfo",
     "GetFenceLaunderTransactionInfo",
@@ -332,6 +338,7 @@ read_globals = {
     "GetNextAntiquityId",
     "GetNonCombatBonus",
     "GetNumAntiquityDigSites",
+    "GetNumBagUsedSlots",
     "GetNumBuffs",
     "GetNumChampionDisciplines",
     "GetNumChampionXPInChampionPoint",
@@ -374,6 +381,7 @@ read_globals = {
     "GetSmithingResearchLineTraitInfo",
     "GetSmithingResearchLineTraitTimes",
     "GetSoulGemInfo",
+    "GetString",
     "GetTimedActivityDescription",
     "GetTimedActivityMaxProgress",
     "GetTimedActivityName",
@@ -404,6 +412,7 @@ read_globals = {
     "GetZoneId",
     "GetZoneNameById",
     "GetZoneSkyshardId",
+    "GuiRoot",
     "HasActiveCompanion",
     "HasCraftBagAccess",
     "HasPendingCompanion",

@@ -309,14 +309,14 @@ function baseWidget:GetMinWidthChars()
     return self.minWidthChars
 end
 
-function baseWidget:SetProgress(value, min, max)
+function baseWidget:SetProgress(value, min, max, text)
     if (self.noValue) then
         return
     end
 
     if (max and value) then
         self.value:SetMinMax(min, max)
-        self.value.progress:SetText(value .. "/" .. max)
+        self.value.progress:SetText(text or (value .. "/" .. max))
         self.value:SetValue(value)
     end
 end

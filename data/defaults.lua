@@ -716,6 +716,11 @@ BS.Defaults = {
         },
         [BS.W_ARCHIVE_PORT] = {
             Cat = cat.Abilities
+        },
+        [BS.W_ENDLESS_ARCHIVE_PROGRESS] = {
+            Cat = cat.Activities,
+            HideWhenComplete = false,
+            Progress = true
         }
     }
 }
