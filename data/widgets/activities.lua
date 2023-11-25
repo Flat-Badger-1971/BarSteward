@@ -1312,12 +1312,12 @@ BS.widgets[BS.W_ENDLESS_ARCHIVE_PROGRESS] = {
         local currentProgress =
             (stageCounter - 1) +
             ((cycleCounter - 1) * BS.ENDLESS_ARCHIVE_MAX_COUNTS[_G.ENDLESS_DUNGEON_COUNTER_TYPE_CYCLE])
+        local pc = math.ceil((currentProgress / maxProgressPerArc) * 100)
 
         if (BS.Vars.Controls[this].Progress) then
             widget:SetProgress(currentProgress, 0, maxProgressPerArc, string.format("%s %d", arc, arcCounter))
         else
             local colour = BS.Vars.Controls[this].Colour or BS.Vars.DefaultColour
-            local pc = math.ceil((currentProgress / maxProgressPerArc) * 100)
 
             widget:SetValue(string.format("%s %d: |c%s%d%%|r", arc, arcCounter, BS.COLOURS.YELLOW, pc))
             widget:SetColour(unpack(colour))
@@ -1342,7 +1342,7 @@ BS.widgets[BS.W_ENDLESS_ARCHIVE_PROGRESS] = {
             ttt .. wrap(BS.Format(_G["SI_ENDLESSDUNGEONCOUNTERTYPE" .. _G.ENDLESS_DUNGEON_COUNTER_TYPE_CYCLE]) .. ": ")
         ttt = ttt .. cycleCounter .. BS.LF
         ttt = ttt .. wrap(arc .. ": ")
-        ttt = ttt .. arcCounter .. BS.LF
+        ttt = ttt .. arcCounter .. " w(" .. pc .. "%)" .. BS.LF
 
         local buffs = getBuffs()
         local function addBuffs(buffData)
