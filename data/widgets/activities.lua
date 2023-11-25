@@ -1302,7 +1302,7 @@ BS.widgets[BS.W_ENDLESS_ARCHIVE_PROGRESS] = {
                 widget:SetColour(unpack(colour))
             end
 
-            return
+            return true
         end
 
         local stageCounter, cycleCounter, arcCounter = ENDLESS_DUNGEON_MANAGER:GetProgression()
@@ -1379,11 +1379,14 @@ BS.widgets[BS.W_ENDLESS_ARCHIVE_PROGRESS] = {
                 ttt = ttt .. BS.Format(_G.SI_ENDLESS_DUNGEON_SUMMARY_VERSES_HEADER) .. BS.LF
                 ttt = ttt .. addBuffs(verses)
             end
+        else
+            -- remove the trailing LF
+            ttt = ttt:sub(1, #ttt - 1)
         end
 
         widget.tooltip = ttt
 
-        --return maxTask.progress == maxTask.maxProgress
+        return false
     end,
     gradient = function()
         local startg = {GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, _G.INTERFACE_GENERAL_COLOR_STATUS_BAR_START)}
@@ -1404,9 +1407,7 @@ BS.widgets[BS.W_ENDLESS_ARCHIVE_PROGRESS] = {
     },
     icon = "endlessdungeon/icon_progression_arc",
     tooltip = GetString(_G.BARSTEWARD_ENDLESS_ARCHIVE_PROGRESS),
-    hideWhenTrue = function()
-        return not ENDLESS_DUNGEON_MANAGER:IsPlayerInEndlessDungeon()
-    end,
+    hideWhenEqual = true,
     customSettings = {
         [1] = {
             type = "checkbox",

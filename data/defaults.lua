@@ -719,7 +719,7 @@ BS.Defaults = {
         },
         [BS.W_ENDLESS_ARCHIVE_PROGRESS] = {
             Cat = cat.Activities,
-            HideWhenComplete = false,
+            Autohide = false,
             Progress = true
         }
     }
