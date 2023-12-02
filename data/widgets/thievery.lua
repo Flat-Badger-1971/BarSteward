@@ -178,8 +178,9 @@ BS.widgets[BS.W_FENCE_RESET] = {
     name = "fenceReset",
     update = function(widget)
         local _, used, timeToReset = GetFenceLaunderTransactionInfo()
-        local colour = BS.Vars.DefaultColour
-        local remaining = BS.SecondsToTime(timeToReset, true, false, BS.Vars.Controls[BS.W_FENCE_RESET].HideSeconds)
+        local this = BS.W_FENCE_RESET
+        local colour = BS.GetVar("DefaultColour")
+        local remaining = BS.SecondsToTime(timeToReset, true, false, BS.GetVar("HideSeconds", this))
 
         widget:SetColour(unpack(colour))
         widget:SetValue(remaining)

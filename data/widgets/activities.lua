@@ -304,7 +304,7 @@ BS.widgets[BS.W_LEADS] = {
         local minTime = 99999999
         local leads = {}
         local antiquityId = GetNextAntiquityId()
-        local vars = BS.Vars.Controls[BS.W_LEADS]
+        local this = BS.W_LEADS
 
         while antiquityId do
             if (DoesAntiquityHaveLead(antiquityId)) then
@@ -330,14 +330,7 @@ BS.widgets[BS.W_LEADS] = {
         end
 
         if (#leads > 0) then
-            local timeColour = BS.Vars.DefaultOkColour
-
-            if (minTime <= (vars.DangerValue) * 3600) then
-                timeColour = vars.DangerColour or BS.Vars.DefaultDangerColour
-            elseif (minTime <= (vars.WarningValue * 3600)) then
-                timeColour = vars.WarningColour or BS.Vars.DefaultWarningColour
-            end
-
+            local timeColour = BS.GetTimeColour(minTime, this) or BS.GetVar("DefaultOkColour")
             local value
 
             if (#leads == 1 and leads[1].inProgress) then
@@ -345,14 +338,22 @@ BS.widgets[BS.W_LEADS] = {
                 timeColour = {1, 0.5, 0, 1}
                 minTime = 0
             else
-                value = BS.SecondsToTime(minTime, false, false, true, vars.Format, vars.HideDaysWhenZero)
+                value =
+                    BS.SecondsToTime(
+                    minTime,
+                    false,
+                    false,
+                    true,
+                    BS.GetVar("Format", this),
+                    BS.GetVar("HideDaysWhenZero", this)
+                )
             end
 
-            if (vars.ShowCount) then
+            if (BS.GetVar("ShowCount", this)) then
                 value = "(" .. #leads .. ")  " .. value
             end
 
-            if (vars.HideTimer) then
+            if (BS.GetVar("HideTimer", this)) then
                 value = tostring(#leads)
             end
 
@@ -371,20 +372,24 @@ BS.widgets[BS.W_LEADS] = {
 
             for _, lead in ipairs(leads) do
                 local nameAndZone = lead.name .. " - " .. lead.zone
-                local time = BS.SecondsToTime(lead.remaining, false, false, true, vars.Format, vars.HideDaysWhenZero)
+                local time =
+                    BS.SecondsToTime(
+                    lead.remaining,
+                    false,
+                    false,
+                    true,
+                    BS.GetVar("Format", this),
+                    BS.GetVar("HideDaysWhenZero", this)
+                )
                 local ttlColour = getLeadColour(lead)
 
-                timeColour = BS.Vars.DefaultOkColour
+                timeColour = BS.GetVar("DefaultOkColour")
 
                 if (lead.inProgress) then
                     time = GetString(_G.BARSTEWARD_IN_PROGRESS)
                     timeColour = {1, 0.5, 0, 1}
                 else
-                    if (lead.remaining <= (vars.DangerValue * 3600)) then
-                        timeColour = vars.DangerColour or BS.Vars.DefaultDangerColour
-                    elseif (lead.remaining <= (vars.WarningValue * 3600)) then
-                        timeColour = vars.WarningColour or BS.Vars.DefaultWarningColour
-                    end
+                    timeColour = BS.GetTimeColour(lead.remaining, this) or timeColour
                 end
 
                 ttt = ttt .. BS.LF .. " " .. ttlColour
@@ -457,18 +462,13 @@ local function getDisplay(timeRemaining, widgetIndex)
     return display
 end
 
-local function getTimedActivityTimeRemaining(activityType, widgetIndex, widget)
+local function getTimedActivityTimeRemaining(activityType, this, widget)
     local secondsRemaining = TIMED_ACTIVITIES_MANAGER:GetTimedActivityTypeTimeRemainingSeconds(activityType)
-    local vars = BS.Vars.Controls[widgetIndex]
-    local colour = vars.OkColour or BS.Vars.DefaultOkColour
+    local colour = BS.GetVar("OkColour", this) or BS.GetVar("DefaultOkColour")
 
-    if (secondsRemaining < (vars.DangerValue * 3600)) then
-        colour = vars.DangerColour or BS.Vars.DefaultDangerColour
-    elseif (secondsRemaining < (vars.WarningValue * 3600)) then
-        colour = vars.WarningColour or BS.Vars.DefaultWarningColour
-    end
+    colour = BS.GetTimeColour(secondsRemaining, this) or colour
 
-    local display = getDisplay(secondsRemaining, widgetIndex)
+    local display = getDisplay(secondsRemaining, this)
 
     widget:SetColour(unpack(colour))
     widget:SetValue(display)
@@ -681,8 +681,8 @@ BS.widgets[BS.W_SHADOWY_VENDOR_TIME] = {
     update = function(widget)
         local this = BS.W_SHADOWY_VENDOR_TIME
         local timeToReset = GetTimeToShadowyConnectionsResetInSeconds()
-        local colour = BS.Vars.DefaultColour
-        local remaining = BS.SecondsToTime(timeToReset, true, false, BS.Vars.Controls[this].HideSeconds)
+        local colour = BS.GetVar("DefaultColour")
+        local remaining = BS.SecondsToTime(timeToReset, true, false, BS.GetVar("HideSeconds", this))
 
         widget:SetColour(unpack(colour))
         widget:SetValue(remaining)
@@ -704,8 +704,8 @@ BS.widgets[BS.W_LFG_TIME] = {
     update = function(widget)
         local this = BS.W_LFG_TIME
         local timeToReset = GetLFGCooldownTimeRemainingSeconds(_G.LFG_COOLDOWN_DUNGEON_REWARD_GRANTED)
-        local colour = BS.Vars.DefaultColour
-        local remaining = BS.SecondsToTime(timeToReset, true, false, BS.Vars.Controls[this].HideSeconds)
+        local colour = BS.GetVar("DefaultColour")
+        local remaining = BS.SecondsToTime(timeToReset, true, false, BS.GetVar("HideSeconds", this))
 
         widget:SetColour(unpack(colour))
         widget:SetValue(remaining)
@@ -1236,15 +1236,6 @@ BS.widgets[BS.W_DAILY_PROGRESS] = {
     }
 }
 
---[[
-    BS.ENDLESS_ARCHIVE_MAX_COUNTS = {
-    [_G.ENDLESS_DUNGEON_COUNTER_TYPE_STAGE] = 3,
-    [_G.ENDLESS_DUNGEON_COUNTER_TYPE_CYCLE] = 3,
-    [_G.ENDLESS_DUNGEON_COUNTER_TYPE_ARC] = 5
-}
-]]
--- menubar/menubar_character_down
-
 local function wrap(value)
     return "|cf9f9f9" .. value .. "|r"
 end
@@ -1342,7 +1333,7 @@ BS.widgets[BS.W_ENDLESS_ARCHIVE_PROGRESS] = {
             ttt .. wrap(BS.Format(_G["SI_ENDLESSDUNGEONCOUNTERTYPE" .. _G.ENDLESS_DUNGEON_COUNTER_TYPE_CYCLE]) .. ": ")
         ttt = ttt .. cycleCounter .. BS.LF
         ttt = ttt .. wrap(arc .. ": ")
-        ttt = ttt .. arcCounter .. " w(" .. pc .. "%)" .. BS.LF
+        ttt = ttt .. arcCounter .. " (" .. pc .. "%)" .. BS.LF
 
         local buffs = getBuffs()
         local function addBuffs(buffData)

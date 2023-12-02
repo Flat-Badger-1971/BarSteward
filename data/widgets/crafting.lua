@@ -115,16 +115,11 @@ BS.widgets[BS.W_BLACKSMITHING] = {
     update = function(widget)
         local this = BS.W_BLACKSMITHING
         local timeRemaining, maxResearch, inUse = getResearchTimer(_G.CRAFTING_TYPE_BLACKSMITHING)
-        local vars = BS.Vars.Controls[this]
-        local colour = vars.OkColour or BS.Vars.DefaultOkColour
+        local colour = BS.GetVar("OkColour", this) or BS.GetVar("DefaultOkColour")
 
-        if (timeRemaining < (vars.DangerValue * 3600)) then
-            colour = vars.DangerColour or BS.Vars.DefaultDangerColour
-        elseif (timeRemaining < (vars.WarningValue * 3600)) then
-            colour = vars.WarningColour or BS.Vars.DefaultWarningColour
-        end
-
+        colour = BS.GetTimeColour(timeRemaining, this) or colour
         fullyUsed[_G.CRAFTING_TYPE_BLACKSMITHING] = inUse == maxResearch
+
         local display = getDisplay(timeRemaining, this, inUse, maxResearch)
 
         widget:SetColour(unpack(colour))
@@ -161,16 +156,11 @@ BS.widgets[BS.W_WOODWORKING] = {
     update = function(widget)
         local this = BS.W_WOODWORKING
         local timeRemaining, maxResearch, inUse = getResearchTimer(_G.CRAFTING_TYPE_WOODWORKING)
-        local vars = BS.Vars.Controls[this]
-        local colour = vars.OkColour or BS.Vars.DefaultOkColour
+        local colour = BS.GetVar("OkColour", this) or BS.GetVar("DefaultOkColour")
 
-        if (timeRemaining < (vars.DangerValue * 3600)) then
-            colour = vars.DangerColour or BS.Vars.DefaultDangerColour
-        elseif (timeRemaining < (vars.WarningValue * 3600)) then
-            colour = vars.WarningColour or BS.Vars.DefaultWarningColour
-        end
-
+        colour = BS.GetTimeColour(timeRemaining, this) or colour
         fullyUsed[_G.CRAFTING_TYPE_WOODWORKING] = inUse == maxResearch
+
         local display = getDisplay(timeRemaining, this, inUse, maxResearch)
 
         widget:SetColour(unpack(colour))
@@ -207,16 +197,11 @@ BS.widgets[BS.W_CLOTHING] = {
     update = function(widget)
         local this = BS.W_CLOTHING
         local timeRemaining, maxResearch, inUse = getResearchTimer(_G.CRAFTING_TYPE_CLOTHIER)
-        local vars = BS.Vars.Controls[this]
-        local colour = vars.OkColour or BS.Vars.DefaultOkColour
+        local colour = BS.GetVar("OkColour", this) or BS.GetVar("DefaultOkColour")
 
-        if (timeRemaining < (vars.DangerValue * 3600)) then
-            colour = vars.DangerColour or BS.Vars.DefaultDangerColour
-        elseif (timeRemaining < (vars.WarningValue * 3600)) then
-            colour = vars.WarningColour or BS.Vars.DefaultWarningColour
-        end
-
+        colour = BS.GetTimeColour(timeRemaining, this) or colour
         fullyUsed[_G.CRAFTING_TYPE_CLOTHIER] = inUse == maxResearch
+
         local display = getDisplay(timeRemaining, this, inUse, maxResearch)
 
         widget:SetColour(unpack(colour))
@@ -252,16 +237,11 @@ BS.widgets[BS.W_JEWELCRAFTING] = {
     update = function(widget)
         local this = BS.W_JEWELCRAFTING
         local timeRemaining, maxResearch, inUse = getResearchTimer(_G.CRAFTING_TYPE_JEWELRYCRAFTING)
-        local vars = BS.Vars.Controls[this]
-        local colour = vars.OkColour or BS.Vars.DefaultOkColour
+        local colour = BS.GetVar("OkColour", this) or BS.GetVar("DefaultOkColour")
 
-        if (timeRemaining < (vars.DangerValue * 3600)) then
-            colour = vars.DangerColour or BS.Vars.DefaultDangerColour
-        elseif (timeRemaining < (vars.WarningValue * 3600)) then
-            colour = vars.WarningColour or BS.Vars.DefaultWarningColour
-        end
-
+        colour = BS.GetTimeColour(timeRemaining, this) or colour
         fullyUsed[_G.CRAFTING_TYPE_JEWELRYCRAFTING] = inUse == maxResearch
+
         local display = getDisplay(timeRemaining, this, inUse, maxResearch)
 
         widget:SetColour(unpack(colour))

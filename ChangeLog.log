@@ -1,3 +1,8 @@
+[color=#ff9900][b]Version: 2.0.10 ---------------[/b][/color]
+Corrected stray w in Endless Archives widget tooltip
+Enabled defaults trimming to reduce the saved variables file size by up to 40%
+Updated timer based widgets to handle default variables
+
 [color=#ff9900][b]Version: 2.0.9 ---------------[/b][/color]
 Endless Archive progress widget added
 

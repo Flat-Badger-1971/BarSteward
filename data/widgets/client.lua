@@ -19,16 +19,17 @@ BS.widgets = {
     [BS.W_TIME] = {
         name = "time",
         update = function(widget)
-            local format = BS.Vars.TimeFormat24
+            local format = BS.GetVar("TimeFormat24")
+            local this = BS.W_TIME
 
-            if (BS.Vars.TimeType == GetString(_G.BARSTEWARD_12)) then
-                format = BS.Vars.TimeFormat12
+            if (BS.GetVar("TimeType") == GetString(_G.BARSTEWARD_12)) then
+                format = BS.GetVar("TimeFormat12")
             end
 
             local time = BS.FormatTime(format)
 
             widget:SetValue(time)
-            widget:SetColour(unpack(BS.Vars.Controls[BS.W_TIME].Colour or BS.Vars.DefaultColour))
+            widget:SetColour(unpack(BS.GetVar("Colour", this) or BS.GetVar("DefaultColour")))
             return widget:GetValue()
         end,
         timer = 1000,
@@ -41,7 +42,7 @@ BS.widgets = {
             local framerate = GetFramerate()
 
             widget:SetValue(math.floor(framerate))
-            widget:SetColour(unpack(BS.Vars.Controls[BS.W_FPS].Colour or BS.Vars.DefaultColour))
+            widget:SetColour(unpack(BS.GetVar("Colour", BS.W_FPS) or BS.GetVar("DefaultColour")))
 
             return widget:GetValue()
         end,
@@ -54,18 +55,18 @@ BS.widgets = {
         name = "latency",
         update = function(widget)
             local latency = GetLatency()
-            local vars = BS.Vars.Controls[BS.W_LATENCY]
-            local colour = vars.Colour or BS.Vars.DefaultColour
+            local this = BS.W_LATENCY
+            local colour = BS.GetVar("Colour", this) or BS.GetVar("DefaultColour")
 
-            if ((vars.WarningValue or 0) > 0) then
-                if (latency >= (vars.WarningValue or 0)) then
-                    colour = vars.WarningColour or BS.Vars.DefaultWarningColour
+            if ((BS.GetVar("WarningValue", this) or 0) > 0) then
+                if (latency >= (BS.GetVar("WarningValue", this) or 0)) then
+                    colour = BS.GetVar("WarningColour", this) or BS.GetVar("DefaultWarningColour")
                 end
             end
 
-            if ((vars.DangerValue or 0) > 0) then
-                if (latency >= (vars.DangerValue or 0)) then
-                    colour = vars.DangerColour or BS.Vars.DefaultDangerColour
+            if ((BS.GetVar("DangerValue", this) or 0) > 0) then
+                if (latency >= (BS.GetVar("DangerValue", this) or 0)) then
+                    colour = BS.GetVar("DangerColour", this) or BS.GetVar("DefaultDangerColour")
                 end
             end
 
@@ -85,17 +86,17 @@ BS.widgets = {
         update = function(widget)
             local usedKiB = collectgarbage("count")
             local usedMiB = (usedKiB / 1024)
-            local vars = BS.Vars.Controls[BS.W_MEMORY]
-            local precision = vars.Precision or 1
+            local this = BS.W_MEMORY
+            local precision = BS.GetVar("Precision", this) or 1
             local rfactor = 10 ^ precision
-            local colour = vars.OkColour or BS.Vars.DefaultOkColour
+            local colour = BS.GetVar("OkColour", this) or BS.GetVar("DefaultOkColour")
 
             usedMiB = math.ceil(usedMiB * rfactor) / rfactor
 
-            if (usedMiB > (vars.DangerValue or 99999)) then
-                colour = vars.DangerColour or BS.Vars.DefaultDangerColour
-            elseif (usedMiB > (vars.WarningValue or 99999)) then
-                colour = vars.WarningColour or BS.Vars.DefaultWarningColour
+            if (usedMiB > (BS.GetVar("DangerValue", this) or 99999)) then
+                colour = BS.GetVar("DangerValue", this) or BS.GetVar("DefaultDangerColour")
+            elseif (usedMiB > (BS.GetVar("WarningValue", this) or 99999)) then
+                colour = BS.GetVar("WarningValue", this) or BS.GetVar("DefaultWarningColour")
             end
 
             widget:SetValue(ZO_FastFormatDecimalNumber(tostring(usedMiB)) .. " MiB")
@@ -119,11 +120,11 @@ BS.widgets = {
         -- v1.3.17
         name = "tamrielTime",
         update = function(widget)
-            local vars = BS.Vars.Controls[BS.W_TAMRIEL_TIME]
-            local format = vars.TimeFormat24 or BS.Defaults.TimeFormat24
+            local this = BS.W_TAMRIEL_TIME
+            local format = BS.GetVar("TimeFormat24", this) or BS.Defaults.TimeFormat24
 
-            if ((vars.TimeType or BS.Defaults.TimeType) == GetString(_G.BARSTEWARD_12)) then
-                format = vars.TimeFormat12 or BS.Defaults.TimeFormat12
+            if ((BS.GetVar("TimeType", this) or BS.Defaults.TimeType) == GetString(_G.BARSTEWARD_12)) then
+                format = BS.GetVar("TimeFormat12", this) or BS.Defaults.TimeFormat12
             end
 
             if (BS.LibClock) then
@@ -133,7 +134,7 @@ BS.widgets = {
 
                 widget:SetIcon("BarSteward/assets/moon/" .. phase .. ".dds")
                 widget:SetValue(time)
-                widget:SetColour(unpack(vars.Colour or BS.Vars.DefaultColour))
+                widget:SetColour(unpack(BS.GetVar("Colour", this) or BS.GetVar("DefaultColour")))
 
                 return widget:GetValue()
             end

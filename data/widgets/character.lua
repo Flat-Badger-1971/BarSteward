@@ -74,7 +74,7 @@ BS.widgets[BS.W_RECALL_COOLDOWN] = {
         local cooldownTime = GetRecallCooldown() / 1000
 
         widget:SetValue(BS.SecondsToTime(cooldownTime, true, true))
-        widget:SetColour(unpack(BS.Vars.Controls[BS.W_RECALL_COOLDOWN].Colour or BS.Vars.DefaultColour))
+        widget:SetColour(unpack(BS.GetVar("Colour", BS.W_RECALL_COOLDOWN) or BS.GetVar("DefaultColour")))
 
         return cooldownTime
     end,
@@ -323,8 +323,9 @@ local function getSpeed(widget)
     local distance = math.sqrt(math.pow(x1 - x2, 2) + math.pow(y1 - y2, 2))
     local timeDelta = (t1 - t2) / 1000
     local speed, speedText, fixWidth
+    local this = BS.W_SPEED
 
-    if (BS.Vars.Controls[BS.W_SPEED].ShowPercent) then
+    if (BS.GetVar("ShowPercent", this)) then
         local rawSpeed = 0
 
         if (timeDelta > 0) then
@@ -349,7 +350,7 @@ local function getSpeed(widget)
             speedInMS = distanceInMeters / timeDelta
         end
 
-        local units = BS.Vars.Controls[BS.W_SPEED].Units
+        local units = BS.GetVar("Units", this)
 
         if (units == "mph") then
             speed = speedInMS * 2.23694
@@ -931,7 +932,7 @@ BS.widgets[BS.W_VAMPIRISM_TIMER] = {
         local name, icon, plainValue, value
         local isVampire = false
         local ending, stage
-        local vars = BS.Vars.Controls[BS.W_VAMPIRISM_TIMER]
+        local this = BS.W_VAMPIRISM_TIMER
 
         for buffNum = 1, GetNumBuffs("player") do
             local buffName, _, buffEnding, _, _, buffIcon, _, _, _, _, id = GetUnitBuffInfo("player", buffNum)
@@ -948,7 +949,7 @@ BS.widgets[BS.W_VAMPIRISM_TIMER] = {
 
         local remaining = 0
         local time = ""
-        local colour = vars.OkColour or BS.Vars.DefaultOkColour
+        local colour = BS.GetVar("OkColour", this) or BS.GetVar("DefaultOkColour")
 
         if (isVampire) then
             remaining = ending - GetGameTimeSeconds()
@@ -957,18 +958,13 @@ BS.widgets[BS.W_VAMPIRISM_TIMER] = {
                 remaining = 0
             end
 
-            time = BS.SecondsToTime(remaining, true, false, vars.HideSeconds, vars.Format)
-
-            if (remaining < (vars.DangerValue * 60)) then
-                colour = vars.DangerColour or BS.Vars.DefaultDangerColour
-            elseif (remaining < (vars.WarningValue * 60)) then
-                colour = vars.WarningColour or BS.Vars.DefaultWarningColour
-            end
+            time = BS.SecondsToTime(remaining, true, false, BS.GetVar("HideSeconds", this), BS.GetVar("Format", this))
+            colour = BS.GetTimeColour(remaining, this, 60) or colour
         end
 
         widget:SetColour(unpack(colour))
 
-        if (vars.ShowStage) then
+        if (BS.GetVar("ShowStage", this)) then
             plainValue = zo_strformat(GetString(_G.BARSTEWARD_VAMPIRE_STAGE), time, "", stage, "|r")
             value = zo_strformat(GetString(_G.BARSTEWARD_VAMPIRE_STAGE), time, "|cf9f9f9", stage, "|r")
         else
@@ -1022,7 +1018,7 @@ BS.widgets[BS.W_VAMPIRISM_FEED_TIMER] = {
         local name, icon
         local isVampireWithFeed = false
         local ending
-        local vars = BS.Vars.Controls[BS.W_VAMPIRISM_FEED_TIMER]
+        local this = BS.W_VAMPIRISM_FEED_TIMER
 
         for buffNum = 1, GetNumBuffs("player") do
             local buffName, _, buffEnding, _, _, buffIcon, _, _, _, _, id = GetUnitBuffInfo("player", buffNum)
@@ -1038,19 +1034,23 @@ BS.widgets[BS.W_VAMPIRISM_FEED_TIMER] = {
 
         local remaining = 0
         local time = ""
-        local colour = vars.OkColour or BS.Vars.DefaultOkColour
+        local colour = BS.GetVar("OkColour", this) or BS.GetVar("DefaultOkColour")
 
         if (isVampireWithFeed) then
             remaining = ending - GetGameTimeSeconds()
 
             if (remaining > 0) then
-                time = BS.SecondsToTime(remaining, false, false, vars.HideSeconds, vars.Format, vars.HideDaysWhenZero)
+                time =
+                    BS.SecondsToTime(
+                    remaining,
+                    false,
+                    false,
+                    BS.GetVar("HideSeconds", this),
+                    BS.GetVar("Format", this),
+                    BS.GetVar("HideDaysWhenZero", this)
+                )
 
-                if (remaining < (vars.DangerValue * 60)) then
-                    colour = vars.DangerColour or BS.Vars.DefaultDangerColour
-                elseif (remaining < (vars.WarningValue * 60)) then
-                    colour = vars.WarningColour or BS.Vars.DefaultWarningColour
-                end
+                colour = BS.GetTimeColour(remaining, this, 60) or colour
             end
         end
 

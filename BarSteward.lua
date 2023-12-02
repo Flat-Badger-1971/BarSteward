@@ -234,7 +234,7 @@ local function Initialise()
         _G.LibSavedVars:NewAccountWide("BarStewardSavedVars", "Account", BS.Defaults):AddCharacterSettingsToggle(
         "BarStewardSavedVars",
         "Characters"
-    )
+    ):EnableDefaultsTrimming()
 
     BS.CheckVars(BS.Vars)
     BS.VersionCheck()

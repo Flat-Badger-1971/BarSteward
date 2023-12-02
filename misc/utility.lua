@@ -1616,6 +1616,32 @@ function BS.Icon(path, colour, width, height)
     return texture
 end
 
+function BS.GetVar(name, widget)
+    local value
+
+    if (widget) then
+        value = BS.Vars.Controls[widget][name] or BS.Defaults.Controls[widget][name]
+    else
+        value = BS.Vars[name] or BS.Defaults[name]
+    end
+
+    return value
+end
+
+function BS.GetTimeColour(value, this, multiplier)
+    local colour
+
+    multiplier = multiplier or 3600
+
+    if (value <= (BS.GetVar("DangerValue", this)) * multiplier) then
+        colour = BS.GetVar("DangerColour", this) or BS.GetVar("DefaultDangerColour")
+    elseif (value <= (BS.GetVar("WarningValue", this) * multiplier)) then
+        colour = BS.GetVar("WarningColour", this) or BS.GetVar("DefaultWarningColour")
+    end
+
+    return colour
+end
+
 -- function BS.FindItem(text)
 --     local filteredItems =
 --             SHARED_INVENTORY:GenerateFullSlotData(
