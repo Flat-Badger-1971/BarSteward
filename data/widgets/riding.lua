@@ -49,7 +49,7 @@ BS.widgets[BS.W_MOUNT_TRAINING] = {
             local icon = string.format("%s|cf9f9f9%s ", BS.LF, BS.Icon(texture))
             local ttype = string.format("%s ", BS.Format(GetString("SI_RIDINGTRAINTYPE", trainingType)))
             local val, maxVal = STABLE_MANAGER:GetStats(trainingType)
-            local tcol = ((val == maxVal) and BS.Vars.DefaultOkColour or BS.Vars.DefaultWarningColour)
+            local tcol = ((val == maxVal) and BS.GetVar("DefaultOkColour") or BS.GetVar("DefaultWarningColour"))
             local col = string.format("|r%s", BS.ARGBConvert(tcol))
 
             ttt = string.format("%s%s%s%s%s/%s|r", ttt, icon, ttype, col, val, maxVal)
