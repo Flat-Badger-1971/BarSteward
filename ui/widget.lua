@@ -149,7 +149,7 @@ end
 
 BS.ProgressIndex = 0
 
-function baseWidget:CreateProgress(progress, gradient)
+function baseWidget:CreateProgress(progress, gradient, transition)
     if (progress) then
         local name = BS.Name .. "_progress_" .. BS.ProgressIndex
 
@@ -177,7 +177,20 @@ function baseWidget:CreateProgress(progress, gradient)
         end
     else
         if (not self:HasNoValue()) then
-            self.value = self.value or WINDOW_MANAGER:CreateControl(nil, self.control, CT_LABEL)
+            if (transition) then
+                self.value =
+                    self.value or WINDOW_MANAGER:CreateControlFromVirtual(nil, self.control, "ZO_RollingMeterLabel")
+                self.value:SetHorizontalAlignment(_G.TEXT_ALIGN_LEFT)
+                self.value:SetResizeToFitLabels(true)
+                self.value.transitionManager = self.value:GetOrCreateTransitionManager()
+                self.value.transitionManager:SetMaxTransitionSteps(50)
+                self.transition = true
+            else
+                self.value = self.value or WINDOW_MANAGER:CreateControl(nil, self.control, CT_LABEL)
+                self.value:SetDimensions(50, 32)
+                self.value:SetVerticalAlignment(TEXT_ALIGN_CENTER)
+            end
+
             self.value:SetFont(self.font)
             self.value:SetColor(unpack(BS.Vars.DefaultColour))
             self.value:ClearAnchors()
@@ -188,8 +201,6 @@ function baseWidget:CreateProgress(progress, gradient)
                 self.valueSide == LEFT and -10 or 10,
                 0
             )
-            self.value:SetDimensions(50, 32)
-            self.value:SetVerticalAlignment(TEXT_ALIGN_CENTER)
         end
     end
 end
@@ -321,12 +332,23 @@ function baseWidget:SetProgress(value, min, max, text)
     end
 end
 
-function baseWidget:SetValue(value, plainValue)
+function baseWidget:SetValue(value, plainValue, immediate)
     if (self.noValue) then
         return
     end
 
-    self.value:SetText(value)
+    if (self.transition) then
+        -- TODO: figure out how to stop resizing issues
+        -- and the control jumping around
+
+        if (immediate) then
+            self.value.transitionManager:SetValueImmediately(value)
+        else
+            self.value.transitionManager:SetValue(value)
+        end
+    else
+        self.value:SetText(value)
+    end
 
     -- use the undecorated value for width calculations
     local textWidth = self.value:GetStringWidth(plainValue or value)
@@ -452,6 +474,10 @@ function baseWidget:SetHidden(hidden)
     end
 end
 
+function baseWidget:ToggleResize(toggle)
+    self.control:SetResizeToFitDescendents(toggle == "on")
+end
+
 function baseWidget:IsHidden()
     return self.isHidden or false
 end
@@ -504,7 +530,7 @@ function BS.CreateWidget(metadata, parent, tooltipAnchor, valueSide, noValue, ba
     widget:CreateIcon(metadata.icon)
     widget:CreateCooldown()
     widget:SetInitialFont()
-    widget:CreateProgress(metadata.progress, metadata.gradient)
+    widget:CreateProgress(metadata.progress, metadata.gradient, metadata.transition)
     widget:SetTooltipAnchor(tooltipAnchor)
     widget:SetOnClick(metadata.onClick)
     widget:CreateTooltip(metadata.tooltip)

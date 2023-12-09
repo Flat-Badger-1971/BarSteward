@@ -1414,6 +1414,7 @@ BS.widgets[BS.W_ENDLESS_ARCHIVE_SCORE] = {
     name = "endlessArchiveScore",
     update = function(widget, event, score)
         local this = BS.W_ENDLESS_ARCHIVE_SCORE
+        local immediate = event ~= "ScoreChanged"
 
         if (not ENDLESS_DUNGEON_MANAGER:IsPlayerInEndlessDungeon()) then
             widget:SetValue(ENDLESS_DUNGEON_MANAGER:GetScore())
@@ -1428,7 +1429,7 @@ BS.widgets[BS.W_ENDLESS_ARCHIVE_SCORE] = {
             currentScore = ENDLESS_DUNGEON_MANAGER:GetScore()
         end
 
-        widget:SetValue(currentScore)
+        widget:SetValue(currentScore, nil, immediate)
         widget:SetColour(unpack(BS.GetColour(this)))
 
         return false

@@ -1668,19 +1668,18 @@ function BS.GetColour(this, colourType, default)
     return BS.GetVar(colour, this) or defColour
 end
 
-function BS.ToggleBarResizing(widgetIndex, toggle)
-    local barIndex = BS.Vars.Controls[widgetIndex].Bar
+function BS.GetWidget(widgetIndex)
+    return BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[widgetIndex])
+end
 
-    if (barIndex == 0) then
-        return
-    end
+function BS.GetBar(widgetIndex)
+    local barNumber = BS.Vars.Controls[widgetIndex].Bar
 
-    local barObject = BS.BarObjectPool:GetActiveObject(BS.BarObjects[barIndex])
+    if (barNumber ~= 0) then
+        local barKey = BS.BarObjects[barNumber]
+        local bar = BS.BarObjectPool:GetActiveObject(barKey)
 
-    if (barObject) then
-        local bar = barObject.bar
-
-        bar:SetResizeToFitDescendents(toggle == "on")
+        return bar
     end
 end
 
