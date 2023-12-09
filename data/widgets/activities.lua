@@ -6,15 +6,15 @@ local completed = {
 
 local function configureWidget(widget, complete, maxComplete, activityType, tasks, hideLimit, defaultTooltip)
     local widgetIndex = activityType == _G.TIMED_ACTIVITY_TYPE_DAILY and BS.W_DAILY_ENDEAVOURS or BS.W_WEEKLY_ENDEAVOURS
-    local colour = BS.Vars.Controls[widgetIndex].Colour or BS.Vars.DefaultColour
+    local colour = BS.GetColour(widgetIndex)
 
-    if (BS.Vars.Controls[widgetIndex].UseRag) then
+    if (BS.GetVar("UseRag", widgetIndex)) then
         if (complete > 0 and complete < maxComplete) then
-            colour = BS.Vars.DefaultWarningColour
+            colour = BS.GetVar("DefaultWarningColour")
         elseif (complete == maxComplete) then
-            colour = BS.Vars.DefaultOkColour
+            colour = BS.GetVar("DefaultOkColour")
         else
-            colour = BS.Vars.DefaultDangerColour
+            colour = BS.GetVar("DefaultDangerColour")
         end
     end
 
@@ -120,7 +120,7 @@ BS.widgets[BS.W_DAILY_ENDEAVOURS] = {
         return getTimedActivityProgress(
             _G.TIMED_ACTIVITY_TYPE_DAILY,
             widget,
-            BS.Vars.Controls[BS.W_DAILY_ENDEAVOURS].HideLimit,
+            BS.GetVar("HideLimit", BS.W_DAILY_ENDEAVOURS),
             GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS)
         )
     end,
@@ -162,7 +162,7 @@ BS.widgets[BS.W_WEEKLY_ENDEAVOURS] = {
         return getTimedActivityProgress(
             _G.TIMED_ACTIVITY_TYPE_WEEKLY,
             widget,
-            BS.Vars.Controls[BS.W_WEEKLY_ENDEAVOURS].HideLimit,
+            BS.GetVar("HideLimit", BS.W_WEEKLY_ENDEAVOURS),
             GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS)
         )
     end,
@@ -205,13 +205,11 @@ BS.widgets[BS.W_ENDEAVOUR_PROGRESS] = {
         local _, maxTask = getTimedActivityProgress(_G.TIMED_ACTIVITY_TYPE_WEEKLY, nil)
 
         if (maxTask.name and maxTask.maxProgress) then
-            if (BS.Vars.Controls[this].Progress) then
+            if (BS.GetVar("Progress", this)) then
                 widget:SetProgress(maxTask.progress, 0, maxTask.maxProgress)
             else
-                local colour = BS.Vars.Controls[this].Colour or BS.Vars.DefaultColour
-
                 widget:SetValue(maxTask.progress .. "/" .. maxTask.maxProgress)
-                widget:SetColour(unpack(colour))
+                widget:SetColour(unpack(BS.GetColor(this)))
             end
 
             local ttt = GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS_BEST) .. BS.LF
@@ -445,7 +443,7 @@ local function getDisplay(timeRemaining, widgetIndex)
     local hours = timeRemaining / 60 / 60
     local days = math.floor((hours / 24) + 0.5)
 
-    if (BS.Vars.Controls[widgetIndex].ShowDays and days >= 1 and hours > 24) then
+    if (BS.GetVar("ShowDays", widgetIndex) and days >= 1 and hours > 24) then
         display = zo_strformat(GetString(_G.BARSTEWARD_DAYS), days)
     else
         display =
@@ -453,9 +451,9 @@ local function getDisplay(timeRemaining, widgetIndex)
             timeRemaining,
             false,
             false,
-            BS.Vars.Controls[widgetIndex].HideSeconds,
-            BS.Vars.Controls[widgetIndex].Format,
-            BS.Vars.Controls[widgetIndex].HideDaysWhenZero
+            BS.GetVar("HideSeconds", widgetIndex),
+            BS.GetVar("Format", widgetIndex),
+            BS.GetVar("HideDaysWhenZero", widgetIndex)
         )
     end
 
@@ -570,15 +568,14 @@ BS.widgets[BS.W_ACHIEVEMENT_POINTS] = {
         local this = BS.W_ACHIEVEMENT_POINTS
         local totalPoints = GetTotalAchievementPoints()
         local earnedPoints = GetEarnedAchievementPoints()
-        local colour = BS.Vars.Controls[this].Colour or BS.Vars.DefaultColour
         local value = earnedPoints
 
-        if (BS.Vars.Controls[this].ShowPercent) then
+        if (BS.GetVar("ShowPercent", this)) then
             value = math.floor((earnedPoints / totalPoints) * 100) .. "%"
         end
 
         widget:SetValue(value)
-        widget:SetColour(unpack(colour))
+        widget:SetColour(unpack(BS.GetColour(this)))
 
         local ttt = BS.Format(_G.SI_ACHIEVEMENTS_OVERALL) .. BS.LF
 
@@ -681,10 +678,9 @@ BS.widgets[BS.W_SHADOWY_VENDOR_TIME] = {
     update = function(widget)
         local this = BS.W_SHADOWY_VENDOR_TIME
         local timeToReset = GetTimeToShadowyConnectionsResetInSeconds()
-        local colour = BS.GetVar("DefaultColour")
         local remaining = BS.SecondsToTime(timeToReset, true, false, BS.GetVar("HideSeconds", this))
 
-        widget:SetColour(unpack(colour))
+        widget:SetColour(unpack(BS.GetVar("DefaultColour")))
         widget:SetValue(remaining)
 
         widget.tooltip = setTracker(this, timeToReset, GetString(_G.BARSTEWARD_SHADOWY_VENDOR_RESET))
@@ -704,10 +700,9 @@ BS.widgets[BS.W_LFG_TIME] = {
     update = function(widget)
         local this = BS.W_LFG_TIME
         local timeToReset = GetLFGCooldownTimeRemainingSeconds(_G.LFG_COOLDOWN_DUNGEON_REWARD_GRANTED)
-        local colour = BS.GetVar("DefaultColour")
         local remaining = BS.SecondsToTime(timeToReset, true, false, BS.GetVar("HideSeconds", this))
 
-        widget:SetColour(unpack(colour))
+        widget:SetColour(unpack(BS.GetVar("DefaultColour")))
         widget:SetValue(remaining)
 
         widget.tooltip = setTracker(this, timeToReset, GetString(_G.BARSTEWARD_DUNGEON_REWARD_RESET))
@@ -776,7 +771,6 @@ BS.widgets[BS.W_LOREBOOKS] = {
         end
 
         local this = BS.W_LOREBOOKS
-        local colour = BS.Vars.Controls[this].Colour or BS.Vars.DefaultColour
         local value = ""
         local tt = GetString(_G.BARSTEWARD_LOREBOOKS)
 
@@ -786,13 +780,13 @@ BS.widgets[BS.W_LOREBOOKS] = {
             tt = string.format("%s%s|cf9f9f9", tt, BS.LF)
             tt = string.format("%s%s|r %s", tt, category.name, metrics)
 
-            if (BS.Vars.Controls[this].ShowCategory == category.name) then
+            if (BS.GetVar("ShowCategory", this) == category.name) then
                 value = metrics
             end
         end
 
         widget:SetValue(value)
-        widget:SetColour(unpack(colour))
+        widget:SetColour(unpack(BS.GetColour(this)))
 
         widget.tooltip = tt
 
@@ -843,7 +837,6 @@ BS.widgets[BS.W_SHALIDORS_LIBRARY] = {
             return
         end
 
-        local colour = BS.Vars.Controls[BS.W_SHALIDORS_LIBRARY].Colour or BS.Vars.DefaultColour
         local value = "0/0"
         local known = 0
 
@@ -856,7 +849,7 @@ BS.widgets[BS.W_SHALIDORS_LIBRARY] = {
         end
 
         widget:SetValue(value)
-        widget:SetColour(unpack(colour))
+        widget:SetColour(unpack(BS.GetColour(BS.W_SHALIDORS_LIBRARY)))
 
         return known
     end,
@@ -880,7 +873,6 @@ BS.widgets[BS.W_CRAFTING_MOTIFS] = {
             return
         end
 
-        local colour = BS.Vars.Controls[BS.W_CRAFTING_MOTIFS].Colour or BS.Vars.DefaultColour
         local value = "0/0"
         local known = 0
 
@@ -893,7 +885,7 @@ BS.widgets[BS.W_CRAFTING_MOTIFS] = {
         end
 
         widget:SetValue(value)
-        widget:SetColour(unpack(colour))
+        widget:SetColour(unpack(BS.GetColour(BS.W_CRAFTING_MOTIFS)))
 
         return known
     end,
@@ -1136,8 +1128,6 @@ BS.widgets[BS.W_CHESTS_FOUND] = {
     -- v1.5.2
     name = "chestsFound",
     update = function(widget, _, result, targetName)
-        local colour = BS.Vars.Controls[BS.W_CHESTS_FOUND].Colour or BS.Vars.DefaultColour
-
         if (BS.Vars.DungeonInfo.IsInDungeon) then
             if (result == _G.CLIENT_INTERACT_RESULT_SUCCESS and isChest(targetName)) then
                 local x, y, _ = GetMapPlayerPosition("player")
@@ -1157,7 +1147,7 @@ BS.widgets[BS.W_CHESTS_FOUND] = {
         end
 
         widget:SetValue(BS.Vars.DungeonInfo.ChestCount)
-        widget:SetColour(unpack(colour))
+        widget:SetColour(unpack(BS.GetColour(BS.W_CHESTS_FOUND)))
 
         return BS.Vars.DungeonInfo.ChestCount
     end,
@@ -1177,13 +1167,11 @@ BS.widgets[BS.W_DAILY_PROGRESS] = {
         local this = BS.W_DAILY_PROGRESS
 
         if (maxTask.name and maxTask.maxProgress) then
-            if (BS.Vars.Controls[this].Progress) then
+            if (BS.GetVar("Progress", this)) then
                 widget:SetProgress(maxTask.progress, 0, maxTask.maxProgress)
             else
-                local colour = BS.Vars.Controls[this].Colour or BS.Vars.DefaultColour
-
                 widget:SetValue(maxTask.progress .. "/" .. maxTask.maxProgress)
-                widget:SetColour(unpack(colour))
+                widget:SetColour(unpack(BS.GetColour(this)))
             end
 
             local ttt = GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS_BEST) .. BS.LF
@@ -1277,23 +1265,28 @@ local function getBuffs()
 end
 
 local arc = BS.Format(_G["SI_ENDLESSDUNGEONCOUNTERTYPE" .. _G.ENDLESS_DUNGEON_COUNTER_TYPE_ARC])
+local currentScore = 0
 
 BS.widgets[BS.W_ENDLESS_ARCHIVE_PROGRESS] = {
     -- v2.0.9
     name = "endlessArchiveBar",
-    update = function(widget)
+    update = function(widget, event, score)
         local this = BS.W_ENDLESS_ARCHIVE_PROGRESS
         if (not ENDLESS_DUNGEON_MANAGER:IsPlayerInEndlessDungeon()) then
-            if (BS.Vars.Controls[this].Progress) then
+            if (BS.GetVar("Progress", this)) then
                 widget:SetProgress(0, 0, 1, "")
             else
-                local colour = BS.Vars.Controls[this].Colour or BS.Vars.DefaultColour
-
                 widget:SetValue("0%")
-                widget:SetColour(unpack(colour))
+                widget:SetColour(unpack(BS.GetColour(this)))
             end
 
             return true
+        end
+
+        if (event == "ScoreChanged") then
+            currentScore = score
+        elseif (score == 0) then
+            currentScore = ENDLESS_DUNGEON_MANAGER:GetScore()
         end
 
         local stageCounter, cycleCounter, arcCounter = ENDLESS_DUNGEON_MANAGER:GetProgression()
@@ -1305,13 +1298,11 @@ BS.widgets[BS.W_ENDLESS_ARCHIVE_PROGRESS] = {
             ((cycleCounter - 1) * BS.ENDLESS_ARCHIVE_MAX_COUNTS[_G.ENDLESS_DUNGEON_COUNTER_TYPE_CYCLE])
         local pc = math.ceil((currentProgress / maxProgressPerArc) * 100)
 
-        if (BS.Vars.Controls[this].Progress) then
+        if (BS.GetVar("Progress", this)) then
             widget:SetProgress(currentProgress, 0, maxProgressPerArc, string.format("%s %d", arc, arcCounter))
         else
-            local colour = BS.Vars.Controls[this].Colour or BS.Vars.DefaultColour
-
             widget:SetValue(string.format("%s %d: |c%s%d%%|r", arc, arcCounter, BS.COLOURS.YELLOW, pc))
-            widget:SetColour(unpack(colour))
+            widget:SetColour(unpack(BS.GetColour(this)))
         end
 
         local ttt = GetString(_G.BARSTEWARD_ENDLESS_ARCHIVE_PROGRESS) .. BS.LF .. BS.LF
@@ -1334,6 +1325,7 @@ BS.widgets[BS.W_ENDLESS_ARCHIVE_PROGRESS] = {
         ttt = ttt .. cycleCounter .. BS.LF
         ttt = ttt .. wrap(arc .. ": ")
         ttt = ttt .. arcCounter .. " (" .. pc .. "%)" .. BS.LF
+        ttt = ttt .. wrap(BS.Format(_G.SI_ENDLESS_DUNGEON_SUMMARY_SCORE_HEADER) .. ":") .. "  " .. currentScore .. BS.LF
 
         local buffs = getBuffs()
         local function addBuffs(buffData)
@@ -1390,10 +1382,11 @@ BS.widgets[BS.W_ENDLESS_ARCHIVE_PROGRESS] = {
     events = _G.EVENT_PLAYER_ACTIVATED,
     callback = {
         [ENDLESS_DUNGEON_MANAGER] = {
-            "DungeonStarted",
-            "AttemptsRemainingChanged",
-            "ProgressionChanged",
-            "BuffStackCountChanged"
+            {event = "DungeonStarted", label = ""},
+            {event = "AttemptsRemainingChanged", label = ""},
+            {event = "ProgressionChanged", label = ""},
+            {event = "BuffStackCountChanged", label = ""},
+            {event = "ScoreChanged", label = "ScoreChanged"}
         }
     },
     icon = "endlessdungeon/icon_progression_arc",
@@ -1414,4 +1407,39 @@ BS.widgets[BS.W_ENDLESS_ARCHIVE_PROGRESS] = {
             width = "full"
         }
     }
+}
+
+BS.widgets[BS.W_ENDLESS_ARCHIVE_SCORE] = {
+    -- v2.0.10
+    name = "endlessArchiveScore",
+    update = function(widget, event, score)
+        local this = BS.W_ENDLESS_ARCHIVE_SCORE
+
+        if (not ENDLESS_DUNGEON_MANAGER:IsPlayerInEndlessDungeon()) then
+            widget:SetValue(ENDLESS_DUNGEON_MANAGER:GetScore())
+            widget:SetColour(unpack(BS.GetColour(this)))
+
+            return true
+        end
+
+        if (event == "ScoreChanged") then
+            currentScore = score
+        elseif (currentScore == 0) then
+            currentScore = ENDLESS_DUNGEON_MANAGER:GetScore()
+        end
+
+        widget:SetValue(currentScore)
+        widget:SetColour(unpack(BS.GetColour(this)))
+
+        return false
+    end,
+    events = _G.EVENT_PLAYER_ACTIVATED,
+    callback = {
+        [ENDLESS_DUNGEON_MANAGER] = {
+            {event = "ScoreChanged", label = "ScoreChanged"}
+        }
+    },
+    icon = "campaign/overview_indexicon_scoring_up",
+    tooltip = GetString(_G.BARSTEWARD_ENDLESS_ARCHIVE_SCORE),
+    hideWhenEqual = true
 }

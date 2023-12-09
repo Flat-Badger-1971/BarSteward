@@ -72,7 +72,7 @@ local function currencyWidget(currencyType, widgetIndex, text, eventList, hideWh
                 ((currencyType == _G.CURT_MONEY) and BS.Vars.Gold or BS.Vars.OtherCurrencies[currencyType]) or {}
             local thisCharacter = GetUnitName("player")
             local charactertt = ""
-            local useSeparators = BS.Vars.Controls[widgetIndex].UseSeparators
+            local useSeparators = BS.GetVar("UseSeparators", widgetIndex)
 
             for character, amount in pairs(otherCharacterCurrency) do
                 if (character ~= thisCharacter) then
@@ -97,19 +97,20 @@ local function currencyWidget(currencyType, widgetIndex, text, eventList, hideWh
 
             local toDisplay = currencyInBag
             local separated = currencyInBag .. "/" .. currencyInBank
+            local vcType = BS.GetVar(ctype, widgetIndex)
 
-            if (BS.Vars.Controls[widgetIndex][ctype] == GetString(text.bank)) then
+            if (vcType == GetString(text.bank)) then
                 toDisplay = currencyInBank
-            elseif (BS.Vars.Controls[widgetIndex][ctype] == GetString(text.combined)) then
+            elseif (vcType == GetString(text.combined)) then
                 toDisplay = combined
-            elseif (BS.Vars.Controls[widgetIndex][ctype] == GetString(text.separated)) then
+            elseif (vcType == GetString(text.separated)) then
                 toDisplay = separated
-            elseif (BS.Vars.Controls[widgetIndex][ctype] == GetString(text.everyWhere)) then
+            elseif (vcType == GetString(text.everyWhere)) then
                 toDisplay = allCharacters
             end
 
             widget:SetValue(toDisplay)
-            widget:SetColour(unpack(BS.Vars.Controls[widgetIndex].Colour or BS.Vars.DefaultColour))
+            widget:SetColour(unpack(BS.GetColour(widgetIndex)))
 
             -- update the tooltip
             local ttt =
@@ -178,12 +179,12 @@ BS.widgets[BS.W_CROWN_GEMS] = {
         local this = BS.W_CROWN_GEMS
         local gems = GetCurrencyAmount(_G.CURT_CROWN_GEMS, _G.CURRENCY_LOCATION_ACCOUNT)
 
-        if (BS.Vars.Controls[this].UseSeparators == true) then
+        if (BS.GetVar("UseSeparators", this) == true) then
             gems = BS.AddSeparators(gems)
         end
 
         widget:SetValue(gems)
-        widget:SetColour(unpack(BS.Vars.Controls[this].Colour or BS.Vars.DefaultColour))
+        widget:SetColour(unpack(BS.GetColour(this)))
 
         local tt = GetString(_G.BARSTEWARD_CROWN_GEMS) .. BS.LF
 
@@ -212,7 +213,7 @@ BS.widgets[BS.W_CROWNS] = {
         end
 
         widget:SetValue(crowns)
-        widget:SetColour(unpack(BS.Vars.Controls[this].Colour or BS.Vars.DefaultColour))
+        widget:SetColour(unpack(BS.GetColour(this)))
 
         local tt = GetString(_G.BARSTEWARD_CROWNS) .. BS.LF
 
@@ -234,29 +235,29 @@ BS.widgets[BS.W_EVENT_TICKETS] = {
     name = "eventTickets",
     update = function(widget)
         local this = BS.W_EVENT_TICKETS
-        local vars = BS.Vars.Controls[this]
         local tickets = GetCurrencyAmount(_G.CURT_EVENT_TICKETS, _G.CURRENCY_LOCATION_ACCOUNT)
         local maxTickets = GetMaxPossibleCurrency(_G.CURT_EVENT_TICKETS, _G.CURRENCY_LOCATION_ACCOUNT)
-        local noLimitColour = vars.NoLimitColour and "|cf9f9f9" or ""
-        local noLimitTerminator = vars.NoLimitColour and "|r" or ""
+        local noLimitColour = BS.GetVar("NoLimitColour", this) and "|cf9f9f9" or ""
+        local noLimitTerminator = BS.GetVar("NoLimitColour", this) and "|r" or ""
         local value =
-            tickets .. (vars.HideLimit and "" or (noLimitColour .. "/" .. tostring(maxTickets) .. noLimitTerminator))
-        local widthValue = tickets .. (vars.HideLimit and "" or ("/" .. tostring(maxTickets)))
+            tickets ..
+            (BS.GetVar("HideLimit", this) and "" or (noLimitColour .. "/" .. tostring(maxTickets) .. noLimitTerminator))
+        local widthValue = tickets .. (BS.GetVar("HideLimit", this) and "" or ("/" .. tostring(maxTickets)))
         local pc = BS.ToPercent(tickets, maxTickets)
 
-        if (vars.ShowPercent) then
+        if (BS.GetVar("ShowPercent", this)) then
             value = pc .. "%"
         end
 
-        local colour = vars.Colour or BS.Vars.DefaultColour
+        local colour = BS.GetColour(this)
 
-        if (tickets > vars.DangerValue) then
-            colour = vars.DangerColour or BS.Vars.DefaultDangerColour
+        if (tickets > BS.GetVar("DangerValue", this)) then
+            colour = BS.GetColour(this, "Danger")
 
-            if (vars.Announce) then
+            if (BS.GetVar("Announce", this)) then
                 local announce = true
                 local previousTime = BS.Vars.PreviousAnnounceTime[this] or (os.time() - 100)
-                local debounceTime = (vars.DebounceTime or 5) * 60
+                local debounceTime = (BS.GetVar("DebounceTime", this) or 5) * 60
 
                 if (os.time() - previousTime <= debounceTime) then
                     announce = false
@@ -275,9 +276,9 @@ BS.widgets[BS.W_EVENT_TICKETS] = {
             end
         end
 
-        if (vars.MaxValue) then
+        if (BS.GetVar("MaxValue", this)) then
             if (tickets == maxTickets) then
-                colour = vars.MaxColour or BS.Vars.DefaultMaxColour
+                colour = BS.GetColour(this, "Max")
             end
         end
 
@@ -325,12 +326,12 @@ BS.widgets[BS.W_SEALS_OF_ENDEAVOUR] = {
         local this = BS.W_SEALS_OF_ENDEAVOUR
         local seals = GetCurrencyAmount(_G.CURT_ENDEAVOR_SEALS, _G.CURRENCY_LOCATION_ACCOUNT)
 
-        if (BS.Vars.Controls[this].UseSeparators == true) then
+        if (BS.GetVar("UseSeparators", this) == true) then
             seals = BS.AddSeparators(seals)
         end
 
         widget:SetValue(seals)
-        widget:SetColour(unpack(BS.Vars.Controls[this].Colour or BS.Vars.DefaultColour))
+        widget:SetColour(unpack(BS.GetColour(this)))
 
         local tt = BS.Format(_G.SI_CROWN_STORE_MENU_SEALS_STORE_LABEL) .. BS.LF
 
@@ -378,44 +379,45 @@ BS.widgets[BS.W_TELVAR_STONES] =
 BS.widgets[BS.W_TRANSMUTE_CRYSTALS] = {
     name = "transmuteCrystals",
     update = function(widget)
-        local vars = BS.Vars.Controls[BS.W_TRANSMUTE_CRYSTALS]
+        local this = BS.W_TRANSMUTE_CRYSTALS
         local crystals = GetCurrencyAmount(_G.CURT_CHAOTIC_CREATIA, _G.CURRENCY_LOCATION_ACCOUNT)
         local maxCrystals = GetMaxPossibleCurrency(_G.CURT_CHAOTIC_CREATIA, _G.CURRENCY_LOCATION_ACCOUNT)
-        local value = crystals .. (vars.HideLimit and "" or ("/" .. tostring(maxCrystals)))
+        local value = crystals .. (BS.GetVar("HideLimit", this) and "" or ("/" .. tostring(maxCrystals)))
         local pc = BS.ToPercent(crystals, 1000)
-        local colour = vars.Colour or BS.Vars.DefaultColour
+        local colour = BS.GetColour(this)
+        local warningValue, dangerValue = BS.GetVar("WarningValue", this), BS.GetVar("DangerValue", this)
 
-        if (vars.Invert) then
-            if ((vars.WarningValue or 0) > 0) then
-                if (crystals >= vars.WarningValue) then
-                    colour = vars.WarningColour or BS.Vars.DefaultWarningColour
+        if (BS.GetVar("Invert", this)) then
+            if ((warningValue or 0) > 0) then
+                if (crystals >= warningValue) then
+                    colour = BS.GetColour(this, "Warning")
                 end
             end
-            if ((vars.DangerValue or 0) > 0) then
-                if (crystals >= vars.DangerValue) then
-                    colour = vars.DangerColour or BS.Vars.DefaultDangerColour
+            if ((dangerValue or 0) > 0) then
+                if (crystals >= dangerValue) then
+                    colour = BS.GetColour(this, "Danger")
                 end
             end
         else
-            if ((vars.WarningValue or 0) > 0) then
-                if (crystals <= vars.WarningValue) then
-                    colour = vars.WarningColour or BS.Vars.DefaultWarningColour
+            if ((warningValue or 0) > 0) then
+                if (crystals <= warningValue) then
+                    colour = BS.GetColour(this, "Warning")
                 end
             end
-            if ((vars.DangerValue or 0) > 0) then
-                if (crystals <= vars.DangerValue) then
-                    colour = vars.DangerColour or BS.Vars.DefaultDangerColour
+            if ((dangerValue or 0) > 0) then
+                if (crystals <= dangerValue) then
+                    colour = BS.GetColour(this, "Danger")
                 end
             end
         end
 
-        if (vars.MaxValue) then
+        if (BS.GetVar("MaxValue", this)) then
             if (crystals == maxCrystals) then
-                colour = vars.MaxColour or BS.Vars.DefaultMaxColour
+                colour = BS.GetColour(this, "Max")
             end
         end
 
-        if (vars.ShowPercent) then
+        if (BS.GetVar("ShowPercent", this)) then
             value = pc .. "%"
         end
 
@@ -437,7 +439,7 @@ BS.widgets[BS.W_UNDAUNTED_KEYS] = {
     name = "undauntedKeys",
     update = function(widget)
         widget:SetValue(GetCurrencyAmount(_G.CURT_UNDAUNTED_KEYS, _G.CURRENCY_LOCATION_ACCOUNT))
-        widget:SetColour(unpack(BS.Vars.Controls[BS.W_UNDAUNTED_KEYS].Colour or BS.Vars.DefaultColour))
+        widget:SetColour(unpack(BS.GetColour(BS.W_UNDAUNTED_KEYS)))
 
         local tt = getcrownStoreCurrencies(true)
 
@@ -477,7 +479,7 @@ BS.widgets[BS.W_ARCHIVAL_FRAGMENTS] = {
         end
 
         widget:SetValue(qty)
-        widget:SetColour(unpack(BS.Vars.Controls[this].Colour or BS.Vars.DefaultColour))
+        widget:SetColour(unpack(BS.GetColour(this)))
 
         local tt = GetString(_G.BARSTEWARD_ARCHIVAL_FRAGMENTS) .. BS.LF
 
@@ -494,4 +496,3 @@ BS.widgets[BS.W_ARCHIVAL_FRAGMENTS] = {
         SCENE_MANAGER:Show("show_market")
     end
 }
-

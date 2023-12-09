@@ -21,20 +21,19 @@ BS.widgets[BS.W_ACTIVE_BAR] = {
     name = "activeBar",
     update = function(widget, event, _, _, _, instanceDisplayType)
         local this = BS.W_ACTIVE_BAR
-        local vars = BS.Vars.Controls[this]
         local activeWeaponPair = GetActiveWeaponPairInfo()
-        local mainIcon = vars.MainIcon or BS.Defaults.MainBarIcon
-        local backIcon = vars.BackIcon or BS.Defaults.BackBarIcon
+        local mainIcon = BS.GetVar("MainIcon", this) or BS.Defaults.MainBarIcon
+        local backIcon = BS.GetVar("BackIcon", this) or BS.Defaults.BackBarIcon
         local icon = activeWeaponPair == _G.ACTIVE_WEAPON_PAIR_BACKUP and backIcon or mainIcon
         local text =
             activeWeaponPair == _G.ACTIVE_WEAPON_PAIR_BACKUP and GetString(_G.BARSTEWARD_BACK_BAR) or
             GetString(_G.BARSTEWARD_MAIN_BAR)
 
-        if (event == _G.EVENT_PREPARE_FOR_JUMP and vars.Warn) then
+        if (event == _G.EVENT_PREPARE_FOR_JUMP and BS.GetVar("Warn", this)) then
             if (not ignoreTypes[instanceDisplayType]) then
                 if
                     (activeWeaponPair == _G.ACTIVE_WEAPON_PAIR_BACKUP or
-                        (activeWeaponPair == _G.ACTIVE_WEAPON_PAIR_MAIN and not vars.WarnOnBackOnly))
+                        (activeWeaponPair == _G.ACTIVE_WEAPON_PAIR_MAIN and not BS.GetVar("WarnOnBackOnly", this)))
                  then
                     zo_callLater(
                         function()
@@ -53,8 +52,9 @@ BS.widgets[BS.W_ACTIVE_BAR] = {
             end
         else
             local colour =
-                activeWeaponPair == _G.ACTIVE_WEAPON_PAIR_BACKUP and (vars.BackColour or BS.Vars.DefaultColour) or
-                (vars.MainColour or BS.Defaults.DefaultColour)
+                activeWeaponPair == _G.ACTIVE_WEAPON_PAIR_BACKUP and
+                (BS.GetVar("BackColour", this) or BS.GetVar("DefaultColour")) or
+                (BS.GetVar("MainColour", this) or BS.Defaults.DefaultColour)
 
             widget:SetColour(unpack(colour))
             widget:SetValue(text)

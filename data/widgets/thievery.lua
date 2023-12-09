@@ -51,7 +51,7 @@ BS.widgets[BS.W_STOLEN_ITEMS] = {
         end
 
         widget:SetValue(value)
-        widget:SetColour(unpack(BS.Vars.Controls[this].Colour or BS.Vars.DefaultColour))
+        widget:SetColour(unpack(BS.GetColour(this)))
 
         local ttt = GetString(_G.BARSTEWARD_STOLEN) .. BS.LF .. "|cf9f9f9"
         ttt = ttt .. BS.BAGICON .. " " .. bagCounts.carrying .. " " .. BS.BANKICON .. " " .. bagCounts.banked .. "|r"
@@ -115,20 +115,20 @@ BS.widgets[BS.W_FENCE_TRANSACTIONS] = {
     -- v1.0.2
     name = "fenceSlots",
     update = function(widget)
-        local vars = BS.Vars.Controls[BS.W_FENCE_TRANSACTIONS]
+        local this = BS.W_FENCE_TRANSACTIONS
         local max = FENCE_MANAGER:GetNumTotalTransactions(_G.ZO_MODE_STORE_SELL_STOLEN)
         local used = FENCE_MANAGER:GetNumTransactionsUsed(_G.ZO_MODE_STORE_SELL_STOLEN)
         local pcUsed = math.floor(used / max) * 100
-        local colour = vars.OkColour or BS.Vars.DefaultOkColour
-        local noLimitColour = vars.NoLimitColour and "|cf9f9f9" or ""
-        local noLimitTerminator = vars.NoLimitColour and "|r" or ""
-        local value = used .. (vars.HideLimit and "" or (noLimitColour .. "/" .. max .. noLimitTerminator))
-        local widthValue = used .. (vars.HideLimit and "" or ("/" .. max))
+        local colour = BS.GetColour(this, "Ok")
+        local noLimitColour = BS.GetVar("NoLimitColour", this) and "|cf9f9f9" or ""
+        local noLimitTerminator = BS.GetVar("NoLimitColour", this) and "|r" or ""
+        local value = used .. (BS.GetVar("HideLimit", this) and "" or (noLimitColour .. "/" .. max .. noLimitTerminator))
+        local widthValue = used .. (BS.GetVar("HideLimit", this) and "" or ("/" .. max))
 
-        if (pcUsed >= vars.WarningValue and pcUsed < vars.DangerValue) then
-            colour = vars.WarningColour or BS.Vars.DefaultWarningColour
-        elseif (pcUsed >= vars.DangerValue) then
-            colour = vars.DangerColour or BS.Vars.DefaultDangerColour
+        if (pcUsed >= BS.GetVar("WarningValue", this) and pcUsed < BS.GetVar("DangerValue", this)) then
+            colour = BS.GetColour(this, "Warning")
+        elseif (pcUsed >= BS.GetVar("DangerValue", this)) then
+            colour = BS.GetColour(this, "Danger")
         end
 
         widget:SetColour(unpack(colour))
@@ -146,20 +146,20 @@ BS.widgets[BS.W_LAUNDER_TRANSACTIONS] = {
     -- v1.2.15
     name = "launderlots",
     update = function(widget)
-        local vars = BS.Vars.Controls[BS.W_LAUNDER_TRANSACTIONS]
+        local this = BS.W_LAUNDER_TRANSACTIONS
         local max = FENCE_MANAGER:GetNumTotalTransactions(_G.ZO_MODE_STORE_LAUNDER)
         local used = FENCE_MANAGER:GetNumTransactionsUsed(_G.ZO_MODE_STORE_LAUNDER)
         local pcUsed = math.floor(used / max) * 100
-        local colour = vars.OkColour or BS.Vars.DefaultOkColour
-        local noLimitColour = vars.NoLimitColour and "|cf9f9f9" or ""
-        local noLimitTerminator = vars.NoLimitColour and "|r" or ""
-        local value = used .. (vars.HideLimit and "" or (noLimitColour .. "/" .. max .. noLimitTerminator))
-        local widthValue = used .. (vars.HideLimit and "" or ("/" .. max))
+        local colour = BS.GetColour(this, "Ok")
+        local noLimitColour = BS.GetVar("NoLimitColour", this) and "|cf9f9f9" or ""
+        local noLimitTerminator = BS.GetVar("NoLimitColour", this) and "|r" or ""
+        local value = used .. (BS.GetVar("HideLimit", this) and "" or (noLimitColour .. "/" .. max .. noLimitTerminator))
+        local widthValue = used .. (BS.GetVar("HideLimit", this) and "" or ("/" .. max))
 
-        if (pcUsed >= vars.WarningValue and pcUsed < vars.DangerValue) then
-            colour = vars.WarningColour or BS.Vars.DefaultWarningColour
-        elseif (pcUsed >= vars.DangerValue) then
-            colour = vars.DangerColour or BS.Vars.DefaultDangerColour
+        if (pcUsed >= BS.GetVar("WarningValue", this) and pcUsed < BS.GetVar("DangerValue", this)) then
+            colour = BS.GetColour(this, "Warning")
+        elseif (pcUsed >= BS.GetVar("DangerValue", this)) then
+            colour = BS.GetColour(this, "Danger")
         end
 
         widget:SetColour(unpack(colour))

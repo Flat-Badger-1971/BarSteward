@@ -721,6 +721,10 @@ BS.Defaults = {
             Cat = cat.Activities,
             Autohide = false,
             Progress = true
+        },
+        [BS.W_ENDLESS_ARCHIVE_SCORE] = {
+            Cat = cat.Activities,
+            Autohide = false
         }
     }
 }

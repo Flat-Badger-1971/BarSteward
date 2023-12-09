@@ -15,7 +15,7 @@ BS.widgets[BS.W_MUNDUS_STONE] = {
                 mundusId = id
                 mundusName = BS.Format(name)
 
-                if (BS.Vars.Controls[this].Shorten) then
+                if (BS.GetVar("Shorten", this)) then
                     local colonPosition = mundusName:find(":")
 
                     mundusName = mundusName:gsub(mundusName:sub(1, colonPosition + 1), "")
@@ -28,7 +28,7 @@ BS.widgets[BS.W_MUNDUS_STONE] = {
         if (mundusId ~= nil) then
             widget:SetIcon(mundusIcon)
             widget:SetValue(mundusName)
-            widget:SetColour(unpack(BS.Vars.Controls[this].Colour or BS.Vars.DefaultColour))
+            widget:SetColour(unpack(BS.GetColour(this)))
 
             local tt = BS.Format(_G.SI_CONFIRM_MUNDUS_STONE_TITLE) .. BS.LF
             local desc = BS.Format(GetAbilityDescription(mundusId))
@@ -40,7 +40,7 @@ BS.widgets[BS.W_MUNDUS_STONE] = {
             return mundusName
         else
             widget:SetValue(BS.Format(_G.SI_CRAFTING_INVALID_ITEM_STYLE))
-            widget:SetColour(unpack(BS.Vars.Controls[this].DangerColour or BS.Vars.DefaultDangerColour))
+            widget:SetColour(unpack(BS.GetVar(this, "Danger")))
         end
 
         return ""
@@ -74,7 +74,7 @@ BS.widgets[BS.W_RECALL_COOLDOWN] = {
         local cooldownTime = GetRecallCooldown() / 1000
 
         widget:SetValue(BS.SecondsToTime(cooldownTime, true, true))
-        widget:SetColour(unpack(BS.GetVar("Colour", BS.W_RECALL_COOLDOWN) or BS.GetVar("DefaultColour")))
+        widget:SetColour(unpack(BS.GetColour(BS.W_RECALL_COOLDOWN)))
 
         return cooldownTime
     end,
@@ -89,7 +89,7 @@ BS.widgets[BS.W_ZONE] = {
     name = "currentZone",
     update = function(widget)
         widget:SetValue(BS.Format(GetUnitZone("player")))
-        widget:SetColour(unpack(BS.Vars.Controls[BS.W_ZONE].Colour or BS.Vars.DefaultColour))
+        widget:SetColour(unpack(BS.GetColour(BS.W_ZONE)))
 
         return widget:GetValue()
     end,
@@ -112,7 +112,7 @@ BS.widgets[BS.W_PLAYER_NAME] = {
         local playerName = GetUnitName("player")
 
         widget:SetValue(ZO_FormatUserFacingDisplayName(playerName))
-        widget:SetColour(unpack(BS.Vars.Controls[BS.W_PLAYER_NAME].Colour or BS.Vars.DefaultColour))
+        widget:SetColour(unpack(BS.GetColour(BS.W_PLAYER_NAME)))
 
         local classId = GetUnitClassId("player")
         local icon = GetClassIcon(classId)
@@ -138,7 +138,7 @@ BS.widgets[BS.W_RACE] = {
     name = "playerRace",
     update = function(widget)
         widget:SetValue(BS.Format(GetUnitRace("player")))
-        widget:SetColour(unpack(BS.Vars.Controls[BS.W_RACE].Colour or BS.Vars.DefaultColour))
+        widget:SetColour(unpack(BS.GetColour(BS.W_RACE)))
 
         return widget:GetValue()
     end,
@@ -155,9 +155,9 @@ BS.widgets[BS.W_CLASS] = {
         local classId = GetUnitClassId("player")
         local icon = GetClassIcon(classId)
 
-        if (not BS.Vars.Controls[this].NoValue) then
+        if (not BS.GetVar("NoValue", this)) then
             widget:SetValue(BS.Format(GetUnitClass("player")))
-            widget:SetColour(unpack(BS.Vars.Controls[this].Colour or BS.Vars.DefaultColour))
+            widget:SetColour(unpack(BS.GetColour(this)))
         end
 
         widget:SetIcon(icon)
@@ -200,7 +200,7 @@ BS.widgets[BS.W_ALLIANCE] = {
             icon = "scoredisplay/redflag"
         end
 
-        if (not BS.Vars.Controls[BS.W_ALLIANCE].NoValue) then
+        if (not BS.GetVar("NoValue", BS.W_ALLIANCE)) then
             widget:SetValue(" " .. BS.Format(GetAllianceName(alliance)))
             widget:SetColour(colour.r, colour.g, colour.b, colour.a)
         end
@@ -265,7 +265,7 @@ BS.widgets[BS.W_SKYSHARDS] = {
         end
 
         widget:SetValue(discoveredInZone .. "/" .. inZoneSkyshards)
-        widget:SetColour(unpack(BS.Vars.Controls[BS.W_SKYSHARDS].Colour or BS.Vars.DefaultColour))
+        widget:SetColour(unpack(BS.GetColour(BS.W_SKYSHARDS)))
 
         local ttt = BS.Format(_G.SI_MAPFILTER15) .. BS.LF
 
@@ -286,7 +286,7 @@ BS.widgets[BS.W_SKILL_POINTS] = {
         local unspent = GetAvailableSkillPoints()
 
         widget:SetValue(unspent)
-        widget:SetColour(unpack(BS.Vars.Controls[BS.W_SKILL_POINTS].Colour or BS.Vars.DefaultOkColour))
+        widget:SetColour(unpack(BS.GetColour(BS.W_SKILL_POINTS, nil, "DefaultOkColour")))
 
         return unspent
     end,
@@ -572,7 +572,7 @@ local function updateWidget()
         damageTime = math.max(damageTime or 1, 1)
 
         local dps = zo_round((singleTargetDamage or 0) / damageTime)
-        local useSeparators = BS.Vars.Controls[BS.W_DPS].UseSeparators
+        local useSeparators = BS.GetVar("UseSeparators", BS.W_DPS)
 
         if (dps > maxDamage) then
             maxDamage = dps
@@ -582,7 +582,7 @@ local function updateWidget()
         local value = tostring(useSeparators and BS.AddSeparators(dps) or dps)
 
         dpsWidget:SetValue(value)
-        dpsWidget:SetColour(unpack(BS.Vars.Controls[BS.W_DPS].Colour or BS.Vars.DefaultColour))
+        dpsWidget:SetColour(unpack(BS.GetColour(BS.W_DPS)))
         dpsWidget:SetIcon(icon)
 
         local ttt = GetString(_G.BARSTEWARD_DPS) .. BS.LF
@@ -689,10 +689,10 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
         local disciplineType = GetChampionPointPoolForRank(earned + 1)
         local disciplineData = CHAMPION_DATA_MANAGER:FindChampionDisciplineDataByType(disciplineType)
         local cpicon = disciplineData:GetHUDIcon()
-        local vars = BS.Vars.Controls[BS.W_CHAMPION_POINTS]
+        local this = BS.W_CHAMPION_POINTS
         local cp = {}
 
-        if (vars.UseSeparators == true) then
+        if (BS.GetVar("UseSeparators", this) == true) then
             earned = BS.AddSeparators(earned)
         end
 
@@ -751,7 +751,7 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
         local value = earned .. " (" .. pc .. "%)"
         local plainValue = value
 
-        if (vars.ShowUnspent) then
+        if (BS.GetVar("ShowUnspent", this)) then
             if (unspent == 0) then
                 value = earned
                 plainValue = earned
@@ -761,12 +761,12 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
             end
         end
 
-        if (vars.ShowUnslottedCount and unslotted > 0) then
+        if (BS.GetVar("ShowUnslottedCount", this) and unslotted > 0) then
             plainValue = plainValue .. " - " .. unslotted
             value = value .. " - |cff0000" .. unslotted .. "|r"
         end
 
-        widget:SetColour(unpack(vars.Colour or BS.Vars.DefaultColour))
+        widget:SetColour(unpack(BS.GetColour(this)))
         widget:SetValue(value, plainValue)
         widget:SetIcon(cpicon)
 
@@ -825,7 +825,7 @@ BS.widgets[BS.W_PLAYER_LOCATION] = {
         end
 
         widget:SetValue(BS.Format(area))
-        widget:SetColour(unpack(BS.Vars.Controls[BS.W_PLAYER_LOCATION].Colour or BS.Vars.DefaultColour))
+        widget:SetColour(unpack(BS.GetColour(BS.W_PLAYER_LOCATION)))
 
         return widget:GetValue()
     end,
@@ -848,13 +848,13 @@ BS.widgets[BS.W_PLAYER_EXPERIENCE] = {
         local earned = GetPlayerChampionPointsEarned()
         local xp, xplvl = GetPlayerChampionXP(), GetNumChampionXPInChampionPoint(earned)
         local pc = math.floor((xp / xplvl) * 100)
-        local vars = BS.Vars.Controls[BS.W_PLAYER_EXPERIENCE]
+        local this = BS.W_PLAYER_EXPERIENCE
         local out
 
-        if (vars.ShowPercent) then
+        if (BS.GetVar("ShowPercent", this)) then
             out = pc .. "%"
         else
-            if (vars.UseSeparators == true) then
+            if (BS.GetVar("UseSeparators", this) == true) then
                 xp = BS.AddSeparators(xp)
                 xplvl = BS.AddSeparators(xplvl)
             end
@@ -862,7 +862,7 @@ BS.widgets[BS.W_PLAYER_EXPERIENCE] = {
             out = xp .. " / " .. xplvl
         end
 
-        widget:SetColour(unpack(vars.Colour or BS.Vars.DefaultColour))
+        widget:SetColour(unpack(BS.GetColour(this)))
         widget:SetValue(out)
 
         return xp
@@ -904,7 +904,7 @@ BS.widgets[BS.W_VAMPIRISM] = {
         end
 
         widget:SetValue(text)
-        widget:SetColour(unpack(BS.Vars.Controls[BS.W_VAMPIRISM].Colour or BS.Vars.DefaultColour))
+        widget:SetColour(unpack(BS.GetColour(BS.W_VAMPIRISM)))
 
         local tt = BS.Format(_G.SI_CURSETYPE1)
         tt = tt .. BS.LF .. "|cf9f9f9" .. text .. "|r"
@@ -949,7 +949,7 @@ BS.widgets[BS.W_VAMPIRISM_TIMER] = {
 
         local remaining = 0
         local time = ""
-        local colour = BS.GetVar("OkColour", this) or BS.GetVar("DefaultOkColour")
+        local colour = BS.GetColour(this, "Ok")
 
         if (isVampire) then
             remaining = ending - GetGameTimeSeconds()
@@ -1034,7 +1034,7 @@ BS.widgets[BS.W_VAMPIRISM_FEED_TIMER] = {
 
         local remaining = 0
         local time = ""
-        local colour = BS.GetVar("OkColour", this) or BS.GetVar("DefaultOkColour")
+        local colour = BS.GetColour(this, "Ok")
 
         if (isVampireWithFeed) then
             remaining = ending - GetGameTimeSeconds()

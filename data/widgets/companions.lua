@@ -58,13 +58,13 @@ BS.widgets[BS.W_COMPANION_LEVEL] = {
 
         if (not isMaxLevel) then
             percent = math.max(zo_roundToNearest((currentXPInLevel or 0) / totalXPInLevel, 0.01), 0) * 100
-        elseif (BS.Vars.Controls[this].HideWhenMaxLevel) then
+        elseif (BS.GetVar("HideWhenMaxLevel", this)) then
             return companionLevel
         end
 
         local text = companionLevel
 
-        if (BS.Vars.Controls[this].ShowXPPC and not isMaxLevel) then
+        if (BS.GetVar("ShowXPPC", this) and not isMaxLevel) then
             text = text .. " (" .. percent .. "%)"
         end
 
@@ -74,7 +74,7 @@ BS.widgets[BS.W_COMPANION_LEVEL] = {
 
         widget:SetIcon(icon)
         widget:SetValue(text)
-        widget:SetColour(unpack(BS.Vars.Controls[this].Colour or BS.Vars.DefaultColour))
+        widget:SetColour(unpack(BS.GetColour(this)))
 
         local ttt = GetString(_G.BARSTEWARD_COMPANION_LEVEL) .. BS.LF
         local progress = (currentXPInLevel or 0) .. " / " .. totalXPInLevel
@@ -134,7 +134,7 @@ for k, v in pairs(BS.COMPANION_DEFIDS) do
             local name = ZO_CachedStrFormat(_G.SI_UNIT_NAME, GetCollectibleInfo(GetCompanionCollectibleId(v)))
 
             widget:SetValue(name)
-            widget:SetColour(unpack(BS.Vars.Controls[this].Colour or BS.Vars.DefaultColour))
+            widget:SetColour(unpack(BS.GetColour(this)))
 
             return name
         end,

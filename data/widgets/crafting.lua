@@ -56,7 +56,7 @@ local function getDisplay(timeRemaining, widgetIndex, inUse, maxResearch)
     local hours = timeRemaining / 60 / 60
     local days = math.floor((hours / 24) + 0.5)
 
-    if (BS.Vars.Controls[widgetIndex].ShowDays and days >= 1 and hours > 24) then
+    if (BS.GetVar("ShowDays", widgetIndex) and days >= 1 and hours > 24) then
         display = zo_strformat(GetString(_G.BARSTEWARD_DAYS), days)
     else
         display =
@@ -64,15 +64,14 @@ local function getDisplay(timeRemaining, widgetIndex, inUse, maxResearch)
             timeRemaining,
             false,
             false,
-            BS.Vars.Controls[widgetIndex].HideSeconds,
-            BS.Vars.Controls[widgetIndex].Format,
-            BS.Vars.Controls[widgetIndex].HideDaysWhenZero
+            BS.GetVar("HideSeconds", widgetIndex),
+            BS.GetVar("Format", widgetIndex),
+            BS.GetVar("HideDaysWhenZero", widgetIndex)
         )
     end
 
     if (inUse ~= nil) then
-        display =
-            display .. (BS.Vars.Controls[widgetIndex].ShowSlots and " (" .. inUse .. "/" .. maxResearch .. ")" or "")
+        display = display .. (BS.GetVar("ShowSlots", widgetIndex) and " (" .. inUse .. "/" .. maxResearch .. ")" or "")
     end
 
     return display
@@ -115,7 +114,7 @@ BS.widgets[BS.W_BLACKSMITHING] = {
     update = function(widget)
         local this = BS.W_BLACKSMITHING
         local timeRemaining, maxResearch, inUse = getResearchTimer(_G.CRAFTING_TYPE_BLACKSMITHING)
-        local colour = BS.GetVar("OkColour", this) or BS.GetVar("DefaultOkColour")
+        local colour = BS.GetColour(this, "Ok")
 
         colour = BS.GetTimeColour(timeRemaining, this) or colour
         fullyUsed[_G.CRAFTING_TYPE_BLACKSMITHING] = inUse == maxResearch
@@ -156,7 +155,7 @@ BS.widgets[BS.W_WOODWORKING] = {
     update = function(widget)
         local this = BS.W_WOODWORKING
         local timeRemaining, maxResearch, inUse = getResearchTimer(_G.CRAFTING_TYPE_WOODWORKING)
-        local colour = BS.GetVar("OkColour", this) or BS.GetVar("DefaultOkColour")
+        local colour = BS.GetColour(this, "Ok")
 
         colour = BS.GetTimeColour(timeRemaining, this) or colour
         fullyUsed[_G.CRAFTING_TYPE_WOODWORKING] = inUse == maxResearch
@@ -197,7 +196,7 @@ BS.widgets[BS.W_CLOTHING] = {
     update = function(widget)
         local this = BS.W_CLOTHING
         local timeRemaining, maxResearch, inUse = getResearchTimer(_G.CRAFTING_TYPE_CLOTHIER)
-        local colour = BS.GetVar("OkColour", this) or BS.GetVar("DefaultOkColour")
+        local colour = BS.GetColour(this, "Ok")
 
         colour = BS.GetTimeColour(timeRemaining, this) or colour
         fullyUsed[_G.CRAFTING_TYPE_CLOTHIER] = inUse == maxResearch
@@ -237,7 +236,7 @@ BS.widgets[BS.W_JEWELCRAFTING] = {
     update = function(widget)
         local this = BS.W_JEWELCRAFTING
         local timeRemaining, maxResearch, inUse = getResearchTimer(_G.CRAFTING_TYPE_JEWELRYCRAFTING)
-        local colour = BS.GetVar("OkColour", this) or BS.GetVar("DefaultOkColour")
+        local colour = BS.GetColour(this, "Ok")
 
         colour = BS.GetTimeColour(timeRemaining, this) or colour
         fullyUsed[_G.CRAFTING_TYPE_JEWELRYCRAFTING] = inUse == maxResearch
@@ -419,21 +418,21 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
         done = countState("done", character)
         ready = countState("ready", character)
 
-        local colour = BS.Vars.DefaultColour
+        local colour = BS.GetVar("DefaultColour")
 
         if (done == qualifiedCount) then
-            colour = BS.Vars.DefaultOkColour
+            colour = BS.GetVar("DefaultOkColour")
             BS.Vars.dailyQuests[character].complete = true
         elseif (ready == qualifiedCount) then
             colour = {(255 / 52), (255 / 164), (255 / 2350), 1}
         elseif (added == qualifiedCount) then
-            colour = BS.Vars.DefaultWarningColour
+            colour = BS.GetVar("DefaultWarningColour")
             BS.Vars.dailyQuests[character].pickedup = true
         end
 
         if (update) then
             local tName
-            if (BS.Vars.Controls[this].UseIcons) then
+            if (BS.GetVar("UseIcons", this)) then
                 local output = ""
 
                 for craftingType, info in pairs(BS.CRAFTING_ACHIEVEMENT) do
@@ -460,19 +459,27 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
                 local tdone = BS.Vars.dailyQuests[character][name] == "done"
                 local tadded = BS.Vars.dailyQuests[character][name] == "added"
                 local tready = BS.Vars.dailyQuests[character][name] == "ready"
-                local tcolour = BS.ARGBConvert(BS.Vars.DefaultColour)
+                local tcolour = BS.ARGBConvert(BS.GetVar("DefaultColour"))
 
                 if (tready) then
                     ttt = string.format("%s%s|c%s", ttt, BS.LF, BS.COLOURS.BLUE)
                     ttt = string.format("%s%s - %s|r", ttt, name, GetString(_G.BARSTEWARD_READY))
                 elseif (tdone) then
-                    ttt = string.format("%s%s%s", ttt, BS.LF, BS.ARGBConvert(BS.Vars.DefaultOkColour))
+                    ttt = string.format("%s%s%s", ttt, BS.LF, BS.ARGBConvert(BS.GetVar("DefaultOkColour")))
                     ttt = string.format("%s%s - %s|r", ttt, name, GetString(_G.BARSTEWARD_COMPLETED))
                 elseif (tadded) then
-                    ttt = string.format("%s%s%s", ttt, BS.LF, BS.ARGBConvert(BS.Vars.DefaultWarningColour))
+                    ttt = string.format("%s%s%s", ttt, BS.LF, BS.ARGBConvert(BS.GetVar("DefaultWarningColour")))
                     ttt = string.format("%s%s - %s|r", ttt, name, GetString(_G.BARSTEWARD_PICKED_UP))
                 else
-                    ttt = string.format("%s%s%s%s - %s|r", ttt, BS.LF, tcolour, name, GetString(_G.BARSTEWARD_NOT_PICKED_UP))
+                    ttt =
+                        string.format(
+                        "%s%s%s%s - %s|r",
+                        ttt,
+                        BS.LF,
+                        tcolour,
+                        name,
+                        GetString(_G.BARSTEWARD_NOT_PICKED_UP)
+                    )
                 end
             end
 
@@ -488,9 +495,9 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
                             local dccolour = ccolour
 
                             if (BS.Vars.dailyQuests[char].complete) then
-                                dccolour = BS.ARGBConvert(BS.Vars.DefaultOkColour)
+                                dccolour = BS.ARGBConvert(BS.GetVar("DefaultOkColour"))
                             elseif (BS.Vars.dailyQuests[char].pickedup) then
-                                dccolour = BS.ARGBConvert(BS.Vars.DefaultWarningColour)
+                                dccolour = BS.ARGBConvert(BS.GetVar("DefaultWarningColour"))
                             end
 
                             ttt = string.format("%s%s%s%s|r", ttt, BS.LF, dccolour, char)
@@ -613,7 +620,7 @@ BS.widgets[BS.W_RECIPES] = {
         local allFoodAndDrink = allFood + allDrink
         local allFurnishing = BS.recipeList.furnishing.known + BS.recipeList.furnishing.unknown
         local tt = recipes
-        local vars = BS.Vars.Controls[BS.W_RECIPES]
+        local this = BS.W_RECIPES
 
         tt = tt .. BS.LF .. "|cffd700"
         tt = tt .. BS.recipeList.food.known .. "/" .. allFood .. "|r |cf9f9f9"
@@ -626,13 +633,14 @@ BS.widgets[BS.W_RECIPES] = {
         tt = tt .. furnishing
 
         local value = BS.recipeList.food.known .. "/" .. allFood
-        local colour = vars.Colour or BS.Vars.DefaultColour
+        local colour = BS.GetColour(this)
+        local display = BS.GetVar("Display", this)
 
-        if (vars.Display == drink) then
+        if (display == drink) then
             value = BS.recipeList.drink.known .. "/" .. allDrink
-        elseif (vars.Display == foodAndDrink) then
+        elseif (display == foodAndDrink) then
             value = (BS.recipeList.drink.known + BS.recipeList.food.known) .. "/" .. allFoodAndDrink
-        elseif (vars.Display == furnishing) then
+        elseif (display == furnishing) then
             value = BS.recipeList.furnishing.known .. "/" .. allFurnishing
         end
 
@@ -680,10 +688,10 @@ BS.widgets[BS.W_UNKNOWN_WRIT_MOTIFS] = {
     -- v1.4.30
     name = "unknownWritMotifs",
     update = function(widget, event)
-        local vars = BS.Vars.Controls[BS.W_UNKNOWN_WRIT_MOTIFS]
+        local this = BS.W_UNKNOWN_WRIT_MOTIFS
 
         if (event == "initial") then
-            widget:SetColour(unpack(vars.Colour or BS.Vars.DefaultColour))
+            widget:SetColour(unpack(BS.GetColour(this)))
             return
         end
 
@@ -739,7 +747,7 @@ BS.widgets[BS.W_UNKNOWN_WRIT_MOTIFS] = {
 
         table.sort(display)
 
-        widget:SetColour(unpack(vars.Colour or BS.Vars.DefaultColour))
+        widget:SetColour(unpack(BS.GetColour(this)))
         widget:SetValue(#display)
 
         if (#display > 0) then

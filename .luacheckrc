@@ -42,7 +42,9 @@ read_globals = {
             GetAbilityStackCountTable = {read_only = true},
             GetAttemptsRemaining = {read_only = true},
             GetProgression = {read_only = true},
-            IsPlayerInEndlessDungeon = {read_only = true}
+            GetScore = {read_only = true},
+            IsPlayerInEndlessDungeon = {read_only = true},
+            RegisterCallback = {read_only = true}
         }
     },
     ["EVENT_MANAGER"] = {

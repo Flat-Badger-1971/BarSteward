@@ -26,7 +26,7 @@ BS.widgets[BS.W_MOUNT_TRAINING] = {
             remaining, total = GetTimeUntilCanBeTrained()
         end
 
-        local colour = BS.GetVar("OkColour", this) or BS.GetVar("DefaultOkColour")
+        local colour = BS.GetColour(this, "Ok")
         local time = "X"
 
         if (remaining ~= nil and total ~= nil) then

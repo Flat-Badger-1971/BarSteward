@@ -1620,9 +1620,16 @@ function BS.GetVar(name, widget)
     local value
 
     if (widget) then
-        value = BS.Vars.Controls[widget][name] or BS.Defaults.Controls[widget][name]
+        value = BS.Vars.Controls[widget][name]
+        if (value == nil) then
+            value = BS.Defaults.Controls[widget][name]
+        end
     else
-        value = BS.Vars[name] or BS.Defaults[name]
+        value = BS.Vars[name]
+
+        if (value == nil) then
+            value = BS.Defaults[name]
+        end
     end
 
     return value
@@ -1634,12 +1641,47 @@ function BS.GetTimeColour(value, this, multiplier)
     multiplier = multiplier or 3600
 
     if (value <= (BS.GetVar("DangerValue", this)) * multiplier) then
-        colour = BS.GetVar("DangerColour", this) or BS.GetVar("DefaultDangerColour")
+        colour = BS.GetColour(this, "Danger")
     elseif (value <= (BS.GetVar("WarningValue", this) * multiplier)) then
-        colour = BS.GetVar("WarningColour", this) or BS.GetVar("DefaultWarningColour")
+        colour = BS.GetColour(this, "Warning")
     end
 
     return colour
+end
+
+function BS.GetColour(this, colourType, default)
+    local colour = "Colour"
+    local defaultColour = "Default" .. colour
+    local defColour
+
+    if (colourType) then
+        colour = colourType .. colour
+        defaultColour = "Default" .. colour
+    end
+
+    if (default) then
+        defColour = BS.GetVar(default)
+    else
+        defColour = BS.GetVar(defaultColour)
+    end
+
+    return BS.GetVar(colour, this) or defColour
+end
+
+function BS.ToggleBarResizing(widgetIndex, toggle)
+    local barIndex = BS.Vars.Controls[widgetIndex].Bar
+
+    if (barIndex == 0) then
+        return
+    end
+
+    local barObject = BS.BarObjectPool:GetActiveObject(BS.BarObjects[barIndex])
+
+    if (barObject) then
+        local bar = barObject.bar
+
+        bar:SetResizeToFitDescendents(toggle == "on")
+    end
 end
 
 -- function BS.FindItem(text)
