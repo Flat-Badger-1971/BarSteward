@@ -4,6 +4,7 @@ Enabled defaults trimming to reduce the saved variables file size by up to 40%
 Updated widgets to handle default variables
 Score added to endless archive widget
 Endless Archive score widget added
+Endless Archive category added
 
 [color=#ff9900][b]Version: 2.0.9 ---------------[/b][/color]
 Endless Archive progress widget added

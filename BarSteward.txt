@@ -38,6 +38,7 @@ data/widgets/character.lua
 data/widgets/companions.lua
 data/widgets/crafting.lua
 data/widgets/currency.lua
+data/widgets/endlessArchive.lua
 data/widgets/housing.lua
 data/widgets/inventory.lua
 data/widgets/riding.lua

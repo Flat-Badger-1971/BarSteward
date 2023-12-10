@@ -152,20 +152,3 @@ BS.widgets[BS.W_ACTIVE_BAR] = {
         }
     }
 }
-
-BS.widgets[BS.W_ARCHIVE_PORT] = {
-    -- v2.0.3
-    name = "archivePort",
-    update = function(widget)
-        widget:SetValue(BS.Icon("ava/ava_ram_slot_green"), "___")
-
-        return 0
-    end,
-    event = _G.EVENT_PLAYER_ACTIVATED,
-    tooltip = GetString(_G.BARSTEWARD_ENDLESS_ARCHIVE_PORT),
-    icon = "icons/poi/poi_endlessdungeon_complete",
-    cooldown = true,
-    onClick = function()
-        FastTravelToNode(BS.ENDLESS_ARCHIVE_NODE_INDEX)
-    end
-}

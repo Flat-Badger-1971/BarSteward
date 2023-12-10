@@ -24,4 +24,14 @@ function BS.VersionCheck()
 
         BS.Vars.Updates[2006] = true
     end
+
+    if (needsUpdate(2010)) then
+        local widgets = {BS.W_ENDLESS_ARCHIVE_PROGRESS, BS.W_ENDLESS_ARCHIVE_SCORE, BS.W_ARCHIVE_PORT}
+
+        for _, widget in ipairs(widgets) do
+            BS.Vars.Controls[widget].Cat = BS.CATNAMES.EndlessArchive
+        end
+
+        BS.Vars.Updates[2010] = true
+    end
 end
