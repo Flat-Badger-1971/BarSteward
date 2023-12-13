@@ -4,6 +4,11 @@ max_line_length = 160
 -- globals used within addons
 --globals = {"CF"}
 read_globals = {
+    ["ACHIEVEMENTS_MANAGER"] = {
+        fields = {
+            GetAchievementStatus = {read_only = true}
+        }
+    },
     ["CALLBACK_MANAGER"] = {
         fields = {
             FireCallbacks = {read_only = true},
@@ -12,7 +17,7 @@ read_globals = {
     },
     ["CENTER_SCREEN_ANNOUNCE"] = {
         fields = {
-            CreateMessageParams = {read_only = true},
+            CreateMessageParams = {read_only = true},   
             AddMessageWithParams = {read_only = true}
         }
     },
@@ -240,6 +245,7 @@ read_globals = {
     "GetAbilityIcon",
     "GetAbilityName",
     "GetAchievementCriterion",
+    "GetAchievementNumCriteria",
     "GetActiveCollectibleByType",
     "GetActiveCompanionDefId",
     "GetActiveCompanionLevelInfo",
@@ -254,11 +260,12 @@ read_globals = {
     "GetAntiquityLeadIcon",
     "GetAntiquityLeadTimeRemainingSeconds",
     "GetAntiquityName",
-    "GetAntiquityQuality",
+    "GetAntiquityQuality",           
     "GetAntiquityZoneId",
     "GetAvailableSkillPoints",
     "GetBagSize",
     "GetBankedCurrencyAmount",
+    "GetCategoryInfoFromAchievementId",
     "GetChampionDisciplineId",
     "GetChampionDisciplineName",
     "GetChampionPointPoolForRank",
@@ -280,6 +287,7 @@ read_globals = {
     "GetCVar",
     "GetEarnedAchievementPoints",
     "GetEmoteInfo",
+    "GetEndlessDungeonBuffSelectorBucketTypeChoice",
     "GetFenceLaunderTransactionInfo",
     "GetFishingLure",
     "GetFishingLureInfo",
@@ -437,6 +445,7 @@ read_globals = {
     "ReloadUI",
     "RequestJumpToHouse",
     "RequestTributeClubData",
+    "SecurePostHook",
     "SetGameCameraUIMode",
     "TriggerTutorial",
     "UseCollectible",
@@ -473,6 +482,7 @@ read_globals = {
     "ZO_DeepTableCopy",
     "ZO_Dialogs_RegisterCustomDialog",
     "ZO_Dialogs_ShowDialog",
+    "ZO_EndlessDungeonBuffSelector_Shared",
     "ZO_FastFormatDecimalNumber",
     "ZO_FormatUserFacingCharacterName",
     "ZO_FormatUserFacingDisplayName",
