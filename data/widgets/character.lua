@@ -40,7 +40,7 @@ BS.widgets[BS.W_MUNDUS_STONE] = {
             return mundusName
         else
             widget:SetValue(BS.Format(_G.SI_CRAFTING_INVALID_ITEM_STYLE))
-            widget:SetColour(unpack(BS.GetVar("Danger", this)))
+            widget:SetColour(unpack(BS.GetColour(this, "Danger")))
         end
 
         return ""
