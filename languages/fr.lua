@@ -175,6 +175,7 @@ ZO_CreateStringId(
     "BARSTEWARD_HIDE_WHEN_FULLY_USED_TOOLTIP",
     "Masque quand tout les emplacements/options disponibles sont utilisés."
 )
+ZO_CreateStringId("BARSTEWARD_HIGHEST", "Highest score")
 ZO_CreateStringId("BARSTEWARD_HORIZONTAL", "Horizontale")
 ZO_CreateStringId("BARSTEWARD_HOURS", "Heures")
 ZO_CreateStringId("BARSTEWARD_IMPORT", "Importer")

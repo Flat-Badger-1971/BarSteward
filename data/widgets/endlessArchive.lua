@@ -225,6 +225,17 @@ BS.widgets[BS.W_ENDLESS_ARCHIVE_SCORE] = {
         widget:SetValue(currentScore, nil, immediate)
         widget:SetColour(unpack(BS.GetColour(this)))
 
+        if (currentScore > (BS.Vars.EndlessHighest or 0)) then
+            BS.Vars.EndlessHighest = currentScore
+        end
+
+        local ttt = GetString(_G.BARSTEWARD_ENDLESS_ARCHIVE_SCORE) .. BS.LF
+        ttt =
+            ttt ..
+            "|cf9f9f9" .. GetString(_G.BARSTEWARD_HIGHEST) .. ":|r |cffff00" .. (BS.Vars.EndlessHighest or 0) .. "|r"
+
+        widget.tooltip = ttt
+
         return false
     end,
     events = _G.EVENT_PLAYER_ACTIVATED,

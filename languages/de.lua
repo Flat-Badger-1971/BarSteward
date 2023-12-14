@@ -182,6 +182,7 @@ ZO_CreateStringId(
     "BARSTEWARD_HIDE_WHEN_FULLY_USED_TOOLTIP",
     "Verstecke wenn alle verfügbaren Optionen in Benutzung sind"
 )
+ZO_CreateStringId("BARSTEWARD_HIGHEST", "Highest score")
 ZO_CreateStringId("BARSTEWARD_HORIZONTAL", "Horizontal")
 ZO_CreateStringId("BARSTEWARD_HOURS", "Stunden")
 ZO_CreateStringId("BARSTEWARD_IMPORT", "Import")
