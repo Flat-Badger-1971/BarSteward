@@ -17,7 +17,7 @@ read_globals = {
     },
     ["CENTER_SCREEN_ANNOUNCE"] = {
         fields = {
-            CreateMessageParams = {read_only = true},   
+            CreateMessageParams = {read_only = true},
             AddMessageWithParams = {read_only = true}
         }
     },
@@ -245,6 +245,8 @@ read_globals = {
     "GetAbilityIcon",
     "GetAbilityName",
     "GetAchievementCriterion",
+    "GetAchievementInfo",
+    "GetAchievementName",
     "GetAchievementNumCriteria",
     "GetActiveCollectibleByType",
     "GetActiveCompanionDefId",
@@ -260,7 +262,7 @@ read_globals = {
     "GetAntiquityLeadIcon",
     "GetAntiquityLeadTimeRemainingSeconds",
     "GetAntiquityName",
-    "GetAntiquityQuality",           
+    "GetAntiquityQuality",
     "GetAntiquityZoneId",
     "GetAvailableSkillPoints",
     "GetBagSize",
@@ -288,6 +290,7 @@ read_globals = {
     "GetEarnedAchievementPoints",
     "GetEmoteInfo",
     "GetEndlessDungeonBuffSelectorBucketTypeChoice",
+    "GetEndlessDungeonGroupType",
     "GetFenceLaunderTransactionInfo",
     "GetFishingLure",
     "GetFishingLureInfo",

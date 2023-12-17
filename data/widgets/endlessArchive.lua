@@ -206,6 +206,7 @@ BS.widgets[BS.W_ENDLESS_ARCHIVE_SCORE] = {
     -- v2.0.10
     name = "endlessArchiveScore",
     update = function(widget, event, score)
+        local groupType = GetEndlessDungeonGroupType()
         local this = BS.W_ENDLESS_ARCHIVE_SCORE
         local immediate = event ~= "ScoreChanged"
 
@@ -225,14 +226,18 @@ BS.widgets[BS.W_ENDLESS_ARCHIVE_SCORE] = {
         widget:SetValue(currentScore, nil, immediate)
         widget:SetColour(unpack(BS.GetColour(this)))
 
-        if (currentScore > (BS.Vars.EndlessHighest or 0)) then
-            BS.Vars.EndlessHighest = currentScore
+        if (currentScore > (BS.Vars.EndlessHighest[groupType] or 0)) then
+            BS.Vars.EndlessHighest[groupType] = currentScore
         end
 
+        local solo = " (" .. BS.Format(_G.SI_ENDLESSDUNGEONGROUPTYPE0) .. ")"
+        local duo = " (" .. BS.Format(_G.SI_ENDLESSDUNGEONGROUPTYPE) .. ")"
+        local soloScore = BS.Vars.EndlessHighest[_G.ENDLESS_DUNGEON_GROUP_TYPE_SOLO] or 0
+        local duoScore = BS.Vars.EndlessHighest[_G.ENDLESS_DUNGEON_GROUP_TYPE_DUO] or 0
         local ttt = GetString(_G.BARSTEWARD_ENDLESS_ARCHIVE_SCORE) .. BS.LF
-        ttt =
-            ttt ..
-            "|cf9f9f9" .. GetString(_G.BARSTEWARD_HIGHEST) .. ":|r |cffff00" .. (BS.Vars.EndlessHighest or 0) .. "|r"
+
+        ttt = ttt .. "|cf9f9f9" .. BS.Format(_G.BARSTEWARD_HIGHEST) .. "|r" .. BS.LF
+        ttt = string.format("%s%s: |cffff00%s|r%s%s: |cffff00%s|r", ttt, solo, soloScore, BS.LF, duo, duoScore)
 
         widget.tooltip = ttt
 
