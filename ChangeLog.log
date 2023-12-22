@@ -1,14 +1,15 @@
 [color=#ff9900][b]Version: 2.0.10 ---------------[/b][/color]
-Corrected stray w in Endless Archives widget tooltip
+Corrected stray w in Infinite Archives widget tooltip
 Enabled defaults trimming to reduce the saved variables file size by up to 40%
 Updated widgets to handle default variables
-Score added to endless archive widget
-Endless Archive score widget added
-Endless Archive category added
+Score added to Infinite Archive widget
+Infinite Archive score widget added
+Infinite Archive category added
 Option added to Leads widget to show already found quantity
+Updated Infinite Archive name
 
 [color=#ff9900][b]Version: 2.0.9 ---------------[/b][/color]
-Endless Archive progress widget added
+Infinite Archive progress widget added
 
 [color=#ff9900][b]Version: 2.0.8 ---------------[/b][/color]
 German language writ name corrections affecting the daily crafting widget
@@ -34,7 +35,7 @@ Fixed bug with default values
 [color=#ff9900][b]Version: 2.0.3 ---------------[/b][/color]
 Version check fix
 Widget settings title now changes colour as soon as it is added/removed from a bar
-Added Endless Archive travel widget
+Added Infinite Archive travel widget
 
 [color=#ff9900][b]Version: 2.0.2 ---------------[/b][/color]
 Bugfix for bar toggle keybinds
