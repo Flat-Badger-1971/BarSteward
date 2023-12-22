@@ -206,6 +206,12 @@ BS.widgets[BS.W_ENDLESS_ARCHIVE_SCORE] = {
     -- v2.0.10
     name = "endlessArchiveScore",
     update = function(widget, event, score)
+        if (type(BS.Vars.EndlessHighest) == "number") then
+            BS.Vars.EndlessHighest = {[_G.ENDLESS_DUNGEON_GROUP_TYPE_SOLO]=0, [_G.ENDLESS_DUNGEON_GROUP_TYPE_DUO]=BS.Vars.EndlessHighest}
+        elseif (not BS.Vars.EndlessHighest) then
+            BS.Vars.EndlessHighest = {}
+        end
+
         local groupType = GetEndlessDungeonGroupType()
         local this = BS.W_ENDLESS_ARCHIVE_SCORE
         local immediate = event ~= "ScoreChanged"
@@ -230,8 +236,8 @@ BS.widgets[BS.W_ENDLESS_ARCHIVE_SCORE] = {
             BS.Vars.EndlessHighest[groupType] = currentScore
         end
 
-        local solo = " (" .. BS.Format(_G.SI_ENDLESSDUNGEONGROUPTYPE0) .. ")"
-        local duo = " (" .. BS.Format(_G.SI_ENDLESSDUNGEONGROUPTYPE) .. ")"
+        local solo = " " .. BS.Format(_G.SI_ENDLESSDUNGEONGROUPTYPE0) .. ""
+        local duo = " " .. BS.Format(_G.SI_ENDLESSDUNGEONGROUPTYPE1) .. ""
         local soloScore = BS.Vars.EndlessHighest[_G.ENDLESS_DUNGEON_GROUP_TYPE_SOLO] or 0
         local duoScore = BS.Vars.EndlessHighest[_G.ENDLESS_DUNGEON_GROUP_TYPE_DUO] or 0
         local ttt = GetString(_G.BARSTEWARD_ENDLESS_ARCHIVE_SCORE) .. BS.LF

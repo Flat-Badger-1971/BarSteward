@@ -312,7 +312,8 @@ BS.widgets[BS.W_LEADS] = {
                     quality = GetAntiquityQuality(antiquityId),
                     zone = BS.Format(GetZoneNameById(GetAntiquityZoneId(antiquityId))),
                     id = antiquityId,
-                    inProgress = GetNumAntiquityDigSites(antiquityId) > 0
+                    inProgress = GetNumAntiquityDigSites(antiquityId) > 0,
+                    recovered = GetNumAntiquitiesRecovered(antiquityId)
                 }
 
                 table.insert(leads, lead)
@@ -392,6 +393,11 @@ BS.widgets[BS.W_LEADS] = {
 
                 ttt = ttt .. BS.LF .. " " .. ttlColour
                 ttt = ttt .. nameAndZone .. " - |r" .. BS.ARGBConvert(timeColour) .. time .. "|r"
+
+                if (BS.GetVar("ShowFound", this)) then
+                    local found = zo_strformat(_G.SI_ANTIQUITY_TIMES_ACQUIRED, lead.recovered)
+                    ttt = ttt .. " - " .. found
+                end
             end
 
             widget.tooltip = ttt
@@ -432,6 +438,17 @@ BS.widgets[BS.W_LEADS] = {
                 BS.Vars.Controls[BS.W_LEADS].HideTimer = value
                 BS.RefreshWidget(BS.W_LEADS)
                 BS.ResizeBar(BS.Vars.Controls[BS.W_LEADS].Bar)
+            end,
+            default = false
+        },
+        [3] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_SHOW_FOUND),
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_LEADS].ShowFound or false
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_LEADS].ShowFound = value
             end,
             default = false
         }
