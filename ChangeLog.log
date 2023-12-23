@@ -1,3 +1,6 @@
+[color=#ff9900][b]Version: 2.0.11 ---------------[/b][/color]
+Lockpick widget bugfix
+
 [color=#ff9900][b]Version: 2.0.10 ---------------[/b][/color]
 Corrected stray w in Infinite Archives widget tooltip
 Enabled defaults trimming to reduce the saved variables file size by up to 40%

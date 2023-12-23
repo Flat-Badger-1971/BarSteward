@@ -632,7 +632,7 @@ BS.widgets[BS.W_LOCKPICKS] = {
         local this = BS.W_LOCKPICKS
         local colour = BS.GetColour(this, "Ok")
 
-        if (available <= BS.GetVar("WarningValue", this) and available > BS.GetVar("DangerValue")) then
+        if (available <= BS.GetVar("WarningValue", this) and available > BS.GetVar("DangerValue", this)) then
             colour = BS.GetColour(this, "Warning")
         elseif (available <= BS.GetVar("DangerValue", this)) then
             colour = BS.GetColour(this, "Danger")
