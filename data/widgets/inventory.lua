@@ -1949,7 +1949,7 @@ local function getColour(value)
     local this = BS.W_WEAPON_CHARGE
     local colour = BS.GetVar("OkColour", this) or BS.GetVar("DefaultOkColour")
 
-    if (value <= BS.GetVar("WarningValue", this) and value > BS.GetVar("DangerValue")) then
+    if (value <= BS.GetVar("WarningValue", this) and value > BS.GetVar("DangerValue", this)) then
         colour = BS.GetVar("WarningColour", this) or BS.GetVar("DefaultWarningColour")
     elseif (value <= BS.GetVar("DangerValue", this)) then
         colour = BS.GetVar("DangerColour", this) or BS.GetVar("DefaultDangerColour")

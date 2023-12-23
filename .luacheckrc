@@ -415,6 +415,7 @@ read_globals = {
     "GetUnitBuffInfo",
     "GetUnitClass",
     "GetUnitClassId",
+    "GetUnitDisplayName",
     "GetUnitEffectiveLevel",
     "GetUnitLevel",
     "GetUnitName",
