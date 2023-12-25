@@ -9,11 +9,11 @@ BS.widgets[BS.W_ARCHIVE_PORT] = {
         return 0
     end,
     event = _G.EVENT_PLAYER_ACTIVATED,
-    tooltip = GetString(_G.BARSTEWARD_ENDLESS_ARCHIVE_PORT),
+    tooltip = GetString(_G.BARSTEWARD_INFINITE_ARCHIVE_PORT),
     icon = "icons/poi/poi_endlessdungeon_complete",
     cooldown = true,
     onClick = function()
-        FastTravelToNode(BS.ENDLESS_ARCHIVE_NODE_INDEX)
+        FastTravelToNode(BS.INFINITE_ARCHIVE_NODE_INDEX)
     end
 }
 
@@ -60,11 +60,11 @@ end
 local arc = BS.Format(_G["SI_ENDLESSDUNGEONCOUNTERTYPE" .. _G.ENDLESS_DUNGEON_COUNTER_TYPE_ARC])
 local currentScore = 0
 
-BS.widgets[BS.W_ENDLESS_ARCHIVE_PROGRESS] = {
+BS.widgets[BS.W_INFINITE_ARCHIVE_PROGRESS] = {
     -- v2.0.9
-    name = "endlessArchiveBar",
+    name = "infiniteArchiveBar",
     update = function(widget, event, score)
-        local this = BS.W_ENDLESS_ARCHIVE_PROGRESS
+        local this = BS.W_INFINITE_ARCHIVE_PROGRESS
         if (not ENDLESS_DUNGEON_MANAGER:IsPlayerInEndlessDungeon()) then
             if (BS.GetVar("Progress", this)) then
                 widget:SetProgress(0, 0, 1, "")
@@ -84,11 +84,11 @@ BS.widgets[BS.W_ENDLESS_ARCHIVE_PROGRESS] = {
 
         local stageCounter, cycleCounter, arcCounter = ENDLESS_DUNGEON_MANAGER:GetProgression()
         local maxProgressPerArc =
-            BS.ENDLESS_ARCHIVE_MAX_COUNTS[_G.ENDLESS_DUNGEON_COUNTER_TYPE_CYCLE] *
-            BS.ENDLESS_ARCHIVE_MAX_COUNTS[_G.ENDLESS_DUNGEON_COUNTER_TYPE_ARC]
+            BS.INFINITE_ARCHIVE_MAX_COUNTS[_G.ENDLESS_DUNGEON_COUNTER_TYPE_CYCLE] *
+            BS.INFINITE_ARCHIVE_MAX_COUNTS[_G.ENDLESS_DUNGEON_COUNTER_TYPE_ARC]
         local currentProgress =
             (stageCounter - 1) +
-            ((cycleCounter - 1) * BS.ENDLESS_ARCHIVE_MAX_COUNTS[_G.ENDLESS_DUNGEON_COUNTER_TYPE_CYCLE])
+            ((cycleCounter - 1) * BS.INFINITE_ARCHIVE_MAX_COUNTS[_G.ENDLESS_DUNGEON_COUNTER_TYPE_CYCLE])
         local pc = math.ceil((currentProgress / maxProgressPerArc) * 100)
 
         if (BS.GetVar("Progress", this)) then
@@ -98,7 +98,7 @@ BS.widgets[BS.W_ENDLESS_ARCHIVE_PROGRESS] = {
             widget:SetColour(unpack(BS.GetColour(this)))
         end
 
-        local ttt = GetString(_G.BARSTEWARD_ENDLESS_ARCHIVE_PROGRESS) .. BS.LF .. BS.LF
+        local ttt = GetString(_G.BARSTEWARD_INFINITE_ARCHIVE_PROGRESS) .. BS.LF .. BS.LF
 
         local threads = ENDLESS_DUNGEON_MANAGER:GetAttemptsRemaining()
         ttt =
@@ -167,8 +167,8 @@ BS.widgets[BS.W_ENDLESS_ARCHIVE_PROGRESS] = {
     gradient = function()
         local startg = {GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, _G.INTERFACE_GENERAL_COLOR_STATUS_BAR_START)}
         local endg = {GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, _G.INTERFACE_GENERAL_COLOR_STATUS_BAR_END)}
-        local s = BS.Vars.Controls[BS.W_ENDLESS_ARCHIVE_PROGRESS].GradientStart or startg
-        local e = BS.Vars.Controls[BS.W_ENDLESS_ARCHIVE_PROGRESS].GradientEnd or endg
+        local s = BS.Vars.Controls[BS.W_INFINITE_ARCHIVE_PROGRESS].GradientStart or startg
+        local e = BS.Vars.Controls[BS.W_INFINITE_ARCHIVE_PROGRESS].GradientEnd or endg
 
         return s, e
     end,
@@ -183,17 +183,17 @@ BS.widgets[BS.W_ENDLESS_ARCHIVE_PROGRESS] = {
         }
     },
     icon = "endlessdungeon/icon_progression_arc",
-    tooltip = GetString(_G.BARSTEWARD_ENDLESS_ARCHIVE_PROGRESS),
+    tooltip = GetString(_G.BARSTEWARD_INFINITE_ARCHIVE_PROGRESS),
     hideWhenEqual = true,
     customSettings = {
         [1] = {
             type = "checkbox",
             name = GetString(_G.BARSTEWARD_USE_PROGRESS),
             getFunc = function()
-                return BS.Vars.Controls[BS.W_ENDLESS_ARCHIVE_PROGRESS].Progress or false
+                return BS.Vars.Controls[BS.W_INFINITE_ARCHIVE_PROGRESS].Progress or false
             end,
             setFunc = function(value)
-                BS.Vars.Controls[BS.W_ENDLESS_ARCHIVE_PROGRESS].Progress = value
+                BS.Vars.Controls[BS.W_INFINITE_ARCHIVE_PROGRESS].Progress = value
             end,
             requiresReload = true,
             default = false,
@@ -202,19 +202,21 @@ BS.widgets[BS.W_ENDLESS_ARCHIVE_PROGRESS] = {
     }
 }
 
-BS.widgets[BS.W_ENDLESS_ARCHIVE_SCORE] = {
+BS.widgets[BS.W_INFINITE_ARCHIVE_SCORE] = {
     -- v2.0.10
-    name = "endlessArchiveScore",
+    name = "infiniteArchiveScore",
     update = function(widget, event, score)
         if (type(BS.Vars.EndlessHighest) == "number") then
-            BS.Vars.EndlessHighest = {[_G.ENDLESS_DUNGEON_GROUP_TYPE_SOLO]=0, [_G.ENDLESS_DUNGEON_GROUP_TYPE_DUO]=BS.Vars.EndlessHighest}
+            BS.Vars.EndlessHighest = {
+                [_G.ENDLESS_DUNGEON_GROUP_TYPE_SOLO] = 0,
+                [_G.ENDLESS_DUNGEON_GROUP_TYPE_DUO] = BS.Vars.EndlessHighest
+            }
         elseif (not BS.Vars.EndlessHighest) then
             BS.Vars.EndlessHighest = {}
         end
 
         local groupType = GetEndlessDungeonGroupType()
-        local this = BS.W_ENDLESS_ARCHIVE_SCORE
-        local immediate = event ~= "ScoreChanged"
+        local this = BS.W_INFINITE_ARCHIVE_SCORE
 
         if (not ENDLESS_DUNGEON_MANAGER:IsPlayerInEndlessDungeon()) then
             widget:SetValue(ENDLESS_DUNGEON_MANAGER:GetScore())
@@ -229,7 +231,7 @@ BS.widgets[BS.W_ENDLESS_ARCHIVE_SCORE] = {
             currentScore = ENDLESS_DUNGEON_MANAGER:GetScore()
         end
 
-        widget:SetValue(currentScore, nil, immediate)
+        widget:SetValue(currentScore)
         widget:SetColour(unpack(BS.GetColour(this)))
 
         if (currentScore > (BS.Vars.EndlessHighest[groupType] or 0)) then
@@ -240,7 +242,7 @@ BS.widgets[BS.W_ENDLESS_ARCHIVE_SCORE] = {
         local duo = " " .. BS.Format(_G.SI_ENDLESSDUNGEONGROUPTYPE1) .. ""
         local soloScore = BS.Vars.EndlessHighest[_G.ENDLESS_DUNGEON_GROUP_TYPE_SOLO] or 0
         local duoScore = BS.Vars.EndlessHighest[_G.ENDLESS_DUNGEON_GROUP_TYPE_DUO] or 0
-        local ttt = GetString(_G.BARSTEWARD_ENDLESS_ARCHIVE_SCORE) .. BS.LF
+        local ttt = GetString(_G.BARSTEWARD_INFINITE_ARCHIVE_SCORE) .. BS.LF
 
         ttt = ttt .. "|cf9f9f9" .. BS.Format(_G.BARSTEWARD_HIGHEST) .. "|r" .. BS.LF
         ttt = string.format("%s%s: |cffff00%s|r%s%s: |cffff00%s|r", ttt, solo, soloScore, BS.LF, duo, duoScore)
@@ -256,6 +258,6 @@ BS.widgets[BS.W_ENDLESS_ARCHIVE_SCORE] = {
         }
     },
     icon = "campaign/overview_indexicon_scoring_up",
-    tooltip = GetString(_G.BARSTEWARD_ENDLESS_ARCHIVE_SCORE),
+    tooltip = GetString(_G.BARSTEWARD_INFINITE_ARCHIVE_SCORE),
     hideWhenEqual = true
 }
