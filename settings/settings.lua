@@ -662,7 +662,7 @@ local function getBarSettings()
                     local barObject = BS.BarObjectPool:GetActiveObject(BS.BarObjects[idx])
 
                     if (barObject) then
-                        local bar = barObject.ref.bar
+                        local bar = barObject.bar
 
                         BS.AddToScenes(varType, idx, bar)
 
@@ -1554,7 +1554,7 @@ local function checkProgressBar(_, widgetControls, vars, key)
             setFunc = function(r, g, b, a)
                 vars.ProgressColour = {r, g, b, a}
 
-                local widget = BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[key]).ref
+                local widget = BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[key])
 
                 widget.value.progress:SetColor(r, g, b, a)
             end,
@@ -1579,7 +1579,7 @@ local function checkProgressBar(_, widgetControls, vars, key)
             setFunc = function(r, g, b)
                 vars.GradientStart = {r, g, b}
 
-                local widget = BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[key]).ref
+                local widget = BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[key])
                 local endg = {
                     GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, _G.INTERFACE_GENERAL_COLOR_STATUS_BAR_END)
                 }
@@ -1608,7 +1608,7 @@ local function checkProgressBar(_, widgetControls, vars, key)
             setFunc = function(r, g, b)
                 vars.GradientEnd = {r, g, b}
 
-                local widget = BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[key]).ref
+                local widget = BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[key])
                 local startg = {
                     GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, _G.INTERFACE_GENERAL_COLOR_STATUS_BAR_START)
                 }

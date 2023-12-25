@@ -1,6 +1,8 @@
 [color=#ff9900][b]Version: 2.0.14 ---------------[/b][/color]
 Fix issue with archive score showing 1
 Internal renames of endless -> Infinite
+Corrected widget refs
+Fixed typo bug in Weekly endeavours widget
 
 [color=#ff9900][b]Version: 2.0.13 ---------------[/b][/color]
 Bugfix fix for defaults not available on logout

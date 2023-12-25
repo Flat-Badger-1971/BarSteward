@@ -209,7 +209,7 @@ BS.widgets[BS.W_ENDEAVOUR_PROGRESS] = {
                 widget:SetProgress(maxTask.progress, 0, maxTask.maxProgress)
             else
                 widget:SetValue(maxTask.progress .. "/" .. maxTask.maxProgress)
-                widget:SetColour(unpack(BS.GetColor(this)))
+                widget:SetColour(unpack(BS.GetColour(this)))
             end
 
             local ttt = GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS_BEST) .. BS.LF
