@@ -410,7 +410,7 @@ BS.CATNAMES = {
     Social = 11,
     Thievery = 12,
     Assistants = 13,
-    EndlessArchive = 14
+    InfiniteArchive = 14
 }
 
 BS.CATEGORIES = {
@@ -436,7 +436,7 @@ BS.CATEGORIES = {
     [BS.CATNAMES.Social] = {name = _G.BARSTEWARD_CATEGORY_SOCIAL, icon = "friends/friends_tabicon_friends"},
     [BS.CATNAMES.Thievery] = {name = _G.BARSTEWARD_CATEGORY_THIEVERY, icon = "icons/mapkey/mapkey_fence"},
     [BS.CATNAMES.Assistants] = {name = _G.BARSTEWARD_ASSISTANTS, icon = "icons/assistant_premiumbanker_01"},
-    [BS.CATNAMES.EndlessArchive] = {name = _G.SI_ENDLESS_DUNGEON_HUD_TRACKER_TITLE, icon = "icons/poi/poi_endlessdungeon_complete"}
+    [BS.CATNAMES.InfiniteArchive] = {name = _G.SI_ENDLESS_DUNGEON_HUD_TRACKER_TITLE, icon = "icons/poi/poi_endlessdungeon_complete"}
 }
 
 BS.ASSISTANTS = {

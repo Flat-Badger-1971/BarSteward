@@ -715,15 +715,15 @@ BS.Defaults = {
             Cat = cat.Currency
         },
         [BS.W_ARCHIVE_PORT] = {
-            Cat = cat.EndlessArchive
+            Cat = cat.InfiniteArchive
         },
-        [BS.W_ENDLESS_ARCHIVE_PROGRESS] = {
-            Cat = cat.EndlessArchive,
+        [BS.W_INFINITE_ARCHIVE_PROGRESS] = {
+            Cat = cat.InfiniteArchive,
             Autohide = false,
             Progress = true
         },
-        [BS.W_ENDLESS_ARCHIVE_SCORE] = {
-            Cat = cat.EndlessArchive,
+        [BS.W_INFINITE_ARCHIVE_SCORE] = {
+            Cat = cat.InfiniteArchive,
             Autohide = false
         }
     }
