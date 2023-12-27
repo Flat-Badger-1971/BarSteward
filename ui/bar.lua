@@ -464,7 +464,8 @@ function baseBar:DoUpdate(metadata, ...)
         return
     end
 
-    local widgetKey = BS.WidgetObjects[metadata.id]
+    local id = metadata.id
+    local widgetKey = BS.WidgetObjects[id]
     local widget = BS.WidgetObjectPool:AcquireObject(widgetKey)
 
     if (widget.destroyed) then
@@ -480,7 +481,7 @@ function baseBar:DoUpdate(metadata, ...)
         self.widgetValue = {}
     end
 
-    self.widgetValue[metadata.id] = value
+    self.widgetValue[id] = value
 
     -- set the intial state as unhidden
     self:SetHiddenWidget(metadata.widget, false)
@@ -489,7 +490,7 @@ function baseBar:DoUpdate(metadata, ...)
 
     --- check for hide on completion
     if (metadata.complete) then
-        if (BS.GetVar("HideWhenComplete", metadata.id) or BS.GetVar("HideWhenCompleted", metadata.id)) then
+        if (BS.GetVar("HideWhenComplete", id) or BS.GetVar("HideWhenCompleted", id)) then
             hidecheck = true
             if (metadata.complete() == true) then
                 self:HideWhen(metadata, "hide it!")
@@ -503,7 +504,7 @@ function baseBar:DoUpdate(metadata, ...)
 
     -- check for hide when fully used
     if (metadata.fullyUsed) then
-        if (BS.GetVar("HideWhenFullyUsed", metadata.id)) then
+        if (BS.GetVar("HideWhenFullyUsed", id)) then
             hidecheck = true
             if (metadata.fullyUsed() == true) then
                 self:HideWhen(metadata, "hide it!")
@@ -516,7 +517,7 @@ function baseBar:DoUpdate(metadata, ...)
     -- check if it needs to be hidden
     if (hidecheck == false) then
         if (metadata.hideWhenEqual or metadata.hideWhenGreaterThan or metadata.hideWhenLessThan) then
-            if (BS.Vars.Controls[metadata.id].Autohide) then
+            if (BS.GetVar("Autohide", id)) then
                 self:HideWhen(metadata, value)
             end
         end
@@ -530,52 +531,52 @@ function baseBar:DoUpdate(metadata, ...)
     -- check if a sound needs to be played
     local sound = nil
 
-    if (BS.GetVar("SoundWhenEquals", metadata.id)) then
-        if (tostring(BS.GetVar("SoundWhenEqualsValue", metadata.id)) == tostring(value)) then
-            sound = BS.SoundLookup[BS.GetVar("SoundWhenEqualsSound", metadata.id)]
+    if (BS.GetVar("SoundWhenEquals", id)) then
+        if (tostring(BS.GetVar("SoundWhenEqualsValue",id)) == tostring(value)) then
+            sound = BS.SoundLookup[BS.GetVar("SoundWhenEqualsSound", id)]
         else
-            BS.SoundLastPlayed[metadata.id] = nil
+            BS.SoundLastPlayed[id] = nil
         end
-    elseif (BS.GetVar("SoundWhenOver", metadata.id)) then
-        local compareTo = tonumber(BS.GetVar("SoundWhenOverValue", metadata.id))
+    elseif (BS.GetVar("SoundWhenOver", id)) then
+        local compareTo = tonumber(BS.GetVar("SoundWhenOverValue", id))
         local current = tonumber(value)
 
         if (current and compareTo) then
             if (current > compareTo) then
-                sound = BS.SoundLookup[BS.GetVar("SoundWhenOverSound", metadata.id)]
+                sound = BS.SoundLookup[BS.GetVar("SoundWhenOverSound", id)]
             else
-                BS.SoundLastPlayed[metadata.id] = nil
+                BS.SoundLastPlayed[id] = nil
             end
         end
-    elseif (BS.GetVar("SoundWhenUnder", metadata.id)) then
-        local compareTo = tonumber(BS.GetVar("SoundWhenUnderValue", metadata.id))
+    elseif (BS.GetVar("SoundWhenUnder", id)) then
+        local compareTo = tonumber(BS.GetVar("SoundWhenUnderValue", id))
         local current = tonumber(value)
 
         if (current and compareTo) then
             if (current < compareTo) then
-                sound = BS.SoundLookup[BS.GetVar("SoundWhenUnderSound", metadata.id)]
+                sound = BS.SoundLookup[BS.GetVar("SoundWhenUnderSound", id)]
             else
-                BS.SoundLastPlayed[metadata.id] = nil
+                BS.SoundLastPlayed[id] = nil
             end
         end
     end
 
     if (sound) then
-        local play = BS.SoundLastPlayed[metadata.id] == nil
+        local play = BS.SoundLastPlayed[id] == nil
 
-        if (BS.SoundLastPlayed[metadata.id]) then
-            if ((os.time() - BS.SoundLastPlayed[metadata.id].time) < 61) then
+        if (BS.SoundLastPlayed[id]) then
+            if ((os.time() - BS.SoundLastPlayed[id].time) < 61) then
                 play = false
             end
 
-            if (BS.SoundLastPlayed[metadata.id].value == value) then
+            if (BS.SoundLastPlayed[id].value == value) then
                 play = false
             end
         end
 
         if (play) then
             PlaySound(sound)
-            BS.SoundLastPlayed[metadata.id] = {time = os.time(), value = value}
+            BS.SoundLastPlayed[id] = {time = os.time(), value = value}
         end
     end
 end

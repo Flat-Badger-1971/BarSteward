@@ -337,6 +337,10 @@ function baseWidget:SetValue(value, plainValue, immediate)
         return
     end
 
+    if (self.value:IsHidden()) then
+        self.value:SetHidden(false)
+    end
+
     if (self.transition) then
         -- TODO: figure out how to stop resizing issues
         -- and the control jumping around
@@ -496,6 +500,10 @@ local function checkOrCreatePool()
                 widget.control:SetHidden(true)
                 widget:SetParent(GuiRoot)
                 widget:ClearAnchors()
+
+                if (widget.value) then
+                    widget.value:SetHidden(true)
+                end
 
                 widget.destroyed = true
             end

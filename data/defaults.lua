@@ -725,7 +725,10 @@ BS.Defaults = {
         [BS.W_INFINITE_ARCHIVE_SCORE] = {
             Cat = cat.InfiniteArchive,
             Autohide = false
-        }
+        },
+        [BS.W_DRINWETH] = {
+            Cat = cat.Assistants
+        },
     }
 }
 

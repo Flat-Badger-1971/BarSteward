@@ -146,6 +146,22 @@ for k, v in pairs(BS.COMPANION_DEFIDS) do
         icon = companionIcons[k],
         onClick = function()
             UseCollectible(GetCompanionCollectibleId(v))
-        end
+        end,
+        customSettings = {
+            [1] = {
+                type = "checkbox",
+                name = GetString(_G.BARSTEWARD_HIDE_TEXT),
+                getFunc = function()
+                    return BS.Vars.Controls[k].NoValue or false
+                end,
+                setFunc = function(value)
+                    BS.Vars.Controls[k].NoValue = value
+                    BS.GetWidget(k):SetNoValue(value)
+                    BS.RegenerateBar(BS.Vars.Controls[k].Bar, k)
+                end,
+                width = "full",
+                default = false
+            }
+        }
     }
 end

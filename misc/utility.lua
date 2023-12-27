@@ -1624,7 +1624,9 @@ function BS.GetVar(name, widget)
             value = BS.Vars.Controls[widget][name]
         end
         if (value == nil) then
-            value = BS.Defaults.Controls[widget][name]
+            if (BS.Defaults.Controls[widget]) then
+                value = BS.Defaults.Controls[widget][name]
+            end
         end
     else
         value = BS.Vars[name]
