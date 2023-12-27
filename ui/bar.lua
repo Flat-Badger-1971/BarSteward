@@ -252,10 +252,14 @@ function baseBar:SetCombatFunction()
                     if ((self.background or 99) ~= 99) then
                         if (self.expand) then
                             self.bar.expandbackground:SetCenterColor(1, 1, 1, 1)
-                            self.bar.expandbackground:SetCenterTexture(BS.FormatIcon(BS.BACKGROUNDS[self.settings.Background]))
+                            self.bar.expandbackground:SetCenterTexture(
+                                BS.FormatIcon(BS.BACKGROUNDS[self.settings.Background])
+                            )
                         else
                             self.bar.background:SetCenterColor(1, 1, 1, 1)
-                            self.bar.background:SetCenterTexture(BS.FormatIcon(BS.BACKGROUNDS[self.settings.Background]))
+                            self.bar.background:SetCenterTexture(
+                                BS.FormatIcon(BS.BACKGROUNDS[self.settings.Background])
+                            )
                         end
                     else
                         if (self.expand) then
@@ -485,7 +489,7 @@ function baseBar:DoUpdate(metadata, ...)
 
     --- check for hide on completion
     if (metadata.complete) then
-        if (BS.Vars.Controls[metadata.id].HideWhenComplete or BS.Vars.Controls[metadata.id].HideWhenCompleted) then
+        if (BS.GetVar("HideWhenComplete", metadata.id) or BS.GetVar("HideWhenCompleted", metadata.id)) then
             hidecheck = true
             if (metadata.complete() == true) then
                 self:HideWhen(metadata, "hide it!")
@@ -499,7 +503,7 @@ function baseBar:DoUpdate(metadata, ...)
 
     -- check for hide when fully used
     if (metadata.fullyUsed) then
-        if (BS.Vars.Controls[metadata.id].HideWhenFullyUsed) then
+        if (BS.GetVar("HideWhenFullyUsed", metadata.id)) then
             hidecheck = true
             if (metadata.fullyUsed() == true) then
                 self:HideWhen(metadata, "hide it!")
@@ -526,30 +530,30 @@ function baseBar:DoUpdate(metadata, ...)
     -- check if a sound needs to be played
     local sound = nil
 
-    if (BS.Vars.Controls[metadata.id].SoundWhenEquals) then
-        if (tostring(BS.Vars.Controls[metadata.id].SoundWhenEqualsValue) == tostring(value)) then
-            sound = BS.SoundLookup[BS.Vars.Controls[metadata.id].SoundWhenEqualsSound]
+    if (BS.GetVar("SoundWhenEquals", metadata.id)) then
+        if (tostring(BS.GetVar("SoundWhenEqualsValue", metadata.id)) == tostring(value)) then
+            sound = BS.SoundLookup[BS.GetVar("SoundWhenEqualsSound", metadata.id)]
         else
             BS.SoundLastPlayed[metadata.id] = nil
         end
-    elseif (BS.Vars.Controls[metadata.id].SoundWhenOver) then
-        local compareTo = tonumber(BS.Vars.Controls[metadata.id].SoundWhenOverValue)
+    elseif (BS.GetVar("SoundWhenOver", metadata.id)) then
+        local compareTo = tonumber(BS.GetVar("SoundWhenOverValue", metadata.id))
         local current = tonumber(value)
 
         if (current and compareTo) then
             if (current > compareTo) then
-                sound = BS.SoundLookup[BS.Vars.Controls[metadata.id].SoundWhenOverSound]
+                sound = BS.SoundLookup[BS.GetVar("SoundWhenOverSound", metadata.id)]
             else
                 BS.SoundLastPlayed[metadata.id] = nil
             end
         end
-    elseif (BS.Vars.Controls[metadata.id].SoundWhenUnder) then
-        local compareTo = tonumber(BS.Vars.Controls[metadata.id].SoundWhenUnderValue)
+    elseif (BS.GetVar("SoundWhenUnder", metadata.id)) then
+        local compareTo = tonumber(BS.GetVar("SoundWhenUnderValue", metadata.id))
         local current = tonumber(value)
 
         if (current and compareTo) then
             if (current < compareTo) then
-                sound = BS.SoundLookup[BS.Vars.Controls[metadata.id].SoundWhenUnderSound]
+                sound = BS.SoundLookup[BS.GetVar("SoundWhenUnderSound", metadata.id)]
             else
                 BS.SoundLastPlayed[metadata.id] = nil
             end
