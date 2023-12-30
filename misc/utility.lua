@@ -1639,8 +1639,12 @@ function BS.GetVar(name, widget)
     return value
 end
 
-function BS.GetTimeColour(value, this, multiplier)
+function BS.GetTimeColour(value, this, multiplier, useOK)
     local colour
+
+    if (useOK) then
+        colour = BS.GetColour(this, "Ok")
+    end
 
     multiplier = multiplier or 3600
 

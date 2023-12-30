@@ -1103,7 +1103,7 @@ BS.widgets[BS.W_FOOD_BUFF] = {
                     )
 
                     widget:SetValue(formattedTime)
-                    widget:SetColour(unpack(BS.GetTimeColour(remaining, this, 60)))
+                    widget:SetColour(unpack(BS.GetTimeColour(remaining, this, 60, true)))
                     widget.tooltip = BS.Format(buffName)
 
                     return remaining
@@ -1114,7 +1114,7 @@ BS.widgets[BS.W_FOOD_BUFF] = {
         local value = BS.SecondsToTime(0, true, false, BS.GetVar("HideSeconds", this), BS.GetVar("Format", this))
 
         widget:SetValue(value)
-        widget:SetColour(unpack(BS.GetTimeColour(0, this, 60)))
+        widget:SetColour(unpack(BS.GetTimeColour(0, this, 60, true)))
         return 0
     end,
     timer = 1000,
