@@ -1078,3 +1078,47 @@ BS.widgets[BS.W_VAMPIRISM_FEED_TIMER] = {
     tooltip = GetString(_G.BARSTEWARD_VAMPIRE_FEED_TIMER),
     hideWhenEqual = 0
 }
+
+BS.widgets[BS.W_FOOD_BUFF] = {
+    -- v2.0.17
+    name = "foodBuff",
+    update = function(widget)
+        local this = BS.W_FOOD_BUFF
+        local numberOfBuffs = GetNumBuffs("player")
+
+        if (numberOfBuffs > 0) then
+            for buffNum = 1, numberOfBuffs do
+                local buffName, _, timeEnding, _, _, _, _, _, _, _, abilityId = GetUnitBuffInfo("player", buffNum)
+
+                if (BS.FOOD_BUFFS[abilityId]) then
+                    local timeNow = GetGameTimeMilliseconds()
+                    local remaining = timeEnding - timeNow / 1000
+                    local formattedTime =
+                        BS.SecondsToTime(
+                        remaining,
+                        true,
+                        false,
+                        BS.GetVar("HideSeconds", this),
+                        BS.GetVar("Format", this)
+                    )
+
+                    widget:SetValue(formattedTime)
+                    widget:SetColour(unpack(BS.GetTimeColour(remaining, this, 60)))
+                    widget.tooltip = BS.Format(buffName)
+
+                    return remaining
+                end
+            end
+        end
+
+        local value = BS.SecondsToTime(0, true, false, BS.GetVar("HideSeconds", this), BS.GetVar("Format", this))
+
+        widget:SetValue(value)
+        widget:SetColour(unpack(BS.GetTimeColour(0, this, 60)))
+        return 0
+    end,
+    timer = 1000,
+    hideWhenEqual = 0,
+    icon = "icons/store_tricolor_food_01",
+    tooltip = BS.Format(_G.BARSTEWARD_FOOD_BUFF)
+}

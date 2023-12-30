@@ -62,7 +62,7 @@ BS.Defaults = {
     Controls = {
         [BS.W_TIME] = {
             Bar = 1,
-            Cat = cat.Activities,
+            Cat = cat.Client,
             SoundWhenEquals = false,
             SoundWhenEqualsSound = "Daily Login Reward Claim Fanfare"
         },
@@ -729,6 +729,16 @@ BS.Defaults = {
         [BS.W_DRINWETH] = {
             Cat = cat.Assistants
         },
+        [BS.W_FOOD_BUFF] = {
+            Cat = cat.Character,
+            Autohide = false,
+            ColourValues = "okc,wv,wc,dv,dc",
+            DangerValue = 2,
+            HideSeconds = false,
+            Timer = true,
+            Units = GetString(_G.BARSTEWARD_MINUTES),
+            WarningValue = 10
+        }
     }
 }
 

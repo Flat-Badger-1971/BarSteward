@@ -233,6 +233,7 @@ read_globals = {
     -- lua
     "unpack",
     --API
+    "AssignTargetMarkerToReticleTarget",
     "CreateSimpleAnimation",
     "DoesAntiquityHaveLead",
     "DoesUnitExist",
@@ -336,6 +337,7 @@ read_globals = {
     "GetItemType",
     "GetJournalQuestConditionInfo",
     "GetJournalQuestInfo",
+    "GetJournalQuestName",
     "GetJournalQuestNumConditions",
     "GetJournalQuestRepeatType",
     "GetLatency",
@@ -380,6 +382,7 @@ read_globals = {
     "GetPlayerLocationName",
     "GetMapPlayerPosition",
     "GetPulseTimeline",
+    "GetQuestName",
     "GetRecallCooldown",
     "GetRecipeInfo",
     "GetRecipeIngredientItemInfo",
@@ -422,6 +425,8 @@ read_globals = {
     "GetUnitPower",
     "GetUnitRace",
     "GetUnitRawWorldPosition",
+    "GetUnitReaction",
+    "GetUnitTargetMarkerType",
     "GetUnitXP",
     "GetUnitZone",
     "GetUnitZoneIndex",

@@ -1978,7 +1978,7 @@ BS.widgets[BS.W_WEAPON_CHARGE] = {
 
             if (charges > -1) then
                 raw = math.floor((charges / maxCharges) * 100)
-                pc = string.format("%d%%", raw)
+                pc = string.format("%d%%", raw or 0)
             end
 
             local name = BS.Format(GetItemName(_G.BAG_WORN, slot))
@@ -2004,7 +2004,7 @@ BS.widgets[BS.W_WEAPON_CHARGE] = {
             )
         end
 
-        local colour = getColour(min.raw)
+        local colour = getColour(min.raw or 0)
 
         widget:SetValue(min.pc)
         widget:SetColour(unpack(colour))

@@ -128,6 +128,7 @@ BS.W_ARCHIVE_PORT = 119
 BS.W_INFINITE_ARCHIVE_PROGRESS = 120
 BS.W_INFINITE_ARCHIVE_SCORE = 121
 BS.W_DRINWETH = 122
+BS.W_FOOD_BUFF = 123
 
 BS.WRITS = {
     [_G.CRAFTING_TYPE_ALCHEMY] = {
@@ -437,7 +438,10 @@ BS.CATEGORIES = {
     [BS.CATNAMES.Social] = {name = _G.BARSTEWARD_CATEGORY_SOCIAL, icon = "friends/friends_tabicon_friends"},
     [BS.CATNAMES.Thievery] = {name = _G.BARSTEWARD_CATEGORY_THIEVERY, icon = "icons/mapkey/mapkey_fence"},
     [BS.CATNAMES.Assistants] = {name = _G.BARSTEWARD_ASSISTANTS, icon = "icons/assistant_premiumbanker_01"},
-    [BS.CATNAMES.InfiniteArchive] = {name = _G.SI_ENDLESS_DUNGEON_HUD_TRACKER_TITLE, icon = "icons/poi/poi_endlessdungeon_complete"}
+    [BS.CATNAMES.InfiniteArchive] = {
+        name = _G.SI_ENDLESS_DUNGEON_HUD_TRACKER_TITLE,
+        icon = "icons/poi/poi_endlessdungeon_complete"
+    }
 }
 
 BS.ASSISTANTS = {
@@ -474,4 +478,76 @@ BS.INFINITE_ARCHIVE_MAX_COUNTS = {
     [_G.ENDLESS_DUNGEON_COUNTER_TYPE_STAGE] = 3,
     [_G.ENDLESS_DUNGEON_COUNTER_TYPE_CYCLE] = 3,
     [_G.ENDLESS_DUNGEON_COUNTER_TYPE_ARC] = 5
+}
+
+BS.FOOD_BUFFS = {
+    [17407] = true,
+    [17577] = true,
+    [17581] = true,
+    [17614] = true,
+    [61218] = true,
+    [61255] = true,
+    [61257] = true,
+    [61259] = true,
+    [61260] = true,
+    [61261] = true,
+    [61294] = true,
+    [61335] = true,
+    [61340] = true,
+    [61341] = true,
+    [61344] = true,
+    [61345] = true,
+    [61350] = true,
+    [66124] = true,
+    [66125] = true,
+    [66127] = true,
+    [66128] = true,
+    [66129] = true,
+    [66130] = true,
+    [66131] = true,
+    [66132] = true,
+    [66136] = true,
+    [66137] = true,
+    [66140] = true,
+    [66141] = true,
+    [66551] = true,
+    [66568] = true,
+    [68411] = true,
+    [68412] = true,
+    [68413] = true,
+    [68416] = true,
+    [72816] = true,
+    [72822] = true,
+    [72824] = true,
+    [72957] = true,
+    [72960] = true,
+    [72962] = true,
+    [72819] = true,
+    [72956] = true,
+    [72959] = true,
+    [72961] = true,
+    [84678] = true,
+    [84681] = true,
+    [84700] = true,
+    [84704] = true,
+    [84709] = true,
+    [84720] = true,
+    [84725] = true,
+    [84731] = true,
+    [84735] = true,
+    [85484] = true,
+    [86559] = true,
+    [86673] = true,
+    [86746] = true,
+    [89955] = true,
+    [89957] = true,
+    [89971] = true,
+    [100488] = true,
+    [100498] = true,
+    [100502] = true,
+    [107748] = true,
+    [107789] = true,
+    [127531] = true,
+    [127572] = true,
+    [127596] = true
 }
