@@ -952,6 +952,16 @@ function BS.Count(input, searchFor)
     return count
 end
 
+function BS.Search(values, searchFor)
+    for _, value in ipairs(values) do
+        if (searchFor:find(value))then
+            return true
+        end
+    end
+
+    return false
+end
+
 local function addQuotes(value, sub)
     return '"' .. GetString(value, sub) .. '"'
 end

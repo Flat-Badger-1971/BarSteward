@@ -1,3 +1,10 @@
+[color=#ff9900][b]Version: 2.0.20 ---------------[/b][/color]
+Added buff description to food buff widget
+Fixed bug with Fence Transaction colours
+
+[color=#ff9900][b]Version: 2.0.19 ---------------[/b][/color]
+Fixed for Treasure chest counter in German client
+
 [color=#ff9900][b]Version: 2.0.18 ---------------[/b][/color]
 Bugfix for colour fetching in new widget
 

@@ -1138,7 +1138,7 @@ BS.widgets[BS.W_RANDOM_TRIBUTE] = {
 -- widget based in InfoPanel
 
 local function isChest(name)
-    return BS.Count("Truhe,Coffre,Chest,сундук", name) > 0
+    return BS.Search({"Truhe", "Coffre", "Chest", "сундук"}, name)
 end
 
 BS.widgets[BS.W_CHESTS_FOUND] = {

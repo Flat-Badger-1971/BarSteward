@@ -448,6 +448,7 @@ read_globals = {
     "IsItemPlaceableFurniture",
     "IsItemRepairKit",
     "IsItemStolen",
+    "IsUnitDead",
     "IsUnitGrouped",
     "IsUnitInCombat",
     "IsUnitInDungeon",

@@ -1104,7 +1104,11 @@ BS.widgets[BS.W_FOOD_BUFF] = {
 
                     widget:SetValue(formattedTime)
                     widget:SetColour(unpack(BS.GetTimeColour(remaining, this, 60, true)))
-                    widget.tooltip = BS.Format(buffName)
+
+                    local ttt = "|cffffff" .. BS.Format(buffName) .. "|r" .. BS.LF
+
+                    ttt = ttt .. BS.Format(GetAbilityDescription(abilityId))
+                    widget.tooltip = ttt
 
                     return remaining
                 end
