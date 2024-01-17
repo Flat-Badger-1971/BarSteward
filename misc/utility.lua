@@ -954,7 +954,7 @@ end
 
 function BS.Search(values, searchFor)
     for _, value in ipairs(values) do
-        if (searchFor:find(value))then
+        if (searchFor:find(value)) then
             return true
         end
     end
@@ -1698,6 +1698,20 @@ function BS.GetBar(widgetIndex)
         local bar = BS.BarObjectPool:GetActiveObject(barKey)
 
         return bar
+    end
+end
+
+function BS.UpdateIconGap(barNumber)
+    if (barNumber and (barNumber > 0)) then
+        local widgets = getWidgets(barNumber)
+
+        for _, widgetData in pairs(widgets) do
+            local widget = BS.GetWidget(widgetData.id)
+
+            widget:SetValueAnchor()
+        end
+
+        BS.RegenerateBar(barNumber)
     end
 end
 

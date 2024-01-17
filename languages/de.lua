@@ -173,6 +173,7 @@ L(BS .. "HIDE_WHEN_FULLY_USED_TOOLTIP", "Verstecke wenn alle verfügbaren Option
 L(BS .. "HIGHEST", "Highest score")
 L(BS .. "HORIZONTAL", "Horizontal")
 L(BS .. "HOURS", "Stunden")
+L(BS .. "ICONGAP", "Gap between the icon and the text")
 L(BS .. "IMPORT", "Import")
 L(BS .. "IMPORT_BAR", "Import Leiste")
 L(BS .. "IMPORT_ERROR_BAR", "Fehlende Leisteninformation")

@@ -435,6 +435,7 @@ read_globals = {
     "GetZoneSkyshardId",
     "GuiRoot",
     "HasActiveCompanion",
+    "HasBlockedCompanion",
     "HasCraftBagAccess",
     "HasPendingCompanion",
     "IsCollectibleBlocked",

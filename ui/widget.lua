@@ -194,15 +194,22 @@ function baseWidget:CreateProgress(progress, gradient, transition)
             self.value:SetFont(self.font)
             self.value:SetColor(unpack(BS.Vars.DefaultColour))
             self.value:ClearAnchors()
-            self.value:SetAnchor(
-                self.valueSide == LEFT and RIGHT or LEFT,
-                self.icon,
-                self.valueSide,
-                self.valueSide == LEFT and -10 or 10,
-                0
-            )
+
+            self:SetValueAnchor()
         end
     end
+end
+
+function baseWidget:SetValueAnchor()
+    local icongap = self.barSettings.IconGap or 10
+
+    self.value:SetAnchor(
+        self.valueSide == LEFT and RIGHT or LEFT,
+        self.icon,
+        self.valueSide,
+        self.valueSide == LEFT and (icongap * -1) or icongap,
+        0
+    )
 end
 
 function baseWidget:SetInitialFont()

@@ -169,6 +169,7 @@ L(BS .. "HIDE_WHEN_FULLY_USED_TOOLTIP", "Masque quand tout les emplacements/opti
 L(BS .. "HIGHEST", "Highest score")
 L(BS .. "HORIZONTAL", "Horizontale")
 L(BS .. "HOURS", "Heures")
+L(BS .. "ICONGAP", "Gap between the icon and the text")
 L(BS .. "IMPORT", "Importer")
 L(BS .. "IMPORT_BAR", "Importer la barre")
 L(BS .. "IMPORT_ERROR_BAR", "Informations manquantes sur la barre")

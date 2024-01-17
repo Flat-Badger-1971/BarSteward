@@ -1,7 +1,7 @@
 local BS = _G.BarSteward
 
 BS.LAM = _G.LibAddonMenu2
-BS.VERSION = "2.0.20"
+BS.VERSION = "2.0.21"
 
 local panel = {
     type = "panel",
@@ -739,7 +739,7 @@ local function getBarSettings()
             end,
             setFunc = function(value)
                 vars.IconSize = value
-                BS.RegenerateBar(idx)
+                BS.RegenerateBar(idx, true)
             end,
             min = 8,
             max = 64,
@@ -748,6 +748,21 @@ local function getBarSettings()
             disabled = function()
                 return not vars.Override
             end
+        }
+
+        controls[#controls + 1] = {
+            type = "slider",
+            name = GetString(_G.BARSTEWARD_ICONGAP),
+            getFunc = function()
+                return vars.IconGap or 10
+            end,
+            setFunc = function(value)
+                vars.IconGap = value
+                BS.UpdateIconGap(idx)
+            end,
+            min = 0,
+            max = 40,
+            width = "true"
         }
 
         local ref = "BarSteward_SampleText_bar_" .. idx
@@ -2331,7 +2346,9 @@ local function getWidgetSettings()
 
         local widgetData = {
             type = "submenu",
-            name = function() return getWidgetName(k) end,
+            name = function()
+                return getWidgetName(k)
+            end,
             icon = BS.FormatIcon(BS.widgets[k].icon),
             iconTextureCoords = textureCoords,
             controls = widgetControls,

@@ -227,7 +227,9 @@ BS.widgets[BS.W_INFINITE_ARCHIVE_SCORE] = {
 
         if (event == "ScoreChanged") then
             currentScore = score
-        elseif (currentScore == 0) then
+        end
+
+        if (currentScore < 2) then
             currentScore = ENDLESS_DUNGEON_MANAGER:GetScore()
         end
 
