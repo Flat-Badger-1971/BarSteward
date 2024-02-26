@@ -472,7 +472,11 @@ BS.widgets[BS.W_ARCHIVAL_FRAGMENTS] = {
     name = "archivalFragments",
     update = function(widget)
         local this = BS.W_ARCHIVAL_FRAGMENTS
-        local qty = GetCurrencyAmount(_G.CURT_ENDLESS_DUNGEON, GetCurrencyPlayerStoredLocation(_G.CURT_ENDLESS_DUNGEON))
+        local qty =
+            GetCurrencyAmount(
+            (_G.CURT_ENDLESS_DUNGEON or _G.CURT_ARCHIVAL_FORTUNES),
+            GetCurrencyPlayerStoredLocation(_G.CURT_ENDLESS_DUNGEON or _G.CURT_ARCHIVAL_FORTUNES)
+        )
 
         if (BS.Vars.Controls[this].UseSeparators == true) then
             qty = BS.AddSeparators(qty)

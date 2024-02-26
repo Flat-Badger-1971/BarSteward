@@ -371,7 +371,7 @@ BS.CURRENCIES = {
         crownStore = false,
         text = _G.BARSTEWARD_TRANSMUTE_CRYSTALS
     },
-    [_G.CURT_ENDLESS_DUNGEON] = {
+    [_G.CURT_ENDLESS_DUNGEON or _G.CURT_ARCHIVAL_FORTUNES] = {
         icon = "archivalfragments_mipmaps",
         crownStore = true,
         text = _G.BARSTEWARD_ARCHIVAL_FRAGMENTS

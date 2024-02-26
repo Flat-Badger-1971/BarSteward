@@ -9,6 +9,7 @@ read_globals = {
             GetAchievementStatus = {read_only = true}
         }
     },
+    "BOSS_BAR",
     ["CALLBACK_MANAGER"] = {
         fields = {
             FireCallbacks = {read_only = true},
@@ -42,6 +43,7 @@ read_globals = {
             BrowseToCollectible = {read_only = true}
         }
     },
+    "COMPASS",
     ["ENDLESS_DUNGEON_MANAGER"] = {
         fields = {
             GetAbilityStackCountTable = {read_only = true},
@@ -304,6 +306,7 @@ read_globals = {
     "GetGameCameraPickpocketingBonusInfo",
     "GetGameTimeMilliseconds",
     "GetGameTimeSeconds",
+    "GetGroupSize",
     "GetGuildId",
     "GetGuildMemberCharacterInfo",
     "GetGuildMemberInfo",
@@ -370,6 +373,8 @@ read_globals = {
     "GetNumLockpicksLeft",
     "GetNumLoreCategories",
     "GetNumRecipeLists",
+    "GetNumSkillAbilities",
+    "GetNumSkillLines",
     "GetNumSkyShards",
     "GetNumSkyshardsInZone",
     "GetNumSmithingResearchLines",
@@ -391,10 +396,15 @@ read_globals = {
     "GetRepairAllCost",
     "GetRequiredChampionDisciplineIdForSlot",
     "GetRidingStats",
+    "GetSkillAbilityId",
+    "GetSkillAbilityInfo",
+    "GetSkillLineId",
     "GetSkillLineIndicesFromSkillLineId",
     "GetSkillLineInfo",
     "GetSkyshardDiscoveryStatus",
+    "GetSlotBoundId",
     "GetSlotStackSize",
+    "GetSlotType",
     "GetSmithingResearchLineInfo",
     "GetSmithingResearchLineTraitInfo",
     "GetSmithingResearchLineTraitTimes",
@@ -449,10 +459,12 @@ read_globals = {
     "IsItemPlaceableFurniture",
     "IsItemRepairKit",
     "IsItemStolen",
+    "IsSlotUsed",
     "IsUnitDead",
     "IsUnitGrouped",
     "IsUnitInCombat",
     "IsUnitInDungeon",
+    "IsUnitOnline",
     "IsUnitPvPFlagged",
     "JumpToSpecificHouse",
     "PlayEmoteByIndex",
