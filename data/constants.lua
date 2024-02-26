@@ -183,15 +183,18 @@ BS.MUNDUS_STONES = {
 BS.BAGICON = zo_iconFormat("/esoui/art/tooltips/icon_bag.dds")
 BS.BANKICON = zo_iconFormat("/esoui/art/tooltips/icon_bank.dds")
 
+-- scions check
+local suffix = _G.CURT_ARCHIVAL_FORTUNES and "slug" or "otf"
+
 BS.FONTS = {
-    ["Default"] = "EsoUi/Common/Fonts/Univers57.otf",
-    ["Univers55"] = "EsoUi/Common/Fonts/Univers55.otf",
-    ["ESO Bold"] = "EsoUi/Common/Fonts/Univers67.otf",
-    ["Antique"] = "EsoUI/Common/Fonts/ProseAntiquePSMT.otf",
-    ["Handwritten"] = "EsoUI/Common/Fonts/Handwritten_Bold.otf",
-    ["Trajan"] = "EsoUI/Common/Fonts/TrajanPro-Regular.otf",
-    ["Futura"] = "EsoUI/Common/Fonts/FuturaStd-CondensedLight.otf",
-    ["Futura Bold"] = "EsoUI/Common/Fonts/FuturaStd-Condensed.otf"
+    ["Default"] = "EsoUi/Common/Fonts/Univers57." .. suffix,
+    ["Univers55"] = "EsoUi/Common/Fonts/Univers55." .. suffix,
+    ["ESO Bold"] = "EsoUi/Common/Fonts/Univers67." .. suffix,
+    ["Antique"] = "EsoUI/Common/Fonts/ProseAntiquePSMT." .. suffix,
+    ["Handwritten"] = "EsoUI/Common/Fonts/Handwritten_Bold." .. suffix,
+    ["Trajan"] = "EsoUI/Common/Fonts/TrajanPro-Regular." .. suffix,
+    ["Futura"] = "EsoUI/Common/Fonts/FuturaStd-CondensedLight." .. suffix,
+    ["Futura Bold"] = "EsoUI/Common/Fonts/FuturaStd-Condensed." .. suffix
 }
 
 BS.CRAFTING_SCENES = {"alchemy", "enchanting", "provisioner", "smithing"}
