@@ -154,6 +154,11 @@ function baseWidget:CreateProgress(progress, gradient, transition)
         local name = BS.Name .. "_progress_" .. BS.ProgressIndex
 
         BS.ProgressIndex = BS.ProgressIndex + 1
+
+        if (self.value and not self.value.progress) then
+            self.value = BS.CreateProgressBar(name, self.control)
+        end
+
         self.value = self.value or BS.CreateProgressBar(name, self.control)
         self.value:ClearAnchors()
         self.value:SetAnchor(
@@ -178,6 +183,10 @@ function baseWidget:CreateProgress(progress, gradient, transition)
     else
         if (not self:HasNoValue()) then
             if (transition) then
+                if (self.value and not self.transition) then
+                    self.value = WINDOW_MANAGER:CreateControlFromVirtual(nil, self.control, "ZO_RollingMeterLabel")
+                end
+
                 self.value =
                     self.value or WINDOW_MANAGER:CreateControlFromVirtual(nil, self.control, "ZO_RollingMeterLabel")
                 self.value:SetHorizontalAlignment(_G.TEXT_ALIGN_LEFT)
@@ -186,6 +195,10 @@ function baseWidget:CreateProgress(progress, gradient, transition)
                 self.value.transitionManager:SetMaxTransitionSteps(50)
                 self.transition = true
             else
+                if (self.value and not self.value.SetFont) then
+                    self.value = WINDOW_MANAGER:CreateControl(nil, self.control, CT_LABEL)
+                end
+
                 self.value = self.value or WINDOW_MANAGER:CreateControl(nil, self.control, CT_LABEL)
                 self.value:SetDimensions(50, 32)
                 self.value:SetVerticalAlignment(TEXT_ALIGN_CENTER)

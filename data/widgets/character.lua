@@ -110,14 +110,17 @@ BS.widgets[BS.W_PLAYER_NAME] = {
     name = "playerName",
     update = function(widget)
         local playerName = GetUnitName("player")
+        local this = BS.W_PLAYER_NAME
 
         widget:SetValue(ZO_FormatUserFacingDisplayName(playerName))
-        widget:SetColour(unpack(BS.GetColour(BS.W_PLAYER_NAME)))
+        widget:SetColour(unpack(BS.GetColour(this)))
 
-        local classId = GetUnitClassId("player")
-        local icon = GetClassIcon(classId)
+        if (BS.GetVar("ShowClassIcon", this)) then
+            local classId = GetUnitClassId("player")
+            local icon = GetClassIcon(classId)
 
-        widget:SetIcon(icon)
+            widget:SetIcon(icon)
+        end
 
         return widget:GetValue()
     end,
@@ -130,7 +133,22 @@ BS.widgets[BS.W_PLAYER_NAME] = {
         else
             SCENE_MANAGER:Show("LevelUpRewardsClaimGamepad")
         end
-    end
+    end,
+    customSettings = {
+        [1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_SHOW_CLASS_ICON),
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_PLAYER_NAME].ShowClassIcon or false
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_PLAYER_NAME].ShowClassIcon = value
+                BS.RegenerateBar(BS.Vars.Controls[BS.W_PLAYER_NAME].Bar)
+            end,
+            width = "full",
+            default = false
+        }
+    }
 }
 
 BS.widgets[BS.W_RACE] = {

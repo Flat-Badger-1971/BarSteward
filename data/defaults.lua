@@ -315,7 +315,8 @@ BS.Defaults = {
             Cat = cat.Character
         },
         [BS.W_PLAYER_NAME] = {
-            Cat = cat.Character
+            Cat = cat.Character,
+            ShowClassIcon = true
         },
         [BS.W_RACE] = {
             Cat = cat.Character

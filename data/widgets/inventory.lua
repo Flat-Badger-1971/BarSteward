@@ -314,14 +314,17 @@ BS.widgets[BS.W_REPAIRS_KITS] = {
     tooltip = BS.Format(_G.SI_HOOK_POINT_STORE_REPAIR_KIT_HEADER):gsub(":", "")
 }
 
+local filledIcon = "icons/soulgem_006_filled"
+local emptyIcon = "icons/soulgem_006_empty"
+
 BS.widgets[BS.W_SOUL_GEMS] = {
     -- v1.2.0
     name = "soulGems",
     update = function(widget)
         local this = BS.W_SOUL_GEMS
         local level = GetUnitEffectiveLevel("player")
-        local _, filledIcon, filledCount = GetSoulGemInfo(_G.SOUL_GEM_TYPE_FILLED, level)
-        local _, emptyIcon, emptyCount = GetSoulGemInfo(_G.SOUL_GEM_TYPE_EMPTY, level)
+        local filledCount = select(3, GetSoulGemInfo(_G.SOUL_GEM_TYPE_FILLED, level))
+        local emptyCount = select(3, GetSoulGemInfo(_G.SOUL_GEM_TYPE_EMPTY, level))
 
         if (BS.GetVar("UseSeparators", this) == true) then
             filledCount = BS.AddSeparators(filledCount)
