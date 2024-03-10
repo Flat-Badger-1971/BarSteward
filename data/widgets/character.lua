@@ -856,6 +856,16 @@ BS.widgets[BS.W_PLAYER_LOCATION] = {
         else
             SCENE_MANAGER:Show("gamepad_worldMap")
         end
+    end,
+    hideWhenTrue = function()
+        if (BS.Vars.Controls[BS.W_PLAYER_LOCATION].PvPOnly == true) then
+            local mapContentType = GetMapContentType()
+            local isPvP = (mapContentType == _G.MAP_CONTENT_AVA or mapContentType == _G.MAP_CONTENT_BATTLEGROUND)
+
+            return not isPvP
+        end
+
+        return false
     end
 }
 

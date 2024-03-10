@@ -545,7 +545,8 @@ BS.Defaults = {
             ColourValues = ""
         },
         [BS.W_PLAYER_LOCATION] = {
-            Cat = cat.Character
+            Cat = cat.Character,
+            PvPOnly = false
         },
         [BS.W_RANDOM_BATTLEGROUND] = {
             Autohide = false,
