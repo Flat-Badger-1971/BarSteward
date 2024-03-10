@@ -1097,40 +1097,63 @@ BS.widgets[BS.W_VAMPIRISM_FEED_TIMER] = {
     hideWhenEqual = 0
 }
 
+local function scanBuffs(buffList, widgetIndex)
+    local numberOfBuffs = GetNumBuffs("player")
+    local buffs = {}
+
+    if (numberOfBuffs > 0) then
+        for buffNum = 1, numberOfBuffs do
+            local buffName, _, timeEnding, _, _, _, _, _, _, _, abilityId = GetUnitBuffInfo("player", buffNum)
+
+            if (buffList[abilityId]) then
+                local timeNow = GetGameTimeMilliseconds()
+                local remaining = timeEnding - timeNow / 1000
+                local formattedTime =
+                    BS.SecondsToTime(
+                    remaining,
+                    true,
+                    false,
+                    BS.GetVar("HideSeconds", widgetIndex),
+                    BS.GetVar("Format", widgetIndex)
+                )
+
+                local ttt = "|cffffff" .. BS.Format(buffName) .. "|r" .. BS.LF
+
+                ttt = ttt .. BS.Format(GetAbilityDescription(abilityId))
+
+                table.insert(
+                    buffs,
+                    {remaining = remaining, formattedTime = formattedTime, ttt = ttt, buffName = buffName}
+                )
+            end
+        end
+    end
+
+    return buffs
+end
+
 BS.widgets[BS.W_FOOD_BUFF] = {
     -- v2.0.17
     name = "foodBuff",
     update = function(widget)
         local this = BS.W_FOOD_BUFF
-        local numberOfBuffs = GetNumBuffs("player")
+        local buffs = scanBuffs(BS.FOOD_BUFFS, this)
 
-        if (numberOfBuffs > 0) then
-            for buffNum = 1, numberOfBuffs do
-                local buffName, _, timeEnding, _, _, _, _, _, _, _, abilityId = GetUnitBuffInfo("player", buffNum)
+        if (#buffs > 0) then
+            local buff = buffs[1]
 
-                if (BS.FOOD_BUFFS[abilityId]) then
-                    local timeNow = GetGameTimeMilliseconds()
-                    local remaining = timeEnding - timeNow / 1000
-                    local formattedTime =
-                        BS.SecondsToTime(
-                        remaining,
-                        true,
-                        false,
-                        BS.GetVar("HideSeconds", this),
-                        BS.GetVar("Format", this)
-                    )
+            widget:SetValue(buff.formattedTime)
+            widget:SetColour(unpack(BS.GetTimeColour(buff.remaining, this, 60, true)))
 
-                    widget:SetValue(formattedTime)
-                    widget:SetColour(unpack(BS.GetTimeColour(remaining, this, 60, true)))
+            widget.tooltip = buff.ttt
 
-                    local ttt = "|cffffff" .. BS.Format(buffName) .. "|r" .. BS.LF
-
-                    ttt = ttt .. BS.Format(GetAbilityDescription(abilityId))
-                    widget.tooltip = ttt
-
-                    return remaining
-                end
+            if (BS.GetVar("Announce", this) and BS.GetVar("DangerValue", this) > buff.remaining) then
+                local buffMessage =
+                    ZO_CachedStrFormat(GetString(_G.BARSTEWARD_WARNING_EXPIRING), GetString(_G.BARSTEWARD_FOOD_BUFF))
+                BS.Announce(GetString(_G.BARSTEWARD_WARNING), buffMessage, this)
             end
+
+            return buff.remaining
         end
 
         local value = BS.SecondsToTime(0, true, false, BS.GetVar("HideSeconds", this), BS.GetVar("Format", this))
@@ -1143,4 +1166,118 @@ BS.widgets[BS.W_FOOD_BUFF] = {
     hideWhenEqual = 0,
     icon = "icons/store_tricolor_food_01",
     tooltip = BS.Format(_G.BARSTEWARD_FOOD_BUFF)
+}
+
+BS.widgets[BS.W_AP_BUFF] = {
+    -- v2.1.2
+    name = "apBuff",
+    update = function(widget)
+        local this = BS.W_AP_BUFF
+        local buffs = scanBuffs(BS.AP_BUFFS, this)
+        local lowest = {remaining = 99999}
+        local ttt = BS.Format(_G.BARSTEWARD_AP_BUFF) .. BS.LF
+
+        if (#buffs > 0) then
+            for _, buff in ipairs(buffs) do
+                ttt = ttt .. BS.LF
+
+                if (#buffs > 1) then
+                    ttt = ttt .. buff.buffName .. ": " .. buff.formattedTime
+                else
+                    ttt = ttt .. BS.LF .. buff.ttt
+                end
+
+                buff.ttt = ttt
+
+                if (buff.remaining < lowest.remaining) then
+                    lowest = buff
+                end
+            end
+
+            widget:SetValue(lowest.formattedTime)
+            widget:SetColour(unpack(BS.GetTimeColour(lowest.remaining, this, 60, true)))
+
+            widget.tooltip = lowest.ttt
+
+            if (BS.GetVar("Announce", this) and (BS.GetVar("WarningValue", this) * 60) == BS.ToInt(lowest.remaining)) then
+                local buffMessage =
+                    ZO_CachedStrFormat(GetString(_G.BARSTEWARD_WARNING_EXPIRING), BS.Format(lowest.buffName))
+                BS.Announce(GetString(_G.BARSTEWARD_WARNING), buffMessage, this)
+            end
+
+            return lowest.remaining
+        end
+
+        local value = BS.SecondsToTime(0, true, false, BS.GetVar("HideSeconds", this), BS.GetVar("Format", this))
+
+        widget:SetValue(value)
+        widget:SetColour(unpack(BS.GetTimeColour(0, this, 60, true)))
+
+        return 0
+    end,
+    timer = 1000,
+    hideWhenTrue = function()
+        if (BS.Vars.Controls[BS.W_AP_BUFF].PvPOnly == true) then
+            local mapContentType = GetMapContentType()
+            local isPvP = (mapContentType == _G.MAP_CONTENT_AVA or mapContentType == _G.MAP_CONTENT_BATTLEGROUND)
+
+            return not isPvP
+        end
+
+        return false
+    end,
+    icon = "icons/crownstore_skillline_alliancewar_assault",
+    tooltip = BS.Format(_G.BARSTEWARD_AP_BUFF)
+}
+
+BS.widgets[BS.W_XP_BUFF] = {
+    -- v2.1.2
+    name = "apBuff",
+    update = function(widget)
+        local this = BS.W_XP_BUFF
+        local buffs = scanBuffs(BS.XP_BUFFS, this)
+        local lowest = {remaining = 99999}
+        local ttt = BS.Format(_G.BARSTEWARD_XP_BUFF) .. BS.LF
+
+        if (#buffs > 0) then
+            for _, buff in ipairs(buffs) do
+                ttt = ttt .. BS.LF
+
+                if (#buffs > 1) then
+                    ttt = ttt .. buff.buffName .. ": " .. buff.formattedTime
+                else
+                    ttt = ttt .. BS.LF .. buff.ttt
+                end
+
+                buff.ttt = ttt
+
+                if (buff.remaining < lowest.remaining) then
+                    lowest = buff
+                end
+            end
+
+            widget:SetValue(lowest.formattedTime)
+            widget:SetColour(unpack(BS.GetTimeColour(lowest.remaining, this, 60, true)))
+
+            widget.tooltip = lowest.ttt
+
+            if (BS.GetVar("Announce", this) and (BS.GetVar("WarningValue", this) * 60) == BS.ToInt(lowest.remaining)) then
+                local buffMessage =
+                    ZO_CachedStrFormat(GetString(_G.BARSTEWARD_WARNING_EXPIRING), BS.Format(lowest.buffName))
+                BS.Announce(GetString(_G.BARSTEWARD_WARNING), buffMessage, this)
+            end
+
+            return lowest.remaining
+        end
+
+        local value = BS.SecondsToTime(0, true, false, BS.GetVar("HideSeconds", this), BS.GetVar("Format", this))
+
+        widget:SetValue(value)
+        widget:SetColour(unpack(BS.GetTimeColour(0, this, 60, true)))
+
+        return 0
+    end,
+    timer = 1000,
+    icon = "icons/icon_experience",
+    tooltip = BS.Format(_G.BARSTEWARD_XP_BUFF)
 }

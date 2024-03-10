@@ -1,3 +1,10 @@
+[color=#ff9900][b]Version: 2.1.2 ---------------[/b][/color]
+Alert option added to food/drink buff widget
+Alliance point buff widget added
+Experience point buff widget added
+Infinite Archive 'Autohide' option renamed for clarity
+Bugfix for hiding Infinite Archive Score outside the archive
+
 [color=#ff9900][b]Version: 2.1.1 ---------------[/b][/color]
 Bugfixes
 Skyshard icons now hard coded

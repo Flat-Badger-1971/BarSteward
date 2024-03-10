@@ -129,6 +129,8 @@ BS.W_INFINITE_ARCHIVE_PROGRESS = 120
 BS.W_INFINITE_ARCHIVE_SCORE = 121
 BS.W_DRINWETH = 122
 BS.W_FOOD_BUFF = 123
+BS.W_AP_BUFF = 124
+BS.W_XP_BUFF = 125
 
 BS.WRITS = {
     [_G.CRAFTING_TYPE_ALCHEMY] = {
@@ -553,4 +555,34 @@ BS.FOOD_BUFFS = {
     [127531] = true,
     [127572] = true,
     [127596] = true
+}
+
+BS.AP_BUFFS = {
+    [66282] = true,
+    [147466] = true,
+    [147467] = true,
+    [147687] = true,
+    [147733] = true,
+    [147734] = true,
+    [147797] = true
+}
+
+BS.XP_BUFFS = {
+    [15429] = true,
+    [15450] = true,
+    [63570] = true,
+    [64210] = true,
+    [66776] = true,
+    [85501] = true,
+    [85502] = true,
+    [85503] = true,
+    [88445] = true,
+    [89683] = true,
+    [91365] = true,
+    [91368] = true,
+    [91369] = true,
+    [99462] = true,
+    [99463] = true,
+    [174237] = true,
+    [193152] = true
 }

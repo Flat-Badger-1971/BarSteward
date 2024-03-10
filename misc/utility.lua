@@ -932,6 +932,10 @@ function BS.SimpleTableCompare(t1, t2)
     return table.concat(t1) == table.concat(t2)
 end
 
+function BS.ToInt(num)
+    return tonumber(string.format("%.0f", num))
+end
+
 function BS.CompareColours(c1, c2)
     local colours = {c1, c2}
 
@@ -1715,20 +1719,34 @@ function BS.UpdateIconGap(barNumber)
     end
 end
 
--- function BS.FindItem(text)
---     local filteredItems =
---             SHARED_INVENTORY:GenerateFullSlotData(
---             function(itemdata)
---                 local match = itemdata.name:find(text)
---                 return match ~= nil
---             end,
---             _G.BAG_BACKPACK
---         )
+-- developer utility functions
+-- luacheck: push ignore 113
+function BS.FindItem(text)
+    local filteredItems =
+        SHARED_INVENTORY:GenerateFullSlotData(
+        function(itemdata)
+            local match = itemdata.name:find(text)
+            return match ~= nil
+        end,
+        _G.BAG_BACKPACK
+    )
 
---         for _, item in ipairs(filteredItems) do
---             d(item.name)
---             d(item.bagId, item.slotIndex)
---             d(GetItemId(item.bagId, item.slotIndex))
---             d(GetItemType(item.bagId, item.slotIndex))
---         end
--- end
+    for _, item in ipairs(filteredItems) do
+        d(item.name)
+        d(item.bagId, item.slotIndex)
+        d(GetItemId(item.bagId, item.slotIndex))
+        d(GetItemType(item.bagId, item.slotIndex))
+    end
+end
+
+function BS.FindAbility(text, start, finish)
+    for abilityId = start, finish do
+        local name = GetAbilityName(abilityId)
+
+        if (name:find(text)) then
+            d(abilityId)
+            d(name)
+        end
+    end
+end
+-- luacheck: pop

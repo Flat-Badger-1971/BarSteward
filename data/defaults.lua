@@ -45,18 +45,18 @@ BS.Defaults = {
     },
     Bars = {
         [1] = {
-            Orientation = GetString(_G.BARSTEWARD_HORIZONTAL),
-            Position = {X = x, Y = y},
-            Name = GetString(_G.BARSTEWARD_MAIN_BAR),
+            Anchor = GetString(_G.BARSTEWARD_MIDDLE),
             Backdrop = {
                 Show = true,
                 Colour = {0.23, 0.23, 0.23, 0.7}
             },
-            TooltipAnchor = GetString(_G.BARSTEWARD_BOTTOM),
-            ValueSide = GetString(_G.BARSTEWARD_RIGHT),
-            Anchor = GetString(_G.BARSTEWARD_MIDDLE),
+            Name = GetString(_G.BARSTEWARD_MAIN_BAR),
+            NudgeCompass = false,
+            Orientation = GetString(_G.BARSTEWARD_HORIZONTAL),
+            Position = {X = x, Y = y},
             Scale = 1,
-            NudgeCompass = false
+            TooltipAnchor = GetString(_G.BARSTEWARD_BOTTOM),
+            ValueSide = GetString(_G.BARSTEWARD_RIGHT)
         }
     },
     Controls = {
@@ -719,20 +719,44 @@ BS.Defaults = {
             Cat = cat.InfiniteArchive
         },
         [BS.W_INFINITE_ARCHIVE_PROGRESS] = {
-            Cat = cat.InfiniteArchive,
             Autohide = false,
+            Cat = cat.InfiniteArchive,
             Progress = true
         },
         [BS.W_INFINITE_ARCHIVE_SCORE] = {
-            Cat = cat.InfiniteArchive,
-            Autohide = false
+            Autohide = false,
+            Cat = cat.InfiniteArchive
         },
         [BS.W_DRINWETH] = {
             Cat = cat.Assistants
         },
         [BS.W_FOOD_BUFF] = {
-            Cat = cat.Character,
+            Announce = false,
             Autohide = false,
+            Cat = cat.Character,
+            ColourValues = "okc,wv,wc,dv,dc",
+            DangerValue = 2,
+            HideSeconds = false,
+            Timer = true,
+            Units = GetString(_G.BARSTEWARD_MINUTES),
+            WarningValue = 10
+        },
+        [BS.W_AP_BUFF] = {
+            Announce = false,
+            Autohide = false,
+            Cat = cat.Character,
+            ColourValues = "okc,wv,wc,dv,dc",
+            DangerValue = 2,
+            HideSeconds = false,
+            PvPOnly = false,
+            Timer = true,
+            Units = GetString(_G.BARSTEWARD_MINUTES),
+            WarningValue = 10
+        },
+        [BS.W_XP_BUFF] = {
+            Announce = false,
+            Autohide = false,
+            Cat = cat.Character,
             ColourValues = "okc,wv,wc,dv,dc",
             DangerValue = 2,
             HideSeconds = false,

@@ -1,7 +1,7 @@
 local BS = _G.BarSteward
 
 BS.LAM = _G.LibAddonMenu2
-BS.VERSION = "2.1.1"
+BS.VERSION = "2.1.2"
 
 local panel = {
     type = "panel",
@@ -1160,21 +1160,23 @@ local function checkInvert(defaults, widgetControls, vars, key)
 end
 
 local function checkAutoHide(defaults, widgetControls, vars, key)
-    if (defaults.Autohide ~= nil) then
-        widgetControls[#widgetControls + 1] = {
-            type = "checkbox",
-            name = GetString(_G.BARSTEWARD_AUTOHIDE),
-            tooltip = GetString(_G.BARSTEWARD_AUTOHIDE_TOOLTIP),
-            getFunc = function()
-                return vars.Autohide
-            end,
-            setFunc = function(value)
-                vars.Autohide = value
-                BS.RefreshBar(key)
-            end,
-            width = "full",
-            default = defaults.Autohide
-        }
+    if (key ~= BS.W_INFINITE_ARCHIVE_SCORE and key ~= BS.W_INFINITE_ARCHIVE_PROGRESS) then
+        if (defaults.Autohide ~= nil) then
+            widgetControls[#widgetControls + 1] = {
+                type = "checkbox",
+                name = GetString(_G.BARSTEWARD_AUTOHIDE),
+                tooltip = GetString(_G.BARSTEWARD_AUTOHIDE_TOOLTIP),
+                getFunc = function()
+                    return vars.Autohide
+                end,
+                setFunc = function(value)
+                    vars.Autohide = value
+                    BS.RefreshBar(key)
+                end,
+                width = "full",
+                default = defaults.Autohide
+            }
+        end
     end
 end
 

@@ -198,6 +198,19 @@ BS.widgets[BS.W_INFINITE_ARCHIVE_PROGRESS] = {
             requiresReload = true,
             default = false,
             width = "full"
+        },
+        [2] = {
+            name = BS.Format(_G.BARSTEWARD_INFINITE_ARCHIVE_SHOW),
+            type = "checkbox",
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_INFINITE_ARCHIVE_PROGRESS].Autohide or false
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_INFINITE_ARCHIVE_PROGRESS].Autohide = value
+                BS.RefreshBar(BS.W_INFINITE_ARCHIVE_PROGRESS)
+            end,
+            width = "full",
+            default = false
         }
     }
 }
@@ -256,10 +269,26 @@ BS.widgets[BS.W_INFINITE_ARCHIVE_SCORE] = {
     events = _G.EVENT_PLAYER_ACTIVATED,
     callback = {
         [ENDLESS_DUNGEON_MANAGER] = {
-            {event = "ScoreChanged", label = "ScoreChanged"}
+            {event = "ScoreChanged", label = "ScoreChanged"},
+            {event = "StateChanged", label = "StageChanged"}
         }
     },
     icon = "campaign/overview_indexicon_scoring_up",
     tooltip = GetString(_G.BARSTEWARD_INFINITE_ARCHIVE_SCORE),
-    hideWhenEqual = true
+    hideWhenEqual = true,
+    customSettings = {
+        [1] = {
+            name = BS.Format(_G.BARSTEWARD_INFINITE_ARCHIVE_SHOW),
+            type = "checkbox",
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_INFINITE_ARCHIVE_SCORE].Autohide or false
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_INFINITE_ARCHIVE_SCORE].Autohide = value
+                BS.RefreshBar(BS.W_INFINITE_ARCHIVE_SCORE)
+            end,
+            width = "full",
+            default = false
+        }
+    }
 }
