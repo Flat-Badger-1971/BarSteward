@@ -25,6 +25,7 @@ function baseBar:Initialise()
     self.bar:SetResizeToFitDescendents(true)
     self.bar:SetDrawLayer(_G.DL_CONTROLS)
     self.bar:SetMouseEnabled(true)
+    self.bar:SetClampedToScreen(true)
 
     if (BS.Vars.Movable) then
         self.bar:SetMovable(true)
@@ -532,7 +533,7 @@ function baseBar:DoUpdate(metadata, ...)
     local sound = nil
 
     if (BS.GetVar("SoundWhenEquals", id)) then
-        if (tostring(BS.GetVar("SoundWhenEqualsValue",id)) == tostring(value)) then
+        if (tostring(BS.GetVar("SoundWhenEqualsValue", id)) == tostring(value)) then
             sound = BS.SoundLookup[BS.GetVar("SoundWhenEqualsSound", id)]
         else
             BS.SoundLastPlayed[id] = nil

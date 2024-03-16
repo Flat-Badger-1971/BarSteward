@@ -15,6 +15,26 @@ local function getPTFInfo(id)
     end
 end
 
+local function fixDuplicates(bindings)
+    local assigned = {}
+
+    for key, value in pairs(bindings) do
+        if (value > BS.MAX_BINDINGS) then
+            bindings[key] = nil
+        end
+
+        if (ZO_IsElementInNumericallyIndexedTable(assigned, value)) then
+            local newValue = BS.GetNextIndex(bindings)
+            if (newValue <= BS.MAX_BINDINGS) then
+                bindings[key] = newValue
+                table.insert(assigned, newValue)
+            end
+        else
+            table.insert(assigned, value)
+        end
+    end
+end
+
 function BS.GetHouses()
     local collectibleData = ZO_COLLECTIBLE_DATA_MANAGER:GetAllCollectibleDataObjects()
     local houses = {}
@@ -65,12 +85,23 @@ function BS.AddHousingWidgets(idx, widgets)
 
         local bindings = BS.Vars.HouseBindings or {}
 
-        for id, active in pairs(BS.Vars.HouseWidgets) do
-            if (active) then
-                local house = BS.GetHouseFromReferenceId(id)
-                local vars = BS.Vars.Controls[1000 + id]
+        -- clear out unused bindings
+        for id, _ in pairs(bindings) do
+            if (not BS.Vars.Controls[1000 + id]) then
+                bindings[id] = nil
+            end
+        end
 
-                if (BS.Vars.Controls[1000 + id].Bar == idx) then
+        -- remove any duplicate binding values
+        fixDuplicates(bindings)
+
+        for id, _ in pairs(BS.Vars.HouseWidgets) do
+            local varId = 1000 + id
+            local house = BS.GetHouseFromReferenceId(id)
+            local vars = BS.Vars.Controls[varId]
+
+            if (vars) then
+                if (BS.Vars.Controls[varId].Bar == idx) then
                     local tooltip = vars.Name .. BS.LF .. "|cf9f9f9"
 
                     tooltip = tooltip .. house.name .. BS.LF
@@ -79,7 +110,7 @@ function BS.AddHousingWidgets(idx, widgets)
                     local widget = {
                         name = "house_" .. id,
                         update = function(widget)
-                            local colour = BS.Vars.Controls[1000 + id].Colour or BS.Vars.DefaultColour
+                            local colour = BS.Vars.Controls[varId].Colour or BS.Vars.DefaultColour
 
                             widget:SetColour(unpack(colour))
                             widget:SetValue(vars.Name, vars.RawName)
@@ -93,11 +124,11 @@ function BS.AddHousingWidgets(idx, widgets)
                                 RequestJumpToHouse(id, vars.Outside)
                             end
                         end,
-                        id = 1000 + id
+                        id = varId
                     }
 
-                    table.insert(widgets, {BS.Vars.Controls[1000 + id].Order, widget})
-                    BS.widgets[1000 + id] = widget
+                    table.insert(widgets, {BS.Vars.Controls[varId].Order, widget})
+                    BS.widgets[varId] = widget
 
                     if (not bindings[id]) then
                         bindings[id] = BS.GetNextIndex(bindings)
@@ -207,7 +238,6 @@ local function addSubmenu(barNames, vars, varId, house, id, controls)
                 return barName
             end,
             setFunc = function(value)
-
                 local tbars = BS.Vars.Bars
                 local barNum = 0
 
@@ -444,7 +474,24 @@ function BS.GetPortToHouseSettings()
 
         table.insert(barNames, none)
 
+        -- sort the houses by name
+        local sortedHouses = {}
+
         for id, _ in pairs(addedHouses) do
+            table.insert(sortedHouses, id)
+        end
+
+        table.sort(
+            sortedHouses,
+            function(a, b)
+                local houseNameA = BS.Vars.Controls[1000 + a].RawName
+                local houseNameB = BS.Vars.Controls[1000 + b].RawName
+
+                return houseNameA < houseNameB
+            end
+        )
+
+        for _, id in ipairs(sortedHouses) do
             local varId = 1000 + id
             local vars = BS.Vars.Controls[varId]
             local house = BS.GetHouseFromReferenceId(id)

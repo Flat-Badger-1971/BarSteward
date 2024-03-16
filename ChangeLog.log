@@ -1,3 +1,9 @@
+[color=#ff9900][b]Version: 2.1.4 ---------------[/b][/color]
+Bars are now clamped to prevent them being moved off screen
+Bugfix for housing widget key binds
+Removed the requirement for housing widgets to be on a bar before they can be bound to a key
+House names now sorted alphabetically in the Port to House settings
+
 [color=#ff9900][b]Version: 2.1.3 ---------------[/b][/color]
 Option added to show player location only in pvp zones
 

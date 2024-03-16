@@ -840,18 +840,19 @@ end
 -- get then next unused index number from the table's values
 function BS.GetNextIndex(t)
     local nextIndex = 1
-
-    table.sort(
-        t,
-        function(a, b)
-            return a < b
-        end
-    )
+    local tmpTable = {}
 
     for _, value in pairs(t) do
+        table.insert(tmpTable, value)
+    end
+
+    table.sort(tmpTable)
+
+    for _, value in ipairs(tmpTable) do
         if (value ~= nextIndex) then
             return nextIndex
         end
+
         nextIndex = nextIndex + 1
     end
 
