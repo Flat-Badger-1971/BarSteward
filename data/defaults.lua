@@ -764,7 +764,12 @@ BS.Defaults = {
             Timer = true,
             Units = GetString(_G.BARSTEWARD_MINUTES),
             WarningValue = 10
-        }
+        },
+        [BS.W_ALL_CRAFTING] = {
+            Bar = 0,
+            Cat = cat.Crafting,
+            Experimental = true
+        },
     }
 }
 

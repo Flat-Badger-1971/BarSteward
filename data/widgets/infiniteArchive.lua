@@ -59,12 +59,16 @@ end
 
 local arc = BS.Format(_G["SI_ENDLESSDUNGEONCOUNTERTYPE" .. _G.ENDLESS_DUNGEON_COUNTER_TYPE_ARC])
 local currentScore = 0
+local arcIcon = "endlessdungeon/icon_progression_arc"
+local cycleIcon = "endlessdungeon/icon_progression_cycle"
+local stageIcon = "endlessdungeon/icon_progression_stage"
 
 BS.widgets[BS.W_INFINITE_ARCHIVE_PROGRESS] = {
     -- v2.0.9
     name = "infiniteArchiveBar",
     update = function(widget, event, score)
         local this = BS.W_INFINITE_ARCHIVE_PROGRESS
+
         if (not ENDLESS_DUNGEON_MANAGER:IsPlayerInEndlessDungeon()) then
             if (BS.GetVar("Progress", this)) then
                 widget:SetProgress(0, 0, 1, "")
@@ -94,7 +98,22 @@ BS.widgets[BS.W_INFINITE_ARCHIVE_PROGRESS] = {
         if (BS.GetVar("Progress", this)) then
             widget:SetProgress(currentProgress, 0, maxProgressPerArc, string.format("%s %d", arc, arcCounter))
         else
-            widget:SetValue(string.format("%s %d: |c%s%d%%|r", arc, arcCounter, BS.COLOURS.YELLOW, pc))
+            if (BS.GetVar("UseIcons", this)) then
+                widget:SetValue(
+                    string.format(
+                        "%s %d %s %d %s %d",
+                        BS.Icon(arcIcon),
+                        arcCounter,
+                        BS.Icon(cycleIcon),
+                        cycleCounter,
+                        BS.Icon(stageIcon),
+                        stageCounter
+                    )
+                )
+            else
+                widget:SetValue(string.format("%s %d: |c%s%d%%|r", arc, arcCounter, BS.COLOURS.YELLOW, pc))
+            end
+
             widget:SetColour(unpack(BS.GetColour(this)))
         end
 
@@ -182,7 +201,7 @@ BS.widgets[BS.W_INFINITE_ARCHIVE_PROGRESS] = {
             {event = "ScoreChanged", label = "ScoreChanged"}
         }
     },
-    icon = "endlessdungeon/icon_progression_arc",
+    icon = arcIcon,
     tooltip = GetString(_G.BARSTEWARD_INFINITE_ARCHIVE_PROGRESS),
     hideWhenEqual = true,
     customSettings = {
@@ -200,6 +219,22 @@ BS.widgets[BS.W_INFINITE_ARCHIVE_PROGRESS] = {
             width = "full"
         },
         [2] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_USE_ICONS),
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_INFINITE_ARCHIVE_PROGRESS].UseIcons or false
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_INFINITE_ARCHIVE_PROGRESS].UseIcons = value
+                BS.RefreshBar(BS.W_INFINITE_ARCHIVE_PROGRESS)
+            end,
+            disabled = function()
+                return BS.Vars.Controls[BS.W_INFINITE_ARCHIVE_PROGRESS].Progress
+            end,
+            default = false,
+            width = "full"
+        },
+        [3] = {
             name = BS.Format(_G.BARSTEWARD_INFINITE_ARCHIVE_SHOW),
             type = "checkbox",
             getFunc = function()

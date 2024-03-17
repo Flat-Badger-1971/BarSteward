@@ -1,3 +1,9 @@
+[color=#ff9900][b]Version: 2.1.5 ---------------[/b][/color]
+XP/AP buff autohide bug fixed
+Food buff warning trigger changed from Danger Value to Warning Value
+Option added to Infinite Archive Progress widget to display with icons
+'Experimental' Researching widget added
+
 [color=#ff9900][b]Version: 2.1.4 ---------------[/b][/color]
 Bars are now clamped to prevent them being moved off screen
 Bugfix for housing widget key binds

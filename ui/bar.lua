@@ -383,7 +383,7 @@ function baseBar:SetHiddenWidget(widget, hidden)
     BS.ResizeBar(self.index)
 end
 
-function baseBar:HideWhen(metadata, value)
+function baseBar:HideWhen(metadata, value, autohideValue)
     local hideValue
 
     if (metadata.complete) then
@@ -406,16 +406,18 @@ function baseBar:HideWhen(metadata, value)
     end
 
     if (metadata.hideWhenEqual) then
-        if (type(metadata.hideWhenEqual) == "function") then
-            hideValue = metadata.hideWhenEqual(value)
-        else
-            hideValue = metadata.hideWhenEqual
-        end
+        if (autohideValue == nil or autohideValue == true) then
+            if (type(metadata.hideWhenEqual) == "function") then
+                hideValue = metadata.hideWhenEqual(value)
+            else
+                hideValue = metadata.hideWhenEqual
+            end
 
-        self:SetHiddenWidget(metadata.widget, hideValue == value)
+            self:SetHiddenWidget(metadata.widget, hideValue == value)
 
-        if (hideValue == value) then
-            return
+            if (hideValue == value) then
+                return
+            end
         end
     end
 
@@ -526,7 +528,7 @@ function baseBar:DoUpdate(metadata, ...)
 
     -- check for hide when true
     if (metadata.hideWhenTrue) then
-        self:HideWhen(metadata, value)
+        self:HideWhen(metadata, value, BS.GetVar("Autohide", id))
     end
 
     -- check if a sound needs to be played

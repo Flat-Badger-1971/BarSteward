@@ -1,7 +1,7 @@
 local BS = _G.BarSteward
 
 BS.LAM = _G.LibAddonMenu2
-BS.VERSION = "2.1.4"
+BS.VERSION = "2.1.5"
 
 local panel = {
     type = "panel",
@@ -2003,6 +2003,17 @@ local function checkPrint(defaults, widgetControls, vars)
     end
 end
 
+local function checkExperimental(defaults, widgetControls)
+    if (defaults.Experimental) then
+        widgetControls[#widgetControls + 1] = {
+            type = "description",
+            text = "|cff0000" .. GetString(_G.BARSTEWARD_EXPERIMENTAL) .. "|r",
+            tooltip = GetString(_G.BARSTEWARD_EXPERIMENTAL_DESC),
+            width = "full"
+        }
+    end
+end
+
 local function getWidgetName(id)
     local widgetName = BS.widgets[id].tooltip:gsub(":", "")
 
@@ -2259,6 +2270,8 @@ local function getWidgetSettings()
         local v = w.widget
         local widgetControls = {}
         local disabled = false
+        local vars = BS.Vars.Controls[k]
+        local defaults = BS.Defaults.Controls[k]
 
         if (widgets[k].Requires and not _G[widgets[k].Requires]) then
             widgetControls[#widgetControls + 1] = {
@@ -2268,6 +2281,8 @@ local function getWidgetSettings()
             }
             disabled = true
         else
+            checkExperimental(defaults, widgetControls)
+
             widgetControls[#widgetControls + 1] = {
                 type = "dropdown",
                 name = GetString(_G.BARSTEWARD_BAR),
@@ -2311,9 +2326,6 @@ local function getWidgetSettings()
             }
         end
 
-        local vars = BS.Vars.Controls[k]
-        local defaults = BS.Defaults.Controls[k]
-
         if (not disabled) then
             checkAutoHide(defaults, widgetControls, vars, k)
             checkHideWhenComplete(defaults, widgetControls, vars, k)
@@ -2340,6 +2352,7 @@ local function getWidgetSettings()
             checkPrint(defaults, widgetControls, vars)
             checkInvert(defaults, widgetControls, vars, k)
         end
+
         local textureCoords = nil
 
         if (k == BS.W_ALLIANCE) then

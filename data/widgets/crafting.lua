@@ -109,6 +109,41 @@ local function getSettings(widgetIndex)
     return settings
 end
 
+local allTypes = {
+    _G.CRAFTING_TYPE_BLACKSMITHING,
+    _G.CRAFTING_TYPE_CLOTHIER,
+    _G.CRAFTING_TYPE_WOODWORKING,
+    _G.CRAFTING_TYPE_JEWELRYCRAFTING
+}
+
+local craftingIcons = {
+    [_G.CRAFTING_TYPE_BLACKSMITHING]="icons/servicemappins/servicepin_smithy",
+    [_G.CRAFTING_TYPE_CLOTHIER]="icons/servicemappins/servicepin_outfitter",
+    [_G.CRAFTING_TYPE_WOODWORKING]="icons/servicemappins/servicepin_woodworking",
+    [_G.CRAFTING_TYPE_JEWELRYCRAFTING]="icons/icon_jewelrycrafting_symbol"
+}
+
+BS.widgets[BS.W_ALL_CRAFTING] = {
+    name = "allCrafting",
+    update = function(widget)
+        local timers = {}
+        local text = ""
+
+        for _, craftingType in ipairs(allTypes) do
+            local timeRemaining, maxResearch, inUse = getResearchTimer(craftingType)
+
+            timers[craftingType]=timeRemaining
+            text=string.format("%s%s (%d/%d) ", text,BS.Icon(craftingIcons[craftingType]), inUse, maxResearch)
+        end
+
+        widget:SetValue(text)
+        return 0
+    end,
+    timer = 1000,
+    icon = "icons/housing_gen_crf_clothingattunabletable001",
+    tooltip = BS.Format(_G.SI_GAMEPAD_SMITHING_CURRENT_RESEARCH_HEADER)
+}
+
 BS.widgets[BS.W_BLACKSMITHING] = {
     name = "blacksmithing",
     update = function(widget)

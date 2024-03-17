@@ -1157,7 +1157,7 @@ BS.widgets[BS.W_FOOD_BUFF] = {
 
             widget.tooltip = buff.ttt
 
-            if (BS.GetVar("Announce", this) and BS.GetVar("DangerValue", this) > buff.remaining) then
+            if (BS.GetVar("Announce", this) and BS.GetVar("WarningValue", this) > buff.remaining) then
                 local buffMessage =
                     ZO_CachedStrFormat(GetString(_G.BARSTEWARD_WARNING_EXPIRING), GetString(_G.BARSTEWARD_FOOD_BUFF))
                 BS.Announce(GetString(_G.BARSTEWARD_WARNING), buffMessage, this)
@@ -1226,6 +1226,7 @@ BS.widgets[BS.W_AP_BUFF] = {
         return 0
     end,
     timer = 1000,
+    hideWhenEqual = 0,
     hideWhenTrue = function()
         if (BS.Vars.Controls[BS.W_AP_BUFF].PvPOnly == true) then
             local mapContentType = GetMapContentType()
@@ -1287,6 +1288,7 @@ BS.widgets[BS.W_XP_BUFF] = {
 
         return 0
     end,
+    hideWhenEqual = 0,
     timer = 1000,
     icon = "icons/icon_experience",
     tooltip = BS.Format(_G.BARSTEWARD_XP_BUFF)
