@@ -1,9 +1,11 @@
 local BS = _G.BarSteward
+local cindex = 1
 
 -- borrowed from Bandits UI
 function BS.CreateComboBox(name, parent, width, height, choices, default, callback)
-    local combo = WINDOW_MANAGER:CreateControlFromVirtual(name, parent, "ZO_ComboBox")
+    local combo = WINDOW_MANAGER:CreateControlFromVirtual(name or ("BSCombo_" .. cindex), parent, "ZO_ComboBox")
 
+    cindex = cindex + 1
     combo:SetDimensions(width, height)
 
     combo.UpdateValues = function(self, array, index)
