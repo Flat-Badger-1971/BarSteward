@@ -768,7 +768,14 @@ BS.Defaults = {
         [BS.W_ALL_CRAFTING] = {
             Bar = 0,
             Cat = cat.Crafting,
-            Experimental = true
+            Experimental = true,
+            ColourValues = "okc,wv,wc,dv,dc",
+            DangerValue = 24,
+            HideSeconds = false,
+            HideDaysWhenZero = false,
+            Timer = true,
+            Units = GetString(_G.BARSTEWARD_HOURS),
+            WarningValue = 72
         },
     }
 }

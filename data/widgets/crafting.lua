@@ -117,31 +117,74 @@ local allTypes = {
 }
 
 local craftingIcons = {
-    [_G.CRAFTING_TYPE_BLACKSMITHING]="icons/servicemappins/servicepin_smithy",
-    [_G.CRAFTING_TYPE_CLOTHIER]="icons/servicemappins/servicepin_outfitter",
-    [_G.CRAFTING_TYPE_WOODWORKING]="icons/servicemappins/servicepin_woodworking",
-    [_G.CRAFTING_TYPE_JEWELRYCRAFTING]="icons/icon_jewelrycrafting_symbol"
+    [_G.CRAFTING_TYPE_BLACKSMITHING] = "icons/servicemappins/servicepin_smithy",
+    [_G.CRAFTING_TYPE_CLOTHIER] = "icons/servicemappins/servicepin_outfitter",
+    [_G.CRAFTING_TYPE_WOODWORKING] = "icons/servicemappins/servicepin_woodworking",
+    [_G.CRAFTING_TYPE_JEWELRYCRAFTING] = "icons/icon_jewelrycrafting_symbol"
 }
+
+local function getMinType(timers)
+    local minType
+
+    for craftingType, timer in pairs(timers) do
+        minType = minType or craftingType
+
+        if (timer.timeRemaining < timers[minType].timeRemaining) then
+            minType = craftingType
+        end
+    end
+
+    return minType
+end
 
 BS.widgets[BS.W_ALL_CRAFTING] = {
     name = "allCrafting",
     update = function(widget)
+        local this = BS.W_ALL_CRAFTING
         local timers = {}
-        local text = ""
+        local text, ttt = "", BS.Format(_G.SI_GAMEPAD_SMITHING_CURRENT_RESEARCH_HEADER) .. BS.LF
+        local totalInUse, totalMaxResearch = 0, 0
+        local colour = BS.GetColour(this, "Ok")
 
         for _, craftingType in ipairs(allTypes) do
             local timeRemaining, maxResearch, inUse = getResearchTimer(craftingType)
+            local ttColour = BS.ARGBConvert(BS.GetTimeColour(timeRemaining, this) or colour)
 
-            timers[craftingType]=timeRemaining
-            text=string.format("%s%s (%d/%d) ", text,BS.Icon(craftingIcons[craftingType]), inUse, maxResearch)
+            timers[craftingType] = {timeRemaining = timeRemaining, inUse = inUse, maxResearch = maxResearch}
+            totalInUse = totalInUse + inUse
+            totalMaxResearch = totalMaxResearch + maxResearch
+
+            ttt =
+                string.format(
+                "%s%s%s%s %s|r",
+                ttt,
+                BS.LF,
+                ttColour,
+                BS.Icon(craftingIcons[craftingType]),
+                getDisplay(timeRemaining, this, inUse, maxResearch)
+            ) .. "|r"
         end
 
+        local minType = getMinType(timers)
+        local timeRemaining = 0
+
+        if (minType) then
+            text = getDisplay(timers[minType].timeRemaining, this, totalInUse, totalMaxResearch)
+            timeRemaining = timers[minType].timeRemaining
+        end
+
+        colour = BS.GetTimeColour(timeRemaining, this) or colour
+
+        widget:SetColour(unpack(colour))
         widget:SetValue(text)
-        return 0
+        widget.tooltip = ttt
+
+        return timeRemaining
     end,
     timer = 1000,
     icon = "icons/housing_gen_crf_clothingattunabletable001",
-    tooltip = BS.Format(_G.SI_GAMEPAD_SMITHING_CURRENT_RESEARCH_HEADER)
+    tooltip = BS.Format(_G.SI_GAMEPAD_SMITHING_CURRENT_RESEARCH_HEADER),
+    customSettings = getSettings(BS.W_ALL_CRAFTING)
 }
 
 BS.widgets[BS.W_BLACKSMITHING] = {
