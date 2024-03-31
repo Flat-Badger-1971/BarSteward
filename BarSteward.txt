@@ -2,8 +2,8 @@
 ## Description: Data broker style bar for easy display of in-game metrics
 ## Author: Flat Badger
 ## APIVersion: 101041
-## AddOnVersion: 2107
-## Version: 2.1.7
+## AddOnVersion: 2106
+## Version: 2.1.6
 ## SavedVariables: BarStewardSavedVars
 ## DependsOn: LibSavedVars>=60007 LibAddonMenu-2.0>=35
 ## OptionalDependsOn: BanditsUserInterface WritWorthy>=70302 LibClockTST>=1 LibCombat>=62 PortToFriendsHouse>=92 LibCharacterKnowledge>=16 Taneth>=21
