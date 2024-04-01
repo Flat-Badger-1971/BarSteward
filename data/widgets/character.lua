@@ -1157,7 +1157,7 @@ BS.widgets[BS.W_FOOD_BUFF] = {
 
             widget.tooltip = buff.ttt
 
-            if (BS.GetVar("Announce", this) and BS.GetVar("WarningValue", this) > buff.remaining) then
+            if (BS.GetVar("Announce", this) and (BS.GetVar("WarningValue", this) * 60) == BS.ToInt(buff.remaining)) then
                 local buffMessage =
                     ZO_CachedStrFormat(GetString(_G.BARSTEWARD_WARNING_EXPIRING), GetString(_G.BARSTEWARD_FOOD_BUFF))
                 BS.Announce(GetString(_G.BARSTEWARD_WARNING), buffMessage, this)
