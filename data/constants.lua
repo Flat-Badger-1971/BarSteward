@@ -186,18 +186,15 @@ BS.MUNDUS_STONES = {
 BS.BAGICON = zo_iconFormat("/esoui/art/tooltips/icon_bag.dds")
 BS.BANKICON = zo_iconFormat("/esoui/art/tooltips/icon_bank.dds")
 
--- scions check
-local suffix = _G.CURT_ARCHIVAL_FORTUNES and "slug" or "otf"
-
 BS.FONTS = {
-    ["Default"] = "EsoUi/Common/Fonts/Univers57." .. suffix,
-    ["Univers55"] = "EsoUi/Common/Fonts/Univers55." .. suffix,
-    ["ESO Bold"] = "EsoUi/Common/Fonts/Univers67." .. suffix,
-    ["Antique"] = "EsoUI/Common/Fonts/ProseAntiquePSMT." .. suffix,
-    ["Handwritten"] = "EsoUI/Common/Fonts/Handwritten_Bold." .. suffix,
-    ["Trajan"] = "EsoUI/Common/Fonts/TrajanPro-Regular." .. suffix,
-    ["Futura"] = "EsoUI/Common/Fonts/FuturaStd-CondensedLight." .. suffix,
-    ["Futura Bold"] = "EsoUI/Common/Fonts/FuturaStd-Condensed." .. suffix
+    ["Default"] = "$(MEDIUM_FONT)",
+    ["Univers55"] = "EsoUi/Common/Fonts/Univers55.slug",
+    ["ESO Bold"] = "$(BOLD_FONT)",
+    ["Antique"] = "$(ANTIQUE_FONT)",
+    ["Handwritten"] = "$(HANDWRITTEN_FONT)",
+    ["Trajan"] = "$(STONE_TABLET_FONT)",
+    ["Futura"] = "EsoUI/Common/Fonts/FuturaStd-CondensedLight.slug",
+    ["Futura Bold"] = "EsoUI/Common/Fonts/FuturaStd-Condensed.slug"
 }
 
 BS.CRAFTING_SCENES = {"alchemy", "enchanting", "provisioner", "smithing"}
