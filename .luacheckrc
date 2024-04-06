@@ -438,6 +438,7 @@ read_globals = {
     "GetUnitReaction",
     "GetUnitTargetMarkerType",
     "GetUnitXP",
+    "GetUnitXPMax",
     "GetUnitZone",
     "GetUnitZoneIndex",
     "GetZoneId",

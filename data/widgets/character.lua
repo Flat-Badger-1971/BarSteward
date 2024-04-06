@@ -879,6 +879,11 @@ BS.widgets[BS.W_PLAYER_EXPERIENCE] = {
         local this = BS.W_PLAYER_EXPERIENCE
         local out
 
+        if (GetUnitLevel("player") < BS.MAX_PLAYER_LEVEL) then
+            xp, xplvl = GetUnitXP("player"), GetUnitXPMax("player")
+            pc = math.floor((xp / xplvl) * 100)
+        end
+
         if (BS.GetVar("ShowPercent", this)) then
             out = pc .. "%"
         else
@@ -892,6 +897,13 @@ BS.widgets[BS.W_PLAYER_EXPERIENCE] = {
 
         widget:SetColour(unpack(BS.GetColour(this)))
         widget:SetValue(out)
+
+        local ttt = GetString(_G.BARSTEWARD_PLAYER_EXPERIENCE) .. BS.LF .. "|cf9f9f9"
+
+        ttt = ttt .. xp .. " / " .. xplvl .. BS.LF
+        ttt = ttt .. pc .. "%" .. "|r"
+
+        widget.tooltip = ttt
 
         return xp
     end,

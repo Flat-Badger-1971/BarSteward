@@ -584,3 +584,5 @@ BS.XP_BUFFS = {
     [174237] = true,
     [193152] = true
 }
+
+BS.MAX_PLAYER_LEVEL = 50

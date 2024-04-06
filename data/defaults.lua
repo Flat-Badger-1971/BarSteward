@@ -560,6 +560,7 @@ BS.Defaults = {
         },
         [BS.W_PLAYER_EXPERIENCE] = {
             Cat = cat.Character,
+            ShowPercent = false,
             UseSeparators = false
         },
         [BS.W_UNKNOWN_WRIT_MOTIFS] = {
