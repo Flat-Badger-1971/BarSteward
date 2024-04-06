@@ -1720,6 +1720,19 @@ function BS.UpdateIconGap(barNumber)
     end
 end
 
+function BS.GetLastDailyResetTime()
+    local timeRemaining =
+        TIMED_ACTIVITIES_MANAGER:GetTimedActivityTypeTimeRemainingSeconds(_G.TIMED_ACTIVITY_TYPE_DAILY)
+    local secondsInADay = 86400
+    local lastResetTime = os.time() - (secondsInADay - timeRemaining)
+
+    BS.Vars.lastDailyReset = BS.Vars.lastDailyReset or lastResetTime
+
+    if ((BS.Vars.lastDailyReset + secondsInADay) < os.time()) then
+        return lastResetTime
+    end
+end
+
 -- developer utility functions
 -- luacheck: push ignore 113
 function BS.FindItem(text)

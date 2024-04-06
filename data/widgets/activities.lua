@@ -1240,3 +1240,86 @@ BS.widgets[BS.W_DAILY_PROGRESS] = {
         }
     }
 }
+
+local function checkReset()
+    local lastResetTime = BS.GetLastDailyResetTime()
+
+    if (lastResetTime) then
+        BS.Vars.dailyQuestCount = {}
+        BS.Vars.lastDailyReset = lastResetTime
+    end
+end
+
+BS.widgets[BS.W_DAILY_COUNT] = {
+    name = "dailyCount",
+    update = function(widget, eventId, param1, param2, param3)
+        local character = GetUnitName("player")
+        local journalIndex, questName
+
+        checkReset()
+        BS.Vars.dailyQuestCount = BS.Vars.dailyQuestCount or {}
+        BS.Vars.dailyQuestCount[character] = BS.Vars.dailyQuestCount[character] or {}
+
+        if (eventId == _G.EVENT_QUEST_ADDED) then
+            journalIndex = param1
+            questName = param2
+
+            if (GetJournalQuestRepeatType(journalIndex) == _G.QUEST_REPEAT_DAILY) then
+                BS.Vars.dailyQuestCount[character][questName] = "added"
+            end
+        elseif (eventId == _G.EVENT_QUEST_REMOVED) then
+            journalIndex = param2
+            questName = param3
+
+            if (GetJournalQuestRepeatType(journalIndex) == _G.QUEST_REPEAT_DAILY) then
+                BS.Vars.dailyQuestCount[character][questName] = nil
+            end
+        elseif (eventId == _G.EVENT_QUEST_COMPLETE) then
+            journalIndex = 0
+            questName = param1
+
+            if (BS.Vars.dailyQuestCount[character][questName]) then
+                BS.Vars.dailyQuestCount[character][questName] = "completed"
+            end
+        end
+
+        local done = 0
+        local added = 0
+        local colour = BS.GetVar("DefaultColour")
+
+        if (journalIndex or (eventId == "initial")) then
+            for _, status in pairs(BS.Vars.dailyQuestCount[character]) do
+                if (status == "completed") then
+                    done = done + 1
+                end
+
+                added = added + 1
+            end
+
+
+            if (done == BS.MAX_DAILY_QUESTS) then
+                colour = BS.GetVar("DefaultDangerColour")
+            end
+        end
+
+        widget:SetValue(done .. "/" .. BS.MAX_DAILY_QUESTS)
+        widget:SetColour(unpack(colour))
+
+        local ttt = GetString(_G.BARSTEWARD_DAILY_QUEST_COUNT) .. BS.LF
+
+        ttt = ttt .. "|cf9f9f9"
+        ttt = ttt .. zo_strformat(_G.SI_CHATTEXT_QUEST_ACCEPTED, added) .. BS.LF
+        ttt = ttt .. zo_strformat(_G.SI_CHATTEXT_QUEST_COMPLETED, done) .. "|r"
+
+        widget.tooltip = ttt
+
+        return done
+    end,
+    event = {
+        _G.EVENT_QUEST_ADDED,
+        _G.EVENT_QUEST_REMOVED,
+        _G.EVENT_QUEST_COMPLETE
+    },
+    icon = "floatingmarkers/repeatablequest_available_icon",
+    tooltip = GetString(_G.BARSTEWARD_DAILY_QUEST_COUNT)
+}

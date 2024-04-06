@@ -391,14 +391,9 @@ local function countState(state, character)
 end
 
 local function checkReset()
-    local timeRemaining =
-        TIMED_ACTIVITIES_MANAGER:GetTimedActivityTypeTimeRemainingSeconds(_G.TIMED_ACTIVITY_TYPE_DAILY)
-    local secondsInADay = 86400
-    local lastResetTime = os.time() - (secondsInADay - timeRemaining)
+    local lastResetTime = BS.GetLastDailyResetTime()
 
-    BS.Vars.lastDailyReset = BS.Vars.lastDailyReset or lastResetTime
-
-    if ((BS.Vars.lastDailyReset + secondsInADay) < os.time()) then
+    if (lastResetTime) then
         BS.Vars.dailyQuests = {}
         BS.Vars.lastDailyReset = lastResetTime
     end
@@ -597,7 +592,7 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
         _G.EVENT_QUEST_COMPLETE,
         _G.EVENT_QUEST_CONDITION_COUNTER_CHANGED
     },
-    icon = "floatingmarkers/repeatablequest_available_icon",
+    icon = "icons/quest_wrothgar_item_029",
     tooltip = GetString(_G.BARSTEWARD_DAILY_CRAFTING),
     hideWhenEqual = true,
     customSettings = {

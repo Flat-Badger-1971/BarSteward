@@ -99,6 +99,7 @@ L(BS .. "DAILY_ENDEAVOUR_PROGRESS_BEST", "Tägl. Bestrebungen - größter Fortsc
 L(BS .. "DAILY_ENDEAVOUR_PROGRESS", "Tägl. Bestrebungen - Fortschritt")
 L(BS .. "DAILY_ENDEAVOUR_TIME", "Tägl. Bestrebungen - verbleibende Zeit")
 L(BS .. "DAILY_PLEDGES_TIME", "Tägl. Gelöbnisse - verbleibende Zeit")
+L(BS .. "DAILY_QUEST_COUNT", "Daily Quest Count")
 L(BS .. "DAILY_WRITS_TIME", "Tägl. Handwerksschriebe - verbleibende Zeit")
 L(BS .. "DANGER_COLOUR", "Kritisch")
 L(BS .. "DANGER_VALUE", "kritischer Wert")

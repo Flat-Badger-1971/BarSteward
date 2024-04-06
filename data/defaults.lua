@@ -767,7 +767,6 @@ BS.Defaults = {
             WarningValue = 10
         },
         [BS.W_ALL_CRAFTING] = {
-            Bar = 0,
             Cat = cat.Crafting,
             Experimental = true,
             ColourValues = "okc,wv,wc,dv,dc",
@@ -778,6 +777,9 @@ BS.Defaults = {
             Units = GetString(_G.BARSTEWARD_HOURS),
             WarningValue = 72
         },
+        [BS.W_DAILY_COUNT] = {
+            Cat = cat.Activities
+        }
     }
 }
 
