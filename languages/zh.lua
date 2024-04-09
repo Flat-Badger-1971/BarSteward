@@ -418,3 +418,7 @@ L(BS .. "WRITS_SURVEYS", "<<1[无 调查报告/1 调查报告/$d 调查报告]>>
 L(BS .. "WRITS_MAPS", "<<1[无 藏宝图/1 藏宝图/$s 藏宝图]>>")
 L(BS .. "XP_BUFF","经验值加成")
 --luacheck: pop
+
+-- LibSavedVars overrides
+L("SI_LSV_ACCOUNT_WIDE","同步玩家账户下所有角色的设置")
+L("SI_LSV_ACCOUNT_WIDE_TT","以下的所有设置将会同步至你的每一个角色")
