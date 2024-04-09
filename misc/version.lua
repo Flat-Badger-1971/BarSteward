@@ -79,6 +79,6 @@ function BS.VersionCheck()
             updateLanguageVars()
         end
 
-        BS.Vars.Update[2111] = true
+        BS.Vars.Updates[2111] = true
     end
 end
