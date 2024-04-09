@@ -19,7 +19,7 @@ function BS.CreateAlignmentFrame(alignBars)
     frame.bge:SetTexture("esoui/art/miscellaneous/centerscreen_right.dds")
 
     local fontSize = 24
-    local fontStyle = "BOLD_FONT"
+    local fontStyle = "${BOLD_FONT}"
     local fontWeight = "soft-shadow-thick"
     local nameFont = string.format("$(%s)|$(KB_%s)|%s", fontStyle, fontSize, fontWeight)
 
@@ -221,7 +221,7 @@ function BS.CreateLockButton()
     local icon = BS.Icon("miscellaneous/locked_up", nil, 24, 24)
 
     BS.lock.label = WINDOW_MANAGER:CreateControl(name .. "_label", BS.lock, CT_LABEL)
-    BS.lock.label:SetFont("EsoUi/Common/Fonts/Univers67.otf|36|soft-shadow-thick")
+    BS.lock.label:SetFont("${BOLD_FONT}|36|soft-shadow-thick")
     BS.lock.label:SetColor(0.8, 0.8, 0.8, 1)
     BS.lock.label:SetText(icon .. " " .. GetString(_G.BARSTEWARD_LOCK_FRAMES))
     BS.lock.label:SetDimensions(BS.lock:GetWidth(), 50)
@@ -347,7 +347,7 @@ function BS.CreateWidgetOrderTool(bars)
     frame.bge:SetTexture("esoui/art/miscellaneous/centerscreen_right.dds")
 
     local fontSize = 24
-    local fontStyle = "BOLD_FONT"
+    local fontStyle = "${BOLD_FONT}"
     local fontWeight = "soft-shadow-thick"
     local nameFont = string.format("$(%s)|$(KB_%s)|%s", fontStyle, fontSize, fontWeight)
 
@@ -560,7 +560,7 @@ local function CreateTool(heading, toolName, varName, setupFunc, guild)
     frame.bge:SetTexture("esoui/art/miscellaneous/centerscreen_right.dds")
 
     local fontSize = 24
-    local fontStyle = "BOLD_FONT"
+    local fontStyle = "${BOLD_FONT}"
     local fontWeight = "soft-shadow-thick"
     local nameFont = string.format("$(%s)|$(KB_%s)|%s", fontStyle, fontSize, fontWeight)
 
@@ -807,7 +807,7 @@ function BS.CreateExportFrame()
     frame.bge:SetTexture("esoui/art/miscellaneous/centerscreen_right.dds")
 
     local fontSize = 24
-    local fontStyle = "BOLD_FONT"
+    local fontStyle = "${BOLD_FONT}"
     local fontWeight = "soft-shadow-thick"
     local nameFont = string.format("$(%s)|$(KB_%s)|%s", fontStyle, fontSize, fontWeight)
 
