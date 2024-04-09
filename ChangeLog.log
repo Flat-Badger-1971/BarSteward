@@ -1,8 +1,6 @@
-[color=#ff9900][b]Version: 2.1.11 ---------------[/b][/color]
-Font correction for popup windows
-Housing widget bindings changed to remove requirement to be added to a bar
-
 [color=#ff9900][b]Version: 2.1.10 ---------------[/b][/color]
+Housing widget bindings changed to remove requirement to be added to a bar
+Font correction for popup windows
 Daily quest count widget added
 Crafting daily icon changed so old icon can be used with new widget
 

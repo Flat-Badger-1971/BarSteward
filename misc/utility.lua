@@ -1720,16 +1720,24 @@ function BS.UpdateIconGap(barNumber)
     end
 end
 
-function BS.GetLastDailyResetTime()
+function BS.GetLastDailyResetTime(counts)
     local timeRemaining =
         TIMED_ACTIVITIES_MANAGER:GetTimedActivityTypeTimeRemainingSeconds(_G.TIMED_ACTIVITY_TYPE_DAILY)
     local secondsInADay = 86400
     local lastResetTime = os.time() - (secondsInADay - timeRemaining)
 
-    BS.Vars.lastDailyReset = BS.Vars.lastDailyReset or lastResetTime
+    if (counts) then
+        BS.Vars.lastDailyResetCounts = BS.Vars.lastDailyResetCounts or lastResetTime
 
-    if ((BS.Vars.lastDailyReset + secondsInADay) < os.time()) then
-        return lastResetTime
+        if ((BS.Vars.lastDailyResetCounts + secondsInADay) < os.time()) then
+            return lastResetTime
+        end
+    else
+        BS.Vars.lastDailyReset = BS.Vars.lastDailyReset or lastResetTime
+
+        if ((BS.Vars.lastDailyReset + secondsInADay) < os.time()) then
+            return lastResetTime
+        end
     end
 end
 

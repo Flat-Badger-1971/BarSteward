@@ -1242,7 +1242,7 @@ BS.widgets[BS.W_DAILY_PROGRESS] = {
 }
 
 local function checkReset()
-    local lastResetTime = BS.GetLastDailyResetTime()
+    local lastResetTime = BS.GetLastDailyResetTime(true)
 
     if (lastResetTime) then
         BS.Vars.dailyQuestCount = {}
