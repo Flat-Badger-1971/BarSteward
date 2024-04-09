@@ -294,6 +294,9 @@ local function Initialise()
         end
     end
 
+    -- ensure all houses get a keybind option
+    BS.AddHousingWidgets(0)
+
     -- performance
     BS.RegisterForEvent(
         _G.EVENT_PLAYER_COMBAT_STATE,

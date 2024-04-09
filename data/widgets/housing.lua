@@ -102,33 +102,35 @@ function BS.AddHousingWidgets(idx, widgets)
 
             if (vars) then
                 if (BS.Vars.Controls[varId].Bar == idx) then
-                    local tooltip = vars.Name .. BS.LF .. "|cf9f9f9"
+                    if (idx > 0) then
+                        local tooltip = vars.Name .. BS.LF .. "|cf9f9f9"
 
-                    tooltip = tooltip .. house.name .. BS.LF
-                    tooltip = tooltip .. house.location .. "|r"
+                        tooltip = tooltip .. house.name .. BS.LF
+                        tooltip = tooltip .. house.location .. "|r"
 
-                    local widget = {
-                        name = "house_" .. id,
-                        update = function(widget)
-                            local colour = BS.Vars.Controls[varId].Colour or BS.Vars.DefaultColour
+                        local widget = {
+                            name = "house_" .. id,
+                            update = function(widget)
+                                local colour = BS.Vars.Controls[varId].Colour or BS.Vars.DefaultColour
 
-                            widget:SetColour(unpack(colour))
-                            widget:SetValue(vars.Name, vars.RawName)
-                        end,
-                        tooltip = tooltip,
-                        icon = house.icon,
-                        onClick = function()
-                            if (house.ptfName) then
-                                JumpToSpecificHouse(house.ptfName, id)
-                            else
-                                RequestJumpToHouse(id, vars.Outside)
-                            end
-                        end,
-                        id = varId
-                    }
+                                widget:SetColour(unpack(colour))
+                                widget:SetValue(vars.Name, vars.RawName)
+                            end,
+                            tooltip = tooltip,
+                            icon = house.icon,
+                            onClick = function()
+                                if (house.ptfName) then
+                                    JumpToSpecificHouse(house.ptfName, id)
+                                else
+                                    RequestJumpToHouse(id, vars.Outside)
+                                end
+                            end,
+                            id = varId
+                        }
 
-                    table.insert(widgets, {BS.Vars.Controls[varId].Order, widget})
-                    BS.widgets[varId] = widget
+                        table.insert(widgets, {BS.Vars.Controls[varId].Order, widget})
+                        BS.widgets[varId] = widget
+                    end
 
                     if (not bindings[id]) then
                         bindings[id] = BS.GetNextIndex(bindings)
