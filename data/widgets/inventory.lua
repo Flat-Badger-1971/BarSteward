@@ -310,7 +310,7 @@ BS.widgets[BS.W_REPAIRS_KITS] = {
         return count
     end,
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
-    icon = "inventory/inventory_tabicon_repair_up",
+    icon = "/vendor/vendor_tabicon_repair_up",
     tooltip = BS.Format(_G.SI_HOOK_POINT_STORE_REPAIR_KIT_HEADER):gsub(":", "")
 }
 
@@ -1269,7 +1269,7 @@ BS.widgets[BS.W_CONTAINERS] = {
         return itemScan(widget, filteredItems, BS.W_CONTAINERS, BS.Format(_G.SI_ITEMTYPEDISPLAYCATEGORY26))
     end,
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
-    icon = "inventory/inventory_tabicon_container_up",
+    icon = "icons/mail_armor_container",
     tooltip = BS.Format(_G.SI_ITEMTYPEDISPLAYCATEGORY26),
     hideWhenEqual = 0,
     onClick = function()
