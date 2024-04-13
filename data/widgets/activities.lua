@@ -1309,7 +1309,7 @@ BS.widgets[BS.W_DAILY_COUNT] = {
 
                 local ttt = GetString(_G.BARSTEWARD_DAILY_QUEST_COUNT) .. BS.LF .. "|cf9f9f9"
 
-                ttt = ttt .. zo_strformat(_G.SI_ENDLESS_DUNGEON_BUFF_ADDED_ANNOUNCEMENT_TITLE_FORMATTER, added) .. BS.LF
+                ttt = ttt .. BS.Format(_G.SI_DLC_BOOK_QUEST_STATUS_ACCEPTED) .. ": " .. added .. BS.LF
                 ttt = ttt .. zo_strformat(_G.SI_NOTIFYTEXT_QUEST_COMPLETE, complete) .. "|r"
 
                 widget.tooltip = ttt
