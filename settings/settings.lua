@@ -2309,6 +2309,7 @@ local function getWidgetSettings()
                     local oldBarNum = BS.Vars.Controls[k].Bar
 
                     BS.Vars.Controls[k].Bar = barNum
+                    BS.GetQuestInfo()
                     BS.RegenerateBar(oldBarNum, k)
                     BS.RegenerateBar(barNum)
                 end,

@@ -320,6 +320,9 @@ local function Initialise()
 
     BS.Vars.CharacterList[GetUnitName("player")] = true
 
+    -- handle quest info
+    BS.GetQuestInfo()
+
     BS.RegisterForEvent(
         _G.EVENT_PLAYER_ACTIVATED,
         function()

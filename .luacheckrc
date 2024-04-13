@@ -119,8 +119,10 @@ read_globals = {
     },
     ["QUEST_JOURNAL_MANAGER"] = {
         fields = {
+            BuildTextForConditions = {read_only = true},
+            GetQuestList = {read_only = true},
             GetQuestListData = {read_only = true},
-            BuildTextForConditions = {read_only = true}
+            RegisterCallback = {read_only = true}
         }
     },
     ["REWARDS_MANAGER"] = {

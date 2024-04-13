@@ -1741,6 +1741,19 @@ function BS.GetLastDailyResetTime(counts)
     end
 end
 
+function BS.GetQuestInfo()
+    if (BS.GetVar("Bar", BS.W_DAILY_COUNT) ~= 0) then
+        QUEST_JOURNAL_MANAGER:RegisterCallback(
+            "QuestListUpdated",
+            function()
+                if (BS.GetVar("Bar", BS.W_DAILY_COUNT) ~= 0) then
+                    BS.Quests = QUEST_JOURNAL_MANAGER:GetQuestList()
+                end
+            end
+        )
+    end
+end
+
 -- developer utility functions
 -- luacheck: push ignore 113
 function BS.FindItem(text)

@@ -1246,74 +1246,76 @@ local function checkReset()
 
     if (lastResetTime) then
         BS.Vars.dailyQuestCount = {}
-        BS.Vars.lastDailyReset = lastResetTime
+        BS.Vars.lastDailyResetCounts = lastResetTime
+    end
+end
+
+local function findQuest(index)
+    for _, quest in ipairs(BS.Quests) do
+        if (quest.questIndex == index) then
+            return quest
+        end
     end
 end
 
 BS.widgets[BS.W_DAILY_COUNT] = {
     name = "dailyCount",
     update = function(widget, eventId, param1, param2, param3)
-        local character = GetUnitName("player")
-        local journalIndex, questName
-
         checkReset()
-        BS.Vars.dailyQuestCount = BS.Vars.dailyQuestCount or {}
-        BS.Vars.dailyQuestCount[character] = BS.Vars.dailyQuestCount[character] or {}
+        zo_callLater(
+            function()
+                local player = GetUnitName("player")
 
-        if (eventId == _G.EVENT_QUEST_ADDED) then
-            journalIndex = param1
-            questName = param2
-
-            if (GetJournalQuestRepeatType(journalIndex) == _G.QUEST_REPEAT_DAILY) then
-                BS.Vars.dailyQuestCount[character][questName] = "added"
-            end
-        elseif (eventId == _G.EVENT_QUEST_REMOVED) then
-            journalIndex = param2
-            questName = param3
-
-            if (GetJournalQuestRepeatType(journalIndex) == _G.QUEST_REPEAT_DAILY) then
-                BS.Vars.dailyQuestCount[character][questName] = nil
-            end
-        elseif (eventId == _G.EVENT_QUEST_COMPLETE) then
-            journalIndex = 0
-            questName = param1
-
-            if (BS.Vars.dailyQuestCount[character][questName]) then
-                BS.Vars.dailyQuestCount[character][questName] = "completed"
-            end
-        end
-
-        local done = 0
-        local added = 0
-        local colour = BS.GetVar("DefaultColour")
-
-        if (journalIndex or (eventId == "initial")) then
-            for _, status in pairs(BS.Vars.dailyQuestCount[character]) do
-                if (status == "completed") then
-                    done = done + 1
+                if (not BS.Vars.dailyQuestCount[player]) then
+                    BS.Vars.dailyQuestCount[player] = {}
                 end
 
-                added = added + 1
-            end
+                local counts = BS.Vars.dailyQuestCount[player]
 
+                if (eventId == _G.EVENT_QUEST_ADDED) then
+                    local quest = findQuest(param1)
 
-            if (done == BS.MAX_DAILY_QUESTS) then
-                colour = BS.GetVar("DefaultDangerColour")
-            end
-        end
+                    if (quest) then
+                        if (quest.repeatableType == _G.QUEST_REPEAT_DAILY) then
+                            counts[param2] = "added"
+                        end
+                    end
+                end
 
-        widget:SetValue(done .. "/" .. BS.MAX_DAILY_QUESTS)
-        widget:SetColour(unpack(colour))
+                if (eventId == _G.EVENT_QUEST_REMOVED) then
+                    if (param1 ~= true) then
+                        counts[param3] = nil
+                    end
+                end
 
-        local ttt = GetString(_G.BARSTEWARD_DAILY_QUEST_COUNT) .. BS.LF
+                if (eventId == _G.EVENT_QUEST_COMPLETE) then
+                    if (counts[param1] ~= nil) then
+                        counts[param1] = "complete"
+                    end
+                end
 
-        ttt = ttt .. "|cf9f9f9"
-        ttt = ttt .. zo_strformat(_G.SI_CHATTEXT_QUEST_ACCEPTED, added) .. BS.LF
-        ttt = ttt .. zo_strformat(_G.SI_CHATTEXT_QUEST_COMPLETED, done) .. "|r"
+                local added, complete = 0, 0
 
-        widget.tooltip = ttt
+                for _, status in pairs(counts) do
+                    if (status == "added") then
+                        added = added + 1
+                    end
+                    if (status == "complete") then
+                        complete = complete + 1
+                    end
+                end
 
-        return done
+                widget:SetValue(complete .. "/" .. BS.MAX_DAILY_QUESTS)
+
+                local ttt = GetString(_G.BARSTEWARD_DAILY_QUEST_COUNT) .. BS.LF .. "|cf9f9f9"
+
+                ttt = ttt .. zo_strformat(_G.SI_ENDLESS_DUNGEON_BUFF_ADDED_ANNOUNCEMENT_TITLE_FORMATTER, added) .. BS.LF
+                ttt = ttt .. zo_strformat(_G.SI_NOTIFYTEXT_QUEST_COMPLETE, complete) .. "|r"
+
+                widget.tooltip = ttt
+            end,
+            500
+        )
     end,
     event = {
         _G.EVENT_QUEST_ADDED,
