@@ -120,6 +120,10 @@ function baseWidget:CreateTooltip(tooltip)
     end
 end
 
+function baseWidget:SetHandler(...)
+    self.control:SetHandler(...)
+end
+
 function baseWidget:SetOnClick(onClick)
     if (onClick) then
         self.hasOnClick = true

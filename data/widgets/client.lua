@@ -15,10 +15,55 @@ local function getMoonPhaseIcon()
     return 5
 end
 
+local function addContextMenu(widget)
+    widget:SetHandler(
+        "OnMouseDown",
+        function(self, button)
+            if (button == _G.MOUSE_BUTTON_INDEX_RIGHT) then
+                ClearMenu()
+                AddMenuItem(
+                    "Test",
+                    function()
+                        d("test")
+                    end
+                )
+                ShowMenu()
+            end
+        end
+    )
+end
+
+local timers = {
+    [1] = {
+        type = "description",
+        text = "|cffff00" .. "Set to 0:00 to disable|r" .. BS.LF .. "|cffc0c0Important, use the format mins:secs|r",
+        width = "full"
+    }
+}
+
+do
+    for timer = 1, 5 do
+        timers[timer + 1] = {
+            type = "editbox",
+            name = "Timer " .. ZO_CachedStrFormat("<<n:1>>", timer),
+            getFunc = function()
+                return "0:00"
+            end,
+            setFunc = function(value)
+            end,
+            width = "full"
+        }
+    end
+end
+
 BS.widgets = {
     [BS.W_TIME] = {
         name = "time",
-        update = function(widget)
+        update = function(widget, init)
+            if (init == "initial") then
+                addContextMenu(widget)
+            end
+
             local format = BS.GetVar("TimeFormat24")
             local this = BS.W_TIME
 
@@ -34,7 +79,14 @@ BS.widgets = {
         end,
         timer = 1000,
         tooltip = BS.Format(_G.SI_TRADINGHOUSELISTINGSORTTYPE0),
-        icon = "lfg/lfg_indexicon_timedactivities_up"
+        icon = "lfg/lfg_indexicon_timedactivities_up",
+        customSettings = {
+            [1] = {
+                type = "submenu",
+                name = "Timers",
+                controls = timers
+            }
+        }
     },
     [BS.W_FPS] = {
         name = "fps",
