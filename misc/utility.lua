@@ -253,7 +253,9 @@ local function callTimerFunctions(time)
     end
 
     for i = 1, #timerFunctions[time] do
-        timerFunctions[time][i]()
+        if (timerFunctions[time][i]) then
+            timerFunctions[time][i]()
+        end
     end
 end
 
@@ -1682,6 +1684,70 @@ function BS.GetQuestInfo()
             end
         )
     end
+end
+
+local function findButton(dialog, primary)
+    local buttons = dialog.buttons
+
+    for _, button in ipairs(buttons) do
+        if (primary) then
+            if (button.keybind == "DIALOG_PRIMARY") then
+                return button
+            end
+        else
+            if (button.text == _G.SI_DIALOG_CANCEL) then
+                return button
+            end
+        end
+    end
+end
+
+-- prevent timer based widget making calls during logout
+function BS.AddLogoutHooks()
+    local dialogs = {"LOG_OUT", "GAMEPAD_LOG_OUT", "QUIT"}
+
+    for _, dialog in ipairs(dialogs) do
+        local esoDialog = _G.ESO_Dialogs[dialog]
+        local okbutton = findButton(esoDialog, true)
+        local cancel = findButton(esoDialog, false)
+        local okcb = okbutton.callback
+        local cancelcb = cancel.callback
+
+        okbutton.callback = function(...)
+            BS.DisableUpdates()
+
+            return okcb(...)
+        end
+
+        cancel.callback = function(...)
+            BS.EnableUpdates()
+
+            if (cancelcb) then
+                return cancelcb(...)
+            end
+        end
+    end
+end
+
+function BS.PopulateSoundOptions()
+    BS.SoundChoices = {}
+    BS.SoundLookup = {}
+
+    for _, v in ipairs(BS.Sounds) do
+        if (_G.SOUNDS[v] ~= nil) then
+            local soundName = _G.SOUNDS[v]:gsub("_", " ")
+
+            table.insert(BS.SoundChoices, soundName)
+            BS.SoundLookup[soundName] = _G.SOUNDS[v]
+        end
+    end
+end
+
+function BS.SecondsToMinutes(secondsValue)
+    local minutes = math.floor(secondsValue / 60)
+    local seconds = secondsValue - (minutes * 60)
+
+    return string.format("%d:%02d", minutes, seconds)
 end
 
 -- developer utility functions

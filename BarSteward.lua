@@ -340,6 +340,7 @@ local function Initialise()
     )
 
     BS.GridChanged = true
+    BS.AddLogoutHooks()
 end
 
 function BS.ToggleBar(index)

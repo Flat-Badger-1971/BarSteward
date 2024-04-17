@@ -35,7 +35,8 @@ read_globals = {
     },
     ["CHAT_ROUTER"] = {
         fields = {
-            AddSystemMessage = {read_only = true}
+            AddSystemMessage = {read_only = true},
+            FormatAndAddChatMessage = {read_only = true}
         }
     },
     ["COLLECTIONS_BOOK"] = {
@@ -147,7 +148,8 @@ read_globals = {
     ["SHARED_INVENTORY"] = {
         fields = {
             GenerateFullSlotData = {read_only = true},
-            bagCache = {read_only = true}
+            bagCache = {read_only = true},
+            RegisterCallback = {read_only = true}
         }
     },
     ["STABLE_MANAGER"] = {
@@ -237,7 +239,9 @@ read_globals = {
     -- lua
     "unpack",
     --API
+    "AddMenuItem",
     "AssignTargetMarkerToReticleTarget",
+    "ClearMenu",
     "CreateSimpleAnimation",
     "DoesAntiquityHaveLead",
     "DoesUnitExist",
@@ -465,6 +469,7 @@ read_globals = {
     "IsSlotUsed",
     "IsUnitDead",
     "IsUnitGrouped",
+    "IsUnitGroupLeader",
     "IsUnitInCombat",
     "IsUnitInDungeon",
     "IsUnitOnline",
@@ -477,6 +482,7 @@ read_globals = {
     "RequestTributeClubData",
     "SecurePostHook",
     "SetGameCameraUIMode",
+    "ShowMenu",
     "TriggerTutorial",
     "UseCollectible",
     -- Zenimax objects

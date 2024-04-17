@@ -1245,7 +1245,14 @@ local function checkReset()
     local lastResetTime = BS.GetLastDailyResetTime(true)
 
     if (lastResetTime) then
-        BS.Vars.dailyQuestCount = {}
+        for char, quests in pairs(BS.Vars.dailyQuestCount) do
+            for quest, status in pairs(quests) do
+                if (status == "complete") then
+                    BS.Vars.dailyQuestCount[char][quest] = nil
+                end
+            end
+        end
+
         BS.Vars.lastDailyResetCounts = lastResetTime
     end
 end
