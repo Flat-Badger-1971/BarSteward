@@ -1,20 +1,4 @@
 local BS = _G.BarSteward
-
-local function getMoonPhaseIcon()
-    if (BS.LibClock) then
-        local constants = _G.LibClockTST.CONSTANTS()
-        local moonInfo = BS.LibClock:GetMoon()
-
-        for idx, data in ipairs(constants.moon.phasesPercentage) do
-            if (data.name == moonInfo.currentPhaseName) then
-                return idx
-            end
-        end
-    end
-
-    return 5
-end
-
 local startButton = BS.Icon("buttons/rightarrow_up", "00ff00", 16, 16)
 local stopButton = BS.Icon("buttons/gamepad/console-widget-checkbox", "ff0000", 16, 16)
 local timerFunctions = {}
@@ -48,14 +32,18 @@ end
 
 local function getTimers()
     local nums = {}
+    local added = 0
 
     for timer = 1, BS.MAX_TIMERS do
         if (BS.Vars[string.format("Timer%dEnabled", timer)]) then
             local timerValue = BS.Vars[string.format("Timer%dTime", timer)] or "0:00"
             local index = 0
-            local timerName =
-                BS.Vars[string.format("Timer%dName", timer)] or
-                ZO_CachedStrFormat(_G.BARSTEWARD_TIMER, ZO_CachedStrFormat("<<n:1>>", timer))
+            local defaultName = ZO_CachedStrFormat(_G.BARSTEWARD_TIMER, ZO_CachedStrFormat("<<n:1>>", timer))
+            local timerName = BS.Vars[string.format("Timer%dName", timer)] or defaultName
+
+            if (timerName == "") then
+                timerName = defaultName
+            end
 
             for digits in timerValue:gmatch("%d+") do
                 index = index + 1
@@ -78,7 +66,17 @@ local function getTimers()
             end
 
             AddMenuItem(title, timerFunction)
+            added = added + 1
         end
+    end
+
+    if (added == 0) then
+        AddMenuItem(
+            BS.Format(_G.BARSTEWARD_TIMER_NONE),
+            function()
+                BS.LAM:OpenToPanel(BS.OptionsPanel)
+            end
+        )
     end
 end
 
@@ -177,6 +175,21 @@ do
     end
 end
 
+local function getMoonPhaseIcon()
+    if (BS.LibClock) then
+        local constants = _G.LibClockTST.CONSTANTS()
+        local moonInfo = BS.LibClock:GetMoon()
+
+        for idx, data in ipairs(constants.moon.phasesPercentage) do
+            if (data.name == moonInfo.currentPhaseName) then
+                return idx
+            end
+        end
+    end
+
+    return 5
+end
+
 BS.widgets = {
     [BS.W_TIME] = {
         name = "time",
@@ -196,16 +209,20 @@ BS.widgets = {
 
             widget:SetValue(time)
             widget:SetColour(unpack(BS.GetColour(this)))
+
+            widget.tooltip =
+                BS.Format(_G.SI_TRADINGHOUSELISTINGSORTTYPE0) ..
+                BS.LF .. "|cf9f9f9" .. BS.Format(_G.BARSTEWARD_TIMER_TIP) .. "|r"
+
             return widget:GetValue()
         end,
         timer = 1000,
-        tooltip = BS.Format(_G.SI_TRADINGHOUSELISTINGSORTTYPE0) ..
-            BS.LF .. "|cf9f9f9" .. BS.Format(_G.BARSTEWARD_TIMER_TIP) .. "|r",
+        tooltip = BS.Format(_G.SI_TRADINGHOUSELISTINGSORTTYPE0),
         icon = "lfg/lfg_indexicon_timedactivities_up",
         customSettings = {
             [1] = {
                 type = "submenu",
-                name = BS.Format(_G.BARSTEWARD_TIMERS),
+                name = "|c34cceb" .. BS.Format(_G.BARSTEWARD_TIMERS) .. "|r",
                 controls = timers
             }
         }
