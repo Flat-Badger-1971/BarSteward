@@ -1564,22 +1564,33 @@ function BS.Icon(path, colour, width, height)
 end
 
 function BS.GetVar(name, widget)
-    local value
+    local value = 0
+    local continue = false
 
-    if (widget) then
-        if (BS.Vars.Controls[widget]) then
-            value = BS.Vars.Controls[widget][name]
-        end
-        if (value == nil) then
-            if (BS.Defaults.Controls[widget]) then
-                value = BS.Defaults.Controls[widget][name]
+    if (BS) then
+        if (BS.Vars) then
+            if (BS.Vars.Controls) then
+                continue = true
             end
         end
-    else
-        value = BS.Vars[name]
+    end
 
-        if (value == nil) then
-            value = BS.Defaults[name]
+    if (continue) then
+        if (widget) then
+            if (BS.Vars.Controls[widget]) then
+                value = BS.Vars.Controls[widget][name]
+            end
+            if (value == nil) then
+                if (BS.Defaults.Controls[widget]) then
+                    value = BS.Defaults.Controls[widget][name]
+                end
+            end
+        else
+            value = BS.Vars[name]
+
+            if (value == nil) then
+                value = BS.Defaults[name]
+            end
         end
     end
 
@@ -1683,49 +1694,6 @@ function BS.GetQuestInfo()
                 end
             end
         )
-    end
-end
-
-local function findButton(dialog, primary)
-    local buttons = dialog.buttons
-
-    for _, button in ipairs(buttons) do
-        if (primary) then
-            if (button.keybind == "DIALOG_PRIMARY") then
-                return button
-            end
-        else
-            if (button.text == _G.SI_DIALOG_CANCEL) then
-                return button
-            end
-        end
-    end
-end
-
--- prevent timer based widget making calls during logout
-function BS.AddLogoutHooks()
-    local dialogs = {"LOG_OUT", "GAMEPAD_LOG_OUT", "QUIT"}
-
-    for _, dialog in ipairs(dialogs) do
-        local esoDialog = _G.ESO_Dialogs[dialog]
-        local okbutton = findButton(esoDialog, true)
-        local cancel = findButton(esoDialog, false)
-        local okcb = okbutton.callback
-        local cancelcb = cancel.callback
-
-        okbutton.callback = function(...)
-            BS.DisableUpdates()
-
-            return okcb(...)
-        end
-
-        cancel.callback = function(...)
-            BS.EnableUpdates()
-
-            if (cancelcb) then
-                return cancelcb(...)
-            end
-        end
     end
 end
 

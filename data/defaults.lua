@@ -779,6 +779,9 @@ BS.Defaults = {
         },
         [BS.W_DAILY_COUNT] = {
             Cat = cat.Activities
+        },
+        [BS.W_PLAYER_STATUS] = {
+            Cat = cat.Character
         }
     }
 }

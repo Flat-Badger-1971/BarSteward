@@ -1305,3 +1305,38 @@ BS.widgets[BS.W_XP_BUFF] = {
     icon = "icons/icon_experience",
     tooltip = BS.Format(_G.BARSTEWARD_XP_BUFF)
 }
+
+BS.widgets[BS.W_PLAYER_STATUS] = {
+    -- v2.1.13
+    name = "playerStatus",
+    update = function(widget, _, _, newStatus)
+        local status = newStatus or GetPlayerStatus()
+        local icon = ZO_GetGamepadPlayerStatusIcon(status)
+        local text = BS.Format(_G["SI_PLAYERSTATUS" .. status])
+
+        widget:SetIcon(icon)
+        widget:SetValue(text)
+
+        return 0
+    end,
+    hideWhenEqual = 0,
+    event = _G.EVENT_PLAYER_STATUS_CHANGED,
+    icon = "contacts/gamepad/gp_social_status_online",
+    tooltip = BS.Format(_G.SI_FRIENDS_LIST_PANEL_TOOLTIP_STATUS),
+    customSettings = {
+        [1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_HIDE_TEXT),
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_PLAYER_STATUS].NoValue or false
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_PLAYER_STATUS].NoValue = value
+                BS.GetWidget(BS.W_PLAYER_STATUS):SetNoValue(value)
+                BS.RegenerateBar(BS.Vars.Controls[BS.W_PLAYER_STATUS].Bar, BS.W_PLAYER_STATUS)
+            end,
+            width = "full",
+            default = false
+        }
+    }
+}

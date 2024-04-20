@@ -355,6 +355,7 @@ read_globals = {
     "GetLoreCategoryInfo",
     "GetLoreCollectionInfo",
     "GetMapContentType",
+    "GetMapPlayerPosition",
     "GetMaximumRapport",
     "GetMaxLevel",
     "GetMaxPossibleCurrency",
@@ -391,7 +392,7 @@ read_globals = {
     "GetPlayerChampionXP",
     "GetPlayerGuildMemberIndex",
     "GetPlayerLocationName",
-    "GetMapPlayerPosition",
+    "GetPlayerStatus",
     "GetPulseTimeline",
     "GetQuestName",
     "GetRecallCooldown",
@@ -523,6 +524,8 @@ read_globals = {
     "ZO_FormatUserFacingCharacterName",
     "ZO_FormatUserFacingDisplayName",
     "ZO_GetAllianceIcon",
+    "ZO_GetGamepadPlayerStatusIcon",
+    "ZO_GetPlayerStatusIcon",
     ["ZO_HiddenReasons"] = {
         fields = {
             New = {read_only = true}
