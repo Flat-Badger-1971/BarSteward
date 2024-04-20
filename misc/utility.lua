@@ -253,7 +253,9 @@ local function callTimerFunctions(time)
     end
 
     for i = 1, #timerFunctions[time] do
-        timerFunctions[time][i]()
+        if (timerFunctions[time][i]) then
+            timerFunctions[time][i]()
+        end
     end
 end
 
@@ -765,76 +767,6 @@ function BS.ColourToIcon(r, g, b)
     local quality = BS.ColourToQuality(r, g, b, 1)
 
     return BS.FormatIcon(BS.ITEM_COLOUR_ICON[quality or 1])
-end
-
-local function setSubjectAndBody(subject, body, recipient)
-    local bodyField, subjectField, recipientField
-
-    if (IsInGamepadPreferredMode()) then
-        bodyField = MAIL_MANAGER_GAMEPAD:GetSend().mailView.bodyEdit.edit
-        subjectField = MAIL_MANAGER_GAMEPAD:GetSend().mailView.subjectEdit.edit
-        recipientField = MAIL_MANAGER_GAMEPAD:GetSend().mailView.addressEdit.edit
-    else
-        bodyField = ZO_MailSendBodyField
-        subjectField = ZO_MailSendSubjectField
-        recipientField = ZO_MailSendToField
-    end
-
-    recipientField:SetText(recipient)
-    subjectField:SetText(subject)
-    bodyField:SetText(bodyField:GetText() .. body)
-end
-
-local function composeMail(subject, body, recipient)
-    local mailManager
-
-    if (IsInGamepadPreferredMode()) then
-        mailManager = MAIL_MANAGER_GAMEPAD:GetSend()
-        BS.mailScene = "mailManagerGamepad"
-    else
-        mailManager = MAIL_SEND
-        BS.mailScene = "mailSend"
-    end
-
-    mailManager:ClearFields()
-
-    if (SCENE_MANAGER:IsShowing(BS.mailScene)) then
-        setSubjectAndBody(subject, body, recipient)
-    else
-        mailManager:ComposeMailTo(recipient or "")
-        SCENE_MANAGER:CallWhen(
-            BS.mailScene,
-            _G.SCENE_SHOWN,
-            function()
-                setSubjectAndBody(subject, body, recipient)
-            end
-        )
-    end
-
-    return mailManager
-end
-
-function BS.SendMail(subject, body, recipient)
-    local mailManager = composeMail(subject, body, recipient)
-
-    zo_callLater(
-        function()
-            mailManager:Send()
-            zo_callLater(
-                function()
-                    BS.CloseMail()
-                end,
-                500
-            )
-        end,
-        500
-    )
-end
-
-function BS.CloseMail()
-    if (SCENE_MANAGER:IsShowing(BS.mailScene)) then
-        SCENE_MANAGER:Hide(BS.mailScene)
-    end
 end
 
 -- get then next unused index number from the table's values
@@ -1633,21 +1565,32 @@ end
 
 function BS.GetVar(name, widget)
     local value
+    local continue = false
 
-    if (widget) then
-        if (BS.Vars.Controls[widget]) then
-            value = BS.Vars.Controls[widget][name]
-        end
-        if (value == nil) then
-            if (BS.Defaults.Controls[widget]) then
-                value = BS.Defaults.Controls[widget][name]
+    if (BS) then
+        if (BS.Vars) then
+            if (BS.Vars.Controls) then
+                continue = true
             end
         end
-    else
-        value = BS.Vars[name]
+    end
 
-        if (value == nil) then
-            value = BS.Defaults[name]
+    if (continue) then
+        if (widget) then
+            if (BS.Vars.Controls[widget]) then
+                value = BS.Vars.Controls[widget][name]
+            end
+            if (value == nil) then
+                if (BS.Defaults.Controls[widget]) then
+                    value = BS.Defaults.Controls[widget][name]
+                end
+            end
+        else
+            value = BS.Vars[name]
+
+            if (value == nil) then
+                value = BS.Defaults[name]
+            end
         end
     end
 
@@ -1683,9 +1626,9 @@ function BS.GetColour(this, colourType, default)
     end
 
     if (default) then
-        defColour = BS.GetVar(default)
+        defColour = BS.GetVar(default) or {0, 0, 0, 0}
     else
-        defColour = BS.GetVar(defaultColour)
+        defColour = BS.GetVar(defaultColour) or {0, 0, 0, 0}
     end
 
     return BS.GetVar(colour, this) or defColour
@@ -1752,6 +1695,27 @@ function BS.GetQuestInfo()
             end
         )
     end
+end
+
+function BS.PopulateSoundOptions()
+    BS.SoundChoices = {}
+    BS.SoundLookup = {}
+
+    for _, v in ipairs(BS.Sounds) do
+        if (_G.SOUNDS[v] ~= nil) then
+            local soundName = _G.SOUNDS[v]:gsub("_", " ")
+
+            table.insert(BS.SoundChoices, soundName)
+            BS.SoundLookup[soundName] = _G.SOUNDS[v]
+        end
+    end
+end
+
+function BS.SecondsToMinutes(secondsValue)
+    local minutes = math.floor(secondsValue / 60)
+    local seconds = secondsValue - (minutes * 60)
+
+    return string.format("%d:%02d", minutes, seconds)
 end
 
 -- developer utility functions

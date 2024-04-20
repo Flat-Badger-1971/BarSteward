@@ -35,7 +35,8 @@ read_globals = {
     },
     ["CHAT_ROUTER"] = {
         fields = {
-            AddSystemMessage = {read_only = true}
+            AddSystemMessage = {read_only = true},
+            FormatAndAddChatMessage = {read_only = true}
         }
     },
     ["COLLECTIONS_BOOK"] = {
@@ -147,7 +148,8 @@ read_globals = {
     ["SHARED_INVENTORY"] = {
         fields = {
             GenerateFullSlotData = {read_only = true},
-            bagCache = {read_only = true}
+            bagCache = {read_only = true},
+            RegisterCallback = {read_only = true}
         }
     },
     ["STABLE_MANAGER"] = {
@@ -237,7 +239,9 @@ read_globals = {
     -- lua
     "unpack",
     --API
+    "AddMenuItem",
     "AssignTargetMarkerToReticleTarget",
+    "ClearMenu",
     "CreateSimpleAnimation",
     "DoesAntiquityHaveLead",
     "DoesUnitExist",
@@ -351,6 +355,7 @@ read_globals = {
     "GetLoreCategoryInfo",
     "GetLoreCollectionInfo",
     "GetMapContentType",
+    "GetMapPlayerPosition",
     "GetMaximumRapport",
     "GetMaxLevel",
     "GetMaxPossibleCurrency",
@@ -387,7 +392,7 @@ read_globals = {
     "GetPlayerChampionXP",
     "GetPlayerGuildMemberIndex",
     "GetPlayerLocationName",
-    "GetMapPlayerPosition",
+    "GetPlayerStatus",
     "GetPulseTimeline",
     "GetQuestName",
     "GetRecallCooldown",
@@ -465,6 +470,7 @@ read_globals = {
     "IsSlotUsed",
     "IsUnitDead",
     "IsUnitGrouped",
+    "IsUnitGroupLeader",
     "IsUnitInCombat",
     "IsUnitInDungeon",
     "IsUnitOnline",
@@ -477,6 +483,7 @@ read_globals = {
     "RequestTributeClubData",
     "SecurePostHook",
     "SetGameCameraUIMode",
+    "ShowMenu",
     "TriggerTutorial",
     "UseCollectible",
     -- Zenimax objects
@@ -517,6 +524,8 @@ read_globals = {
     "ZO_FormatUserFacingCharacterName",
     "ZO_FormatUserFacingDisplayName",
     "ZO_GetAllianceIcon",
+    "ZO_GetGamepadPlayerStatusIcon",
+    "ZO_GetPlayerStatusIcon",
     ["ZO_HiddenReasons"] = {
         fields = {
             New = {read_only = true}

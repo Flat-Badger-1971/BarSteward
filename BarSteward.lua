@@ -339,6 +339,13 @@ local function Initialise()
         end
     )
 
+    BS.RegisterForEvent(
+        _G.EVENT_PLAYER_DEACTIVATED,
+        function()
+            BS.DisableUpdates()
+        end
+    )
+
     BS.GridChanged = true
 end
 

@@ -1,4 +1,179 @@
 local BS = _G.BarSteward
+local startButton = BS.Icon("buttons/rightarrow_up", "00ff00", 16, 16)
+local stopButton = BS.Icon("buttons/gamepad/console-widget-checkbox", "ff0000", 16, 16)
+local timerFunctions = {}
+
+BS.TimerRunning = {}
+
+local startFunction = function(t)
+    if (BS.TimerRunning[t]) then
+        BS.TimerRunning[t] = BS.TimerRunning[t] - 1
+
+        if (BS.TimerRunning[t] == 0) then
+            BS.TimerRunning[t] = nil
+            BS.UnregisterForUpdate(1000, timerFunctions[t])
+
+            local sound = BS.Vars[string.format("Timer%dSound", t)]
+
+            if (sound) then
+                PlaySound(BS.SoundLookup[sound])
+            end
+        end
+    end
+end
+
+do
+    for timer = 1, BS.MAX_TIMERS do
+        timerFunctions[timer] = function()
+            startFunction(timer)
+        end
+    end
+end
+
+local function getTimers()
+    local nums = {}
+    local added = 0
+
+    for timer = 1, BS.MAX_TIMERS do
+        if (BS.Vars[string.format("Timer%dEnabled", timer)]) then
+            local timerValue = BS.Vars[string.format("Timer%dTime", timer)] or "0:00"
+            local index = 0
+            local defaultName = ZO_CachedStrFormat(_G.BARSTEWARD_TIMER, ZO_CachedStrFormat("<<n:1>>", timer))
+            local timerName = BS.Vars[string.format("Timer%dName", timer)] or defaultName
+
+            if (timerName == "") then
+                timerName = defaultName
+            end
+
+            for digits in timerValue:gmatch("%d+") do
+                index = index + 1
+                nums[index] = tonumber(digits)
+            end
+
+            local seconds =
+                BS.TimerRunning[timer] and BS.TimerRunning[timer] or (((nums[1] or 0) * 60) + (nums[2] or 0))
+            local formatted = BS.SecondsToMinutes(seconds)
+            local title =
+                string.format("%s  %s - %s", BS.TimerRunning[timer] and stopButton or startButton, formatted, timerName)
+            local timerFunction = function()
+                if (BS.TimerRunning[timer]) then
+                    BS.TimerRunning[timer] = nil
+                    BS.UnregisterForUpdate(1000, timerFunctions[timer])
+                else
+                    BS.TimerRunning[timer] = seconds
+                    BS.RegisterForUpdate(1000, timerFunctions[timer])
+                end
+            end
+
+            AddMenuItem(title, timerFunction)
+            added = added + 1
+        end
+    end
+
+    if (added == 0) then
+        AddMenuItem(
+            BS.Format(_G.BARSTEWARD_TIMER_NONE),
+            function()
+                BS.LAM:OpenToPanel(BS.OptionsPanel)
+            end
+        )
+    end
+end
+
+local function addContextMenu(widget)
+    widget:SetHandler(
+        "OnMouseDown",
+        function(_, button)
+            if (button == _G.MOUSE_BUTTON_INDEX_RIGHT) then
+                ClearMenu()
+                getTimers()
+                ShowMenu()
+            end
+        end
+    )
+end
+
+local note =
+    "|cffff00" .. BS.Format(_G.BARSTEWARD_TIMER_NOTE) .. BS.LF .. BS.Format(_G.BARSTEWARD_TIMER_WARNING) .. "|r"
+local timers = {
+    [1] = {
+        type = "description",
+        text = note,
+        width = "full"
+    }
+}
+
+do
+    if (not BS.SoundChoices) then
+        BS.PopulateSoundOptions()
+    end
+
+    for timer = 1, BS.MAX_TIMERS do
+        timers[timer + 1] = {
+            type = "submenu",
+            name = ZO_CachedStrFormat(_G.BARSTEWARD_TIMER, ZO_CachedStrFormat("<<n:1>>", timer)),
+            controls = {
+                [1] = {
+                    type = "checkbox",
+                    name = BS.Format(_G.SI_ADDONLOADSTATE2),
+                    getFunc = function()
+                        return BS.Vars[string.format("Timer%dEnabled", timer)]
+                    end,
+                    setFunc = function(value)
+                        BS.Vars[string.format("Timer%dEnabled", timer)] = value
+                    end,
+                    width = "full"
+                },
+                [2] = {
+                    type = "editbox",
+                    name = ZO_CachedStrFormat(_G.BARSTEWARD_TIMER, ZO_CachedStrFormat("<<n:1>>", timer)),
+                    getFunc = function()
+                        return BS.Vars[string.format("Timer%dTime", timer)] or "0:00"
+                    end,
+                    setFunc = function(value)
+                        BS.Vars[string.format("Timer%dTime", timer)] = value
+                    end,
+                    disabled = function()
+                        return not BS.Vars[string.format("Timer%dEnabled", timer)]
+                    end,
+                    width = "full"
+                },
+                [3] = {
+                    type = "editbox",
+                    name = BS.Format(_G.SI_ADDON_MANAGER_NAME),
+                    getFunc = function()
+                        return BS.Vars[string.format("Timer%dName", timer)] or
+                            ZO_CachedStrFormat(_G.BARSTEWARD_TIMER, ZO_CachedStrFormat("<<n:1>>", timer))
+                    end,
+                    setFunc = function(value)
+                        BS.Vars[string.format("Timer%dName", timer)] = value
+                    end,
+                    disabled = function()
+                        return not BS.Vars[string.format("Timer%dEnabled", timer)]
+                    end,
+                    width = "full"
+                },
+                [4] = {
+                    type = "dropdown",
+                    name = GetString(_G.BARSTEWARD_SOUND),
+                    choices = BS.SoundChoices,
+                    getFunc = function()
+                        return BS.Vars[string.format("Timer%dSound", timer)]
+                    end,
+                    setFunc = function(value)
+                        BS.Vars[string.format("Timer%dSound", timer)] = value
+                        PlaySound(BS.SoundLookup[value])
+                    end,
+                    disabled = function()
+                        return not BS.Vars[string.format("Timer%dEnabled", timer)]
+                    end,
+                    scrollable = true,
+                    default = nil
+                }
+            }
+        }
+    end
+end
 
 local function getMoonPhaseIcon()
     if (BS.LibClock) then
@@ -18,7 +193,11 @@ end
 BS.widgets = {
     [BS.W_TIME] = {
         name = "time",
-        update = function(widget)
+        update = function(widget, init)
+            if (init == "initial") then
+                addContextMenu(widget)
+            end
+
             local format = BS.GetVar("TimeFormat24")
             local this = BS.W_TIME
 
@@ -30,11 +209,23 @@ BS.widgets = {
 
             widget:SetValue(time)
             widget:SetColour(unpack(BS.GetColour(this)))
+
+            widget.tooltip =
+                BS.Format(_G.SI_TRADINGHOUSELISTINGSORTTYPE0) ..
+                BS.LF .. "|cf9f9f9" .. BS.Format(_G.BARSTEWARD_TIMER_TIP) .. "|r"
+
             return widget:GetValue()
         end,
         timer = 1000,
         tooltip = BS.Format(_G.SI_TRADINGHOUSELISTINGSORTTYPE0),
-        icon = "lfg/lfg_indexicon_timedactivities_up"
+        icon = "lfg/lfg_indexicon_timedactivities_up",
+        customSettings = {
+            [1] = {
+                type = "submenu",
+                name = "|c34cceb" .. BS.Format(_G.BARSTEWARD_TIMERS) .. "|r",
+                controls = timers
+            }
+        }
     },
     [BS.W_FPS] = {
         name = "fps",

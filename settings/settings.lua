@@ -1,7 +1,7 @@
 local BS = _G.BarSteward
 
 BS.LAM = _G.LibAddonMenu2
-BS.VERSION = "2.1.11"
+BS.VERSION = "2.1.13"
 
 local panel = {
     type = "panel",
@@ -14,19 +14,11 @@ local panel = {
     slashCommand = "/bs"
 }
 
-local soundChoices = {}
-BS.SoundLookup = {}
 BS.SoundLastPlayed = {}
 
 -- populate the sound selection and lookup tables
-do
-    for _, v in ipairs(BS.Sounds) do
-        if (_G.SOUNDS[v] ~= nil) then
-            local soundName = _G.SOUNDS[v]:gsub("_", " ")
-            table.insert(soundChoices, soundName)
-            BS.SoundLookup[soundName] = _G.SOUNDS[v]
-        end
-    end
+if (not BS.SoundChoices) then
+    BS.PopulateSoundOptions()
 end
 
 -- populate the lookup tables
@@ -1417,7 +1409,7 @@ local function checkSoundWhenEquals(defaults, widgetControls, vars)
         widgetControls[#widgetControls + 1] = {
             type = "dropdown",
             name = GetString(_G.BARSTEWARD_SOUND),
-            choices = soundChoices,
+            choices = BS.SoundChoices,
             getFunc = function()
                 return vars.SoundWhenEqualsSound
             end,
@@ -1428,6 +1420,7 @@ local function checkSoundWhenEquals(defaults, widgetControls, vars)
             disabled = function()
                 return not vars.SoundWhenEquals
             end,
+            scrollable = true,
             default = nil
         }
     end
@@ -1467,7 +1460,7 @@ local function checkSoundWhenOver(defaults, widgetControls, vars)
         widgetControls[#widgetControls + 1] = {
             type = "dropdown",
             name = GetString(_G.BARSTEWARD_SOUND),
-            choices = soundChoices,
+            choices = BS.SoundChoices,
             getFunc = function()
                 return vars.SoundWhenOverSound
             end,
@@ -1478,6 +1471,7 @@ local function checkSoundWhenOver(defaults, widgetControls, vars)
             disabled = function()
                 return not vars.SoundWhenOver
             end,
+            scrollable = true,
             default = nil
         }
     end
@@ -1517,7 +1511,7 @@ local function checkSoundWhenUnder(defaults, widgetControls, vars)
         widgetControls[#widgetControls + 1] = {
             type = "dropdown",
             name = GetString(_G.BARSTEWARD_SOUND),
-            choices = soundChoices,
+            choices = BS.SoundChoices,
             getFunc = function()
                 return vars.SoundWhenUnderSound
             end,
@@ -1528,6 +1522,7 @@ local function checkSoundWhenUnder(defaults, widgetControls, vars)
             disabled = function()
                 return not vars.SoundWhenUnder
             end,
+            scrollable = true,
             default = nil
         }
     end
