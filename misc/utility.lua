@@ -1564,7 +1564,7 @@ function BS.Icon(path, colour, width, height)
 end
 
 function BS.GetVar(name, widget)
-    local value = 0
+    local value
     local continue = false
 
     if (BS) then
@@ -1626,9 +1626,9 @@ function BS.GetColour(this, colourType, default)
     end
 
     if (default) then
-        defColour = BS.GetVar(default)
+        defColour = BS.GetVar(default) or {0, 0, 0, 0}
     else
-        defColour = BS.GetVar(defaultColour)
+        defColour = BS.GetVar(defaultColour) or {0, 0, 0, 0}
     end
 
     return BS.GetVar(colour, this) or defColour
