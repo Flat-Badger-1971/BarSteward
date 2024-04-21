@@ -1,7 +1,7 @@
 local BS = _G.BarSteward
 
 BS.LAM = _G.LibAddonMenu2
-BS.VERSION = "2.1.13"
+BS.VERSION = "2.1.15"
 
 local panel = {
     type = "panel",
@@ -1375,156 +1375,58 @@ local function checkShowFreeSpace(defaults, widgetControls, vars, key)
     end
 end
 
-local function checkSoundWhenEquals(defaults, widgetControls, vars)
-    if (defaults.SoundWhenEquals ~= nil) then
-        widgetControls[#widgetControls + 1] = {
-            type = "checkbox",
-            name = GetString(_G.BARSTEWARD_SOUND_VALUE_EQUALS),
-            getFunc = function()
-                return vars.SoundWhenEquals
-            end,
-            setFunc = function(value)
-                vars.SoundWhenEquals = value
-            end,
-            width = "full",
-            default = defaults.SoundWhenEquals
-        }
+local function checkSounds(defaults, widgetControls, vars)
+    local checks = {EQUALS = "Equals", EXCEEDS = "Over", BELOW = "Under"}
 
-        widgetControls[#widgetControls + 1] = {
-            type = "editbox",
-            name = GetString(_G.BARSTEWARD_VALUE),
-            getFunc = function()
-                return vars.SoundWhenEqualsValue
-            end,
-            setFunc = function(value)
-                vars.SoundWhenEqualsValue = value
-            end,
-            width = "full",
-            disabled = function()
-                return not vars.SoundWhenEquals
-            end,
-            default = nil
-        }
+    for langSuffix, varSuffix in pairs(checks) do
+        if (defaults["SoundWhen" .. varSuffix] ~= nil) then
+            widgetControls[#widgetControls + 1] = {
+                type = "checkbox",
+                name = GetString(_G["BARSTEWARD_SOUND_VALUE_" .. langSuffix]),
+                getFunc = function()
+                    return vars["SoundWhen" .. varSuffix]
+                end,
+                setFunc = function(value)
+                    vars["SoundWhen" .. varSuffix] = value
+                end,
+                width = "full",
+                default = defaults["SoundWhen" .. varSuffix]
+            }
 
-        widgetControls[#widgetControls + 1] = {
-            type = "dropdown",
-            name = GetString(_G.BARSTEWARD_SOUND),
-            choices = BS.SoundChoices,
-            getFunc = function()
-                return vars.SoundWhenEqualsSound
-            end,
-            setFunc = function(value)
-                vars.SoundWhenEqualsSound = value
-                PlaySound(BS.SoundLookup[value])
-            end,
-            disabled = function()
-                return not vars.SoundWhenEquals
-            end,
-            scrollable = true,
-            default = nil
-        }
-    end
-end
+            widgetControls[#widgetControls + 1] = {
+                type = "editbox",
+                name = GetString(_G.BARSTEWARD_VALUE),
+                getFunc = function()
+                    return vars["SoundWhen" .. varSuffix .. "Value"]
+                end,
+                setFunc = function(value)
+                    vars["SoundWhen" .. varSuffix .. "Value"] = value
+                end,
+                width = "full",
+                disabled = function()
+                    return not vars["SoundWhen" .. varSuffix]
+                end,
+                default = nil
+            }
 
-local function checkSoundWhenOver(defaults, widgetControls, vars)
-    if (defaults.SoundWhenOver ~= nil) then
-        widgetControls[#widgetControls + 1] = {
-            type = "checkbox",
-            name = GetString(_G.BARSTEWARD_SOUND_VALUE_EXCEEDS),
-            getFunc = function()
-                return vars.SoundWhenOver
-            end,
-            setFunc = function(value)
-                vars.SoundWhenOver = value
-            end,
-            width = "full",
-            default = defaults.SoundWhenOver
-        }
-
-        widgetControls[#widgetControls + 1] = {
-            type = "editbox",
-            name = GetString(_G.BARSTEWARD_VALUE),
-            getFunc = function()
-                return vars.SoundWhenOverValue
-            end,
-            setFunc = function(value)
-                vars.SoundWhenOverValue = value
-            end,
-            width = "full",
-            disabled = function()
-                return not vars.SoundWhenOver
-            end,
-            default = nil
-        }
-
-        widgetControls[#widgetControls + 1] = {
-            type = "dropdown",
-            name = GetString(_G.BARSTEWARD_SOUND),
-            choices = BS.SoundChoices,
-            getFunc = function()
-                return vars.SoundWhenOverSound
-            end,
-            setFunc = function(value)
-                vars.SoundWhenOverSound = value
-                PlaySound(BS.SoundLookup[value])
-            end,
-            disabled = function()
-                return not vars.SoundWhenOver
-            end,
-            scrollable = true,
-            default = nil
-        }
-    end
-end
-
-local function checkSoundWhenUnder(defaults, widgetControls, vars)
-    if (defaults.SoundWhenUnder ~= nil) then
-        widgetControls[#widgetControls + 1] = {
-            type = "checkbox",
-            name = GetString(_G.BARSTEWARD_SOUND_VALUE_BELOW),
-            getFunc = function()
-                return vars.SoundWhenUnder
-            end,
-            setFunc = function(value)
-                vars.SoundWhenUnder = value
-            end,
-            width = "full",
-            default = defaults.SoundWhenUnder
-        }
-
-        widgetControls[#widgetControls + 1] = {
-            type = "editbox",
-            name = GetString(_G.BARSTEWARD_VALUE),
-            getFunc = function()
-                return vars.SoundWhenUnderValue
-            end,
-            setFunc = function(value)
-                vars.SoundWhenUnderValue = value
-            end,
-            width = "full",
-            disabled = function()
-                return not vars.SoundWhenUnder
-            end,
-            default = nil
-        }
-
-        widgetControls[#widgetControls + 1] = {
-            type = "dropdown",
-            name = GetString(_G.BARSTEWARD_SOUND),
-            choices = BS.SoundChoices,
-            getFunc = function()
-                return vars.SoundWhenUnderSound
-            end,
-            setFunc = function(value)
-                vars.SoundWhenUnderSound = value
-                PlaySound(BS.SoundLookup[value])
-            end,
-            disabled = function()
-                return not vars.SoundWhenUnder
-            end,
-            scrollable = true,
-            default = nil
-        }
+            widgetControls[#widgetControls + 1] = {
+                type = "dropdown",
+                name = GetString(_G.BARSTEWARD_SOUND),
+                choices = BS.SoundChoices,
+                getFunc = function()
+                    return vars["SoundWhen" .. varSuffix .. "Sound"]
+                end,
+                setFunc = function(value)
+                    vars["SoundWhen" .. varSuffix .. "Sound"] = value
+                    PlaySound(BS.SoundLookup[value])
+                end,
+                disabled = function()
+                    return not vars["SoundWhen" .. varSuffix]
+                end,
+                scrollable = true,
+                default = nil
+            }
+        end
     end
 end
 
@@ -2335,9 +2237,7 @@ local function getWidgetSettings()
             checkHideLimit(defaults, widgetControls, vars, k)
             checkNoLimitColour(defaults, widgetControls, vars, k)
             checkShowFreeSpace(defaults, widgetControls, vars, k)
-            checkSoundWhenEquals(defaults, widgetControls, vars)
-            checkSoundWhenOver(defaults, widgetControls, vars)
-            checkSoundWhenUnder(defaults, widgetControls, vars)
+            checkSounds(defaults, widgetControls, vars)
             checkAnnouncement(defaults, widgetControls, vars, k)
             checkProgressBar(defaults, widgetControls, vars, k)
             checkCustomDropdown(widgetControls, k)

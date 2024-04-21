@@ -118,7 +118,7 @@ function BS.AddHousingWidgets(idx, widgets)
                             end,
                             tooltip = tooltip,
                             icon = house.icon,
-                            onClick = function()
+                            onLeftClick = function()
                                 if (house.ptfName) then
                                     JumpToSpecificHouse(house.ptfName, id)
                                 else

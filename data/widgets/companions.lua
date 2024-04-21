@@ -144,7 +144,7 @@ for k, v in pairs(BS.COMPANION_DEFIDS) do
             ZO_CachedStrFormat(_G.SI_UNIT_NAME, GetCollectibleInfo(GetCompanionCollectibleId(v)))
         ),
         icon = companionIcons[k],
-        onClick = function()
+        onLeftClick = function()
             UseCollectible(GetCompanionCollectibleId(v))
         end,
         customSettings = {

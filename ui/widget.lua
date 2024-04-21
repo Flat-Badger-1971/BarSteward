@@ -124,14 +124,24 @@ function baseWidget:SetHandler(...)
     self.control:SetHandler(...)
 end
 
-function baseWidget:SetOnClick(onClick)
-    if (onClick) then
+function baseWidget:SetOnClick(onLeftClick, onRightClick)
+    if (onLeftClick or onRightClick) then
         self.hasOnClick = true
         self.control:SetMouseEnabled(true)
         self.control:SetHandler(
             "OnMouseDown",
-            function()
-                onClick()
+            function(_, button)
+                if (button == _G.MOUSE_BUTTON_INDEX_LEFT) then
+                    if (onLeftClick) then
+                        onLeftClick()
+                    end
+                elseif (button == _G.MOUSE_BUTTON_INDEX_RIGHT) then
+                    if (onRightClick) then
+                        onRightClick()
+                    elseif (onLeftClick) then
+                        onLeftClick()
+                    end
+                end
             end
         )
     else
@@ -564,7 +574,7 @@ function BS.CreateWidget(metadata, parent, tooltipAnchor, valueSide, noValue, ba
     widget:SetInitialFont()
     widget:CreateProgress(metadata.progress, metadata.gradient, metadata.transition)
     widget:SetTooltipAnchor(tooltipAnchor)
-    widget:SetOnClick(metadata.onClick)
+    widget:SetOnClick(metadata.onLeftClick, metadata.onRightClick)
     widget:CreateTooltip(metadata.tooltip)
     widget:CreateSpacer()
     widget:ApplyFontCorrection()

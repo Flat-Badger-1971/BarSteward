@@ -96,7 +96,7 @@ BS.widgets[BS.W_ZONE] = {
     event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_ZONE_CHANGED},
     icon = "tradinghouse/gamepad/gp_tradinghouse_trophy_treasure_map",
     tooltip = BS.Format(_G.SI_ANTIQUITY_SCRYABLE_CURRENT_ZONE_SUBCATEGORY),
-    onClick = function()
+    onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("worldMap")
         else
@@ -127,7 +127,7 @@ BS.widgets[BS.W_PLAYER_NAME] = {
     event = _G.EVENT_PLAYER_ACTIVATED,
     icon = "charactercreate/charactercreate_faceicon_up",
     tooltip = BS.Format(_G.SI_CUSTOMER_SERVICE_ASK_FOR_HELP_PLAYER_NAME),
-    onClick = function()
+    onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             SYSTEMS:GetObject("mainMenu"):ToggleCategory(_G.MENU_CATEGORY_CHARACTER)
         else
@@ -233,7 +233,7 @@ BS.widgets[BS.W_ALLIANCE] = {
     event = _G.EVENT_PLAYER_ACTIVATED,
     icon = "scoredisplay/blueflag",
     tooltip = BS.Format(_G.SI_COLLECTIBLERESTRICTIONTYPE2),
-    onClick = function()
+    onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("campaignOverview")
         else
@@ -312,7 +312,7 @@ BS.widgets[BS.W_SKILL_POINTS] = {
     icon = "campaign/campaignbrowser_indexicon_normal_up",
     tooltip = GetString(_G.BARSTEWARD_SKILL_POINTS),
     hideWhenEqual = 0,
-    onClick = function()
+    onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("skills")
         else
@@ -794,7 +794,7 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
     icon = "champion/champion_points_magicka_icon-hud",
     tooltip = BS.Format(_G.SI_STAT_GAMEPAD_CHAMPION_POINTS_LABEL),
     hideWhenEqual = 0,
-    onClick = function()
+    onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             MAIN_MENU_KEYBOARD:ShowScene("championPerks")
         else
@@ -850,7 +850,7 @@ BS.widgets[BS.W_PLAYER_LOCATION] = {
     event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_ZONE_CHANGED},
     icon = "icons/mapkey/mapkey_player",
     tooltip = GetString(_G.BARSTEWARD_PLAYER_LOCATION),
-    onClick = function()
+    onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("worldMap")
         else

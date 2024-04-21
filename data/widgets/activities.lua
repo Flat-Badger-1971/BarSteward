@@ -127,7 +127,7 @@ BS.widgets[BS.W_DAILY_ENDEAVOURS] = {
     event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED},
     icon = "journal/u26_progress_digsite_checked_incomplete",
     tooltip = GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS),
-    onClick = function()
+    onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             GROUP_MENU_KEYBOARD:ShowCategory(_G.TIMED_ACTIVITIES_FRAGMENT)
             TIMED_ACTIVITIES_KEYBOARD:SetCurrentActivityType(_G.TIMED_ACTIVITY_TYPE_DAILY)
@@ -169,7 +169,7 @@ BS.widgets[BS.W_WEEKLY_ENDEAVOURS] = {
     event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED},
     icon = "journal/u26_progress_digsite_checked_complete",
     tooltip = GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS),
-    onClick = function()
+    onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             GROUP_MENU_KEYBOARD:ShowCategory(_G.TIMED_ACTIVITIES_FRAGMENT)
             TIMED_ACTIVITIES_KEYBOARD:SetCurrentActivityType(_G.TIMED_ACTIVITY_TYPE_WEEKLY)
@@ -235,7 +235,7 @@ BS.widgets[BS.W_ENDEAVOUR_PROGRESS] = {
     event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED},
     icon = "journal/u26_progress_digsite_marked_complete",
     tooltip = GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS_BEST),
-    onClick = function()
+    onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             GROUP_MENU_KEYBOARD:ShowCategory(_G.TIMED_ACTIVITIES_FRAGMENT)
         else
@@ -306,14 +306,16 @@ BS.widgets[BS.W_LEADS] = {
 
         while antiquityId do
             if (DoesAntiquityHaveLead(antiquityId)) then
+                local leadInfo = ANTIQUITY_DATA_MANAGER:GetOrCreateAntiquityData(antiquityId)
                 local lead = {
-                    name = BS.Format(GetAntiquityName(antiquityId)),
-                    remaining = GetAntiquityLeadTimeRemainingSeconds(antiquityId),
-                    quality = GetAntiquityQuality(antiquityId),
-                    zone = BS.Format(GetZoneNameById(GetAntiquityZoneId(antiquityId))),
+                    name = BS.Format(leadInfo:GetName()),
+                    colourName = leadInfo:GetColorizedFormattedName(),
+                    remaining = leadInfo:GetLeadTimeRemainingS(),
+                    quality = leadInfo:GetQuality(),
+                    zone = BS.Format(GetZoneNameById(leadInfo:GetZoneId())),
                     id = antiquityId,
                     inProgress = GetNumAntiquityDigSites(antiquityId) > 0,
-                    recovered = GetNumAntiquitiesRecovered(antiquityId)
+                    recovered = leadInfo:GetNumRecovered()
                 }
 
                 table.insert(leads, lead)
@@ -504,7 +506,7 @@ BS.widgets[BS.W_DAILY_ENDEAVOUR_TIME] = {
     timer = 1000,
     icon = "journal/u26_progress_digsite_unknown_incomplete",
     tooltip = GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_TIME),
-    onClick = function()
+    onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             GROUP_MENU_KEYBOARD:ShowCategory(_G.TIMED_ACTIVITIES_FRAGMENT)
         else
@@ -522,7 +524,7 @@ BS.widgets[BS.W_WEEKLY_ENDEAVOUR_TIME] = {
     timer = 1000,
     icon = "journal/u26_progress_digsite_unknown_complete",
     tooltip = GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_TIME),
-    onClick = function()
+    onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             GROUP_MENU_KEYBOARD:ShowCategory(_G.TIMED_ACTIVITIES_FRAGMENT)
         else
@@ -609,7 +611,7 @@ BS.widgets[BS.W_ACHIEVEMENT_POINTS] = {
     },
     icon = "journal/journal_tabicon_achievements_up",
     tooltip = BS.Format(_G.SI_ACHIEVEMENTS_OVERALL),
-    onClick = function()
+    onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("achievements")
         else
@@ -729,7 +731,7 @@ BS.widgets[BS.W_LFG_TIME] = {
     timer = 1000,
     icon = "lfg/lfg_indexicon_dungeon_up",
     tooltip = GetString(_G.BARSTEWARD_DUNGEON_REWARD_RESET),
-    onClick = function()
+    onLeftClick = function()
         if (IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("gamepad_groupList")
         else
@@ -812,7 +814,7 @@ BS.widgets[BS.W_LOREBOOKS] = {
     callback = {[CALLBACK_MANAGER] = {BS.Name .. "CB_Lorebooks_Updated"}},
     icon = "icons/quest_book_001",
     tooltip = GetString(_G.BARSTEWARD_LOREBOOKS),
-    onClick = function()
+    onLeftClick = function()
         if (IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("loreLibraryGamepad")
         else
@@ -873,7 +875,7 @@ BS.widgets[BS.W_SHALIDORS_LIBRARY] = {
     callback = {[CALLBACK_MANAGER] = {BS.Name .. "CB_Lorebooks_Updated"}},
     icon = "icons/housing_sum_fur_booksfloatingset003",
     tooltip = BS.Format(_G.SI_ZONECOMPLETIONTYPE11),
-    onClick = function()
+    onLeftClick = function()
         if (IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("loreLibraryGamepad")
         else
@@ -909,7 +911,7 @@ BS.widgets[BS.W_CRAFTING_MOTIFS] = {
     callback = {[CALLBACK_MANAGER] = {BS.Name .. "CB_Lorebooks_Updated"}},
     icon = "icons/u34_crafting_style_item_sybranic_marine",
     tooltip = GetString(_G.BARSTEWARD_CRAFTING_MOTIFS),
-    onClick = function()
+    onLeftClick = function()
         if (IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("loreLibraryGamepad")
         else
@@ -1028,7 +1030,7 @@ BS.widgets[BS.W_RANDOM_DUNGEON] = {
     icon = "icons/achievement_update11_dungeons_019",
     hideWhenEqual = 0,
     tooltip = GetString(_G.BARSTEWARD_RANDOM_DUNGEON),
-    onClick = function()
+    onLeftClick = function()
         if (IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("gamepadDungeonFinder")
         else
@@ -1079,7 +1081,7 @@ BS.widgets[BS.W_RANDOM_BATTLEGROUND] = {
     icon = "icons/store_battleground",
     hideWhenEqual = 0,
     tooltip = BS.Format(_G.SI_BATTLEGROUND_FINDER_RANDOM_FILTER_TEXT),
-    onClick = function()
+    onLeftClick = function()
         if (IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("gamepadDungeonFinder")
         else
@@ -1126,7 +1128,7 @@ BS.widgets[BS.W_RANDOM_TRIBUTE] = {
     icon = "icons/u34_tribute_tutorial",
     hideWhenEqual = 0,
     tooltip = GetString(_G.BARSTEWARD_RANDOM_TRIBUTE),
-    onClick = function()
+    onLeftClick = function()
         if (IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("gamepadDungeonFinder")
         else
@@ -1214,7 +1216,7 @@ BS.widgets[BS.W_DAILY_PROGRESS] = {
     event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED},
     icon = "journal/u26_progress_digsite_marked_incomplete",
     tooltip = GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS_BEST),
-    onClick = function()
+    onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             GROUP_MENU_KEYBOARD:ShowCategory(_G.TIMED_ACTIVITIES_FRAGMENT)
         else

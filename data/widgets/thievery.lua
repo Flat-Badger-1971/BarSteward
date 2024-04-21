@@ -87,7 +87,7 @@ BS.widgets[BS.W_STOLEN_ITEMS] = {
     icon = "inventory/inventory_stolenitem_icon",
     tooltip = GetString(_G.BARSTEWARD_STOLEN),
     hideWhenEqual = 0,
-    onClick = function()
+    onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("inventory")
         else

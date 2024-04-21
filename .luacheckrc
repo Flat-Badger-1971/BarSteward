@@ -9,6 +9,11 @@ read_globals = {
             GetAchievementStatus = {read_only = true}
         }
     },
+    ["ANTIQUITY_DATA_MANAGER"] = {
+        fields = {
+            GetOrCreateAntiquityData = {read_only = true}
+        }
+    },
     "BOSS_BAR",
     ["CALLBACK_MANAGER"] = {
         fields = {

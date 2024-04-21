@@ -12,7 +12,7 @@ BS.widgets[BS.W_ARCHIVE_PORT] = {
     tooltip = GetString(_G.BARSTEWARD_INFINITE_ARCHIVE_PORT),
     icon = "icons/poi/poi_endlessdungeon_complete",
     cooldown = true,
-    onClick = function()
+    onLeftClick = function()
         FastTravelToNode(BS.INFINITE_ARCHIVE_NODE_INDEX)
     end
 }

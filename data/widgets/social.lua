@@ -95,7 +95,7 @@ BS.widgets[BS.W_FRIENDS] = {
     },
     tooltip = BS.Format(_G.SI_GAMEPAD_SOCIAL_FOOTER_NUM_ONLINE),
     icon = "chatwindow/chat_friendsonline_up",
-    onClick = function()
+    onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             SYSTEMS:GetObject("mainMenu"):ToggleCategory(_G.MENU_CATEGORY_CONTACTS)
         else
@@ -281,7 +281,7 @@ BS.widgets[BS.W_GUILD_FRIENDS] = {
     },
     tooltip = BS.Format(_G.BARSTEWARD_GUILD_FRIENDS_ONLINE),
     icon = "guild/guildheraldry_indexicon_crest_up",
-    onClick = function()
+    onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             SYSTEMS:GetObject("mainMenu"):ToggleCategory(_G.MENU_CATEGORY_GUILDS)
         else

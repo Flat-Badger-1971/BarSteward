@@ -23,7 +23,7 @@ for k, v in pairs(BS.ASSISTANTS) do
             ZO_CachedStrFormat(_G.SI_UNIT_NAME, GetCollectibleName(v))
         ),
         icon = assistantIcons[k],
-        onClick = function()
+        onLeftClick = function()
             UseCollectible(v)
         end,
         customSettings = {

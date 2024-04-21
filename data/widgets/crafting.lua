@@ -727,7 +727,7 @@ BS.widgets[BS.W_RECIPES] = {
     event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_RECIPE_LEARNED, _G.EVENT_MULTIPLE_RECIPES_LEARNED},
     icon = "tradinghouse/tradinghouse_trophy_recipe_fragment_up",
     tooltip = recipes,
-    onClick = function()
+    onLeftClick = function()
         local vars = BS.Vars.Controls[BS.W_RECIPES]
         local display = BS.unknownRecipeLinks[_G.ITEMTYPE_FOOD]
 

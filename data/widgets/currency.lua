@@ -197,7 +197,7 @@ BS.widgets[BS.W_CROWN_GEMS] = {
     event = {_G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED, _G.EVENT_CROWN_UPDATE, _G.EVENT_CROWN_GEM_UPDATE},
     tooltip = GetString(_G.BARSTEWARD_CROWN_GEMS),
     icon = "currency/currency_crown_gems",
-    onClick = function()
+    onLeftClick = function()
         SCENE_MANAGER:Show("show_market")
     end
 }
@@ -226,7 +226,7 @@ BS.widgets[BS.W_CROWNS] = {
     event = {_G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED, _G.EVENT_CROWN_UPDATE, _G.EVENT_CROWN_GEM_UPDATE},
     tooltip = GetString(_G.BARSTEWARD_CROWNS),
     icon = "currency/currency_crowns_32",
-    onClick = function()
+    onLeftClick = function()
         SCENE_MANAGER:Show("show_market")
     end
 }
@@ -344,7 +344,7 @@ BS.widgets[BS.W_SEALS_OF_ENDEAVOUR] = {
     event = {_G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED, _G.EVENT_CURRENCY_UPDATE},
     tooltip = BS.Format(_G.SI_CROWN_STORE_MENU_SEALS_STORE_LABEL),
     icon = "currency/currency_seals_of_endeavor_64",
-    onClick = function()
+    onLeftClick = function()
         SCENE_MANAGER:Show("show_market")
         ZO_ShowSealStore()
     end
@@ -496,7 +496,7 @@ BS.widgets[BS.W_ARCHIVAL_FRAGMENTS] = {
     event = _G.EVENT_CURRENCY_UPDATE,
     tooltip = GetString(_G.BARSTEWARD_ARCHIVAL_FRAGMENTS),
     icon = "currency/archivalfragments_mipmaps",
-    onClick = function()
+    onLeftClick = function()
         SCENE_MANAGER:Show("show_market")
     end
 }

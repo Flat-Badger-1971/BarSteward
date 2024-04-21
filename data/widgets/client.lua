@@ -80,19 +80,6 @@ local function getTimers()
     end
 end
 
-local function addContextMenu(widget)
-    widget:SetHandler(
-        "OnMouseDown",
-        function(_, button)
-            if (button == _G.MOUSE_BUTTON_INDEX_RIGHT) then
-                ClearMenu()
-                getTimers()
-                ShowMenu()
-            end
-        end
-    )
-end
-
 local note =
     "|cffff00" .. BS.Format(_G.BARSTEWARD_TIMER_NOTE) .. BS.LF .. BS.Format(_G.BARSTEWARD_TIMER_WARNING) .. "|r"
 local timers = {
@@ -193,11 +180,7 @@ end
 BS.widgets = {
     [BS.W_TIME] = {
         name = "time",
-        update = function(widget, init)
-            if (init == "initial") then
-                addContextMenu(widget)
-            end
-
+        update = function(widget)
             local format = BS.GetVar("TimeFormat24")
             local this = BS.W_TIME
 
@@ -215,6 +198,11 @@ BS.widgets = {
                 BS.LF .. "|cf9f9f9" .. BS.Format(_G.BARSTEWARD_TIMER_TIP) .. "|r"
 
             return widget:GetValue()
+        end,
+        onRightClick = function()
+            ClearMenu()
+            getTimers()
+            ShowMenu()
         end,
         timer = 1000,
         tooltip = BS.Format(_G.SI_TRADINGHOUSELISTINGSORTTYPE0),

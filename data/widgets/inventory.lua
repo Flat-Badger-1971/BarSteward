@@ -1152,7 +1152,7 @@ BS.widgets[BS.W_RANDOM_MOUNT] = {
     end,
     event = _G.EVENT_COLLECTION_UPDATED,
     tooltip = GetString(_G.BARSTEWARD_RANDOM_MOUNT),
-    icon = "icons/mounticon_horse_zenithauroran",
+    icon = "collections/random_anymount",
     onClick = function()
         randomOnClick(mounts, BS.W_RANDOM_MOUNT)
     end
