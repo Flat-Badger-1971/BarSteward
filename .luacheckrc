@@ -487,6 +487,7 @@ read_globals = {
     "RequestJumpToHouse",
     "RequestTributeClubData",
     "SecurePostHook",
+    "SelectPlayerStatus",
     "SetGameCameraUIMode",
     "ShowMenu",
     "TriggerTutorial",

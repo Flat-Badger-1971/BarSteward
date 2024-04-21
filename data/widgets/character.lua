@@ -1306,6 +1306,18 @@ BS.widgets[BS.W_XP_BUFF] = {
     tooltip = BS.Format(_G.BARSTEWARD_XP_BUFF)
 }
 
+local function changeStatus()
+    local status = GetPlayerStatus()
+
+    if (status== _G.PLAYER_STATUS_OFFLINE) then
+        status = _G.PLAYER_STATUS_ONLINE
+    else
+        status = status + 1
+    end
+
+    SelectPlayerStatus(status)
+end
+
 BS.widgets[BS.W_PLAYER_STATUS] = {
     -- v2.1.13
     name = "playerStatus",
@@ -1322,6 +1334,7 @@ BS.widgets[BS.W_PLAYER_STATUS] = {
     hideWhenEqual = 0,
     event = _G.EVENT_PLAYER_STATUS_CHANGED,
     icon = "contacts/gamepad/gp_social_status_online",
+    onLeftClick = changeStatus,
     tooltip = BS.Format(_G.SI_FRIENDS_LIST_PANEL_TOOLTIP_STATUS),
     customSettings = {
         [1] = {
