@@ -1270,6 +1270,7 @@ end
 BS.widgets[BS.W_DAILY_COUNT] = {
     name = "dailyCount",
     update = function(widget, eventId, param1, param2, param3)
+        BS.Vars.dailyQuestCount = BS.Vars.dailyQuestCount or {}
         checkReset()
         zo_callLater(
             function()

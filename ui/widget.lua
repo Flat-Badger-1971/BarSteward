@@ -120,10 +120,6 @@ function baseWidget:CreateTooltip(tooltip)
     end
 end
 
-function baseWidget:SetHandler(...)
-    self.control:SetHandler(...)
-end
-
 function baseWidget:SetOnClick(onLeftClick, onRightClick)
     if (onLeftClick or onRightClick) then
         self.hasOnClick = true
@@ -164,66 +160,63 @@ end
 BS.ProgressIndex = 0
 
 function baseWidget:CreateProgress(progress, gradient, transition)
-    if (progress) then
-        local name = BS.Name .. "_progress_" .. BS.ProgressIndex
+    local name = BS.Name .. "_progress_" .. BS.ProgressIndex
 
-        BS.ProgressIndex = BS.ProgressIndex + 1
+    BS.ProgressIndex = BS.ProgressIndex + 1
 
-        if (self.value and not self.value.progress) then
-            self.value = BS.CreateProgressBar(name, self.control)
-        end
+    self.progress = self.progress or BS.CreateProgressBar(name, self.control)
+    self.progress:ClearAnchors()
+    self.progress:SetAnchor(
+        self.valueSide == LEFT and RIGHT or LEFT,
+        self.icon,
+        self.valueSide,
+        self.valueSide == LEFT and -10 or 10,
+        0
+    )
+    self.progress:SetDimensions(200, 32)
+    self.progress:SetMinMax(0, 100)
+    self.progress.progress:SetColor(unpack(BS.Vars.Controls[self.id].ProgressColour or BS.Vars.DefaultWarningColour))
+    self.progress.progress:SetFont(self.font)
 
-        self.value = self.value or BS.CreateProgressBar(name, self.control)
-        self.value:ClearAnchors()
-        self.value:SetAnchor(
-            self.valueSide == LEFT and RIGHT or LEFT,
-            self.icon,
-            self.valueSide,
-            self.valueSide == LEFT and -10 or 10,
-            0
-        )
-        self.value:SetDimensions(200, 32)
-        self.value:SetMinMax(0, 100)
-        self.value.progress:SetColor(unpack(BS.Vars.Controls[self.id].ProgressColour or BS.Vars.DefaultWarningColour))
-        self.value.progress:SetFont(self.font)
+    if (gradient) then
+        local startg, endg = gradient()
+        local sr, sg, sb = unpack(startg)
+        local er, eg, eb = unpack(endg)
 
-        if (gradient) then
-            local startg, endg = gradient()
-            local sr, sg, sb = unpack(startg)
-            local er, eg, eb = unpack(endg)
+        self.progress:SetGradientColors(sr, sg, sb, 1, er, eg, eb, 1)
+    end
 
-            self.value:SetGradientColors(sr, sg, sb, 1, er, eg, eb, 1)
-        end
-    else
-        if (not self:HasNoValue()) then
-            if (transition) then
-                if (self.value and not self.transition) then
-                    self.value = WINDOW_MANAGER:CreateControlFromVirtual(nil, self.control, "ZO_RollingMeterLabel")
-                end
+    self.progress:SetHidden(not progress)
 
-                self.value =
-                    self.value or WINDOW_MANAGER:CreateControlFromVirtual(nil, self.control, "ZO_RollingMeterLabel")
-                self.value:SetHorizontalAlignment(_G.TEXT_ALIGN_LEFT)
-                self.value:SetResizeToFitLabels(true)
-                self.value.transitionManager = self.value:GetOrCreateTransitionManager()
-                self.value.transitionManager:SetMaxTransitionSteps(50)
-                self.transition = true
-            else
-                if (self.value and not self.value.SetFont) then
-                    self.value = WINDOW_MANAGER:CreateControl(nil, self.control, CT_LABEL)
-                end
-
-                self.value = self.value or WINDOW_MANAGER:CreateControl(nil, self.control, CT_LABEL)
-                self.value:SetDimensions(50, 32)
-                self.value:SetVerticalAlignment(TEXT_ALIGN_CENTER)
+    if (not self:HasNoValue()) then
+        if (transition) then
+            if (self.value and not self.transition) then
+                self.value = WINDOW_MANAGER:CreateControlFromVirtual(nil, self.control, "ZO_RollingMeterLabel")
             end
 
-            self.value:SetFont(self.font)
-            self.value:SetColor(unpack(BS.Vars.DefaultColour))
-            self.value:ClearAnchors()
+            self.value =
+                self.value or WINDOW_MANAGER:CreateControlFromVirtual(nil, self.control, "ZO_RollingMeterLabel")
+            self.value:SetHorizontalAlignment(_G.TEXT_ALIGN_LEFT)
+            self.value:SetResizeToFitLabels(true)
+            self.value.transitionManager = self.value:GetOrCreateTransitionManager()
+            self.value.transitionManager:SetMaxTransitionSteps(50)
+            self.transition = true
+        else
+            if (self.value and not self.value.SetFont) then
+                self.value = WINDOW_MANAGER:CreateControl(nil, self.control, CT_LABEL)
+            end
 
-            self:SetValueAnchor()
+            self.value = self.value or WINDOW_MANAGER:CreateControl(nil, self.control, CT_LABEL)
+            self.value:SetDimensions(50, 32)
+            self.value:SetVerticalAlignment(TEXT_ALIGN_CENTER)
         end
+
+        self.value:SetFont(self.font)
+        self.value:SetColor(unpack(BS.Vars.DefaultColour))
+        self.value:ClearAnchors()
+
+        self:SetValueAnchor()
+        self.value:SetHidden(progress ~= false)
     end
 end
 
@@ -359,10 +352,14 @@ function baseWidget:SetProgress(value, min, max, text)
         return
     end
 
+    if (self.progress:IsHidden()) then
+        self.progress:SetHidden(false)
+    end
+
     if (max and value) then
-        self.value:SetMinMax(min, max)
-        self.value.progress:SetText(text or (value .. "/" .. max))
-        self.value:SetValue(value)
+        self.progress:SetMinMax(min, max)
+        self.progress.progress:SetText(text or (value .. "/" .. max))
+        self.progress:SetValue(value)
     end
 end
 
