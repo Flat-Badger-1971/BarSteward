@@ -179,6 +179,8 @@ read_globals = {
     },
     ["TIMED_ACTIVITIES_MANAGER"] = {
         fields = {
+            ActivitiesIterator = {read_only = true},
+            GetTimedActivityTypeLimitInfo = {read_only = true},
             GetTimedActivityTypeTimeRemainingSeconds = {read_only = true}
         }
     },
@@ -300,6 +302,7 @@ read_globals = {
     "GetCompanionCollectibleId",
     "GetCompanionName",
     "GetCurrencyAmount",
+    "GetCurrentCharacterId",
     "GetCurrencyPlayerStoredLocation",
     "GetCurrentMapId",
     "GetCVar",
@@ -453,6 +456,7 @@ read_globals = {
     "GetUnitXPMax",
     "GetUnitZone",
     "GetUnitZoneIndex",
+    "GetWorldName",
     "GetZoneId",
     "GetZoneNameById",
     "GetZoneSkyshardId",
@@ -566,7 +570,8 @@ read_globals = {
     "ZO_Provisioner",
     ["ZO_SavedVars"] = {
         fields = {
-            NewAccountWide = {read_only = true}
+            NewAccountWide = {read_only = true},
+            NewCharacterIdSettings = {read_only = true}
         }
     },
     "ZO_SceneManager_ToggleHUDUIBinding",

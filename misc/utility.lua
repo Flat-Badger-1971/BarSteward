@@ -1160,10 +1160,10 @@ function BS.ExportBar(barNumber)
                     string.format(
                         "%s#%.3g-%.3g-%.3g-%.3g^",
                         BS.ENCODING[key],
-                        forExport.Controls[widgetIndex][key][1],
-                        forExport.Controls[widgetIndex][key][2],
-                        forExport.Controls[widgetIndex][key][3],
-                        forExport.Controls[widgetIndex][key][4]
+                        forExport.Controls[widgetIndex][key][1] or "0",
+                        forExport.Controls[widgetIndex][key][2] or "0",
+                        forExport.Controls[widgetIndex][key][3] or "0",
+                        forExport.Controls[widgetIndex][key][4] or "0"
                     )
             else
                 output = output .. string.format("%s#%s^", BS.ENCODING[key] or key, tostring(value))
