@@ -8,7 +8,7 @@ local x, y = GuiRoot:GetCenter()
 local BS = _G.BarSteward
 local cat = BS.CATNAMES
 
-BS.Defaults = {
+BS.SavedVarDefaults = {
     BackBarIcon = "/esoui/art/tradinghouse/tradinghouse_weapons_1h_sword_up.dds",
     Categories = true,
     CategoriesCount = true,
@@ -21,28 +21,16 @@ BS.Defaults = {
     DungeonInfo = {IsInDungeon = false, ChestCount = 0, PreviousChest = {x = 0, y = 0}},
     Font = "Default",
     FontSize = 18,
-    FriendAnnounce = {},
-    Gold = {},
     GridSize = 10,
-    GuildFriendAnnounce = {},
     IconSize = 32,
     MainBarIcon = "/esoui/art/tradinghouse/category_u30_equipment_up.dds",
     Movable = false,
-    OtherCurrencies = {},
-    PreviousFriendTime = {},
-    PreviousGuildFriendTime = {},
-    PreviousAnnounceTime = {},
     SnapToGrid = false,
     TimeFormat12 = "hh:m",
     TimeFormat24 = "HH:m",
     TimeType = GetString(_G.BARSTEWARD_24),
-    Trackers = {},
     Updates = {},
     VisibleGridSize = 65,
-    WatchedItems = {
-        [BS.PERFECT_ROE] = true,
-        [BS.POTENT_NIRNCRUX] = true
-    },
     Bars = {
         [1] = {
             Anchor = GetString(_G.BARSTEWARD_MIDDLE),
@@ -784,6 +772,29 @@ BS.Defaults = {
             Cat = cat.Character
         }
     }
+}
+
+BS.CommonDefaults = {
+    CharacterList = {},
+    dailyQuests = {},
+    dailyQuestCount = {},
+    FriendAnnounce = {},
+    Gold = {},
+    GuildFriendAnnounce = {},
+    HouseBindings = {},
+    HouseWidgets = {},
+    OtherCurrencies = {},
+    PreviousAnnounceTime = {},
+    PreviousFriendTime = {},
+    PreviousGuildFriendTime = {},
+    SurveyTracking = {},
+    Trackers = {},
+    WatchedItems = {
+        [BS.PERFECT_ROE] = true,
+        [BS.POTENT_NIRNCRUX] = true
+    },
+    WritTracking = {},
+    Update = {}
 }
 
 function BS.CheckVars(vars)

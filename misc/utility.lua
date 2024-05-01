@@ -1,5 +1,25 @@
 local BS = _G.BarSteward
 
+local commonSettings = {
+    "CharacterList",
+    "dailyQuests",
+    "dailyQuestCount",
+    "FriendAnnounce",
+    "Gold",
+    "GuildFriendAnnounce",
+    "HouseBindings",
+    "HouseWidgets",
+    "OtherCurrencies",
+    "PreviousAnnounceTime",
+    "PreviousFriendTime",
+    "PreviousGuildFriendTime",
+    "SurveyTracking",
+    "Trackers",
+    "WatchedItems",
+    "WritTracking",
+    "Updates"
+}
+
 function BS.SecondsToTime(seconds, hideDays, hideHours, hideSeconds, format, hideDaysWhenZero)
     local time = ""
     local days = math.floor(seconds / 86400)
@@ -1576,6 +1596,8 @@ function BS.GetVar(name, widget)
     end
 
     if (continue) then
+        local isCommon = ZO_IsElementInNumericallyIndexedTable(commonSettings, name)
+
         if (widget) then
             if (BS.Vars.Controls[widget]) then
                 value = BS.Vars.Controls[widget][name]
@@ -1586,15 +1608,35 @@ function BS.GetVar(name, widget)
                 end
             end
         else
-            value = BS.Vars[name]
+            if (isCommon) then
+                value = BS.Vars:GetCommon(name)
+            else
+                value = BS.Vars[name]
+            end
 
             if (value == nil) then
-                value = BS.Defaults[name]
+                value = BS.SavedVarDefaults[name] or BS.CommonDefaults[name]
             end
         end
     end
 
     return value
+end
+
+function BS.SetVar(name, value, widget)
+    local isCommon = ZO_IsElementInNumericallyIndexedTable(commonSettings, name)
+
+    if (widget) then
+        if (BS.Vars.Controls[widget]) then
+            BS.Vars.Controls[widget][name] = value
+        end
+    else
+        if (isCommon) then
+            BS.Vars:SetCommon(name, value)
+        else
+            BS.Vars[name] = value
+        end
+    end
 end
 
 function BS.GetTimeColour(value, this, multiplier, useOK)
@@ -1716,6 +1758,68 @@ function BS.SecondsToMinutes(secondsValue)
     local seconds = secondsValue - (minutes * 60)
 
     return string.format("%d:%02d", minutes, seconds)
+end
+
+local function checkCommon(vars, common)
+    for name, settings in pairs(vars) do
+        if (ZO_IsElementInNumericallyIndexedTable(commonSettings, name)) then
+            if (type(settings) == "table") then
+                for k, v in pairs(settings) do
+                    common[name] = common[name] or {}
+                    common[name][k] = v
+                end
+            else
+                common[name] = settings
+            end
+
+            vars[name] = nil
+        end
+    end
+
+    return common
+end
+
+local function countElements(t)
+    local count = 0
+
+    for _, _ in pairs(t) do
+        count = count + 1
+    end
+
+    return count
+end
+
+function BS.ConvertFromLibSavedVars(savedVarsName)
+    local vars = _G[savedVarsName]
+
+    for server, serverVars in pairs(vars) do
+        for account, accountVars in pairs(serverVars) do
+            if (not vars[server][account]["$AccountWide"].COMMON) then
+                local characterOnly = {}
+                local common = {}
+
+                for character, info in pairs(accountVars) do
+                    if (character == "$AccountWide" and info.Account) then
+                        common = checkCommon(info.Account, common)
+                        vars[server][account][character] = info.Account
+                    elseif (info.Characters and countElements(info.Characters) > 2) then
+                        local characterInfo = info.Characters
+
+                        characterOnly[character] = true
+                        common = checkCommon(characterInfo, common)
+                        characterInfo["$LastCharacterName"] = info["$LastCharacterName"]
+                        characterInfo.LibSavedVars = nil
+                        vars[server][account][character] = characterInfo
+                    elseif (info.Characters) then
+                        vars[server][account][character] = nil
+                    end
+                end
+
+                vars[server][account]["$AccountWide"].COMMON = common
+                vars[server][account]["$AccountWide"].COMMON.CharacterSettings = characterOnly
+            end
+        end
+    end
 end
 
 -- developer utility functions

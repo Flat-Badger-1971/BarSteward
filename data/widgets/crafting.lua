@@ -381,7 +381,7 @@ BS.RegisterForEvent(
 local function countState(state, character)
     local count = 0
 
-    for _, s in pairs(BS.Vars.dailyQuests[character]) do
+    for _, s in pairs(BS.GetVar("dailyQuests")[character]) do
         if (s == state) then
             count = count + 1
         end
@@ -394,7 +394,7 @@ local function checkReset()
     local lastResetTime = BS.GetLastDailyResetTime()
 
     if (lastResetTime) then
-        BS.Vars.dailyQuests = {}
+        BS.SetVar("dailyQuests", {})
         BS.Vars.lastDailyReset = lastResetTime
     end
 end
@@ -419,8 +419,10 @@ local function getReadyForHandIn(character)
                 local conditionText = zo_strformat("<<z:1>>", conditionInfo[info].name)
 
                 if (string.find(conditionText, GetString(_G.BARSTEWARD_DELIVER))) then
-                    if (BS.Vars.dailyQuests[character][quest.name] ~= "ready") then
-                        BS.Vars.dailyQuests[character][quest.name] = "ready"
+                    if (BS.Vars:GetCommon("dailyQuests", character, quest.name) ~= "ready") then
+                        --if (BS.Vars.dailyQuests[character][quest.name] ~= "ready") then
+                        BS.Vars:SetCommon("ready", "dailyQuests", character, quest.name)
+                        --BS.Vars.dailyQuests[character][quest.name] = "ready"
                         update = true
                         break
                     end

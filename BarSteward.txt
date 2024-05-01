@@ -47,6 +47,7 @@ data/widgets/thievery.lua
 
 settings/maintenance.lua
 settings/settings.lua
+settings/savedVarsManager.lua
 
 ui/widget.lua
 ui/friend.xml

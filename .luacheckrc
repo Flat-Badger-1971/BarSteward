@@ -306,6 +306,7 @@ read_globals = {
     "GetCurrencyPlayerStoredLocation",
     "GetCurrentMapId",
     "GetCVar",
+    "GetDisplayName",
     "GetEarnedAchievementPoints",
     "GetEmoteInfo",
     "GetEndlessDungeonBuffSelectorBucketTypeChoice",

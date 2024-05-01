@@ -230,11 +230,17 @@ local function Initialise()
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "Confirm", confirm)
 
     -- saved variables
-    BS.Vars =
-        _G.LibSavedVars:NewAccountWide("BarStewardSavedVars", "Account", BS.Defaults):AddCharacterSettingsToggle(
-        "BarStewardSavedVars",
-        "Characters"
-    ):EnableDefaultsTrimming()
+    BS.ConvertFromLibSavedVars()
+
+    local vars, rawTableName, isAccountWide, characterId, displayName = BS.CreateSavedVariablesManager()
+
+    BS.Vars = vars
+    BS.VarData = {
+        RawTableName = rawTableName,
+        IsAccountWide = isAccountWide,
+        CharacterId = characterId,
+        DisplayName = displayName
+    }
 
     BS.CheckVars(BS.Vars)
     BS.VersionCheck()
