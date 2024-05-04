@@ -498,11 +498,11 @@ local function setupFriendsDataRow(rowControl, data)
     ZO_CheckButton_SetLabelText(checkBox, data.name)
 
     local function onCheckClicked(checkButton, checked)
-        BS.Vars.FriendAnnounce[checkButton.label:GetText()] = checked
+        BS.Vars:SetCommon(checked, "FriendAnnounce", checkButton.label:GetText())
     end
 
     ZO_CheckButton_SetToggleFunction(checkBox, onCheckClicked)
-    ZO_CheckButton_SetCheckState(checkBox, BS.Vars.FriendAnnounce[checkBox.label:GetText()])
+    ZO_CheckButton_SetCheckState(checkBox, BS.Vars:GetCommon("FriendAnnounce", checkBox.label:GetText()))
 end
 
 function BS.UpdateFriendsList()
@@ -736,14 +736,14 @@ local function setupGuildFriendsDataRow(rowControl, data)
 
     local function onAnnounceClicked(checkButton, checked)
         if (checked) then
-            BS.Vars.GuildFriendAnnounce[checkButton.label:GetText()] = BS.GetGuildId(BS.selectedGuild)
+            BS.Var:SetCommon(BS.GetGuildId(BS.selectedGuild), "GuildFriendAnnounce", checkButton.label:GetText())
         else
-            BS.Vars.GuildFriendAnnounce[checkButton.label:GetText()] = nil
+            BS.Vars:SetCommon(nil, "GuildFriendAnnounce", checkButton.label:GetText())
         end
     end
 
     ZO_CheckButton_SetToggleFunction(checkBox, onAnnounceClicked)
-    ZO_CheckButton_SetCheckState(checkBox, BS.Vars.GuildFriendAnnounce[checkBox.label:GetText()])
+    ZO_CheckButton_SetCheckState(checkBox, BS.Vars:GetCommon("GuildFriendAnnounce", checkBox.label:GetText()))
 end
 
 function BS.UpdateGuildFriendsList()

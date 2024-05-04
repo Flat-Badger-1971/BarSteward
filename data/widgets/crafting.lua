@@ -381,7 +381,7 @@ BS.RegisterForEvent(
 local function countState(state, character)
     local count = 0
 
-    for _, s in pairs(BS.GetVar("dailyQuests")[character]) do
+    for _, s in pairs(BS.Vars:GetCommon("dailyQuests", character)) do
         if (s == state) then
             count = count + 1
         end
@@ -394,7 +394,7 @@ local function checkReset()
     local lastResetTime = BS.GetLastDailyResetTime()
 
     if (lastResetTime) then
-        BS.SetVar("dailyQuests", {})
+        BS.Vars:SetCommon({}, "dailyQuests")
         BS.Vars.lastDailyReset = lastResetTime
     end
 end
@@ -420,9 +420,7 @@ local function getReadyForHandIn(character)
 
                 if (string.find(conditionText, GetString(_G.BARSTEWARD_DELIVER))) then
                     if (BS.Vars:GetCommon("dailyQuests", character, quest.name) ~= "ready") then
-                        --if (BS.Vars.dailyQuests[character][quest.name] ~= "ready") then
                         BS.Vars:SetCommon("ready", "dailyQuests", character, quest.name)
-                        --BS.Vars.dailyQuests[character][quest.name] = "ready"
                         update = true
                         break
                     end
@@ -458,8 +456,13 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
             updateQualifications()
         end
 
-        BS.Vars.dailyQuests = BS.Vars.dailyQuests or {}
-        BS.Vars.dailyQuests[character] = BS.Vars.dailyQuests[character] or {}
+        if (BS.Vars:GetCommon("dailyQuests") == nil) then
+            BS.Vars:SetCommon({}, "dailyQuests")
+        end
+
+        if (BS.Vars:GetCommon("dailyQuests", character) == nil) then
+            BS.Vars:SetCommon({}, "dailyQuests", character)
+        end
 
         if (event == _G.EVENT_QUEST_CONDITION_COUNTER_CHANGED) then
             addedName = 1
@@ -470,13 +473,13 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
         removedName = (type(removedName) == "string") and removedName or "null"
 
         if (qualifiedQuestNames[completeName]) then
-            BS.Vars.dailyQuests[character][completeName] = "done"
+            BS.Vars:SetCommon("done", "dailyQuests", character, completeName)
         elseif (qualifiedQuestNames[addedName]) then
-            BS.Vars.dailyQuests[character][addedName] = "added"
+            BS.Vars:SetCommon("added", "dailyQuests", character, addedName)
         elseif (qualifiedQuestNames[removedName]) then
             -- addedName is actually 'completed' in this case
             if (tostring(addedName) ~= "true") then
-                BS.Vars.dailyQuests[character][removedName] = nil
+                BS.Vars:SetCommon(nil, "dailyQuests", character, removedName)
             end
         else
             update = false
@@ -497,12 +500,12 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
 
         if (done == qualifiedCount) then
             colour = BS.GetVar("DefaultOkColour")
-            BS.Vars.dailyQuests[character].complete = true
+            BS.Vars:SetCommon(true, "dailyQuests", character, "complete")
         elseif (ready == qualifiedCount) then
             colour = {(255 / 52), (255 / 164), (255 / 2350), 1}
         elseif (added == qualifiedCount) then
             colour = BS.GetVar("DefaultWarningColour")
-            BS.Vars.dailyQuests[character].pickedup = true
+            BS.Vars:SetCommon(true, "dailyQuests", character, "pickedup")
         end
 
         if (update) then
@@ -513,7 +516,7 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
                 for craftingType, info in pairs(BS.CRAFTING_ACHIEVEMENT) do
                     if (qualifiedQuestNames[BS.CRAFTING_DAILY[craftingType]]) then
                         local cname = BS.CRAFTING_DAILY[craftingType]
-                        local cvar = BS.Vars.dailyQuests[character][cname]
+                        local cvar = BS.Vars:GetCommon("dailyQuests", character, cname)
                         local ciconName = iconString:format(info.icon)
                         colour = cvar and DAILY_COLOURS[cvar] or BS.COLOURS.GREY
 
@@ -531,9 +534,9 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
             local ttt = GetString(_G.BARSTEWARD_DAILY_CRAFTING) .. BS.LF
 
             for name, _ in pairs(qualifiedQuestNames) do
-                local tdone = BS.Vars.dailyQuests[character][name] == "done"
-                local tadded = BS.Vars.dailyQuests[character][name] == "added"
-                local tready = BS.Vars.dailyQuests[character][name] == "ready"
+                local tdone = BS.Vars:GetCommon("dailyQuests", character, name) == "done"
+                local tadded = BS.Vars:GetCommon("dailyQuests", character, name) == "added"
+                local tready = BS.Vars:GetCommon("dailyQuests", character, name) == "ready"
                 local tcolour = BS.ARGBConvert(BS.GetVar("DefaultColour"))
 
                 if (tready) then
@@ -558,20 +561,20 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
                 end
             end
 
-            if (BS.Vars.CharacterList) then
+            if (BS.Vars:GetCommon("CharacterList")) then
                 local ccolour = BS.ARGBConvert(BS.Vars.DefaultColour)
-                local chars = BS.Vars.CharacterList
+                local chars = BS.Vars:GetCommon("CharacterList")
 
                 ttt = ttt .. BS.LF
 
                 for char, _ in pairs(chars) do
                     if (char ~= character) then
-                        if (BS.Vars.dailyQuests[char]) then
+                        if (BS.Vars:GetCommon("dailyQuests", char)) then
                             local dccolour = ccolour
 
-                            if (BS.Vars.dailyQuests[char].complete) then
+                            if (BS.Vars:GetCommon("dailyQuests", char, "complete")) then
                                 dccolour = BS.ARGBConvert(BS.GetVar("DefaultOkColour"))
-                            elseif (BS.Vars.dailyQuests[char].pickedup) then
+                            elseif (BS.Vars:GetCommon("dailyQuests", char, "pickedup")) then
                                 dccolour = BS.ARGBConvert(BS.GetVar("DefaultWarningColour"))
                             end
 

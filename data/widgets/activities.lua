@@ -633,20 +633,20 @@ BS.widgets[BS.W_PLEDGES_TIME] = {
 }
 
 local function setTracker(widgetIndex, resetSeconds, tooltip)
-    if (not BS.Vars.Trackers[widgetIndex]) then
-        BS.Vars.Trackers[widgetIndex] = {}
+    if (not BS.Vars:GetCommon("Trackers", widgetIndex)) then
+        BS.Vars:SetCommon({}, "Trackers", widgetIndex)
     end
 
     local thisCharacter = GetUnitName("player")
 
-    if (not BS.Vars.Trackers[widgetIndex][thisCharacter]) then
-        BS.Vars.Trackers[widgetIndex][thisCharacter] = {}
+    if (not BS.Vars:GetCommon("Trackers", widgetIndex, thisCharacter)) then
+        BS.Vars:SetCommon({}, "Trackers", widgetIndex, thisCharacter)
     end
 
     local resetTime = resetSeconds + os.time()
-    BS.Vars.Trackers[widgetIndex][thisCharacter].resetTime = resetTime
+    BS.Vars:SetCommon(resetTime, "Trackers", widgetIndex, thisCharacter, "resetTime")
 
-    local resets = BS.Vars.Trackers[widgetIndex]
+    local resets = BS.Vars:GetCommon("Trackers", widgetIndex)
 
     for character, time in pairs(resets) do
         if (character ~= thisCharacter) then
@@ -1247,10 +1247,10 @@ local function checkReset()
     local lastResetTime = BS.GetLastDailyResetTime(true)
 
     if (lastResetTime) then
-        for char, quests in pairs(BS.Vars.dailyQuestCount) do
+        for char, quests in pairs(BS.Vars:GetCommon("dailyQuestCount")) do
             for quest, status in pairs(quests) do
                 if (status == "complete") then
-                    BS.Vars.dailyQuestCount[char][quest] = nil
+                    BS.Vars:SetCommon(nil, "dailyQuestCount", char, quest)
                 end
             end
         end
@@ -1270,17 +1270,20 @@ end
 BS.widgets[BS.W_DAILY_COUNT] = {
     name = "dailyCount",
     update = function(widget, eventId, param1, param2, param3)
-        BS.Vars.dailyQuestCount = BS.Vars.dailyQuestCount or {}
+        if (BS.Vars:GetCommon("dailyQuestCount") == nil) then
+            BS.Vars:SetCommon({}, "dailyQuestCount")
+        end
+
         checkReset()
         zo_callLater(
             function()
                 local player = GetUnitName("player")
 
-                if (not BS.Vars.dailyQuestCount[player]) then
-                    BS.Vars.dailyQuestCount[player] = {}
+                if (not BS.Vars:GetCommon("dailyQuestCount", player)) then
+                BS.Vars:SetCommon({}, "dailyQuestCount", player)
                 end
 
-                local counts = BS.Vars.dailyQuestCount[player]
+                local counts = BS.Vars:GetCommon("dailyQuestCount", player)
 
                 if (eventId == _G.EVENT_QUEST_ADDED) then
                     local quest = findQuest(param1)

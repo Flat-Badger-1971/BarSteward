@@ -76,14 +76,14 @@ function BS.GetHouseFromReferenceId(id)
 end
 
 function BS.AddHousingWidgets(idx, widgets)
-    if (BS.Vars.HouseWidgets) then
+    if (BS.Vars:GetCommon("HouseWidgets")) then
         BS.PTF = _G.PortToFriend
 
         if (not BS.houses) then
             BS.houses = BS.GetHouses()
         end
 
-        local bindings = BS.Vars.HouseBindings or {}
+        local bindings = BS.Vars:GetCommon("HouseBindings") or {}
 
         -- clear out unused bindings
         for id, _ in pairs(bindings) do
@@ -95,7 +95,7 @@ function BS.AddHousingWidgets(idx, widgets)
         -- remove any duplicate binding values
         fixDuplicates(bindings)
 
-        for id, _ in pairs(BS.Vars.HouseWidgets) do
+        for id, _ in pairs(BS.Vars:GetCommon("HouseWidgets")) do
             local varId = 1000 + id
             local house = BS.GetHouseFromReferenceId(id)
             local vars = BS.Vars.Controls[varId]
@@ -134,7 +134,7 @@ function BS.AddHousingWidgets(idx, widgets)
 
                     if (not bindings[id]) then
                         bindings[id] = BS.GetNextIndex(bindings)
-                        BS.Vars.HouseBindings = bindings
+                        BS.Vars:SetCommon(bindings, "HouseBindings")
                     end
 
                     if (bindings[id] < BS.MAX_BINDINGS) then
@@ -150,7 +150,7 @@ function BS.AddHousingWidgets(idx, widgets)
 end
 
 function BS.PortToHouse(index)
-    local id = BS.GetByValue(BS.Vars.HouseBindings, index)
+    local id = BS.GetByValue(BS.Vars:GetCommon("HouseBindings"), index)
 
     if (not id) then
         return
@@ -198,7 +198,7 @@ local function addHouseWidget()
         return
     end
 
-    local houseWidgets = BS.Vars.HouseWidgets or {}
+    local houseWidgets = BS.Vars:GetCommon("HouseWidgets") or {}
     local house = BS.houses[BS.House_SelectedHouse]
 
     for houseId, _ in pairs(houseWidgets) do
@@ -219,7 +219,7 @@ local function addHouseWidget()
     }
 
     houseWidgets[house.id] = true
-    BS.Vars.HouseWidgets = houseWidgets
+    BS.Vars:SetCommon(houseWidgets, "HouseWidgets")
 
     ZO_Dialogs_ShowDialog(BS.Name .. "Reload")
 end
@@ -327,8 +327,8 @@ local function addSubmenu(barNames, vars, varId, house, id, controls)
             tooltip = GetString(_G.BARSTEWARD_GENERIC_REMOVE_WARNING),
             func = function()
                 BS.Vars.Controls[1000 + id] = nil
-                BS.Vars.HouseWidgets[id] = nil
-                BS.Vars.HouseBindings[id] = nil
+                BS.Vars:SetCommon(nil, "HouseWidgets", id)
+                BS.Vars:SetCommon(nil, "HouseBindings", id)
 
                 ZO_Dialogs_ShowDialog(BS.Name .. "Reload")
             end,
@@ -463,7 +463,7 @@ function BS.GetPortToHouseSettings()
         end
     }
 
-    local addedHouses = BS.Vars.HouseWidgets
+    local addedHouses = BS.Vars:GetCommon("HouseWidgets")
 
     if (addedHouses) then
         local bars = BS.Vars.Bars

@@ -11,8 +11,13 @@ local function trackOtherCurrency(currency)
     local currencyInBag = GetCurrencyAmount(currency, _G.CURRENCY_LOCATION_CHARACTER)
     local character = GetUnitName("player")
 
-    BS.Vars.OtherCurrencies[currency] = BS.Vars.OtherCurrencies[currency] or {}
-    BS.Vars.OtherCurrencies[currency][character] = currencyInBag
+    if (BS.Vars:GetCommon("OtherCurrencies", currency) == nil) then
+        BS.Vars:SetCommon({}, "OtherCurrencies")
+    end
+
+    if (BS.Vars:GetCommon("OtherCurrencies", currency, character) == nil) then
+        BS.Vars:SetCommon(currencyInBag, "OtherCurrencies", currency, character)
+    end
 end
 
 local function Initialise()
@@ -230,7 +235,9 @@ local function Initialise()
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "Confirm", confirm)
 
     -- saved variables
-    BS.ConvertFromLibSavedVars()
+    if (BS.HasLibSavedVars()) then
+        BS.ConvertFromLibSavedVars()
+    end
 
     local vars, rawTableName, isAccountWide, characterId, displayName = BS.CreateSavedVariablesManager()
 
@@ -315,16 +322,16 @@ local function Initialise()
     if (BS.Vars.CharacterList == nil) then
         BS.Vars.CharacterList = {}
 
-        if (BS.Vars.Gold) then
-            local gold = BS.Vars.Gold
+        if (BS.Vars:GetCommon("Gold")) then
+            local gold = BS.Vars:GetCommon("Gold")
 
             for char, _ in pairs(gold) do
-                BS.Vars.CharacterList[char] = true
+                BS.Vars:SetCommon(true, "CharacterList", char)
             end
         end
     end
 
-    BS.Vars.CharacterList[GetUnitName("player")] = true
+    BS.Vars:SetCommon(true, "CharacterList", GetUnitName("player"))
 
     -- handle quest info
     BS.GetQuestInfo()

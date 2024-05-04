@@ -787,7 +787,6 @@ BS.CommonDefaults = {
     PreviousAnnounceTime = {},
     PreviousFriendTime = {},
     PreviousGuildFriendTime = {},
-    SurveyTracking = {},
     Trackers = {},
     WatchedItems = {
         [BS.PERFECT_ROE] = true,

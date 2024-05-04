@@ -19,7 +19,7 @@ BS.widgets[BS.W_BAG_SPACE] = {
 
             if (BS.GetVar("Announce", this) and newItem) then
                 local announce = true
-                local previousTime = BS.Vars.PreviousAnnounceTime[this] or (os.time() - 301)
+                local previousTime = BS.Vars:GetCommon("PreviousAnnounceTime", this) or (os.time() - 301)
                 local debounceTime = (BS.GetVar("DebounceTime", this) or 5) * 60
 
                 if (os.time() - previousTime <= debounceTime) then
@@ -27,7 +27,7 @@ BS.widgets[BS.W_BAG_SPACE] = {
                 end
 
                 if (announce == true) then
-                    BS.Vars.PreviousAnnounceTime[this] = os.time()
+                    BS.Vars:SetCommon(os.time(), "PreviousAnnounceTime", this)
                     BS.Announce(GetString(_G.BARSTEWARD_WARNING), GetString(_G.BARSTEWARD_WARNING_BAGS), this)
                 end
             end
@@ -660,7 +660,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
     name = "itemWatcher",
     update = function(widget)
         local this = BS.W_WATCHED_ITEMS
-        local itemIds = BS.Vars.WatchedItems
+        local itemIds = BS.Vars:GetCommon("WatchedItems")
 
         for itemId, _ in pairs(itemIds) do
             if (not linkCache[itemId]) then
@@ -778,7 +778,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
 
                 if (itemCount > previousCounts[itemId]) then
                     local announce = true
-                    local previousTime = BS.Vars.PreviousAnnounceTime[this] or (os.time() - 301)
+                    local previousTime = BS.Vars:GetCommon("PreviousAnnounceTime", this) or (os.time() - 301)
                     local debounceTime = (BS.GetVar("DebounceTime", this) or 5) * 60
 
                     if (os.time() - previousTime <= debounceTime) then
@@ -786,7 +786,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
                     end
 
                     if (announce == true) then
-                        BS.Vars.PreviousAnnounceTime[this] = os.time()
+                        BS.Vars:SetCommon(os.time(), "PreviousAnnounceTime", this)
 
                         -- need a short delay so the announcement doesn't get quashed by any animations
                         if (itemId == BS.PERFECT_ROE) then
@@ -842,7 +842,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
     },
     customSettings = function()
         local settings = {}
-        local itemIds = BS.Vars.WatchedItems
+        local itemIds = BS.Vars:GetCommon("WatchedItems")
         local vars = BS.Vars.Controls[BS.W_WATCHED_ITEMS]
 
         for itemId, _ in pairs(itemIds) do
@@ -876,7 +876,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
                         return vars[itemId]
                     end,
                     setFunc = function(value)
-                        vars[itemId] = value
+                        BS.Vars:SetCommon(value, "WatchedItems", itemId)
                         BS.RefreshWidget(BS.W_WATCHED_ITEMS)
                         BS.ResizeBar(vars.Bar)
                     end,
@@ -922,9 +922,8 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
             type = "button",
             name = BS.Format(_G.SI_GAMEPAD_TRADE_ADD),
             func = function()
-                if (BS.Vars.WatchedItems[tonumber(BS.Vars.NewItemId)] == nil) then
-                    BS.Vars.WatchedItems[tonumber(BS.Vars.NewItemId)] = true
-                    vars[tonumber(BS.Vars.NewItemId)] = true
+                if (BS.Vars:GetCommon("WatchedItems", tonumber(BS.Vars.NewItemId)) == nil) then
+                    BS.Vars:SetCommon(true, "WatchedItems", tonumber(BS.Vars.NewItemId))
                     BS.Vars.NewItemId = nil
 
                     ZO_Dialogs_ShowDialog(BS.Name .. "Reload")
@@ -949,8 +948,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
             type = "button",
             name = BS.Format(_G.SI_DIALOG_REMOVE),
             func = function()
-                BS.Vars.WatchedItems[tonumber(BS.Vars.NewItemId)] = nil
-                vars[tonumber(BS.Vars.NewItemId)] = nil
+                BS.Vars:SetCommon(nil, "WatchedItems", tonumber(BS.Vars.NewItemId))
                 BS.Vars.NewItemId = nil
 
                 ZO_Dialogs_ShowDialog(BS.Name .. "Reload")
@@ -1885,7 +1883,7 @@ BS.widgets[BS.W_RECIPE_WATCH] = {
             local icolour = GetItemQualityColor(displayQuality)
             local iname = icolour:Colorize(BS.Format(itemName))
 
-            BS.Vars.PreviousAnnounceTime[this] = os.time()
+            BS.Vars:SetCommon(os.time(), "PreviousAnnounceTime", this)
             BS.Announce(
                 GetString(_G.BARSTEWARD_RECIPES),
                 zo_strformat(GetString(_G.BARSTEWARD_WATCHED_ITEM_MESSAGE), iname),

@@ -13,10 +13,8 @@ local commonSettings = {
     "PreviousAnnounceTime",
     "PreviousFriendTime",
     "PreviousGuildFriendTime",
-    "SurveyTracking",
     "Trackers",
     "WatchedItems",
-    "WritTracking",
     "Updates"
 }
 

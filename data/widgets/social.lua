@@ -7,8 +7,8 @@ local function addToTooltip(friendList, textureFunctions)
         local textColour = BS.ARGBConvert2(ZO_SocialList_GetRowColors(friend, false))
         local noChar = not friend.hasCharacter or (zo_strlen(friend.characterName) <= 0)
 
-        if (BS.Vars.FriendAnnounce) then
-            if (BS.Vars.FriendAnnounce[friend.displayName] and friend.online) then
+        if (BS.Vars:GetCommon("FriendAnnounce")) then
+            if (BS.Vars:GetCommon("FriendAnnounce", friend.displayName) and friend.online) then
                 textColour = BS.ARGBConvert(BS.Vars.DefaultOkColour)
             end
         end
@@ -57,20 +57,20 @@ BS.widgets[BS.W_FRIENDS] = {
         if (event == _G.EVENT_FRIEND_PLAYER_STATUS_CHANGED) then
             if (newStatus == _G.PLAYER_STATUS_ONLINE) then
                 if (BS.GetVar("Announce", this)) then
-                    if (BS.Vars.FriendAnnounce[displayName] == true) then
+                    if (BS.Vars:GetCommon("FriendAnnounce", displayName) == true) then
                         local announce = true
-                        local previousTime = BS.Vars.PreviousFriendTime[displayName] or (os.time() - 3600)
+                        local previousTime = BS.Vars:GetCommon("PreviousFriendTime", displayName) or (os.time() - 3600)
                         local debounceTime = (BS.GetVar("DebounceTime") or 5) * 60
 
                         if (os.time() - previousTime <= debounceTime) then
                             announce = false
                         end
 
-                        BS.Vars.PreviousFriendTime[displayName] = os.time()
+                        BS.Vars:SetCommon(os.time(), "PreviousFriendTime", displayName)
 
                         if (announce == true) then
                             local dname = ZO_FormatUserFacingDisplayName(displayName) or displayName
-                            if (BS.Vars.FriendAnnounce[dname]) then
+                            if (BS.Vars:GetCommon("FriendAnnounce", dname)) then
                                 local cname = ZO_FormatUserFacingDisplayName(characterName) or characterName
 
                                 BS.Announce(
@@ -140,7 +140,7 @@ BS.widgets[BS.W_FRIENDS] = {
 }
 
 local function isFriend(displayName)
-    local friends = BS.Vars.GuildFriendAnnounce
+    local friends = BS.Vars:GetCommon("GuildFriendAnnounce")
 
     for member, _ in pairs(friends) do
         if (member == displayName) then
@@ -203,7 +203,7 @@ BS.widgets[BS.W_GUILD_FRIENDS] = {
     name = "guildFriends",
     update = function(widget, _, guildId, displayName, _, newStatus)
         local this = BS.W_GUILD_FRIENDS
-        local masterList = BS.Vars.GuildFriendAnnounce
+        local masterList = BS.Vars:GetCommon("GuildFriendAnnounce")
         local online, offline, other = {}, {}, {}
         local oCount, tCount = 0, 0
         local tt = BS.Format(_G.BARSTEWARD_GUILD_FRIENDS) .. "|cffffff"
@@ -249,14 +249,14 @@ BS.widgets[BS.W_GUILD_FRIENDS] = {
         if (newStatus == _G.PLAYER_STATUS_ONLINE) then
             if (BS.GetVar("Announce", this) and isFriend(displayName)) then
                 local announce = true
-                local previousTime = BS.Vars.PreviousGuildFriendTime[displayName] or (os.time() - 3600)
+                local previousTime = BS.Vars:GetCommon("PreviousGuildFriendTime", displayName) or (os.time() - 3600)
                 local debounceTime = (BS.GetVar("DebounceTime", this) or 5) * 60
 
                 if (os.time() - previousTime <= debounceTime) then
                     announce = false
                 end
 
-                BS.Vars.PreviousGuildFriendTime[displayName] = os.time()
+                BS.Vars:SetCommon(os.time(), "PreviousGuildFriendTime", displayName)
 
                 if (announce == true) then
                     setGuildId(guildId)

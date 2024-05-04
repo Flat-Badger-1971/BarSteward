@@ -8,7 +8,7 @@ function BS.GetMaintenanceSettings()
             text = "|cff0000" .. GetString(_G.BARSTEWARD_DELETE) .. "|r"
         }
     }
-    local characters = BS.Vars.CharacterList or {}
+    local characters = BS.Vars:GetCommon("CharacterList") or {}
     local thisCharacter = GetUnitName("player")
 
     for character, _ in pairs(characters) do
@@ -58,31 +58,35 @@ function BS.GetMaintenanceSettings()
 end
 
 function BS.DeleteTrackedData()
-    local other = BS.Vars.OtherCurrencies
-    local trackers = BS.Vars.Trackers
+    local other = BS.Vars:GetCommon("OtherCurrencies")
+    local trackers = BS.Vars:GetCommon("Trackers")
 
     for character, delete in pairs(BS.forDeletion) do
         if (delete) then
-            BS.Vars.CharacterList[character] = nil
+            BS.Vars:SetCommon(nil, character)
 
             for _, chars in pairs(other) do
                 if (chars[character]) then
-                    chars[character] = nil
+                    BS.Vars:SetCommon(nil, "OtherCurrencies", chars[character])
                 end
             end
 
             for _, chars in pairs(trackers) do
                 if (chars[character]) then
-                    chars[character] = nil
+                    BS.Vars:SetCommon(nil, "Trackers", chars[character])
                 end
             end
 
-            if (BS.Vars.Gold[character]) then
-                BS.Vars.Gold[character] = nil
+            if (BS.Vars:GetCommon("Gold", character)) then
+                BS.Vars:SetCommon(nil, "Gold", character)
             end
 
-            if (BS.Vars.dailyQuests[character]) then
-                BS.Vars.dailyQuests[character] = nil
+            if (BS.Vars:GetCommon("dailyQuests", character)) then
+                BS.Vars:SetCommon(nil, "dailyQuests", character)
+            end
+
+            if (BS.Vars:GetCommon("dailyQuestCount", character)) then
+                BS.Vars:SetCommon(nil, "dailyQuestCount", character)
             end
         end
     end

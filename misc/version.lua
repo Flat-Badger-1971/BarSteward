@@ -1,7 +1,7 @@
 local BS = _G.BarSteward
 
 local function needsUpdate(version)
-    if (not BS.Vars.Updates[version]) then
+    if (not BS.Vars:GetCommon("Updates", version)) then
         return true
     end
 
@@ -51,17 +51,17 @@ function BS.VersionCheck()
     if (needsUpdate(2000)) then
         BS.Vars.Categories = true
         BS.Vars.CategoriesCount = true
-        BS.Vars.Updates[2000] = true
+        BS.Vars:SetCommon(true, "Updates", 2000)
     end
 
     if (needsUpdate(2006)) then
         local oldUpdates = {112, 1222, 1223, 1224, 1301, 1304, 1421, 1504, 1506}
 
         for _, ver in ipairs(oldUpdates) do
-            BS.Vars.Updates[ver] = nil
+            BS.Vars:SetCommon(nil, "Updates", ver)
         end
 
-        BS.Vars.Updates[2006] = true
+        BS.Vars:SetCommon(true, "Updates", 2006)
     end
 
     if (needsUpdate(2010)) then
@@ -71,7 +71,7 @@ function BS.VersionCheck()
             BS.Vars.Controls[widget].Cat = BS.CATNAMES.EndlessArchive
         end
 
-        BS.Vars.Updates[2010] = true
+        BS.Vars:SetCommon(true, "Updates", 2010)
     end
 
     if (needsUpdate(2111)) then
@@ -79,6 +79,6 @@ function BS.VersionCheck()
             updateLanguageVars()
         end
 
-        BS.Vars.Updates[2111] = true
+        BS.Vars:SetCommon(true, "Updates", 2111)
     end
 end

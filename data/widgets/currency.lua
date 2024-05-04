@@ -69,7 +69,7 @@ local function currencyWidget(currencyType, widgetIndex, text, eventList, hideWh
             local combined = currencyInBag + currencyInBank
             local allCharacters = combined
             local otherCharacterCurrency =
-                ((currencyType == _G.CURT_MONEY) and BS.Vars.Gold or BS.Vars.OtherCurrencies[currencyType]) or {}
+                ((currencyType == _G.CURT_MONEY) and BS.Vars:GetCommon("Gold") or BS.Vars:GetCommon("OtherCurrencies", currencyType)) or {}
             local thisCharacter = GetUnitName("player")
             local charactertt = ""
             local useSeparators = BS.GetVar("UseSeparators", widgetIndex)
@@ -256,7 +256,7 @@ BS.widgets[BS.W_EVENT_TICKETS] = {
 
             if (BS.GetVar("Announce", this)) then
                 local announce = true
-                local previousTime = BS.Vars.PreviousAnnounceTime[this] or (os.time() - 100)
+                local previousTime = BS.Vars:GetCommon("PreviousAnnounceTime", this) or (os.time() - 100)
                 local debounceTime = (BS.GetVar("DebounceTime", this) or 5) * 60
 
                 if (os.time() - previousTime <= debounceTime) then
@@ -270,7 +270,7 @@ BS.widgets[BS.W_EVENT_TICKETS] = {
                 end
 
                 if (announce) then
-                    BS.Vars.PreviousAnnounceTime[this] = os.time()
+                    BS.Vars:SetCommon(os.time(), "PreviousAnnounceTime", this)
                     BS.Announce(GetString(_G.BARSTEWARD_WARNING), GetString(_G.BARSTEWARD_WARNING_EVENT_TICKETS), this)
                 end
             end
