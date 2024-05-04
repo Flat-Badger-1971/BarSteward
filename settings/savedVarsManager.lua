@@ -32,7 +32,7 @@ function manager:New()
 end
 
 function manager:Initialise()
-    self.Defaults = BS.SavedVarDefaults
+    self.Defaults = BS.Defaults
     self.RawTableName = BS.Name .. "SavedVars"
     self.Profile = GetWorldName()
     self.DisplayName = GetDisplayName()
@@ -406,7 +406,7 @@ local function removeDefaults()
     local rawTable = _G[BS.VarData.RawTableName]
     local rawSavedVarsTable = searchPath(rawTable, BS.VarData.Profile, BS.VarData.DisplayName, character)
 
-    trim(rawSavedVarsTable, BS.SavedVarDefaults)
+    trim(rawSavedVarsTable, BS.Defaults)
 end
 
 local function onLogout()
@@ -428,13 +428,13 @@ end
 local function onLogoutCancelled()
     local rawTable = _G[BS.VarData.RawTableName]
 
-    fillDefaults(rawTable, BS.SavedVarDefaults)
+    fillDefaults(rawTable, BS.Defaults)
 end
 
-function BS.HasLibSavedVars()
+function BS.SavedVarsNeedConverting()
     local rawTable = _G[BS.Name .. "SavedVars"]
 
-    return searchPath(rawTable, GetWorldName(), GetDisplayName(), "$AccountWide", "COMMON") ~= nil
+    return searchPath(rawTable, GetWorldName(), GetDisplayName(), "$AccountWide", "COMMON") == nil
 end
 
 function BS.ConvertFromLibSavedVars()

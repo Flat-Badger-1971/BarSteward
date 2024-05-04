@@ -53,7 +53,7 @@ local function initialise()
         width = "full"
     }
 
-    BS.options[#BS.options + 1] = BS.Vars:GetLibAddonMenuAccountCheckbox()
+    --BS.options[#BS.options + 1] = BS.Vars:GetLibAddonMenuAccountCheckbox()
     BS.options[#BS.options + 1] = {
         type = "checkbox",
         name = GetString(_G.BARSTEWARD_MOVEFRAME),

@@ -8,7 +8,7 @@ local x, y = GuiRoot:GetCenter()
 local BS = _G.BarSteward
 local cat = BS.CATNAMES
 
-BS.SavedVarDefaults = {
+BS.Defaults = {
     BackBarIcon = "/esoui/art/tradinghouse/tradinghouse_weapons_1h_sword_up.dds",
     Categories = true,
     CategoriesCount = true,

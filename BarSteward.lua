@@ -4,7 +4,7 @@ local function trackGold()
     local goldInBag = GetCurrencyAmount(_G.CURT_MONEY, _G.CURRENCY_LOCATION_CHARACTER)
     local character = GetUnitName("player")
 
-    BS.Vars.Gold[character] = goldInBag
+    BS.Vars:SetCommon(goldInBag, "Gold", character)
 end
 
 local function trackOtherCurrency(currency)
@@ -235,7 +235,7 @@ local function Initialise()
     ZO_Dialogs_RegisterCustomDialog(BS.Name .. "Confirm", confirm)
 
     -- saved variables
-    if (BS.HasLibSavedVars()) then
+    if (BS.SavedVarsNeedConverting()) then
         BS.ConvertFromLibSavedVars()
     end
 
