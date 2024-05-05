@@ -1,8 +1,9 @@
 local BS = _G.BarSteward
 local manager = ZO_Object:Subclass()
-local addToTable, removeFromTable, searchPath, setPath, simpleCopy
+local searchPath, setPath, simpleCopy
 
 -- set default getter/setter for vars
+-- pretty sure I'm doing this wrong, but it works, so, meh...
 local metatable = {
     __index = function(t, key)
         -- if the key exists in the main class - return that
@@ -41,6 +42,12 @@ function manager:Initialise()
     self.Version = 1
     self.UseCharacterSettings = self:HasCharacterSettings()
 
+    self:LoadSavedVars()
+
+    return self.RawTableName, self.Vars.IsAccountWide, self.CharacterId, self.DisplayName
+end
+
+function manager:LoadSavedVars()
     if (self.UseCharacterSettings) then
         self.Vars =
             ZO_SavedVars:NewCharacterIdSettings(self.RawTableName, self.Version, nil, self.Defaults, self.Profile)
@@ -62,20 +69,10 @@ function manager:Initialise()
     end
 
     self.ServerInformation = serverInformation
-
-    return self.RawTableName, self.Vars.IsAccountWide, self.CharacterId, self.DisplayName
 end
 
 function manager:HasCharacterSettings()
-    local characterSettings = self:GetCommon("CharacterSettings")
-
-    if (characterSettings and type(characterSettings) == "table") then
-        if (ZO_IsElementInNumericallyIndexedTable(characterSettings, self.CharacterId)) then
-            return true
-        end
-    end
-
-    return false
+    return self:GetCommon("CharacterSettings", self.CharacterId)
 end
 
 function manager:GetCommon(...)
@@ -90,6 +87,18 @@ function manager:SetCommon(value, ...)
     setPath(rawTable, value, self.Profile, self.DisplayName, "$AccountWide", "COMMON", ...)
 end
 
+function manager:SetAccount(value, ...)
+    local rawTable = self:GetRawTable()
+
+    setPath(rawTable, value, self.Profile, self.DisplayName, "$AccountWide", ...)
+end
+
+function manager:SetCharacter(value, ...)
+    local rawTable = self:GetRawTable()
+
+    setPath(rawTable, value, self.Profile, self.DisplayName, self.CharacterId, ...)
+end
+
 function manager:GetServerInformation()
     return self.ServerInformation
 end
@@ -101,6 +110,8 @@ function manager:GetServers()
         table.insert(servers, server)
     end
 
+    table.sort(servers)
+
     return servers
 end
 
@@ -111,15 +122,23 @@ function manager:GetAccounts(server)
         table.insert(accounts, account)
     end
 
+    table.sort(accounts)
+
     return accounts
 end
 
-function manager:GetCharacters(server, account)
+function manager:GetCharacters(server, account, excludeCurrent)
     local characters = {}
 
-    for _, character in pairs(self.ServerInformation[server][account]) do
-        table.insert(characters, character)
+    for id, character in pairs(self.ServerInformation[server][account]) do
+        local insert = not (excludeCurrent and id == self.CharacterId)
+
+        if (insert) then
+            table.insert(characters, character)
+        end
     end
+
+    table.sort(characters)
 
     return characters
 end
@@ -133,35 +152,35 @@ function manager:GetCharacterId(server, account, character)
 
     for id, characterName in pairs(characters) do
         if (characterName == character) then
-            return id
+            return tostring(id)
         end
     end
 end
 
-function manager:IsAccountWide()
-    return not self.UseCharacterSettings
-end
-
-function manager:Copy(server, account, character)
+function manager:Copy(server, account, character, copyToAccount)
     local characterId = "$AccountWide"
 
     if (character ~= "Account") then
         characterId = self:GetCharacterId(server, account, character)
     end
 
-    local characterSettings = simpleCopy(self.ServerInformation[server][account][characterId])
+    local rawTable = self:GetRawTable()
+    local path = searchPath(rawTable, server, account, characterId)
+    local characterSettings = simpleCopy(path, true)
 
-    local common = self:GetCommon()
-
-    for key, value in ipairs(characterSettings) do
-        if (not common[key]) then
-            self.Vars[key] = value
+    if (copyToAccount) then
+        if (characterId == "$AccountWide") then
+            return
         end
+
+        self:SetAccount(characterSettings)
+    else
+        self:SetCharacter(characterSettings)
     end
 end
 
 function manager:ConvertToCharacterSettings()
-    if (not self.HasCharacterSettings) then
+    if (not self.UseCharacterSettings) then
         local settings = simpleCopy(self.Vars)
 
         self.Vars.UseAccountWide = false
@@ -172,15 +191,12 @@ function manager:ConvertToCharacterSettings()
             self.Vars[k] = v
         end
 
-        local characterSettings = self:GetCommon("CharacterSettings")
-
-        characterSettings = addToTable(characterSettings, self.CharacterId)
-        self:SetCommon("CharacterSettings", characterSettings)
+        self:SetCommon(true, "CharacterSettings", self.CharacterId)
     end
 end
 
 function manager:ConvertToAccountSettings()
-    if (self.HasCharacterSettings) then
+    if (self.UseCharacterSettings) then
         local settings = simpleCopy(self.Vars)
 
         self.Vars = ZO_SavedVars:NewAccountWide(self.RawTableName, self.Version, nil, self.Defaults, self.Profile)
@@ -189,10 +205,7 @@ function manager:ConvertToAccountSettings()
             self.Vars[k] = v
         end
 
-        local characterSettings = self:GetCommon("CharacterSettings")
-
-        characterSettings = removeFromTable(characterSettings, self.CharacterId)
-        self:SetCommon("CharacterSettings", characterSettings)
+        self:SetCommon(nil, "CharacterSettings", self.CharacterId)
     end
 end
 
@@ -202,14 +215,33 @@ function manager:GetRawTable()
     return rawTable
 end
 
-function simpleCopy (t)
-    local output = {}
+function manager:AddAccountSettingsCheckbox()
+    return {
+        type = "checkbox",
+        name = GetString(_G.BARSTEWARD_ACCOUNT_WIDE),
+        tooltip = GetString(_G.BARSTEWARD_ACCOUNT_WIDE_TOOLTIP),
+        getFunc = function()
+            return not self:HasCharacterSettings()
+        end,
+        setFunc = function(value)
+            if (value) then
+                self:ConvertToAccountSettings()
+            else
+                self:ConvertToCharacterSettings()
+            end
+        end
+    }
+end
 
+function simpleCopy(t, excludeCommon)
+    local output = {}
     for name, settings in pairs(t) do
         if (type(settings) == "table") then
-            for k, v in pairs(settings) do
-                output[name] = output[name] or {}
-                output[name][k] = v
+            if ((excludeCommon and name ~= "COMMON") or (not excludeCommon)) then
+                for k, v in pairs(settings) do
+                    output[name] = output[name] or {}
+                    output[name][k] = v
+                end
             end
         else
             output[name] = settings
@@ -219,47 +251,9 @@ function simpleCopy (t)
     return output
 end
 
-function removeFromTable(t, v)
-    local newTable = {}
-
-    for _, value in ipairs(t) do
-        if (value ~= v) then
-            table.insert(newTable, value)
-        end
-    end
-
-    return newTable
-end
-
-function addToTable(t, v)
-    if (not ZO_IsElementInNumericallyIndexedTable(t, v)) then
-        table.insert(t, v)
-    end
-
-    return t
-end
-
-local commonSettings = {
-    "CharacterList",
-    "dailyQuests",
-    "dailyQuestCount",
-    "FriendAnnounce",
-    "Gold",
-    "GuildFriendAnnounce",
-    "HouseBindings",
-    "HouseWidgets",
-    "OtherCurrencies",
-    "PreviousAnnounceTime",
-    "PreviousFriendTime",
-    "PreviousGuildFriendTime",
-    "Trackers",
-    "WatchedItems",
-    "Updates"
-}
-
 local function checkCommon(vars, common)
     for name, settings in pairs(vars) do
-        if (ZO_IsElementInNumericallyIndexedTable(commonSettings, name)) then
+        if (ZO_IsElementInNumericallyIndexedTable(BS.COMMON_SETTINGS, name)) then
             if (type(settings) == "table") then
                 for k, v in pairs(settings) do
                     common[name] = common[name] or {}
@@ -286,7 +280,7 @@ local function countElements(t)
     return count
 end
 
--- functions from zo_savedvars.lua
+-- path functions from zo_savedvars.lua
 function searchPath(t, ...)
     local current = t
 
@@ -358,6 +352,7 @@ end
 
 -- loop through the default values - if the saved value matches the default value
 -- then remove it. It's just wasting space as the default values will be loaded anyway
+-- based on code from LibSavedVars
 local function trim(savedVarsTable, defaults)
     local valid = savedVarsTable ~= nil
 

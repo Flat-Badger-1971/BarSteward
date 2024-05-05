@@ -91,6 +91,7 @@ L(
     BS .. "COPY",
     "Wähle den unten stehenden Text aus und drücke strg-c um ihn zu kopieren. Der Text kann dann in die Bar Steward's 'Import Leiste' für einen anderen Benutzer eingefügt werden."
 )
+L(BS .. "COPY_SETTINGS", "Einstellungen kopieren")
 L(BS .. "CRAFTING_MOTIFS", "Stilbücher")
 L(BS .. "CROWNS", "Kronen")
 L(BS .. "CROWN_GEMS", "Kronen-Edelsteine")
@@ -313,6 +314,7 @@ L(BS .. "SCREEN", "Bildschirm")
 L(BS .. "SECONDS", "Sekunden")
 L(BS .. "SELECT_ALL", "Alles auswählen")
 L(BS .. "SELECT_NONE", "Nichts auswählen")
+L(BS .. "SERVER", "Server")
 L(BS .. "SHADOWY_VENDOR_RESET", "Verhüllte Versorgerin - verbleibende Zeit")
 L(BS .. "SHORTEN", "Kurzer Name")
 L(BS .. "SHOW_BACKDROP", "Hintergrund anzeigen")
@@ -348,6 +350,8 @@ L(BS .. "SPEED", "Bewegungsgeschwindigkeit")
 L(BS .. "SPEED_UNITS", "Einheit der Geschwindigkeit")
 L(BS .. "STOLEN", "Gestohlene Teile im Inventar")
 L(BS .. "TAMRIEL_TIME", "Zeit in Tamriel")
+L(BS .. "THIS_ACCOUNT", "Dieses Konto")
+L(BS .. "THIS_CHARACTER", "Dieser Charakter")
 L(BS .. "TIME_FORMAT_12", "12 Std. Zeit Format")
 L(BS .. "TIME_FORMAT_24", "24 Std. Zeit Format")
 L(BS .. "TIMER", "Timer <<1>>")
@@ -430,3 +434,7 @@ L(BS .. "WRITS_SURVEYS", "<<1[Keine Fundberichte/1 Fundbericht/$d Fundberichte]>
 L(BS .. "WRITS_MAPS", "<<1[Keine Schatzkarte/1 Schatzkarte/$s Schatzkarten]>>")
 L(BS .. "XP_BUFF", "Erfahrungspunkte Buff")
 --luacheck: pop
+
+-- Saved Vars
+L(BS .. "ACCOUNT_WIDE","Accountweite Einstellungen")
+L(BS .. "ACCOUNT_WIDE_TOOLTIP","Alle Einstellungen sind für alle deine Charaktere identisch.")

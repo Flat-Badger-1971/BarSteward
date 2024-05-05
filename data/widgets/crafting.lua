@@ -395,7 +395,7 @@ local function checkReset()
 
     if (lastResetTime) then
         BS.Vars:SetCommon({}, "dailyQuests")
-        BS.Vars.lastDailyReset = lastResetTime
+        BS.Vars:SetCommon(lastResetTime, "lastDailyReset")
     end
 end
 

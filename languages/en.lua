@@ -91,6 +91,7 @@ L(
     BS .. "COPY",
     "Select the text below, then use ctrl-c to copy it. The text can then be pasted into Bar Steward's 'Import Bar' box for another user."
 )
+L(BS .. "COPY_SETTINGS", "Copy Settings")
 L(BS .. "CRAFTING_MOTIFS", "Crafting Motifs")
 L(BS .. "CROWNS", "Crowns")
 L(BS .. "CROWN_GEMS", "Crown Gems")
@@ -307,6 +308,7 @@ L(BS .. "SCREEN", "Screen")
 L(BS .. "SECONDS", "Seconds")
 L(BS .. "SELECT_ALL", "Select All")
 L(BS .. "SELECT_NONE", "Select None")
+L(BS .. "SERVER", "Server")
 L(BS .. "SHADOWY_VENDOR_RESET", "Time to Shadowy Supplier reset")
 L(BS .. "SHORTEN", "Shorten Name (remove Boon:)")
 L(BS .. "SHOW_BACKDROP", "Show Background")
@@ -342,6 +344,8 @@ L(BS .. "SPEED", "Movement Speed")
 L(BS .. "SPEED_UNITS", "Speed Units")
 L(BS .. "STOLEN", "Stolen Items in Inventory")
 L(BS .. "TAMRIEL_TIME", "Tamriel Time")
+L(BS .. "THIS_ACCOUNT", "This Account")
+L(BS .. "THIS_CHARACTER", "This Character")
 L(BS .. "TIME_FORMAT_12", "12hr Time Format")
 L(BS .. "TIME_FORMAT_24", "24hr Time Format")
 L(BS .. "TIMER", "Timer <<1>>")
@@ -424,3 +428,7 @@ L(BS .. "WRITS_SURVEYS", "<<1[No Surveys/1 Survey/$d Surveys]>>")
 L(BS .. "WRITS_MAPS", "<<1[No Treasure Maps/1 Treasure Map/$s Treasure Maps]>>")
 L(BS .. "XP_BUFF","Experience Point Buff")
 --luacheck: pop
+
+-- Saved Vars
+L(BS .. "ACCOUNT_WIDE","Account-wide Settings")
+L(BS .. "ACCOUNT_WIDE_TOOLTIP","All the settings below will be the same for each of your characters.")

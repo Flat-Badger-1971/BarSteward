@@ -953,3 +953,191 @@ function BS.ShowGrid(showGrid)
         end
     end
 end
+
+function BS.CreateCopyFrame()
+    local name = BS.Name .. "_Copy_Frame"
+
+    BS.CopyFrame = WINDOW_MANAGER:CreateTopLevelWindow(name)
+    local frame = BS.CopyFrame
+
+    frame:SetDimensions(470, 600)
+    frame:SetAnchor(CENTER, GuiRoot, CENTER)
+    frame:SetHidden(true)
+
+    frame.bgc = WINDOW_MANAGER:CreateControl(name .. "_background", frame, CT_TEXTURE)
+    frame.bgc:SetAnchorFill(frame)
+    frame.bgc:SetTexture("/esoui/art/miscellaneous/centerscreen_left.dds")
+
+    frame.bge = WINDOW_MANAGER:CreateControl(name .. "_edges", frame, CT_TEXTURE)
+    frame.bge:SetDimensions(24, frame:GetHeight())
+    frame.bge:SetAnchor(TOPLEFT, frame.bgc, TOPRIGHT)
+    frame.bge:SetTexture("esoui/art/miscellaneous/centerscreen_right.dds")
+
+    local fontSize = 24
+    local fontStyle = "${BOLD_FONT}"
+    local fontWeight = "soft-shadow-thick"
+    local nameFont = string.format("$(%s)|$(KB_%s)|%s", fontStyle, fontSize, fontWeight)
+
+    frame.heading = WINDOW_MANAGER:CreateControl(name .. "_heading", frame, CT_LABEL)
+    frame.heading:SetFont(nameFont)
+    frame.heading:SetColor(1, 0.39, 0, 1)
+    frame.heading:SetAnchor(TOPLEFT, frame, TOPLEFT, 50, 80)
+    frame.heading:SetText(GetString(_G.BARSTEWARD_COPY_SETTINGS))
+    frame.heading:SetDimensions(350, 24)
+
+    frame.divider = WINDOW_MANAGER:CreateControl(name .. "_divider", frame, CT_TEXTURE)
+    frame.divider:SetDimensions(470, 4)
+    frame.divider:SetAnchor(TOPLEFT, frame.heading, BOTTOMLEFT, -50, 10)
+    frame.divider:SetTexture("/esoui/art/campaign/campaignbrowser_divider_short.dds")
+
+    local servers = BS.Vars:GetServers()
+    local accounts = BS.Vars:GetAccounts(servers[1])
+    local characters = BS.Vars:GetCharacters(servers[1], accounts[1], true)
+
+    local function serverSelected(value)
+        BS.selectedServer = value
+        accounts = BS.Vars:GetAccounts(value)
+        frame.accounts:UpdateValues(accounts, 1)
+        frame.accounts:SetDisabled(false)
+    end
+
+    local function accountSelected(value)
+        BS.selectedAccount = value
+        characters = BS.Vars:GetCharacters(BS.selectedServer, value, true)
+        frame.characters:UpdateValues(characters, 1)
+        frame.characters:SetDisabled(false)
+    end
+
+    local function characterSelected(value)
+        BS.selectedCharacter = value
+    end
+
+    frame.fromlabel = WINDOW_MANAGER:CreateControl(name .. "_from", frame, CT_LABEL)
+    frame.fromlabel:SetFont("$(MEDIUM_FONT)|$(KB_18)|$(soft-shadow-fix)")
+    frame.fromlabel:SetColor(1, 1, 0, 1)
+    frame.fromlabel:SetAnchor(TOPLEFT, frame.divider, BOTTOMLEFT, 40, 20)
+    frame.fromlabel:SetText(BS.Format(_G.SI_MAIL_INBOX_FROM_COLUMN))
+    frame.fromlabel:SetDimensions(100, 24)
+
+    frame.serverlabel = WINDOW_MANAGER:CreateControl(name .. "_serverLabel", frame, CT_LABEL)
+    frame.serverlabel:SetFont("$(MEDIUM_FONT)|$(KB_18)|$(soft-shadow-fix)")
+    frame.serverlabel:SetColor(0.98, 0.98, 0.98, 1)
+    frame.serverlabel:SetAnchor(TOPLEFT, frame.fromlabel, BOTTOMLEFT, 10, 20)
+    frame.serverlabel:SetText(GetString(_G.BARSTEWARD_SERVER))
+    frame.serverlabel:SetDimensions(100, 24)
+
+    frame.servers = BS.CreateComboBox(name .. "_server", frame, 250, 32, servers, servers[1], serverSelected)
+    frame.servers:SetAnchor(LEFT, frame.serverlabel, RIGHT, 30, 0)
+
+    frame.accountlabel = WINDOW_MANAGER:CreateControl(name .. "_accountLabel", frame, CT_LABEL)
+    frame.accountlabel:SetFont("$(MEDIUM_FONT)|$(KB_18)|$(soft-shadow-fix)")
+    frame.accountlabel:SetColor(0.98, 0.98, 0.98, 1)
+    frame.accountlabel:SetAnchor(TOPLEFT, frame.serverlabel, BOTTOMLEFT, 0, 20)
+    frame.accountlabel:SetText(BS.Format(_G.SI_CURRENCYLOCATION3))
+    frame.accountlabel:SetDimensions(100, 24)
+
+    frame.accounts = BS.CreateComboBox(name .. "_account", frame, 250, 32, nil, nil, accountSelected)
+    frame.accounts:SetAnchor(LEFT, frame.accountlabel, RIGHT, 30, 0)
+    frame.accounts:SetDisabled(true)
+
+    frame.characterlabel = WINDOW_MANAGER:CreateControl(name .. "_characterLabel", frame, CT_LABEL)
+    frame.characterlabel:SetFont("$(MEDIUM_FONT)|$(KB_18)|$(soft-shadow-fix)")
+    frame.characterlabel:SetColor(0.98, 0.98, 0.98, 1)
+    frame.characterlabel:SetAnchor(TOPLEFT, frame.accountlabel, BOTTOMLEFT, 0, 20)
+    frame.characterlabel:SetText(BS.Format(_G.SI_CURRENCYLOCATION0))
+    frame.characterlabel:SetDimensions(100, 24)
+
+    frame.characters = BS.CreateComboBox(name .. "_character", frame, 250, 32, nil, nil, characterSelected)
+    frame.characters:SetAnchor(LEFT, frame.characterlabel, RIGHT, 30, 0)
+    frame.characters:SetDisabled(true)
+
+    serverSelected(servers[1])
+    accountSelected(accounts[1])
+    characterSelected(characters[1])
+
+    frame.tolabel = WINDOW_MANAGER:CreateControl(name .. "_to", frame, CT_LABEL)
+    frame.tolabel:SetFont("$(MEDIUM_FONT)|$(KB_18)|$(soft-shadow-fix)")
+    frame.tolabel:SetColor(1, 1, 0, 1)
+    frame.tolabel:SetAnchor(TOPLEFT, frame.characterlabel, BOTTOMLEFT, -10, 20)
+    frame.tolabel:SetText(BS.Format(_G.SI_GAMEPAD_MAIL_SEND_TO))
+    frame.tolabel:SetDimensions(100, 24)
+
+    frame.thisaccount = WINDOW_MANAGER:CreateControlFromVirtual(name .. "_acc_sel", frame, "ZO_CheckButton")
+    frame.thisaccount:SetDimensions(24, 24)
+    frame.thisaccount:SetAnchor(TOPLEFT, frame.tolabel, LEFT, 10, 20)
+
+    ZO_CheckButton_SetLabelText(frame.thisaccount, GetString(_G.BARSTEWARD_THIS_ACCOUNT))
+
+    local function onAccountClicked(_, checked)
+        BS.selectedAccountOption = checked
+
+        if (BS.selectedCharacterOption and checked) then
+            ZO_CheckButton_SetCheckState(frame.thischaracter, false)
+        else
+            ZO_CheckButton_SetCheckState(frame.thischaracter, true)
+            BS.selectedCharacterOption = true
+        end
+    end
+
+    ZO_CheckButton_SetToggleFunction(frame.thisaccount, onAccountClicked)
+    ZO_CheckButtonLabel_SetTextColor(frame.thisaccount, 0.98, 0.98, 0.98)
+
+    frame.thischaracter = WINDOW_MANAGER:CreateControlFromVirtual(name .. "_char_sel", frame, "ZO_CheckButton")
+    frame.thischaracter:SetDimensions(24, 24)
+    frame.thischaracter:SetAnchor(LEFT, frame.thisaccount, LEFT, 225, 0)
+
+    ZO_CheckButton_SetLabelText(frame.thischaracter, GetString(_G.BARSTEWARD_THIS_CHARACTER))
+
+    local function onCharacterClicked(_, checked)
+        BS.selectedCharacterOption = checked
+
+        if (BS.selectedAccountOption and checked) then
+            ZO_CheckButton_SetCheckState(frame.thisaccount, false)
+        else
+            ZO_CheckButton_SetCheckState(frame.thisaccount, true)
+            BS.selectedAccountOption = true
+        end
+    end
+
+    ZO_CheckButton_SetToggleFunction(frame.thischaracter, onCharacterClicked)
+    ZO_CheckButtonLabel_SetTextColor(frame.thischaracter, 0.98, 0.98, 0.98)
+
+    -- set initial state
+    BS.selectedCharacterOption = true
+    ZO_CheckButton_SetCheckState(frame.thisaccount, false)
+    ZO_CheckButton_SetCheckState(frame.thischaracter, true)
+
+    frame.close = BS.CreateButton(name .. "_close", frame, 100, 32)
+    frame.close:SetText(BS.Format(_G.SI_CANCEL))
+    frame.close:SetAnchor(BOTTOMRIGHT, frame, BOTTOMRIGHT, -20, -140)
+    frame.close:SetHandler(
+        "OnClicked",
+        function()
+            frame.fragment:SetHiddenForReason("disabled", true)
+        end
+    )
+
+    frame.ok = BS.CreateButton(name .. "_ok", frame, 100, 32)
+    frame.ok:SetText(BS.Format(_G.SI_OK))
+    frame.ok:SetAnchor(RIGHT, frame.close, LEFT, -20, 0)
+    frame.ok:SetHandler(
+        "OnClicked",
+        function()
+            if (BS.selectedServer and BS.selectedAccount and BS.selectedCharacter) then
+                BS.Vars:Copy(BS.selectedServer, BS.selectedAccount, BS.selectedCharacter, BS.selectedAccountOption)
+                BS.Vars:LoadSavedVars()
+                BS.RegenerateAllBars()
+            end
+
+            frame.fragment:SetHiddenForReason("disabled", true)
+        end
+    )
+
+    frame.fragment = ZO_HUDFadeSceneFragment:New(frame)
+    frame.fragment:SetHiddenForReason("disabled", true)
+
+    SCENE_MANAGER:GetScene("hud"):AddFragment(frame.fragment)
+    SCENE_MANAGER:GetScene("hudui"):AddFragment(frame.fragment)
+
+    return frame
+end

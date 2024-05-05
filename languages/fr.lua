@@ -94,6 +94,7 @@ L(
     BS .. "COPY",
     "Sélectionnez le texte ci-dessous, puis utilisez ctrl-c pour le copier. Le texte peut ensuite être collé dans la case 'Importer la barre' de Bar Steward pour un autre utilisateur."
 )
+L(BS .. "COPY_SETTINGS", "Paramètres de copie")
 L(BS .. "CROWNS", "Couronnes")
 L(BS .. "CROWN_GEMS", "Gemmes à Couronnes")
 L(BS .. "DAILY_CRAFTING", "Commandes d'artisanat journalières")
@@ -301,6 +302,7 @@ L(BS .. "SCREEN", "L'écran")
 L(BS .. "SECONDS", "Secondes")
 L(BS .. "SELECT_ALL", "Tous")
 L(BS .. "SELECT_NONE", "Aucuns")
+L(BS .. "SERVER", "Serveur")
 L(BS .. "SHADOWY_VENDOR_RESET", "Réinitialisation du Fournisseur des Ombres")
 L(BS .. "SHORTEN", "Raccourcir le nom (supprimer la bénédiction:)")
 L(BS .. "SHOW_BACKDROP", "Afficher le fond")
@@ -335,6 +337,8 @@ L(BS .. "SPEED", "Vitesse de déplacement")
 L(BS .. "SPEED_UNITS", "Unités de vitesse")
 L(BS .. "STOLEN", "Objets volés dans l'inventaire")
 L(BS .. "TAMRIEL_TIME", "Heure de Tamriel")
+L(BS .. "THIS_ACCOUNT", "Ce compte")
+L(BS .. "THIS_CHARACTER", "Ce personnage")
 L(BS .. "TIME_FORMAT_12", "Format de l'heure 12hrs")
 L(BS .. "TIME_FORMAT_24", "Format de l'heure 24hrs")
 L(BS .. "TIMER", "Minuterie <<1>>")
@@ -414,3 +418,7 @@ L(BS .. "WRITS_SURVEYS", "<<1[Aucun repérages/1 Repérage/$d Repérages]>>")
 L(BS .. "WRITS_MAPS", "<<1[Aucune cartes au trésor/1 Carte au trésor/$s Cartes au trésor]>>")
 L(BS .. "XP_BUFF","Experience Point Buff")
 -- luacheck: pop
+
+-- Saved Vars
+L(BS .. "ACCOUNT_WIDE","Appliquer les réglages au niveau du compte")
+L(BS .. "ACCOUNT_WIDE_TOOLTIP","Tous les réglages ci-dessous seront les mêmes pour chacun de vos personnages.")

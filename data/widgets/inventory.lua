@@ -865,7 +865,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
                     name = function()
                         local name = BS.Icon(data.icon) .. " " .. data.name
 
-                        if (BS.Defaults.WatchedItems[itemId] == nil) then
+                        if (BS.CommonDefaults.WatchedItems[itemId] == nil) then
                             name = name .. " (" .. itemId .. ")"
                         end
 

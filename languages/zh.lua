@@ -91,6 +91,7 @@ L(
     BS .. "COPY",
     "全选下面的文本，然后使用 ctrl+c 复制。便可将文本粘贴到 Bar Steward 的“导入状态栏”框中，分享给其他用户使用。"
 )
+L(BS .. "COPY_SETTINGS", "复印设置")
 L(BS .. "CRAFTING_MOTIFS", "制作样式")
 L(BS .. "CROWNS", "王冠")
 L(BS .. "CROWN_GEMS", "王冠宝石")
@@ -307,6 +308,7 @@ L(BS .. "SCREEN", "屏幕")
 L(BS .. "SECONDS", "秒")
 L(BS .. "SELECT_ALL", "全选")
 L(BS .. "SELECT_NONE", "全不选")
+L(BS .. "SERVER", "服务器")
 L(BS .. "SHADOWY_VENDOR_RESET", "暗影供应者重置时间")
 L(BS .. "SHORTEN", "短名称")
 L(BS .. "SHOW_BACKDROP", "显示背景")
@@ -342,6 +344,8 @@ L(BS .. "SPEED", "移动速度")
 L(BS .. "SPEED_UNITS", "速度单位")
 L(BS .. "STOLEN", "库存中的扒窃物品")
 L(BS .. "TAMRIEL_TIME", "泰姆瑞尔时间")
+L(BS .. "THIS_ACCOUNT", "此帐户")
+L(BS .. "THIS_CHARACTER", "这个角色")
 L(BS .. "TIME_FORMAT_12", "12小时制时间格式")
 L(BS .. "TIME_FORMAT_24", "24小时制时间格式")
 L(BS .. "TIMER", "定时器<<1>>")
@@ -425,6 +429,6 @@ L(BS .. "WRITS_MAPS", "<<1[无 藏宝图/1 藏宝图/$s 藏宝图]>>")
 L(BS .. "XP_BUFF","经验值加成")
 --luacheck: pop
 
--- LibSavedVars overrides
-L("SI_LSV_ACCOUNT_WIDE","同步玩家账户下所有角色的设置")
-L("SI_LSV_ACCOUNT_WIDE_TT","以下的所有设置将会同步至你的每一个角色")
+-- Saved Vars
+L(BS .. "ACCOUNT_WIDE","同步玩家账户下所有角色的设置")
+L(BS .. "ACCOUNT_WIDE_TOOLTIP","以下的所有设置将会同步至你的每一个角色")

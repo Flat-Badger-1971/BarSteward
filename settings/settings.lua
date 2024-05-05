@@ -53,7 +53,7 @@ local function initialise()
         width = "full"
     }
 
-    --BS.options[#BS.options + 1] = BS.Vars:GetLibAddonMenuAccountCheckbox()
+    BS.options[#BS.options + 1] = BS.Vars:AddAccountSettingsCheckbox()
     BS.options[#BS.options + 1] = {
         type = "checkbox",
         name = GetString(_G.BARSTEWARD_MOVEFRAME),
@@ -241,6 +241,18 @@ local function initialise()
         name = GetString(_G.BARSTEWARD_REORDER_WIDGETS),
         func = function()
             local frame = BS.w_order or BS.CreateWidgetOrderTool(BS.alignBars)
+            SCENE_MANAGER:Show("hudui")
+            SetGameCameraUIMode(true)
+            frame.fragment:SetHiddenForReason("disabled", false)
+        end,
+        width = "half"
+    }
+
+    BS.options[#BS.options + 1] = {
+        type = "button",
+        name = GetString(_G.BARSTEWARD_COPY_SETTINGS),
+        func = function()
+            local frame = BS.CopyFrame or BS.CreateCopyFrame()
             SCENE_MANAGER:Show("hudui")
             SetGameCameraUIMode(true)
             frame.fragment:SetHiddenForReason("disabled", false)

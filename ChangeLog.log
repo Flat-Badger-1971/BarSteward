@@ -1,3 +1,8 @@
+[color=#ff9900][b]Version: 3.0.0 ---------------[/b][/color]
+Remove LibSavedVars dependency
+Copy bar setup between servers/accounts/characters
+Code refactor
+
 [color=#ff9900][b]Version: 2.1.16 ---------------[/b][/color]
 Left click Player Status widget to change status
 Fix progress bars when rerendering after adding/removing widgets

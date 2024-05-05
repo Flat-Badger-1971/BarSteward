@@ -796,7 +796,9 @@ BS.CommonDefaults = {
     Update = {}
 }
 
-function BS.CheckVars(vars)
+function BS.CheckVars()
+    local vars = BS.Defaults
+
     for widgetId, widgetData in pairs(vars.Controls) do
         if (not widgetData.Bar) then
             widgetData.Bar = 0
@@ -813,5 +815,5 @@ function BS.CheckVars(vars)
 end
 
 do
-    BS.CheckVars(BS.Defaults)
+    BS.CheckVars()
 end

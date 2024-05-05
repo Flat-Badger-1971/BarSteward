@@ -29,6 +29,7 @@ data/sounds.lua
 
 misc/utility.lua
 misc/version.lua
+misc/dialogues.lua
 
 data/widgets/client.lua
 data/widgets/abilities.lua

@@ -590,3 +590,23 @@ BS.XP_BUFFS = {
 BS.MAX_PLAYER_LEVEL = 50
 BS.MAX_DAILY_QUESTS = 50
 BS.MAX_TIMERS = 5
+
+BS.COMMON_SETTINGS = {
+    "CharacterList",
+    "dailyQuests",
+    "dailyQuestCount",
+    "FriendAnnounce",
+    "Gold",
+    "GuildFriendAnnounce",
+    "HouseBindings",
+    "HouseWidgets",
+    "lastDailyReset",
+    "lastDailyResetCounts",
+    "OtherCurrencies",
+    "PreviousAnnounceTime",
+    "PreviousFriendTime",
+    "PreviousGuildFriendTime",
+    "Trackers",
+    "WatchedItems",
+    "Updates"
+}

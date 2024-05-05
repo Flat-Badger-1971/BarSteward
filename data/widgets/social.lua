@@ -60,7 +60,7 @@ BS.widgets[BS.W_FRIENDS] = {
                     if (BS.Vars:GetCommon("FriendAnnounce", displayName) == true) then
                         local announce = true
                         local previousTime = BS.Vars:GetCommon("PreviousFriendTime", displayName) or (os.time() - 3600)
-                        local debounceTime = (BS.GetVar("DebounceTime") or 5) * 60
+                        local debounceTime = (BS.GetVar("DebounceTime", this) or 5) * 60
 
                         if (os.time() - previousTime <= debounceTime) then
                             announce = false

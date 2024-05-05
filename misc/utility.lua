@@ -1,23 +1,5 @@
 local BS = _G.BarSteward
 
-local commonSettings = {
-    "CharacterList",
-    "dailyQuests",
-    "dailyQuestCount",
-    "FriendAnnounce",
-    "Gold",
-    "GuildFriendAnnounce",
-    "HouseBindings",
-    "HouseWidgets",
-    "OtherCurrencies",
-    "PreviousAnnounceTime",
-    "PreviousFriendTime",
-    "PreviousGuildFriendTime",
-    "Trackers",
-    "WatchedItems",
-    "Updates"
-}
-
 function BS.SecondsToTime(seconds, hideDays, hideHours, hideSeconds, format, hideDaysWhenZero)
     local time = ""
     local days = math.floor(seconds / 86400)
@@ -620,7 +602,7 @@ function BS.AddToScenes(sceneType, barIndex, bar, override)
 end
 
 function BS.RemoveFromScenes(sceneType, bar)
-    if (sceneType == "Default") then
+    if (sceneType == "Default" or bar == nil) then
         return
     end
 
@@ -1594,7 +1576,7 @@ function BS.GetVar(name, widget)
     end
 
     if (continue) then
-        local isCommon = ZO_IsElementInNumericallyIndexedTable(commonSettings, name)
+        local isCommon = ZO_IsElementInNumericallyIndexedTable(BS.COMMON_SETTINGS, name)
 
         if (widget) then
             if (BS.Vars.Controls[widget]) then
@@ -1619,22 +1601,6 @@ function BS.GetVar(name, widget)
     end
 
     return value
-end
-
-function BS.SetVar(name, value, widget)
-    local isCommon = ZO_IsElementInNumericallyIndexedTable(commonSettings, name)
-
-    if (widget) then
-        if (BS.Vars.Controls[widget]) then
-            BS.Vars.Controls[widget][name] = value
-        end
-    else
-        if (isCommon) then
-            BS.Vars:SetCommon(name, value)
-        else
-            BS.Vars[name] = value
-        end
-    end
 end
 
 function BS.GetTimeColour(value, this, multiplier, useOK)
@@ -1710,15 +1676,19 @@ function BS.GetLastDailyResetTime(counts)
     local lastResetTime = os.time() - (secondsInADay - timeRemaining)
 
     if (counts) then
-        BS.Vars.lastDailyResetCounts = BS.Vars.lastDailyResetCounts or lastResetTime
+        if (BS.Vars:GetCommon("lastDailyResetCounts") == nil) then
+            BS.Vars:SetCommon(lastResetTime, "lastDailyResetCounts")
+        end
 
-        if ((BS.Vars.lastDailyResetCounts + secondsInADay) < os.time()) then
+        if ((BS.Vars:GetCommon("lastDailyResetCounts") + secondsInADay) < os.time()) then
             return lastResetTime
         end
     else
-        BS.Vars.lastDailyReset = BS.Vars.lastDailyReset or lastResetTime
+        if (BS.Vars:GetCommon("lastDailyReset") == nil) then
+            BS.Vars:SetCommon(lastResetTime, "lastDailyReset")
+        end
 
-        if ((BS.Vars.lastDailyReset + secondsInADay) < os.time()) then
+        if ((BS.Vars:GetCommon("lastDailyReset") + secondsInADay) < os.time()) then
             return lastResetTime
         end
     end
@@ -1760,7 +1730,7 @@ end
 
 local function checkCommon(vars, common)
     for name, settings in pairs(vars) do
-        if (ZO_IsElementInNumericallyIndexedTable(commonSettings, name)) then
+        if (ZO_IsElementInNumericallyIndexedTable(BS.COMMON_SETTINGS, name)) then
             if (type(settings) == "table") then
                 for k, v in pairs(settings) do
                     common[name] = common[name] or {}
@@ -1817,6 +1787,14 @@ function BS.ConvertFromLibSavedVars(savedVarsName)
                 vars[server][account]["$AccountWide"].COMMON.CharacterSettings = characterOnly
             end
         end
+    end
+end
+
+function BS.ToggleBar(index)
+    local bar = BS.BarObjectPool:GetActiveObject(BS.BarObjects[index])
+
+    if (bar) then
+        bar:Toggle()
     end
 end
 

@@ -1255,7 +1255,7 @@ local function checkReset()
             end
         end
 
-        BS.Vars.lastDailyResetCounts = lastResetTime
+        BS.Vars:SetCommon(lastResetTime, "lastDailyResetCounts")
     end
 end
 
