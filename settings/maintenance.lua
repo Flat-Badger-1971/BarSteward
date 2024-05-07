@@ -91,7 +91,7 @@ function BS.DeleteTrackedData()
         end
     end
 
-    BS.forDeletion = {}
+    BS.Clear(BS.forDeletion)
 
     zo_callLater(
         function()

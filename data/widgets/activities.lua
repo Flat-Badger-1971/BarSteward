@@ -1280,7 +1280,7 @@ BS.widgets[BS.W_DAILY_COUNT] = {
                 local player = GetUnitName("player")
 
                 if (not BS.Vars:GetCommon("dailyQuestCount", player)) then
-                BS.Vars:SetCommon({}, "dailyQuestCount", player)
+                    BS.Vars:SetCommon({}, "dailyQuestCount", player)
                 end
 
                 local counts = BS.Vars:GetCommon("dailyQuestCount", player)
@@ -1337,4 +1337,85 @@ BS.widgets[BS.W_DAILY_COUNT] = {
     },
     icon = "floatingmarkers/repeatablequest_available_icon",
     tooltip = GetString(_G.BARSTEWARD_DAILY_QUEST_COUNT)
+}
+
+SecurePostHook(
+    IsInGamepadPreferredMode() and _G.FISHING_GAMEPAD or _G.FISHING_KEYBOARD,
+    "PrepareForInteraction",
+    function()
+        local isFishing = false
+
+        if (not SCENE_MANAGER:IsInUIMode()) then
+            local additionalInfo = select(5, GetGameCameraInteractableActionInfo())
+
+            if (additionalInfo == _G.ADDITIONAL_INTERACT_INFO_FISHING_NODE) then
+                if (GetFishingLure() ~= 0) then
+                    isFishing = true
+                end
+            end
+        end
+
+        if (isFishing) then
+            BS.isFishing = true
+            BS.lastTrigger = os.time()
+        end
+    end
+)
+
+local fishingTimeout = 33
+
+BS.widgets[BS.W_FISHING] = {
+    -- v3.0.0
+    name = "fishing",
+    update = function(widget, event, ...)
+        if (event == _G.EVENT_LOOT_RECEIVED) then
+            if ((os.time() - fishingTimeout) > (BS.lastTrigger or 0)) then
+                BS.isFishing = false
+            end
+
+            if (BS.isFishing) then
+                local itemLink = select(2, ...)
+                local itemType, _ = GetItemLinkItemType(itemLink)
+
+                BS.Vars.FishingLoot[itemType] = (BS.Vars.FishingLoot[itemType] or 0) + 1
+                BS.isFishing = false
+            end
+        end
+
+        local loot = ""
+        local tt = BS.Format(_G.SI_GUILDACTIVITYATTRIBUTEVALUE9)
+        local typeCount = 0
+
+        for lootType, count in pairs(BS.Vars.FishingLoot) do
+            local info = BS.ITEM_TYPE_ICON[lootType]
+
+            if (info) then
+                loot = loot .. BS.Icon(info.icon) .. " "
+                loot = loot .. count .. " "
+
+                typeCount = typeCount + 3 + tostring(count):len()
+
+                tt = tt .. BS.LF
+                tt = tt .. BS.Icon(info.icon) .. " "
+                tt = tt .. "|cf9f9f9" .. count .. "|r "
+                tt = tt .. BS.Format(info.name)
+            end
+        end
+
+        local setwidth = string.rep("8", typeCount)
+
+        if (loot:len() == 0) then
+            widget:SetValue(0)
+        else
+            widget:SetValue(BS.Trim(loot), setwidth)
+            widget.tooltip = tt
+        end
+    end,
+    event = _G.EVENT_LOOT_RECEIVED,
+    icon = "icons/fishing_discus_blue_turquoise",
+    onLeftClick = function()
+        BS.Clear(BS.Vars.FishingLoot)
+        BS.RefreshWidget(BS.W_FISHING)
+    end,
+    tooltip = BS.Format(_G.SI_GUILDACTIVITYATTRIBUTEVALUE9)
 }

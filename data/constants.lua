@@ -134,6 +134,7 @@ BS.W_XP_BUFF = 125
 BS.W_ALL_CRAFTING = 126
 BS.W_DAILY_COUNT = 127
 BS.W_PLAYER_STATUS = 128
+BS.W_FISHING = 129
 
 BS.WRITS = {
     [_G.CRAFTING_TYPE_ALCHEMY] = {
@@ -591,22 +592,17 @@ BS.MAX_PLAYER_LEVEL = 50
 BS.MAX_DAILY_QUESTS = 50
 BS.MAX_TIMERS = 5
 
-BS.COMMON_SETTINGS = {
-    "CharacterList",
-    "dailyQuests",
-    "dailyQuestCount",
-    "FriendAnnounce",
-    "Gold",
-    "GuildFriendAnnounce",
-    "HouseBindings",
-    "HouseWidgets",
-    "lastDailyReset",
-    "lastDailyResetCounts",
-    "OtherCurrencies",
-    "PreviousAnnounceTime",
-    "PreviousFriendTime",
-    "PreviousGuildFriendTime",
-    "Trackers",
-    "WatchedItems",
-    "Updates"
+BS.ITEM_TYPE_ICON = {
+    [_G.ITEMTYPE_FISH] = {
+        icon = "icons/fishing_salmon_variant_red",
+        name = _G.SI_PROVISIONERSPECIALINGREDIENTTYPE_TRADINGHOUSERECIPECATEGORY4
+    },
+    [_G.ITEMTYPE_COLLECTIBLE] = {icon = "icons/crafting_fishing_trophy_perch", name = _G.SI_SPECIALIZEDITEMTYPE80},
+    [_G.ITEMTYPE_TRASH] = {icon = "inventory/inventory_tabicon_trash_up", name = _G.SI_ITEMTYPE48},
+    [_G.ITEMTYPE_LURE] = {icon = "inventory/inventory_tabicon_bait_up", name = _G.SI_FISHING_WHEEL_NARRATION},
+    [_G.ITEMTYPE_FURNISHING] = {
+        icon = "inventory/inventory_tabicon_furnishing_material_up",
+        name = _G.SI_HOUSING_PREVIEW_TEMPLATE_FURNISHINGS
+    },
+    [_G.ITEMTYPE_CONTAINER] = {icon = "icons/justice_stolen_wax_sealed_heavy_sack", name = _G.SI_ITEMTYPE18}
 }

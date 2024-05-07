@@ -1,6 +1,8 @@
 [color=#ff9900][b]Version: 3.0.0 ---------------[/b][/color]
 Remove LibSavedVars dependency
 Copy bar setup between servers/accounts/characters
+Stolen items widget - remove count of items in the bank as they can't be stored in a bank
+Fishing widget added
 Code refactor
 
 [color=#ff9900][b]Version: 2.1.16 ---------------[/b][/color]

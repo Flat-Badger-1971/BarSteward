@@ -1576,8 +1576,6 @@ function BS.GetVar(name, widget)
     end
 
     if (continue) then
-        local isCommon = ZO_IsElementInNumericallyIndexedTable(BS.COMMON_SETTINGS, name)
-
         if (widget) then
             if (BS.Vars.Controls[widget]) then
                 value = BS.Vars.Controls[widget][name]
@@ -1588,14 +1586,10 @@ function BS.GetVar(name, widget)
                 end
             end
         else
-            if (isCommon) then
-                value = BS.Vars:GetCommon(name)
-            else
-                value = BS.Vars[name]
-            end
+            value = BS.Vars[name]
 
             if (value == nil) then
-                value = BS.SavedVarDefaults[name] or BS.CommonDefaults[name]
+                value = BS.SavedVarDefaults[name]
             end
         end
     end
@@ -1795,6 +1789,13 @@ function BS.ToggleBar(index)
 
     if (bar) then
         bar:Toggle()
+    end
+end
+
+-- clear *any* table
+function BS.Clear(t)
+    for k in next, t do
+        rawset(t, k, nil)
     end
 end
 

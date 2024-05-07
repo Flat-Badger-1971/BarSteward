@@ -44,7 +44,8 @@ local function Initialise()
         BS.ConvertFromLibSavedVars()
     end
 
-    local vars, rawTableName, isAccountWide, characterId, displayName = BS.CreateSavedVariablesManager()
+    local vars, rawTableName, isAccountWide, characterId, displayName =
+        BS.CreateSavedVariablesManager("BarStewardSavedVars", BS.Defaults, BS.CommonDefaults)
 
     BS.Vars = vars
     BS.VarData = {

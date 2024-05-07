@@ -999,6 +999,8 @@ function BS.CreateCopyFrame()
         accounts = BS.Vars:GetAccounts(value)
         frame.accounts:UpdateValues(accounts, 1)
         frame.accounts:SetDisabled(false)
+        characters = BS.Vars:GetCharacters(value, accounts[1], true)
+        frame.characters:UpdateValues(characters, 1)
     end
 
     local function accountSelected(value)
@@ -1125,7 +1127,6 @@ function BS.CreateCopyFrame()
         function()
             if (BS.selectedServer and BS.selectedAccount and BS.selectedCharacter) then
                 BS.Vars:Copy(BS.selectedServer, BS.selectedAccount, BS.selectedCharacter, BS.selectedAccountOption)
-                BS.Vars:LoadSavedVars()
                 BS.RegenerateAllBars()
             end
 

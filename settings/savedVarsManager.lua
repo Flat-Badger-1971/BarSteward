@@ -1,4 +1,3 @@
-local BS = _G.BarSteward
 local manager = ZO_Object:Subclass()
 local searchPath, setPath, simpleCopy
 
@@ -21,24 +20,28 @@ local metatable = {
         end
     end,
     __newindex = function(t, key, value)
-        rawset(t.Vars, key, value)
+        -- can't use rawset - doesn't like empty tables for some reason
+        local vars = rawget(t, "Vars")
+
+        vars[key] = value
     end
 }
 
-function manager:New()
+function manager:New(varFileName, defaults, CommonDefaults)
     local managerObject = self:Subclass()
-    local rawTableName, isAccountWide, characterId, displayName = managerObject:Initialise()
+    local rawTableName, isAccountWide, characterId, displayName =
+        managerObject:Initialise(varFileName, defaults, CommonDefaults)
 
     return setmetatable(managerObject, metatable), rawTableName, isAccountWide, characterId, displayName
 end
 
-function manager:Initialise()
-    self.Defaults = BS.Defaults
-    self.RawTableName = BS.Name .. "SavedVars"
+function manager:Initialise(varFileName, defaults, commonDefaults)
+    self.Defaults = defaults
+    self.RawTableName = varFileName
     self.Profile = GetWorldName()
     self.DisplayName = GetDisplayName()
     self.CharacterId = GetCurrentCharacterId()
-    self.CommonDefaults = BS.CommonDefaults
+    self.CommonDefaults = commonDefaults
     self.Version = 1
     self.UseCharacterSettings = self:HasCharacterSettings()
 
@@ -47,6 +50,7 @@ function manager:Initialise()
     return self.RawTableName, self.Vars.IsAccountWide, self.CharacterId, self.DisplayName
 end
 
+-- Load/Reload the saved vars
 function manager:LoadSavedVars()
     if (self.UseCharacterSettings) then
         self.Vars =
@@ -70,39 +74,45 @@ function manager:LoadSavedVars()
 
     self.ServerInformation = serverInformation
 end
-
+-- Does the current character have character specific settings?
 function manager:HasCharacterSettings()
     return self:GetCommon("CharacterSettings", self.CharacterId)
 end
 
+-- Get settings from the 'COMMON' section, works regardless of whether we are using Account-wide or Character settings
 function manager:GetCommon(...)
     local rawTable = self:GetRawTable()
 
     return searchPath(rawTable, self.Profile, self.DisplayName, "$AccountWide", "COMMON", ...)
 end
 
+-- Set settings from the 'COMMON' section, works regardless of whether we are using Account-wide or Character settings
 function manager:SetCommon(value, ...)
     local rawTable = self:GetRawTable()
 
     setPath(rawTable, value, self.Profile, self.DisplayName, "$AccountWide", "COMMON", ...)
 end
 
+-- Get settings from the 'Account-wide' section, works regardless of whether we are using Account-wide or Character settings
 function manager:SetAccount(value, ...)
     local rawTable = self:GetRawTable()
 
     setPath(rawTable, value, self.Profile, self.DisplayName, "$AccountWide", ...)
 end
 
+-- Get settings from the 'Character' section, works regardless of whether we are using Account-wide or Character settings
 function manager:SetCharacter(value, ...)
     local rawTable = self:GetRawTable()
 
     setPath(rawTable, value, self.Profile, self.DisplayName, self.CharacterId, ...)
 end
 
+-- return a table of server/account/character information found in the saved vars file
 function manager:GetServerInformation()
     return self.ServerInformation
 end
 
+-- return a sorted list of servers found in the saved vars file
 function manager:GetServers()
     local servers = {}
 
@@ -115,6 +125,7 @@ function manager:GetServers()
     return servers
 end
 
+-- return a sorted list of accounts found in the saved vars file for the given server
 function manager:GetAccounts(server)
     local accounts = {}
 
@@ -127,6 +138,7 @@ function manager:GetAccounts(server)
     return accounts
 end
 
+-- return a sorted list of characters found in the saved vars file for the given server and account
 function manager:GetCharacters(server, account, excludeCurrent)
     local characters = {}
 
@@ -143,6 +155,7 @@ function manager:GetCharacters(server, account, excludeCurrent)
     return characters
 end
 
+-- return the character id from the saved vars file for the given character name
 function manager:GetCharacterId(server, account, character)
     local characters = self.ServerInformation[server][account]
 
@@ -157,6 +170,7 @@ function manager:GetCharacterId(server, account, character)
     end
 end
 
+-- copy all settings, excluding common settings, from one character/account to another
 function manager:Copy(server, account, character, copyToAccount)
     local characterId = "$AccountWide"
 
@@ -177,11 +191,15 @@ function manager:Copy(server, account, character, copyToAccount)
     else
         self:SetCharacter(characterSettings)
     end
+
+    -- reload the saved vars to reflect the changes
+    self:LoadSavedVars()
 end
 
+-- switch the current character's settings from Account-wide to character specific
 function manager:ConvertToCharacterSettings()
     if (not self.UseCharacterSettings) then
-        local settings = simpleCopy(self.Vars)
+        local settings = simpleCopy(self.Vars, true)
 
         self.Vars.UseAccountWide = false
         self.Vars =
@@ -195,9 +213,10 @@ function manager:ConvertToCharacterSettings()
     end
 end
 
+-- switch the current character's settings from character specific to Account-wide
 function manager:ConvertToAccountSettings()
     if (self.UseCharacterSettings) then
-        local settings = simpleCopy(self.Vars)
+        local settings = simpleCopy(self.Vars, true)
 
         self.Vars = ZO_SavedVars:NewAccountWide(self.RawTableName, self.Version, nil, self.Defaults, self.Profile)
 
@@ -209,12 +228,14 @@ function manager:ConvertToAccountSettings()
     end
 end
 
+-- return the raw saved vars table
 function manager:GetRawTable()
     local rawTable = _G[self.RawTableName]
 
     return rawTable
 end
 
+-- add a 'Use Aaccount-wide settings' checkbox to libAddonMenu
 function manager:AddAccountSettingsCheckbox()
     return {
         type = "checkbox",
@@ -233,6 +254,10 @@ function manager:AddAccountSettingsCheckbox()
     }
 end
 
+-- private functions
+local BS = _G.BarSteward
+
+-- simple, two level deep, table copying function
 function simpleCopy(t, excludeCommon)
     local output = {}
     for name, settings in pairs(t) do
@@ -251,25 +276,7 @@ function simpleCopy(t, excludeCommon)
     return output
 end
 
-local function checkCommon(vars, common)
-    for name, settings in pairs(vars) do
-        if (ZO_IsElementInNumericallyIndexedTable(BS.COMMON_SETTINGS, name)) then
-            if (type(settings) == "table") then
-                for k, v in pairs(settings) do
-                    common[name] = common[name] or {}
-                    common[name][k] = v
-                end
-            else
-                common[name] = settings
-            end
-
-            vars[name] = nil
-        end
-    end
-
-    return common
-end
-
+-- generic table element count (#table only works correctly on sequentially numerically indexed tables)
 local function countElements(t)
     local count = 0
 
@@ -280,7 +287,8 @@ local function countElements(t)
     return count
 end
 
--- path functions from zo_savedvars.lua
+-- *** path functions from zo_savedvars.lua ***
+-- find the supplied path and return the value
 function searchPath(t, ...)
     local current = t
 
@@ -299,6 +307,7 @@ function searchPath(t, ...)
     return current
 end
 
+-- add a path to the supplied table
 local function createPath(t, ...)
     local current = t
     local container
@@ -321,6 +330,7 @@ local function createPath(t, ...)
     return current, container, containerKey
 end
 
+-- set the value of path, creating a new one if it does not already exist
 function setPath(t, value, ...)
     if value ~= nil then
         createPath(t, ...)
@@ -349,10 +359,11 @@ function setPath(t, value, ...)
         parent[lastKey] = value
     end
 end
+-- *** ***
 
 -- loop through the default values - if the saved value matches the default value
 -- then remove it. It's just wasting space as the default values will be loaded anyway
--- based on code from LibSavedVars
+-- *** based on code from LibSavedVars ***
 local function trim(savedVarsTable, defaults)
     local valid = savedVarsTable ~= nil
 
@@ -405,18 +416,20 @@ local function removeDefaults()
 end
 
 local function onLogout()
-    removeDefaults()
+    if (BS.VarData) then
+        removeDefaults()
 
-    local rawTable = _G[BS.VarData.RawTableName]
-    local nextKey
+        local rawTable = _G[BS.VarData.RawTableName]
+        local nextKey
 
-    repeat
-        nextKey = next(rawTable, nextKey)
-    until nextKey ~= "version" and nextKey ~= "$LastCharacterName"
+        repeat
+            nextKey = next(rawTable, nextKey)
+        until nextKey ~= "version" and nextKey ~= "$LastCharacterName"
 
-    if (nextKey == nil) then
-        rawTable.version = nil
-        rawTable["$LastCharacterName"] = nil
+        if (nextKey == nil) then
+            rawTable.version = nil
+            rawTable["$LastCharacterName"] = nil
+        end
     end
 end
 
@@ -425,13 +438,47 @@ local function onLogoutCancelled()
 
     fillDefaults(rawTable, BS.Defaults)
 end
+--*** ***
 
+-- Helper functions
+-- returns whether the saved vars file has been converted from the libSavedVars variant to
+-- the type used by this class
 function BS.SavedVarsNeedConverting()
     local rawTable = _G[BS.Name .. "SavedVars"]
 
     return searchPath(rawTable, GetWorldName(), GetDisplayName(), "$AccountWide", "COMMON") == nil
 end
 
+-- determine whether the supplied vars belong in the COMMON section and merge if appropriate
+-- returns the merged table
+local commonSettings = {}
+
+do
+    for key, _ in pairs(BS.CommonDefaults) do
+        table.insert(commonSettings, key)
+    end
+end
+
+local function checkCommon(vars, common)
+    for name, settings in pairs(vars) do
+        if (ZO_IsElementInNumericallyIndexedTable(commonSettings, name)) then
+            if (type(settings) == "table") then
+                for k, v in pairs(settings) do
+                    common[name] = common[name] or {}
+                    common[name][k] = v
+                end
+            else
+                common[name] = settings
+            end
+
+            vars[name] = nil
+        end
+    end
+
+    return common
+end
+
+-- converts a libSavedVars type saved vars file to the type used by this class
 function BS.ConvertFromLibSavedVars()
     local vars = _G[BS.Name .. "SavedVars"]
 
@@ -465,10 +512,11 @@ function BS.ConvertFromLibSavedVars()
     end
 end
 
-function BS.CreateSavedVariablesManager()
+-- apply logout hooks for default trimming, create a new saved vars manager and return it
+function BS.CreateSavedVariablesManager(varsFilename, defaults, commonDefaults)
     ZO_PreHook("Logout", onLogout)
     ZO_PreHook("Quit", onLogout)
     ZO_PreHook("CancelLogout", onLogoutCancelled)
 
-    return manager:New()
+    return manager:New(varsFilename, defaults, commonDefaults)
 end

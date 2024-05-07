@@ -652,7 +652,7 @@ BS.RegisterForEvent(
             if (inCombat) then
                 BS.inCombat = true
                 maxDamage = 0
-                damage = {}
+                BS.Clear(damage)
             else
                 BS.inCombat = false
             end

@@ -19,6 +19,7 @@ BS.Defaults = {
     DefaultWarningColour = {1, 1, 0, 1},
     DefaultOkColour = {0, 1, 0, 1},
     DungeonInfo = {IsInDungeon = false, ChestCount = 0, PreviousChest = {x = 0, y = 0}},
+    FishingLoot = {},
     Font = "Default",
     FontSize = 18,
     GridSize = 10,
@@ -770,6 +771,9 @@ BS.Defaults = {
         },
         [BS.W_PLAYER_STATUS] = {
             Cat = cat.Character
+        },
+        [BS.W_FISHING] = {
+            Cat = cat.Activities
         }
     }
 }

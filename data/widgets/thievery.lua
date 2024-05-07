@@ -16,9 +16,7 @@ BS.widgets[BS.W_STOLEN_ITEMS] = {
                 return IsItemStolen(itemdata.bagId, itemdata.slotIndex)
             end,
             _G.BAG_WORN,
-            _G.BAG_BACKPACK,
-            _G.BAG_BANK,
-            _G.BAG_SUBSCRIBER_BANK
+            _G.BAG_BACKPACK
         )
 
         for _, item in ipairs(filteredItems) do
@@ -54,7 +52,7 @@ BS.widgets[BS.W_STOLEN_ITEMS] = {
         widget:SetColour(unpack(BS.GetColour(this)))
 
         local ttt = GetString(_G.BARSTEWARD_STOLEN) .. BS.LF .. "|cf9f9f9"
-        ttt = ttt .. BS.BAGICON .. " " .. bagCounts.carrying .. " " .. BS.BANKICON .. " " .. bagCounts.banked .. "|r"
+        ttt = ttt .. BS.BAGICON .. " " .. bagCounts.carrying .. "|r"
 
         if (#stolen > 0) then
             local total = 0

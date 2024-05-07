@@ -154,8 +154,7 @@ end
 local guildMasterList = {}
 
 local function getMasterList()
-    --ZO_ClearNumericallyIndexedTable(guildMasterList)
-    guildMasterList = {}
+    BS.Clear(guildMasterList)
 
     local guildId = BS.guildId
     local localPlayerIndex = GetPlayerGuildMemberIndex(guildId)
