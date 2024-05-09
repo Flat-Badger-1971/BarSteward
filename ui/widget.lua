@@ -5,6 +5,7 @@ local baseWidget = ZO_Object:Subclass()
 
 function baseWidget:New(...)
     local widget = ZO_Object.New(self)
+
     widget:Initialise(...)
 
     return widget

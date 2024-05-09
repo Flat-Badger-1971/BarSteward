@@ -13,7 +13,7 @@ local metatable = {
         end
 
         -- assume anything that's not part of the main class is an attempt to read a saved variable
-        local vars = rawget(t, "Vars")
+        local vars = rawget(t, "_vars")
 
         if (vars) then
             return vars[key]
@@ -21,7 +21,7 @@ local metatable = {
     end,
     __newindex = function(t, key, value)
         -- can't use rawset - doesn't like empty tables for some reason
-        local vars = rawget(t, "Vars")
+        local vars = rawget(t, "_vars")
 
         vars[key] = value
     end
@@ -36,27 +36,27 @@ function manager:New(varFileName, defaults, CommonDefaults)
 end
 
 function manager:Initialise(varFileName, defaults, commonDefaults)
-    self.Defaults = defaults
-    self.RawTableName = varFileName
-    self.Profile = GetWorldName()
-    self.DisplayName = GetDisplayName()
-    self.CharacterId = GetCurrentCharacterId()
-    self.CommonDefaults = commonDefaults
-    self.Version = 1
-    self.UseCharacterSettings = self:HasCharacterSettings()
+    self._defaults = defaults
+    self._rawTableName = varFileName
+    self._profile = GetWorldName()
+    self._displayName = GetDisplayName()
+    self._characterId = GetCurrentCharacterId()
+    self._commonDefaults = commonDefaults
+    self._version = 1
+    self._useCharacterSettings = self:HasCharacterSettings()
 
     self:LoadSavedVars()
 
-    return self.RawTableName, self.Vars.IsAccountWide, self.CharacterId, self.DisplayName
+    return self._rawTableName, self._vars.IsAccountWide, self._characterId, self._displayName
 end
 
 -- Load/Reload the saved vars
 function manager:LoadSavedVars()
-    if (self.UseCharacterSettings) then
-        self.Vars =
-            ZO_SavedVars:NewCharacterIdSettings(self.RawTableName, self.Version, nil, self.Defaults, self.Profile)
+    if (self._useCharacterSettings) then
+        self._vars =
+            ZO_SavedVars:NewCharacterIdSettings(self._rawTableName, self._version, nil, self._defaults, self._profile)
     else
-        self.Vars = ZO_SavedVars:NewAccountWide(self.RawTableName, self.Version, nil, self.Defaults, self.Profile)
+        self._vars = ZO_SavedVars:NewAccountWide(self._rawTableName, self._version, nil, self._defaults, self._profile)
     end
 
     local rawTable = self:GetRawTable()
@@ -72,51 +72,51 @@ function manager:LoadSavedVars()
         end
     end
 
-    self.ServerInformation = serverInformation
+    self._serverInformation = serverInformation
 end
 -- Does the current character have character specific settings?
 function manager:HasCharacterSettings()
-    return self:GetCommon("CharacterSettings", self.CharacterId)
+    return self:GetCommon("CharacterSettings", self._characterId)
 end
 
 -- Get settings from the 'COMMON' section, works regardless of whether we are using Account-wide or Character settings
 function manager:GetCommon(...)
     local rawTable = self:GetRawTable()
 
-    return searchPath(rawTable, self.Profile, self.DisplayName, "$AccountWide", "COMMON", ...)
+    return searchPath(rawTable, self._profile, self._displayName, "$AccountWide", "COMMON", ...)
 end
 
 -- Set settings from the 'COMMON' section, works regardless of whether we are using Account-wide or Character settings
 function manager:SetCommon(value, ...)
     local rawTable = self:GetRawTable()
 
-    setPath(rawTable, value, self.Profile, self.DisplayName, "$AccountWide", "COMMON", ...)
+    setPath(rawTable, value, self._profile, self._displayName, "$AccountWide", "COMMON", ...)
 end
 
 -- Get settings from the 'Account-wide' section, works regardless of whether we are using Account-wide or Character settings
 function manager:SetAccount(value, ...)
     local rawTable = self:GetRawTable()
 
-    setPath(rawTable, value, self.Profile, self.DisplayName, "$AccountWide", ...)
+    setPath(rawTable, value, self._profile, self._displayName, "$AccountWide", ...)
 end
 
 -- Get settings from the 'Character' section, works regardless of whether we are using Account-wide or Character settings
 function manager:SetCharacter(value, ...)
     local rawTable = self:GetRawTable()
 
-    setPath(rawTable, value, self.Profile, self.DisplayName, self.CharacterId, ...)
+    setPath(rawTable, value, self._profile, self._displayName, self._characterId, ...)
 end
 
 -- return a table of server/account/character information found in the saved vars file
 function manager:GetServerInformation()
-    return self.ServerInformation
+    return self._serverInformation
 end
 
 -- return a sorted list of servers found in the saved vars file
 function manager:GetServers()
     local servers = {}
 
-    for server, _ in pairs(self.ServerInformation) do
+    for server, _ in pairs(self._serverInformation) do
         table.insert(servers, server)
     end
 
@@ -129,7 +129,7 @@ end
 function manager:GetAccounts(server)
     local accounts = {}
 
-    for account, _ in pairs(self.ServerInformation[server]) do
+    for account, _ in pairs(self._serverInformation[server]) do
         table.insert(accounts, account)
     end
 
@@ -142,8 +142,8 @@ end
 function manager:GetCharacters(server, account, excludeCurrent)
     local characters = {}
 
-    for id, character in pairs(self.ServerInformation[server][account]) do
-        local insert = not (excludeCurrent and id == self.CharacterId)
+    for id, character in pairs(self._serverInformation[server][account]) do
+        local insert = not (excludeCurrent and id == self._characterId)
 
         if (insert) then
             table.insert(characters, character)
@@ -157,7 +157,7 @@ end
 
 -- return the character id from the saved vars file for the given character name
 function manager:GetCharacterId(server, account, character)
-    local characters = self.ServerInformation[server][account]
+    local characters = self._serverInformation[server][account]
 
     if (character == "Account") then
         return "$AccountWide"
@@ -198,39 +198,39 @@ end
 
 -- switch the current character's settings from Account-wide to character specific
 function manager:ConvertToCharacterSettings()
-    if (not self.UseCharacterSettings) then
-        local settings = simpleCopy(self.Vars, true)
+    if (not self._useCharacterSettings) then
+        local settings = simpleCopy(self._vars, true)
 
-        self.Vars.UseAccountWide = false
-        self.Vars =
-            ZO_SavedVars:NewCharacterIdSettings(self.RawTableName, self.Version, nil, self.Defaults, self.Profile)
+        self._vars.UseAccountWide = false
+        self._vars =
+            ZO_SavedVars:NewCharacterIdSettings(self._rawTableName, self._version, nil, self._defaults, self._profile)
 
         for k, v in pairs(settings) do
-            self.Vars[k] = v
+            self._vars[k] = v
         end
 
-        self:SetCommon(true, "CharacterSettings", self.CharacterId)
+        self:SetCommon(true, "CharacterSettings", self._characterId)
     end
 end
 
 -- switch the current character's settings from character specific to Account-wide
 function manager:ConvertToAccountSettings()
-    if (self.UseCharacterSettings) then
-        local settings = simpleCopy(self.Vars, true)
+    if (self._useCharacterSettings) then
+        local settings = simpleCopy(self._vars, true)
 
-        self.Vars = ZO_SavedVars:NewAccountWide(self.RawTableName, self.Version, nil, self.Defaults, self.Profile)
+        self._vars = ZO_SavedVars:NewAccountWide(self._rawTableName, self._version, nil, self._defaults, self._profile)
 
         for k, v in pairs(settings) do
-            self.Vars[k] = v
+            self._vars[k] = v
         end
 
-        self:SetCommon(nil, "CharacterSettings", self.CharacterId)
+        self:SetCommon(nil, "CharacterSettings", self._characterId)
     end
 end
 
 -- return the raw saved vars table
 function manager:GetRawTable()
-    local rawTable = _G[self.RawTableName]
+    local rawTable = _G[self._rawTableName]
 
     return rawTable
 end
