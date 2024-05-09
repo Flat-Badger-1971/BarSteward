@@ -30,7 +30,6 @@ BS.Defaults = {
     TimeFormat12 = "hh:m",
     TimeFormat24 = "HH:m",
     TimeType = GetString(_G.BARSTEWARD_24),
-    Updates = {},
     VisibleGridSize = 65,
     Bars = {
         [1] = {
@@ -797,7 +796,7 @@ BS.CommonDefaults = {
         [BS.POTENT_NIRNCRUX] = true
     },
     WritTracking = {},
-    Update = {}
+    Updates = {}
 }
 
 function BS.CheckVars()

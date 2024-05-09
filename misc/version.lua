@@ -94,6 +94,6 @@ function BS.VersionCheck()
             BS.Vars:SetCommon(true, "WatchedItems", BS.POTENT_NIRNCRUX)
         end
 
-        BS.Vars:SetCommon(true, "Update", 3000)
+        BS.Vars:SetCommon(true, "Updates", 3000)
     end
 end
