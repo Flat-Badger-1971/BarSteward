@@ -260,7 +260,7 @@ BS.widgets[BS.W_DURABILITY] = {
                 tooltipText = tooltipText .. BS.LF .. i
             end
 
-            widget.tooltip = tooltipText
+            widget:SetTooltip(tooltipText)
         end
 
         return lowest
@@ -354,7 +354,7 @@ BS.widgets[BS.W_SOUL_GEMS] = {
         ttt = ttt .. BS.Icon(filledIcon) .. " " .. filledCount .. BS.LF
         ttt = ttt .. BS.Icon(emptyIcon) .. " " .. emptyCount
 
-        widget.tooltip = ttt
+        widget:SetTooltip(ttt)
 
         return widget:GetValue()
     end,
@@ -538,7 +538,7 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
             end
         end
 
-        widget.tooltip = ttt
+        widget:SetTooltip(ttt)
 
         return widget:GetValue()
     end,
@@ -616,7 +616,7 @@ BS.widgets[BS.W_TROPHY_VAULT_KEYS] = {
                 end
             end
 
-            widget.tooltip = ttt
+            widget:SetTooltip(ttt)
         end
 
         return count
@@ -767,8 +767,9 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
 
         widget:SetColour(unpack(BS.GetColour(this)))
         widget:SetValue(BS.Trim(countText), BS.Trim(plainCountText))
+        widget:SetTooltip(ttt)
+
         BS.ResizeBar(BS.GetVar("Bar", this))
-        widget.tooltip = ttt
 
         if (BS.GetVar("Announce", this)) then
             for itemId, itemCount in pairs(count) do
@@ -1073,7 +1074,7 @@ local function randomOnClick(collectibleTable, widgetIndex)
         tt = tt .. "|cf9f9f9" .. GetString(_G.BARSTEWARD_RANDOM_RECENT) .. "|r" .. BS.LF
         tt = tt .. "|cffd700" .. name
 
-        widget.tooltip = tt
+        widget:SetTooltip(tt)
 
         UseCollectible(collectibleId)
 
@@ -1198,7 +1199,7 @@ BS.widgets[BS.W_RANDOM_EMOTE] = {
             tt = tt .. "|cf9f9f9" .. GetString(_G.BARSTEWARD_RANDOM_RECENT) .. "|r" .. BS.LF
             tt = tt .. "|cffd700" .. displayName
 
-            widget.tooltip = tt
+            widget:SetTooltip(tt)
 
             if (BS.Vars.Controls[BS.W_RANDOM_EMOTE].Print) then
                 local name = BS.Format(displayName)
@@ -1247,7 +1248,7 @@ local function itemScan(widget, filteredItems, widgetIndex, name)
         end
     end
 
-    widget.tooltip = tt
+    widget:SetTooltip(tt)
 
     return count
 end
@@ -1494,7 +1495,7 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
             end
         end
 
-        widget.tooltip = tt
+        widget:SetTooltip(tt)
 
         return count
     end,
@@ -1650,7 +1651,7 @@ BS.widgets[BS.W_FRAGMENTS] = {
             tt = tt .. GetString(_G.BARSTEWARD_NOT_COLLECTED) .. BS.LF .. uncollectedtt .. "|r"
         end
 
-        widget.tooltip = tt
+        widget:SetTooltip(tt)
 
         return collected
     end,
@@ -1795,7 +1796,7 @@ BS.widgets[BS.W_RUNEBOXES] = {
             tt = string.format("%s%s 0/%d", tt, BS.Format(info.name), info.quantity)
         end
 
-        widget.tooltip = tt
+        widget:SetTooltip(tt)
 
         return collected
     end,
@@ -1861,7 +1862,7 @@ BS.widgets[BS.W_RECIPE_WATCH] = {
 
         if ((event or "initial") == "initial") then
             widget:SetValue(BS.Vars.FoundCount or 0)
-            widget.tooltip = getFoundRecipesTooltip()
+            widget:SetTooltip(getFoundRecipesTooltip())
             widget:SetColour(unpack(BS.GetColour(this)))
         end
 
@@ -1893,8 +1894,7 @@ BS.widgets[BS.W_RECIPE_WATCH] = {
 
         widget:SetValue(BS.Vars.FoundCount)
         widget:SetColour(unpack(BS.GetColour(this)))
-
-        widget.tooltip = getFoundRecipesTooltip()
+        widget:SetTooltip(getFoundRecipesTooltip())
 
         return BS.Vars.FoundCount
     end,
@@ -2018,7 +2018,7 @@ BS.widgets[BS.W_WEAPON_CHARGE] = {
             tt = string.format("%s%s%s%s|r - %s", tt, BS.LF, slotColour, info.name, info.pc)
         end
 
-        widget.tooltip = tt
+        widget:SetTooltip(tt)
 
         return min.raw
     end,

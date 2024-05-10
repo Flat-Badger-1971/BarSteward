@@ -69,7 +69,9 @@ local function currencyWidget(currencyType, widgetIndex, text, eventList, hideWh
             local combined = currencyInBag + currencyInBank
             local allCharacters = combined
             local otherCharacterCurrency =
-                ((currencyType == _G.CURT_MONEY) and BS.Vars:GetCommon("Gold") or BS.Vars:GetCommon("OtherCurrencies", currencyType)) or {}
+                ((currencyType == _G.CURT_MONEY) and BS.Vars:GetCommon("Gold") or
+                BS.Vars:GetCommon("OtherCurrencies", currencyType)) or
+                {}
             local thisCharacter = GetUnitName("player")
             local charactertt = ""
             local useSeparators = BS.GetVar("UseSeparators", widgetIndex)
@@ -115,10 +117,8 @@ local function currencyWidget(currencyType, widgetIndex, text, eventList, hideWh
             -- update the tooltip
             local ttt =
                 updateTooltip(text, currencyInBag, currencyInBank, combined, charactertt, allCharacters, currencyType)
-            widget.tooltip = ttt
-            widget.tooltipFunc = function()
-                updateTooltip(text, currencyInBag, currencyInBank, combined, charactertt, allCharacters, currencyType)
-            end
+
+            widget:SetTooltip(ttt)
 
             return widget:GetValue()
         end,
@@ -190,7 +190,7 @@ BS.widgets[BS.W_CROWN_GEMS] = {
 
         tt = tt .. getcrownStoreCurrencies()
 
-        widget.tooltip = tt
+        widget:SetTooltip(tt)
 
         return widget:GetValue()
     end,
@@ -219,7 +219,7 @@ BS.widgets[BS.W_CROWNS] = {
 
         tt = tt .. getcrownStoreCurrencies()
 
-        widget.tooltip = tt
+        widget:SetTooltip(tt)
 
         return widget:GetValue()
     end,
@@ -287,7 +287,7 @@ BS.widgets[BS.W_EVENT_TICKETS] = {
 
         local tt = getcrownStoreCurrencies(true)
 
-        widget.tooltip = tt
+        widget:SetTooltip(tt)
 
         return value
     end,
@@ -337,7 +337,7 @@ BS.widgets[BS.W_SEALS_OF_ENDEAVOUR] = {
 
         tt = tt .. getcrownStoreCurrencies()
 
-        widget.tooltip = tt
+        widget:SetTooltip(tt)
 
         return widget:GetValue()
     end,
@@ -426,7 +426,7 @@ BS.widgets[BS.W_TRANSMUTE_CRYSTALS] = {
 
         local tt = getcrownStoreCurrencies(true)
 
-        widget.tooltip = tt
+        widget:SetTooltip(tt)
 
         return value
     end,
@@ -443,7 +443,7 @@ BS.widgets[BS.W_UNDAUNTED_KEYS] = {
 
         local tt = getcrownStoreCurrencies(true)
 
-        widget.tooltip = tt
+        widget:SetTooltip(tt)
 
         return widget:GetValue()
     end,
@@ -489,7 +489,7 @@ BS.widgets[BS.W_ARCHIVAL_FRAGMENTS] = {
 
         tt = tt .. getcrownStoreCurrencies()
 
-        widget.tooltip = tt
+        widget:SetTooltip(tt)
 
         return widget:GetValue()
     end,

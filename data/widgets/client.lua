@@ -193,9 +193,10 @@ BS.widgets = {
             widget:SetValue(time)
             widget:SetColour(unpack(BS.GetColour(this)))
 
-            widget.tooltip =
+            widget:SetTooltip(
                 BS.Format(_G.SI_TRADINGHOUSELISTINGSORTTYPE0) ..
-                BS.LF .. "|cf9f9f9" .. BS.Format(_G.BARSTEWARD_TIMER_TIP) .. "|r"
+                    BS.LF .. "|cf9f9f9" .. BS.Format(_G.BARSTEWARD_TIMER_TIP) .. "|r"
+            )
 
             return widget:GetValue()
         end,

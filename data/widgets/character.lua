@@ -35,7 +35,7 @@ BS.widgets[BS.W_MUNDUS_STONE] = {
 
             tt = tt .. "|cf9f9f9" .. desc .. "|r"
 
-            widget.tooltip = tt
+            widget:SetTooltip(tt)
 
             return mundusName
         else
@@ -289,7 +289,8 @@ BS.widgets[BS.W_SKYSHARDS] = {
 
         ttt = ttt .. "|cffffff" .. zo_strformat(GetString(_G.BARSTEWARD_SKYSHARDS_SKILL_POINTS), skillSkyShards) .. "|r"
 
-        widget.tooltip = ttt
+        widget:SetTooltip(ttt)
+
         return discoveredInZone
     end,
     event = _G.EVENT_SKYSHARDS_UPDATED,
@@ -439,7 +440,7 @@ BS.widgets[BS.W_PLAYER_LEVEL] = {
         ttt = ttt .. BS.Format(_G.SI_STAT_GAMEPAD_EXPERIENCE_LABEL) .. "  "
         ttt = ttt .. xp .. " / " .. xpMax .. "|r"
 
-        widget.tooltip = ttt
+        widget:SetTooltip(ttt)
 
         return level
     end,
@@ -616,7 +617,7 @@ local function updateWidget()
         ttt = ttt .. GetString(_G.BARSTEWARD_PREVIOUS_ENCOUNTER_MAXIMUM) .. gold .. maxDamage .. "|r" .. BS.LF
         ttt = ttt .. GetString(_G.BARSTEWARD_PREVIOUS_ENCOUNTER_DURATION) .. gold .. getCombatTime() .. "|r"
 
-        dpsWidget.tooltip = ttt
+        dpsWidget:SetTooltip(ttt)
     end
 end
 
@@ -763,7 +764,7 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
             ttt = ttt .. BS.Format(_G.SI_STAT_GAMEPAD_EXPERIENCE_LABEL) .. BS.LF
             ttt = ttt .. "|cf9f9f9" .. ZO_CommaDelimitNumber(xp) .. " / " .. ZO_CommaDelimitNumber(xplvl) .. "|r"
 
-            widget.tooltip = ttt
+            widget:SetTooltip(ttt)
         end
 
         local value = earned .. " (" .. pc .. "%)"
@@ -903,7 +904,7 @@ BS.widgets[BS.W_PLAYER_EXPERIENCE] = {
         ttt = ttt .. xp .. " / " .. xplvl .. BS.LF
         ttt = ttt .. pc .. "%" .. "|r"
 
-        widget.tooltip = ttt
+        widget:SetTooltip(ttt)
 
         return xp
     end,
@@ -949,7 +950,7 @@ BS.widgets[BS.W_VAMPIRISM] = {
         local tt = BS.Format(_G.SI_CURSETYPE1)
         tt = tt .. BS.LF .. "|cf9f9f9" .. text .. "|r"
 
-        widget.tooltip = tt
+        widget:SetTooltip(tt)
 
         if (icon) then
             widget:SetIcon(icon)
@@ -1020,7 +1021,7 @@ BS.widgets[BS.W_VAMPIRISM_TIMER] = {
             tt = tt .. BS.LF .. "|cf9f9f9" .. BS.Format(name) .. "|r"
         end
 
-        widget.tooltip = tt
+        widget:SetTooltip(tt)
 
         if (icon) then
             widget:SetIcon(icon)
@@ -1103,7 +1104,7 @@ BS.widgets[BS.W_VAMPIRISM_FEED_TIMER] = {
             tt = tt .. BS.LF .. "|cf9f9f9" .. BS.Format(name) .. "|r"
         end
 
-        widget.tooltip = tt
+        widget:SetTooltip(tt)
 
         if (icon) then
             widget:SetIcon(icon)
@@ -1166,8 +1167,7 @@ BS.widgets[BS.W_FOOD_BUFF] = {
 
             widget:SetValue(buff.formattedTime)
             widget:SetColour(unpack(BS.GetTimeColour(buff.remaining, this, 60, true)))
-
-            widget.tooltip = buff.ttt
+            widget:SetTooltip(buff.ttt)
 
             if (BS.GetVar("Announce", this) and (BS.GetVar("WarningValue", this) * 60) == BS.ToInt(buff.remaining)) then
                 local buffMessage =
@@ -1218,8 +1218,7 @@ BS.widgets[BS.W_AP_BUFF] = {
 
             widget:SetValue(lowest.formattedTime)
             widget:SetColour(unpack(BS.GetTimeColour(lowest.remaining, this, 60, true)))
-
-            widget.tooltip = lowest.ttt
+            widget:SetTooltip(lowest.ttt)
 
             if (BS.GetVar("Announce", this) and (BS.GetVar("WarningValue", this) * 60) == BS.ToInt(lowest.remaining)) then
                 local buffMessage =
@@ -1281,8 +1280,7 @@ BS.widgets[BS.W_XP_BUFF] = {
 
             widget:SetValue(lowest.formattedTime)
             widget:SetColour(unpack(BS.GetTimeColour(lowest.remaining, this, 60, true)))
-
-            widget.tooltip = lowest.ttt
+            widget:SetTooltip(lowest.ttt)
 
             if (BS.GetVar("Announce", this) and (BS.GetVar("WarningValue", this) * 60) == BS.ToInt(lowest.remaining)) then
                 local buffMessage =

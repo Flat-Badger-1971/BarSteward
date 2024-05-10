@@ -177,7 +177,7 @@ BS.widgets[BS.W_ALL_CRAFTING] = {
 
         widget:SetColour(unpack(colour))
         widget:SetValue(text)
-        widget.tooltip = ttt
+        widget:SetTooltip(ttt)
 
         return timeRemaining
     end,
@@ -211,7 +211,7 @@ BS.widgets[BS.W_BLACKSMITHING] = {
             ttt = ttt .. getDisplay(researchSlots[_G.CRAFTING_TYPE_BLACKSMITHING][slot] or 0, this)
         end
 
-        widget.tooltip = ttt
+        widget:SetTooltip(ttt)
 
         return timeRemaining
     end,
@@ -252,7 +252,7 @@ BS.widgets[BS.W_WOODWORKING] = {
             ttt = ttt .. getDisplay(researchSlots[_G.CRAFTING_TYPE_WOODWORKING][slot] or 0, this)
         end
 
-        widget.tooltip = ttt
+        widget:SetTooltip(ttt)
 
         return timeRemaining
     end,
@@ -292,7 +292,7 @@ BS.widgets[BS.W_CLOTHING] = {
             ttt = ttt .. slotText .. getDisplay(researchSlots[_G.CRAFTING_TYPE_CLOTHIER][slot] or 0, this)
         end
 
-        widget.tooltip = ttt
+        widget:SetTooltip(ttt)
 
         return timeRemaining
     end,
@@ -333,7 +333,7 @@ BS.widgets[BS.W_JEWELCRAFTING] = {
             ttt = ttt .. getDisplay(researchSlots[_G.CRAFTING_TYPE_JEWELRYCRAFTING][slot] or 0, this)
         end
 
-        widget.tooltip = ttt
+        widget:SetTooltip(ttt)
 
         return timeRemaining
     end,
@@ -586,7 +586,7 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
                 end
             end
 
-            widget.tooltip = ttt
+            widget:SetTooltip(ttt)
         end
 
         return done == qualifiedCount
@@ -724,8 +724,7 @@ BS.widgets[BS.W_RECIPES] = {
 
         widget:SetValue(value)
         widget:SetColour(unpack(colour))
-
-        widget.tooltip = tt
+        widget:SetTooltip(tt)
 
         return widget:GetValue()
     end,
@@ -839,7 +838,7 @@ BS.widgets[BS.W_UNKNOWN_WRIT_MOTIFS] = {
                 tt = tt .. BS.LF .. motif
             end
 
-            widget.tooltip = tt
+            widget:SetTooltip(tt)
         end
 
         return widget:GetValue()

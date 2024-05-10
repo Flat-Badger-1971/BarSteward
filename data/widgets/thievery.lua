@@ -77,7 +77,7 @@ BS.widgets[BS.W_STOLEN_ITEMS] = {
             ttt = ttt .. stt
         end
 
-        widget.tooltip = ttt
+        widget:SetTooltip(ttt)
 
         return count
     end,

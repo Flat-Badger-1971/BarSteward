@@ -179,7 +179,7 @@ BS.widgets[BS.W_INFINITE_ARCHIVE_PROGRESS] = {
             ttt = ttt:sub(1, #ttt - 1)
         end
 
-        widget.tooltip = ttt
+        widget:SetTooltip(ttt)
 
         return false
     end,
@@ -297,7 +297,7 @@ BS.widgets[BS.W_INFINITE_ARCHIVE_SCORE] = {
         ttt = ttt .. "|cf9f9f9" .. BS.Format(_G.BARSTEWARD_HIGHEST) .. "|r" .. BS.LF
         ttt = string.format("%s%s: |cffff00%s|r%s%s: |cffff00%s|r", ttt, solo, soloScore, BS.LF, duo, duoScore)
 
-        widget.tooltip = ttt
+        widget:SetTooltip(ttt)
 
         return false
     end,

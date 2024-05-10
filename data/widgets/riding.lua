@@ -55,7 +55,7 @@ BS.widgets[BS.W_MOUNT_TRAINING] = {
             ttt = string.format("%s%s%s%s%s/%s|r", ttt, icon, ttype, col, val, maxVal)
         end
 
-        widget.tooltip = ttt
+        widget:SetTooltip(ttt)
 
         return remaining
     end,

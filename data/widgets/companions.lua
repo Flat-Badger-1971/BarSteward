@@ -25,7 +25,7 @@ BS.widgets[BS.W_RAPPORT] = {
         local level = GetActiveCompanionRapportLevel()
         local desc = GetActiveCompanionRapportLevelDescription(level)
 
-        widget.tooltip = GetString(_G.BARSTEWARD_RAPPORT) .. BS.LF .. "|cffffff" .. desc .. "|r"
+        widget:SetTooltip(GetString(_G.BARSTEWARD_RAPPORT) .. BS.LF .. "|cffffff" .. desc .. "|r")
 
         return rapportValue
     end,
@@ -85,7 +85,7 @@ BS.widgets[BS.W_COMPANION_LEVEL] = {
 
         ttt = ttt .. "|cf9f9f9" .. progress .. "|r"
 
-        widget.tooltip = ttt
+        widget:SetTooltip(ttt)
 
         return companionLevel
     end,

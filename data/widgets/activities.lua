@@ -28,7 +28,7 @@ local function configureWidget(widget, complete, maxComplete, activityType, task
             tooltipText = tooltipText .. BS.LF .. t
         end
 
-        widget.tooltip = tooltipText
+        widget:SetTooltip(tooltipText)
     end
 end
 
@@ -217,7 +217,7 @@ BS.widgets[BS.W_ENDEAVOUR_PROGRESS] = {
             ttt = ttt .. maxTask.name .. BS.LF .. BS.LF
             ttt = ttt .. maxTask.description
 
-            widget.tooltip = ttt
+            widget:SetTooltip(ttt)
 
             return maxTask.progress == maxTask.maxProgress
         else
@@ -402,7 +402,7 @@ BS.widgets[BS.W_LEADS] = {
                 end
             end
 
-            widget.tooltip = ttt
+            widget:SetTooltip(ttt)
         end
 
         return minTime
@@ -567,7 +567,7 @@ BS.widgets[BS.W_TRIBUTE_CLUB_RANK] = {
             ttt = ttt .. "|cf9f9f9" .. displayRank .. " - " .. rankName .. BS.LF .. BS.LF
             ttt = ttt .. xp .. " / " .. totalxp .. ((rank == 7) and "" or " (" .. percent .. "%)|r")
 
-            widget.tooltip = ttt
+            widget:SetTooltip(ttt)
         end
     end,
     event = {
@@ -600,7 +600,8 @@ BS.widgets[BS.W_ACHIEVEMENT_POINTS] = {
 
         ttt = ttt .. "|cf9f9f9" .. earnedPoints .. "/" .. totalPoints .. "|r"
 
-        widget.tooltip = ttt
+        widget:SetTooltip(ttt)
+
         return widget:GetValue()
     end,
     event = {
@@ -701,8 +702,8 @@ BS.widgets[BS.W_SHADOWY_VENDOR_TIME] = {
 
         widget:SetColour(unpack(BS.GetVar("DefaultColour")))
         widget:SetValue(remaining)
+        widget:SetTooltip(setTracker(this, timeToReset, GetString(_G.BARSTEWARD_SHADOWY_VENDOR_RESET)))
 
-        widget.tooltip = setTracker(this, timeToReset, GetString(_G.BARSTEWARD_SHADOWY_VENDOR_RESET))
         return timeToReset
     end,
     timer = 1000,
@@ -723,8 +724,7 @@ BS.widgets[BS.W_LFG_TIME] = {
 
         widget:SetColour(unpack(BS.GetVar("DefaultColour")))
         widget:SetValue(remaining)
-
-        widget.tooltip = setTracker(this, timeToReset, GetString(_G.BARSTEWARD_DUNGEON_REWARD_RESET))
+        widget:SetTooltip(setTracker(this, timeToReset, GetString(_G.BARSTEWARD_DUNGEON_REWARD_RESET)))
 
         return timeToReset
     end,
@@ -807,7 +807,7 @@ BS.widgets[BS.W_LOREBOOKS] = {
         widget:SetValue(value)
         widget:SetColour(unpack(BS.GetColour(this)))
 
-        widget.tooltip = tt
+        widget:SetTooltip(tt)
 
         return #categories
     end,
@@ -1022,7 +1022,7 @@ BS.widgets[BS.W_RANDOM_DUNGEON] = {
         end
 
         widget:SetValue(data.output, data.normalisedOutput)
-        widget.tooltip = data.tt
+        widget:SetTooltip(data.tt)
 
         return data.eligibleCount
     end,
@@ -1073,7 +1073,7 @@ BS.widgets[BS.W_RANDOM_BATTLEGROUND] = {
         end
 
         widget:SetValue(data.output, data.normalisedOutput)
-        widget.tooltip = data.tt
+        widget:SetTooltip(data.tt)
 
         return data.eligibleCount
     end,
@@ -1120,7 +1120,7 @@ BS.widgets[BS.W_RANDOM_TRIBUTE] = {
         end
 
         widget:SetValue(data.output, data.normalisedOutput)
-        widget.tooltip = data.tt
+        widget:SetTooltip(data.tt)
 
         return data.eligibleCount
     end,
@@ -1198,7 +1198,7 @@ BS.widgets[BS.W_DAILY_PROGRESS] = {
             ttt = ttt .. maxTask.name .. BS.LF .. BS.LF
             ttt = ttt .. maxTask.description
 
-            widget.tooltip = ttt
+            widget:SetTooltip(ttt)
 
             return maxTask.progress == maxTask.maxProgress
         else
@@ -1325,7 +1325,7 @@ BS.widgets[BS.W_DAILY_COUNT] = {
                 ttt = ttt .. BS.Format(_G.SI_DLC_BOOK_QUEST_STATUS_ACCEPTED) .. ": " .. added .. BS.LF
                 ttt = ttt .. zo_strformat(_G.SI_NOTIFYTEXT_QUEST_COMPLETE, complete) .. "|r"
 
-                widget.tooltip = ttt
+                widget:SetTooltip(ttt)
             end,
             500
         )
@@ -1408,7 +1408,7 @@ BS.widgets[BS.W_FISHING] = {
             widget:SetValue(0)
         else
             widget:SetValue(BS.Trim(loot), setwidth)
-            widget.tooltip = tt
+            widget:SetTooltip(tt)
         end
     end,
     event = _G.EVENT_LOOT_RECEIVED,
