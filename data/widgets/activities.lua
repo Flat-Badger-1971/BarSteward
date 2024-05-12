@@ -1395,10 +1395,9 @@ BS.widgets[BS.W_FISHING] = {
 
                 typeCount = typeCount + 3 + tostring(count):len()
 
-                tt = tt .. BS.LF
-                tt = tt .. BS.Icon(info.icon) .. " "
-                tt = tt .. "|cf9f9f9" .. count .. "|r "
-                tt = tt .. BS.Format(info.name)
+                tt = tt .. BS.LF .. "|cf9f9f9"
+                tt = tt .. zo_strformat("<<1>> <<2>> <<m:3>>", BS.Icon(info.icon), count, GetString(info.name))
+                tt = tt .. "|r"
             end
         end
 
