@@ -17,7 +17,7 @@ L(BS .. "ANNOUNCEMENT", "显示警告通知")
 L(BS .. "ANNOUNCEMENT_FRIEND", "显示好友上线通知")
 L(BS .. "ANNOUNCEMENT_FRIEND_GUILD", "显示公会好友上线通知")
 L(BS .. "ANNOUNCEMENTS", "通知")
-L(BS .. "AP_BUFF","联盟点数加成")
+L(BS .. "AP_BUFF", "联盟点数加成")
 L(BS .. "ARCHIVAL_FRAGMENTS", "档案塔财富")
 L(BS .. "ASSISTANT_WIDGET", "助手 - <<1>>")
 L(BS .. "ASSISTANTS", "助手")
@@ -87,10 +87,7 @@ L(BS .. "COMPANION_LEVEL", "当前盟友等级")
 L(BS .. "COMPANION_WIDGET", "盟友 - <<1>>")
 L(BS .. "CONDITION", "条件")
 L(BS .. "CONFIGURE", "配置")
-L(
-    BS .. "COPY",
-    "全选下面的文本，然后使用 ctrl+c 复制。便可将文本粘贴到 Bar Steward 的“导入状态栏”框中，分享给其他用户使用。"
-)
+L(BS .. "COPY", "全选下面的文本，然后使用 ctrl+c 复制。便可将文本粘贴到 Bar Steward 的“导入状态栏”框中，分享给其他用户使用。")
 L(BS .. "COPY_SETTINGS", "复印设置")
 L(BS .. "CRAFTING_MOTIFS", "制作样式")
 L(BS .. "CROWNS", "王冠")
@@ -169,10 +166,7 @@ L(BS .. "HIDE_SECONDS", "隐藏秒数")
 L(BS .. "HIDE_TEXT", "隐藏文本")
 L(BS .. "HIDE_TIMER", "隐藏计时器")
 L(BS .. "HIDE_WHEN_COMPLETE", "完成时隐藏")
-L(
-    BS .. "HIDE_WHEN_COMPLETE_TOOLTIP",
-    "当该工艺类型无法研究出更多特质时隐藏。此设置将覆盖任何自动隐藏设置。"
-)
+L(BS .. "HIDE_WHEN_COMPLETE_TOOLTIP", "当该工艺类型无法研究出更多特质时隐藏。此设置将覆盖任何自动隐藏设置。")
 L(BS .. "HIDE_WHEN_FULLY_USED", "完全使用时隐藏")
 L(BS .. "HIDE_WHEN_FULLY_USED_TOOLTIP", "当所有可用的插槽/选项都已被使用时隐藏")
 L(BS .. "HIGHEST", "最高分数")
@@ -191,10 +185,7 @@ L(BS .. "INFINITE_ARCHIVE_PROGRESS", "无尽档案塔进度")
 L(BS .. "INFINITE_ARCHIVE_SCORE", "无尽档案塔分数")
 L(BS .. "INFINITE_ARCHIVE_SHOW", "仅在无尽档案塔中显示")
 L(BS .. "INVERT", "反转警告/危险逻辑")
-L(
-    BS .. "INVERT_TOOLTIP",
-    "更改逻辑，高于数值时触发颜色更改。默认行为是在数值较低时触发。"
-)
+L(BS .. "INVERT_TOOLTIP", "更改逻辑，高于数值时触发颜色更改。默认行为是在数值较低时触发。")
 L(BS .. "ITEM_EXISTS", "此项目已被添加到观察清单中。")
 L(BS .. "ITEM_ID", "物品id")
 L(BS .. "ITEM_INVALID", "无效的物品id")
@@ -216,10 +207,7 @@ L(BS .. "MEMORY", "内存使用量")
 L(BS .. "MIDDLE", "中间")
 L(BS .. "MINUTES", "分钟")
 L(BS .. "MOUNT_TRAINING", "距离下次坐骑训练的剩余时间")
-L(
-    BS .. "MOVE_WIDGETS",
-    "此状态栏包含 <<1[无小组件/1 个小组件/$d 个小组件]>>，这些小组件将从当前状态栏移至新状态栏。您要继续吗？"
-)
+L(BS .. "MOVE_WIDGETS", "此状态栏包含 <<1[无小组件/1 个小组件/$d 个小组件]>>，这些小组件将从当前状态栏移至新状态栏。您要继续吗？")
 L(BS .. "MOVEFRAME", "移动状态栏")
 L(BS .. "MPH", "mph 英里/每小时")
 L(BS .. "NEW_BAR", "创建新状态栏")
@@ -255,10 +243,7 @@ L(BS .. "PASTE", "在下面粘贴新状态栏所导出的代码文本，然后�
 L(BS .. "PERCENTAGE", "以百分比显示")
 L(BS .. "PERFORMANCE", "性能选项")
 L(BS .. "PERFORMANCE_TIMERS", "在战斗中禁用计时器")
-L(
-    BS .. "PERFORMANCE_TIMERS_TOOLTIP",
-    "在战斗中禁用基于计时器的小组件（时间除外）。这将减少可能会影响性能的数值更新次数。"
-)
+L(BS .. "PERFORMANCE_TIMERS_TOOLTIP", "在战斗中禁用基于计时器的小组件（时间除外）。这将减少可能会影响性能的数值更新次数。")
 L(BS .. "PLAYER_EXPERIENCE", "玩家经验")
 L(BS .. "PLAYER_LOCATION", "玩家位置")
 L(BS .. "PORT_TO_HOUSE", "传送至住宅")
@@ -309,6 +294,7 @@ L(BS .. "SECONDS", "秒")
 L(BS .. "SELECT_ALL", "全选")
 L(BS .. "SELECT_NONE", "全不选")
 L(BS .. "SERVER", "服务器")
+L(BS .. "SETTINGS", "在 UI 重新加载之前，设置可能无法正确显示")
 L(BS .. "SHADOWY_VENDOR_RESET", "暗影供应者重置时间")
 L(BS .. "SHORTEN", "短名称")
 L(BS .. "SHOW_BACKDROP", "显示背景")
@@ -378,15 +364,9 @@ L(BS .. "USE_ICONS", "使用图标")
 L(BS .. "USE_PROGRESS", "使用进度条")
 L(BS .. "USE_RAG", "使用红色/琥珀色/绿色的进度颜色")
 L(BS .. "USE_FONT_CORRECTION", "使用字体大小校正（试验性功能）")
-L(
-    BS .. "USE_FONT_CORRECTION_TOOLTIP",
-    "当字体大小设置为小于默认值时，某些小组件的值可能会显示不全。此设置试图修正这种情况。"
-)
+L(BS .. "USE_FONT_CORRECTION_TOOLTIP", "当字体大小设置为小于默认值时，某些小组件的值可能会显示不全。此设置试图修正这种情况。")
 L(BS .. "USE_WRITWORTHY", "使用 WritWorthy获取令状委托摘要")
-L(
-    BS .. "USE_WRITWORTHY_TOOLTIP",
-    "如果安装了WritWorthy，请使用WritWorthy获取令状委托摘要。请注意，如果您有大量委托，每次更新背包槽位时可能会出现轻微卡顿。"
-)
+L(BS .. "USE_WRITWORTHY_TOOLTIP", "如果安装了WritWorthy，请使用WritWorthy获取令状委托摘要。请注意，如果您有大量委托，每次更新背包槽位时可能会出现轻微卡顿。")
 L(BS .. "VALUE", "数值")
 L(BS .. "VALUE_SIDE", "数值位置")
 L(BS .. "VAMPIRE_FEED_TIMER", "吸血鬼进食冷却计时器")
@@ -426,9 +406,18 @@ L(BS .. "WRITS", "大师委托/调查报告/藏宝图")
 L(BS .. "WRITS_WRITS", "<<1[无 大师委托/1 大师委托/$d 大师委托]>>")
 L(BS .. "WRITS_SURVEYS", "<<1[无 调查报告/1 调查报告/$d 调查报告]>>")
 L(BS .. "WRITS_MAPS", "<<1[无 藏宝图/1 藏宝图/$s 藏宝图]>>")
-L(BS .. "XP_BUFF","经验值加成")
---luacheck: pop
+L(BS .. "XP_BUFF", "经验值加成")
 
 -- Saved Vars
-L(BS .. "ACCOUNT_WIDE","同步玩家账户下所有角色的设置")
-L(BS .. "ACCOUNT_WIDE_TOOLTIP","以下的所有设置将会同步至你的每一个角色")
+L(BS .. "ACCOUNT_WIDE", "同步玩家账户下所有角色的设置")
+L(BS .. "ACCOUNT_WIDE_TOOLTIP", "以下的所有设置将会同步至你的每一个角色")
+
+-- based on pChat by Puddy, Ayantir, Baertram, DesertDwellers
+L(
+    BS .. "BACKUP_DIALOG_TEXT",
+    "Bar Steward 需要对您的 SavedVariables 进行结构性更改。\n\n" ..
+        "请 |cff0000登出|r 并备份您的 SavedVariables！\n\n" ..
+            "按 |cffff00取消|r 按钮打开一个解释如何操作的链接。\n\n备份完成后，按 |cffff00确认|r 按钮继续加载 Bar Steward 并允许其进行更改。"
+)
+L(BS .. "BACKUP_WARNING", "记得先退出！")
+--luacheck: pop

@@ -960,7 +960,7 @@ function BS.CreateCopyFrame()
     BS.CopyFrame = WINDOW_MANAGER:CreateTopLevelWindow(name)
     local frame = BS.CopyFrame
 
-    frame:SetDimensions(470, 600)
+    frame:SetDimensions(470, 650)
     frame:SetAnchor(CENTER, GuiRoot, CENTER)
     frame:SetHidden(true)
 
@@ -1108,6 +1108,13 @@ function BS.CreateCopyFrame()
     BS.selectedCharacterOption = true
     ZO_CheckButton_SetCheckState(frame.thisaccount, false)
     ZO_CheckButton_SetCheckState(frame.thischaracter, true)
+
+    frame.warning = WINDOW_MANAGER:CreateControl(name .. "_warning", frame, CT_LABEL)
+    frame.warning:SetFont("$(MEDIUM_FONT)|$(KB_18)|$(soft-shadow-fix)")
+    frame.warning:SetColor(1, 1, 0, 1)
+    frame.warning:SetAnchor(TOPLEFT, frame.thisaccount, BOTTOMLEFT, -10, 20)
+    frame.warning:SetText(GetString(_G.BARSTEWARD_SETTINGS))
+    frame.warning:SetDimensions(390, 72)
 
     frame.close = BS.CreateButton(name .. "_close", frame, 100, 32)
     frame.close:SetText(BS.Format(_G.SI_CANCEL))

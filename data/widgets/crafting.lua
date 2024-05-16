@@ -391,11 +391,13 @@ local function countState(state, character)
 end
 
 local function checkReset()
-    local lastResetTime = BS.GetLastDailyResetTime()
+    if (BS.Vars) then
+        local lastResetTime = BS.GetLastDailyResetTime()
 
-    if (lastResetTime) then
-        BS.Vars:SetCommon({}, "dailyQuests")
-        BS.Vars:SetCommon(lastResetTime, "lastDailyReset")
+        if (lastResetTime) then
+            BS.Vars:SetCommon({}, "dailyQuests")
+            BS.Vars:SetCommon(lastResetTime, "lastDailyReset")
+        end
     end
 end
 

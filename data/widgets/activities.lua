@@ -741,39 +741,41 @@ BS.widgets[BS.W_LFG_TIME] = {
 }
 
 local function updateLoreBooks()
-    local bypass =
-        BS.Vars.Controls[BS.W_LOREBOOKS].Bar + BS.Vars.Controls[BS.W_SHALIDORS_LIBRARY].Bar +
-        BS.Vars.Controls[BS.W_CRAFTING_MOTIFS].Bar ==
-        0
+    if (BS.Vars) then
+        local bypass =
+            BS.Vars.Controls[BS.W_LOREBOOKS].Bar + BS.Vars.Controls[BS.W_SHALIDORS_LIBRARY].Bar +
+            BS.Vars.Controls[BS.W_CRAFTING_MOTIFS].Bar ==
+            0
 
-    if (bypass) then
-        return
-    end
-
-    local categories = {}
-
-    for categoryIndex = 1, GetNumLoreCategories() do
-        local categoryName, numCollections, categoryId = GetLoreCategoryInfo(categoryIndex)
-        local category = {
-            id = categoryId,
-            name = categoryName,
-            numCollections = numCollections,
-            numKnownBooks = 0,
-            totalBooks = 0
-        }
-
-        for collectionIndex = 1, numCollections do
-            local _, _, numKnownBooks, totalBooks, hidden = GetLoreCollectionInfo(categoryIndex, collectionIndex)
-            if not hidden then
-                category.numKnownBooks = category.numKnownBooks + numKnownBooks
-                category.totalBooks = category.totalBooks + totalBooks
-            end
+        if (bypass) then
+            return
         end
 
-        categories[categoryIndex] = category
-    end
+        local categories = {}
 
-    CALLBACK_MANAGER:FireCallbacks(BS.Name .. "CB_Lorebooks_Updated", categories)
+        for categoryIndex = 1, GetNumLoreCategories() do
+            local categoryName, numCollections, categoryId = GetLoreCategoryInfo(categoryIndex)
+            local category = {
+                id = categoryId,
+                name = categoryName,
+                numCollections = numCollections,
+                numKnownBooks = 0,
+                totalBooks = 0
+            }
+
+            for collectionIndex = 1, numCollections do
+                local _, _, numKnownBooks, totalBooks, hidden = GetLoreCollectionInfo(categoryIndex, collectionIndex)
+                if not hidden then
+                    category.numKnownBooks = category.numKnownBooks + numKnownBooks
+                    category.totalBooks = category.totalBooks + totalBooks
+                end
+            end
+
+            categories[categoryIndex] = category
+        end
+
+        CALLBACK_MANAGER:FireCallbacks(BS.Name .. "CB_Lorebooks_Updated", categories)
+    end
 end
 
 BS.RegisterForEvent(_G.EVENT_PLAYER_ACTIVATED, updateLoreBooks)

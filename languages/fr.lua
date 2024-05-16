@@ -17,7 +17,7 @@ L(BS .. "ANNOUNCEMENT", "Afficher l'annonce d'avertissement")
 L(BS .. "ANNOUNCEMENT_FRIEND", "Annoncer un ami en ligne")
 L(BS .. "ANNOUNCEMENT_FRIEND_GUILD", "Annoncer un membre de guilde en ligne")
 L(BS .. "ANNOUNCEMENTS", "Annonces")
-L(BS .. "AP_BUFF","Alliance Point Buff")
+L(BS .. "AP_BUFF", "Alliance Point Buff")
 L(BS .. "ARCHIVAL_FRAGMENTS", "Archival Fragments")
 L(BS .. "ASSISTANT_WIDGET", "Assistant - <<1>>")
 L(BS .. "ASSISTANTS", "Assistants")
@@ -303,6 +303,7 @@ L(BS .. "SECONDS", "Secondes")
 L(BS .. "SELECT_ALL", "Tous")
 L(BS .. "SELECT_NONE", "Aucuns")
 L(BS .. "SERVER", "Serveur")
+L(BS .. "SETTINGS", "Les paramètres peuvent ne pas s'afficher correctement jusqu'à ce qu'un rechargement de l'interface utilisateur soit effectué.")
 L(BS .. "SHADOWY_VENDOR_RESET", "Réinitialisation du Fournisseur des Ombres")
 L(BS .. "SHORTEN", "Raccourcir le nom (supprimer la bénédiction:)")
 L(BS .. "SHOW_BACKDROP", "Afficher le fond")
@@ -345,7 +346,10 @@ L(BS .. "TIMER", "Minuterie <<1>>")
 L(BS .. "TIMER_NONE", "Aucune minuterie activée")
 L(BS .. "TIMER_NOTE", "Important, utilisez le format min:secs, par ex. 4:50")
 L(BS .. "TIMER_TIP", "Faites un clic droit pour les minuteries")
-L(BS .. "TIMER_WARNING", "Les minuteries ne persisteront pas au-delà de la déconnexion ou du rechargement de l’interface utilisateur.")
+L(
+    BS .. "TIMER_WARNING",
+    "Les minuteries ne persisteront pas au-delà de la déconnexion ou du rechargement de l’interface utilisateur."
+)
 L(BS .. "TIMERS", "Comptes à rebours")
 L(BS .. "TIMER_FORMAT", "Format de l'heure")
 L(BS .. "TIMER_FORMAT_TEXT", "<<1>>j <<2>>h <<3>>m")
@@ -416,9 +420,20 @@ L(BS .. "WRITS", "Commandes de maitre/Repérages/Trésor")
 L(BS .. "WRITS_WRITS", "<<1[Aucune commandes de maitre/1 Commande de maitre/$d Commandes de maitre]>>")
 L(BS .. "WRITS_SURVEYS", "<<1[Aucun repérages/1 Repérage/$d Repérages]>>")
 L(BS .. "WRITS_MAPS", "<<1[Aucune cartes au trésor/1 Carte au trésor/$s Cartes au trésor]>>")
-L(BS .. "XP_BUFF","Experience Point Buff")
--- luacheck: pop
+L(BS .. "XP_BUFF", "Experience Point Buff")
 
 -- Saved Vars
-L(BS .. "ACCOUNT_WIDE","Appliquer les réglages au niveau du compte")
-L(BS .. "ACCOUNT_WIDE_TOOLTIP","Tous les réglages ci-dessous seront les mêmes pour chacun de vos personnages.")
+L(BS .. "ACCOUNT_WIDE", "Appliquer les réglages au niveau du compte")
+L(BS .. "ACCOUNT_WIDE_TOOLTIP", "Tous les réglages ci-dessous seront les mêmes pour chacun de vos personnages.")
+
+-- based on pChat by Puddy, Ayantir, Baertram, DesertDwellers
+L(
+    BS .. "BACKUP_DIALOG_TEXT",
+    "Bar Steward doit apporter des modifications structurelles à vos SavedVariables.\n\n" ..
+    "Veuillez |cff0000logout|r et sauvegardez vos variables enregistrées!\n\n" ..
+    "Appuyez sur le bouton |cffff00Cancel|r pour ouvrir un lien expliquant comment procéder.\n\n" ..
+    "Une fois votre sauvegarde terminée, appuyez sur le bouton |cffff00Confirm|r " ..
+    "pour continuer à charger Bar Steward et lui permettre d'effectuer les modifications."
+)
+L(BS .. "BACKUP_WARNING", "N'oubliez pas de vous déconnecter d'abord!")
+-- luacheck: pop

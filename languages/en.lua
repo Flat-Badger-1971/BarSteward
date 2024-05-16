@@ -17,7 +17,7 @@ L(BS .. "ANNOUNCEMENT", "Show Warning Announcement")
 L(BS .. "ANNOUNCEMENT_FRIEND", "Show Friend Online Announcement")
 L(BS .. "ANNOUNCEMENT_FRIEND_GUILD", "Show Guild Friend Online Announcement")
 L(BS .. "ANNOUNCEMENTS", "Announcements")
-L(BS .. "AP_BUFF","Alliance Point Buff")
+L(BS .. "AP_BUFF", "Alliance Point Buff")
 L(BS .. "ARCHIVAL_FRAGMENTS", "Archival Fragments")
 L(BS .. "ASSISTANT_WIDGET", "Assistant - <<1>>")
 L(BS .. "ASSISTANTS", "Assistants")
@@ -309,6 +309,7 @@ L(BS .. "SECONDS", "Seconds")
 L(BS .. "SELECT_ALL", "Select All")
 L(BS .. "SELECT_NONE", "Select None")
 L(BS .. "SERVER", "Server")
+L(BS .. "SETTINGS", "Settings may not appear correctly until a UI reload.")
 L(BS .. "SHADOWY_VENDOR_RESET", "Time to Shadowy Supplier reset")
 L(BS .. "SHORTEN", "Shorten Name (remove Boon:)")
 L(BS .. "SHOW_BACKDROP", "Show Background")
@@ -426,9 +427,20 @@ L(BS .. "WRITS", "Master Writs/Surveys/Treasure Maps")
 L(BS .. "WRITS_WRITS", "<<1[No Master Writs/1 Master Writ/$d Master Writs]>>")
 L(BS .. "WRITS_SURVEYS", "<<1[No Surveys/1 Survey/$d Surveys]>>")
 L(BS .. "WRITS_MAPS", "<<1[No Treasure Maps/1 Treasure Map/$s Treasure Maps]>>")
-L(BS .. "XP_BUFF","Experience Point Buff")
---luacheck: pop
+L(BS .. "XP_BUFF", "Experience Point Buff")
 
 -- Saved Vars
-L(BS .. "ACCOUNT_WIDE","Account-wide Settings")
-L(BS .. "ACCOUNT_WIDE_TOOLTIP","All the settings below will be the same for each of your characters.")
+L(BS .. "ACCOUNT_WIDE", "Account-wide Settings")
+L(BS .. "ACCOUNT_WIDE_TOOLTIP", "All the settings below will be the same for each of your characters.")
+
+-- based on pChat by Puddy, Ayantir, Baertram, DesertDwellers
+L(
+    BS .. "BACKUP_DIALOG_TEXT",
+    "Bar Steward needs to make structural changes to your SavedVariables.\n\n" ..
+        "Please |cff0000logout|r and backup your SavedVariables!\n\n" ..
+            "Press the |cffff00Cancel|r button to open a link explaining how to do it.\n\n" ..
+                "When your backup is complete, press the |cffff00Confirm|r button " ..
+                    "to continue loading Bar Steward and allow it to make the changes."
+)
+L(BS .. "BACKUP_WARNING", "Remember to LOGOUT first!")
+--luacheck: pop

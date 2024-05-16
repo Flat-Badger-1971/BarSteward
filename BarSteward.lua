@@ -20,30 +20,7 @@ local function trackOtherCurrency(currency)
     end
 end
 
-local function Initialise()
-    -- utiltity
-    if (_G.SLASH_COMMANDS["/rl"] == nil) then
-        _G.SLASH_COMMANDS["/rl"] = function()
-            ReloadUI()
-        end
-    end
-
-    if (_G.SLASH_COMMANDS["/rld"] == nil) then
-        _G.SLASH_COMMANDS["/rld"] = function()
-            if (_G.LibDebugLogger) then
-                _G.LibDebugLogger:ClearLog()
-            end
-            ReloadUI()
-        end
-    end
-
-    BS.RegisterDialogues()
-
-    -- saved variables
-    if (BS.SavedVarsNeedConverting()) then
-        BS.ConvertFromLibSavedVars()
-    end
-
+function BS.ContinueIntialising()
     local vars, rawTableName, isAccountWide, characterId, displayName =
         BS.CreateSavedVariablesManager("BarStewardSavedVars", BS.Defaults, BS.CommonDefaults)
 
@@ -159,6 +136,32 @@ local function Initialise()
     )
 
     BS.GridChanged = true
+end
+
+local function Initialise()
+    -- utiltity
+    if (_G.SLASH_COMMANDS["/rl"] == nil) then
+        _G.SLASH_COMMANDS["/rl"] = function()
+            ReloadUI()
+        end
+    end
+
+    if (_G.SLASH_COMMANDS["/rld"] == nil) then
+        _G.SLASH_COMMANDS["/rld"] = function()
+            if (_G.LibDebugLogger) then
+                _G.LibDebugLogger:ClearLog()
+            end
+            ReloadUI()
+        end
+    end
+
+    BS.RegisterDialogues()
+
+    if (BS.SavedVarsNeedConverting()) then
+        ZO_Dialogs_ShowDialog(BS.Name .. "Backup")
+    else
+       BS.ContinueIntialising()
+    end
 end
 
 function BS.OnAddonLoaded(_, addonName)

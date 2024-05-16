@@ -315,6 +315,7 @@ L(BS .. "SECONDS", "Sekunden")
 L(BS .. "SELECT_ALL", "Alles auswählen")
 L(BS .. "SELECT_NONE", "Nichts auswählen")
 L(BS .. "SERVER", "Server")
+L(BS .. "SETTINGS", "Die Einstellungen werden möglicherweise erst nach einem Neuladen der Benutzeroberfläche korrekt angezeigt.")
 L(BS .. "SHADOWY_VENDOR_RESET", "Verhüllte Versorgerin - verbleibende Zeit")
 L(BS .. "SHORTEN", "Kurzer Name")
 L(BS .. "SHOW_BACKDROP", "Hintergrund anzeigen")
@@ -433,8 +434,19 @@ L(BS .. "WRITS_WRITS", "<<1[Keine Meister Schriebe/1 Meister Schrieb/$d Meister 
 L(BS .. "WRITS_SURVEYS", "<<1[Keine Fundberichte/1 Fundbericht/$d Fundberichte]>>")
 L(BS .. "WRITS_MAPS", "<<1[Keine Schatzkarte/1 Schatzkarte/$s Schatzkarten]>>")
 L(BS .. "XP_BUFF", "Erfahrungspunkte Buff")
---luacheck: pop
 
 -- Saved Vars
-L(BS .. "ACCOUNT_WIDE","Accountweite Einstellungen")
-L(BS .. "ACCOUNT_WIDE_TOOLTIP","Alle Einstellungen sind für alle deine Charaktere identisch.")
+L(BS .. "ACCOUNT_WIDE", "Accountweite Einstellungen")
+L(BS .. "ACCOUNT_WIDE_TOOLTIP", "Alle Einstellungen sind für alle deine Charaktere identisch.")
+
+-- based on pChat by Puddy, Ayantir, Baertram, DesertDwellers
+L(
+    BS .. "BACKUP_DIALOG_TEXT",
+    "Bar Steward muss strukturelle Änderungen an Ihren SavedVariables vornehmen.\n\n" ..
+        "Bitte |cFF0000!logge dich aus!|r und sichere deine SavedVariables!\n\n" ..
+            "Klicken Sie auf die Schaltfläche |cffff00Abbrechen|r, um einen Link zu öffnen, der die Vorgehensweise erklärt.\n\n" ..
+                "Wenn Ihre Sicherung abgeschlossen ist, klicken Sie auf die Schaltfläche |cffff00Confirm|r, " ..
+                    "um mit dem Laden von Bar Steward fortzufahren und ihm zu ermöglichen, die Änderungen vorzunehmen."
+)
+L(BS .. "BACKUP_WARNING", "Denk daran dich zuerst AUSZULOGGEN!")
+--luacheck: pop
