@@ -175,7 +175,7 @@ function BS.RegisterDialogues()
         },
         -- based on pChat by Puddy, Ayantir, Baertram, DesertDwellers
         Backup = {
-            title = {text = "Bar Steward"},
+            title = {text = "|cff9900Bar |r|c4f34ebSteward|r"},
             mainText = {
                 text = GetString(_G.BARSTEWARD_BACKUP_DIALOG_TEXT)
             },
@@ -202,7 +202,7 @@ function BS.RegisterDialogues()
         }
     }
 
-    for name, data in pairs(dialogues) do
-        ZO_Dialogs_RegisterCustomDialog(string.format("%s%s", BS.Name, name), data)
+    for name, config in pairs(dialogues) do
+        ZO_Dialogs_RegisterCustomDialog(string.format("%s%s", BS.Name, name), config)
     end
 end

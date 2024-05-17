@@ -235,6 +235,15 @@ function manager:ConvertToAccountSettings()
     end
 end
 
+-- get the current character's unique id
+function manager:GetCurrentCharacterId()
+    if (self:HasCharacterSettings()) then
+        return self._characterId
+    else
+        return "$AccountWide"
+    end
+end
+
 -- return the raw saved vars table
 function manager:GetRawTable()
     local rawTable = _G[self._rawTableName]
@@ -371,16 +380,18 @@ local function trim(savedVarsTable, defaults)
     end
 
     for key, defaultValue in pairs(defaults) do
-        if (type(defaultValue) == "table") then
-            if (type(savedVarsTable[key])) == "table" then
-                trim(savedVarsTable[key], defaultValue)
+        if (key ~= "WatchedItems") then
+            if (type(defaultValue) == "table") then
+                if (type(savedVarsTable[key])) == "table" then
+                    trim(savedVarsTable[key], defaultValue)
 
-                if (savedVarsTable[key] and (next(savedVarsTable[key]) == nil)) then
-                    savedVarsTable[key] = nil
+                    if (savedVarsTable[key] and (next(savedVarsTable[key]) == nil)) then
+                        savedVarsTable[key] = nil
+                    end
                 end
+            elseif (savedVarsTable[key] == defaultValue) then
+                savedVarsTable[key] = nil
             end
-        elseif (savedVarsTable[key] == defaultValue) then
-            savedVarsTable[key] = nil
         end
     end
 end
@@ -404,35 +415,43 @@ local function fillDefaults(t, defaults)
 end
 
 local function removeDefaults()
-    local character = BS.VarData.AccountWide and "$AccountWide" or BS.VarData.CharacterId
-    local rawTable = _G[BS.VarData.RawTableName]
-    local rawSavedVarsTable = searchPath(rawTable, BS.VarData.Profile, BS.VarData.DisplayName, character)
+    local character = BS.Vars:GetCurrentCharacterId()
+    local rawTable = BS.Vars:GetRawTable()
+    local profile = GetWorldName()
+    local displayName = GetDisplayName()
+    local rawSavedVarsTable = searchPath(rawTable, profile, displayName, character)
+    local commonVars = BS.Vars:GetCommon()
 
     trim(rawSavedVarsTable, BS.Defaults)
+    trim(commonVars, BS.CommonDefaults)
 end
 
 local function onLogout()
-    if (BS.VarData) then
-        removeDefaults()
+    removeDefaults()
 
-        local rawTable = _G[BS.VarData.RawTableName]
-        local nextKey
+    local rawTable = _G[BS.VarData.RawTableName]
+    local nextKey
 
-        repeat
-            nextKey = next(rawTable, nextKey)
-        until nextKey ~= "version" and nextKey ~= "$LastCharacterName"
+    repeat
+        nextKey = next(rawTable, nextKey)
+    until nextKey ~= "version" and nextKey ~= "$LastCharacterName"
 
-        if (nextKey == nil) then
-            rawTable.version = nil
-            rawTable["$LastCharacterName"] = nil
-        end
+    if (nextKey == nil) then
+        rawTable.version = nil
+        rawTable["$LastCharacterName"] = nil
     end
 end
 
 local function onLogoutCancelled()
-    local rawTable = _G[BS.VarData.RawTableName]
+    local character = BS.Vars:GetCurrentCharacterId()
+    local rawTable = BS.Vars:GetRawTable()
+    local profile = GetWorldName()
+    local displayName = GetDisplayName()
+    local rawSavedVarsTable = searchPath(rawTable, profile, displayName, character)
+    local commonVars = BS.Vars:GetCommon()
 
-    fillDefaults(rawTable, BS.Defaults)
+    fillDefaults(rawSavedVarsTable, BS.Defaults)
+    fillDefaults(commonVars, BS.CommonDefaults)
 end
 --*** ***
 
@@ -481,6 +500,16 @@ local function checkCommon(vars, common)
     return common
 end
 
+local redundant = {"SurveyTracking", "WritTracking"}
+
+local function removeRedundant(vars)
+    for name, _ in pairs(vars) do
+        if (ZO_IsElementInNumericallyIndexedTable(redundant, name)) then
+            vars[name] = nil
+        end
+    end
+end
+
 -- converts a libSavedVars type saved vars file to the type used by this class
 function BS.ConvertFromLibSavedVars()
     local vars = _G[BS.Name .. "SavedVars"]
@@ -494,6 +523,7 @@ function BS.ConvertFromLibSavedVars()
                 for character, info in pairs(accountVars) do
                     if (character == "$AccountWide" and info.Account) then
                         common = checkCommon(info.Account, common)
+                        removeRedundant(info.Account)
                         vars[server][account][character] = info.Account
                     elseif (info.Characters and BS.CountElements(info.Characters) > 2) then
                         local characterInfo = info.Characters
@@ -502,6 +532,7 @@ function BS.ConvertFromLibSavedVars()
                         common = checkCommon(characterInfo, common)
                         characterInfo["$LastCharacterName"] = info["$LastCharacterName"]
                         characterInfo.LibSavedVars = nil
+                        removeRedundant(characterInfo)
                         vars[server][account][character] = characterInfo
                     elseif (info.Characters) then
                         vars[server][account][character] = nil

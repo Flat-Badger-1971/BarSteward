@@ -795,7 +795,6 @@ BS.CommonDefaults = {
         [BS.PERFECT_ROE] = true,
         [BS.POTENT_NIRNCRUX] = true
     },
-    WritTracking = {},
     Updates = {}
 }
 

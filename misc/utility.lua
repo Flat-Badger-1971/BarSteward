@@ -1589,7 +1589,7 @@ function BS.GetVar(name, widget)
             value = BS.Vars[name]
 
             if (value == nil) then
-                value = BS.SavedVarDefaults[name]
+                value = BS.Defaults[name]
             end
         end
     end
