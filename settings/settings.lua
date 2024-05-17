@@ -1,7 +1,7 @@
 local BS = _G.BarSteward
 
 BS.LAM = _G.LibAddonMenu2
-BS.VERSION = "2.1.16"
+BS.VERSION = "3.0.0"
 
 local panel = {
     type = "panel",
@@ -2159,6 +2159,7 @@ local function getWidgetSettings()
     local numBaseControls = #controls
     local categories = {}
     local categoryIndex = {}
+    local catCount = {}
 
     if (BS.Vars.Categories) then
         for k, cat in pairs(BS.CATEGORIES) do
@@ -2281,6 +2282,7 @@ local function getWidgetSettings()
         if (BS.Vars.Categories) then
             categories[vars.Cat].controls[categoryIndex[vars.Cat]] = widgetData
             categoryIndex[vars.Cat] = categoryIndex[vars.Cat] + 1
+            catCount[vars.Cat] = (catCount[vars.Cat] or 0) + ((BS.Vars.Controls[k].Bar ~= 0) and 1 or 0)
         else
             controls[idx + numBaseControls] = widgetData
         end
@@ -2289,12 +2291,14 @@ local function getWidgetSettings()
     if (BS.Vars.Categories) then
         local cats = {}
 
-        for _, cat in pairs(categories) do
+        for catId, cat in pairs(categories) do
             if (BS.Vars.CategoriesCount) then
                 cat.name =
                     string.format(
-                    "%s  %s %d|r",
+                    "%s  %s %d|r%s/%d|r",
                     cat.name,
+                    BS.ARGBConvert(BS.Defaults.DefaultOkColour),
+                    catCount[catId],
                     BS.ARGBConvert(BS.Defaults.DefaultWarningColour),
                     #cat.controls
                 )

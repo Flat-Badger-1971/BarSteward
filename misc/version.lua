@@ -83,10 +83,10 @@ function BS.VersionCheck()
     end
 
     if (needsUpdate(3000)) then
-        -- add back missing wacthed items
-        local watchedItems = BS.Vars:GetCommon("WatchedItems")
+        -- add back missing watched items
+        local watchedItems = BS.Vars:GetCommon("WatchedItems") or {}
 
-        if (watchedItems[BS.PERFECT_ROE] == nil)then
+        if (watchedItems[BS.PERFECT_ROE] == nil) then
             BS.Vars:SetCommon(true, "WatchedItems", BS.PERFECT_ROE)
         end
 
@@ -95,5 +95,13 @@ function BS.VersionCheck()
         end
 
         BS.Vars:SetCommon(true, "Updates", 3000)
+    end
+end
+
+function BS.SetVersionCheck()
+    local versions = {2000, 2006, 2010, 2111, 3000}
+
+    for _, version in ipairs(versions) do
+        BS.Vars:SetCommon(true, "Updates", version)
     end
 end

@@ -33,7 +33,12 @@ function BS.ContinueIntialising()
     }
 
     BS.CheckVars(BS.Vars)
-    BS.VersionCheck()
+
+    if (BS.NewVars) then
+        BS.SetVersionCheck()
+    else
+        BS.VersionCheck()
+    end
 
     -- gold tracker
     BS.RegisterForEvent(_G.EVENT_PLAYER_ACTIVATED, trackGold)
@@ -160,7 +165,7 @@ local function Initialise()
     if (BS.SavedVarsNeedConverting()) then
         ZO_Dialogs_ShowDialog(BS.Name .. "Backup")
     else
-       BS.ContinueIntialising()
+        BS.ContinueIntialising()
     end
 end
 

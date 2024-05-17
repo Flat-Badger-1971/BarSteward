@@ -27,10 +27,10 @@ local metatable = {
     end
 }
 
-function manager:New(varFileName, defaults, CommonDefaults)
+function manager:New(varFileName, defaults, commonDefaults)
     local managerObject = self:Subclass()
     local rawTableName, isAccountWide, characterId, displayName =
-        managerObject:Initialise(varFileName, defaults, CommonDefaults)
+        managerObject:Initialise(varFileName, defaults, commonDefaults)
 
     return setmetatable(managerObject, metatable), rawTableName, isAccountWide, characterId, displayName
 end
@@ -57,6 +57,13 @@ function manager:LoadSavedVars()
             ZO_SavedVars:NewCharacterIdSettings(self._rawTableName, self._version, nil, self._defaults, self._profile)
     else
         self._vars = ZO_SavedVars:NewAccountWide(self._rawTableName, self._version, nil, self._defaults, self._profile)
+    end
+
+    -- check common defaults
+    for key, value in pairs(self._commonDefaults) do
+        if (not self:GetCommon(key)) then
+            self:SetCommon(value, key)
+        end
     end
 
     local rawTable = self:GetRawTable()
@@ -276,17 +283,6 @@ function simpleCopy(t, excludeCommon)
     return output
 end
 
--- generic table element count (#table only works correctly on sequentially numerically indexed tables)
-local function countElements(t)
-    local count = 0
-
-    for _, _ in pairs(t) do
-        count = count + 1
-    end
-
-    return count
-end
-
 -- *** path functions from zo_savedvars.lua ***
 -- find the supplied path and return the value
 function searchPath(t, ...)
@@ -446,6 +442,13 @@ end
 function BS.SavedVarsNeedConverting()
     local rawTable = _G[BS.Name .. "SavedVars"]
 
+    if (rawTable == nil) then
+        -- new installation
+        BS.NewVars = true
+
+        return false
+    end
+
     return searchPath(rawTable, GetWorldName(), GetDisplayName(), "$AccountWide", "COMMON") == nil
 end
 
@@ -492,7 +495,7 @@ function BS.ConvertFromLibSavedVars()
                     if (character == "$AccountWide" and info.Account) then
                         common = checkCommon(info.Account, common)
                         vars[server][account][character] = info.Account
-                    elseif (info.Characters and countElements(info.Characters) > 2) then
+                    elseif (info.Characters and BS.CountElements(info.Characters) > 2) then
                         local characterInfo = info.Characters
 
                         characterOnly[character] = true

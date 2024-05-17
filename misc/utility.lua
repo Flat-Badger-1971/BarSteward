@@ -1722,66 +1722,15 @@ function BS.SecondsToMinutes(secondsValue)
     return string.format("%d:%02d", minutes, seconds)
 end
 
-local function checkCommon(vars, common)
-    for name, settings in pairs(vars) do
-        if (ZO_IsElementInNumericallyIndexedTable(BS.COMMON_SETTINGS, name)) then
-            if (type(settings) == "table") then
-                for k, v in pairs(settings) do
-                    common[name] = common[name] or {}
-                    common[name][k] = v
-                end
-            else
-                common[name] = settings
-            end
-
-            vars[name] = nil
-        end
-    end
-
-    return common
-end
-
-local function countElements(t)
+-- generic table element count (#table only works correctly on sequentially numerically indexed tables)
+function BS.CountElements(t)
     local count = 0
 
-    for _, _ in pairs(t) do
+    for _ in next, t do
         count = count + 1
     end
 
     return count
-end
-
-function BS.ConvertFromLibSavedVars(savedVarsName)
-    local vars = _G[savedVarsName]
-
-    for server, serverVars in pairs(vars) do
-        for account, accountVars in pairs(serverVars) do
-            if (not vars[server][account]["$AccountWide"].COMMON) then
-                local characterOnly = {}
-                local common = {}
-
-                for character, info in pairs(accountVars) do
-                    if (character == "$AccountWide" and info.Account) then
-                        common = checkCommon(info.Account, common)
-                        vars[server][account][character] = info.Account
-                    elseif (info.Characters and countElements(info.Characters) > 2) then
-                        local characterInfo = info.Characters
-
-                        characterOnly[character] = true
-                        common = checkCommon(characterInfo, common)
-                        characterInfo["$LastCharacterName"] = info["$LastCharacterName"]
-                        characterInfo.LibSavedVars = nil
-                        vars[server][account][character] = characterInfo
-                    elseif (info.Characters) then
-                        vars[server][account][character] = nil
-                    end
-                end
-
-                vars[server][account]["$AccountWide"].COMMON = common
-                vars[server][account]["$AccountWide"].COMMON.CharacterSettings = characterOnly
-            end
-        end
-    end
 end
 
 function BS.ToggleBar(index)
