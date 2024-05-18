@@ -1,38 +1,38 @@
 local manager = ZO_Object:Subclass()
 local searchPath, setPath, simpleCopy
 
--- set default getter/setter for vars
--- pretty sure I'm doing this wrong, but it works, so, meh...
-local metatable = {
-    __index = function(t, key)
-        -- if the key exists in the main class - return that
-        local parentClass = rawget(t, "__parentClasses")[1]
-
-        if (parentClass[key]) then
-            return parentClass[key]
-        end
-
-        -- assume anything that's not part of the main class is an attempt to read a saved variable
-        local vars = rawget(t, "_vars")
-
-        if (vars) then
-            return vars[key]
-        end
-    end,
-    __newindex = function(t, key, value)
-        -- can't use rawset - doesn't like empty tables for some reason
-        local vars = rawget(t, "_vars")
-
-        vars[key] = value
-    end
-}
-
 function manager:New(varFileName, defaults, commonDefaults)
     local managerObject = self:Subclass()
-    local rawTableName, isAccountWide, characterId, displayName =
-        managerObject:Initialise(varFileName, defaults, commonDefaults)
 
-    return setmetatable(managerObject, metatable), rawTableName, isAccountWide, characterId, displayName
+    managerObject:Initialise(varFileName, defaults, commonDefaults)
+
+    -- set default getter/setter for vars
+    -- pretty sure I'm doing this wrong, but it works, so, meh...
+    local metatable = {
+        __index = function(t, key)
+            -- if the key exists in the main class - return that
+            local parentClass = rawget(t, "__parentClasses")[1]
+
+            if (parentClass[key]) then
+                return parentClass[key]
+            end
+
+            -- assume anything that's not part of the main class is an attempt to read a saved variable
+            local vars = rawget(t, "_vars")
+
+            if (vars) then
+                return vars[key]
+            end
+        end,
+        __newindex = function(t, key, value)
+            -- can't use rawset - doesn't like empty tables for some reason
+            local vars = rawget(t, "_vars")
+
+            vars[key] = value
+        end
+    }
+
+    return setmetatable(managerObject, metatable)
 end
 
 function manager:Initialise(varFileName, defaults, commonDefaults)
@@ -46,8 +46,6 @@ function manager:Initialise(varFileName, defaults, commonDefaults)
     self._useCharacterSettings = self:HasCharacterSettings()
 
     self:LoadSavedVars()
-
-    return self._rawTableName, self._vars.IsAccountWide, self._characterId, self._displayName
 end
 
 -- Load/Reload the saved vars
@@ -270,6 +268,75 @@ function manager:AddAccountSettingsCheckbox()
     }
 end
 
+function manager:TrimDefaults(savedVarsTable, defaults)
+    local valid = savedVarsTable ~= nil
+
+    valid = valid and type(savedVarsTable) == "table"
+    valid = valid and defaults
+
+    if (not valid) then
+        return
+    end
+
+    for key, defaultValue in pairs(defaults) do
+        if (key ~= "WatchedItems") then
+            if (type(defaultValue) == "table") then
+                if (type(savedVarsTable[key])) == "table" then
+                    self:TrimDefaults(savedVarsTable[key], defaultValue)
+
+                    if (savedVarsTable[key] and (next(savedVarsTable[key]) == nil)) then
+                        savedVarsTable[key] = nil
+                    end
+                end
+            elseif (savedVarsTable[key] == defaultValue) then
+                savedVarsTable[key] = nil
+            end
+        end
+    end
+end
+
+-- loop through the default values - if the saved value matches the default value
+-- then remove it. It's just wasting space as the default values will be loaded anyway
+-- *** based on code from LibSavedVars ***
+function manager:RemoveDefaults()
+    local character = self:GetCurrentCharacterId()
+    local rawTable = self:GetRawTable()
+    local rawSavedVarsTable = searchPath(rawTable, self._profile, self._displayName, character)
+    local commonVars = self:GetCommon()
+
+    self:TrimDefaults(rawSavedVarsTable, self._defaults)
+    self:TrimDefaults(commonVars, self._commonDefaults)
+end
+
+function manager:FillDefaults(t, defaults)
+    if ((t == nil) or (type(t) ~= "table") or (defaults == nil)) then
+        return
+    end
+
+    for key, defaultValue in pairs(defaults) do
+        if (type(defaultValue)) == "table" then
+            if (t[key] == nil) then
+                t[key] = {}
+            end
+
+            self:FillDefaults(t[key], defaultValue)
+        elseif (t[key] == nil) then
+            t[key] = defaultValue
+        end
+    end
+end
+
+-- add defaults back into the saved vars file
+function manager:RestoreDefaultValues()
+    local character = self:GetCurrentCharacterId()
+    local rawTable = self:GetRawTable()
+    local rawSavedVarsTable = searchPath(rawTable, self._profile, self._displayName, character)
+    local commonVars = self:GetCommon()
+
+    self:FillDefaults(rawSavedVarsTable, self._defaults)
+    self:FillDefaults(commonVars, self._commonDefaults)
+end
+
 -- private functions
 local BS = _G.BarSteward
 
@@ -335,7 +402,7 @@ local function createPath(t, ...)
     return current, container, containerKey
 end
 
--- set the value of path, creating a new one if it does not already exist
+-- set the value of path, creating a new one if it doesn't already exist
 function setPath(t, value, ...)
     if value ~= nil then
         createPath(t, ...)
@@ -365,95 +432,6 @@ function setPath(t, value, ...)
     end
 end
 -- *** ***
-
--- loop through the default values - if the saved value matches the default value
--- then remove it. It's just wasting space as the default values will be loaded anyway
--- *** based on code from LibSavedVars ***
-local function trim(savedVarsTable, defaults)
-    local valid = savedVarsTable ~= nil
-
-    valid = valid and type(savedVarsTable) == "table"
-    valid = valid and defaults
-
-    if (not valid) then
-        return
-    end
-
-    for key, defaultValue in pairs(defaults) do
-        if (key ~= "WatchedItems") then
-            if (type(defaultValue) == "table") then
-                if (type(savedVarsTable[key])) == "table" then
-                    trim(savedVarsTable[key], defaultValue)
-
-                    if (savedVarsTable[key] and (next(savedVarsTable[key]) == nil)) then
-                        savedVarsTable[key] = nil
-                    end
-                end
-            elseif (savedVarsTable[key] == defaultValue) then
-                savedVarsTable[key] = nil
-            end
-        end
-    end
-end
-
-local function fillDefaults(t, defaults)
-    if ((t == nil) or (type(t) ~= "table") or (defaults == nil)) then
-        return
-    end
-
-    for key, defaultValue in pairs(defaults) do
-        if (type(defaultValue)) == "table" then
-            if (t[key] == nil) then
-                t[key] = {}
-            end
-
-            fillDefaults(t[key], defaultValue)
-        elseif (t[key] == nil) then
-            t[key] = defaultValue
-        end
-    end
-end
-
-local function removeDefaults()
-    local character = BS.Vars:GetCurrentCharacterId()
-    local rawTable = BS.Vars:GetRawTable()
-    local profile = GetWorldName()
-    local displayName = GetDisplayName()
-    local rawSavedVarsTable = searchPath(rawTable, profile, displayName, character)
-    local commonVars = BS.Vars:GetCommon()
-
-    trim(rawSavedVarsTable, BS.Defaults)
-    trim(commonVars, BS.CommonDefaults)
-end
-
-local function onLogout()
-    removeDefaults()
-
-    local rawTable = _G[BS.VarData.RawTableName]
-    local nextKey
-
-    repeat
-        nextKey = next(rawTable, nextKey)
-    until nextKey ~= "version" and nextKey ~= "$LastCharacterName"
-
-    if (nextKey == nil) then
-        rawTable.version = nil
-        rawTable["$LastCharacterName"] = nil
-    end
-end
-
-local function onLogoutCancelled()
-    local character = BS.Vars:GetCurrentCharacterId()
-    local rawTable = BS.Vars:GetRawTable()
-    local profile = GetWorldName()
-    local displayName = GetDisplayName()
-    local rawSavedVarsTable = searchPath(rawTable, profile, displayName, character)
-    local commonVars = BS.Vars:GetCommon()
-
-    fillDefaults(rawSavedVarsTable, BS.Defaults)
-    fillDefaults(commonVars, BS.CommonDefaults)
-end
---*** ***
 
 -- Helper functions
 -- returns whether the saved vars file has been converted from the libSavedVars variant to
@@ -547,10 +525,20 @@ function BS.ConvertFromLibSavedVars()
 end
 
 -- apply logout hooks for default trimming, create a new saved vars manager and return it
+local function onLogout()
+    BS.Vars:RemoveDefaults()
+end
+
+local function onLogoutCancelled()
+    BS.Vars:RestoreDefaultValues()
+end
+
 function BS.CreateSavedVariablesManager(varsFilename, defaults, commonDefaults)
+    local savedVarsManager = manager:New(varsFilename, defaults, commonDefaults)
+
     ZO_PreHook("Logout", onLogout)
     ZO_PreHook("Quit", onLogout)
     ZO_PreHook("CancelLogout", onLogoutCancelled)
 
-    return manager:New(varsFilename, defaults, commonDefaults)
+    return savedVarsManager
 end

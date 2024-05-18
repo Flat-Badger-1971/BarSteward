@@ -21,17 +21,7 @@ local function trackOtherCurrency(currency)
 end
 
 function BS.ContinueIntialising()
-    local vars, rawTableName, isAccountWide, characterId, displayName =
-        BS.CreateSavedVariablesManager("BarStewardSavedVars", BS.Defaults, BS.CommonDefaults)
-
-    BS.Vars = vars
-    BS.VarData = {
-        RawTableName = rawTableName,
-        IsAccountWide = isAccountWide,
-        CharacterId = characterId,
-        DisplayName = displayName
-    }
-
+    BS.Vars = BS.CreateSavedVariablesManager("BarStewardSavedVars", BS.Defaults, BS.CommonDefaults)
     BS.CheckVars(BS.Vars)
 
     if (BS.NewVars) then
@@ -144,7 +134,7 @@ function BS.ContinueIntialising()
 end
 
 local function Initialise()
-    -- utiltity
+    -- *** utiltity ***
     if (_G.SLASH_COMMANDS["/rl"] == nil) then
         _G.SLASH_COMMANDS["/rl"] = function()
             ReloadUI()
@@ -159,6 +149,7 @@ local function Initialise()
             ReloadUI()
         end
     end
+    -- ***
 
     BS.RegisterDialogues()
 
