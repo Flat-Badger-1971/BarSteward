@@ -67,7 +67,7 @@ BS.widgets[BS.W_BAG_SPACE] = {
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
     tooltip = BS.Format(_G.SI_GAMEPAD_MAIL_INBOX_INVENTORY):gsub(":", ""),
     icon = "tooltips/icon_bag",
-    onClick = function()
+    onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("inventory")
         else
@@ -171,7 +171,7 @@ BS.widgets[BS.W_REPAIR_COST] = {
     icon = "ava/ava_resourcestatus_tabicon_defense_inactive",
     tooltip = GetString(_G.BARSTEWARD_REPAIR_COST),
     hideWhenEqual = 0,
-    onClick = function()
+    onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("inventory")
         else
@@ -268,7 +268,7 @@ BS.widgets[BS.W_DURABILITY] = {
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
     icon = "inventory/inventory_tabicon_armor_up",
     tooltip = GetString(_G.BARSTEWARD_DURABILITY),
-    onClick = function()
+    onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("inventory")
         else
@@ -1112,7 +1112,7 @@ BS.widgets[BS.W_RANDOM_MEMENTO] = {
     tooltip = GetString(_G.BARSTEWARD_RANDOM_MEMENTO),
     icon = "icons/collectible_memento_blizzard",
     cooldown = true,
-    onClick = function()
+    onLeftClick = function()
         randomOnClick(mementos, BS.W_RANDOM_MEMENTO)
     end
 }
@@ -1133,7 +1133,7 @@ BS.widgets[BS.W_RANDOM_PET] = {
     tooltip = GetString(_G.BARSTEWARD_RANDOM_PET),
     icon = "icons/pet_sphynxlynx",
     cooldown = true,
-    onClick = function()
+    onLeftClick = function()
         randomOnClick(pets, BS.W_RANDOM_PET)
     end
 }
@@ -1153,7 +1153,7 @@ BS.widgets[BS.W_RANDOM_MOUNT] = {
     event = _G.EVENT_COLLECTION_UPDATED,
     tooltip = GetString(_G.BARSTEWARD_RANDOM_MOUNT),
     icon = "collections/random_anymount",
-    onClick = function()
+    onLeftClick = function()
         randomOnClick(mounts, BS.W_RANDOM_MOUNT)
     end
 }
@@ -1173,7 +1173,7 @@ BS.widgets[BS.W_RANDOM_EMOTE] = {
     event = _G.EVENT_COLLECTION_UPDATED,
     tooltip = GetString(_G.BARSTEWARD_RANDOM_EMOTE),
     icon = "icons/emotes/emotecategoryicon_fidget_personality",
-    onClick = function()
+    onLeftClick = function()
         if (#emotes == 0) then
             return
         end
@@ -1272,7 +1272,7 @@ BS.widgets[BS.W_CONTAINERS] = {
     icon = "icons/mail_armor_container",
     tooltip = BS.Format(_G.SI_ITEMTYPEDISPLAYCATEGORY26),
     hideWhenEqual = 0,
-    onClick = function()
+    onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("inventory")
         else
@@ -1299,7 +1299,7 @@ BS.widgets[BS.W_TREASURE] = {
     icon = "icons/quest_strosmkai_open_treasure_chest",
     tooltip = BS.Format(_G.SI_ITEMTYPE56),
     hideWhenEqual = 0,
-    onClick = function()
+    onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("inventory")
         else
@@ -1326,7 +1326,7 @@ BS.widgets[BS.W_FURNISHINGS] = {
     icon = "icons/servicemappins/servicepin_furnishings",
     tooltip = BS.Format(_G.SI_ITEMFILTERTYPE21),
     hideWhenEqual = 0,
-    onClick = function()
+    onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("inventory")
         else
@@ -1356,7 +1356,7 @@ BS.widgets[BS.W_COMPANION_GEAR] = {
     icon = "inventory/inventory_trait_companionequipment_icon",
     tooltip = BS.Format(_G.SI_ITEMFILTERTYPE27),
     hideWhenEqual = 0,
-    onClick = function()
+    onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("inventory")
         else
@@ -1386,7 +1386,7 @@ BS.widgets[BS.W_MUSEUM] = {
     icon = "icons/servicemappins/servicepin_museum",
     tooltip = BS.Format(_G.SI_SPECIALIZEDITEMTYPE103),
     hideWhenEqual = 0,
-    onClick = function()
+    onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("inventory")
         else
@@ -1505,7 +1505,7 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
     tooltip = GetString(_G.BARSTEWARD_EQUIPPED_POISON),
     icon = "icons/crafting_poison_001_cyan_003",
     hideWhenEqual = 0,
-    onClick = function()
+    onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("inventory")
         else
@@ -1656,7 +1656,7 @@ BS.widgets[BS.W_FRAGMENTS] = {
 
         return collected
     end,
-    onClick = function()
+    onLeftClick = function()
         COLLECTIONS_BOOK:BrowseToCollectible(BS.CollectibleId)
     end,
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
@@ -1801,7 +1801,7 @@ BS.widgets[BS.W_RUNEBOXES] = {
 
         return collected
     end,
-    onClick = function()
+    onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("inventory")
         else
@@ -1904,7 +1904,7 @@ BS.widgets[BS.W_RECIPE_WATCH] = {
     icon = "icons/event_newlifefestival_2016_recipe",
     tooltip = GetString(_G.BARSTEWARD_RECIPES),
     hideWhenEqual = 0,
-    onClick = function()
+    onLeftClick = function()
         BS.Vars.FoundRecipes = {}
         BS.Vars.FoundCount = 0
         ZO_Tooltips_HideTextTooltip()
@@ -2027,7 +2027,7 @@ BS.widgets[BS.W_WEAPON_CHARGE] = {
     event = {_G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE, _G.EVENT_ACTIVE_WEAPON_PAIR_CHANGED},
     icon = "icons/alchemy/crafting_alchemy_trait_weaponcrit_match",
     tooltip = GetString(_G.BARSTEWARD_WEAPON_CHARGE),
-    onClick = function()
+    onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("inventory")
         else
