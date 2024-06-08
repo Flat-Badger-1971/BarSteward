@@ -654,7 +654,6 @@ BS.widgets[BS.W_LOCKPICKS] = {
 local linkCache = {}
 local previousCounts = {}
 local DEBUG = false
-local luminousInk = 204881
 
 BS.widgets[BS.W_WATCHED_ITEMS] = {
     -- v1.3.14
