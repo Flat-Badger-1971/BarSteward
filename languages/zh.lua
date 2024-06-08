@@ -416,7 +416,7 @@ L(BS .. "ACCOUNT_WIDE_TOOLTIP", "以下的所有设置将会同步至你的每�
 L(
     BS .. "BACKUP_DIALOG_TEXT",
     "Bar Steward 需要对您的 SavedVariables 进行结构性更改。\n\n" ..
-        "请 |cff0000登出|r 并备份您的 SavedVariables！\n\n" ..
+        "请 |cff0000登出|r 并**备份**你的 SavedVariables！\n\n" ..
             "按 |cffff00取消|r 按钮打开一个解释如何操作的链接。\n\n备份完成后，按 |cffff00确认|r 按钮继续加载 Bar Steward 并允许其进行更改。"
 )
 L(BS .. "BACKUP_WARNING", "记得先退出！")

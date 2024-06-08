@@ -430,7 +430,7 @@ L(BS .. "ACCOUNT_WIDE_TOOLTIP", "Tous les réglages ci-dessous seront les mêmes
 L(
     BS .. "BACKUP_DIALOG_TEXT",
     "Bar Steward doit apporter des modifications structurelles à vos SavedVariables.\n\n" ..
-    "Veuillez |cff0000logout|r et sauvegardez vos variables enregistrées!\n\n" ..
+    "Veuillez |cff0000logout|r et **SAUVEGARDEZ** vos variables enregistrées!\n\n" ..
     "Appuyez sur le bouton |cffff00Cancel|r pour ouvrir un lien expliquant comment procéder.\n\n" ..
     "Une fois votre sauvegarde terminée, appuyez sur le bouton |cffff00Confirm|r " ..
     "pour continuer à charger Bar Steward et lui permettre d'effectuer les modifications."

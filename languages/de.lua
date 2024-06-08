@@ -443,7 +443,7 @@ L(BS .. "ACCOUNT_WIDE_TOOLTIP", "Alle Einstellungen sind für alle deine Charakt
 L(
     BS .. "BACKUP_DIALOG_TEXT",
     "Bar Steward muss strukturelle Änderungen an Ihren SavedVariables vornehmen.\n\n" ..
-        "Bitte |cFF0000!logge dich aus!|r und sichere deine SavedVariables!\n\n" ..
+        "Bitte |cFF0000!logge dich aus!|r und **SICHERE** deine SavedVariables!\n\n" ..
             "Klicken Sie auf die Schaltfläche |cffff00Abbrechen|r, um einen Link zu öffnen, der die Vorgehensweise erklärt.\n\n" ..
                 "Wenn Ihre Sicherung abgeschlossen ist, klicken Sie auf die Schaltfläche |cffff00Confirm|r, " ..
                     "um mit dem Laden von Bar Steward fortzufahren und ihm zu ermöglichen, die Änderungen vorzunehmen."

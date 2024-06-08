@@ -437,7 +437,7 @@ L(BS .. "ACCOUNT_WIDE_TOOLTIP", "All the settings below will be the same for eac
 L(
     BS .. "BACKUP_DIALOG_TEXT",
     "Bar Steward needs to make structural changes to your SavedVariables.\n\n" ..
-        "Please |cff0000logout|r and backup your SavedVariables!\n\n" ..
+        "Please |cff0000logout|r and **BACKUP** your SavedVariables!\n\n" ..
             "Press the |cffff00Cancel|r button to open a link explaining how to do it.\n\n" ..
                 "When your backup is complete, press the |cffff00Confirm|r button " ..
                     "to continue loading Bar Steward and allow it to make the changes."
