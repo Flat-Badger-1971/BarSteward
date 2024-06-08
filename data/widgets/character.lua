@@ -1307,7 +1307,7 @@ BS.widgets[BS.W_XP_BUFF] = {
 local function changeStatus()
     local status = GetPlayerStatus()
 
-    if (status== _G.PLAYER_STATUS_OFFLINE) then
+    if (status == _G.PLAYER_STATUS_OFFLINE) then
         status = _G.PLAYER_STATUS_ONLINE
     else
         status = status + 1
@@ -1350,4 +1350,71 @@ BS.widgets[BS.W_PLAYER_STATUS] = {
             default = false
         }
     }
+}
+
+BS.widgets[BS.W_LFG_ROLE] = {
+    -- v3.0.0
+    name = "playerRole",
+    update = function(widget)
+        local role = GetSelectedLFGRole()
+        local icon = GetRoleIcon(role)
+        local text = BS.Format(_G["SI_LFGROLE" .. role])
+
+        widget:SetIcon(icon)
+        widget:SetValue(text)
+
+        return role
+    end,
+    hideWhenEqual = 0,
+    callback = {[_G.PREFERRED_ROLES] = {"LFGRoleChanged"}},
+    icon = "lfg/lfg_icon_dps",
+    onLeftClick = function()
+        if (IsInGamepadPreferredMode()) then
+            SCENE_MANAGER:Show("gamepad_groupList")
+        else
+            SCENE_MANAGER:Show("groupMenuKeyboard")
+        end
+    end,
+    tooltip = BS.Format(_G.SI_GAMEPAD_GROUP_PREFERRED_ROLES_HEADER),
+    customSettings = {
+        [1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_HIDE_TEXT),
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_LFG_ROLE].NoValue or false
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_LFG_ROLE].NoValue = value
+                BS.GetWidget(BS.W_LFG_ROLE):SetNoValue(value)
+                BS.RegenerateBar(BS.Vars.Controls[BS.W_LFG_ROLE].Bar, BS.W_LFG_ROLE)
+            end,
+            width = "full",
+            default = false
+        }
+    }
+}
+
+BS.widgets[BS.W_TITLE] = {
+    -- v3.0.0
+    name = "playerTitle",
+    update = function(widget, event, unitTag)
+        if (event == "initial" or unitTag == "player") then
+            local title = BS.Format(GetUnitTitle("player"))
+
+            widget:SetValue((title == "") and BS.Format(_G.SI_STATS_NO_TITLE) or title)
+
+            return title
+        end
+    end,
+    hideWhenEqual = "",
+    event = _G.EVENT_TITLE_UPDATE,
+    icon = "dye/dyes_tabicon_player_up",
+    onLeftClick = function()
+        if (IsInGamepadPreferredMode()) then
+            SCENE_MANAGER:Show("gamepad_stats_root")
+        else
+            SCENE_MANAGER:Show("stats")
+        end
+    end,
+    tooltip = BS.Format(_G.SI_STATS_TITLE)
 }

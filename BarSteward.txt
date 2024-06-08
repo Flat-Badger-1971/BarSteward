@@ -1,7 +1,7 @@
 ## Title: Bar Steward
 ## Description: Data broker style bar for easy display of in-game metrics
 ## Author: Flat Badger
-## APIVersion: 101041
+## APIVersion: 101042
 ## AddOnVersion: 3000
 ## Version: 3.0.0
 ## SavedVariables: BarStewardSavedVars

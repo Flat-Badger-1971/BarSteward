@@ -773,7 +773,28 @@ BS.Defaults = {
         },
         [BS.W_FISHING] = {
             Cat = cat.Activities
-        }
+        },
+        [BS.W_LFG_ROLE] = {
+            Cat = cat.Character
+        },
+        [BS.W_TZOZABRAR] = {
+            Cat = cat.Assistants
+        },
+        [BS.W_ERI] = {
+            Cat = cat.Assistants
+        },
+        [BS.W_XYN] = {
+            Cat = cat.Assistants
+        },
+        [BS.W_SCRIBING_INK] = {
+            Cat = cat.Inventory,
+            ColourValues="okc,wv,wc,dv,wc",
+            DangerValue = 10,
+            WarningValue = 30
+        },
+        [BS.W_TITLE] = {
+            Cat = cat.Character
+        },
     }
 }
 

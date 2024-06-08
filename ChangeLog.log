@@ -3,9 +3,16 @@ Remove LibSavedVars dependency
 Copy bar setup between servers/accounts/characters
 Stolen items widget - remove count of items in the bank as they can't be stored in a bank
 Fishing widget added
+Luminous Ink widget added
+Group Role widget added
+Player Title widget added
 Inventory widgets left click fix
 Random emote no longer selects locked emotes
+Missing assistants added
 Code refactor
+
+[color=#ff9900][b]Version: 2.1.17 ---------------[/b][/color]
+Fix inventory widget clicks
 
 [color=#ff9900][b]Version: 2.1.16 ---------------[/b][/color]
 Left click Player Status widget to change status

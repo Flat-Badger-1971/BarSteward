@@ -654,6 +654,7 @@ BS.widgets[BS.W_LOCKPICKS] = {
 local linkCache = {}
 local previousCounts = {}
 local DEBUG = false
+local luminousInk = 204881
 
 BS.widgets[BS.W_WATCHED_ITEMS] = {
     -- v1.3.14
@@ -692,8 +693,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
             for _, data in pairs(_G.SHARED_INVENTORY.bagCache[bag]) do
                 if (data) then
                     local itemId = GetItemId(bag, data.slotIndex)
-
-                    if (BS.Vars.Controls[this][itemId]) then
+                    if (BS.Vars:GetCommon("WatchedItems", itemId)) then
                         if (linkCache[itemId]) then
                             local cnt = data.stackCount
 
@@ -745,7 +745,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
         local minSize = string.rep("_", minSizeNumChars)
 
         for itemId, data in pairs(linkCache) do
-            if (BS.Vars.Controls[this][itemId]) then
+            if (BS.Vars:GetCommon("WatchedItems", itemId)) then
                 local itemCount = count[itemId] or 0
 
                 if (DEBUG) then
@@ -2038,4 +2038,31 @@ BS.widgets[BS.W_WEAPON_CHARGE] = {
             SCENE_MANAGER:Show("gamepad_inventory_root")
         end
     end
+}
+
+BS.widgets[BS.W_SCRIBING_INK] = {
+    -- v3.0.0
+    name = "scribingInkCount",
+    update = function(widget)
+        local this = BS.W_SCRIBING_INK
+        local inkLink = GetScribingInkItemLink()
+        local inkCount =
+            GetItemLinkInventoryCount(inkLink, _G.INVENTORY_COUNT_BAG_OPTION_BACKPACK_AND_BANK_AND_CRAFT_BAG)
+
+        local colour = BS.GetColour(this, "Ok")
+
+        if (inkCount < BS.GetVar("DangerValue", this)) then
+            colour = BS.GetColour(this, "Danger")
+        elseif (inkCount < BS.GetVar("WarningValue", this)) then
+            colour = BS.GetColour(this, "Warning")
+        end
+
+        widget:SetColour(unpack(colour))
+        widget:SetValue(inkCount)
+
+        return inkCount
+    end,
+    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
+    icon = "/icons/item_grimoire_ink",
+    tooltip = ZO_Scribing_Manager.GetFormattedScribingInkName()
 }
