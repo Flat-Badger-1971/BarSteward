@@ -476,6 +476,7 @@ BS.Defaults = {
         [BS.W_WATCHED_ITEMS] = {
             Announce = false,
             Cat = cat.Inventory,
+            NoValue = false,
             [BS.PERFECT_ROE] = true,
             [BS.POTENT_NIRNCRUX] = true
         },

@@ -736,36 +736,39 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
             end
         end
 
-        local barNumber = BS.GetVar("Bar", this)
-        local iconSize =
-            BS.Vars.Bars[barNumber].Override and (BS.Vars.Bars[barNumber].IconSize or BS.GetVar("IconSize")) or
-            BS.GetVar("IconSize")
-        local minSizeNumChars = math.ceil(BS.Vars.IconSize / 8)
-        local minSize = string.rep("_", minSizeNumChars)
+        if (not widget:HasNoValue()) then
+            local barNumber = BS.GetVar("Bar", this)
+            local iconSize =
+                BS.Vars.Bars[barNumber].Override and (BS.Vars.Bars[barNumber].IconSize or BS.GetVar("IconSize")) or
+                BS.GetVar("IconSize")
+            local minSizeNumChars = math.ceil(BS.Vars.IconSize / 8)
+            local minSize = string.rep("_", minSizeNumChars)
 
-        for itemId, data in pairs(linkCache) do
-            if (BS.Vars:GetCommon("WatchedItems", itemId)) then
-                local itemCount = count[itemId] or 0
+            for itemId, data in pairs(linkCache) do
+                if (BS.Vars:GetCommon("WatchedItems", itemId)) then
+                    local itemCount = count[itemId] or 0
 
-                if (DEBUG) then
-                    itemCount = 100
-                end
+                    if (DEBUG) then
+                        itemCount = 100
+                    end
 
-                local countItem = BS.Icon(data.icon, nil, iconSize, iconSize)
-                countText = countText .. countItem .. " " .. itemCount .. " "
-                plainCountText = plainCountText .. minSize .. " " .. itemCount .. " "
+                    local countItem = BS.Icon(data.icon, nil, iconSize, iconSize)
+                    countText = countText .. countItem .. " " .. itemCount .. " "
+                    plainCountText = plainCountText .. minSize .. " " .. itemCount .. " "
 
-                if (not foundIds[itemId]) then
-                    local zoIcon = BS.Icon(data.icon)
+                    if (not foundIds[itemId]) then
+                        local zoIcon = BS.Icon(data.icon)
 
-                    ttt = ttt .. BS.LF .. BS.BAGICON .. " " .. zoIcon .. " " .. "|cf9f9f9" .. data.name .. "|r"
-                    ttt = ttt .. " (0)"
+                        ttt = ttt .. BS.LF .. BS.BAGICON .. " " .. zoIcon .. " " .. "|cf9f9f9" .. data.name .. "|r"
+                        ttt = ttt .. " (0)"
+                    end
                 end
             end
+
+            widget:SetColour(unpack(BS.GetColour(this)))
+            widget:SetValue(BS.Trim(countText), BS.Trim(plainCountText))
         end
 
-        widget:SetColour(unpack(BS.GetColour(this)))
-        widget:SetValue(BS.Trim(countText), BS.Trim(plainCountText))
         widget:SetTooltip(ttt)
 
         BS.ResizeBar(BS.GetVar("Bar", this))
@@ -841,9 +844,27 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
         default = 5
     },
     customSettings = function()
-        local settings = {}
+        local settings
+        local this = BS.W_WATCHED_ITEMS
         local itemIds = BS.Vars:GetCommon("WatchedItems")
-        local vars = BS.Vars.Controls[BS.W_WATCHED_ITEMS]
+        local vars = BS.Vars.Controls[this]
+
+        settings = {
+            [1] = {
+                type = "checkbox",
+                name = GetString(_G.BARSTEWARD_HIDE_TEXT),
+                getFunc = function()
+                    return BS.Vars.Controls[this].NoValue or false
+                end,
+                setFunc = function(value)
+                    BS.Vars.Controls[this].NoValue = value
+                    BS.GetWidget(this):SetNoValue(value)
+                    BS.RegenerateBar(BS.Vars.Controls[this].Bar, this)
+                end,
+                width = "full",
+                default = false
+            }
+        }
 
         for itemId, _ in pairs(itemIds) do
             if (not linkCache[itemId]) then
