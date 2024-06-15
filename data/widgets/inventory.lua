@@ -692,7 +692,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
             for _, data in pairs(_G.SHARED_INVENTORY.bagCache[bag]) do
                 if (data) then
                     local itemId = GetItemId(bag, data.slotIndex)
-                    if (BS.Vars:GetCommon("WatchedItems", itemId)) then
+                    if (itemIds[itemId]) then
                         if (linkCache[itemId]) then
                             local cnt = data.stackCount
 
@@ -741,11 +741,11 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
             local iconSize =
                 BS.Vars.Bars[barNumber].Override and (BS.Vars.Bars[barNumber].IconSize or BS.GetVar("IconSize")) or
                 BS.GetVar("IconSize")
-            local minSizeNumChars = math.ceil(BS.Vars.IconSize / 8)
+            local minSizeNumChars = math.ceil(iconSize / 8)
             local minSize = string.rep("_", minSizeNumChars)
 
             for itemId, data in pairs(linkCache) do
-                if (BS.Vars:GetCommon("WatchedItems", itemId)) then
+                if (itemIds[itemId]) then
                     local itemCount = count[itemId] or 0
 
                     if (DEBUG) then
@@ -894,7 +894,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
                     end,
                     type = "checkbox",
                     getFunc = function()
-                        return vars[itemId]
+                        return BS.Vars:GetCommon("WatchedItems",itemId)
                     end,
                     setFunc = function(value)
                         BS.Vars:SetCommon(value, "WatchedItems", itemId)
