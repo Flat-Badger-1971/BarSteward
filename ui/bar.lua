@@ -736,9 +736,19 @@ function baseBar:Hide()
     self.hidden = true
 end
 
+function baseBar:ForceHide()
+    self.bar.fragment:Hide(BS.FADE_OUT_TIME)
+    self.hidden = true
+end
+
 function baseBar:Show()
     self.bar.fragment:SetHiddenForReason("userHidden", false, BS.FADE_IN_TIME, BS.FADE_OUT_TIME)
     self.hidden = false
+end
+
+function baseBar:ForceShow()
+    self.bar.fragment:Show(BS.FADE_IN_TIME)
+    self.hidden = true
 end
 
 function baseBar:Toggle()

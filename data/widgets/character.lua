@@ -657,6 +657,8 @@ BS.RegisterForEvent(
             else
                 BS.inCombat = false
             end
+
+            BS.HideInCombat()
         end
     end
 )
@@ -1417,4 +1419,38 @@ BS.widgets[BS.W_TITLE] = {
         end
     end,
     tooltip = BS.Format(_G.SI_STATS_TITLE)
+}
+
+BS.widgets[BS.W_BOUNTY] = {
+    -- v3.0.0
+    name = "playerBounty",
+    update = function(widget)
+        local bounty = GetFullBountyPayoffAmount()
+        local infamy = GetInfamyLevel(GetInfamy())
+        local infamyText = BS.Format(_G["SI_INFAMYTHRESHOLDSTYPE" .. infamy])
+        local secondsTillClear = GetSecondsUntilBountyDecaysToZero()
+        local this = BS.W_BOUNTY
+        local colour = BS.GetVar("DefaultColour")
+        local remaining = BS.SecondsToTime(secondsTillClear, true, false, BS.GetVar("HideSeconds", this))
+
+        widget:SetColour(unpack(colour))
+        widget:SetValue(remaining)
+
+        local tt = BS.Format(_G.SI_STATS_BOUNTY_LABEL) .. BS.LF .. BS.LF
+        local formatted = zo_strformat(_G.SI_JUSTICE_INFAMY_LEVEL_CHANGED, infamyText)
+
+        formatted = zo_strformat("<<zC:1>>", formatted)
+
+        tt = tt .. "|cf9f9f9"
+        tt = tt .. zo_strformat(_G.SI_JUSTICE_BOUNTY_SET, bounty):gsub("%.", "") .. BS.LF
+        tt = tt .. formatted .. "|r"
+
+        widget.tooltip = tt
+
+        return secondsTillClear
+    end,
+    timer = 1000,
+    hideWhenEqual = 0,
+    icon = "stats/justice_bounty_icon-red",
+    tooltip = BS.Format(_G.SI_STATS_BOUNTY_LABEL)
 }

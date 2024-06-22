@@ -23,6 +23,7 @@ BS.Defaults = {
     Font = "Default",
     FontSize = 18,
     GridSize = 10,
+    HideDuringCombat = false,
     IconSize = 32,
     MainBarIcon = "/esoui/art/tradinghouse/category_u30_equipment_up.dds",
     Movable = false,
@@ -795,6 +796,13 @@ BS.Defaults = {
         },
         [BS.W_TITLE] = {
             Cat = cat.Character
+        },
+        [BS.W_BOUNTY] = {
+            Autohide = true,
+            Cat = cat.Character,
+            ColourValues = "",
+            HideSeconds = false,
+            Timer = true
         },
     }
 }

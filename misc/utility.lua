@@ -1638,14 +1638,18 @@ function BS.GetWidget(widgetIndex)
     return BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[widgetIndex])
 end
 
+local function getBar(barNumber)
+    local barKey = BS.BarObjects[barNumber]
+    local bar = BS.BarObjectPool:GetActiveObject(barKey)
+
+    return bar
+end
+
 function BS.GetBar(widgetIndex)
     local barNumber = BS.Vars.Controls[widgetIndex].Bar
 
     if (barNumber ~= 0) then
-        local barKey = BS.BarObjects[barNumber]
-        local bar = BS.BarObjectPool:GetActiveObject(barKey)
-
-        return bar
+        return getBar(barNumber)
     end
 end
 
@@ -1748,6 +1752,24 @@ function BS.Clear(t)
     end
 end
 
+function BS.HideInCombat()
+    for barNumber, barData in pairs(BS.Vars.Bars) do
+        if (not barData.Disable) then
+            if (BS.GetVar("HideDuringCombat")) then
+                local bar = getBar(barNumber)
+
+                if (bar) then
+                    if (BS.inCombat) then
+                        bar:ForceHide()
+                    else
+                        bar:ForceShow()
+                    end
+                end
+            end
+        end
+    end
+end
+
 -- developer utility functions
 -- luacheck: push ignore 113
 function BS.FindItem(text)
@@ -1779,3 +1801,8 @@ function BS.FindAbility(text, start, finish)
     end
 end
 -- luacheck: pop
+
+function BS.Test()
+    BS.inCombat = true
+    BS.HideInCombat()
+end
