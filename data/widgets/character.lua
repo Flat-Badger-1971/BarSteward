@@ -1369,6 +1369,7 @@ BS.widgets[BS.W_LFG_ROLE] = {
     end,
     hideWhenEqual = 0,
     callback = {[_G.PREFERRED_ROLES] = {"LFGRoleChanged"}},
+    event = _G.EVENT_GROUP_MEMBER_ROLE_CHANGED,
     icon = "lfg/lfg_icon_dps",
     onLeftClick = function()
         if (IsInGamepadPreferredMode()) then

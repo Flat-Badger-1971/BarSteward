@@ -1,5 +1,7 @@
 [color=#ff9900][b]Version: 3.0.1 ---------------[/b][/color]
 Logout bugfix
+Login bugfix
+Additional event added to role widget
 
 [color=#ff9900][b]Version: 3.0.0 ---------------[/b][/color]
 Remove LibSavedVars dependency

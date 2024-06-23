@@ -149,6 +149,13 @@ local function Initialise()
             ReloadUI()
         end
     end
+
+    -- if (_G.SLASH_COMMANDS["/bslang"] == nil) then
+    --     _G.SLASH_COMMANDS["/bslang"] = function(lang)
+    --         SetCVar("language.2", lang)
+    --     end
+    -- end
+
     -- ***
 
     BS.RegisterDialogues()

@@ -506,6 +506,7 @@ read_globals = {
     "RequestTributeClubData",
     "SecurePostHook",
     "SelectPlayerStatus",
+    "SetCVar",
     "SetGameCameraUIMode",
     "ShowMenu",
     "TriggerTutorial",
