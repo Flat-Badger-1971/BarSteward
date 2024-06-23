@@ -382,11 +382,15 @@ function BS.CheckPerformance(inCombat)
 end
 
 function BS.ARGBConvert(argb)
-    local r = string.format("%02x", math.floor(argb[1] * 255))
-    local g = string.format("%02x", math.floor(argb[2] * 255))
-    local b = string.format("%02x", math.floor(argb[3] * 255))
+    if (argb) then
+        local r = string.format("%02x", math.floor(argb[1] * 255))
+        local g = string.format("%02x", math.floor(argb[2] * 255))
+        local b = string.format("%02x", math.floor(argb[3] * 255))
 
-    return "|c" .. r .. g .. b
+        return "|c" .. r .. g .. b
+    end
+
+    return "|cf9f9f9"
 end
 
 function BS.ARGBConvert2(argb)
