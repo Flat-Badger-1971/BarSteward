@@ -169,6 +169,7 @@ L(
     BS .. "HIDE_WHEN_COMPLETE_TOOLTIP",
     "Masque la recherche lorsque plus aucun trait ne peut être recherché pour ce type d'artisanat. Ce paramètre remplacera tous les paramètre de masquage automatique."
 )
+L(BS .. "HIDE_WHEN_DEAD", "Masquer quand on est mort")
 L(BS .. "HIDE_WHEN_FULLY_USED", "Masquer lorsque tout est utilisé")
 L(BS .. "HIDE_WHEN_FULLY_USED_TOOLTIP", "Masque quand tout les emplacements/options disponibles sont utilisés.")
 L(BS .. "HIDE_ZERO_DAYS", "Masquer les jours arrivés à zéro")

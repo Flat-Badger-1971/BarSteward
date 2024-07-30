@@ -663,6 +663,9 @@ BS.RegisterForEvent(
     end
 )
 
+BS.RegisterForEvent(_G.EVENT_PLAYER_DEAD, BS.HideWhenDead)
+BS.RegisterForEvent(_G.EVENT_PLAYER_ALIVE, BS.HideWhenDead)
+
 BS.widgets[BS.W_DPS] = {
     name = "dps",
     update = function(widget)

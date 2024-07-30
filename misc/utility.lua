@@ -1774,6 +1774,26 @@ function BS.HideInCombat()
     end
 end
 
+function BS.HideWhenDead()
+    for barNumber, barData in pairs(BS.Vars.Bars) do
+        if (not barData.Disable) then
+            if (BS.GetVar("HideWhenDead")) then
+                local bar = getBar(barNumber)
+
+                if (bar) then
+                    if (IsUnitDead("player")) then
+                        d("dead")
+                        bar:ForceHide()
+                    else
+                        d("alive")
+                        bar:ForceShow()
+                    end
+                end
+            end
+        end
+    end
+end
+
 -- developer utility functions
 -- luacheck: push ignore 113
 function BS.FindItem(text)

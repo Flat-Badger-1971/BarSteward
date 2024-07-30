@@ -233,6 +233,19 @@ local function initialise()
     }
 
     BS.options[#BS.options + 1] = {
+        type = "checkbox",
+        name = GetString(_G.BARSTEWARD_HIDE_WHEN_DEAD),
+        getFunc = function()
+            return BS.Vars.HideWhenDead or false
+        end,
+        setFunc = function(value)
+            BS.Vars.HideWhenDead = value
+        end,
+        width = "full",
+        default = false
+    }
+
+    BS.options[#BS.options + 1] = {
         type = "divider",
         alpha = 0
     }

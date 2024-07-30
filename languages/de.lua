@@ -173,6 +173,7 @@ L(
     BS .. "HIDE_WHEN_COMPLETE_TOOLTIP",
     "Verstecken, wenn keine Eigenschaft mehr für diesen Handwerkstyp erforscht werden kann. Diese Einstellung überschreibt alle 'autom. verstecken' Einstellungen."
 )
+L(BS .. "HIDE_WHEN_DEAD", "Verstecken, wenn tot")
 L(BS .. "HIDE_WHEN_FULLY_USED", "Verstecken, wenn vollständig genutzt")
 L(BS .. "HIDE_WHEN_FULLY_USED_TOOLTIP", "Verstecken, wenn alle verfügbaren Optionen in Benutzung sind")
 L(BS .. "HIDE_ZERO_DAYS", "Tage verstecken, wenn Wert = 0")

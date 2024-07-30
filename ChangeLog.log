@@ -2,6 +2,9 @@
 *** If there is a problem, logout of the game, restore your saved vars and revert to
 *** to v2.1.17 using the instructions in this addons Comments section on ESOUI
 
+[color=#ff9900][b]Version: 3.0.2 ---------------[/b][/color]
+Added setting to hide bars when the player is dead
+
 [color=#ff9900][b]Version: 3.0.1 ---------------[/b][/color]
 Logout bugfix
 Login bugfix

@@ -173,6 +173,7 @@ L(
     BS .. "HIDE_WHEN_COMPLETE_TOOLTIP",
     "Hide when no more traits can be researched for this crafting type. This settings will override any Autohide setting."
 )
+L(BS .. "HIDE_WHEN_DEAD", "Hide when dead")
 L(BS .. "HIDE_WHEN_FULLY_USED", "Hide when fully in use")
 L(BS .. "HIDE_WHEN_FULLY_USED_TOOLTIP", "Hide when all availble slots/options are being used")
 L(BS .. "HIDE_ZERO_DAYS", "Hide days when zero")
