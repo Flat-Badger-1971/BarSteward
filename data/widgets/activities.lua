@@ -4,6 +4,8 @@ local completed = {
     [_G.TIMED_ACTIVITY_TYPE_WEEKLY] = false
 }
 
+local star = BS.Icon("targetmarkers/target_gold_star_64")
+
 local function configureWidget(widget, complete, maxComplete, activityType, tasks, hideLimit, defaultTooltip)
     local widgetIndex = activityType == _G.TIMED_ACTIVITY_TYPE_DAILY and BS.W_DAILY_ENDEAVOURS or BS.W_WEEKLY_ENDEAVOURS
     local colour = BS.GetColour(widgetIndex)
@@ -23,9 +25,30 @@ local function configureWidget(widget, complete, maxComplete, activityType, task
 
     if (#tasks > 0) then
         local tooltipText = defaultTooltip or ""
+        local maxValue, maxIndex, allEqual = 0, 0, true
+
+        if (activityType == _G.TIMED_ACTIVITY_TYPE_DAILY) then
+            for _, t in ipairs(tasks) do
+                if (t.value > maxValue) then
+                    if (maxValue > 0) then
+                        allEqual = false
+                    end
+                    maxValue = t.value
+                    maxIndex = t.index
+                end
+            end
+        end
 
         for _, t in ipairs(tasks) do
-            tooltipText = tooltipText .. BS.LF .. t
+            if (activityType == _G.TIMED_ACTIVITY_TYPE_DAILY) then
+                if (not allEqual) then
+                    if (t.index == maxIndex) then
+                        t.text = string.format("%s%s %s %s%s", star, star, t.text, star, star)
+                    end
+                end
+
+                tooltipText = tooltipText .. BS.LF .. t.text
+            end
         end
 
         widget:SetTooltip(tooltipText)
@@ -67,6 +90,7 @@ local function getTimedActivityProgress(activityType, widget, hideLimit, default
             -- get reward info
             local numRewards = GetNumTimedActivityRewards(idx)
             local reward = ""
+            local rewardValue = 0
 
             for rewardIndex = 1, numRewards do
                 local rewardId, quantity = GetTimedActivityRewardInfo(idx, rewardIndex)
@@ -77,11 +101,12 @@ local function getTimedActivityProgress(activityType, widget, hideLimit, default
                 end
 
                 reward = reward .. BS.Icon(rewardData.lootIcon or rewardData.icon) .. quantity
+                rewardValue = rewardValue + quantity
             end
 
             ttext = colour .. ttext .. "|r" .. " " .. reward
 
-            table.insert(tasks, ttext)
+            table.insert(tasks, {text = ttext, value = rewardValue, index = idx})
 
             local add = pcProgress > maxPcProgress
 

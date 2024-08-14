@@ -1782,10 +1782,8 @@ function BS.HideWhenDead()
 
                 if (bar) then
                     if (IsUnitDead("player")) then
-                        d("dead")
                         bar:ForceHide()
                     else
-                        d("alive")
                         bar:ForceShow()
                     end
                 end

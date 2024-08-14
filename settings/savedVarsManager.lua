@@ -112,6 +112,21 @@ function manager:Copy(server, account, character, copyToAccount)
     self:LoadSavedVars()
 end
 
+function manager:GetAllAccountCommon(...)
+    local rawTable = self:GetRawTable()
+    local accountVars = {}
+
+    for server, serverData in pairs(rawTable) do
+        for account, accountData in pairs(serverData) do
+            local commonAccountVars = searchPath(accountData, "$AccountWide", "COMMON", ...)
+
+            table.insert(accountVars, {server = server, account = account, vars = commonAccountVars})
+        end
+    end
+
+    return accountVars
+end
+
 function manager:FillDefaults(t, defaults)
     if ((t == nil) or (type(t) ~= "table") or (defaults == nil)) then
         return
@@ -134,12 +149,13 @@ end
 function manager:GetAccounts(server)
     local accounts = {}
 
-    for account, _ in pairs(self._serverInformation[server]) do
-        table.insert(accounts, account)
+    if (self._serverInformation[server]) then
+        for account, _ in pairs(self._serverInformation[server]) do
+            table.insert(accounts, account)
+        end
+
+        table.sort(accounts)
     end
-
-    table.sort(accounts)
-
     return accounts
 end
 
@@ -295,6 +311,13 @@ function manager:SetAccount(value, ...)
     local rawTable = self:GetRawTable()
 
     setPath(rawTable, value, self._profile, self._displayName, "$AccountWide", ...)
+end
+
+-- Set settings from the 'COMMON' section, works regardless of whether we are using Account-wide or Character settings
+function manager:SetCommon(value, ...)
+    local rawTable = self:GetRawTable()
+
+    setPath(rawTable, value, self._profile, self._displayName, "$AccountWide", "COMMON", ...)
 end
 
 -- Get settings from the 'Character' section, works regardless of whether we are using Account-wide or Character settings

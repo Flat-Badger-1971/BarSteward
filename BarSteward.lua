@@ -160,11 +160,11 @@ local function Initialise()
 
     BS.RegisterDialogues()
 
-    if (BS.SavedVarsNeedConverting()) then
-        ZO_Dialogs_ShowDialog(BS.Name .. "Backup")
-    else
-        BS.ContinueIntialising()
-    end
+    --if (BS.SavedVarsNeedConverting()) then
+    --    ZO_Dialogs_ShowDialog(BS.Name .. "Backup")
+    --else
+    BS.ContinueIntialising()
+    --end
 end
 
 function BS.OnAddonLoaded(_, addonName)

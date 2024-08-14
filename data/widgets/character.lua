@@ -691,13 +691,15 @@ local function getEmptySlotCount()
     local championBar = CHAMPION_PERKS:GetChampionBar()
     local foundEmpty = false
 
-    for slot = 1, championBar:GetNumSlots() do
-        if (championBar:GetSlot(slot):GetSavedChampionSkillData() == nil) then
-            local disciplineId = GetRequiredChampionDisciplineIdForSlot(slot, _G.HOTBAR_CATEGORY_CHAMPION)
-            local disciplineName = GetChampionDisciplineName(disciplineId)
+    if (championBar) then
+        for slot = 1, championBar:GetNumSlots() do
+            if (championBar:GetSlot(slot):GetSavedChampionSkillData() == nil) then
+                local disciplineId = GetRequiredChampionDisciplineIdForSlot(slot, _G.HOTBAR_CATEGORY_CHAMPION)
+                local disciplineName = GetChampionDisciplineName(disciplineId)
 
-            emptySlots[disciplineName] = (emptySlots[disciplineName] or 0) + 1
-            foundEmpty = true
+                emptySlots[disciplineName] = (emptySlots[disciplineName] or 0) + 1
+                foundEmpty = true
+            end
         end
     end
 
@@ -1457,4 +1459,67 @@ BS.widgets[BS.W_BOUNTY] = {
     hideWhenEqual = 0,
     icon = "stats/justice_bounty_icon-red",
     tooltip = BS.Format(_G.SI_STATS_BOUNTY_LABEL)
+}
+
+local claimed = "|c00ff00" .. BS.Format(_G.SI_DAILY_LOGIN_REWARDS_CLAIMED_TILE_NARRATION) .. "|r"
+local unclaimed = "|cff0000" .. BS.Format(_G.SI_GIFT_INVENTORY_UNCLAIMED_GIFTS_HEADER) .. "|r"
+
+local function findAccount(account, server, allAccounts)
+    for _, accountData in ipairs(allAccounts) do
+        if (accountData.account == account and accountData.server == server) then
+            return accountData.vars
+        end
+    end
+end
+
+BS.widgets[BS.W_DAILY_REWARD] = {
+    -- v3.0.3
+    name = "dailyReward",
+    update = function(widget)
+        local worldname = {"EU", "NA"}
+        local rewardIndex = GetDailyLoginClaimableRewardIndex()
+        local secondsTillReset = GetTimeUntilNextDailyLoginRewardClaimS()
+        local dailyRewardClaimed
+
+        if (rewardIndex == nil) then
+            dailyRewardClaimed = true
+        else
+            local rewardId = GetDailyLoginRewardInfoForCurrentMonth(rewardIndex)
+            dailyRewardClaimed = IsDailyLoginRewardInCurrentMonthClaimed(rewardId)
+        end
+
+        BS.Vars:SetCommon({claimed = dailyRewardClaimed, resetTime = os.time() + secondsTillReset}, "DailyRewards")
+        local allAccounts = BS.Vars:GetAllAccountCommon("DailyRewards")
+        local accountCount, claimedAccountCount = 0, 0
+        local accountList = ""
+
+        for _, server in ipairs(worldname) do
+            local servername = string.format("%s Megaserver", server)
+            local accounts = BS.Vars:GetAccounts(servername)
+
+            for _, account in ipairs(accounts) do
+                accountCount = accountCount + 1
+
+                local acc = findAccount(account, servername, allAccounts)
+
+                if (acc) then
+                    if ((acc.resetTime or 0) <= os.time()) then
+                        acc.claimed = false
+                    end
+                    accountList = string.format("%s%s|cf9f9f9%s (%s): |r%s", accountList, BS.LF, account, server, (acc.claimed and claimed or unclaimed))
+                    claimedAccountCount = claimedAccountCount + (acc.claimed and 1 or 0)
+                else
+                    accountList = string.format("%s%s|cf9f9f9%s (%s): |r%s", accountList, BS.LF, account, server,  unclaimed)
+                end
+            end
+        end
+
+        widget:SetValue(accountCount .. "/" .. claimedAccountCount)
+        widget:SetTooltip(BS.Format(_G.SI_DAILY_LOGIN_REWARDS_CLAIMED_ANNOUNCEMENT) .. accountList)
+
+        return claimedAccountCount
+    end,
+    event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_DAILY_LOGIN_REWARDS_CLAIMED},
+    icon = "icons/achievement_u27_loyalty_reward",
+    tooltip = BS.Format(_G.SI_DAILY_LOGIN_REWARDS_CLAIMED_ANNOUNCEMENT)
 }

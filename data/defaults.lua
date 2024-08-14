@@ -804,6 +804,10 @@ BS.Defaults = {
             HideSeconds = false,
             Timer = true
         },
+        [BS.W_DAILY_REWARD] = {
+            Cat = cat.Character,
+            Experimental = true
+        },
     }
 }
 

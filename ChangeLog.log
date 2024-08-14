@@ -1,6 +1,8 @@
-*** PLEASE ENSURE YOU BACKUP YOUR SAVEDVARS BEFORE USING THIS VERSION ***
-*** If there is a problem, logout of the game, restore your saved vars and revert to
-*** to v2.1.17 using the instructions in this addons Comments section on ESOUI
+[color=#ff9900][b]Version: 3.0.3 ---------------[/b][/color]
+Removed debug messages
+Removed savedvars warning
+Daily Rewards (cross account/server) experimental widget added
+Highlight the best daily endeavour reward with stars
 
 [color=#ff9900][b]Version: 3.0.2 ---------------[/b][/color]
 Added setting to hide bars when the player is dead
