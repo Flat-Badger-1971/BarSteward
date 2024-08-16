@@ -2293,12 +2293,18 @@ local function getWidgetSettings()
             textureCoords = {0, 1, 0, 0.6}
         end
 
+        local iconInfo = BS.widgets[k].icon
+
+        if (type(iconInfo) ==  "function") then
+            iconInfo = iconInfo()
+        end
+
         local widgetData = {
             type = "submenu",
             name = function()
                 return getWidgetName(k)
             end,
-            icon = BS.FormatIcon(BS.widgets[k].icon),
+            icon = BS.FormatIcon(iconInfo),
             iconTextureCoords = textureCoords,
             controls = widgetControls,
             reference = "BarStewardWidgets" .. k

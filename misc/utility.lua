@@ -632,12 +632,22 @@ function BS.VersionDelta(version)
     return tonumber(currentVersion) - tonumber(checkVersion)
 end
 
-function BS.RefreshWidget(widgetIndex)
+function BS.RefreshWidget(widgetIndex, doIcon)
     if (BS.Vars.Controls[widgetIndex].Bar ~= 0) then
         local widget = BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[widgetIndex])
 
         if (widget ~= nil) then
             BS.widgets[widgetIndex].update(widget, "initial")
+
+            if (doIcon) then
+                local icon = BS.widgets[widgetIndex].icon
+
+                if (type(icon) == "function") then
+                    icon = icon()
+                end
+
+                widget:SetIcon(icon)
+            end
         end
     end
 end

@@ -310,8 +310,29 @@ BS.widgets[BS.W_REPAIRS_KITS] = {
         return count
     end,
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
-    icon = "/vendor/vendor_tabicon_repair_up",
-    tooltip = BS.Format(_G.SI_HOOK_POINT_STORE_REPAIR_KIT_HEADER):gsub(":", "")
+    icon = function()
+        if (BS.GetVar("UseAlternate", BS.W_REPAIRS_KITS)) then
+            return "/lfg/lfg_bonus_crate"
+        else
+            return "/vendor/vendor_tabicon_repair_up"
+        end
+    end,
+    tooltip = BS.Format(_G.SI_HOOK_POINT_STORE_REPAIR_KIT_HEADER):gsub(":", ""),
+    customSettings = {
+        [1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_USE_ALTERNATE),
+            getFunc = function()
+                return BS.GetVar("UseAlternate", BS.W_REPAIR_KITS)
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_REPAIRS_KITS].UseAlternate = value
+                BS.RefreshWidget(BS.W_REPAIRS_KITS, true)
+            end,
+            width = "full",
+            default = false
+        }
+    }
 }
 
 local filledIcon = "icons/soulgem_006_filled"
@@ -894,7 +915,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
                     end,
                     type = "checkbox",
                     getFunc = function()
-                        return BS.Vars:GetCommon("WatchedItems",itemId)
+                        return BS.Vars:GetCommon("WatchedItems", itemId)
                     end,
                     setFunc = function(value)
                         BS.Vars:SetCommon(value, "WatchedItems", itemId)

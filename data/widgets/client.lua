@@ -177,6 +177,12 @@ local function getMoonPhaseIcon()
     return 5
 end
 
+local latency_icons = {
+    ["danger"] = "campaign/campaignbrowser_lowpop",
+    ["warning"] = "campaign/campaignbrowser_medpop",
+    ["ok"] = "campaign/campaignbrowser_hipop"
+}
+
 BS.widgets = {
     [BS.W_TIME] = {
         name = "time",
@@ -227,9 +233,34 @@ BS.widgets = {
             return widget:GetValue()
         end,
         timer = 1000,
-        icon = "champion/actionbar/champion_bar_combat_selection",
+        icon = function()
+            if (BS.GetVar("ShowText", BS.W_FPS)) then
+                if (GetCVar("language.2") == "zh") then
+                    return "BarSteward/assets/fps_zh.dds"
+                else
+                    return "BarSteward/assets/fps.dds"
+                end
+            else
+                return "champion/actionbar/champion_bar_combat_selection"
+            end
+        end,
         tooltip = GetString(_G.BARSTEWARD_FPS),
-        minWidthChars = "___"
+        minWidthChars = "___",
+        customSettings = {
+            [1] = {
+                type = "checkbox",
+                name = GetString(_G.BARSTEWARD_SHOW_TEXT),
+                getFunc = function()
+                    return BS.GetVar("ShowText", BS.W_FPS)
+                end,
+                setFunc = function(value)
+                    BS.Vars.Controls[BS.W_FPS].ShowText = value
+                    BS.RefreshWidget(BS.W_FPS, true)
+                end,
+                width = "full",
+                default = false
+            }
+        }
     },
     [BS.W_LATENCY] = {
         name = "latency",
@@ -237,26 +268,30 @@ BS.widgets = {
             local latency = GetLatency()
             local this = BS.W_LATENCY
             local colour = BS.GetColour(this)
+            local icon = latency_icons["ok"]
 
             if ((BS.GetVar("WarningValue", this) or 0) > 0) then
                 if (latency >= (BS.GetVar("WarningValue", this) or 0)) then
                     colour = BS.GetColour(this, "Warning")
+                    icon = latency_icons["warning"]
                 end
             end
 
             if ((BS.GetVar("DangerValue", this) or 0) > 0) then
                 if (latency >= (BS.GetVar("DangerValue", this) or 0)) then
                     colour = BS.GetColour(this, "Danger")
+                    icon = latency_icons["danger"]
                 end
             end
 
             widget:SetValue(math.floor(latency))
             widget:SetColour(unpack(colour))
+            widget:SetIcon(icon, BS.ARGBConvert(colour))
 
             return widget:GetValue()
         end,
         timer = 1000,
-        icon = "ava/overview_icon_underdog_score",
+        icon = "Campaign/campaignBrowser_hiPop",
         tooltip = GetString(_G.BARSTEWARD_LATENCY),
         minWidthChars = "____"
     },

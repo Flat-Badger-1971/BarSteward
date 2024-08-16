@@ -322,6 +322,7 @@ L(BS .. "SHOW_GRID", "Show Grid")
 L(BS .. "SHOW_LEAD_COUNT", "Show lead count")
 L(BS .. "SHOW_SLOTS", "Show crafting slots")
 L(BS .. "SHOW_STOLEN_SLOTS", "Show slot count")
+L(BS .. "SHOW_TEXT", "Show text")
 L(BS .. "SHOW_UNSPENT", "Show unspent points")
 L(BS .. "SHOW_WHILST_BANKING", "Show Whilst Banking")
 L(BS .. "SHOW_WHILST_CRAFTING", "Show Whilst Crafting")
@@ -377,14 +378,15 @@ L(BS .. "UNSLOTTED", "Unslotted")
 L(BS .. "UNSLOTTED_OPTION", "Show Unslotted Count")
 L(BS .. "UNSLOTTED_TOOLTIP", "Show the number of empty champion point slots")
 L(BS .. "UNSPENT", "Unspent")
-L(BS .. "USE_ICONS", "Use Icons")
-L(BS .. "USE_PROGRESS", "Use progress bar")
-L(BS .. "USE_RAG", "Use red/amber/green progress colours")
+L(BS .. "USE_ALTERNATE", "Use alternate icon")
 L(BS .. "USE_FONT_CORRECTION", "Use font size correction (experimental)")
 L(
     BS .. "USE_FONT_CORRECTION_TOOLTIP",
     "When the font size is set to less than the default, some widgets may have their values truncated. This setting attempts to compensate for that."
 )
+L(BS .. "USE_ICONS", "Use Icons")
+L(BS .. "USE_PROGRESS", "Use progress bar")
+L(BS .. "USE_RAG", "Use red/amber/green progress colours")
 L(BS .. "USE_WRITWORTHY", "Use WritWorthy for writ summaries")
 L(
     BS .. "USE_WRITWORTHY_TOOLTIP",

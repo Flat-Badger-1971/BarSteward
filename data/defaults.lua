@@ -159,7 +159,9 @@ BS.Defaults = {
         [BS.W_LATENCY] = {
             Bar = 1,
             Cat = cat.Client,
-            ColourValues = "c,wv,wc,dc,dv"
+            ColourValues = "c,wv,wc,dc,dv",
+            WarningValue = 150,
+            DangerValue = 300
         },
         [BS.W_BLACKSMITHING] = {
             Autohide = true,
