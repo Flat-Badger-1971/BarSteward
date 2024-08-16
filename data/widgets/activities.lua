@@ -46,9 +46,8 @@ local function configureWidget(widget, complete, maxComplete, activityType, task
                         t.text = string.format("%s%s %s %s%s", star, star, t.text, star, star)
                     end
                 end
-
-                tooltipText = tooltipText .. BS.LF .. t.text
             end
+            tooltipText = tooltipText .. BS.LF .. t.text
         end
 
         widget:SetTooltip(tooltipText)
