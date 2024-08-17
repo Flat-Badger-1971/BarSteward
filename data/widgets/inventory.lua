@@ -312,9 +312,9 @@ BS.widgets[BS.W_REPAIRS_KITS] = {
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
     icon = function()
         if (BS.GetVar("UseAlternate", BS.W_REPAIRS_KITS)) then
-            return "/lfg/lfg_bonus_crate"
+            return "lfg/lfg_bonus_crate"
         else
-            return "/vendor/vendor_tabicon_repair_up"
+            return "vendor/vendor_tabicon_repair_up"
         end
     end,
     tooltip = BS.Format(_G.SI_HOOK_POINT_STORE_REPAIR_KIT_HEADER):gsub(":", ""),

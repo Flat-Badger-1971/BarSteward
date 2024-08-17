@@ -213,7 +213,7 @@ BS.widgets = {
         end,
         timer = 1000,
         tooltip = BS.Format(_G.SI_TRADINGHOUSELISTINGSORTTYPE0),
-        icon = "lfg/lfg_indexicon_timedactivities_up",
+        icon = "hud/gamepad/gp_radialicon_defer_down",
         customSettings = {
             [1] = {
                 type = "submenu",
