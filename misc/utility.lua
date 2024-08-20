@@ -1766,6 +1766,22 @@ function BS.Clear(t)
     end
 end
 
+function BS.ToggleHidden(hide)
+    for barNumber, barData in pairs(BS.Vars.Bars) do
+        if (not barData.Disable) then
+            local bar = getBar(barNumber)
+
+            if (bar) then
+                if (hide and not bar.bar:IsHidden()) then
+                    bar:ForceHide()
+                elseif ((not hide) and bar.bar:IsHidden()) then
+                    bar:ForceShow()
+                end
+            end
+        end
+    end
+end
+
 function BS.HideInCombat()
     for barNumber, barData in pairs(BS.Vars.Bars) do
         if (not barData.Disable) then
@@ -1833,8 +1849,3 @@ function BS.FindAbility(text, start, finish)
     end
 end
 -- luacheck: pop
-
-function BS.Test()
-    BS.inCombat = true
-    BS.HideInCombat()
-end

@@ -178,3 +178,11 @@ function BS.OnAddonLoaded(_, addonName)
 end
 
 EVENT_MANAGER:RegisterForEvent(BS.Name, _G.EVENT_ADD_ON_LOADED, BS.OnAddonLoaded)
+
+EVENT_MANAGER:RegisterForEvent(
+    BS.Name,
+    _G.EVENT_GUI_HIDDEN,
+    function(_, _, hidden)
+        BS.ToggleHidden(hidden)
+    end
+)
