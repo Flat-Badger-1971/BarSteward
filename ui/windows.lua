@@ -244,8 +244,14 @@ local function onClicked(key)
 end
 
 local function setupDataRow(rowControl, data)
+    local icon = data.icon
+
+    if (type(icon) == "function") then
+        icon = icon()
+    end
+
     rowControl:GetNamedChild("Title"):SetText(data.name)
-    rowControl:GetNamedChild("Icon"):SetTexture(BS.FormatIcon(data.icon))
+    rowControl:GetNamedChild("Icon"):SetTexture(BS.FormatIcon(icon))
 
     local cb = rowControl:GetNamedChild("CheckBox")
     local c = cb:GetNamedChild("Check")
