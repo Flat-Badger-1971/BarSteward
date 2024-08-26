@@ -1,5 +1,7 @@
 [color=#ff9900][b]Version: 3.1.2 ---------------[/b][/color]
-Hide BarSteward when hiding gui
+Added daily pledges widgets
+Bar export/import now copies the bar name
+Bugfixes
 
 [color=#ff9900][b]Version: 3.1.1 ---------------[/b][/color]
 Fix widget reordering screen issue

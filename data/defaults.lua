@@ -810,6 +810,12 @@ BS.Defaults = {
             Cat = cat.Character,
             Experimental = true
         },
+        [BS.W_DAILY_PLEDGES] = {
+            Autohide = false,
+            Cat = cat.Activities,
+            ColourValues = "",
+            Requires = "LibUndauntedPledges"
+        }
     }
 }
 

@@ -620,8 +620,12 @@ end
 function BS.RemoveFromAllScenes(barIndex)
     local bar = BS.BarObjectPool:GetActiveObject(BS.BarObjects[barIndex])
 
-    for _, scene in ipairs(BS.SCENES) do
-        BS.RemoveFromScenes(scene, bar)
+    if (bar) then
+        bar:ForceHide()
+
+        for _, scene in ipairs(BS.SCENES) do
+            BS.RemoveFromScenes(scene, bar)
+        end
     end
 end
 
@@ -1083,7 +1087,6 @@ function BS.ExportBar(barNumber)
 
     -- don't copy unneeded values
     destBar.Position = nil
-    destBar.Name = nil
     destBar.ToggleState = nil
     destBar.HideBarEnable = nil
     destBar.Disable = nil
@@ -1225,12 +1228,24 @@ local function validate(data)
     return importTable
 end
 
+function BS.CheckBarName(name, bars)
+    for _, bar in pairs(bars) do
+        if ((bar.Name or "") == name) then
+            name = name .. "1"
+        end
+    end
+
+    return name
+end
+
 function BS.DoImport()
     local data = BS.ImportData
     local bars = BS.Vars.Bars
     local newBarId = #bars + 1
-    local barname = zo_strformat(GetString(_G.BARSTEWARD_NEW_BAR_DEFAULT_NAME), newBarId)
+    local barname = data.Bar.Name or zo_strformat(GetString(_G.BARSTEWARD_NEW_BAR_DEFAULT_NAME), newBarId)
     local x, y = GuiRoot:GetCenter()
+
+    barname = BS.CheckBarName(barname, bars)
 
     if (BS.ReplaceMain) then
         BS.DestroyBar(BS.MAIN_BAR)
@@ -1244,6 +1259,7 @@ function BS.DoImport()
         end
 
         newBarId = BS.MAIN_BAR
+        barname = nil
     end
 
     BS.Vars.Bars[newBarId] = {

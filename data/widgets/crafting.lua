@@ -378,10 +378,10 @@ BS.RegisterForEvent(
     end
 )
 
-local function countState(state, character)
+function BS.CountState(state, character, pledges)
     local count = 0
 
-    for _, s in pairs(BS.Vars:GetCommon("dailyQuests", character)) do
+    for _, s in pairs(BS.Vars:GetCommon(pledges and "pledges" or "dailyQuests", character)) do
         if (s == state) then
             count = count + 1
         end
@@ -494,9 +494,9 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
             update = true
         end
 
-        added = countState("added", character)
-        done = countState("done", character)
-        ready = countState("ready", character)
+        added = BS.CountState("added", character)
+        done = BS.CountState("done", character)
+        ready = BS.CountState("ready", character)
 
         local colour = BS.GetVar("DefaultColour")
 

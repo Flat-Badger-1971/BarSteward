@@ -153,9 +153,9 @@ function BS.RegisterDialogues()
             }
         },
         Confirm = {
-            title = {text = GetString(_G.BARSTEWARD_REPLACE)},
+            title = {text = GetString(_G.BARSTEWARD_MAIN_BAR_REPLACE)},
             mainText = {
-                text = GetString(_G.BARSTEWARD_REPLACE_CONFIRM)
+                text = GetString(_G.BARSTEWARD_MAIN_BAR_REPLACE_CONFIRM)
             },
             buttons = {
                 {

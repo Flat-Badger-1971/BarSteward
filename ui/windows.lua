@@ -861,11 +861,18 @@ function BS.CreateExportFrame()
         end
     )
 
-    frame.replace = WINDOW_MANAGER:CreateControlFromVirtual(nil, frame, "ZO_CheckButton")
+    frame.replace = WINDOW_MANAGER:CreateControlFromVirtual(name .. "_replace", frame, "ZO_CheckButton")
     frame.replace:SetDimensions(32, 32)
     frame.replace:SetAnchor(LEFT, frame.import, RIGHT, 20, -2)
 
+    ZO_CheckButton_SetLabelText(frame.replace, GetString(_G.BARSTEWARD_MAIN_BAR_REPLACE))
     ZO_CheckButtonLabel_SetTextColor(frame.replace, 1, 0, 0)
+    ZO_CheckButtonLabel_SetDefaultColors(
+        frame.replace:GetNamedChild("Label"),
+        _G.ZO_ERROR_COLOR,
+        _G.ZO_ERROR_COLOR,
+        _G.ZO_ERROR_COLOR
+    )
 
     frame.close = BS.CreateButton(name .. "_close", frame, 100, 32)
     frame.close:SetText(BS.Format(_G.SI_DIALOG_CLOSE))

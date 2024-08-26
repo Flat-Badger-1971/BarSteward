@@ -522,6 +522,7 @@ read_globals = {
     "ZO_CallbackObject",
     "ZO_CheckButton_IsChecked",
     "ZO_CheckButton_SetCheckState",
+    "ZO_CheckButtonLabel_SetDefaultColors",
     "ZO_CheckButton_SetLabelText",
     "ZO_CheckButton_SetToggleFunction",
     "ZO_CheckButtonLabel_SetTextColor",

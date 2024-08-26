@@ -71,6 +71,11 @@ function BS.ContinueIntialising()
         BS.LibCK = _G.LibCharacterKnowledge
     end
 
+    -- get a reference to LibUndauntedPledges if it's installed
+    if (_G.LibUndauntedPledges) then
+        BS.LUP = _G.LibUndauntedPledges
+    end
+
     BS.RegisterSettings()
 
     -- create bars
@@ -178,11 +183,3 @@ function BS.OnAddonLoaded(_, addonName)
 end
 
 EVENT_MANAGER:RegisterForEvent(BS.Name, _G.EVENT_ADD_ON_LOADED, BS.OnAddonLoaded)
-
-EVENT_MANAGER:RegisterForEvent(
-    BS.Name,
-    _G.EVENT_GUI_HIDDEN,
-    function(_, _, hidden)
-        BS.ToggleHidden(hidden)
-    end
-)

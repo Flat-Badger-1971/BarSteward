@@ -1269,19 +1269,29 @@ BS.widgets[BS.W_DAILY_PROGRESS] = {
     }
 }
 
+local function updateQuests(questListType)
+    for char, quests in pairs(BS.Vars:GetCommon(questListType)) do
+        for quest, status in pairs(quests) do
+            if (status == "complete") then
+                BS.Vars:SetCommon(nil, questListType, char, quest)
+            end
+        end
+    end
+end
+
 local function checkReset()
     local lastResetTime = BS.GetLastDailyResetTime(true)
 
     if (lastResetTime) then
-        for char, quests in pairs(BS.Vars:GetCommon("dailyQuestCount")) do
-            for quest, status in pairs(quests) do
-                if (status == "complete") then
-                    BS.Vars:SetCommon(nil, "dailyQuestCount", char, quest)
-                end
-            end
-        end
+        updateQuests("dailyQuestCount")
 
         BS.Vars:SetCommon(lastResetTime, "lastDailyResetCounts")
+
+        local pledges = BS.Vars:GetCommon("pledges")
+
+        if (pledges) then
+            updateQuests("pledges")
+        end
     end
 end
 
@@ -1443,4 +1453,159 @@ BS.widgets[BS.W_FISHING] = {
         BS.RefreshWidget(BS.W_FISHING)
     end,
     tooltip = BS.Format(_G.SI_GUILDACTIVITYATTRIBUTEVALUE9)
+}
+
+local function getPledgeIds()
+    local pledges = {}
+
+    for _, info in pairs(BS.LUP.IDS) do
+        for _, data in ipairs(info) do
+            local id = data[2]
+            local questName = GetQuestName(id)
+
+            pledges[BS.Format(questName)] = true
+        end
+    end
+
+    return pledges
+end
+
+-- check once a minute for daily reset
+BS.RegisterForUpdate(60000, checkReset)
+
+BS.widgets[BS.W_DAILY_PLEDGES] = {
+    name = "dailyPledges",
+    update = function(widget, event, completeName, addedName, removedName)
+        if (not BS.LUP) then
+            return true
+        end
+
+        if (not BS.Pledges) then
+            BS.Pledges = getPledgeIds()
+        end
+
+        local update = true
+        local added, done
+        local character = GetUnitName("player")
+        local maxPledges = 3
+
+        checkReset()
+
+        if (BS.Vars:GetCommon("pledges") == nil) then
+            BS.Vars:SetCommon({}, "pledges")
+        end
+
+        if (BS.Vars:GetCommon("pledges", character) == nil) then
+            BS.Vars:SetCommon({}, "pledges", character)
+        end
+
+        if (event == _G.EVENT_QUEST_CONDITION_COUNTER_CHANGED) then
+            addedName = 1
+        end
+
+        completeName = BS.Format((type(completeName) == "string") and completeName or "null")
+        addedName = BS.Format((type(addedName) == "string") and addedName or "null")
+        removedName = BS.Format((type(removedName) == "string") and removedName or "null")
+
+        if (BS.Pledges[completeName]) then
+            BS.Vars:SetCommon("done", "pledges", character, completeName)
+        elseif (BS.Pledges[addedName]) then
+            BS.Vars:SetCommon("added", "pledges", character, addedName)
+        elseif (BS.Pledges[removedName]) then
+            -- addedName is actually 'completed' in this case
+            if (tostring(addedName) ~= "true") then
+                BS.Vars:SetCommon(nil, "pledges", character, removedName)
+            end
+        elseif (event ~= "initial") then
+            update = false
+        end
+
+        if (completeName == "null" and addedName == "null" and removedName == "null") then
+            -- initial load
+            update = true
+        end
+
+        added = BS.CountState("added", character, true)
+        done = BS.CountState("done", character, true)
+
+        local colour = BS.GetVar("DefaultColour")
+
+        if (done == maxPledges) then
+            colour = BS.GetVar("DefaultOkColour")
+            BS.Vars:SetCommon(true, "pledges", character, "complete")
+        elseif (added == maxPledges) then
+            colour = BS.GetVar("DefaultWarningColour")
+            BS.Vars:SetCommon(true, "pledges", character, "pickedup")
+        end
+
+        if (update) then
+            widget:SetValue(added .. "/" .. done .. "/" .. maxPledges)
+            widget:SetColour(unpack(colour))
+
+            local ttt = GetString(_G.BARSTEWARD_DAILY_PLEDGES) .. BS.LF
+            local pledgeQuests = BS.Vars:GetCommon("pledges", character)
+
+            for name, status in pairs(pledgeQuests) do
+                if (status == "done") then
+                    ttt = string.format("%s%s%s", ttt, BS.LF, BS.ARGBConvert(BS.GetVar("DefaultOkColour")))
+                    ttt = string.format("%s%s - %s|r", ttt, name, GetString(_G.BARSTEWARD_COMPLETED))
+                elseif (status == "added") then
+                    ttt = string.format("%s%s%s", ttt, BS.LF, BS.ARGBConvert(BS.GetVar("DefaultWarningColour")))
+                    ttt = string.format("%s%s - %s|r", ttt, name, GetString(_G.BARSTEWARD_PICKED_UP))
+                end
+            end
+
+            local charPledgesTT = ""
+
+            if (BS.Vars:GetCommon("CharacterList")) then
+                local ccolour = BS.ARGBConvert(BS.Vars.DefaultColour)
+                local chars = BS.Vars:GetCommon("CharacterList")
+
+                for char, _ in pairs(chars) do
+                    if (char ~= character) then
+                        local charPledges = BS.Vars:GetCommon("pledges", char)
+
+                        if (charPledges and (BS.CountElements(charPledges) > 0)) then
+                            local dccolour = ccolour
+                            local cadded = BS.CountState("added", char, true)
+                            local cdone = BS.CountState("done", char, true)
+                            local status = cadded .. "/" .. cdone .. "/" .. maxPledges
+
+                            if (cdone == maxPledges) then
+                                dccolour = BS.GetVar("DefaultOkColour")
+                            elseif (cadded == maxPledges) then
+                                dccolour = BS.GetVar("DefaultWarningColour")
+                            end
+
+                            charPledgesTT =
+                                string.format("%s%s%s: %s%s|r", charPledgesTT, BS.LF, char, dccolour, status)
+                        else
+                            charPledgesTT =
+                                string.format(
+                                "%s%s%s: %s%s|r",
+                                charPledgesTT,
+                                BS.LF,
+                                char,
+                                ccolour,
+                                "0/0/" .. maxPledges
+                            )
+                        end
+                    end
+                end
+            end
+
+            widget:SetTooltip(ttt .. charPledgesTT)
+        end
+
+        return done == maxPledges
+    end,
+    event = {
+        _G.EVENT_QUEST_ADDED,
+        _G.EVENT_QUEST_REMOVED,
+        _G.EVENT_QUEST_COMPLETE,
+        _G.EVENT_QUEST_CONDITION_COUNTER_CHANGED
+    },
+    icon = "icons/event_undaunted_commendation",
+    tooltip = GetString(_G.BARSTEWARD_DAILY_PLEDGES),
+    hideWhenEqual = true
 }
