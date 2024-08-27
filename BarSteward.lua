@@ -164,6 +164,7 @@ local function Initialise()
     -- ***
 
     BS.RegisterDialogues()
+    BS.RegisterColours()
 
     --if (BS.SavedVarsNeedConverting()) then
     --    ZO_Dialogs_ShowDialog(BS.Name .. "Backup")

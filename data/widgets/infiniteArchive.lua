@@ -18,7 +18,7 @@ BS.widgets[BS.W_ARCHIVE_PORT] = {
 }
 
 local function wrap(value)
-    return "|cf9f9f9" .. value .. "|r"
+    return BS.COLOURS.OffWhite:Colorize(value)
 end
 
 local function getBuffs()
@@ -74,7 +74,7 @@ BS.widgets[BS.W_INFINITE_ARCHIVE_PROGRESS] = {
                 widget:SetProgress(0, 0, 1, "")
             else
                 widget:SetValue("0%")
-                widget:SetColour(unpack(BS.GetColour(this)))
+                widget:SetColour(BS.GetColour(this, true))
             end
 
             return true
@@ -111,10 +111,12 @@ BS.widgets[BS.W_INFINITE_ARCHIVE_PROGRESS] = {
                     )
                 )
             else
-                widget:SetValue(string.format("%s %d: |c%s%d%%|r", arc, arcCounter, BS.COLOURS.YELLOW, pc))
+                widget:SetValue(
+                    string.format("%s %d: %s", arc, arcCounter, BS.COLOURS.Yellow:Colorize(tostring(pc) .. "%"))
+                )
             end
 
-            widget:SetColour(unpack(BS.GetColour(this)))
+            widget:SetColour(BS.GetColour(this, true))
         end
 
         local ttt = GetString(_G.BARSTEWARD_INFINITE_ARCHIVE_PROGRESS) .. BS.LF .. BS.LF
@@ -268,7 +270,7 @@ BS.widgets[BS.W_INFINITE_ARCHIVE_SCORE] = {
 
         if (not ENDLESS_DUNGEON_MANAGER:IsPlayerInEndlessDungeon()) then
             widget:SetValue(ENDLESS_DUNGEON_MANAGER:GetScore())
-            widget:SetColour(unpack(BS.GetColour(this)))
+            widget:SetColour(BS.GetColour(this, true))
 
             return true
         end
@@ -282,7 +284,7 @@ BS.widgets[BS.W_INFINITE_ARCHIVE_SCORE] = {
         end
 
         widget:SetValue(currentScore)
-        widget:SetColour(unpack(BS.GetColour(this)))
+        widget:SetColour(BS.GetColour(this, true))
 
         if (currentScore > (BS.Vars.EndlessHighest[groupType] or 0)) then
             BS.Vars.EndlessHighest[groupType] = currentScore
@@ -293,9 +295,19 @@ BS.widgets[BS.W_INFINITE_ARCHIVE_SCORE] = {
         local soloScore = BS.Vars.EndlessHighest[_G.ENDLESS_DUNGEON_GROUP_TYPE_SOLO] or 0
         local duoScore = BS.Vars.EndlessHighest[_G.ENDLESS_DUNGEON_GROUP_TYPE_DUO] or 0
         local ttt = GetString(_G.BARSTEWARD_INFINITE_ARCHIVE_SCORE) .. BS.LF
+        local yellow = BS.COLOURS.Yellow
 
-        ttt = ttt .. "|cf9f9f9" .. BS.Format(_G.BARSTEWARD_HIGHEST) .. "|r" .. BS.LF
-        ttt = string.format("%s%s: |cffff00%s|r%s%s: |cffff00%s|r", ttt, solo, soloScore, BS.LF, duo, duoScore)
+        ttt = ttt .. BS.COLOURS.OffWhite:Colorize(BS.Format(_G.BARSTEWARD_HIGHEST)) .. BS.LF
+        ttt =
+            string.format(
+            "%s%s: %s%s%s: %s",
+            ttt,
+            solo,
+            yellow:Colorize(soloScore),
+            BS.LF,
+            duo,
+            yellow:Colorize(duoScore)
+        )
 
         widget:SetTooltip(ttt)
 

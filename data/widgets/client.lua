@@ -197,11 +197,11 @@ BS.widgets = {
             local time = BS.FormatTime(format)
 
             widget:SetValue(time)
-            widget:SetColour(unpack(BS.GetColour(this)))
+            widget:SetColour(BS.GetColour(this, true))
 
             widget:SetTooltip(
                 BS.Format(_G.SI_TRADINGHOUSELISTINGSORTTYPE0) ..
-                    BS.LF .. "|cf9f9f9" .. BS.Format(_G.BARSTEWARD_TIMER_TIP) .. "|r"
+                    BS.LF .. BS.COLOURS.OffWhite:Colorize(BS.Format(_G.BARSTEWARD_TIMER_TIP))
             )
 
             return widget:GetValue()
@@ -228,7 +228,7 @@ BS.widgets = {
             local framerate = GetFramerate()
 
             widget:SetValue(math.floor(framerate))
-            widget:SetColour(unpack(BS.GetColour(BS.W_FPS)))
+            widget:SetColour(BS.GetColour(BS.W_FPS, true))
 
             return widget:GetValue()
         end,
@@ -267,26 +267,26 @@ BS.widgets = {
         update = function(widget)
             local latency = GetLatency()
             local this = BS.W_LATENCY
-            local colour = BS.GetColour(this)
+            local colour = BS.GetColour(this, true)
             local icon = latency_icons["ok"]
 
             if ((BS.GetVar("WarningValue", this) or 0) > 0) then
                 if (latency >= (BS.GetVar("WarningValue", this) or 0)) then
-                    colour = BS.GetColour(this, "Warning")
+                    colour = BS.GetColour(this, "Warning", true)
                     icon = latency_icons["warning"]
                 end
             end
 
             if ((BS.GetVar("DangerValue", this) or 0) > 0) then
                 if (latency >= (BS.GetVar("DangerValue", this) or 0)) then
-                    colour = BS.GetColour(this, "Danger")
+                    colour = BS.GetColour(this, "Danger", true)
                     icon = latency_icons["danger"]
                 end
             end
 
             widget:SetValue(math.floor(latency))
-            widget:SetColour(unpack(colour))
-            widget:SetIcon(icon, BS.ARGBConvert(colour))
+            widget:SetColour(colour)
+            widget:SetIcon(icon, colour)
 
             return widget:GetValue()
         end,
@@ -304,18 +304,18 @@ BS.widgets = {
             local this = BS.W_MEMORY
             local precision = BS.GetVar("Precision", this) or 1
             local rfactor = 10 ^ precision
-            local colour = BS.GetColour(this, "Ok")
+            local colour = BS.GetColour(this, "Ok", true)
 
             usedMiB = math.ceil(usedMiB * rfactor) / rfactor
 
             if (usedMiB > (BS.GetVar("DangerValue", this) or 99999)) then
-                colour = BS.GetColour(this, "Danger")
+                colour = BS.GetColour(this, "Danger", true)
             elseif (usedMiB > (BS.GetVar("WarningValue", this) or 99999)) then
-                colour = BS.GetColour(this, "Warning")
+                colour = BS.GetColour(this, "Warning", true)
             end
 
             widget:SetValue(ZO_FastFormatDecimalNumber(tostring(usedMiB)) .. " MiB")
-            widget:SetColour(unpack(colour))
+            widget:SetColour(colour)
 
             return usedMiB
         end,
@@ -349,7 +349,7 @@ BS.widgets = {
 
                 widget:SetIcon("BarSteward/assets/moon/" .. phase .. ".dds")
                 widget:SetValue(time)
-                widget:SetColour(unpack(BS.GetColour(this)))
+                widget:SetColour(BS.GetColour(this, true))
 
                 return widget:GetValue()
             end

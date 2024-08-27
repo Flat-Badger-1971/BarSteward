@@ -25,7 +25,7 @@ BS.widgets[BS.W_RAPPORT] = {
         local level = GetActiveCompanionRapportLevel()
         local desc = GetActiveCompanionRapportLevelDescription(level)
 
-        widget:SetTooltip(GetString(_G.BARSTEWARD_RAPPORT) .. BS.LF .. "|cffffff" .. desc .. "|r")
+        widget:SetTooltip(GetString(_G.BARSTEWARD_RAPPORT) .. BS.LF .. BS.COLOURS.OffWhite:Colorize(desc))
 
         return rapportValue
     end,
@@ -74,7 +74,7 @@ BS.widgets[BS.W_COMPANION_LEVEL] = {
 
         widget:SetIcon(icon)
         widget:SetValue(text)
-        widget:SetColour(unpack(BS.GetColour(this)))
+        widget:SetColour(BS.GetColour(this, true))
 
         local ttt = GetString(_G.BARSTEWARD_COMPANION_LEVEL) .. BS.LF
         local progress = (currentXPInLevel or 0) .. " / " .. totalXPInLevel
@@ -83,7 +83,7 @@ BS.widgets[BS.W_COMPANION_LEVEL] = {
             progress = BS.Format(_G.SI_EXPERIENCE_LIMIT_REACHED)
         end
 
-        ttt = ttt .. "|cf9f9f9" .. progress .. "|r"
+        ttt = ttt .. BS.COLOURS.OffWhite:Colorize(progress)
 
         widget:SetTooltip(ttt)
 
@@ -134,7 +134,7 @@ for k, v in pairs(BS.COMPANION_DEFIDS) do
             local name = ZO_CachedStrFormat(_G.SI_UNIT_NAME, GetCollectibleInfo(GetCompanionCollectibleId(v)))
 
             widget:SetValue(name)
-            widget:SetColour(unpack(BS.GetColour(this)))
+            widget:SetColour(BS.GetColour(this, true))
 
             return name
         end,

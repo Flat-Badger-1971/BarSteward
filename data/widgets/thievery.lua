@@ -49,10 +49,11 @@ BS.widgets[BS.W_STOLEN_ITEMS] = {
         end
 
         widget:SetValue(value)
-        widget:SetColour(unpack(BS.GetColour(this)))
+        widget:SetColour(BS.GetColour(this, true))
 
-        local ttt = GetString(_G.BARSTEWARD_STOLEN) .. BS.LF .. "|cf9f9f9"
-        ttt = ttt .. BS.BAGICON .. " " .. bagCounts.carrying .. "|r"
+        local ttt = GetString(_G.BARSTEWARD_STOLEN) .. BS.LF
+
+        ttt = ttt .. BS.COLOURS.OffWhite:Colorize(BS.BAGICON .. " " .. bagCounts.carrying)
 
         if (#stolen > 0) then
             local total = 0
@@ -61,20 +62,20 @@ BS.widgets[BS.W_STOLEN_ITEMS] = {
 
             for _, item in pairs(stolen) do
                 stt = string.format("%s%s%s ", stt, BS.LF, item.icon)
-                stt = string.format("%s|cf9f9f9%s", stt, item.name)
+                stt = string.format("%s%s", stt, item.name)
 
                 if (item.count > 1) then
                     stt = string.format("%s (%d)", stt, item.count)
                 end
 
-                stt = string.format("%s   |cffff00%d|r%s", stt, item.sellPrice * item.count, goldIcon)
+                stt = string.format("%s   %s%s", stt, BS.COLOURS.Yellow:Colorize(tostring(item.sellPrice * item.count)), goldIcon)
                 total = total + (item.sellPrice * item.count)
             end
 
             ttt = ttt .. BS.LF .. BS.LF
-            ttt = ttt .. zo_strformat(GetString(_G.BARSTEWARD_TOTAL_VALUE), "|cffff00" .. total .. "|r " .. goldIcon)
+            ttt = ttt .. zo_strformat(GetString(_G.BARSTEWARD_TOTAL_VALUE), BS.COLOURS.Yellow:Colorize(tostring(total)) .. goldIcon)
 
-            ttt = ttt .. stt
+            ttt = ttt .. BS.COLOURS.OffWhite:Colorize(stt)
         end
 
         widget:SetTooltip(ttt)
@@ -117,19 +118,18 @@ BS.widgets[BS.W_FENCE_TRANSACTIONS] = {
         local max = FENCE_MANAGER:GetNumTotalTransactions(_G.ZO_MODE_STORE_SELL_STOLEN)
         local used = FENCE_MANAGER:GetNumTransactionsUsed(_G.ZO_MODE_STORE_SELL_STOLEN)
         local pcUsed = math.floor((used / max) * 100)
-        local colour = BS.GetColour(this, "Ok")
-        local noLimitColour = BS.GetVar("NoLimitColour", this) and "|cf9f9f9" or ""
-        local noLimitTerminator = BS.GetVar("NoLimitColour", this) and "|r" or ""
-        local value = used .. (BS.GetVar("HideLimit", this) and "" or (noLimitColour .. "/" .. max .. noLimitTerminator))
+        local colour = BS.GetColour(this, "Ok", true)
+        local noLimitColour = BS.GetVar("NoLimitColour", this) and BS.COLOURS.OffWhite or BS.COLOURS.Green
+        local value = used .. (BS.GetVar("HideLimit", this) and "" or (noLimitColour:Colorize("/" .. max)))
         local widthValue = used .. (BS.GetVar("HideLimit", this) and "" or ("/" .. max))
 
         if (pcUsed >= BS.GetVar("WarningValue", this) and pcUsed < BS.GetVar("DangerValue", this)) then
-            colour = BS.GetColour(this, "Warning")
+            colour = BS.GetColour(this, "Warning", true)
         elseif (pcUsed >= BS.GetVar("DangerValue", this)) then
-            colour = BS.GetColour(this, "Danger")
+            colour = BS.GetColour(this, "Danger", true)
         end
 
-        widget:SetColour(unpack(colour))
+        widget:SetColour(colour)
         widget:SetValue(value, widthValue)
 
         return used
@@ -148,19 +148,18 @@ BS.widgets[BS.W_LAUNDER_TRANSACTIONS] = {
         local max = FENCE_MANAGER:GetNumTotalTransactions(_G.ZO_MODE_STORE_LAUNDER)
         local used = FENCE_MANAGER:GetNumTransactionsUsed(_G.ZO_MODE_STORE_LAUNDER)
         local pcUsed = math.floor((used / max) * 100)
-        local colour = BS.GetColour(this, "Ok")
-        local noLimitColour = BS.GetVar("NoLimitColour", this) and "|cf9f9f9" or ""
-        local noLimitTerminator = BS.GetVar("NoLimitColour", this) and "|r" or ""
-        local value = used .. (BS.GetVar("HideLimit", this) and "" or (noLimitColour .. "/" .. max .. noLimitTerminator))
+        local colour = BS.GetColour(this, "Ok", true)
+        local noLimitColour = BS.GetVar("NoLimitColour", this) and BS.COLOURS.OffWhite or nil
+        local value = used .. (BS.GetVar("HideLimit", this) and "" or (noLimitColour:Colorize("/" .. max)))
         local widthValue = used .. (BS.GetVar("HideLimit", this) and "" or ("/" .. max))
 
         if (pcUsed >= BS.GetVar("WarningValue", this) and pcUsed < BS.GetVar("DangerValue", this)) then
-            colour = BS.GetColour(this, "Warning")
+            colour = BS.GetColour(this, "Warning", true)
         elseif (pcUsed >= BS.GetVar("DangerValue", this)) then
-            colour = BS.GetColour(this, "Danger")
+            colour = BS.GetColour(this, "Danger", true)
         end
 
-        widget:SetColour(unpack(colour))
+        widget:SetColour(colour)
         widget:SetValue(value, widthValue)
 
         return used
@@ -177,10 +176,10 @@ BS.widgets[BS.W_FENCE_RESET] = {
     update = function(widget)
         local _, used, timeToReset = GetFenceLaunderTransactionInfo()
         local this = BS.W_FENCE_RESET
-        local colour = BS.GetVar("DefaultColour")
+        local colour = BS.COLOURS.DefaultColour
         local remaining = BS.SecondsToTime(timeToReset, true, false, BS.GetVar("HideSeconds", this))
 
-        widget:SetColour(unpack(colour))
+        widget:SetColour(colour)
         widget:SetValue(remaining)
 
         return used

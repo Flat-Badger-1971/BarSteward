@@ -51,12 +51,15 @@ BS.widgets[BS.W_ACTIVE_BAR] = {
                 end
             end
         else
-            local colour =
-                activeWeaponPair == _G.ACTIVE_WEAPON_PAIR_BACKUP and
-                (BS.GetVar("BackColour", this) or BS.GetVar("DefaultColour")) or
-                (BS.GetVar("MainColour", this) or BS.Defaults.DefaultColour)
+            local colour
 
-            widget:SetColour(unpack(colour))
+            if (activeWeaponPair == _G.ACTIVE_WEAPON_PAIR_BACKUP) then
+                colour = BS.GetColour(this, "Back", "DefaultColour", true)
+            else
+                colour = BS.GetColour(this, "Main", "DefaultColour", true)
+            end
+
+            widget:SetColour(colour)
             widget:SetValue(text)
             widget:SetIcon(icon)
         end

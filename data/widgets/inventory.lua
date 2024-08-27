@@ -6,16 +6,14 @@ BS.widgets[BS.W_BAG_SPACE] = {
         local this = BS.W_BAG_SPACE
         local bagSize = GetBagSize(_G.BAG_BACKPACK)
         local bagUsed = GetNumBagUsedSlots(_G.BAG_BACKPACK)
-        local noLimitColour = BS.GetVar("NoLimitColour", this) and "|cf9f9f9" or ""
-        local noLimitTerminator = BS.GetVar("NoLimitColour", this) and "|r" or ""
-        local value =
-            bagUsed .. (BS.GetVar("HideLimit", this) and "" or (noLimitColour .. "/" .. bagSize .. noLimitTerminator))
+        local noLimitColour = BS.GetVar("NoLimitColour", this) and BS.COLOURS.OffWhite or BS.COLOURS.Green
+        local value = bagUsed .. (BS.GetVar("HideLimit", this) and "" or (noLimitColour:Colorize("/" .. bagSize)))
         local widthValue = bagUsed .. (BS.GetVar("HideLimit", this) and "" or ("/" .. bagSize))
         local pcUsed = math.floor((bagUsed / bagSize) * 100)
-        local colour = BS.GetColour(this, "Ok")
+        local colour = BS.GetColour(this, "Ok", true)
 
         if (pcUsed >= BS.GetVar("WarningValue", this) and pcUsed < BS.GetVar("DangerValue", this)) then
-            colour = BS.GetColour(this, "Warning")
+            colour = BS.GetColour(this, "Warning", true)
 
             if (BS.GetVar("Announce", this) and newItem) then
                 local announce = true
@@ -32,21 +30,20 @@ BS.widgets[BS.W_BAG_SPACE] = {
                 end
             end
         elseif (pcUsed >= BS.GetVar("DangerValue", this)) then
-            colour = BS.GetColour(this, "Danger")
+            colour = BS.GetColour(this, "Danger", true)
         end
 
         if (BS.GetVar("MaxValue", this)) then
             if (pcUsed == 100) then
-                colour = BS.GetColour(this, "Max")
+                colour = BS.GetColour(this, "Max", true)
             end
         end
 
-        widget:SetColour(unpack(colour))
+        widget:SetColour(colour)
 
         if (BS.GetVar("ShowFreeSpace", this)) then
             value =
-                (bagSize - bagUsed) ..
-                (BS.GetVar("HideLimit", this) and "" or (noLimitColour .. "/" .. bagSize .. noLimitTerminator))
+                (bagSize - bagUsed) .. (BS.GetVar("HideLimit", this) and "" or (noLimitColour:Colorize("/" .. bagSize)))
             widthValue = (bagSize - bagUsed) .. (BS.GetVar("HideLimit", this) and "" or ("/" .. bagSize))
         end
 
@@ -94,38 +91,35 @@ BS.widgets[BS.W_BANK_SPACE] = {
         local this = BS.W_BANK_SPACE
         local bagSize = GetBagSize(_G.BAG_BANK)
         local bagUsed = GetNumBagUsedSlots(_G.BAG_BANK)
-        local noLimitColour = BS.GetVar("NoLimitColour", this) and "|cf9f9f9" or ""
-        local noLimitTerminator = BS.GetVar("NoLimitColour", this) and "|r" or ""
+        local noLimitColour = BS.GetVar("NoLimitColour", this) and BS.COLOURS.OffWhite or BS.COLOURS.Green
 
         if (IsESOPlusSubscriber()) then
             bagSize = bagSize + GetBagSize(_G.BAG_SUBSCRIBER_BANK)
             bagUsed = bagUsed + GetNumBagUsedSlots(_G.BAG_SUBSCRIBER_BANK)
         end
 
-        local value =
-            bagUsed .. (BS.GetVar("HideLimit", this) and "" or (noLimitColour .. "/" .. bagSize .. noLimitTerminator))
+        local value = bagUsed .. (BS.GetVar("HideLimit", this) and "" or (noLimitColour:Colorize("/" .. bagSize)))
         local widthValue = bagUsed .. (BS.GetVar("HideLimit", this) and "" or ("/" .. bagSize))
         local pcUsed = math.floor((bagUsed / bagSize) * 100)
-        local colour = BS.GetColour(this, "Ok")
+        local colour = BS.GetColour(this, "Ok", true)
 
         if (pcUsed >= BS.GetVar("WarningValue", this) and pcUsed < BS.GetVar("DangerValue", this)) then
-            colour = BS.GetColour(this, "Warning")
+            colour = BS.GetColour(this, "Warning", true)
         elseif (pcUsed >= BS.GetVar("DangerValue", this)) then
-            colour = BS.GetColour(this, "Danger")
+            colour = BS.GetColour(this, "Danger", true)
         end
 
         if (BS.GetVar("MaxValue", this)) then
             if (pcUsed == 100) then
-                colour = BS.GetColour(this, "Max")
+                colour = BS.GetColour(this, "Max", true)
             end
         end
 
-        widget:SetColour(unpack(colour))
+        widget:SetColour(colour)
 
         if (BS.GetVar("ShowFreeSpace", this)) then
             value =
-                (bagSize - bagUsed) ..
-                (BS.GetVar("HideLimit", this) and "" or (noLimitColour .. "/" .. bagSize .. noLimitTerminator))
+                (bagSize - bagUsed) .. (BS.GetVar("HideLimit", this) and "" or (noLimitColour:Colorize("/" .. bagSize)))
             widthValue = (bagSize - bagUsed) .. (BS.GetVar("HideLimit", this) and "" or ("/" .. bagSize))
         end
 
@@ -160,7 +154,7 @@ BS.widgets[BS.W_REPAIR_COST] = {
             end
 
             widget:SetValue(repairCost)
-            widget:SetColour(unpack(BS.GetColour(this)))
+            widget:SetColour(BS.GetColour(this, true))
 
             return repairCost
         end
@@ -208,18 +202,18 @@ BS.widgets[BS.W_DURABILITY] = {
 
         for slot = 0, GetBagSize(_G.BAG_WORN) do
             if (not ignoreSlots[slot]) then
-                local colour = BS.ARGBConvert(BS.GetColour(this, "Ok"))
+                local colour = BS.GetColour(this, "Ok", true)
                 local itemName = ZO_CachedStrFormat("<<C:1>>", GetItemName(_G.BAG_WORN, slot))
                 local condition = GetItemCondition(_G.BAG_WORN, slot)
 
                 if (itemName ~= "") then
                     if (condition <= BS.GetVar("OkValue", this) and condition >= BS.GetVar("DangerValue", this)) then
-                        colour = BS.ARGBConvert(BS.GetColour(this, "Warning"))
+                        colour = BS.GetColour(this, "Warning", true)
                     elseif (condition < BS.GetVar("DangerValue", this)) then
-                        colour = BS.ARGBConvert(BS.GetColour(this, "Danger"))
+                        colour = BS.GetColour(this, "Danger", true)
                     end
 
-                    table.insert(items, string.format("%s%s - %s%%|r", colour, itemName, condition))
+                    table.insert(items, colour:Colorize(string.format("%s - %d%%", itemName, condition)))
 
                     if (lowest > condition) then
                         lowest = condition
@@ -234,14 +228,14 @@ BS.widgets[BS.W_DURABILITY] = {
         local colour
 
         if (lowest >= BS.GetVar("OkValue", this)) then
-            colour = BS.GetColour(this, "Ok")
+            colour = BS.GetColour(this, "Ok", true)
         elseif (BS.GetVar("DangerValue", this)) then
-            colour = BS.GetColour(this, "Warning")
+            colour = BS.GetColour(this, "Warning", true)
         else
-            colour = BS.GetColour(this, "Danger")
+            colour = BS.GetColour(this, "Danger", true)
         end
 
-        widget:SetColour(unpack(colour))
+        widget:SetColour(colour)
 
         if (lowest <= BS.GetVar("DangerValue", this)) then
             if (lowestType == _G.ITEMTYPE_WEAPON) then
@@ -296,15 +290,15 @@ BS.widgets[BS.W_REPAIRS_KITS] = {
             count = count + item.stackCount
         end
 
-        local colour = BS.GetColour(this, "Ok")
+        local colour = BS.GetColour(this, "Ok", true)
 
         if (count < BS.GetVar("DangerValue", this)) then
-            colour = BS.GetColour(this, "Danger")
+            colour = BS.GetColour(this, "Danger", true)
         elseif (count < BS.GetVar("WarningValue", this)) then
-            colour = BS.GetColour(this, "Warning")
+            colour = BS.GetColour(this, "Warning", true)
         end
 
-        widget:SetColour(unpack(colour))
+        widget:SetColour(colour)
         widget:SetValue(count)
 
         return count
@@ -355,7 +349,7 @@ BS.widgets[BS.W_SOUL_GEMS] = {
         local displayValue = filledCount
         local widthValue = filledCount
         local displayIcon = filledIcon
-        local both = "|c00ff00" .. filledCount .. "|r/" .. emptyCount
+        local both = BS.COLOURS.Green:Colorize(filledCount) .. "/" .. emptyCount
 
         if (BS.GetVar("GemType", this) == GetString(_G.BARSTEWARD_EMPTY)) then
             displayValue = emptyCount
@@ -366,7 +360,7 @@ BS.widgets[BS.W_SOUL_GEMS] = {
             widthValue = filledCount .. "/" .. emptyCount
         end
 
-        widget:SetColour(unpack(BS.GetColour(this)))
+        widget:SetColour(BS.GetColour(this, true))
         widget:SetValue(displayValue, widthValue)
         widget:SetIcon(displayIcon)
 
@@ -488,7 +482,7 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
         end
 
         widget:SetValue(writs .. "/" .. surveys .. "/" .. maps)
-        widget:SetColour(unpack(BS.GetColour(BS.W_WRITS_SURVEYS)))
+        widget:SetColour(BS.GetColour(BS.W_WRITS_SURVEYS, true))
 
         local wwText = ""
 
@@ -500,18 +494,20 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
                 cant = cant + d.cannotCraft
             end
 
-            local canColour = BS.ARGBConvert((can > 0) and BS.GetVar("DefaultOkColour") or BS.GetVar("DefaultColour"))
-            local cantColour =
-                BS.ARGBConvert((cant > 0) and BS.GetVar("DefaultDangerColour") or BS.GetVar("DefaultColour"))
+            local canColour = (can > 0) and BS.COLOURS.DefaultOkColour or BS.COLOURS.DefaultColour
+            local cantColour = (cant > 0) and BS.COLOURS.DefaultDangerColour or BS.COLOURS.DefaultColour
 
-            wwText = "   (" .. canColour .. can .. "|r/"
-            wwText = wwText .. cantColour .. cant .. "|r|cf9f9f9)"
+            wwText = "   (" .. canColour:Colorize(can) .. "/"
+            wwText = wwText .. cantColour:Colorize(cant) .. ")"
         end
 
-        local ttt = GetString(_G.BARSTEWARD_WRITS) .. BS.LF .. "|cf9f9f9"
-        ttt = ttt .. zo_strformat(GetString(_G.BARSTEWARD_WRITS_WRITS), writs) .. wwText .. BS.LF
-        ttt = ttt .. zo_strformat(GetString(_G.BARSTEWARD_WRITS_SURVEYS), surveys) .. BS.LF
-        ttt = ttt .. zo_strformat(GetString(_G.BARSTEWARD_WRITS_MAPS), maps) .. "|r"
+        local ttt = GetString(_G.BARSTEWARD_WRITS) .. BS.LF
+        local ttext = zo_strformat(GetString(_G.BARSTEWARD_WRITS_WRITS), writs) .. wwText .. BS.LF
+
+        ttext = ttext .. zo_strformat(GetString(_G.BARSTEWARD_WRITS_SURVEYS), surveys) .. BS.LF
+        ttext = ttext .. zo_strformat(GetString(_G.BARSTEWARD_WRITS_MAPS), maps)
+
+        ttt = ttt .. BS.COLOURS.OffWhite:Colorize(ttext)
 
         local writText = {}
 
@@ -529,13 +525,11 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
             if (useWW) then
                 local can = canDo[type].canCraft
                 local cant = canDo[type].cannotCraft
-                local canColour =
-                    BS.ARGBConvert((can > 0) and BS.GetVar("DefaultOkColour") or BS.GetVar("DefaultColour"))
-                local cantColour =
-                    BS.ARGBConvert((cant > 0) and BS.GetVar("DefaultDangerColour") or BS.GetVar("DefaultColour"))
+                local canColour = (can > 0) and BS.COLOURS.DefaultOkColour or BS.COLOURS.DefaultColour
+                local cantColour = (cant > 0) and BS.COLOURS.DefaultDangerColour or BS.COLOURS.DefaultColour
 
-                writType = string.format("%s   (%s%d|r/", writType, canColour, can)
-                writType = string.format("%s%s%d|r)", writType, cantColour, cant)
+                writType = string.format("%s   (%s/", writType, canColour:Colorize(can))
+                writType = string.format("%s%s)", writType, cantColour:Colorize(cant))
             end
 
             table.insert(writText, writType)
@@ -619,7 +613,7 @@ BS.widgets[BS.W_TROPHY_VAULT_KEYS] = {
             end
         end
 
-        widget:SetColour(unpack(BS.GetColour(BS.W_TROPHY_VAULT_KEYS)))
+        widget:SetColour(BS.GetColour(BS.W_TROPHY_VAULT_KEYS, true))
         widget:SetValue(count)
 
         if (count > 0) then
@@ -629,7 +623,7 @@ BS.widgets[BS.W_TROPHY_VAULT_KEYS] = {
                 for _, key in pairs(keys[bagType]) do
                     local zoIcon = BS.Icon(key.icon)
 
-                    ttt = ttt .. BS.LF .. BS.BAGICON .. " " .. zoIcon .. " " .. "|cf9f9f9" .. key.name .. "|r"
+                    ttt = ttt .. BS.LF .. BS.BAGICON .. " " .. zoIcon .. " " .. BS.COLOURS.OffWhite:Colorize(key.name)
 
                     if (key.count > 1) then
                         ttt = ttt .. " (" .. key.count .. ")"
@@ -654,15 +648,15 @@ BS.widgets[BS.W_LOCKPICKS] = {
     update = function(widget)
         local available = GetNumLockpicksLeft()
         local this = BS.W_LOCKPICKS
-        local colour = BS.GetColour(this, "Ok")
+        local colour = BS.GetColour(this, "Ok", true)
 
         if (available <= BS.GetVar("WarningValue", this) and available > BS.GetVar("DangerValue", this)) then
-            colour = BS.GetColour(this, "Warning")
+            colour = BS.GetColour(this, "Warning", true)
         elseif (available <= BS.GetVar("DangerValue", this)) then
-            colour = BS.GetColour(this, "Danger")
+            colour = BS.GetColour(this, "Danger", true)
         end
 
-        widget:SetColour(unpack(colour))
+        widget:SetColour(colour)
         widget:SetValue(available)
 
         return available
@@ -713,6 +707,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
             for _, data in pairs(_G.SHARED_INVENTORY.bagCache[bag]) do
                 if (data) then
                     local itemId = GetItemId(bag, data.slotIndex)
+
                     if (itemIds[itemId]) then
                         if (linkCache[itemId]) then
                             local cnt = data.stackCount
@@ -752,7 +747,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
 
                 ttt = ttt .. BS.LF
                 ttt = ttt .. (bagType == "bag" and BS.BAGICON or BS.BANKICON)
-                ttt = ttt .. " " .. zoIcon .. " " .. "|cf9f9f9" .. key.name .. "|r"
+                ttt = ttt .. " " .. zoIcon .. " " .. BS.COLOURS.OffWhite:Colorize(key.name)
                 ttt = ttt .. " (" .. key.count .. ")"
             end
         end
@@ -774,19 +769,20 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
                     end
 
                     local countItem = BS.Icon(data.icon, nil, iconSize, iconSize)
+
                     countText = countText .. countItem .. " " .. itemCount .. " "
                     plainCountText = plainCountText .. minSize .. " " .. itemCount .. " "
 
                     if (not foundIds[itemId]) then
                         local zoIcon = BS.Icon(data.icon)
 
-                        ttt = ttt .. BS.LF .. BS.BAGICON .. " " .. zoIcon .. " " .. "|cf9f9f9" .. data.name .. "|r"
-                        ttt = ttt .. " (0)"
+                        ttt = ttt .. BS.LF .. BS.BAGICON .. " " .. zoIcon .. " "
+                        ttt = ttt .. BS.COLOURS.OffWhite:Colorize(data.name) .. " (0)"
                     end
                 end
             end
 
-            widget:SetColour(unpack(BS.GetColour(this)))
+            widget:SetColour(BS.GetColour(this, true))
             widget:SetValue(BS.Trim(countText), BS.Trim(plainCountText))
         end
 
@@ -1088,7 +1084,7 @@ local function getEmotes()
     end
 end
 
-local function randomonLeftClick(collectibleTable, widgetIndex)
+local function randomOnLeftClick(collectibleTable, widgetIndex)
     if (#collectibleTable == 0) then
         return
     end
@@ -1112,15 +1108,15 @@ local function randomonLeftClick(collectibleTable, widgetIndex)
 
         local tt = BS.widgets[widgetIndex].tooltip .. BS.LF
 
-        tt = tt .. "|cf9f9f9" .. GetString(_G.BARSTEWARD_RANDOM_RECENT) .. "|r" .. BS.LF
-        tt = tt .. "|cffd700" .. name
+        tt = tt .. BS.COLOURS.OffWhite:Colorize(GetString(_G.BARSTEWARD_RANDOM_RECENT)) .. BS.LF
+        tt = tt .. BS.COLOURS.ZOSGold:Colorize(name)
 
         widget:SetTooltip(tt)
 
         UseCollectible(collectibleId)
 
         if (BS.GetVar("Print", widgetIndex)) then
-            local output = "|cff9900Bar Steward|r: " .. name
+            local output = BS.COLOURS.ZOSGold:Colorize("Bar Steward") .. ": " .. name
 
             CHAT_ROUTER:AddSystemMessage(output)
         end
@@ -1153,7 +1149,7 @@ BS.widgets[BS.W_RANDOM_MEMENTO] = {
     icon = "icons/collectible_memento_blizzard",
     cooldown = true,
     onLeftClick = function()
-        randomonLeftClick(mementos, BS.W_RANDOM_MEMENTO)
+        randomOnLeftClick(mementos, BS.W_RANDOM_MEMENTO)
     end
 }
 
@@ -1174,7 +1170,7 @@ BS.widgets[BS.W_RANDOM_PET] = {
     icon = "icons/pet_sphynxlynx",
     cooldown = true,
     onLeftClick = function()
-        randomonLeftClick(pets, BS.W_RANDOM_PET)
+        randomOnLeftClick(pets, BS.W_RANDOM_PET)
     end
 }
 
@@ -1194,7 +1190,7 @@ BS.widgets[BS.W_RANDOM_MOUNT] = {
     tooltip = GetString(_G.BARSTEWARD_RANDOM_MOUNT),
     icon = "collections/random_anymount",
     onLeftClick = function()
-        randomonLeftClick(mounts, BS.W_RANDOM_MOUNT)
+        randomOnLeftClick(mounts, BS.W_RANDOM_MOUNT)
     end
 }
 
@@ -1243,14 +1239,14 @@ BS.widgets[BS.W_RANDOM_EMOTE] = {
             local widget = BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[BS.W_RANDOM_EMOTE])
             local tt = BS.widgets[BS.W_RANDOM_EMOTE].tooltip .. BS.LF
 
-            tt = tt .. "|cf9f9f9" .. GetString(_G.BARSTEWARD_RANDOM_RECENT) .. "|r" .. BS.LF
-            tt = tt .. "|cffd700" .. displayName
+            tt = tt .. BS.COLOURS.OffWhite:Colorize(GetString(_G.BARSTEWARD_RANDOM_RECENT)) .. BS.LF
+            tt = tt .. BS.COLOURS.ZOSGold:Colorize(displayName)
 
             widget:SetTooltip(tt)
 
             if (BS.Vars.Controls[BS.W_RANDOM_EMOTE].Print) then
                 local name = BS.Format(displayName)
-                local output = "|cff9900Bar Steward|r: " .. name
+                local output = BS.COLOURS.ZOSGold:Colorize("Bar Steward") .. ": " .. name
 
                 CHAT_ROUTER:AddSystemMessage(output)
             end
@@ -1278,20 +1274,20 @@ local function itemScan(widget, filteredItems, widgetIndex, name)
         count = count + item.stackCount
     end
 
-    widget:SetColour(unpack(BS.GetColour(widgetIndex)))
+    widget:SetColour(BS.GetColour(widgetIndex, true))
     widget:SetValue(count)
 
     local tt = name
 
     if (count > 0) then
         for itemName, qty in pairs(items) do
-            tt = tt .. BS.LF .. "|cf9f9f9" .. itemName
+            local ttext = itemName
 
             if (qty > 1) then
-                tt = tt .. " " .. "(" .. qty .. ")"
+                ttext = ttext .. " " .. "(" .. qty .. ")"
             end
 
-            tt = tt .. "|r"
+            tt = tt .. BS.LF .. BS.COLOURS.OffWhite:Colorize(ttext)
         end
     end
 
@@ -1499,15 +1495,15 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
             end
         end
 
-        local colour = BS.GetColour(this, "Ok")
+        local colour = BS.GetColour(this, "Ok", true)
 
         if (count <= BS.GetVar("WarningValue", this) and count > BS.GetVar("DangerValue", this)) then
-            colour = BS.GetColour(this, "Warning")
+            colour = BS.GetColour(this, "Warning", true)
         elseif (count <= BS.GetVar("DangerValue", this)) then
-            colour = BS.GetColour(this, "Danger")
+            colour = BS.GetColour(this, "Danger", true)
         end
 
-        widget:SetColour(unpack(colour))
+        widget:SetColour(colour)
         widget:SetValue(count)
 
         local tt = GetString(_G.BARSTEWARD_EQUIPPED_POISON)
@@ -1519,7 +1515,8 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
                     GetString(_G.BARSTEWARD_MAIN_BAR)
 
                 tt = string.format("%s%s%s ", tt, BS.LF, BS.Icon(poison.icon))
-                tt = string.format("%s|cf9f9f9%s|r %s (%d)", tt, poison.name, slotName, poison.count)
+                tt =
+                    string.format("%s%s %s (%d)", tt, BS.COLOURS.OffWhite:Colorize(poison.name), slotName, poison.count)
 
                 if (selected == BS.ACTIVE_BAR) then
                     if
@@ -1622,16 +1619,16 @@ BS.widgets[BS.W_FRAGMENTS] = {
 
         if (unnecessary > 0) then
             plainText = text .. "/" .. unnecessary
-            text = text .. "/|cffff00" .. unnecessary .. "|r"
+            text = text .. "/" .. BS.COLOURS.Yellow:Colorize(unnecessary)
         end
 
         widget:SetValue(text, plainText)
-        widget:SetColour(unpack(BS.GetColour(this)))
+        widget:SetColour(BS.GetColour(this, true))
 
         local tt = GetString(_G.BARSTEWARD_COLLECTIBLE_FRAGMENTS)
         local collectedtt = ""
-        local unnecessarytt = "|cffff00"
-        local uncollectedtt = "|cababab"
+        local unnecessarytt = ""
+        local uncollectedtt = ""
         local fragmentsForDisplay = {}
 
         for id, info in pairs(fragmentInfo) do
@@ -1664,9 +1661,16 @@ BS.widgets[BS.W_FRAGMENTS] = {
             if (info.collected + info.uncollected + info.unnecessary > 0) then
                 if (info.collected and (info.unnecessary == 0) and info.collected > 0) then
                     collectedtt = string.format("%s%s ", collectedtt, BS.Icon(info.icon))
-                    collectedtt = string.format("%s|cf9f9f9%s ", collectedtt, collectibleName)
-                    collectedtt = string.format("%s|r|c00ff00%d", collectedtt, info.collected)
-                    collectedtt = string.format("%s / %d|r%s", collectedtt, info.collected + info.uncollected, BS.LF)
+                    collectedtt = string.format("%s%s ", collectedtt, BS.COLOURS.OffWhite:Colorize(collectibleName))
+                    collectedtt =
+                        string.format("%s%s", collectedtt, BS.COLOURS.Green:Colorize(tostring(info.collected)))
+                    collectedtt =
+                        string.format(
+                        "%s / %s%s",
+                        collectedtt,
+                        BS.COLOURS.Green:Colorize(tostring(info.collected + info.uncollected)),
+                        BS.LF
+                    )
                 end
 
                 if (info.unnecessary > 0) then
@@ -1674,6 +1678,7 @@ BS.widgets[BS.W_FRAGMENTS] = {
                     unnecessarytt = string.format("%s%s %d", unnecessarytt, collectibleName, info.unnecessary)
                     unnecessarytt =
                         string.format("%s / %d%s", unnecessarytt, info.unnecessary + info.uncollected, BS.LF)
+                    unnecessarytt = BS.COLOURS.Yellow:Colorize(unnecessarytt)
                 end
 
                 if (info.collected and (info.unnecessary == 0) and info.collected == 0) then
@@ -1684,18 +1689,15 @@ BS.widgets[BS.W_FRAGMENTS] = {
             end
         end
 
-        if (uncollectedtt:sub(-1) == BS.LF) then
-            uncollectedtt = uncollectedtt:sub(1, uncollectedtt:len() - 1)
-        end
-
         tt = tt .. BS.LF .. collectedtt .. BS.LF
 
-        if (unnecessarytt:len() > 8) then
+        if (unnecessarytt:len() > 0) then
             tt = tt .. GetString(_G.BARSTEWARD_ALREADY_COLLECTED) .. BS.LF .. unnecessarytt .. "|r" .. BS.LF
         end
 
-        if (uncollectedtt:len() > 8) then
-            tt = tt .. GetString(_G.BARSTEWARD_NOT_COLLECTED) .. BS.LF .. uncollectedtt .. "|r"
+        if (uncollectedtt:len() > 0) then
+            uncollectedtt = BS.COLOURS.Grey:Colorize(uncollectedtt)
+            tt = tt .. GetString(_G.BARSTEWARD_NOT_COLLECTED) .. BS.LF .. BS.Trim(uncollectedtt) .. "|r"
         end
 
         widget:SetTooltip(tt)
@@ -1730,7 +1732,7 @@ BS.widgets[BS.W_RUNEBOXES] = {
             function(itemdata)
                 return ZO_IsElementInNumericallyIndexedTable(BS.FRAGMENT_TYPES, itemdata.specializedItemType)
             end,
-            unpack(bags)
+            unpack(bags) -- lol :-)
         )
 
         for _, item in ipairs(filteredItems) do
@@ -1773,15 +1775,15 @@ BS.widgets[BS.W_RUNEBOXES] = {
 
         if (unnecessary > 0) then
             plainText = text .. "/" .. unnecessary
-            text = text .. "/|cffff00" .. unnecessary .. "|r"
+            text = text .. "/" .. BS.COLOURS.Yellow:Colorize(unnecessary)
         end
 
         widget:SetValue(text, plainText)
-        widget:SetColour(unpack(BS.GetColour(this)))
+        widget:SetColour(BS.GetColour(this, true))
 
         local tt = GetString(_G.BARSTEWARD_RUNEBOX_FRAGMENTS)
         local collectedtt = ""
-        local unnecessarytt = "|cffff00"
+        local unnecessarytt = ""
         local icon
         local tttable = {}
 
@@ -1815,35 +1817,40 @@ BS.widgets[BS.W_RUNEBOXES] = {
             if (info.collected + info.required + info.unnecessary > 0) then
                 if (info.collected and (info.unnecessary == 0)) then
                     collectedtt = string.format("%s%s ", collectedtt, BS.Icon(info.icon))
-                    collectedtt = string.format("%s|cf9f9f9%s ", collectedtt, info.name)
-                    collectedtt = string.format("%s|r|c00ff00%d", collectedtt, info.collected)
-                    collectedtt = string.format("%s / %d|r%s", collectedtt, info.required, BS.LF)
+                    collectedtt = string.format("%s%s ", collectedtt, BS.COLOURS.OffWhite:Colorize(info.name))
+                    collectedtt =
+                        string.format("%s%s", collectedtt, BS.COLOURS.Green:Colorize(tostring(info.collected)))
+                    collectedtt =
+                        string.format("%s / %s%s", collectedtt, BS.COLOURS.Green:Colorize(info.required), BS.LF)
                 end
 
                 if (info.unnecessary > 0) then
                     unnecessarytt = string.format("%s%s ", unnecessarytt, BS.Icon(info.icon))
                     unnecessarytt = string.format("%s%s %d", unnecessarytt, info.name, info.unnecessary)
                     unnecessarytt = string.format("%s / %d%s", unnecessarytt, info.required, BS.LF)
+                    unnecessarytt = BS.COLOURS.Yellow:Colorize(unnecessarytt)
                 end
             end
         end
 
         tt = tt .. BS.LF .. collectedtt .. "|r" .. BS.LF
 
-        if (unnecessarytt:len() > 8) then
+        if (unnecessarytt:len() > 0) then
             tt = tt .. GetString(_G.BARSTEWARD_ALREADY_COLLECTED) .. BS.LF .. unnecessarytt .. "|r"
         end
 
         local uncollected = BS.GetNoneCollected(fragmentInfo)
 
-        tt = tt .. BS.LF .. GetString(_G.BARSTEWARD_NOT_COLLECTED) .. "|cababab"
+        tt = tt .. BS.LF .. GetString(_G.BARSTEWARD_NOT_COLLECTED)
+
+        local ttext = ""
 
         for _, info in ipairs(uncollected) do
-            tt = string.format("%s%s%s ", tt, BS.LF, BS.Icon(info.icon))
-            tt = string.format("%s%s 0/%d", tt, BS.Format(info.name), info.quantity)
+            ttext = string.format("%s%s%s ", ttext, BS.LF, BS.Icon(info.icon))
+            ttext = string.format("%s%s 0/%d", ttext, BS.Format(info.name), info.quantity)
         end
 
-        widget:SetTooltip(tt)
+        widget:SetTooltip(tt .. BS.COLOURS.Grey:Colorize(ttext))
 
         return collected
     end,
@@ -1910,7 +1917,7 @@ BS.widgets[BS.W_RECIPE_WATCH] = {
         if ((event or "initial") == "initial") then
             widget:SetValue(BS.Vars.FoundCount or 0)
             widget:SetTooltip(getFoundRecipesTooltip())
-            widget:SetColour(unpack(BS.GetColour(this)))
+            widget:SetColour(BS.GetColour(this, true))
         end
 
         if (itemType ~= _G.ITEMTYPE_RECIPE) then
@@ -1940,7 +1947,7 @@ BS.widgets[BS.W_RECIPE_WATCH] = {
         end
 
         widget:SetValue(BS.Vars.FoundCount)
-        widget:SetColour(unpack(BS.GetColour(this)))
+        widget:SetColour(BS.GetColour(this, true))
         widget:SetTooltip(getFoundRecipesTooltip())
 
         return BS.Vars.FoundCount
@@ -1995,12 +2002,12 @@ end
 
 local function getColour(value)
     local this = BS.W_WEAPON_CHARGE
-    local colour = BS.GetVar("OkColour", this) or BS.GetVar("DefaultOkColour")
+    local colour = BS.GetColour(this, "Ok", true)
 
     if (value <= BS.GetVar("WarningValue", this) and value > BS.GetVar("DangerValue", this)) then
-        colour = BS.GetVar("WarningColour", this) or BS.GetVar("DefaultWarningColour")
+        colour = BS.GetColour(this, "Warning", true)
     elseif (value <= BS.GetVar("DangerValue", this)) then
-        colour = BS.GetVar("DangerColour", this) or BS.GetVar("DefaultDangerColour")
+        colour = BS.GetColour(this, "Danger", true)
     end
 
     return colour
@@ -2055,14 +2062,14 @@ BS.widgets[BS.W_WEAPON_CHARGE] = {
         local colour = getColour(min.raw or 0)
 
         widget:SetValue(min.pc)
-        widget:SetColour(unpack(colour))
+        widget:SetColour(colour)
 
         local tt = GetString(_G.BARSTEWARD_WEAPON_CHARGE)
 
         for _, info in pairs(weaponCharges) do
-            local slotColour = BS.ARGBConvert(getColour(info.raw))
+            local slotColour = getColour(info.raw)
 
-            tt = string.format("%s%s%s%s|r - %s", tt, BS.LF, slotColour, info.name, info.pc)
+            tt = string.format("%s%s%s - %s", tt, BS.LF, slotColour:Colorize(info.name), info.pc)
         end
 
         widget:SetTooltip(tt)
@@ -2090,15 +2097,15 @@ BS.widgets[BS.W_SCRIBING_INK] = {
         local inkCount =
             GetItemLinkInventoryCount(inkLink, _G.INVENTORY_COUNT_BAG_OPTION_BACKPACK_AND_BANK_AND_CRAFT_BAG)
 
-        local colour = BS.GetColour(this, "Ok")
+        local colour = BS.GetColour(this, "Ok", true)
 
         if (inkCount < BS.GetVar("DangerValue", this)) then
-            colour = BS.GetColour(this, "Danger")
+            colour = BS.GetColour(this, "Danger", true)
         elseif (inkCount < BS.GetVar("WarningValue", this)) then
-            colour = BS.GetColour(this, "Warning")
+            colour = BS.GetColour(this, "Warning", true)
         end
 
-        widget:SetColour(unpack(colour))
+        widget:SetColour(colour)
         widget:SetValue(inkCount)
 
         return inkCount

@@ -26,33 +26,34 @@ BS.widgets[BS.W_MOUNT_TRAINING] = {
             remaining, total = GetTimeUntilCanBeTrained()
         end
 
-        local colour = BS.GetColour(this, "Ok")
+        local colour = BS.GetColour(this, "Ok", true)
         local time = "X"
 
         if (remaining ~= nil and total ~= nil) then
             remaining = remaining / 1000
             time = BS.SecondsToTime(remaining, true, false, BS.GetVar("HideSeconds", this))
-            colour = BS.GetTimeColour(remaining, this) or colour
+            colour = BS.GetTimeColour(remaining, this, nil, true, true)
 
             if (remaining == 0) then
                 trainingActive = false
             end
         end
 
-        widget:SetColour(unpack(colour))
+        widget:SetColour(colour)
         widget:SetValue(time)
 
         local ttt = GetString(_G.BARSTEWARD_MOUNT_TRAINING) .. BS.LF .. BS.LF
+
         ttt = ttt .. GetString(_G.BARSTEWARD_TRAINING_PROGRESS)
 
         for trainingType, texture in pairs(_G.STABLE_TRAINING_TEXTURES) do
-            local icon = string.format("%s|cf9f9f9%s ", BS.LF, BS.Icon(texture))
+            local icon = string.format("%s%s ", BS.LF, BS.Icon(texture))
             local ttype = string.format("%s ", BS.Format(GetString("SI_RIDINGTRAINTYPE", trainingType)))
             local val, maxVal = STABLE_MANAGER:GetStats(trainingType)
-            local tcol = ((val == maxVal) and BS.GetVar("DefaultOkColour") or BS.GetVar("DefaultWarningColour"))
-            local col = string.format("|r%s", BS.ARGBConvert(tcol))
+            local tcol = (val == maxVal) and BS.COLOURS.DefaultOkColour or BS.COLOURS.DefaultWarningColour
 
-            ttt = string.format("%s%s%s%s%s/%s|r", ttt, icon, ttype, col, val, maxVal)
+            ttt = string.format("%s%s%s%s/%s", ttt, icon, ttype, tcol:Colorize(val), maxVal)
+            ttt = BS.COLOURS.OffWhite:Colorize(ttt)
         end
 
         widget:SetTooltip(ttt)

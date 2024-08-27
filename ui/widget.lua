@@ -464,9 +464,19 @@ function baseWidget:ClearAnchors()
     self.control:ClearAnchors()
 end
 
-function baseWidget:SetColour(...)
+function baseWidget:SetColour(r, g, b, a)
     if (not self.noValue) then
-        self.value:SetColor(...)
+        if (type(r) == "table") then
+            if (r.New) then
+                r, g, b, a = r:UnpackRGBA()
+            elseif (r.r) then
+                r, g, b, a = r.r, r.g, r.b, r.a
+            else
+                r, g, b, a = unpack(r)
+            end
+        end
+
+        self.value:SetColor(r, g, b, a)
     end
 end
 

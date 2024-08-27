@@ -8,20 +8,20 @@ local star = BS.Icon("targetmarkers/target_gold_star_64")
 
 local function configureWidget(widget, complete, maxComplete, activityType, tasks, hideLimit, defaultTooltip)
     local widgetIndex = activityType == _G.TIMED_ACTIVITY_TYPE_DAILY and BS.W_DAILY_ENDEAVOURS or BS.W_WEEKLY_ENDEAVOURS
-    local colour = BS.GetColour(widgetIndex)
+    local colour = BS.GetColour(widgetIndex, true)
 
     if (BS.GetVar("UseRag", widgetIndex)) then
         if (complete > 0 and complete < maxComplete) then
-            colour = BS.GetVar("DefaultWarningColour")
+            colour = BS.COLOURS.DefaultWarningColour
         elseif (complete == maxComplete) then
-            colour = BS.GetVar("DefaultOkColour")
+            colour = BS.COLOURS.DefaultOkColour
         else
-            colour = BS.GetVar("DefaultDangerColour")
+            colour = BS.COLOURS.DefaultDangerColour
         end
     end
 
     widget:SetValue(complete .. (hideLimit and "" or ("/" .. maxComplete)))
-    widget:SetColour(unpack(colour))
+    widget:SetColour(colour)
 
     if (#tasks > 0) then
         local tooltipText = defaultTooltip or ""
@@ -73,17 +73,17 @@ local function getTimedActivityProgress(activityType, widget, hideLimit, default
             local progress = GetTimedActivityProgress(idx)
             local pcProgress = progress / max
             local ttext = name .. "  (" .. progress .. "/" .. max .. ")"
-            local colour = "|cb4b4b4"
+            local colour = BS.COLOURS.Grey
 
             completed[activityType] = false
 
             if (progress > 0 and progress < max and complete ~= maxComplete) then
-                colour = "|cffff00"
+                colour = BS.COLOURS.Yellow
             elseif (complete == maxComplete and max ~= progress) then
-                colour = "|cb4b4b4"
+                colour = BS.COLOURS.Grey
             elseif (max == progress) then
                 complete = complete + 1
-                colour = "|c00ff00"
+                colour = BS.COLOURS.Green
             end
 
             -- get reward info
@@ -103,7 +103,7 @@ local function getTimedActivityProgress(activityType, widget, hideLimit, default
                 rewardValue = rewardValue + quantity
             end
 
-            ttext = colour .. ttext .. "|r" .. " " .. reward
+            ttext = colour:Colorize(ttext) .. " " .. reward
 
             table.insert(tasks, {text = ttext, value = rewardValue, index = idx})
 
@@ -233,13 +233,13 @@ BS.widgets[BS.W_ENDEAVOUR_PROGRESS] = {
                 widget:SetProgress(maxTask.progress, 0, maxTask.maxProgress)
             else
                 widget:SetValue(maxTask.progress .. "/" .. maxTask.maxProgress)
-                widget:SetColour(unpack(BS.GetColour(this)))
+                widget:SetColour(BS.GetColour(this, true))
             end
 
             local ttt = GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS_BEST) .. BS.LF
-            ttt = ttt .. "|cf6f6f6"
-            ttt = ttt .. maxTask.name .. BS.LF .. BS.LF
-            ttt = ttt .. maxTask.description
+            local taskInfo = maxTask.name .. BS.LF .. BS.LF .. maxTask.description
+
+            ttt = ttt .. BS.COLOURS.OffWhite:Colorize(taskInfo)
 
             widget:SetTooltip(ttt)
 
@@ -286,21 +286,21 @@ BS.widgets[BS.W_ENDEAVOUR_PROGRESS] = {
     }
 }
 
-local difficultyColours = {
-    [_G.ANTIQUITY_DIFFICULTY_TRIVIAL] = "e6e6e6",
-    [_G.ANTIQUITY_DIFFICULTY_SIMPLE] = "2dc50e",
-    [_G.ANTIQUITY_DIFFICULTY_INTERMEDIATE] = "3a92ff",
-    [_G.ANTIQUITY_DIFFICULTY_ADVANCED] = "a02ef7",
-    [_G.ANTIQUITY_DIFFICULTY_MASTER] = "ccaa1a",
-    [_G.ANTIQUITY_DIFFICULTY_ULTIMATE] = "e58b27"
-}
-
 local function getLeadColour(lead)
+    local difficultyColours = {
+        [_G.ANTIQUITY_DIFFICULTY_TRIVIAL] = BS.COLOURS.ZOSGrey,
+        [_G.ANTIQUITY_DIFFICULTY_SIMPLE] = BS.COLOURS.ZOSGreen,
+        [_G.ANTIQUITY_DIFFICULTY_INTERMEDIATE] = BS.COLOURS.ZOSBlue,
+        [_G.ANTIQUITY_DIFFICULTY_ADVANCED] = BS.COLOURS.ZOSPurple,
+        [_G.ANTIQUITY_DIFFICULTY_MASTER] = BS.COLOURS.ZOSGold,
+        [_G.ANTIQUITY_DIFFICULTY_ULTIMATE] = BS.COLOURS.ZOSOrange
+    }
+
     if ((lead.quality or 0) == 0) then
-        return BS.ARGBConvert(BS.Vars.Controls[BS.W_LEADS].Colour or BS.Vars.DefaultColour)
+        return BS.GetColour(BS.W_LEADS, true)
     end
 
-    return "|c" .. difficultyColours[lead.quality]
+    return difficultyColours[lead.quality]
 end
 
 BS.isScryingUnlocked = false
@@ -355,12 +355,12 @@ BS.widgets[BS.W_LEADS] = {
         end
 
         if (#leads > 0) then
-            local timeColour = BS.GetTimeColour(minTime, this) or BS.GetVar("DefaultOkColour")
+            local timeColour = BS.GetTimeColour(minTime, this, nil, true, true)
             local value
 
             if (#leads == 1 and leads[1].inProgress) then
                 value = GetString(_G.BARSTEWARD_IN_PROGRESS)
-                timeColour = {1, 0.5, 0, 1}
+                timeColour = BS.COLOURS.ZOSOrange
                 minTime = 0
             else
                 value =
@@ -382,7 +382,7 @@ BS.widgets[BS.W_LEADS] = {
                 value = tostring(#leads)
             end
 
-            widget:SetColour(unpack(timeColour))
+            widget:SetColour(timeColour)
             widget:SetValue(value)
 
             local ttt = BS.Format(_G.SI_ANTIQUITY_SUBHEADING_ACTIVE_LEADS)
@@ -397,6 +397,7 @@ BS.widgets[BS.W_LEADS] = {
 
             for _, lead in ipairs(leads) do
                 local nameAndZone = lead.name .. " - " .. lead.zone
+                local ttlColour = getLeadColour(lead)
                 local time =
                     BS.SecondsToTime(
                     lead.remaining,
@@ -406,19 +407,17 @@ BS.widgets[BS.W_LEADS] = {
                     BS.GetVar("Format", this),
                     BS.GetVar("HideDaysWhenZero", this)
                 )
-                local ttlColour = getLeadColour(lead)
-
-                timeColour = BS.GetVar("DefaultOkColour")
 
                 if (lead.inProgress) then
                     time = GetString(_G.BARSTEWARD_IN_PROGRESS)
-                    timeColour = {1, 0.5, 0, 1}
+                    timeColour = BS.COLOURS.ZOSOrange
                 else
-                    timeColour = BS.GetTimeColour(lead.remaining, this) or timeColour
+                    timeColour = BS.GetTimeColour(lead.remaining, this, nil, true, true)
                 end
 
-                ttt = ttt .. BS.LF .. " " .. ttlColour
-                ttt = ttt .. nameAndZone .. " - |r" .. BS.ARGBConvert(timeColour) .. time .. "|r"
+                ttt = ttt .. BS.LF .. " "
+                ttt = ttt .. ttlColour:Colorize(nameAndZone .. "- ")
+                ttt = ttt .. timeColour:Colorize(time)
 
                 if (BS.GetVar("ShowFound", this)) then
                     local found = zo_strformat(_G.SI_ANTIQUITY_TIMES_ACQUIRED, lead.recovered)
@@ -505,13 +504,11 @@ end
 
 local function getTimedActivityTimeRemaining(activityType, this, widget)
     local secondsRemaining = TIMED_ACTIVITIES_MANAGER:GetTimedActivityTypeTimeRemainingSeconds(activityType)
-    local colour = BS.GetVar("OkColour", this) or BS.GetVar("DefaultOkColour")
-
-    colour = BS.GetTimeColour(secondsRemaining, this) or colour
+    local colour = BS.GetTimeColour(secondsRemaining, this, nil, true, true)
 
     local display = getDisplay(secondsRemaining, this)
 
-    widget:SetColour(unpack(colour))
+    widget:SetColour(colour)
     widget:SetValue(display)
 
     return secondsRemaining
@@ -587,9 +584,10 @@ BS.widgets[BS.W_TRIBUTE_CLUB_RANK] = {
             end
 
             local ttt = GetString(_G.BARSTEWARD_TRIBUTE_RANK) .. BS.LF
+            local text = displayRank .. " - " .. rankName .. BS.LF .. BS.LF
 
-            ttt = ttt .. "|cf9f9f9" .. displayRank .. " - " .. rankName .. BS.LF .. BS.LF
-            ttt = ttt .. xp .. " / " .. totalxp .. ((rank == 7) and "" or " (" .. percent .. "%)|r")
+            text = text .. xp .. " / " .. totalxp .. ((rank == 7) and "" or " (" .. percent .. "%)")
+            ttt = ttt .. BS.COLOURS.OffWhite:Colorize(text)
 
             widget:SetTooltip(ttt)
         end
@@ -618,11 +616,11 @@ BS.widgets[BS.W_ACHIEVEMENT_POINTS] = {
         end
 
         widget:SetValue(value)
-        widget:SetColour(unpack(BS.GetColour(this)))
+        widget:SetColour(BS.GetColour(this, true))
 
         local ttt = BS.Format(_G.SI_ACHIEVEMENTS_OVERALL) .. BS.LF
 
-        ttt = ttt .. "|cf9f9f9" .. earnedPoints .. "/" .. totalPoints .. "|r"
+        ttt = ttt .. BS.COLOURS.OffWhite:Colorize(earnedPoints .. "/" .. totalPoints)
 
         widget:SetTooltip(ttt)
 
@@ -669,6 +667,7 @@ local function setTracker(widgetIndex, resetSeconds, tooltip)
     end
 
     local resetTime = resetSeconds + os.time()
+
     BS.Vars:SetCommon(resetTime, "Trackers", widgetIndex, thisCharacter, "resetTime")
 
     local resets = BS.Vars:GetCommon("Trackers", widgetIndex)
@@ -684,8 +683,8 @@ local function setTracker(widgetIndex, resetSeconds, tooltip)
             local formattedTime =
                 BS.SecondsToTime(timeRemaining, true, false, BS.Vars.Controls[BS.W_SHADOWY_VENDOR_TIME].HideSeconds)
 
-            tooltip = tooltip .. BS.LF .. "|cffd700"
-            tooltip = tooltip .. formattedTime .. "|r " .. ZO_FormatUserFacingDisplayName(character)
+            tooltip = tooltip .. BS.LF .. BS.COLOURS.Yellow:Colorize(formattedTime) .. " "
+            tooltip = tooltip .. ZO_FormatUserFacingDisplayName(character)
         end
     end
 
@@ -724,7 +723,7 @@ BS.widgets[BS.W_SHADOWY_VENDOR_TIME] = {
         local timeToReset = GetTimeToShadowyConnectionsResetInSeconds()
         local remaining = BS.SecondsToTime(timeToReset, true, false, BS.GetVar("HideSeconds", this))
 
-        widget:SetColour(unpack(BS.GetVar("DefaultColour")))
+        widget:SetColour(BS.COLOURS.DefaultColour)
         widget:SetValue(remaining)
         widget:SetTooltip(setTracker(this, timeToReset, GetString(_G.BARSTEWARD_SHADOWY_VENDOR_RESET)))
 
@@ -746,7 +745,7 @@ BS.widgets[BS.W_LFG_TIME] = {
         local timeToReset = GetLFGCooldownTimeRemainingSeconds(_G.LFG_COOLDOWN_DUNGEON_REWARD_GRANTED)
         local remaining = BS.SecondsToTime(timeToReset, true, false, BS.GetVar("HideSeconds", this))
 
-        widget:SetColour(unpack(BS.GetVar("DefaultColour")))
+        widget:SetColour(BS.COLOURS.DefaultColour)
         widget:SetValue(remaining)
         widget:SetTooltip(setTracker(this, timeToReset, GetString(_G.BARSTEWARD_DUNGEON_REWARD_RESET)))
 
@@ -821,9 +820,9 @@ BS.widgets[BS.W_LOREBOOKS] = {
 
         for _, category in pairs(categories) do
             local metrics = string.format("%d/%d", category.numKnownBooks, category.totalBooks)
+            local cat = BS.COLOURS.OffWhite:Colorize(category.name)
 
-            tt = string.format("%s%s|cf9f9f9", tt, BS.LF)
-            tt = string.format("%s%s|r %s", tt, category.name, metrics)
+            tt = string.format("%s%s%s %s", tt, BS.LF, cat, metrics)
 
             if (BS.GetVar("ShowCategory", this) == category.name) then
                 value = metrics
@@ -831,7 +830,7 @@ BS.widgets[BS.W_LOREBOOKS] = {
         end
 
         widget:SetValue(value)
-        widget:SetColour(unpack(BS.GetColour(this)))
+        widget:SetColour(BS.GetColour(this, true))
 
         widget:SetTooltip(tt)
 
@@ -894,7 +893,7 @@ BS.widgets[BS.W_SHALIDORS_LIBRARY] = {
         end
 
         widget:SetValue(value)
-        widget:SetColour(unpack(BS.GetColour(BS.W_SHALIDORS_LIBRARY)))
+        widget:SetColour(BS.GetColour(BS.W_SHALIDORS_LIBRARY, true))
 
         return known
     end,
@@ -930,7 +929,7 @@ BS.widgets[BS.W_CRAFTING_MOTIFS] = {
         end
 
         widget:SetValue(value)
-        widget:SetColour(unpack(BS.GetColour(BS.W_CRAFTING_MOTIFS)))
+        widget:SetColour(BS.GetColour(BS.W_CRAFTING_MOTIFS, true))
 
         return known
     end,
@@ -968,7 +967,7 @@ local function getActivityRewardInfo(activityTypes)
                                     xpReward = xpReward,
                                     displayName = zo_strformat(_G.SI_ACTIVITY_FINDER_REWARD_NAME_FORMAT, displayName),
                                     icon = icon,
-                                    colour = {r = red, g = green, b = blue},
+                                    colour = BS.NewColour({r = red, g = green, b = blue}),
                                     active = location:IsActive() or false,
                                     meetsRequirements = location:DoesPlayerMeetLevelRequirements()
                                 }
@@ -1002,17 +1001,15 @@ local function getActvityOutput(data)
 
     data.normalisedOutput = data.normalisedOutput .. "XXXXXXX"
 
-    data.tt = data.tt .. BS.LF .. "|cf9f9f9"
-    data.tt = data.tt .. BS.Format(data.label) .. " |r"
+    data.tt = data.tt .. BS.LF .. BS.COLOURS.OffWhite:Colorize(BS.Format(data.label)) .. " "
 
     if (data.activityData.meetsRequirements) then
         local cdt = ZO_CommaDelimitNumber(data.activityData.xpReward)
-        data.tt = data.tt .. BS.ARGBConvert2(data.activityData.colour) .. data.activityData.displayName .. " |r"
+
+        data.tt = data.tt .. data.activityData.colour:Colorize(data.activityData.displayName) .. " "
         data.tt = data.tt .. zo_strformat(_G.SI_ACTIVITY_FINDER_REWARD_XP_FORMAT, cdt)
     else
-        data.tt = data.tt .. "|cf90000"
-        data.tt = data.tt .. BS.Format(_G.SI_HOUSE_TEMPLATE_UNMET_REQUIREMENTS_TEXT)
-        data.tt = data.tt .. "|r"
+        data.tt = data.tt .. BS.COLOURS.Red:Colorize(BS.Format(_G.SI_HOUSE_TEMPLATE_UNMET_REQUIREMENTS_TEXT))
     end
 
     return data
@@ -1163,7 +1160,7 @@ BS.widgets[BS.W_RANDOM_TRIBUTE] = {
     end
 }
 
--- widget based in InfoPanel
+-- widget based on InfoPanel
 
 local function isChest(name)
     return BS.Search({"Truhe", "Coffre", "Chest", "сундук"}, name)
@@ -1192,7 +1189,7 @@ BS.widgets[BS.W_CHESTS_FOUND] = {
         end
 
         widget:SetValue(BS.Vars.DungeonInfo.ChestCount)
-        widget:SetColour(unpack(BS.GetColour(BS.W_CHESTS_FOUND)))
+        widget:SetColour(BS.GetColour(BS.W_CHESTS_FOUND, true))
 
         return BS.Vars.DungeonInfo.ChestCount
     end,
@@ -1216,13 +1213,12 @@ BS.widgets[BS.W_DAILY_PROGRESS] = {
                 widget:SetProgress(maxTask.progress, 0, maxTask.maxProgress)
             else
                 widget:SetValue(maxTask.progress .. "/" .. maxTask.maxProgress)
-                widget:SetColour(unpack(BS.GetColour(this)))
+                widget:SetColour(BS.GetColour(this, true))
             end
 
             local ttt = GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS_BEST) .. BS.LF
-            ttt = ttt .. "|cf6f6f6"
-            ttt = ttt .. maxTask.name .. BS.LF .. BS.LF
-            ttt = ttt .. maxTask.description
+
+            ttt = ttt .. BS.COLOURS.OffWhite:Colorize(maxTask.name .. BS.LF .. BS.LF .. maxTask.description)
 
             widget:SetTooltip(ttt)
 
@@ -1356,10 +1352,11 @@ BS.widgets[BS.W_DAILY_COUNT] = {
 
                 widget:SetValue(complete .. "/" .. BS.MAX_DAILY_QUESTS)
 
-                local ttt = GetString(_G.BARSTEWARD_DAILY_QUEST_COUNT) .. BS.LF .. "|cf9f9f9"
+                local ttt = GetString(_G.BARSTEWARD_DAILY_QUEST_COUNT) .. BS.LF
+                local ttext = BS.Format(_G.SI_DLC_BOOK_QUEST_STATUS_ACCEPTED) .. ": " .. added .. BS.LF
 
-                ttt = ttt .. BS.Format(_G.SI_DLC_BOOK_QUEST_STATUS_ACCEPTED) .. ": " .. added .. BS.LF
-                ttt = ttt .. zo_strformat(_G.SI_NOTIFYTEXT_QUEST_COMPLETE, complete) .. "|r"
+                ttext = ttext .. zo_strformat(_G.SI_NOTIFYTEXT_QUEST_COMPLETE, complete)
+                ttt = ttt .. BS.COLOURS.OffWhite:Colorize(ttext)
 
                 widget:SetTooltip(ttt)
             end,
@@ -1424,16 +1421,15 @@ BS.widgets[BS.W_FISHING] = {
 
         for lootType, count in pairs(BS.Vars.FishingLoot) do
             local info = BS.ITEM_TYPE_ICON[lootType]
-
             if (info) then
                 loot = loot .. BS.Icon(info.icon) .. " "
                 loot = loot .. count .. " "
 
                 typeCount = typeCount + 3 + tostring(count):len()
 
-                tt = tt .. BS.LF .. "|cf9f9f9"
-                tt = tt .. zo_strformat("<<1>> <<2>> <<m:3>>", BS.Icon(info.icon), count, GetString(info.name))
-                tt = tt .. "|r"
+                local ttext = zo_strformat("<<1>> <<2>> <<m:3>>", BS.Icon(info.icon), count, GetString(info.name))
+
+                tt = tt .. BS.LF .. BS.COLOURS.OffWhite:Colorize(ttext)
             end
         end
 
@@ -1528,42 +1524,47 @@ BS.widgets[BS.W_DAILY_PLEDGES] = {
         added = BS.CountState("added", character, true)
         done = BS.CountState("done", character, true)
 
-        local colour = BS.GetVar("DefaultColour")
+        local colour = BS.COLOURS.DefaultColour
 
         if (done == maxPledges) then
-            colour = BS.GetVar("DefaultOkColour")
+            colour = BS.COLOURS.DefaultOkColour
             BS.Vars:SetCommon(true, "pledges", character, "complete")
         elseif (added == maxPledges) then
-            colour = BS.GetVar("DefaultWarningColour")
+            colour = BS.COLOURS.DefaultWarningColour
             BS.Vars:SetCommon(true, "pledges", character, "pickedup")
         end
 
         if (update) then
             widget:SetValue(added .. "/" .. done .. "/" .. maxPledges)
-            widget:SetColour(unpack(colour))
+            widget:SetColour(colour)
 
             local ttt = GetString(_G.BARSTEWARD_DAILY_PLEDGES) .. BS.LF
             local pledgeQuests = BS.Vars:GetCommon("pledges", character)
 
             for name, status in pairs(pledgeQuests) do
+                local ttext
+
+                ttt = ttt .. BS.LF
+
                 if (status == "done") then
-                    ttt = string.format("%s%s%s", ttt, BS.LF, BS.ARGBConvert(BS.GetVar("DefaultOkColour")))
-                    ttt = string.format("%s%s - %s|r", ttt, name, GetString(_G.BARSTEWARD_COMPLETED))
+                    ttext = string.format("%s%s - %s", ttt, name, GetString(_G.BARSTEWARD_COMPLETED))
+                    ttt = ttt .. BS.COLOURS.DefaultOkColour:Colorize(ttext)
                 elseif (status == "added") then
-                    ttt = string.format("%s%s%s", ttt, BS.LF, BS.ARGBConvert(BS.GetVar("DefaultWarningColour")))
-                    ttt = string.format("%s%s - %s|r", ttt, name, GetString(_G.BARSTEWARD_PICKED_UP))
+                    ttext = string.format("%s%s - %s", ttt, name, GetString(_G.BARSTEWARD_PICKED_UP))
+                    ttt = ttt .. BS.COLOURS.DefaultWarningColour:Colorize(ttext)
                 end
             end
 
             local charPledgesTT = ""
 
             if (BS.Vars:GetCommon("CharacterList")) then
-                local ccolour = BS.ARGBConvert(BS.Vars.DefaultColour)
+                local ccolour = BS.COLOURS.DefaultColour
                 local chars = BS.Vars:GetCommon("CharacterList")
 
                 for char, _ in pairs(chars) do
                     if (char ~= character) then
                         local charPledges = BS.Vars:GetCommon("pledges", char)
+                        local stext
 
                         if (charPledges and (BS.CountElements(charPledges) > 0)) then
                             local dccolour = ccolour
@@ -1572,23 +1573,16 @@ BS.widgets[BS.W_DAILY_PLEDGES] = {
                             local status = cadded .. "/" .. cdone .. "/" .. maxPledges
 
                             if (cdone == maxPledges) then
-                                dccolour = BS.GetVar("DefaultOkColour")
+                                dccolour = BS.COLOURS.DefaultOkColour
                             elseif (cadded == maxPledges) then
-                                dccolour = BS.GetVar("DefaultWarningColour")
+                                dccolour = BS.COLOURS.DefaultWarningColour
                             end
 
-                            charPledgesTT =
-                                string.format("%s%s%s: %s%s|r", charPledgesTT, BS.LF, char, dccolour, status)
+                            stext = dccolour:Colorize(status)
+                            charPledgesTT = string.format("%s%s%s: %s", charPledgesTT, BS.LF, char, stext)
                         else
-                            charPledgesTT =
-                                string.format(
-                                "%s%s%s: %s%s|r",
-                                charPledgesTT,
-                                BS.LF,
-                                char,
-                                ccolour,
-                                "0/0/" .. maxPledges
-                            )
+                            stext = ccolour:Colorize("0/0/" .. maxPledges)
+                            charPledgesTT = string.format("%s%s%s: %s", charPledgesTT, BS.LF, char, stext)
                         end
                     end
                 end

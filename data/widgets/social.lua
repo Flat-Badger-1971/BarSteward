@@ -4,20 +4,23 @@ local function addToTooltip(friendList, textureFunctions)
     local tt = ""
 
     for _, friend in ipairs(friendList) do
-        local textColour = BS.ARGBConvert2(ZO_SocialList_GetRowColors(friend, false))
+        local textColour = ZO_ColorDef:New(ZO_SocialList_GetRowColors(friend, false))
         local noChar = not friend.hasCharacter or (zo_strlen(friend.characterName) <= 0)
 
         if (BS.Vars:GetCommon("FriendAnnounce")) then
             if (BS.Vars:GetCommon("FriendAnnounce", friend.displayName) and friend.online) then
-                textColour = BS.ARGBConvert(BS.Vars.DefaultOkColour)
+                textColour = BS.COLOURS.DefaultOkColour
             end
         end
 
         tt = string.format("%s%s%s", tt, BS.LF, BS.Icon(textureFunctions.playerStatusIcon(friend.status)))
-        tt = string.format("%s%s", tt, textColour)
-        tt = string.format("%s%s", tt, noChar and "" or BS.Icon(textureFunctions.allianceIcon(friend.alliance)))
-        tt = string.format("%s%s", tt, ZO_FormatUserFacingDisplayName(friend.displayName))
-        tt = string.format("%s%s|r", tt, noChar and "" or (" - " .. friend.formattedZone))
+
+        local ttext = string.format("%s", noChar and "" or BS.Icon(textureFunctions.allianceIcon(friend.alliance)))
+
+        ttext = string.format("%s%s", ttext, ZO_FormatUserFacingDisplayName(friend.displayName))
+        ttext = string.format("%s%s", ttext, noChar and "" or (" - " .. friend.formattedZone))
+
+        tt = tt .. textColour:Colorize(ttext)
     end
 
     return tt
@@ -30,7 +33,7 @@ BS.widgets[BS.W_FRIENDS] = {
         local this = BS.W_FRIENDS
         local masterList = FRIENDS_LIST_MANAGER:GetMasterList()
         local offline, online, other = {}, {}, {}
-        local tt = BS.Format(_G.SI_SOCIAL_MENU_CONTACTS) .. "|cffffff"
+        local tt = BS.Format(_G.SI_SOCIAL_MENU_CONTACTS)
         local textureFunctions = ZO_SocialList_GetPlatformTextureFunctions()
 
         for _, friend in ipairs(masterList) do
@@ -50,9 +53,9 @@ BS.widgets[BS.W_FRIENDS] = {
             tt = tt .. addToTooltip(offline, textureFunctions)
         end
 
-        widget:SetTooltip(tt .. "|r")
+        widget:SetTooltip(BS.COLOURS.OffWhite:Colorize(tt))
         widget:SetValue(#online .. (BS.GetVar("HideLimit", this) and "" or ("/" .. #masterList)))
-        widget:SetColour(unpack(BS.GetColour(this)))
+        widget:SetColour(BS.GetColour(this, true))
 
         if (event == _G.EVENT_FRIEND_PLAYER_STATUS_CHANGED) then
             if (newStatus == _G.PLAYER_STATUS_ONLINE) then
@@ -205,7 +208,7 @@ BS.widgets[BS.W_GUILD_FRIENDS] = {
         local masterList = BS.Vars:GetCommon("GuildFriendAnnounce")
         local online, offline, other = {}, {}, {}
         local oCount, tCount = 0, 0
-        local tt = BS.Format(_G.BARSTEWARD_GUILD_FRIENDS) .. "|cffffff"
+        local tt = BS.Format(_G.BARSTEWARD_GUILD_FRIENDS)
         local textureFunctions = ZO_SocialList_GetPlatformTextureFunctions()
 
         for member, gid in pairs(masterList) do
@@ -241,9 +244,9 @@ BS.widgets[BS.W_GUILD_FRIENDS] = {
             tt = tt .. addToTooltip(offline, textureFunctions)
         end
 
-        widget:SetTooltip(tt .. "|r")
+        widget:SetTooltip(BS.COLOURS.OffWhite:Colorize(tt))
         widget:SetValue(oCount .. (BS.GetVar("HideLimit", this) and "" or ("/" .. tCount)))
-        widget:SetColour(unpack(BS.GetColour(this)))
+        widget:SetColour(BS.GetColour(this, true))
 
         if (newStatus == _G.PLAYER_STATUS_ONLINE) then
             if (BS.GetVar("Announce", this) and isFriend(displayName)) then

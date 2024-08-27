@@ -13,7 +13,7 @@ for k, v in pairs(BS.ASSISTANTS) do
             local name = ZO_CachedStrFormat(_G.SI_UNIT_NAME, GetCollectibleName(v))
 
             widget:SetValue(name)
-            widget:SetColour(unpack(BS.GetColour(this)))
+            widget:SetColour(BS.GetColour(this, true))
 
             return name
         end,

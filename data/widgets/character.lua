@@ -28,19 +28,19 @@ BS.widgets[BS.W_MUNDUS_STONE] = {
         if (mundusId ~= nil) then
             widget:SetIcon(mundusIcon)
             widget:SetValue(mundusName)
-            widget:SetColour(unpack(BS.GetColour(this)))
+            widget:SetColour(BS.GetColour(this, true))
 
             local tt = BS.Format(_G.SI_CONFIRM_MUNDUS_STONE_TITLE) .. BS.LF
             local desc = BS.Format(GetAbilityDescription(mundusId))
 
-            tt = tt .. "|cf9f9f9" .. desc .. "|r"
+            tt = tt .. BS.COLOURS.OffWhite:Colorize(desc)
 
             widget:SetTooltip(tt)
 
             return mundusName
         else
             widget:SetValue(BS.Format(_G.SI_CRAFTING_INVALID_ITEM_STYLE))
-            widget:SetColour(unpack(BS.GetColour(this, "Danger")))
+            widget:SetColour(BS.GetColour(this, "Danger", true))
         end
 
         return ""
@@ -74,7 +74,7 @@ BS.widgets[BS.W_RECALL_COOLDOWN] = {
         local cooldownTime = GetRecallCooldown() / 1000
 
         widget:SetValue(BS.SecondsToTime(cooldownTime, true, true))
-        widget:SetColour(unpack(BS.GetColour(BS.W_RECALL_COOLDOWN)))
+        widget:SetColour(BS.GetColour(BS.W_RECALL_COOLDOWN, true))
 
         return cooldownTime
     end,
@@ -89,7 +89,7 @@ BS.widgets[BS.W_ZONE] = {
     name = "currentZone",
     update = function(widget)
         widget:SetValue(BS.Format(GetUnitZone("player")))
-        widget:SetColour(unpack(BS.GetColour(BS.W_ZONE)))
+        widget:SetColour(BS.GetColour(BS.W_ZONE, true))
 
         return widget:GetValue()
     end,
@@ -113,7 +113,7 @@ BS.widgets[BS.W_PLAYER_NAME] = {
         local this = BS.W_PLAYER_NAME
 
         widget:SetValue(ZO_FormatUserFacingDisplayName(playerName))
-        widget:SetColour(unpack(BS.GetColour(this)))
+        widget:SetColour(BS.GetColour(this, true))
 
         if (BS.GetVar("ShowClassIcon", this)) then
             local classId = GetUnitClassId("player")
@@ -156,7 +156,7 @@ BS.widgets[BS.W_RACE] = {
     name = "playerRace",
     update = function(widget)
         widget:SetValue(BS.Format(GetUnitRace("player")))
-        widget:SetColour(unpack(BS.GetColour(BS.W_RACE)))
+        widget:SetColour(BS.GetColour(BS.W_RACE, true))
 
         return widget:GetValue()
     end,
@@ -175,7 +175,7 @@ BS.widgets[BS.W_CLASS] = {
 
         if (not BS.GetVar("NoValue", this)) then
             widget:SetValue(BS.Format(GetUnitClass("player")))
-            widget:SetColour(unpack(BS.GetColour(this)))
+            widget:SetColour(BS.GetColour(this, true))
         end
 
         widget:SetIcon(icon)
@@ -220,7 +220,7 @@ BS.widgets[BS.W_ALLIANCE] = {
 
         if (not BS.GetVar("NoValue", BS.W_ALLIANCE)) then
             widget:SetValue(" " .. BS.Format(GetAllianceName(alliance)))
-            widget:SetColour(colour.r, colour.g, colour.b, colour.a)
+            widget:SetColour(colour)
         end
 
         widget:SetIcon(icon)
@@ -283,11 +283,12 @@ BS.widgets[BS.W_SKYSHARDS] = {
         end
 
         widget:SetValue(discoveredInZone .. "/" .. inZoneSkyshards)
-        widget:SetColour(unpack(BS.GetColour(BS.W_SKYSHARDS)))
+        widget:SetColour(BS.GetColour(BS.W_SKYSHARDS, true))
 
         local ttt = BS.Format(_G.SI_MAPFILTER15) .. BS.LF
+        local stext = zo_strformat(GetString(_G.BARSTEWARD_SKYSHARDS_SKILL_POINTS), skillSkyShards)
 
-        ttt = ttt .. "|cffffff" .. zo_strformat(GetString(_G.BARSTEWARD_SKYSHARDS_SKILL_POINTS), skillSkyShards) .. "|r"
+        ttt = ttt .. BS.COLOURS.OffWhite:Colorize(stext)
 
         widget:SetTooltip(ttt)
 
@@ -305,7 +306,7 @@ BS.widgets[BS.W_SKILL_POINTS] = {
         local unspent = GetAvailableSkillPoints()
 
         widget:SetValue(unspent)
-        widget:SetColour(unpack(BS.GetColour(BS.W_SKILL_POINTS, nil, "DefaultOkColour")))
+        widget:SetColour(BS.GetColour(BS.W_SKILL_POINTS, nil, "DefaultOkColour", true))
 
         return unspent
     end,
@@ -436,9 +437,10 @@ BS.widgets[BS.W_PLAYER_LEVEL] = {
         widget:SetValue(level .. " (" .. xpPc .. "%)")
 
         local ttt = BS.Format(_G.SI_CAMPAIGNLEVELREQUIREMENTTYPE1) .. BS.LF
-        ttt = ttt .. "|cf9f9f9"
-        ttt = ttt .. BS.Format(_G.SI_STAT_GAMEPAD_EXPERIENCE_LABEL) .. "  "
-        ttt = ttt .. xp .. " / " .. xpMax .. "|r"
+        local ttext = BS.Format(_G.SI_STAT_GAMEPAD_EXPERIENCE_LABEL) .. "  "
+
+        ttext = ttext .. xp .. " / " .. xpMax
+        ttt = ttt .. BS.COLOURS.OffWhite:Colorize(ttext)
 
         widget:SetTooltip(ttt)
 
@@ -601,21 +603,21 @@ local function updateWidget()
         local value = tostring(useSeparators and BS.AddSeparators(dps) or dps)
 
         dpsWidget:SetValue(value)
-        dpsWidget:SetColour(unpack(BS.GetColour(BS.W_DPS)))
+        dpsWidget:SetColour(BS.GetColour(BS.W_DPS, true))
         dpsWidget:SetIcon(icon)
 
         local ttt = GetString(_G.BARSTEWARD_DPS) .. BS.LF
-        local gold = " |cffd700"
+        local gold = BS.COLOURS.ZOSGold
 
-        ttt = ttt .. "|cf9f9f9" .. GetString(_G.BARSTEWARD_PREVIOUS_ENCOUNTER) .. "|r" .. BS.LF
+        ttt = ttt .. BS.COLOURS.OffWhite:Colorize(GetString(_G.BARSTEWARD_PREVIOUS_ENCOUNTER)) .. BS.LF
 
         if (name) then
-            ttt = ttt .. "|c8a2be2w" .. BS.Format(name) .. "|r" .. BS.LF
+            ttt = ttt .. BS.COLOURS.ZOSPurple:Colorize(BS.Format(name)) .. BS.LF
         end
 
-        ttt = ttt .. GetString(_G.BARSTEWARD_PREVIOUS_ENCOUNTER_AVERAGE) .. gold .. getAvarageDps() .. "|r" .. BS.LF
-        ttt = ttt .. GetString(_G.BARSTEWARD_PREVIOUS_ENCOUNTER_MAXIMUM) .. gold .. maxDamage .. "|r" .. BS.LF
-        ttt = ttt .. GetString(_G.BARSTEWARD_PREVIOUS_ENCOUNTER_DURATION) .. gold .. getCombatTime() .. "|r"
+        ttt = ttt .. GetString(_G.BARSTEWARD_PREVIOUS_ENCOUNTER_AVERAGE) .. gold:Colorize(getAvarageDps()) .. BS.LF
+        ttt = ttt .. GetString(_G.BARSTEWARD_PREVIOUS_ENCOUNTER_MAXIMUM) .. gold:Colorize(maxDamage) .. BS.LF
+        ttt = ttt .. GetString(_G.BARSTEWARD_PREVIOUS_ENCOUNTER_DURATION) .. gold:Colorize(getCombatTime())
 
         dpsWidget:SetTooltip(ttt)
     end
@@ -767,9 +769,11 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
                 end
             end
 
+            local ttext = ZO_CommaDelimitNumber(xp) .. " / " .. ZO_CommaDelimitNumber(xplvl)
+
             ttt = ttt .. BS.LF .. BS.LF
             ttt = ttt .. BS.Format(_G.SI_STAT_GAMEPAD_EXPERIENCE_LABEL) .. BS.LF
-            ttt = ttt .. "|cf9f9f9" .. ZO_CommaDelimitNumber(xp) .. " / " .. ZO_CommaDelimitNumber(xplvl) .. "|r"
+            ttt = ttt .. BS.COLOURS.OffWhite:Colorize(ttext)
 
             widget:SetTooltip(ttt)
         end
@@ -782,17 +786,17 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
                 value = earned
                 plainValue = earned
             else
-                value = earned .. " (|cffff00" .. unspent .. "|r)"
+                value = earned .. " (" .. BS.COLOURS.Yellow:Colorize(unspent) .. ")"
                 plainValue = earned .. " (" .. unspent .. ")"
             end
         end
 
         if (BS.GetVar("ShowUnslottedCount", this) and unslotted > 0) then
             plainValue = plainValue .. " - " .. unslotted
-            value = value .. " - |cff0000" .. unslotted .. "|r"
+            value = value .. " - " .. BS.COLOURS.Red:Colorize(unslotted)
         end
 
-        widget:SetColour(unpack(BS.GetColour(this)))
+        widget:SetColour(BS.GetColour(this, true))
         widget:SetValue(value, plainValue)
         widget:SetIcon(cpicon)
 
@@ -851,7 +855,7 @@ BS.widgets[BS.W_PLAYER_LOCATION] = {
         end
 
         widget:SetValue(BS.Format(area))
-        widget:SetColour(unpack(BS.GetColour(BS.W_PLAYER_LOCATION)))
+        widget:SetColour(BS.GetColour(BS.W_PLAYER_LOCATION, true))
 
         return widget:GetValue()
     end,
@@ -903,13 +907,13 @@ BS.widgets[BS.W_PLAYER_EXPERIENCE] = {
             out = xp .. " / " .. xplvl
         end
 
-        widget:SetColour(unpack(BS.GetColour(this)))
+        widget:SetColour(BS.GetColour(this, true))
         widget:SetValue(out)
 
-        local ttt = GetString(_G.BARSTEWARD_PLAYER_EXPERIENCE) .. BS.LF .. "|cf9f9f9"
+        local ttt = GetString(_G.BARSTEWARD_PLAYER_EXPERIENCE) .. BS.LF
+        local ttext = xp .. " / " .. xplvl .. BS.LF .. pc .. "%"
 
-        ttt = ttt .. xp .. " / " .. xplvl .. BS.LF
-        ttt = ttt .. pc .. "%" .. "|r"
+        ttt = ttt .. BS.COLOURS.OffWhite:Colorize(ttext)
 
         widget:SetTooltip(ttt)
 
@@ -952,10 +956,10 @@ BS.widgets[BS.W_VAMPIRISM] = {
         end
 
         widget:SetValue(text)
-        widget:SetColour(unpack(BS.GetColour(BS.W_VAMPIRISM)))
+        widget:SetColour(BS.GetColour(BS.W_VAMPIRISM, true))
 
         local tt = BS.Format(_G.SI_CURSETYPE1)
-        tt = tt .. BS.LF .. "|cf9f9f9" .. text .. "|r"
+        tt = tt .. BS.LF .. BS.COLOURS.OffWhite:Colorize(text)
 
         widget:SetTooltip(tt)
 
@@ -997,7 +1001,7 @@ BS.widgets[BS.W_VAMPIRISM_TIMER] = {
 
         local remaining = 0
         local time = ""
-        local colour = BS.GetColour(this, "Ok")
+        local colour = BS.COLOURS.DefaultOkColour
 
         if (isVampire) then
             remaining = ending - GetGameTimeSeconds()
@@ -1007,10 +1011,10 @@ BS.widgets[BS.W_VAMPIRISM_TIMER] = {
             end
 
             time = BS.SecondsToTime(remaining, true, false, BS.GetVar("HideSeconds", this), BS.GetVar("Format", this))
-            colour = BS.GetTimeColour(remaining, this, 60) or colour
+            colour = BS.GetTimeColour(remaining, this, 60, true, true)
         end
 
-        widget:SetColour(unpack(colour))
+        widget:SetColour(colour)
 
         if (BS.GetVar("ShowStage", this)) then
             plainValue = zo_strformat(GetString(_G.BARSTEWARD_VAMPIRE_STAGE), time, "", stage, "|r")
@@ -1025,7 +1029,7 @@ BS.widgets[BS.W_VAMPIRISM_TIMER] = {
         local tt = BS.Format(_G.SI_CURSETYPE1)
 
         if (isVampire) then
-            tt = tt .. BS.LF .. "|cf9f9f9" .. BS.Format(name) .. "|r"
+            tt = tt .. BS.LF .. BS.COLOURS.OffWhite:Colorize(BS.Format(name))
         end
 
         widget:SetTooltip(tt)
@@ -1082,7 +1086,7 @@ BS.widgets[BS.W_VAMPIRISM_FEED_TIMER] = {
 
         local remaining = 0
         local time = ""
-        local colour = BS.GetColour(this, "Ok")
+        local colour = BS.COLOURS.DefaultOkColour
 
         if (isVampireWithFeed) then
             remaining = ending - GetGameTimeSeconds()
@@ -1098,17 +1102,17 @@ BS.widgets[BS.W_VAMPIRISM_FEED_TIMER] = {
                     BS.GetVar("HideDaysWhenZero", this)
                 )
 
-                colour = BS.GetTimeColour(remaining, this, 60) or colour
+                colour = BS.GetTimeColour(remaining, this, 60, true, true)
             end
         end
 
-        widget:SetColour(unpack(colour))
+        widget:SetColour(colour)
         widget:SetValue(time)
 
         local tt = GetString(_G.BARSTEWARD_VAMPIRE_FEED_TIMER)
 
         if (isVampireWithFeed) then
-            tt = tt .. BS.LF .. "|cf9f9f9" .. BS.Format(name) .. "|r"
+            tt = tt .. BS.LF .. BS.COLOURS.OffWhite:Colorize(BS.Format(name))
         end
 
         widget:SetTooltip(tt)
@@ -1147,7 +1151,7 @@ local function scanBuffs(buffList, widgetIndex)
                     BS.GetVar("Format", widgetIndex)
                 )
 
-                local ttt = "|cffffff" .. BS.Format(buffName) .. "|r" .. BS.LF
+                local ttt = BS.COLOURS.OffWhite:Colorize(BS.Format(buffName)) .. BS.LF
 
                 ttt = ttt .. BS.Format(GetAbilityDescription(abilityId))
 
@@ -1173,7 +1177,7 @@ BS.widgets[BS.W_FOOD_BUFF] = {
             local buff = buffs[1]
 
             widget:SetValue(buff.formattedTime)
-            widget:SetColour(unpack(BS.GetTimeColour(buff.remaining, this, 60, true)))
+            widget:SetColour(BS.GetTimeColour(buff.remaining, this, 60, true, true))
             widget:SetTooltip(buff.ttt)
 
             if (BS.GetVar("Announce", this) and (BS.GetVar("WarningValue", this) * 60) == BS.ToInt(buff.remaining)) then
@@ -1188,7 +1192,7 @@ BS.widgets[BS.W_FOOD_BUFF] = {
         local value = BS.SecondsToTime(0, true, false, BS.GetVar("HideSeconds", this), BS.GetVar("Format", this))
 
         widget:SetValue(value)
-        widget:SetColour(unpack(BS.GetTimeColour(0, this, 60, true)))
+        widget:SetColour(BS.GetTimeColour(0, this, 60, true, true))
         return 0
     end,
     timer = 1000,
@@ -1224,7 +1228,7 @@ BS.widgets[BS.W_AP_BUFF] = {
             end
 
             widget:SetValue(lowest.formattedTime)
-            widget:SetColour(unpack(BS.GetTimeColour(lowest.remaining, this, 60, true)))
+            widget:SetColour(BS.GetTimeColour(lowest.remaining, this, 60, true, true))
             widget:SetTooltip(lowest.ttt)
 
             if (BS.GetVar("Announce", this) and (BS.GetVar("WarningValue", this) * 60) == BS.ToInt(lowest.remaining)) then
@@ -1239,7 +1243,7 @@ BS.widgets[BS.W_AP_BUFF] = {
         local value = BS.SecondsToTime(0, true, false, BS.GetVar("HideSeconds", this), BS.GetVar("Format", this))
 
         widget:SetValue(value)
-        widget:SetColour(unpack(BS.GetTimeColour(0, this, 60, true)))
+        widget:SetColour(BS.GetTimeColour(0, this, 60, true, true))
 
         return 0
     end,
@@ -1286,7 +1290,7 @@ BS.widgets[BS.W_XP_BUFF] = {
             end
 
             widget:SetValue(lowest.formattedTime)
-            widget:SetColour(unpack(BS.GetTimeColour(lowest.remaining, this, 60, true)))
+            widget:SetColour(BS.GetTimeColour(lowest.remaining, this, 60, true, true))
             widget:SetTooltip(lowest.ttt)
 
             if (BS.GetVar("Announce", this) and (BS.GetVar("WarningValue", this) * 60) == BS.ToInt(lowest.remaining)) then
@@ -1301,7 +1305,7 @@ BS.widgets[BS.W_XP_BUFF] = {
         local value = BS.SecondsToTime(0, true, false, BS.GetVar("HideSeconds", this), BS.GetVar("Format", this))
 
         widget:SetValue(value)
-        widget:SetColour(unpack(BS.GetTimeColour(0, this, 60, true)))
+        widget:SetColour(BS.GetTimeColour(0, this, 60, true, true))
 
         return 0
     end,
@@ -1436,10 +1440,10 @@ BS.widgets[BS.W_BOUNTY] = {
         local infamyText = BS.Format(_G["SI_INFAMYTHRESHOLDSTYPE" .. infamy])
         local secondsTillClear = GetSecondsUntilBountyDecaysToZero()
         local this = BS.W_BOUNTY
-        local colour = BS.GetVar("DefaultColour")
+        local colour = BS.COLOURS.DefaultColour
         local remaining = BS.SecondsToTime(secondsTillClear, true, false, BS.GetVar("HideSeconds", this))
 
-        widget:SetColour(unpack(colour))
+        widget:SetColour(colour)
         widget:SetValue(remaining)
 
         local tt = BS.Format(_G.SI_STATS_BOUNTY_LABEL) .. BS.LF .. BS.LF
@@ -1447,9 +1451,9 @@ BS.widgets[BS.W_BOUNTY] = {
 
         formatted = zo_strformat("<<zC:1>>", formatted)
 
-        tt = tt .. "|cf9f9f9"
-        tt = tt .. zo_strformat(_G.SI_JUSTICE_BOUNTY_SET, bounty):gsub("%.", "") .. BS.LF
-        tt = tt .. formatted .. "|r"
+        local ttext = zo_strformat(_G.SI_JUSTICE_BOUNTY_SET, bounty):gsub("%.", "") .. BS.LF .. formatted
+
+        tt = tt .. BS.COLOURS.OffWhite:Colorize(ttext)
 
         widget.tooltip = tt
 
@@ -1460,9 +1464,6 @@ BS.widgets[BS.W_BOUNTY] = {
     icon = "stats/justice_bounty_icon-red",
     tooltip = BS.Format(_G.SI_STATS_BOUNTY_LABEL)
 }
-
-local claimed = "|c00ff00" .. BS.Format(_G.SI_DAILY_LOGIN_REWARDS_CLAIMED_TILE_NARRATION) .. "|r"
-local unclaimed = "|cff0000" .. BS.Format(_G.SI_GIFT_INVENTORY_UNCLAIMED_GIFTS_HEADER) .. "|r"
 
 local function findAccount(account, server, allAccounts)
     for _, accountData in ipairs(allAccounts) do
@@ -1479,6 +1480,8 @@ BS.widgets[BS.W_DAILY_REWARD] = {
         local worldname = {"EU", "NA"}
         local rewardIndex = GetDailyLoginClaimableRewardIndex()
         local secondsTillReset = GetTimeUntilNextDailyLoginRewardClaimS()
+        local claimed = BS.COLOURS.Green:Colorize(BS.Format(_G.SI_DAILY_LOGIN_REWARDS_CLAIMED_TILE_NARRATION))
+        local unclaimed = BS.COLOURS.Red:Colorize(BS.Format(_G.SI_GIFT_INVENTORY_UNCLAIMED_GIFTS_HEADER))
         local dailyRewardClaimed
 
         if (rewardIndex == nil) then
@@ -1489,6 +1492,7 @@ BS.widgets[BS.W_DAILY_REWARD] = {
         end
 
         BS.Vars:SetCommon({claimed = dailyRewardClaimed, resetTime = os.time() + secondsTillReset}, "DailyRewards")
+
         local allAccounts = BS.Vars:GetAllAccountCommon("DailyRewards")
         local accountCount, claimedAccountCount = 0, 0
         local accountList = ""
@@ -1501,15 +1505,18 @@ BS.widgets[BS.W_DAILY_REWARD] = {
                 accountCount = accountCount + 1
 
                 local acc = findAccount(account, servername, allAccounts)
+                local detail = BS.COLOURS.OffWhite:Colorize(string.format("%s (%s):", account, server))
 
                 if (acc) then
                     if ((acc.resetTime or 0) <= os.time()) then
                         acc.claimed = false
                     end
-                    accountList = string.format("%s%s|cf9f9f9%s (%s): |r%s", accountList, BS.LF, account, server, (acc.claimed and claimed or unclaimed))
+
+                    accountList =
+                        string.format("%s%s%s |r%s", accountList, BS.LF, detail, (acc.claimed and claimed or unclaimed))
                     claimedAccountCount = claimedAccountCount + (acc.claimed and 1 or 0)
                 else
-                    accountList = string.format("%s%s|cf9f9f9%s (%s): |r%s", accountList, BS.LF, account, server,  unclaimed)
+                    accountList = string.format("%s%s%s |r%s", accountList, BS.LF, detail, unclaimed)
                 end
             end
         end

@@ -144,25 +144,23 @@ BS.widgets[BS.W_ALL_CRAFTING] = {
         local timers = {}
         local text, ttt = "", BS.Format(_G.SI_GAMEPAD_SMITHING_CURRENT_RESEARCH_HEADER) .. BS.LF
         local totalInUse, totalMaxResearch = 0, 0
-        local colour = BS.GetColour(this, "Ok")
 
         for _, craftingType in ipairs(allTypes) do
             local timeRemaining, maxResearch, inUse = getResearchTimer(craftingType)
-            local ttColour = BS.ARGBConvert(BS.GetTimeColour(timeRemaining, this) or colour)
+            local ttColour = BS.GetTimeColour(timeRemaining, this, nil, true, true)
 
             timers[craftingType] = {timeRemaining = timeRemaining, inUse = inUse, maxResearch = maxResearch}
             totalInUse = totalInUse + inUse
             totalMaxResearch = totalMaxResearch + maxResearch
 
-            ttt =
+            local ttext =
                 string.format(
-                "%s%s%s%s %s|r",
-                ttt,
-                BS.LF,
-                ttColour,
+                "%s %s",
                 BS.Icon(craftingIcons[craftingType]),
                 getDisplay(timeRemaining, this, inUse, maxResearch)
-            ) .. "|r"
+            )
+
+            ttt = string.format("%s%s%s", ttt, BS.LF, ttColour:Colorize(ttext))
         end
 
         local minType = getMinType(timers)
@@ -173,9 +171,9 @@ BS.widgets[BS.W_ALL_CRAFTING] = {
             timeRemaining = timers[minType].timeRemaining
         end
 
-        colour = BS.GetTimeColour(timeRemaining, this) or colour
+        local colour = BS.GetTimeColour(timeRemaining, this, nil, true, true)
 
-        widget:SetColour(unpack(colour))
+        widget:SetColour(colour)
         widget:SetValue(text)
         widget:SetTooltip(ttt)
 
@@ -192,23 +190,27 @@ BS.widgets[BS.W_BLACKSMITHING] = {
     update = function(widget)
         local this = BS.W_BLACKSMITHING
         local timeRemaining, maxResearch, inUse = getResearchTimer(_G.CRAFTING_TYPE_BLACKSMITHING)
-        local colour = BS.GetColour(this, "Ok")
+        local colour = BS.GetTimeColour(timeRemaining, this, nil, true, true)
 
-        colour = BS.GetTimeColour(timeRemaining, this) or colour
         fullyUsed[_G.CRAFTING_TYPE_BLACKSMITHING] = inUse == maxResearch
 
         local display = getDisplay(timeRemaining, this, inUse, maxResearch)
 
-        widget:SetColour(unpack(colour))
+        widget:SetColour(colour)
         widget:SetValue(display)
 
         local ttt = BS.Format(_G.SI_TRADESKILLTYPE1)
 
         for slot = 1, maxResearch do
-            local slotText = BS.LF .. "|cf9f9f9" .. slot .. " - "
-
-            ttt = ttt .. slotText
-            ttt = ttt .. getDisplay(researchSlots[_G.CRAFTING_TYPE_BLACKSMITHING][slot] or 0, this)
+            ttt =
+                string.format(
+                "%s%s%s",
+                ttt,
+                BS.LF,
+                BS.COLOURS.OffWhite:Colorize(
+                    slot .. " - " .. getDisplay(researchSlots[_G.CRAFTING_TYPE_BLACKSMITHING][slot] or 0, this)
+                )
+            )
         end
 
         widget:SetTooltip(ttt)
@@ -233,23 +235,27 @@ BS.widgets[BS.W_WOODWORKING] = {
     update = function(widget)
         local this = BS.W_WOODWORKING
         local timeRemaining, maxResearch, inUse = getResearchTimer(_G.CRAFTING_TYPE_WOODWORKING)
-        local colour = BS.GetColour(this, "Ok")
+        local colour = BS.GetTimeColour(timeRemaining, this, nil, true, true)
 
-        colour = BS.GetTimeColour(timeRemaining, this) or colour
         fullyUsed[_G.CRAFTING_TYPE_WOODWORKING] = inUse == maxResearch
 
         local display = getDisplay(timeRemaining, this, inUse, maxResearch)
 
-        widget:SetColour(unpack(colour))
+        widget:SetColour(colour)
         widget:SetValue(display)
 
         local ttt = BS.Format(_G.SI_TRADESKILLTYPE6)
 
         for slot = 1, maxResearch do
-            local slotText = BS.LF .. "|cf9f9f9" .. slot .. " - "
-
-            ttt = ttt .. slotText
-            ttt = ttt .. getDisplay(researchSlots[_G.CRAFTING_TYPE_WOODWORKING][slot] or 0, this)
+            ttt =
+                string.format(
+                "%s%s%s",
+                ttt,
+                BS.LF,
+                BS.COLOURS.OffWhite:Colorize(
+                    slot .. " - " .. getDisplay(researchSlots[_G.CRAFTING_TYPE_WOODWORKING][slot] or 0, this)
+                )
+            )
         end
 
         widget:SetTooltip(ttt)
@@ -274,22 +280,27 @@ BS.widgets[BS.W_CLOTHING] = {
     update = function(widget)
         local this = BS.W_CLOTHING
         local timeRemaining, maxResearch, inUse = getResearchTimer(_G.CRAFTING_TYPE_CLOTHIER)
-        local colour = BS.GetColour(this, "Ok")
+        local colour = BS.GetTimeColour(timeRemaining, this, nil, true, true)
 
-        colour = BS.GetTimeColour(timeRemaining, this) or colour
         fullyUsed[_G.CRAFTING_TYPE_CLOTHIER] = inUse == maxResearch
 
         local display = getDisplay(timeRemaining, this, inUse, maxResearch)
 
-        widget:SetColour(unpack(colour))
+        widget:SetColour(colour)
         widget:SetValue(display)
 
         local ttt = BS.Format(_G.SI_TRADESKILLTYPE2)
 
         for slot = 1, maxResearch do
-            local slotText = BS.LF .. "|cf9f9f9" .. slot .. " - "
-
-            ttt = ttt .. slotText .. getDisplay(researchSlots[_G.CRAFTING_TYPE_CLOTHIER][slot] or 0, this)
+            ttt =
+                string.format(
+                "%s%s%s",
+                ttt,
+                BS.LF,
+                BS.COLOURS.OffWhite:Colorize(
+                    slot .. " - " .. getDisplay(researchSlots[_G.CRAFTING_TYPE_CLOTHIER][slot] or 0, this)
+                )
+            )
         end
 
         widget:SetTooltip(ttt)
@@ -314,23 +325,27 @@ BS.widgets[BS.W_JEWELCRAFTING] = {
     update = function(widget)
         local this = BS.W_JEWELCRAFTING
         local timeRemaining, maxResearch, inUse = getResearchTimer(_G.CRAFTING_TYPE_JEWELRYCRAFTING)
-        local colour = BS.GetColour(this, "Ok")
+        local colour = BS.GetTimeColour(timeRemaining, this, nil, true, true)
 
-        colour = BS.GetTimeColour(timeRemaining, this) or colour
         fullyUsed[_G.CRAFTING_TYPE_JEWELRYCRAFTING] = inUse == maxResearch
 
         local display = getDisplay(timeRemaining, this, inUse, maxResearch)
 
-        widget:SetColour(unpack(colour))
+        widget:SetColour(colour)
         widget:SetValue(display)
 
         local ttt = BS.Format(_G.SI_TRADESKILLTYPE7)
 
         for slot = 1, maxResearch do
-            local slotText = BS.LF .. "|cf9f9f9" .. slot .. " - "
-
-            ttt = ttt .. slotText
-            ttt = ttt .. getDisplay(researchSlots[_G.CRAFTING_TYPE_JEWELRYCRAFTING][slot] or 0, this)
+            ttt =
+                string.format(
+                "%s%s%s",
+                ttt,
+                BS.LF,
+                BS.COLOURS.OffWhite:Colorize(
+                    slot .. " - " .. getDisplay(researchSlots[_G.CRAFTING_TYPE_JEWELRYCRAFTING][slot] or 0, this)
+                )
+            )
         end
 
         widget:SetTooltip(ttt)
@@ -437,12 +452,6 @@ end
 -- check once a minute for daily reset
 BS.RegisterForUpdate(60000, checkReset)
 
-local DAILY_COLOURS = {
-    ["done"] = BS.COLOURS.GREEN,
-    ["ready"] = BS.COLOURS.BLUE,
-    ["added"] = BS.COLOURS.YELLOW
-}
-
 BS.widgets[BS.W_CRAFTING_DAILIES] = {
     name = "craftingDailies",
     update = function(widget, event, completeName, addedName, removedName)
@@ -451,6 +460,11 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
         local added, done, ready
         local character = GetUnitName("player")
         local iconString = "icons/mapkey/mapkey_%s"
+        local DAILY_COLOURS = {
+            ["done"] = BS.COLOURS.Green,
+            ["ready"] = BS.COLOURS.Blue,
+            ["added"] = BS.COLOURS.Yellow
+        }
 
         checkReset()
 
@@ -498,15 +512,15 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
         done = BS.CountState("done", character)
         ready = BS.CountState("ready", character)
 
-        local colour = BS.GetVar("DefaultColour")
+        local colour = BS.COLOURS.DefaultColour
 
         if (done == qualifiedCount) then
-            colour = BS.GetVar("DefaultOkColour")
+            colour = BS.COLOURS.DefaultOkColour
             BS.Vars:SetCommon(true, "dailyQuests", character, "complete")
         elseif (ready == qualifiedCount) then
-            colour = {(255 / 52), (255 / 164), (255 / 2350), 1}
+            colour = BS.COLOURS.ZOSBlue
         elseif (added == qualifiedCount) then
-            colour = BS.GetVar("DefaultWarningColour")
+            colour = BS.COLOURS.DefaultWarningColour
             BS.Vars:SetCommon(true, "dailyQuests", character, "pickedup")
         end
 
@@ -520,7 +534,8 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
                         local cname = BS.CRAFTING_DAILY[craftingType]
                         local cvar = BS.Vars:GetCommon("dailyQuests", character, cname)
                         local ciconName = iconString:format(info.icon)
-                        colour = cvar and DAILY_COLOURS[cvar] or BS.COLOURS.GREY
+
+                        colour = cvar and DAILY_COLOURS[cvar] or BS.COLOURS.Grey
 
                         tName = BS.Icon(ciconName, colour, 20, 20)
                         output = string.format("%s %s", output, tName)
@@ -530,7 +545,7 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
                 widget:SetValue(output)
             else
                 widget:SetValue(added .. "/" .. ready .. "/" .. done .. "/" .. qualifiedCount)
-                widget:SetColour(unpack(colour))
+                widget:SetColour(colour)
             end
 
             local ttt = GetString(_G.BARSTEWARD_DAILY_CRAFTING) .. BS.LF
@@ -539,32 +554,30 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
                 local tdone = BS.Vars:GetCommon("dailyQuests", character, name) == "done"
                 local tadded = BS.Vars:GetCommon("dailyQuests", character, name) == "added"
                 local tready = BS.Vars:GetCommon("dailyQuests", character, name) == "ready"
-                local tcolour = BS.ARGBConvert(BS.GetVar("DefaultColour"))
+                local tcolour = BS.COLOURS.DefaultColour
+                local ttext
 
                 if (tready) then
-                    ttt = string.format("%s%s|c%s", ttt, BS.LF, BS.COLOURS.BLUE)
-                    ttt = string.format("%s%s - %s|r", ttt, name, GetString(_G.BARSTEWARD_READY))
+                    ttext = string.format("%s - %s", name, GetString(_G.BARSTEWARD_READY))
+                    ttext = BS.COLOURS.Blue:Colorize(ttext)
+                    ttt = string.format("%s%s", ttt, ttext)
                 elseif (tdone) then
-                    ttt = string.format("%s%s%s", ttt, BS.LF, BS.ARGBConvert(BS.GetVar("DefaultOkColour")))
-                    ttt = string.format("%s%s - %s|r", ttt, name, GetString(_G.BARSTEWARD_COMPLETED))
+                    ttext = string.format("%s - %s", name, GetString(_G.BARSTEWARD_COMPLETED))
+                    ttext = BS.COLOURS.DefaultOkColour:Colorize(ttext)
+                    ttt = string.format("%s%s", ttt, ttext)
                 elseif (tadded) then
-                    ttt = string.format("%s%s%s", ttt, BS.LF, BS.ARGBConvert(BS.GetVar("DefaultWarningColour")))
-                    ttt = string.format("%s%s - %s|r", ttt, name, GetString(_G.BARSTEWARD_PICKED_UP))
+                    ttext = string.format("%s - %s", name, GetString(_G.BARSTEWARD_PICKED_UP))
+                    ttext = BS.COLOURS.DefaultWarningColour:Colorize(ttext)
+                    ttt = string.format("%s%s", ttt, ttext)
                 else
-                    ttt =
-                        string.format(
-                        "%s%s%s%s - %s|r",
-                        ttt,
-                        BS.LF,
-                        tcolour,
-                        name,
-                        GetString(_G.BARSTEWARD_NOT_PICKED_UP)
-                    )
+                    ttext = string.format("%s - %s", name, GetString(_G.BARSTEWARD_NOT_PICKED_UP))
+                    ttext = tcolour:Colorize(ttext)
+                    ttt = string.format("%s%s", ttt, ttext)
                 end
             end
 
             if (BS.Vars:GetCommon("CharacterList")) then
-                local ccolour = BS.ARGBConvert(BS.Vars.DefaultColour)
+                local ccolour = BS.COLOURS.DefaultColour
                 local chars = BS.Vars:GetCommon("CharacterList")
 
                 ttt = ttt .. BS.LF
@@ -575,14 +588,14 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
                             local dccolour = ccolour
 
                             if (BS.Vars:GetCommon("dailyQuests", char, "complete")) then
-                                dccolour = BS.ARGBConvert(BS.GetVar("DefaultOkColour"))
+                                dccolour = BS.COLOURS.DefaultOkColour
                             elseif (BS.Vars:GetCommon("dailyQuests", char, "pickedup")) then
-                                dccolour = BS.ARGBConvert(BS.GetVar("DefaultWarningColour"))
+                                dccolour = BS.COLOURS.DefaultWarningColour
                             end
 
-                            ttt = string.format("%s%s%s%s|r", ttt, BS.LF, dccolour, char)
+                            ttt = string.format("%s%s%s", ttt, BS.LF, dccolour:Colorize(char))
                         else
-                            ttt = string.format("%s%s%s%s|r", ttt, BS.LF, ccolour, char)
+                            ttt = string.format("%s%s%s", ttt, BS.LF, ccolour:Colorize(char))
                         end
                     end
                 end
@@ -701,19 +714,19 @@ BS.widgets[BS.W_RECIPES] = {
         local allFurnishing = BS.recipeList.furnishing.known + BS.recipeList.furnishing.unknown
         local tt = recipes
         local this = BS.W_RECIPES
+        local white, gold = BS.COLOURS.OffWhite, BS.COLOURS.ZOSGold
 
-        tt = tt .. BS.LF .. "|cffd700"
-        tt = tt .. BS.recipeList.food.known .. "/" .. allFood .. "|r |cf9f9f9"
-        tt = tt .. food .. BS.LF .. "|cffd700"
-        tt = tt .. BS.recipeList.drink.known .. "/" .. allDrink .. "|r |cf9f9f9"
-        tt = tt .. drink .. BS.LF .. "|cffd700"
-        tt = tt .. (BS.recipeList.drink.known + BS.recipeList.food.known) .. "/" .. allFoodAndDrink .. "|r |cf9f9f9"
-        tt = tt .. foodAndDrink .. BS.LF .. "|cffd700"
-        tt = tt .. BS.recipeList.furnishing.known .. "/" .. allFurnishing .. "|r |cf9f9f9"
-        tt = tt .. furnishing
+        tt = tt .. BS.LF .. gold:Colorize(BS.recipeList.food.known .. "/" .. allFood)
+        tt = tt .. white:Colorize(food) .. BS.LF
+        tt = tt .. gold:Colorize(BS.recipeList.drink.known .. "/" .. allDrink)
+        tt = tt .. white:Colorize(drink) .. BS.LF
+        tt = tt .. gold:Colorize((BS.recipeList.drink.known + BS.recipeList.food.known) .. "/" .. allFoodAndDrink)
+        tt = tt .. white:Colorize(foodAndDrink) .. BS.LF
+        tt = tt .. gold:Colorize(BS.recipeList.furnishing.known .. "/" .. allFurnishing)
+        tt = tt .. white:Colorize(furnishing)
 
         local value = BS.recipeList.food.known .. "/" .. allFood
-        local colour = BS.GetColour(this)
+        local colour = BS.GetColour(this, true)
         local display = BS.GetVar("Display", this)
 
         if (display == drink) then
@@ -725,7 +738,7 @@ BS.widgets[BS.W_RECIPES] = {
         end
 
         widget:SetValue(value)
-        widget:SetColour(unpack(colour))
+        widget:SetColour(colour)
         widget:SetTooltip(tt)
 
         return widget:GetValue()
@@ -770,7 +783,7 @@ BS.widgets[BS.W_UNKNOWN_WRIT_MOTIFS] = {
         local this = BS.W_UNKNOWN_WRIT_MOTIFS
 
         if (event == "initial") then
-            widget:SetColour(unpack(BS.GetColour(this)))
+            widget:SetColour(BS.GetColour(this, true))
             return
         end
 
@@ -830,14 +843,14 @@ BS.widgets[BS.W_UNKNOWN_WRIT_MOTIFS] = {
 
         table.sort(display)
 
-        widget:SetColour(unpack(BS.GetColour(this)))
+        widget:SetColour(BS.GetColour(this, true))
         widget:SetValue(#display)
 
         if (#display > 0) then
             local tt = GetString(_G.BARSTEWARD_UNKNOWN_WRIT_MOTIFS)
 
             for _, motif in ipairs(display) do
-                tt = tt .. BS.LF .. motif
+                tt = string.format("%s%s%s", tt, BS.LF, motif)
             end
 
             widget:SetTooltip(tt)

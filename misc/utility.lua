@@ -621,8 +621,6 @@ function BS.RemoveFromAllScenes(barIndex)
     local bar = BS.BarObjectPool:GetActiveObject(BS.BarObjects[barIndex])
 
     if (bar) then
-        bar:ForceHide()
-
         for _, scene in ipairs(BS.SCENES) do
             BS.RemoveFromScenes(scene, bar)
         end
@@ -1587,7 +1585,11 @@ function BS.Icon(path, colour, width, height)
     local texture = zo_iconFormat(path, width, height)
 
     if (colour) then
-        texture = string.format("|c%s%s|r", colour, texture:gsub("|t$", ":inheritColor|t"))
+        if (type(colour) == "table") then
+            texture = colour:Colorize(texture:gsub("|t$", ":inheritColor|t"))
+        else
+            texture = string.format("|c%s%s|r", colour, texture:gsub("|t$", ":inheritColor|t"))
+        end
     end
 
     return texture
@@ -1627,25 +1629,35 @@ function BS.GetVar(name, widget)
     return value
 end
 
-function BS.GetTimeColour(value, this, multiplier, useOK)
+function BS.GetTimeColour(value, this, multiplier, useOK, useZoColours)
     local colour
 
     if (useOK) then
-        colour = BS.GetColour(this, "Ok")
+        colour = BS.GetColour(this, "Ok", nil, useZoColours)
     end
 
     multiplier = multiplier or 3600
 
     if (value <= (BS.GetVar("DangerValue", this)) * multiplier) then
-        colour = BS.GetColour(this, "Danger")
+        colour = BS.GetColour(this, "Danger", nil, useZoColours)
     elseif (value <= (BS.GetVar("WarningValue", this) * multiplier)) then
-        colour = BS.GetColour(this, "Warning")
+        colour = BS.GetColour(this, "Warning", nil, useZoColours)
     end
 
     return colour
 end
 
-function BS.GetColour(this, colourType, default)
+function BS.GetColour(this, colourType, default, useZoColours)
+    if (type(colourType) == "boolean") then
+        useZoColours = colourType
+        colourType = nil
+    end
+
+    if (type(default) == "boolean") then
+        useZoColours = default
+        default = nil
+    end
+
     local colour = "Colour"
     local defaultColour = "Default" .. colour
     local defColour
@@ -1661,7 +1673,13 @@ function BS.GetColour(this, colourType, default)
         defColour = BS.GetVar(defaultColour) or {0, 0, 0, 0}
     end
 
-    return BS.GetVar(colour, this) or defColour
+    local retColour = BS.GetVar(colour, this) or defColour
+
+    if (useZoColours) then
+        return BS.NewColour(retColour)
+    else
+        return retColour
+    end
 end
 
 function BS.GetWidget(widgetIndex)
@@ -1832,6 +1850,43 @@ function BS.HideWhenDead()
             end
         end
     end
+end
+
+function BS.NewColour(r, g, b, a)
+    if type(r) == "string" then
+        return ZO_ColorDef:New(r)
+    elseif type(r) == "table" then
+        if (r.r and r.g and r.b) then
+            return ZO_ColorDef:New(r)
+        else
+            return ZO_ColorDef:New(r[1], r[2], r[3], r[4])
+        end
+    else
+        return ZO_ColorDef:New(r, g, b, a)
+    end
+end
+
+function BS.RegisterColours()
+    BS.COLOURS = {
+        DefaultCombatColour = BS.NewColour(BS.GetVar("DefaultCombatColour")),
+        DefaultColour = BS.NewColour(BS.GetVar("DefaultColour")),
+        DefaultDangerColour = BS.NewColour(BS.GetVar("DefaultDangerColour")),
+        DefaultMaxColour = BS.NewColour(BS.GetVar("DefaultMaxColour")),
+        DefaultWarningColour = BS.NewColour(BS.GetVar("DefaultWarningColour")),
+        DefaultOkColour = BS.NewColour(BS.GetVar("DefaultOkColour")),
+        Blue = BS.NewColour("34a4eb"),
+        Green = BS.NewColour("00ff00"),
+        Grey = BS.NewColour("bababa"),
+        Red = BS.NewColour("f90000"),
+        Yellow = BS.NewColour("ffff00"),
+        OffWhite = BS.NewColour("f9f9f9"),
+        ZOSBlue = BS.NewColour("3a92ff"),
+        ZOSGold = BS.NewColour("ccaa1a"),
+        ZOSGreen = BS.NewColour("2dc50e"),
+        ZOSGrey = BS.NewColour("e6e6e6"),
+        ZOSOrange = BS.NewColour("e58b27"),
+        ZOSPurple = BS.NewColour("a02ef7")
+    }
 end
 
 -- developer utility functions
