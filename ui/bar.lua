@@ -196,6 +196,11 @@ function baseBar:Initialise()
 
     -- prevent the bar from displaying when not in hud or hudui modes
     self.bar.fragment = ZO_HUDFadeSceneFragment:New(self.bar)
+
+    -- placeholder for progress bars
+    self.bar.placeholder = WINDOW_MANAGER:CreateControl(nil, self.bar, CT_CONTROL)
+    self.bar.placeholder:SetAnchor(TOPLEFT, self.bar)
+    self.bar.placeholder:SetDimensions(1, 1)
 end
 
 function baseBar:NudgeCompass()
@@ -695,19 +700,29 @@ function baseBar:AddWidgets(widgets)
             end
         end
 
+        local isProgress = metadata.widget.progress ~= nil
+
         if (self.orientation == "horizontal") then
             if (firstWidget) then
-                metadata.widget:SetAnchor(LEFT, self.bar, LEFT)
+                if (isProgress) then
+                    metadata.widget:SetAnchor(LEFT, self.bar.placeholder, RIGHT)
+                else
+                    metadata.widget:SetAnchor(LEFT, self.bar, LEFT)
+                end
             else
                 metadata.widget:SetAnchor(LEFT, previousWidget.control, RIGHT)
             end
         else
             if (firstWidget) then
-                metadata.widget:SetAnchor(
-                    self.valueSide == LEFT and TOPRIGHT or TOPLEFT,
-                    self.bar,
-                    self.valueSide == LEFT and TOPRIGHT or TOPLEFT
-                )
+                if (metadata.widget.progress) then
+                    metadata.widget:SetAnchor(TOPLEFT, self.bar.placeholder, BOTTOMRIGHT)
+                else
+                    metadata.widget:SetAnchor(
+                        self.valueSide == LEFT and TOPRIGHT or TOPLEFT,
+                        self.bar,
+                        self.valueSide == LEFT and TOPRIGHT or TOPLEFT
+                    )
+                end
             else
                 metadata.widget:SetAnchor(
                     self.valueSide == LEFT and TOPRIGHT or TOPLEFT,

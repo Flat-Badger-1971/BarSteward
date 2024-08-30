@@ -148,3 +148,85 @@ function BS.CreateProgressBar(barName, barParent)
 
     return bar
 end
+
+function BS.PBAR()
+    local name = BS.Name .. "_pgbar"
+
+    local parent = WINDOW_MANAGER:CreateTopLevelWindow(name)
+
+    parent:SetDimensions(470, 650)
+    parent:SetAnchor(CENTER, GuiRoot, CENTER)
+
+    -- *** ZO_ArrowStatusBar ***
+    name = name .. "bar"
+    local bar = WINDOW_MANAGER:CreateControl(name, parent, CT_STATUSBAR)
+
+    bar:SetAnchor(CENTER)
+
+    bar:SetDimensions(315, 20)
+    bar:SetTexture("esoui/art/miscellaneous/progressbar_genericfill.dds")
+    bar:SetTextureCoords(0, 1, 0, 0.625)
+    bar:SetLeadingEdge("EsoUI/Art/Miscellaneous/progressbar_genericFill_leadingEdge.dds", 8, 20)
+    bar:SetLeadingEdgeTextureCoords(0, 1, 0, 0.625)
+
+    -- OnInitialized self.gloss = self:GetNamedChild("Gloss")
+    -- OnMinMaxValueChanged self.gloss:SetMinMax(min, max)
+    -- OnValueChanged self.gloss:SetValue(value)
+
+    bar.gloss = WINDOW_MANAGER:CreateControl(name .. "gloss", bar, CT_STATUSBAR)
+    bar.gloss:SetAnchorFill()
+    bar.gloss:SetTexture("EsoUI/Art/Miscellaneous/progressbar_genericFill_gloss.dds")
+    bar.gloss:SetTextureCoords(0, 1, 0, 0.625)
+    bar.gloss:SetLeadingEdge("EsoUI/Art/Miscellaneous/progressbar_genericFill_leadingEdge_gloss.dds", 8, 20)
+    bar.gloss:SetLeadingEdgeTextureCoords(0, 1, 0, 0.625)
+    -- ******
+
+    -- *** ZO_ArrowStatusBarWithBG ***
+    bar.bg = WINDOW_MANAGER:CreateControl(name .. "BG", bar, CT_CONTROL)
+    bar.bg:SetAnchorFill()
+    bar.bg.left = WINDOW_MANAGER:CreateControl(name .. "BGLeft", bar.bg, CT_TEXTURE)
+    bar.bg.left:SetTexture("EsoUI/Art/Miscellaneous/progressbar_frame_bg.dds")
+    bar.bg.left:SetTextureCoords(0, 0.0195, 0, 0.625)
+    bar.bg.left:SetWidth(10)
+    bar.bg.left:SetAnchor(TOPLEFT)
+    bar.bg.left:SetAnchor(BOTTOMLEFT)
+
+    bar.bg.right = WINDOW_MANAGER:CreateControl(name .. "BGRight", bar.bg, CT_TEXTURE)
+    bar.bg.right:SetTexture("EsoUI/Art/Miscellaneous/progressbar_frame_bg.dds")
+    bar.bg.right:SetTextureCoords(0.5938, 0.6133, 0, 0.625)
+    bar.bg.right:SetWidth(10)
+    bar.bg.right:SetAnchor(TOPRIGHT)
+    bar.bg.right:SetAnchor(BOTTOMRIGHT)
+
+    bar.bg.middle = WINDOW_MANAGER:CreateControl(name .. "BGMiddle", bar.bg, CT_TEXTURE)
+    bar.bg.middle:SetTexture("EsoUI/Art/Miscellaneous/progressbar_frame_bg.dds")
+    bar.bg.middle:SetTextureCoords(0.0195, 0.5898, 0, 0.625)
+    bar.bg.middle:SetAnchor(TOPLEFT)
+    bar.bg.middle:SetAnchor(BOTTOMRIGHT)
+
+    bar.overlay = WINDOW_MANAGER:CreateControl(name .. "Overlay", bar, CT_CONTROL)
+    bar.overlay:SetAnchorFill()
+    bar.overlay.left = WINDOW_MANAGER:CreateControl(name .. "OverlayLeft", bar.bg, CT_TEXTURE)
+    bar.overlay.left:SetTexture("EsoUI/Art/Miscellaneous/progressbar_frame.dds")
+    bar.overlay.left:SetDrawLayer(_G.OVERLAY)
+    bar.overlay.left:SetTextureCoords(0, 0.0195, 0, 0.625)
+    bar.overlay.left:SetWidth(10)
+    bar.overlay.left:SetAnchor(TOPLEFT)
+    bar.overlay.left:SetAnchor(BOTTOMLEFT)
+
+    bar.overlay.right = WINDOW_MANAGER:CreateControl(name .. "OverlayRight", bar.bg, CT_TEXTURE)
+    bar.overlay.right:SetTexture("EsoUI/Art/Miscellaneous/progressbar_frame.dds")
+    bar.overlay.right:SetDrawLayer(_G.OVERLAY)
+    bar.overlay.right:SetTextureCoords(0.5938, 0.6133, 0, 0.625)
+    bar.overlay.right:SetWidth(10)
+    bar.overlay.right:SetAnchor(TOPRIGHT)
+    bar.overlay.right:SetAnchor(BOTTOMRIGHT)
+
+    bar.overlay.middle = WINDOW_MANAGER:CreateControl(name .. "OverlayMiddle", bar.bg, CT_TEXTURE)
+    bar.overlay.middle:SetTexture("EsoUI/Art/Miscellaneous/progressbar_frame.dds")
+    bar.overlay.middle:SetDrawLayer(_G.OVERLAY)
+    bar.overlay.middle:SetTextureCoords(0.0195, 0.5898, 0, 0.625)
+    bar.overlay.middle:SetAnchor(TOPLEFT, bar.overlay.left, TOPRIGHT)
+    bar.overlay.middle:SetAnchor(BOTTOMRIGHT, bar.overlay.right, BOTTOMLEFT)
+    -- ******
+end

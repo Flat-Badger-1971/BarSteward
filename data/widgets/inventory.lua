@@ -6,7 +6,7 @@ BS.widgets[BS.W_BAG_SPACE] = {
         local this = BS.W_BAG_SPACE
         local bagSize = GetBagSize(_G.BAG_BACKPACK)
         local bagUsed = GetNumBagUsedSlots(_G.BAG_BACKPACK)
-        local noLimitColour = BS.GetVar("NoLimitColour", this) and BS.COLOURS.OffWhite or BS.COLOURS.Green
+        local noLimitColour = BS.GetVar("NoLimitColour", this) and BS.COLOURS.OffWhite or BS.COLOURS.Yellow
         local value = bagUsed .. (BS.GetVar("HideLimit", this) and "" or (noLimitColour:Colorize("/" .. bagSize)))
         local widthValue = bagUsed .. (BS.GetVar("HideLimit", this) and "" or ("/" .. bagSize))
         local pcUsed = math.floor((bagUsed / bagSize) * 100)
@@ -91,7 +91,7 @@ BS.widgets[BS.W_BANK_SPACE] = {
         local this = BS.W_BANK_SPACE
         local bagSize = GetBagSize(_G.BAG_BANK)
         local bagUsed = GetNumBagUsedSlots(_G.BAG_BANK)
-        local noLimitColour = BS.GetVar("NoLimitColour", this) and BS.COLOURS.OffWhite or BS.COLOURS.Green
+        local noLimitColour = BS.GetVar("NoLimitColour", this) and BS.COLOURS.OffWhite or BS.COLOURS.Yellow
 
         if (IsESOPlusSubscriber()) then
             bagSize = bagSize + GetBagSize(_G.BAG_SUBSCRIBER_BANK)

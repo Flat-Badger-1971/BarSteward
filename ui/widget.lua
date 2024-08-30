@@ -167,6 +167,7 @@ function baseWidget:CreateProgress(progress, gradient, transition)
 
     self.progress = self.progress or BS.CreateProgressBar(name, self.control)
     self.progress:ClearAnchors()
+    self.progress:SetDimensions(200, 32)
     self.progress:SetAnchor(
         self.valueSide == LEFT and RIGHT or LEFT,
         self.icon,
@@ -174,7 +175,6 @@ function baseWidget:CreateProgress(progress, gradient, transition)
         self.valueSide == LEFT and -10 or 10,
         0
     )
-    self.progress:SetDimensions(200, 32)
     self.progress:SetMinMax(0, 100)
     self.progress.progress:SetColor(unpack(BS.Vars.Controls[self.id].ProgressColour or BS.Vars.DefaultWarningColour))
     self.progress.progress:SetFont(self.font)
