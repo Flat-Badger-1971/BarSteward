@@ -198,6 +198,7 @@ function baseBar:Initialise()
     self.bar.fragment = ZO_HUDFadeSceneFragment:New(self.bar)
 
     -- placeholder for progress bars
+    -- they go doolally if they are the first control on a vertical bar - no idea why...
     self.bar.placeholder = WINDOW_MANAGER:CreateControl(nil, self.bar, CT_CONTROL)
     self.bar.placeholder:SetAnchor(TOPLEFT, self.bar)
     self.bar.placeholder:SetDimensions(1, 1)

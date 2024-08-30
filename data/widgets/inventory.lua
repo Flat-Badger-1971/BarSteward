@@ -1957,10 +1957,12 @@ BS.widgets[BS.W_RECIPE_WATCH] = {
     tooltip = GetString(_G.BARSTEWARD_RECIPES),
     hideWhenEqual = 0,
     onLeftClick = function()
-        BS.Clear(BS.Vars.FoundRecipes)
-        BS.Vars.FoundCount = 0
-        ZO_Tooltips_HideTextTooltip()
-        BS.RefreshWidget(BS.W_RECIPE_WATCH)
+        if (BS.Vars.FoundRecipes) then
+            BS.Clear(BS.Vars.FoundRecipes)
+            BS.Vars.FoundCount = 0
+            ZO_Tooltips_HideTextTooltip()
+            BS.RefreshWidget(BS.W_RECIPE_WATCH)
+        end
     end
 }
 

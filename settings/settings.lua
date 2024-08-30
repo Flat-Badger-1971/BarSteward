@@ -2295,7 +2295,7 @@ local function getWidgetSettings()
 
         local iconInfo = BS.widgets[k].icon
 
-        if (type(iconInfo) ==  "function") then
+        if (type(iconInfo) == "function") then
             iconInfo = iconInfo()
         end
 
@@ -2325,10 +2325,9 @@ local function getWidgetSettings()
             if (BS.Vars.CategoriesCount) then
                 cat.name =
                     string.format(
-                    "%s  %s %d|r",
+                    "%s  %s",
                     cat.name,
-                    BS.ARGBConvert(BS.Defaults.DefaultWarningColour),
-                    #cat.controls
+                    BS.COLOURS.DefaultWarningColour:Colorize(" " .. tostring(#cat.controls))
                 )
             end
 
