@@ -704,17 +704,17 @@ function baseBar:AddWidgets(widgets)
 
         if (self.orientation == "horizontal") then
             if (firstWidget) then
-                if (isProgress) then
-                    metadata.widget:SetAnchor(LEFT, self.bar.placeholder, RIGHT)
-                else
+                --if (isProgress) then
+                    --metadata.widget:SetAnchor(LEFT, self.bar.placeholder, RIGHT)
+                --else
                     metadata.widget:SetAnchor(LEFT, self.bar, LEFT)
-                end
+                --end
             else
                 metadata.widget:SetAnchor(LEFT, previousWidget.control, RIGHT)
             end
         else
             if (firstWidget) then
-                if (metadata.widget.progress) then
+                if (isProgress) then
                     metadata.widget:SetAnchor(TOPLEFT, self.bar.placeholder, BOTTOMRIGHT)
                 else
                     metadata.widget:SetAnchor(
