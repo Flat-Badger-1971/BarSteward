@@ -47,6 +47,31 @@ function BS.RegisterDialogues()
                 }
             }
         },
+        ReloadQuestion = {
+            title = {text = "Bar Steward"},
+            mainText = {
+                text = string.format("%s %s?", GetString(_G.BARSTEWARD_SETTINGS), BS.Format(_G.SI_ADDON_MANAGER_RELOAD))
+            },
+            buttons = {
+                {
+                    text = BS.Format(_G.SI_DIALOG_NO),
+                    callback = function()
+                        BS.BarIndex = nil
+                    end
+                },
+                {
+                    text = BS.Format(_G.SI_DIALOG_YES),
+                    callback = function()
+                        zo_callLater(
+                            function()
+                                ReloadUI()
+                            end,
+                            200
+                        )
+                    end
+                }
+            }
+        },
         Remove = {
             title = {text = GetString(_G.BARSTEWARD_REMOVE_BAR)},
             mainText = {text = GetString(_G.BARSTEWARD_REMOVE_WARNING)},

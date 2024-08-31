@@ -634,12 +634,10 @@ local function CreateTool(heading, toolName, varName, setupFunc, guild)
         function()
             frame.fragment:SetHiddenForReason("disabled", true)
 
-            if (guild) then
-                if (BS.Vars.Controls[BS.W_GUILD_FRIENDS].Bar ~= 0) then
-                    BS.widgets[BS.W_GUILD_FRIENDS].update(
-                        BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[BS.W_GUILD_FRIENDS]).ref
-                    )
-                end
+            local ftype = guild and BS.W_GUILD_FRIENDS or BS.W_FRIENDS
+
+            if (BS.Vars.Controls[ftype].Bar ~= 0) then
+                BS.widgets[ftype].update(BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[ftype]))
             end
         end
     )
@@ -1154,6 +1152,7 @@ function BS.CreateCopyFrame()
             end
 
             frame.fragment:SetHiddenForReason("disabled", true)
+            ZO_Dialogs_ShowDialog(BS.Name .. "ReloadQuestion")
         end
     )
 
