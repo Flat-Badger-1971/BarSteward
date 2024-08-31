@@ -477,7 +477,9 @@ function BS.GetPortToHouseSettings()
         local sortedHouses = {}
 
         for id, _ in pairs(addedHouses) do
-            table.insert(sortedHouses, id)
+            if (BS.Vars.Controls[1000 + id]) then
+                table.insert(sortedHouses, id)
+            end
         end
 
         table.sort(

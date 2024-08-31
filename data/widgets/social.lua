@@ -4,23 +4,21 @@ local function addToTooltip(friendList, textureFunctions)
     local tt = ""
 
     for _, friend in ipairs(friendList) do
-        local textColour = ZO_ColorDef:New(ZO_SocialList_GetRowColors(friend, false))
+        local textColourDef = ZO_SocialList_GetRowColors(friend, false)
+
         local noChar = not friend.hasCharacter or (zo_strlen(friend.characterName) <= 0)
 
-        if (BS.Vars:GetCommon("FriendAnnounce")) then
-            if (BS.Vars:GetCommon("FriendAnnounce", friend.displayName) and friend.online) then
-                textColour = BS.COLOURS.DefaultOkColour
-            end
+        if (BS.Vars:GetCommon("FriendAnnounce", friend.displayName) == true and (friend.online)) then
+            textColourDef = BS.COLOURS.ZOSGreen
         end
 
+        local colourise = noChar and "" or BS.Icon(textureFunctions.allianceIcon(friend.alliance))
+
         tt = string.format("%s%s%s", tt, BS.LF, BS.Icon(textureFunctions.playerStatusIcon(friend.status)))
+        colourise = string.format("%s%s", colourise, ZO_FormatUserFacingDisplayName(friend.displayName))
+        colourise = string.format("%s%s", colourise, noChar and "" or (" - " .. friend.formattedZone))
 
-        local ttext = string.format("%s", noChar and "" or BS.Icon(textureFunctions.allianceIcon(friend.alliance)))
-
-        ttext = string.format("%s%s", ttext, ZO_FormatUserFacingDisplayName(friend.displayName))
-        ttext = string.format("%s%s", ttext, noChar and "" or (" - " .. friend.formattedZone))
-
-        tt = tt .. textColour:Colorize(ttext)
+        tt = string.format("%s%s", tt, textColourDef:Colorize(colourise))
     end
 
     return tt

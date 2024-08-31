@@ -1013,6 +1013,8 @@ function BS.CreateCopyFrame()
         frame.accounts:UpdateValues(accounts, 1)
         frame.accounts:SetDisabled(false)
         characters = BS.Vars:GetCharacters(value, accounts[1], true)
+        BS.selectedAccount = accounts[1]
+        BS.selectedCharacter = characters[1]
         frame.characters:UpdateValues(characters, 1)
     end
 
@@ -1021,6 +1023,7 @@ function BS.CreateCopyFrame()
         characters = BS.Vars:GetCharacters(BS.selectedServer, value, true)
         frame.characters:UpdateValues(characters, 1)
         frame.characters:SetDisabled(false)
+        BS.selectedCharacter = characters[1]
     end
 
     local function characterSelected(value)

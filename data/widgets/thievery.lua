@@ -142,14 +142,14 @@ BS.widgets[BS.W_FENCE_TRANSACTIONS] = {
 
 BS.widgets[BS.W_LAUNDER_TRANSACTIONS] = {
     -- v1.2.15
-    name = "launderlots",
+    name = "launderSlots",
     update = function(widget)
         local this = BS.W_LAUNDER_TRANSACTIONS
         local max = FENCE_MANAGER:GetNumTotalTransactions(_G.ZO_MODE_STORE_LAUNDER)
         local used = FENCE_MANAGER:GetNumTransactionsUsed(_G.ZO_MODE_STORE_LAUNDER)
         local pcUsed = math.floor((used / max) * 100)
         local colour = BS.GetColour(this, "Ok", true)
-        local noLimitColour = BS.GetVar("NoLimitColour", this) and BS.COLOURS.OffWhite or nil
+        local noLimitColour = BS.GetVar("NoLimitColour", this) and BS.COLOURS.OffWhite or BS.COLOURS.Yellow
         local value = used .. (BS.GetVar("HideLimit", this) and "" or (noLimitColour:Colorize("/" .. max)))
         local widthValue = used .. (BS.GetVar("HideLimit", this) and "" or ("/" .. max))
 
