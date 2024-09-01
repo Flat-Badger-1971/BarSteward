@@ -574,6 +574,8 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
                     ttext = tcolour:Colorize(ttext)
                     ttt = string.format("%s%s", ttt, ttext)
                 end
+
+                ttt = ttt .. BS.LF
             end
 
             if (BS.Vars:GetCommon("CharacterList")) then
@@ -584,12 +586,14 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
 
                 for char, _ in pairs(chars) do
                     if (char ~= character) then
-                        if (BS.Vars:GetCommon("dailyQuests", char)) then
+                        local charQuests = BS.Vars:GetCommon("dailyQuests", char)
+
+                        if (charQuests) then
                             local dccolour = ccolour
 
-                            if (BS.Vars:GetCommon("dailyQuests", char, "complete")) then
+                            if (charQuests.completed) then
                                 dccolour = BS.COLOURS.DefaultOkColour
-                            elseif (BS.Vars:GetCommon("dailyQuests", char, "pickedup")) then
+                            elseif (charQuests.pickedup) then
                                 dccolour = BS.COLOURS.DefaultWarningColour
                             end
 
@@ -717,13 +721,13 @@ BS.widgets[BS.W_RECIPES] = {
         local white, gold = BS.COLOURS.OffWhite, BS.COLOURS.ZOSGold
 
         tt = tt .. BS.LF .. gold:Colorize(BS.recipeList.food.known .. "/" .. allFood)
-        tt = tt .. white:Colorize(food) .. BS.LF
+        tt = tt .. white:Colorize(" " .. food) .. BS.LF
         tt = tt .. gold:Colorize(BS.recipeList.drink.known .. "/" .. allDrink)
-        tt = tt .. white:Colorize(drink) .. BS.LF
+        tt = tt .. white:Colorize(" " .. drink) .. BS.LF
         tt = tt .. gold:Colorize((BS.recipeList.drink.known + BS.recipeList.food.known) .. "/" .. allFoodAndDrink)
-        tt = tt .. white:Colorize(foodAndDrink) .. BS.LF
+        tt = tt .. white:Colorize(" " .. foodAndDrink) .. BS.LF
         tt = tt .. gold:Colorize(BS.recipeList.furnishing.known .. "/" .. allFurnishing)
-        tt = tt .. white:Colorize(furnishing)
+        tt = tt .. white:Colorize(" " .. furnishing)
 
         local value = BS.recipeList.food.known .. "/" .. allFood
         local colour = BS.GetColour(this, true)

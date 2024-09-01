@@ -1852,12 +1852,12 @@ end
 
 function BS.RegisterColours()
     BS.COLOURS = {
-        DefaultCombatColour = BS.NewColour(BS.GetVar("DefaultCombatColour")),
-        DefaultColour = BS.NewColour(BS.GetVar("DefaultColour")),
-        DefaultDangerColour = BS.NewColour(BS.GetVar("DefaultDangerColour")),
-        DefaultMaxColour = BS.NewColour(BS.GetVar("DefaultMaxColour")),
-        DefaultWarningColour = BS.NewColour(BS.GetVar("DefaultWarningColour")),
-        DefaultOkColour = BS.NewColour(BS.GetVar("DefaultOkColour")),
+        DefaultCombatColour = BS.NewColour(BS.Defaults.DefaultCombatColour),
+        DefaultColour = BS.NewColour(BS.Defaults.DefaultColour),
+        DefaultDangerColour = BS.NewColour(BS.Defaults.DefaultDangerColour),
+        DefaultMaxColour = BS.NewColour(BS.Defaults.DefaultMaxColour),
+        DefaultWarningColour = BS.NewColour(BS.Defaults.DefaultWarningColour),
+        DefaultOkColour = BS.NewColour(BS.Defaults.DefaultOkColour),
         Blue = BS.NewColour("34a4eb"),
         Green = BS.NewColour("00ff00"),
         Grey = BS.NewColour("bababa"),

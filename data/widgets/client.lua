@@ -284,7 +284,7 @@ BS.widgets = {
                 end
             end
 
-            widget:SetValue(math.floor(latency))
+            widget:SetValue(math.floor(latency), BS.GetVar("FixedWidth", this) and "____" or nil)
             widget:SetColour(colour)
             widget:SetIcon(icon, colour)
 
@@ -293,7 +293,20 @@ BS.widgets = {
         timer = 1000,
         icon = "Campaign/campaignBrowser_hiPop",
         tooltip = GetString(_G.BARSTEWARD_LATENCY),
-        minWidthChars = "____"
+        customSettings = {
+            [1] = {
+                type = "checkbox",
+                name = GetString(_G.BARSTEWARD_FIXED_WIDTH),
+                getFunc = function()
+                    return BS.Vars.Controls[BS.W_LATENCY].FixedWidth or false
+                end,
+                setFunc = function(value)
+                    BS.Vars.Controls[BS.W_LATENCY].FixedWidth = value
+                    BS.RefreshWidget(BS.W_LATENCY)
+                end,
+                default = true
+            }
+        }
     },
     [BS.W_MEMORY] = {
         -- v1.2.2

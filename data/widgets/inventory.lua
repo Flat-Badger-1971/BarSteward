@@ -604,8 +604,9 @@ BS.widgets[BS.W_TROPHY_VAULT_KEYS] = {
                     if (not keys[location][itemId]) then
                         local icon = data.iconFile
                         local name = data.name
+                        local colour = GetItemQualityColor(data.displayQuality)
 
-                        keys[location][itemId] = {count = cnt, name = name, icon = icon, bag = bag}
+                        keys[location][itemId] = {count = cnt, name = name, icon = icon, bag = bag, colour = colour}
                     else
                         keys[location][itemId].count = keys[location][itemId].count + cnt
                     end
@@ -623,7 +624,7 @@ BS.widgets[BS.W_TROPHY_VAULT_KEYS] = {
                 for _, key in pairs(keys[bagType]) do
                     local zoIcon = BS.Icon(key.icon)
 
-                    ttt = ttt .. BS.LF .. BS.BAGICON .. " " .. zoIcon .. " " .. BS.COLOURS.OffWhite:Colorize(key.name)
+                    ttt = ttt .. BS.LF .. BS.BAGICON .. " " .. zoIcon .. " " .. key.colour:Colorize(key.name)
 
                     if (key.count > 1) then
                         ttt = ttt .. " (" .. key.count .. ")"
@@ -723,8 +724,16 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
                             if (not keys[location][itemId]) then
                                 local icon = linkCache[itemId].icon
                                 local name = linkCache[itemId].name
+                                local displayQuality = select(9, GetItemInfo(bag, data.slotIndex))
+                                local colour = GetItemQualityColor(displayQuality)
 
-                                keys[location][itemId] = {count = cnt, name = name, icon = icon, bag = bag}
+                                keys[location][itemId] = {
+                                    count = cnt,
+                                    name = name,
+                                    icon = icon,
+                                    bag = bag,
+                                    colour = colour
+                                }
                             else
                                 keys[location][itemId].count = keys[location][itemId].count + cnt
                             end
@@ -747,7 +756,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
 
                 ttt = ttt .. BS.LF
                 ttt = ttt .. (bagType == "bag" and BS.BAGICON or BS.BANKICON)
-                ttt = ttt .. " " .. zoIcon .. " " .. BS.COLOURS.OffWhite:Colorize(key.name)
+                ttt = ttt .. " " .. zoIcon .. " " .. (key.colour or BS.COLOURS.OffWhite):Colorize(key.name)
                 ttt = ttt .. " (" .. key.count .. ")"
             end
         end
@@ -777,7 +786,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
                         local zoIcon = BS.Icon(data.icon)
 
                         ttt = ttt .. BS.LF .. BS.BAGICON .. " " .. zoIcon .. " "
-                        ttt = ttt .. BS.COLOURS.OffWhite:Colorize(data.name) .. " (0)"
+                        ttt = ttt .. (data.colour or BS.COLOURS.OffWhite):Colorize(data.name) .. " (0)"
                     end
                 end
             end

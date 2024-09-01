@@ -160,8 +160,9 @@ BS.Defaults = {
             Bar = 1,
             Cat = cat.Client,
             ColourValues = "c,wv,wc,dc,dv",
-            WarningValue = 150,
-            DangerValue = 300
+            DangerValue = 300,
+            FixedWidth = true,
+            WarningValue = 150
         },
         [BS.W_BLACKSMITHING] = {
             Autohide = true,
@@ -398,9 +399,9 @@ BS.Defaults = {
             Units = "mph"
         },
         [BS.W_CRAFTING_DAILIES] = {
+            Autohide = false,
             Cat = cat.Crafting,
-            ColourValues = "",
-            Autohide = false
+            ColourValues = ""
         },
         [BS.W_GUILD_FRIENDS] = {
             Announce = false,
@@ -854,6 +855,10 @@ function BS.CheckVars()
 
         if ((not widgetData.ColourValues or "") ~= "") then
             widgetData.ColourValues = "c"
+        end
+
+        if (not widgetData.NoIcon) then
+            widgetData.NoIcon = false
         end
     end
 end

@@ -1446,7 +1446,7 @@ BS.widgets[BS.W_FISHING] = {
     icon = "icons/fishing_discus_blue_turquoise",
     onLeftClick = function()
         BS.Clear(BS.Vars.FishingLoot)
-        BS.RefreshWidget(BS.W_FISHING)
+        BS.RefreshBar(BS.W_FISHING)
     end,
     tooltip = BS.Format(_G.SI_GUILDACTIVITYATTRIBUTEVALUE9)
 }

@@ -616,8 +616,9 @@ function baseBar:AddWidgets(widgets)
         end
 
         local noValue = BS.Vars.Controls[metadata.id].NoValue or false
+        local noIcon = BS.Vars.Controls[metadata.id].NoIcon or false
 
-        metadata.widget = BS.CreateWidget(metadata, self.bar, tooltipAnchor, self.valueSide, noValue, self.settings)
+        metadata.widget = BS.CreateWidget(metadata, self.bar, tooltipAnchor, self.valueSide, noValue, self.settings, noIcon)
 
         -- register widgets that need to watch for events
         if (metadata.event) then

@@ -222,7 +222,7 @@ function baseWidget:CreateProgress(progress, gradient, transition)
 end
 
 function baseWidget:SetValueAnchor()
-    local icongap = self.barSettings.IconGap or 10
+    local icongap = self.noIcon and 0 or (self.barSettings.IconGap or 10)
 
     self.value:SetAnchor(
         self.valueSide == LEFT and RIGHT or LEFT,
@@ -254,18 +254,34 @@ function baseWidget:CreateCooldown()
     self.icon.cooldown:SetHidden(true)
 end
 
+function baseWidget:SetNoIcon(value)
+    self.noIcon = value
+end
+
+function baseWidget:GetNoIcon()
+    return self.noIcon
+end
+
 function baseWidget:CreateIcon(icon)
     local texture
 
-    if (type(icon) == "function") then
-        texture = icon()
+    self.icon = self.icon or WINDOW_MANAGER:CreateControl(nil, self.control, CT_TEXTURE)
+
+    if (self.noIcon) then
+        self.icon:SetTexture(nil)
+        self.icon:SetDimensions(1, self.iconSize)
+        self.icon:SetColor(0, 0, 0, 0)
     else
-        texture = icon
+        if (type(icon) == "function") then
+            texture = icon()
+        else
+            texture = icon
+        end
+
+        self.icon:SetTexture(BS.FormatIcon(texture))
+        self.icon:SetDimensions(self.iconSize, self.iconSize)
     end
 
-    self.icon = self.icon or WINDOW_MANAGER:CreateControl(nil, self.control, CT_TEXTURE)
-    self.icon:SetTexture(BS.FormatIcon(texture))
-    self.icon:SetDimensions(self.iconSize, self.iconSize)
     self.icon:ClearAnchors()
     self.icon:SetAnchor(self.valueSide == LEFT and RIGHT or LEFT)
 end
@@ -433,7 +449,9 @@ function baseWidget:SetFont(font)
 end
 
 function baseWidget:SetIcon(value)
-    self.icon:SetTexture(BS.FormatIcon(value))
+    if (not self.noIcon) then
+        self.icon:SetTexture(BS.FormatIcon(value))
+    end
 end
 
 function baseWidget:GetValue()
@@ -553,7 +571,7 @@ local function checkOrCreatePool()
     end
 end
 
-function BS.CreateWidget(metadata, parent, tooltipAnchor, valueSide, noValue, barSettings)
+function BS.CreateWidget(metadata, parent, tooltipAnchor, valueSide, noValue, barSettings, noIcon)
     checkOrCreatePool()
 
     -- try to resuse the original widget
@@ -577,6 +595,7 @@ function BS.CreateWidget(metadata, parent, tooltipAnchor, valueSide, noValue, ba
     widget:SetIconSize()
     widget:SetPadding()
     widget:SetValueSide(valueSide)
+    widget:SetNoIcon(noIcon)
     widget:CreateIcon(metadata.icon)
     widget:CreateCooldown()
     widget:SetInitialFont()
