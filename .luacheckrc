@@ -417,6 +417,7 @@ read_globals = {
     "GetRecipeIngredientItemInfo",
     "GetRecipeListInfo",
     "GetRecipeResultItemLink",
+    "GetReducedBountyPayoffAmount",
     "GetRepairAllCost",
     "GetRequiredChampionDisciplineIdForSlot",
     "GetRidingStats",

@@ -1,7 +1,7 @@
 local BS = _G.BarSteward
 
 BS.LAM = _G.LibAddonMenu2
-BS.VERSION = "3.1.3"
+BS.VERSION = "3.1.4"
 
 local panel = {
     type = "panel",
@@ -1189,6 +1189,25 @@ local function checkNoIcon(defaults, widgetControls, vars, key)
     end
 end
 
+local function checkNoValue(defaults, widgetControls, vars, key)
+    if (defaults.NoValue ~= nil) then
+        widgetControls[#widgetControls + 1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_HIDE_TEXT),
+            getFunc = function()
+                return vars.NoValue or false
+            end,
+            setFunc = function(value)
+                vars.NoValue = value
+                BS.GetWidget(key):SetNoValue(value)
+                BS.RegenerateBar(BS.Vars.Controls[key].Bar, key)
+            end,
+            width = "full",
+            default = false
+        }
+    end
+end
+
 local function checkInvert(defaults, widgetControls, vars, key)
     if (defaults.Invert ~= nil) then
         widgetControls[#widgetControls + 1] = {
@@ -2287,6 +2306,7 @@ local function getWidgetSettings()
             checkHideWhenFullyUsed(defaults, widgetControls, vars, k)
             checkHideWhenMaxLevel(defaults, widgetControls, vars, k)
             checkNoIcon(defaults, widgetControls, vars, k)
+            checkNoValue(defaults, widgetControls, vars, k)
             checkPvPOnly(defaults, widgetControls, vars, k)
             checkShowPercentage(defaults, widgetControls, vars, k)
             checkUseSeparators(defaults, widgetControls, vars, k)

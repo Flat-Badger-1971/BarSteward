@@ -1432,7 +1432,6 @@ BS.widgets[BS.W_FISHING] = {
                 tt = tt .. BS.LF .. BS.COLOURS.OffWhite:Colorize(ttext)
             end
         end
-
         local setwidth = string.rep("8", typeCount)
 
         if (loot:len() == 0) then

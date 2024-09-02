@@ -875,22 +875,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
         local itemIds = BS.Vars:GetCommon("WatchedItems")
         local vars = BS.Vars.Controls[this]
 
-        settings = {
-            [1] = {
-                type = "checkbox",
-                name = GetString(_G.BARSTEWARD_HIDE_TEXT),
-                getFunc = function()
-                    return BS.Vars.Controls[this].NoValue or false
-                end,
-                setFunc = function(value)
-                    BS.Vars.Controls[this].NoValue = value
-                    BS.GetWidget(this):SetNoValue(value)
-                    BS.RegenerateBar(BS.Vars.Controls[this].Bar, this)
-                end,
-                width = "full",
-                default = false
-            }
-        }
+        settings = {}
 
         for itemId, _ in pairs(itemIds) do
             if (not linkCache[itemId]) then

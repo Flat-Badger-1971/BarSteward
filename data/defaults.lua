@@ -318,8 +318,7 @@ BS.Defaults = {
         },
         [BS.W_ALLIANCE] = {
             Cat = cat.Character,
-            ColourValues = "",
-            NoValue = false
+            ColourValues = ""
         },
         [BS.W_LEADS] = {
             Autohide = true,
@@ -480,7 +479,6 @@ BS.Defaults = {
         [BS.W_WATCHED_ITEMS] = {
             Announce = false,
             Cat = cat.Inventory,
-            NoValue = false,
             [BS.PERFECT_ROE] = true,
             [BS.POTENT_NIRNCRUX] = true
         },
@@ -793,7 +791,7 @@ BS.Defaults = {
         },
         [BS.W_SCRIBING_INK] = {
             Cat = cat.Inventory,
-            ColourValues="okc,wv,wc,dv,wc",
+            ColourValues = "okc,wv,wc,dv,wc",
             DangerValue = 10,
             WarningValue = 30
         },
@@ -816,6 +814,10 @@ BS.Defaults = {
             Cat = cat.Activities,
             ColourValues = "",
             Requires = "LibUndauntedPledges"
+        },
+        [BS.W_BOUNTY_AMOUNT] = {
+            Autohide = false,
+            Cat = cat.Character
         }
     }
 }
@@ -859,6 +861,10 @@ function BS.CheckVars()
 
         if (not widgetData.NoIcon) then
             widgetData.NoIcon = false
+        end
+
+        if (not widgetData.NoValue) then
+            widgetData.NoValue = false
         end
     end
 end

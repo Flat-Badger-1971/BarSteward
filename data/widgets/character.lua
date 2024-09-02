@@ -239,22 +239,7 @@ BS.widgets[BS.W_ALLIANCE] = {
         else
             SCENE_MANAGER:Show("gamepad_campaign_root")
         end
-    end,
-    customSettings = {
-        [1] = {
-            type = "checkbox",
-            name = GetString(_G.BARSTEWARD_HIDE_TEXT),
-            getFunc = function()
-                return BS.Vars.Controls[BS.W_ALLIANCE].NoValue or false
-            end,
-            setFunc = function(value)
-                BS.Vars.Controls[BS.W_ALLIANCE].NoValue = value
-                BS.RegenerateBar(BS.Vars.Controls[BS.W_ALLIANCE].Bar)
-            end,
-            width = "full",
-            default = false
-        }
-    }
+    end
 }
 
 BS.widgets[BS.W_SKYSHARDS] = {
@@ -615,9 +600,10 @@ local function updateWidget()
             ttt = ttt .. BS.COLOURS.ZOSPurple:Colorize(BS.Format(name)) .. BS.LF
         end
 
-        ttt = ttt .. GetString(_G.BARSTEWARD_PREVIOUS_ENCOUNTER_AVERAGE) .. gold:Colorize(getAvarageDps()) .. BS.LF
-        ttt = ttt .. GetString(_G.BARSTEWARD_PREVIOUS_ENCOUNTER_MAXIMUM) .. gold:Colorize(maxDamage) .. BS.LF
-        ttt = ttt .. GetString(_G.BARSTEWARD_PREVIOUS_ENCOUNTER_DURATION) .. gold:Colorize(getCombatTime())
+        ttt =
+            ttt .. GetString(_G.BARSTEWARD_PREVIOUS_ENCOUNTER_AVERAGE) .. " " .. gold:Colorize(getAvarageDps()) .. BS.LF
+        ttt = ttt .. GetString(_G.BARSTEWARD_PREVIOUS_ENCOUNTER_MAXIMUM) .. " " .. gold:Colorize(maxDamage) .. BS.LF
+        ttt = ttt .. GetString(_G.BARSTEWARD_PREVIOUS_ENCOUNTER_DURATION) .. " " .. gold:Colorize(getCombatTime())
 
         dpsWidget:SetTooltip(ttt)
     end
@@ -1529,4 +1515,35 @@ BS.widgets[BS.W_DAILY_REWARD] = {
     event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_DAILY_LOGIN_REWARDS_CLAIMED},
     icon = "icons/achievement_u27_loyalty_reward",
     tooltip = BS.Format(_G.SI_DAILY_LOGIN_REWARDS_CLAIMED_ANNOUNCEMENT)
+}
+
+local goldIcon = BS.Icon("currency/currency_gold_64")
+
+BS.widgets[BS.W_BOUNTY_AMOUNT] = {
+    -- v3.1.4
+    name = "playerBountyAmount",
+    update = function(widget)
+        local bounty = GetFullBountyPayoffAmount()
+        local infamy = GetInfamyLevel(GetInfamy())
+        local infamyText = BS.Format(_G["SI_INFAMYTHRESHOLDSTYPE" .. infamy])
+        local colour = BS.COLOURS.DefaultColour
+
+        widget:SetColour(colour)
+        widget:SetValue(bounty .. goldIcon)
+
+        local tt = BS.Format(_G.BARSTEWARD_BOUNTY_AMOUNT) .. BS.LF .. BS.LF
+        local formatted = zo_strformat(_G.SI_JUSTICE_INFAMY_LEVEL_CHANGED, infamyText)
+
+        formatted = zo_strformat("<<zC:1>>", formatted)
+
+        tt = tt .. BS.COLOURS.OffWhite:Colorize(formatted)
+
+        widget.tooltip = tt
+
+        return bounty
+    end,
+    timer = 1000,
+    hideWhenEqual = 0,
+    icon = "icons/store_bounty_expunger_medium",
+    tooltip = BS.Format(_G.BARSTEWARD_BOUNTY_AMOUNT)
 }
