@@ -1537,22 +1537,22 @@ BS.widgets[BS.W_DAILY_PLEDGES] = {
             widget:SetValue(added .. "/" .. done .. "/" .. maxPledges)
             widget:SetColour(colour)
 
-            local ttt = GetString(_G.BARSTEWARD_DAILY_PLEDGES) .. BS.LF
+            local ttt, tt = GetString(_G.BARSTEWARD_DAILY_PLEDGES) .. BS.LF, ""
             local pledgeQuests = BS.Vars:GetCommon("pledges", character)
 
             for name, status in pairs(pledgeQuests) do
                 local ttext
 
-                ttt = ttt .. BS.LF
-
                 if (status == "done") then
-                    ttext = string.format("%s%s - %s", ttt, name, GetString(_G.BARSTEWARD_COMPLETED))
-                    ttt = ttt .. BS.COLOURS.DefaultOkColour:Colorize(ttext)
+                    ttext = string.format("%s - %s", name, GetString(_G.BARSTEWARD_COMPLETED))
+                    tt = string.format("%s%s%s", tt, BS.COLOURS.DefaultOkColour:Colorize(ttext), BS.LF)
                 elseif (status == "added") then
-                    ttext = string.format("%s%s - %s", ttt, name, GetString(_G.BARSTEWARD_PICKED_UP))
-                    ttt = ttt .. BS.COLOURS.DefaultWarningColour:Colorize(ttext)
+                    ttext = string.format("%s - %s", name, GetString(_G.BARSTEWARD_PICKED_UP))
+                    tt = string.format("%s%s%s", tt, BS.COLOURS.DefaultWarningColour:Colorize(ttext), BS.LF)
                 end
             end
+
+            ttt = ttt .. tt
 
             local charPledgesTT = ""
 
@@ -1587,7 +1587,7 @@ BS.widgets[BS.W_DAILY_PLEDGES] = {
                 end
             end
 
-            widget:SetTooltip(ttt .. charPledgesTT)
+            widget:SetTooltip(BS.Trim(ttt .. charPledgesTT))
         end
 
         return done == maxPledges
