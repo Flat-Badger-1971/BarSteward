@@ -239,7 +239,7 @@ BS.widgets[BS.W_ENDEAVOUR_PROGRESS] = {
             local ttt = GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS_BEST) .. BS.LF
             local taskInfo = maxTask.name .. BS.LF .. BS.LF .. maxTask.description
 
-            ttt = ttt .. BS.COLOURS.OffWhite:Colorize(taskInfo)
+            ttt = ttt .. BS.COLOURS.White:Colorize(taskInfo)
 
             widget:SetTooltip(ttt)
 
@@ -587,7 +587,7 @@ BS.widgets[BS.W_TRIBUTE_CLUB_RANK] = {
             local text = displayRank .. " - " .. rankName .. BS.LF .. BS.LF
 
             text = text .. xp .. " / " .. totalxp .. ((rank == 7) and "" or " (" .. percent .. "%)")
-            ttt = ttt .. BS.COLOURS.OffWhite:Colorize(text)
+            ttt = ttt .. BS.COLOURS.White:Colorize(text)
 
             widget:SetTooltip(ttt)
         end
@@ -620,7 +620,7 @@ BS.widgets[BS.W_ACHIEVEMENT_POINTS] = {
 
         local ttt = BS.Format(_G.SI_ACHIEVEMENTS_OVERALL) .. BS.LF
 
-        ttt = ttt .. BS.COLOURS.OffWhite:Colorize(earnedPoints .. "/" .. totalPoints)
+        ttt = ttt .. BS.COLOURS.White:Colorize(earnedPoints .. "/" .. totalPoints)
 
         widget:SetTooltip(ttt)
 
@@ -819,8 +819,8 @@ BS.widgets[BS.W_LOREBOOKS] = {
         local tt = GetString(_G.BARSTEWARD_LOREBOOKS)
 
         for _, category in pairs(categories) do
-            local metrics = string.format("%d/%d", category.numKnownBooks, category.totalBooks)
-            local cat = BS.COLOURS.OffWhite:Colorize(category.name)
+            local metrics = string.format("%s/%s", category.numKnownBooks, category.totalBooks)
+            local cat = BS.COLOURS.White:Colorize(category.name)
 
             tt = string.format("%s%s%s %s", tt, BS.LF, cat, metrics)
 
@@ -1001,7 +1001,7 @@ local function getActvityOutput(data)
 
     data.normalisedOutput = data.normalisedOutput .. "XXXXXXX"
 
-    data.tt = data.tt .. BS.LF .. BS.COLOURS.OffWhite:Colorize(BS.Format(data.label)) .. " "
+    data.tt = data.tt .. BS.LF .. BS.COLOURS.White:Colorize(BS.Format(data.label)) .. " "
 
     if (data.activityData.meetsRequirements) then
         local cdt = ZO_CommaDelimitNumber(data.activityData.xpReward)
@@ -1218,7 +1218,7 @@ BS.widgets[BS.W_DAILY_PROGRESS] = {
 
             local ttt = GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS_BEST) .. BS.LF
 
-            ttt = ttt .. BS.COLOURS.OffWhite:Colorize(maxTask.name .. BS.LF .. BS.LF .. maxTask.description)
+            ttt = ttt .. BS.COLOURS.White:Colorize(maxTask.name .. BS.LF .. BS.LF .. maxTask.description)
 
             widget:SetTooltip(ttt)
 
@@ -1266,10 +1266,19 @@ BS.widgets[BS.W_DAILY_PROGRESS] = {
 }
 
 local function updateQuests(questListType)
-    for char, quests in pairs(BS.Vars:GetCommon(questListType)) do
-        for quest, status in pairs(quests) do
-            if (status == "complete") then
-                BS.Vars:SetCommon(nil, questListType, char, quest)
+    local list = BS.Vars:GetCommon(questListType)
+
+    if (not list) then
+        BS.Vars:SetCommon({}, questListType)
+        list = BS.Vars:GetCommon(questListType)
+    end
+
+    if (list) then
+        for char, quests in pairs(list) do
+            for quest, status in pairs(quests) do
+                if (status == "complete" or status == "done") then
+                    BS.Vars:SetCommon(nil, questListType, char, quest)
+                end
             end
         end
     end
@@ -1356,7 +1365,7 @@ BS.widgets[BS.W_DAILY_COUNT] = {
                 local ttext = BS.Format(_G.SI_DLC_BOOK_QUEST_STATUS_ACCEPTED) .. ": " .. added .. BS.LF
 
                 ttext = ttext .. zo_strformat(_G.SI_NOTIFYTEXT_QUEST_COMPLETE, complete)
-                ttt = ttt .. BS.COLOURS.OffWhite:Colorize(ttext)
+                ttt = ttt .. BS.COLOURS.White:Colorize(ttext)
 
                 widget:SetTooltip(ttt)
             end,
@@ -1429,7 +1438,7 @@ BS.widgets[BS.W_FISHING] = {
 
                 local ttext = zo_strformat("<<1>> <<2>> <<m:3>>", BS.Icon(info.icon), count, GetString(info.name))
 
-                tt = tt .. BS.LF .. BS.COLOURS.OffWhite:Colorize(ttext)
+                tt = tt .. BS.LF .. BS.COLOURS.White:Colorize(ttext)
             end
         end
         local setwidth = string.rep("8", typeCount)

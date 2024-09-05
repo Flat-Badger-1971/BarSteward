@@ -51,7 +51,7 @@ BS.widgets[BS.W_FRIENDS] = {
             tt = tt .. addToTooltip(offline, textureFunctions)
         end
 
-        widget:SetTooltip(BS.COLOURS.OffWhite:Colorize(tt))
+        widget:SetTooltip(BS.COLOURS.White:Colorize(tt))
         widget:SetValue(#online .. (BS.GetVar("HideLimit", this) and "" or ("/" .. #masterList)))
         widget:SetColour(BS.GetColour(this, true))
 
@@ -242,7 +242,7 @@ BS.widgets[BS.W_GUILD_FRIENDS] = {
             tt = tt .. addToTooltip(offline, textureFunctions)
         end
 
-        widget:SetTooltip(BS.COLOURS.OffWhite:Colorize(tt))
+        widget:SetTooltip(BS.COLOURS.White:Colorize(tt))
         widget:SetValue(oCount .. (BS.GetVar("HideLimit", this) and "" or ("/" .. tCount)))
         widget:SetColour(BS.GetColour(this, true))
 

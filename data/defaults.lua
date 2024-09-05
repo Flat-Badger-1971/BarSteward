@@ -497,7 +497,7 @@ BS.Defaults = {
         },
         [BS.W_LOREBOOKS] = {
             Cat = cat.Activities,
-            ShowCategory = GetLoreCategoryInfo(1)
+            ShowCategory = ZO_CachedStrFormat("<<C:1>>", GetLoreCategoryInfo(1))
         },
         [BS.W_RECIPES] = {
             Cat = cat.Crafting

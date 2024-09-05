@@ -18,7 +18,7 @@ local function getcrownStoreCurrencies(invert)
                 end
 
                 crownStoreInfo = crownStoreInfo .. BS.Icon(icon) .. " "
-                crownStoreInfo = crownStoreInfo .. BS.COLOURS.OffWhite:Colorize(BS.Format(info.text))
+                crownStoreInfo = crownStoreInfo .. BS.COLOURS.White:Colorize(BS.Format(info.text))
                 crownStoreInfo = crownStoreInfo .. " " .. amount
             end
         end
@@ -240,7 +240,7 @@ BS.widgets[BS.W_EVENT_TICKETS] = {
         local this = BS.W_EVENT_TICKETS
         local tickets = GetCurrencyAmount(_G.CURT_EVENT_TICKETS, _G.CURRENCY_LOCATION_ACCOUNT)
         local maxTickets = GetMaxPossibleCurrency(_G.CURT_EVENT_TICKETS, _G.CURRENCY_LOCATION_ACCOUNT)
-        local noLimitColour = BS.GetVar("NoLimitColour", this) and BS.COLOURS.OffWhite or BS.COLOURS.Yellow
+        local noLimitColour = BS.GetVar("NoLimitColour", this) and BS.COLOURS.White or BS.COLOURS.Yellow
         local value =
             tickets .. (BS.GetVar("HideLimit", this) and "" or (noLimitColour:Colorize("/" .. tostring(maxTickets))))
         local widthValue = tickets .. (BS.GetVar("HideLimit", this) and "" or ("/" .. tostring(maxTickets)))

@@ -6,7 +6,7 @@ BS.widgets[BS.W_BAG_SPACE] = {
         local this = BS.W_BAG_SPACE
         local bagSize = GetBagSize(_G.BAG_BACKPACK)
         local bagUsed = GetNumBagUsedSlots(_G.BAG_BACKPACK)
-        local noLimitColour = BS.GetVar("NoLimitColour", this) and BS.COLOURS.OffWhite or BS.COLOURS.Yellow
+        local noLimitColour = BS.GetVar("NoLimitColour", this) and BS.COLOURS.White or BS.COLOURS.Yellow
         local value = bagUsed .. (BS.GetVar("HideLimit", this) and "" or (noLimitColour:Colorize("/" .. bagSize)))
         local widthValue = bagUsed .. (BS.GetVar("HideLimit", this) and "" or ("/" .. bagSize))
         local pcUsed = math.floor((bagUsed / bagSize) * 100)
@@ -91,7 +91,7 @@ BS.widgets[BS.W_BANK_SPACE] = {
         local this = BS.W_BANK_SPACE
         local bagSize = GetBagSize(_G.BAG_BANK)
         local bagUsed = GetNumBagUsedSlots(_G.BAG_BANK)
-        local noLimitColour = BS.GetVar("NoLimitColour", this) and BS.COLOURS.OffWhite or BS.COLOURS.Yellow
+        local noLimitColour = BS.GetVar("NoLimitColour", this) and BS.COLOURS.White or BS.COLOURS.Yellow
 
         if (IsESOPlusSubscriber()) then
             bagSize = bagSize + GetBagSize(_G.BAG_SUBSCRIBER_BANK)
@@ -507,7 +507,7 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
         ttext = ttext .. zo_strformat(GetString(_G.BARSTEWARD_WRITS_SURVEYS), surveys) .. BS.LF
         ttext = ttext .. zo_strformat(GetString(_G.BARSTEWARD_WRITS_MAPS), maps)
 
-        ttt = ttt .. BS.COLOURS.OffWhite:Colorize(ttext)
+        ttt = ttt .. BS.COLOURS.White:Colorize(ttext)
 
         local writText = {}
 
@@ -756,7 +756,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
 
                 ttt = ttt .. BS.LF
                 ttt = ttt .. (bagType == "bag" and BS.BAGICON or BS.BANKICON)
-                ttt = ttt .. " " .. zoIcon .. " " .. (key.colour or BS.COLOURS.OffWhite):Colorize(key.name)
+                ttt = ttt .. " " .. zoIcon .. " " .. (key.colour or BS.COLOURS.White):Colorize(key.name)
                 ttt = ttt .. " (" .. key.count .. ")"
             end
         end
@@ -786,7 +786,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
                         local zoIcon = BS.Icon(data.icon)
 
                         ttt = ttt .. BS.LF .. BS.BAGICON .. " " .. zoIcon .. " "
-                        ttt = ttt .. (data.colour or BS.COLOURS.OffWhite):Colorize(data.name) .. " (0)"
+                        ttt = ttt .. (data.colour or BS.COLOURS.White):Colorize(data.name) .. " (0)"
                     end
                 end
             end
@@ -1102,7 +1102,7 @@ local function randomOnLeftClick(collectibleTable, widgetIndex)
 
         local tt = BS.widgets[widgetIndex].tooltip .. BS.LF
 
-        tt = tt .. BS.COLOURS.OffWhite:Colorize(GetString(_G.BARSTEWARD_RANDOM_RECENT)) .. BS.LF
+        tt = tt .. BS.COLOURS.White:Colorize(GetString(_G.BARSTEWARD_RANDOM_RECENT)) .. BS.LF
         tt = tt .. BS.COLOURS.ZOSGold:Colorize(name)
 
         widget:SetTooltip(tt)
@@ -1233,7 +1233,7 @@ BS.widgets[BS.W_RANDOM_EMOTE] = {
             local widget = BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[BS.W_RANDOM_EMOTE])
             local tt = BS.widgets[BS.W_RANDOM_EMOTE].tooltip .. BS.LF
 
-            tt = tt .. BS.COLOURS.OffWhite:Colorize(GetString(_G.BARSTEWARD_RANDOM_RECENT)) .. BS.LF
+            tt = tt .. BS.COLOURS.White:Colorize(GetString(_G.BARSTEWARD_RANDOM_RECENT)) .. BS.LF
             tt = tt .. BS.COLOURS.ZOSGold:Colorize(displayName)
 
             widget:SetTooltip(tt)
@@ -1281,7 +1281,7 @@ local function itemScan(widget, filteredItems, widgetIndex, name)
                 ttext = ttext .. " " .. "(" .. qty .. ")"
             end
 
-            tt = tt .. BS.LF .. BS.COLOURS.OffWhite:Colorize(ttext)
+            tt = tt .. BS.LF .. BS.COLOURS.White:Colorize(ttext)
         end
     end
 
@@ -1510,7 +1510,7 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
 
                 tt = string.format("%s%s%s ", tt, BS.LF, BS.Icon(poison.icon))
                 tt =
-                    string.format("%s%s %s (%d)", tt, BS.COLOURS.OffWhite:Colorize(poison.name), slotName, poison.count)
+                    string.format("%s%s %s (%d)", tt, BS.COLOURS.White:Colorize(poison.name), slotName, poison.count)
 
                 if (selected == BS.ACTIVE_BAR) then
                     if
@@ -1655,7 +1655,7 @@ BS.widgets[BS.W_FRAGMENTS] = {
             if (info.collected + info.uncollected + info.unnecessary > 0) then
                 if (info.collected and (info.unnecessary == 0) and info.collected > 0) then
                     collectedtt = string.format("%s%s ", collectedtt, BS.Icon(info.icon))
-                    collectedtt = string.format("%s%s ", collectedtt, BS.COLOURS.OffWhite:Colorize(collectibleName))
+                    collectedtt = string.format("%s%s ", collectedtt, BS.COLOURS.White:Colorize(collectibleName))
                     collectedtt =
                         string.format("%s%s", collectedtt, BS.COLOURS.Green:Colorize(tostring(info.collected)))
                     collectedtt =
@@ -1811,7 +1811,7 @@ BS.widgets[BS.W_RUNEBOXES] = {
             if (info.collected + info.required + info.unnecessary > 0) then
                 if (info.collected and (info.unnecessary == 0)) then
                     collectedtt = string.format("%s%s ", collectedtt, BS.Icon(info.icon))
-                    collectedtt = string.format("%s%s ", collectedtt, BS.COLOURS.OffWhite:Colorize(info.name))
+                    collectedtt = string.format("%s%s ", collectedtt, BS.COLOURS.White:Colorize(info.name))
                     collectedtt =
                         string.format("%s%s", collectedtt, BS.COLOURS.Green:Colorize(tostring(info.collected)))
                     collectedtt =

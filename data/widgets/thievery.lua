@@ -53,7 +53,7 @@ BS.widgets[BS.W_STOLEN_ITEMS] = {
 
         local ttt = GetString(_G.BARSTEWARD_STOLEN) .. BS.LF
 
-        ttt = ttt .. BS.COLOURS.OffWhite:Colorize(BS.BAGICON .. " " .. bagCounts.carrying)
+        ttt = ttt .. BS.COLOURS.White:Colorize(BS.BAGICON .. " " .. bagCounts.carrying)
 
         if (#stolen > 0) then
             local total = 0
@@ -75,7 +75,7 @@ BS.widgets[BS.W_STOLEN_ITEMS] = {
             ttt = ttt .. BS.LF .. BS.LF
             ttt = ttt .. zo_strformat(GetString(_G.BARSTEWARD_TOTAL_VALUE), BS.COLOURS.Yellow:Colorize(tostring(total)) .. goldIcon)
 
-            ttt = ttt .. BS.COLOURS.OffWhite:Colorize(stt)
+            ttt = ttt .. BS.COLOURS.White:Colorize(stt)
         end
 
         widget:SetTooltip(ttt)
@@ -119,7 +119,7 @@ BS.widgets[BS.W_FENCE_TRANSACTIONS] = {
         local used = FENCE_MANAGER:GetNumTransactionsUsed(_G.ZO_MODE_STORE_SELL_STOLEN)
         local pcUsed = math.floor((used / max) * 100)
         local colour = BS.GetColour(this, "Ok", true)
-        local noLimitColour = BS.GetVar("NoLimitColour", this) and BS.COLOURS.OffWhite or BS.COLOURS.Green
+        local noLimitColour = BS.GetVar("NoLimitColour", this) and BS.COLOURS.White or BS.COLOURS.Green
         local value = used .. (BS.GetVar("HideLimit", this) and "" or (noLimitColour:Colorize("/" .. max)))
         local widthValue = used .. (BS.GetVar("HideLimit", this) and "" or ("/" .. max))
 
@@ -149,7 +149,7 @@ BS.widgets[BS.W_LAUNDER_TRANSACTIONS] = {
         local used = FENCE_MANAGER:GetNumTransactionsUsed(_G.ZO_MODE_STORE_LAUNDER)
         local pcUsed = math.floor((used / max) * 100)
         local colour = BS.GetColour(this, "Ok", true)
-        local noLimitColour = BS.GetVar("NoLimitColour", this) and BS.COLOURS.OffWhite or BS.COLOURS.Yellow
+        local noLimitColour = BS.GetVar("NoLimitColour", this) and BS.COLOURS.White or BS.COLOURS.Yellow
         local value = used .. (BS.GetVar("HideLimit", this) and "" or (noLimitColour:Colorize("/" .. max)))
         local widthValue = used .. (BS.GetVar("HideLimit", this) and "" or ("/" .. max))
 

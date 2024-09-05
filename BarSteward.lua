@@ -1,5 +1,9 @@
 local BS = _G.BarSteward
 
+if (GetDisplayName() == "@Flat-Badger") then
+    BS.DEBUG = true
+end
+
 local function trackGold()
     local goldInBag = GetCurrencyAmount(_G.CURT_MONEY, _G.CURRENCY_LOCATION_CHARACTER)
     local character = GetUnitName("player")

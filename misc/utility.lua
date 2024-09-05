@@ -1863,7 +1863,7 @@ function BS.RegisterColours()
         Grey = BS.NewColour("bababa"),
         Red = BS.NewColour("f90000"),
         Yellow = BS.NewColour("ffff00"),
-        OffWhite = BS.NewColour("f9f9f9"),
+        White = BS.NewColour("f9f9f9"),
         ZOSBlue = BS.NewColour("3a92ff"),
         ZOSGold = BS.NewColour("ccaa1a"),
         ZOSGreen = BS.NewColour("2dc50e"),

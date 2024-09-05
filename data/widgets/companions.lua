@@ -25,7 +25,7 @@ BS.widgets[BS.W_RAPPORT] = {
         local level = GetActiveCompanionRapportLevel()
         local desc = GetActiveCompanionRapportLevelDescription(level)
 
-        widget:SetTooltip(GetString(_G.BARSTEWARD_RAPPORT) .. BS.LF .. BS.COLOURS.OffWhite:Colorize(desc))
+        widget:SetTooltip(GetString(_G.BARSTEWARD_RAPPORT) .. BS.LF .. BS.COLOURS.White:Colorize(desc))
 
         return rapportValue
     end,
@@ -83,7 +83,7 @@ BS.widgets[BS.W_COMPANION_LEVEL] = {
             progress = BS.Format(_G.SI_EXPERIENCE_LIMIT_REACHED)
         end
 
-        ttt = ttt .. BS.COLOURS.OffWhite:Colorize(progress)
+        ttt = ttt .. BS.COLOURS.White:Colorize(progress)
 
         widget:SetTooltip(ttt)
 

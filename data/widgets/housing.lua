@@ -104,7 +104,7 @@ function BS.AddHousingWidgets(idx, widgets)
                 if (BS.Vars.Controls[varId].Bar == idx) then
                     if (idx > 0) then
                         local tooltip =
-                            vars.Name .. BS.LF .. BS.COLOURS.OffWhite:Colorize(house.name .. BS.LF .. house.location)
+                            vars.Name .. BS.LF .. BS.COLOURS.White:Colorize(house.name .. BS.LF .. house.location)
 
                         local widget = {
                             name = "house_" .. id,

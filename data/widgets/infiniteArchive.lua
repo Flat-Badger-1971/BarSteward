@@ -18,7 +18,7 @@ BS.widgets[BS.W_ARCHIVE_PORT] = {
 }
 
 local function wrap(value)
-    return BS.COLOURS.OffWhite:Colorize(value)
+    return BS.COLOURS.White:Colorize(value)
 end
 
 local function getBuffs()
@@ -297,7 +297,7 @@ BS.widgets[BS.W_INFINITE_ARCHIVE_SCORE] = {
         local ttt = GetString(_G.BARSTEWARD_INFINITE_ARCHIVE_SCORE) .. BS.LF
         local yellow = BS.COLOURS.Yellow
 
-        ttt = ttt .. BS.COLOURS.OffWhite:Colorize(BS.Format(_G.BARSTEWARD_HIGHEST)) .. BS.LF
+        ttt = ttt .. BS.COLOURS.White:Colorize(BS.Format(_G.BARSTEWARD_HIGHEST)) .. BS.LF
         ttt =
             string.format(
             "%s%s: %s%s%s: %s",

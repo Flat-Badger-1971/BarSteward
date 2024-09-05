@@ -207,7 +207,7 @@ BS.widgets[BS.W_BLACKSMITHING] = {
                 "%s%s%s",
                 ttt,
                 BS.LF,
-                BS.COLOURS.OffWhite:Colorize(
+                BS.COLOURS.White:Colorize(
                     slot .. " - " .. getDisplay(researchSlots[_G.CRAFTING_TYPE_BLACKSMITHING][slot] or 0, this)
                 )
             )
@@ -252,7 +252,7 @@ BS.widgets[BS.W_WOODWORKING] = {
                 "%s%s%s",
                 ttt,
                 BS.LF,
-                BS.COLOURS.OffWhite:Colorize(
+                BS.COLOURS.White:Colorize(
                     slot .. " - " .. getDisplay(researchSlots[_G.CRAFTING_TYPE_WOODWORKING][slot] or 0, this)
                 )
             )
@@ -297,7 +297,7 @@ BS.widgets[BS.W_CLOTHING] = {
                 "%s%s%s",
                 ttt,
                 BS.LF,
-                BS.COLOURS.OffWhite:Colorize(
+                BS.COLOURS.White:Colorize(
                     slot .. " - " .. getDisplay(researchSlots[_G.CRAFTING_TYPE_CLOTHIER][slot] or 0, this)
                 )
             )
@@ -342,7 +342,7 @@ BS.widgets[BS.W_JEWELCRAFTING] = {
                 "%s%s%s",
                 ttt,
                 BS.LF,
-                BS.COLOURS.OffWhite:Colorize(
+                BS.COLOURS.White:Colorize(
                     slot .. " - " .. getDisplay(researchSlots[_G.CRAFTING_TYPE_JEWELRYCRAFTING][slot] or 0, this)
                 )
             )
@@ -718,7 +718,7 @@ BS.widgets[BS.W_RECIPES] = {
         local allFurnishing = BS.recipeList.furnishing.known + BS.recipeList.furnishing.unknown
         local tt = recipes
         local this = BS.W_RECIPES
-        local white, gold = BS.COLOURS.OffWhite, BS.COLOURS.ZOSGold
+        local white, gold = BS.COLOURS.White, BS.COLOURS.ZOSGold
 
         tt = tt .. BS.LF .. gold:Colorize(BS.recipeList.food.known .. "/" .. allFood)
         tt = tt .. white:Colorize(" " .. food) .. BS.LF

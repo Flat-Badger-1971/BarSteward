@@ -1,4 +1,3 @@
-local DEBUG = false
 local BS = _G.BarSteward
 
 local baseWidget = ZO_Object:Subclass()
@@ -16,7 +15,7 @@ function baseWidget:Initialise()
     self.control:SetResizeToFitDescendents(true)
     self.control.ref = self
 
-    if (DEBUG) then
+    if (BS.DEBUG) then
         self.overlay = self.overlay or WINDOW_MANAGER:CreateControl(nil, self.control, CT_CONTROL)
         self.overlay:SetDrawTier(_G.DT_HIGH)
         self.overlay:ClearAnchors()
@@ -215,6 +214,19 @@ function baseWidget:CreateProgress(progress, gradient, transition)
         self.value:SetFont(self.font)
         self.value:SetColor(unpack(BS.Vars.DefaultColour))
         self.value:ClearAnchors()
+
+        if (BS.DEBUG) then
+            self.value.overlay = self.value.overlay or WINDOW_MANAGER:CreateControl(nil, self.value, CT_CONTROL)
+            self.value.overlay:SetDrawTier(_G.DT_HIGH)
+            self.value.overlay:ClearAnchors()
+            self.value.overlay:SetAnchorFill(self.value)
+
+            self.value.overlay.background =
+                self.value.overlay.background or WINDOW_MANAGER:CreateControl(nil, self.value.overlay, CT_TEXTURE)
+            self.value.overlay.background:ClearAnchors()
+            self.value.overlay.background:SetAnchorFill(self.value.overlay)
+            self.value.overlay.background:SetTexture("/esoui/art/itemupgrade/eso_itemupgrade_redslot.dds")
+        end
 
         self:SetValueAnchor()
         self.value:SetHidden(progress ~= false)
