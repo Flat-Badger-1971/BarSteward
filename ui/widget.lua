@@ -579,6 +579,10 @@ local function checkOrCreatePool()
                     widget.value:SetHidden(true)
                 end
 
+                if (widget.progress) then
+                    widget.progress:SetHidden(true)
+                end
+
                 widget.destroyed = true
             end
         )

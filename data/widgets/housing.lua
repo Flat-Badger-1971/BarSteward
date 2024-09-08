@@ -268,6 +268,34 @@ local function addSubmenu(barNames, vars, varId, house, id, controls)
             end,
             width = "full",
             default = unpack(BS.Vars.DefaultColour)
+        },
+        [3] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_HIDE_WIDGET_ICON),
+            getFunc = function()
+                return vars.NoIcon or false
+            end,
+            setFunc = function(value)
+                vars.NoIcon = value
+                BS.RefreshWidget(varId, true)
+            end,
+            width = "full",
+            default = false,
+            requiresReload = true
+        },
+        [4] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_HIDE_TEXT),
+            getFunc = function()
+                return vars.NoValue or false
+            end,
+            setFunc = function(value)
+                vars.NoValue = value
+                BS.GetWidget(varId):SetNoValue(value)
+                BS.RegenerateBar(BS.Vars.Controls[varId].Bar, varId)
+            end,
+            width = "full",
+            default = false
         }
     }
 
