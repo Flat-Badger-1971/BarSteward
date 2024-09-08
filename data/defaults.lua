@@ -812,11 +812,13 @@ BS.Defaults = {
         [BS.W_DAILY_PLEDGES] = {
             Autohide = false,
             Cat = cat.Activities,
-            ColourValues = "",
             Requires = "LibUndauntedPledges"
         },
         [BS.W_BOUNTY_AMOUNT] = {
             Autohide = false,
+            Cat = cat.Character
+        },
+        [BS.W_ARMOURY_BUILD] = {
             Cat = cat.Character
         }
     }

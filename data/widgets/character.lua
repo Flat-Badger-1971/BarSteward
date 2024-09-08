@@ -1547,3 +1547,67 @@ BS.widgets[BS.W_BOUNTY_AMOUNT] = {
     icon = "icons/store_bounty_expunger_medium",
     tooltip = BS.Format(_G.BARSTEWARD_BOUNTY_AMOUNT)
 }
+
+BS.widgets[BS.W_ARMOURY_BUILD] = {
+    -- v3.1.7
+    name = "currentArmouryBuild",
+    update = function(widget, event, result, buildIndex)
+        local this = BS.W_ARMOURY_BUILD
+        local colour = BS.GetColour(this)
+        local armouryInfo = BS.GetVar("armouryInfo", this) or {}
+
+        if (event == _G.EVENT_ARMORY_BUILD_UPDATED) then
+            buildIndex = result
+        end
+
+        if (result == _G.ARMORY_BUILD_RESTORE_RESULT_SUCCESS or event == _G.EVENT_ARMORY_BUILD_UPDATED) then
+            local data = ZO_ARMORY_MANAGER:GetBuildDataByIndex(buildIndex)
+            armouryInfo = {
+                index = data:GetBuildIndex(),
+                name = data:GetName(),
+                icon = data:GetIcon(),
+                outfit = data:GetEquippedOutfitName(),
+                equipped = GetTimeStamp()
+            }
+
+            BS.Vars.Controls[this].armouryInfo = armouryInfo
+        end
+
+        widget:SetIcon(armouryInfo.icon or "icons/housing_gen_crf_armorycraftingbase001")
+        widget:SetColour(colour)
+        widget:SetValue(armouryInfo.name or "?")
+
+        local tt = BS.Format(_G.SI_ARMORY_TITLE) .. BS.LF .. BS.FORMAT(_G.BARSTEWARD_BUILD_INFO)
+
+        if (armouryInfo.index) then
+            local equipped = BS.COLOURS.White:Colorize(armouryInfo.name)
+
+            tt = tt .. BS.LF .. BS.LF
+            tt = tt .. equipped .. BS.LF
+
+            if (armouryInfo.outfit ~= GetString(_G.SI_NO_OUTFIT_EQUIP_ENTRY)) then
+                local outfit =
+                    BS.COLOURS.White:Colorize(
+                    ZO_CachedStrFormat(GetString(_G.SI_ARMORY_OUTFIT_LABEL), armouryInfo.outfit)
+                )
+
+                tt = tt .. outfit
+            end
+
+            local date = GetDateStringFromTimestamp(armouryInfo.equipped)
+            local formatter = GetString(_G.SI_GAMEPAD_SECTION_HEADER_EQUIPPED_ITEM)
+            local text = ZO_CachedStrFormat(formatter, date)
+
+            tt = tt .. BS.LF .. BS.LF .. BS.Format(text)
+        end
+
+        widget.tooltip = tt
+
+        return armouryInfo.buildIndex or 0
+    end,
+    event = {_G.EVENT_ARMORY_BUILD_RESTORE_RESPONSE, _G.EVENT_ARMORY_BUILD_UPDATED},
+    callback = {[_G.ZO_ARMORY_MANAGER] = {"BuildListUpdated"}},
+    hideWhenEqual = 0,
+    icon = "icons/housing_gen_crf_armorycraftingbase001",
+    tooltip = BS.Format(_G.SI_ARMORY_TITLE)
+}

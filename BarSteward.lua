@@ -1,7 +1,7 @@
 local BS = _G.BarSteward
 
 if (GetDisplayName() == "@Flat-Badger") then
-    BS.DEBUG = true
+    BS.DEBUG = false
 end
 
 local function trackGold()

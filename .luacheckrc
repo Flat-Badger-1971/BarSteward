@@ -202,6 +202,12 @@ read_globals = {
             GetLocationsData = {read_only = true}
         }
     },
+    ["ZO_ARMORY_MANAGER"] = {
+        fields = {
+            GetBuildDataByIndex = {read_only = true},
+            GetBuildIcon = {read_only = true}
+        }
+    },
     ["ZO_COLLECTIBLE_DATA_MANAGER"] = {
         fields = {
             GetAllCollectibleDataObjects = {read_only = true},
@@ -309,6 +315,7 @@ read_globals = {
     "GetCVar",
     "GetDailyLoginClaimableRewardIndex",
     "GetDailyLoginRewardInfoForCurrentMonth",
+    "GetDateStringFromTimestamp",
     "GetDisplayName",
     "GetEarnedAchievementPoints",
     "GetEmoteCollectibleId",
