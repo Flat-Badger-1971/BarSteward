@@ -160,35 +160,37 @@ end
 BS.ProgressIndex = 0
 
 function baseWidget:CreateProgress(progress, gradient, transition)
-    local name = BS.Name .. "_progress_" .. BS.ProgressIndex
-
-    BS.ProgressIndex = BS.ProgressIndex + 1
-
-    self.progress = self.progress or BS.CreateProgressBar(name, self.control)
-    self.progress:ClearAnchors()
-    self.progress:SetDimensions(200, 32)
-    self.progress:SetAnchor(
-        self.valueSide == LEFT and RIGHT or LEFT,
-        self.icon,
-        self.valueSide,
-        self.valueSide == LEFT and -10 or 10,
-        0
-    )
-    self.progress:SetMinMax(0, 100)
-    self.progress.progress:SetColor(unpack(BS.Vars.Controls[self.id].ProgressColour or BS.Vars.DefaultWarningColour))
-    self.progress.progress:SetFont(self.font)
-
-    if (gradient) then
-        local startg, endg = gradient()
-        local sr, sg, sb = unpack(startg)
-        local er, eg, eb = unpack(endg)
-
-        self.progress:SetGradientColors(sr, sg, sb, 1, er, eg, eb, 1)
-    end
-
-    self.progress:SetHidden(not progress)
-
     if (not self:HasNoValue()) then
+        local name = BS.Name .. "_progress_" .. BS.ProgressIndex
+
+        BS.ProgressIndex = BS.ProgressIndex + 1
+
+        self.progress = self.progress or BS.CreateProgressBar(name, self.control)
+        self.progress:ClearAnchors()
+        self.progress:SetDimensions(200, 32)
+        self.progress:SetAnchor(
+            self.valueSide == LEFT and RIGHT or LEFT,
+            self.icon,
+            self.valueSide,
+            self.valueSide == LEFT and -10 or 10,
+            0
+        )
+        self.progress:SetMinMax(0, 100)
+        self.progress.progress:SetColor(
+            unpack(BS.Vars.Controls[self.id].ProgressColour or BS.Vars.DefaultWarningColour)
+        )
+        self.progress.progress:SetFont(self.font)
+
+        if (gradient) then
+            local startg, endg = gradient()
+            local sr, sg, sb = unpack(startg)
+            local er, eg, eb = unpack(endg)
+
+            self.progress:SetGradientColors(sr, sg, sb, 1, er, eg, eb, 1)
+        end
+
+        self.progress:SetHidden(not progress)
+
         if (transition) then
             if (self.value and not self.transition) then
                 self.value = WINDOW_MANAGER:CreateControlFromVirtual(nil, self.control, "ZO_RollingMeterLabel")

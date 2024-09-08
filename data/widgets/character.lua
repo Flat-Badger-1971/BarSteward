@@ -1577,7 +1577,9 @@ BS.widgets[BS.W_ARMOURY_BUILD] = {
         widget:SetColour(colour)
         widget:SetValue(armouryInfo.name or "?")
 
-        local tt = BS.Format(_G.SI_ARMORY_TITLE) .. BS.LF .. BS.FORMAT(_G.BARSTEWARD_BUILD_INFO)
+        local tt = BS.Format(_G.SI_ARMORY_TITLE) .. BS.LF
+
+        tt = tt .. BS.LF .. BS.Format(_G.BARSTEWARD_BUILD_INFO)
 
         if (armouryInfo.index) then
             local equipped = BS.COLOURS.White:Colorize(armouryInfo.name)
@@ -1609,5 +1611,13 @@ BS.widgets[BS.W_ARMOURY_BUILD] = {
     callback = {[_G.ZO_ARMORY_MANAGER] = {"BuildListUpdated"}},
     hideWhenEqual = 0,
     icon = "icons/housing_gen_crf_armorycraftingbase001",
-    tooltip = BS.Format(_G.SI_ARMORY_TITLE)
+    tooltip = BS.Format(_G.SI_ARMORY_TITLE),
+    onLeftClick = function()
+        for _, id in ipairs(BS.ARMOURY_ASSISTANTS) do
+            if (IsCollectibleUsable(id)) then
+                UseCollectible(id)
+                return
+            end
+        end
+    end
 }
