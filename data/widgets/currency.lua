@@ -1,7 +1,8 @@
 local BS = _G.BarSteward
 
-local function getcrownStoreCurrencies(invert)
+local function getcrownStoreCurrencies(invert, widgetIndex)
     local crownStoreInfo = ""
+    local useSeparators = BS.GetVar("UseSeparators", widgetIndex)
 
     for currencyType, info in pairs(BS.CURRENCIES) do
         if (currencyType ~= _G.CURT_MONEY) then
@@ -12,6 +13,8 @@ local function getcrownStoreCurrencies(invert)
 
                 local amount = GetCurrencyAmount(currencyType, GetCurrencyPlayerStoredLocation(currencyType))
                 local icon = info.icon
+
+                amount = tostring(useSeparators and BS.AddSeparators(amount) or amount)
 
                 if (not icon:find(".dds")) then
                     icon = "/esoui/art/currency/" .. icon .. ".dds"
@@ -27,7 +30,15 @@ local function getcrownStoreCurrencies(invert)
     return crownStoreInfo
 end
 
-local function updateTooltip(text, currencyInBag, currencyInBank, combined, charactertt, allCharacters, currencyType)
+local function updateTooltip(
+    text,
+    currencyInBag,
+    currencyInBank,
+    combined,
+    charactertt,
+    allCharacters,
+    currencyType,
+    widgetIndex)
     local ttt = text.title .. BS.LF
     local gold = BS.COLOURS.ZOSGold
 
@@ -38,7 +49,7 @@ local function updateTooltip(text, currencyInBag, currencyInBank, combined, char
     ttt = ttt .. gold:Colorize(tostring(allCharacters)) .. " " .. GetString(text.everyWhere)
 
     if (currencyType ~= _G.CURT_MONEY) then
-        ttt = ttt .. BS.LF .. BS.LF .. getcrownStoreCurrencies(true)
+        ttt = ttt .. BS.LF .. BS.LF .. getcrownStoreCurrencies(true, widgetIndex)
     end
 
     return ttt
@@ -119,7 +130,16 @@ local function currencyWidget(currencyType, widgetIndex, text, eventList, hideWh
 
             -- update the tooltip
             local ttt =
-                updateTooltip(text, currencyInBag, currencyInBank, combined, charactertt, allCharacters, currencyType)
+                updateTooltip(
+                text,
+                currencyInBag,
+                currencyInBank,
+                combined,
+                charactertt,
+                allCharacters,
+                currencyType,
+                widgetIndex
+            )
 
             widget:SetTooltip(ttt)
 
@@ -191,7 +211,7 @@ BS.widgets[BS.W_CROWN_GEMS] = {
 
         local tt = GetString(_G.BARSTEWARD_CROWN_GEMS) .. BS.LF
 
-        tt = tt .. getcrownStoreCurrencies()
+        tt = tt .. getcrownStoreCurrencies(false, this)
 
         widget:SetTooltip(tt)
 
@@ -220,7 +240,7 @@ BS.widgets[BS.W_CROWNS] = {
 
         local tt = GetString(_G.BARSTEWARD_CROWNS) .. BS.LF
 
-        tt = tt .. getcrownStoreCurrencies()
+        tt = tt .. getcrownStoreCurrencies(false, this)
 
         widget:SetTooltip(tt)
 
@@ -286,7 +306,7 @@ BS.widgets[BS.W_EVENT_TICKETS] = {
         widget:SetColour(colour)
         widget:SetValue(value, widthValue)
 
-        local tt = getcrownStoreCurrencies(true)
+        local tt = getcrownStoreCurrencies(true, this)
 
         widget:SetTooltip(tt)
 
@@ -336,7 +356,7 @@ BS.widgets[BS.W_SEALS_OF_ENDEAVOUR] = {
 
         local tt = BS.Format(_G.SI_CROWN_STORE_MENU_SEALS_STORE_LABEL) .. BS.LF
 
-        tt = tt .. getcrownStoreCurrencies()
+        tt = tt .. getcrownStoreCurrencies(false, this)
 
         widget:SetTooltip(tt)
 
@@ -425,7 +445,7 @@ BS.widgets[BS.W_TRANSMUTE_CRYSTALS] = {
         widget:SetValue(value)
         widget:SetColour(colour)
 
-        local tt = getcrownStoreCurrencies(true)
+        local tt = getcrownStoreCurrencies(true, this)
 
         widget:SetTooltip(tt)
 
@@ -442,7 +462,7 @@ BS.widgets[BS.W_UNDAUNTED_KEYS] = {
         widget:SetValue(GetCurrencyAmount(_G.CURT_UNDAUNTED_KEYS, _G.CURRENCY_LOCATION_ACCOUNT))
         widget:SetColour(BS.GetColour(BS.W_UNDAUNTED_KEYS, true))
 
-        local tt = getcrownStoreCurrencies(true)
+        local tt = getcrownStoreCurrencies(true, BS.W_UNDAUNTED_KEYS)
 
         widget:SetTooltip(tt)
 
@@ -488,7 +508,7 @@ BS.widgets[BS.W_ARCHIVAL_FRAGMENTS] = {
 
         local tt = GetString(_G.BARSTEWARD_ARCHIVAL_FRAGMENTS) .. BS.LF
 
-        tt = tt .. getcrownStoreCurrencies()
+        tt = tt .. getcrownStoreCurrencies(false, this)
 
         widget:SetTooltip(tt)
 

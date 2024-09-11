@@ -49,8 +49,12 @@ function baseWidget:ApplyFontCorrection()
 end
 
 function baseWidget:CreateSpacer()
+    local hideSpacer = (self.barSettings.Orientation == GetString(_G.BARSTEWARD_VERTICAL)) and self.noValue
+    local horizontal = hideSpacer and 0 or self.horizontalPadding
+    local vertical = hideSpacer and 0 or self.verticalPadding
+
     self.spacer = self.spacer or WINDOW_MANAGER:CreateControl(nil, self.control, CT_LABEL)
-    self.spacer:SetDimensions(self.horizontalPadding, self.verticalPadding)
+    self.spacer:SetDimensions(horizontal, vertical)
     self.spacer:ClearAnchors()
     self.spacer:SetAnchor(
         self.valueSide == LEFT and RIGHT or LEFT,
