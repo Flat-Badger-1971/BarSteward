@@ -181,7 +181,8 @@ read_globals = {
         fields = {
             ActivitiesIterator = {read_only = true},
             GetTimedActivityTypeLimitInfo = {read_only = true},
-            GetTimedActivityTypeTimeRemainingSeconds = {read_only = true}
+            GetTimedActivityTypeTimeRemainingSeconds = {read_only = true},
+            IsAtTimedActivityTypeLimit = {read_only = true}
         }
     },
     ["WINDOW_MANAGER"] = {

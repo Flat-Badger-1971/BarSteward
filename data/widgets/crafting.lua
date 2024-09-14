@@ -848,7 +848,9 @@ BS.widgets[BS.W_UNKNOWN_WRIT_MOTIFS] = {
         table.sort(display)
 
         widget:SetColour(BS.GetColour(this, true))
-        widget:SetValue(#display)
+        widget:SetValue(tostring(#display))
+        widget:ForceResize()
+        BS.ResizeBar(BS.GetVar("Bar", this))
 
         if (#display > 0) then
             local tt = GetString(_G.BARSTEWARD_UNKNOWN_WRIT_MOTIFS)

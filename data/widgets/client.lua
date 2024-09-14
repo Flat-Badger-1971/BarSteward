@@ -227,7 +227,7 @@ BS.widgets = {
         update = function(widget)
             local framerate = GetFramerate()
 
-            widget:SetValue(math.floor(framerate))
+            widget:SetValue(math.floor(framerate), BS.GetVar("FixedWidth", BS.W_FPS) and "____" or nil)
             widget:SetColour(BS.GetColour(BS.W_FPS, true))
 
             return widget:GetValue()
@@ -245,11 +245,11 @@ BS.widgets = {
             end
         end,
         tooltip = GetString(_G.BARSTEWARD_FPS),
-        minWidthChars = "___",
         customSettings = {
             [1] = {
                 type = "checkbox",
                 name = GetString(_G.BARSTEWARD_SHOW_TEXT),
+                tooltip = GetString(_G.BARSTEWARD_SHOW_TEXT_TOOLTIP),
                 getFunc = function()
                     return BS.GetVar("ShowText", BS.W_FPS)
                 end,
@@ -259,6 +259,18 @@ BS.widgets = {
                 end,
                 width = "full",
                 default = false
+            },
+            [2] = {
+                type = "checkbox",
+                name = GetString(_G.BARSTEWARD_FIXED_WIDTH),
+                getFunc = function()
+                    return BS.Vars.Controls[BS.W_FPS].FixedWidth or false
+                end,
+                setFunc = function(value)
+                    BS.Vars.Controls[BS.W_FPS].FixedWidth = value
+                    BS.RefreshWidget(BS.W_FPS)
+                end,
+                default = true
             }
         }
     },

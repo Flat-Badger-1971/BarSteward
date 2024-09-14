@@ -15,7 +15,7 @@ function baseWidget:Initialise()
     self.control:SetResizeToFitDescendents(true)
     self.control.ref = self
 
-    if (BS.DEBUG) then
+    if (BS.DEBUG or BS.DEBUGC) then
         self.overlay = self.overlay or WINDOW_MANAGER:CreateControl(nil, self.control, CT_CONTROL)
         self.overlay:SetDrawTier(_G.DT_HIGH)
         self.overlay:ClearAnchors()
@@ -54,13 +54,26 @@ function baseWidget:CreateSpacer()
     local vertical = hideSpacer and 0 or self.verticalPadding
 
     self.spacer = self.spacer or WINDOW_MANAGER:CreateControl(nil, self.control, CT_LABEL)
-    self.spacer:SetDimensions(horizontal, vertical)
     self.spacer:ClearAnchors()
+    self.spacer:SetDimensions(self.progress and 0 or horizontal, self.progress and 0 or vertical)
     self.spacer:SetAnchor(
         self.valueSide == LEFT and RIGHT or LEFT,
         (self.noValue and self.icon or self.value),
         self.valueSide
     )
+
+    if (BS.DEBUG or BS.DEBUGS) then
+        self.spacer.overlay = self.spacer.overlay or WINDOW_MANAGER:CreateControl(nil, self.spacer, CT_CONTROL)
+        self.spacer.overlay:SetDrawTier(_G.DT_HIGH)
+        self.spacer.overlay:ClearAnchors()
+        self.spacer.overlay:SetAnchorFill(self.spacer)
+
+        self.spacer.overlay.background =
+            self.spacer.overlay.background or WINDOW_MANAGER:CreateControl(nil, self.spacer.overlay, CT_TEXTURE)
+        self.spacer.overlay.background:ClearAnchors()
+        self.spacer.overlay.background:SetAnchorFill(self.spacer.overlay)
+        self.spacer.overlay.background:SetTexture("/esoui/art/itemupgrade/eso_itemupgrade_yellowslot.dds")
+    end
 end
 
 function baseWidget:CreateTooltip(tooltip)
@@ -164,7 +177,7 @@ end
 BS.ProgressIndex = 0
 
 function baseWidget:CreateProgress(progress, gradient, transition)
-    if (not self:HasNoValue()) then
+    if (progress and not self:HasNoValue()) then
         local name = BS.Name .. "_progress_" .. BS.ProgressIndex
 
         BS.ProgressIndex = BS.ProgressIndex + 1
@@ -194,7 +207,9 @@ function baseWidget:CreateProgress(progress, gradient, transition)
         end
 
         self.progress:SetHidden(not progress)
+    end
 
+    if (not self:HasNoValue()) then
         if (transition) then
             if (self.value and not self.transition) then
                 self.value = WINDOW_MANAGER:CreateControlFromVirtual(nil, self.control, "ZO_RollingMeterLabel")
@@ -221,7 +236,7 @@ function baseWidget:CreateProgress(progress, gradient, transition)
         self.value:SetColor(unpack(BS.Vars.DefaultColour))
         self.value:ClearAnchors()
 
-        if (BS.DEBUG) then
+        if (BS.DEBUG or BS.DEBUGV) then
             self.value.overlay = self.value.overlay or WINDOW_MANAGER:CreateControl(nil, self.value, CT_CONTROL)
             self.value.overlay:SetDrawTier(_G.DT_HIGH)
             self.value.overlay:ClearAnchors()
@@ -313,12 +328,12 @@ function baseWidget:GetValueSide()
 end
 
 function baseWidget:SetPadding()
-    local horizontalPadding = BS.Vars.HorizontalPadding or 0
-    local verticalPadding = BS.Vars.VerticalPadding or 0
+    local horizontalPadding = BS.GetVar("HorizontalPadding", self.id) or 0
+    local verticalPadding = BS.GetVar("VerticalPadding", self.id) or 0
 
     if (self.barSettings.Override) then
-        horizontalPadding = self.barSettings.HorizontalPadding or 0
-        verticalPadding = self.barSettings.VerticalPadding or 0
+        horizontalPadding = self.barSettings.HorizontalPadding
+        verticalPadding = self.barSettings.VerticalPadding
     end
 
     self.horizontalPadding = horizontalPadding + 10
@@ -543,6 +558,12 @@ function baseWidget:StartCooldown(remaining, duration, isSeconds)
     end
 end
 
+function baseWidget:ForceResize()
+    self.control:SetResizeToFitDescendents(false)
+    self.control:SetDimensions(0, 0)
+    self.control:SetResizeToFitDescendents(true)
+end
+
 function baseWidget:SetHidden(hidden)
     if (hidden) then
         self.control:SetResizeToFitDescendents(false)
@@ -587,6 +608,8 @@ local function checkOrCreatePool()
                     widget.progress:SetHidden(true)
                 end
 
+                widget.horizontalPadding = 0
+                widget.verticalPadding = 0
                 widget.destroyed = true
             end
         )

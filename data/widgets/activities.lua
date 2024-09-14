@@ -502,6 +502,7 @@ local function getDisplay(timeRemaining, widgetIndex)
     return display
 end
 
+-- TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(activityType)
 local function getTimedActivityTimeRemaining(activityType, this, widget)
     local secondsRemaining = TIMED_ACTIVITIES_MANAGER:GetTimedActivityTypeTimeRemainingSeconds(activityType)
     local colour = BS.GetTimeColour(secondsRemaining, this, nil, true, true)
@@ -525,6 +526,10 @@ BS.widgets[BS.W_DAILY_ENDEAVOUR_TIME] = {
         return getTimedActivityTimeRemaining(_G.TIMED_ACTIVITY_TYPE_DAILY, BS.W_DAILY_ENDEAVOUR_TIME, widget)
     end,
     timer = 1000,
+    event = _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED,
+    complete = function()
+        return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(_G.TIMED_ACTIVITY_TYPE_DAILY)
+    end,
     icon = "journal/u26_progress_digsite_unknown_incomplete",
     tooltip = GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_TIME),
     onLeftClick = function()
@@ -543,6 +548,7 @@ BS.widgets[BS.W_WEEKLY_ENDEAVOUR_TIME] = {
         return getTimedActivityTimeRemaining(_G.TIMED_ACTIVITY_TYPE_WEEKLY, BS.W_WEEKLY_ENDEAVOUR_TIME, widget)
     end,
     timer = 1000,
+    event = _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED,
     icon = "journal/u26_progress_digsite_unknown_complete",
     tooltip = GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_TIME),
     onLeftClick = function()
@@ -553,7 +559,7 @@ BS.widgets[BS.W_WEEKLY_ENDEAVOUR_TIME] = {
         end
     end,
     complete = function()
-        return completed[_G.TIMED_ACTIVITY_TYPE_WEEKLY]
+        return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(_G.TIMED_ACTIVITY_TYPE_WEEKLY)
     end
 }
 
@@ -1163,7 +1169,7 @@ BS.widgets[BS.W_RANDOM_TRIBUTE] = {
 -- widget based on InfoPanel
 
 local function isChest(name)
-    return BS.Search({"Truhe", "Coffre", "Chest", "сундук"}, name)
+    return BS.Search({"Truhe", "Coffre", "Chest", "сундук", "胸部"}, name)
 end
 
 BS.widgets[BS.W_CHESTS_FOUND] = {
@@ -1359,7 +1365,9 @@ BS.widgets[BS.W_DAILY_COUNT] = {
                     end
                 end
 
-                widget:SetValue(complete .. "/" .. BS.MAX_DAILY_QUESTS)
+                widget:SetValue(tostring(complete) .. "/" .. BS.MAX_DAILY_QUESTS)
+                widget:ForceResize()
+                BS.ResizeBar(BS.GetVar("Bar", BS.W_DAILY_COUNT))
 
                 local ttt = GetString(_G.BARSTEWARD_DAILY_QUEST_COUNT) .. BS.LF
                 local ttext = BS.Format(_G.SI_DLC_BOOK_QUEST_STATUS_ACCEPTED) .. ": " .. added .. BS.LF
@@ -1430,6 +1438,7 @@ BS.widgets[BS.W_FISHING] = {
 
         for lootType, count in pairs(BS.Vars.FishingLoot) do
             local info = BS.ITEM_TYPE_ICON[lootType]
+
             if (info) then
                 loot = loot .. BS.Icon(info.icon) .. " "
                 loot = loot .. count .. " "
@@ -1455,6 +1464,8 @@ BS.widgets[BS.W_FISHING] = {
     onLeftClick = function()
         BS.Clear(BS.Vars.FishingLoot)
         BS.RefreshBar(BS.W_FISHING)
+        BS.ForceResize(BS.W_FISHING)
+        BS.ResizeBar(BS.GetVar("Bar", BS.W_FISHING))
     end,
     tooltip = BS.Format(_G.SI_GUILDACTIVITYATTRIBUTEVALUE9)
 }

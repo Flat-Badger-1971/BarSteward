@@ -1,5 +1,7 @@
 [color=#ff9900][b]Version: 3.1.7 ---------------[/b][/color]
 Currency tooltips now respect number separator settings
+Option to hide endeavour timers when complete
+Fixed issue with some widgets being the wrong width - please let me know if you spot any that are still wrong
 
 [color=#ff9900][b]Version: 3.1.6 ---------------[/b][/color]
 Fix to daily pledge reset code

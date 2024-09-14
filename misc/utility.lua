@@ -618,6 +618,12 @@ function BS.VersionDelta(version)
     return tonumber(currentVersion) - tonumber(checkVersion)
 end
 
+function BS.ForceResize(widgetIndex)
+    local widget = BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[widgetIndex])
+
+    widget:ForceResize()
+end
+
 function BS.RefreshWidget(widgetIndex, doIcon)
     if (BS.Vars.Controls[widgetIndex].Bar ~= 0) then
         local widget = BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[widgetIndex])
@@ -1397,7 +1403,7 @@ function BS.GenerateBar(barIndex)
             index = barIndex,
             position = barData.Orientation == GetString(_G.BARSTEWARD_HORIZONTAL) and TOP or LEFT,
             scale = barData.Scale or GuiRoot:GetScale(),
-            settings = BS.Vars.Bars[barIndex]
+            settings = barData
         }
     )
 
@@ -1406,7 +1412,7 @@ function BS.GenerateBar(barIndex)
     if (#widgets > 0) then
         bar:AddWidgets(widgets)
 
-        if (BS.Vars.Bars[barIndex].ToggleState == "hidden") then
+        if (barData.ToggleState == "hidden") then
             zo_callLater(
                 function()
                     bar:Hide()
@@ -1416,7 +1422,7 @@ function BS.GenerateBar(barIndex)
         end
     end
 
-    if (BS.Vars.Bars[barIndex].NudgeCompass) then
+    if (barData.NudgeCompass) then
         BS.NudgeCompass()
         -- from Bandits UI
         -- stop the game move the compass back to its original position
@@ -1432,7 +1438,7 @@ function BS.GenerateBar(barIndex)
         end
     end
 
-    local barName = BS.Vars.Bars[barIndex].Name
+    local barName = barData.Name
     setBinding(barIndex, barName)
 
     if (not ZO_IsElementInNumericallyIndexedTable(BS.alignBars, barName)) then
