@@ -1,9 +1,4 @@
 local BS = _G.BarSteward
-local completed = {
-    [_G.TIMED_ACTIVITY_TYPE_DAILY] = false,
-    [_G.TIMED_ACTIVITY_TYPE_WEEKLY] = false
-}
-
 local star = BS.Icon("targetmarkers/target_gold_star_64")
 
 local function configureWidget(widget, complete, maxComplete, activityType, tasks, hideLimit, defaultTooltip)
@@ -75,8 +70,6 @@ local function getTimedActivityProgress(activityType, widget, hideLimit, default
             local ttext = name .. "  (" .. progress .. "/" .. max .. ")"
             local colour = BS.COLOURS.Grey
 
-            completed[activityType] = false
-
             if (progress > 0 and progress < max and complete ~= maxComplete) then
                 colour = BS.COLOURS.Yellow
             elseif (complete == maxComplete and max ~= progress) then
@@ -126,10 +119,6 @@ local function getTimedActivityProgress(activityType, widget, hideLimit, default
         end
     end
 
-    if (complete == maxComplete) then
-        completed[activityType] = true
-    end
-
     if (widget ~= nil) then
         configureWidget(widget, complete, maxComplete, activityType, tasks, hideLimit, defaultTooltip)
     end
@@ -160,7 +149,7 @@ BS.widgets[BS.W_DAILY_ENDEAVOURS] = {
         end
     end,
     complete = function()
-        return completed[_G.TIMED_ACTIVITY_TYPE_DAILY]
+        return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(_G.TIMED_ACTIVITY_TYPE_DAILY)
     end,
     customSettings = {
         [1] = {
@@ -202,7 +191,7 @@ BS.widgets[BS.W_WEEKLY_ENDEAVOURS] = {
         end
     end,
     complete = function()
-        return completed[_G.TIMED_ACTIVITY_TYPE_WEEKLY]
+        return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(_G.TIMED_ACTIVITY_TYPE_WEEKLY)
     end,
     customSettings = {
         [1] = {
@@ -267,7 +256,7 @@ BS.widgets[BS.W_ENDEAVOUR_PROGRESS] = {
         end
     end,
     complete = function()
-        return completed[_G.TIMED_ACTIVITY_TYPE_WEEKLY]
+        return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(_G.TIMED_ACTIVITY_TYPE_WEEKLY)
     end,
     customSettings = {
         [1] = {
@@ -817,11 +806,11 @@ BS.widgets[BS.W_LOREBOOKS] = {
     name = "lorebooks",
     update = function(widget, categories)
         if (categories == "initial") then
-            return
+            categories = {}
         end
 
         local this = BS.W_LOREBOOKS
-        local value = ""
+        local value = "0/0"
         local tt = GetString(_G.BARSTEWARD_LOREBOOKS)
 
         for _, category in pairs(categories) do
@@ -1252,7 +1241,7 @@ BS.widgets[BS.W_DAILY_PROGRESS] = {
         end
     end,
     complete = function()
-        return completed[_G.TIMED_ACTIVITY_TYPE_DAILY]
+        return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(_G.TIMED_ACTIVITY_TYPE_DAILY)
     end,
     customSettings = {
         [1] = {
