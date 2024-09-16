@@ -822,7 +822,12 @@ BS.Defaults = {
         },
         [BS.W_ARMOURY_BUILD] = {
             Cat = cat.Character
-        }
+        },
+        [BS.W_ENLIGHTENED] = {
+            Autohide = false,
+            Cat = cat.Character,
+            UseSeparators = false
+        },
     }
 }
 

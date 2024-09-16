@@ -1,3 +1,9 @@
+[color=#ff9900][b]Version: 3.1.9 ---------------[/b][/color]
+Added Enlightenment widget
+
+[color=#ff9900][b]Version: 3.1.8 ---------------[/b][/color]
+Bugfix for bar override padding settings
+
 [color=#ff9900][b]Version: 3.1.7 ---------------[/b][/color]
 Currency tooltips now respect number separator settings
 Option to hide endeavour timers when complete

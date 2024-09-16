@@ -1621,3 +1621,31 @@ BS.widgets[BS.W_ARMOURY_BUILD] = {
         end
     end
 }
+
+BS.widgets[BS.W_ENLIGHTENED] = {
+    --v3.1.9
+    name = "enlightened",
+    update = function(widget)
+        local available = IsEnlightenedAvailableForCharacter()
+        local amount = GetEnlightenedPool()
+        local multiplier = GetEnlightenedMultiplier() + 1
+        local this = BS.W_ENLIGHTENED
+        local useSeparators = BS.GetVar("UseSeparators", this)
+
+        if (available) then
+            amount = amount * multiplier
+        else
+            amount = 0
+        end
+
+        amount = tostring(useSeparators and BS.AddSeparators(amount) or amount)
+
+        widget:SetColour(BS.GetColour(this, true))
+        widget:SetValue(amount)
+
+        return amount or 0
+    end,
+    event = {_G.EVENT_ENLIGHTENED_STATE_LOST, _G.EVENT_ENLIGHTENED_STATE_GAINED, _G.EVENT_EXPERIENCE_UPDATE},
+    icon = "icons/ability_templar_reflective_light",
+    tooltip = GetString(_G.BARSTEWARD_ENLIGHTENED)
+}

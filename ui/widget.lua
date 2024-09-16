@@ -328,17 +328,17 @@ function baseWidget:GetValueSide()
 end
 
 function baseWidget:SetPadding()
-    local horizontalPadding = BS.GetVar("HorizontalPadding", self.id) or 0
-    local verticalPadding = BS.GetVar("VerticalPadding", self.id) or 0
+    local horizontalPadding = BS.GetVar("HorizontalPadding", self.id)
+    local verticalPadding = BS.GetVar("VerticalPadding", self.id)
 
     if (self.barSettings.Override) then
         horizontalPadding = self.barSettings.HorizontalPadding
         verticalPadding = self.barSettings.VerticalPadding
     end
 
-    self.horizontalPadding = horizontalPadding + 10
+    self.horizontalPadding = (horizontalPadding or 0) + 10
     self.minVertical = self.iconSize
-    self.verticalPadding = verticalPadding + self.minVertical
+    self.verticalPadding = (verticalPadding or 0) + self.minVertical
 end
 
 function baseWidget:GetPadding()
