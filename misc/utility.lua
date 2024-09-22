@@ -1879,6 +1879,60 @@ function BS.RegisterColours()
     }
 end
 
+function BS.GetAddonVersion()
+    local manager = GetAddOnManager()
+    local numAddons = manager:GetNumAddOns()
+
+    for addon = 1,numAddons do
+        local name = manager:GetAddOnInfo(addon)
+
+        if (name == BS.Name) then
+            BS.VERSION = manager:GetAddOnVersion(addon)
+        end
+    end
+end
+
+function BS.ScanBuffs(buffList, widgetIndex)
+    local numberOfBuffs = GetNumBuffs("player")
+    local buffs = {}
+
+    if (numberOfBuffs > 0) then
+        for buffNum = 1, numberOfBuffs do
+            local buffName, _, timeEnding, _, _, _, _, _, _, _, abilityId = GetUnitBuffInfo("player", buffNum)
+
+            if (buffList[abilityId]) then
+                local timeNow = GetGameTimeMilliseconds()
+                local remaining = timeEnding - timeNow / 1000
+                local formattedTime =
+                    BS.SecondsToTime(
+                    remaining,
+                    true,
+                    false,
+                    BS.GetVar("HideSeconds", widgetIndex),
+                    BS.GetVar("Format", widgetIndex)
+                )
+
+                local ttt = BS.COLOURS.White:Colorize(BS.Format(buffName)) .. BS.LF
+
+                ttt = ttt .. BS.Format(GetAbilityDescription(abilityId))
+
+                table.insert(
+                    buffs,
+                    {remaining = remaining, formattedTime = formattedTime, ttt = ttt, buffName = buffName}
+                )
+            end
+        end
+    end
+
+    return buffs
+end
+
+function BS.IsPvP()
+    local mapContentType = GetMapContentType()
+
+    return (mapContentType == _G.MAP_CONTENT_AVA or mapContentType == _G.MAP_CONTENT_BATTLEGROUND)
+end
+
 -- developer utility functions
 -- luacheck: push ignore 113
 function BS.FindItem(text)

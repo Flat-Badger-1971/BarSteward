@@ -57,7 +57,7 @@ BS.Defaults = {
         },
         [BS.W_ALLIANCE_POINTS] = {
             Bar = 1,
-            Cat = cat.Currency,
+            Cat = cat.PvP,
             PvPOnly = false,
             SoundWhenEquals = false,
             UseSeparators = false
@@ -98,7 +98,7 @@ BS.Defaults = {
         },
         [BS.W_TELVAR_STONES] = {
             Bar = 1,
-            Cat = cat.Currency,
+            Cat = cat.PvP,
             PvPOnly = false,
             SoundWhenEquals = false,
             SoundWhenEqualsSound = "Daily Login Reward Claim Fanfare",
@@ -304,7 +304,8 @@ BS.Defaults = {
             WarningValue = 85
         },
         [BS.W_ZONE] = {
-            Cat = cat.Character
+            Cat = cat.Character,
+            PvPNever = false
         },
         [BS.W_PLAYER_NAME] = {
             Cat = cat.Character,
@@ -543,7 +544,7 @@ BS.Defaults = {
         },
         [BS.W_RANDOM_BATTLEGROUND] = {
             Autohide = false,
-            Cat = cat.Activities,
+            Cat = cat.PvP,
             ColourValues = ""
         },
         [BS.W_RANDOM_TRIBUTE] = {
@@ -739,7 +740,7 @@ BS.Defaults = {
         [BS.W_AP_BUFF] = {
             Announce = false,
             Autohide = false,
-            Cat = cat.Character,
+            Cat = cat.PvP,
             ColourValues = "okc,wv,wc,dv,dc",
             DangerValue = 2,
             HideSeconds = false,
@@ -828,6 +829,37 @@ BS.Defaults = {
             Cat = cat.Character,
             UseSeparators = false
         },
+        [BS.W_CAMPAIGN_TIER] = {
+            Cat = cat.PvP,
+            Experimental = true,
+            PvPOnly = false,
+            Progress = true,
+            Requires = "RewardTracker"
+        },
+        [BS.W_CONT_ATT] = {
+            Announce = false,
+            Cat = cat.PvP,
+            ColourValues = "okc,wv,wc,dv,dc",
+            DangerValue = 2,
+            Experimental = true,
+            HideSeconds = false,
+            Timer = true,
+            PvPOnly = false,
+            Units = GetString(_G.BARSTEWARD_MINUTES),
+            WarningValue = 5
+        },
+        [BS.W_AYLEID_HEALTH] = {
+            Announce = false,
+            Cat = cat.PvP,
+            ColourValues = "okc,wv,wc,dv,dc",
+            DangerValue = 2,
+            Experimental = true,
+            HideSeconds = false,
+            Timer = true,
+            PvPOnly = false,
+            Units = GetString(_G.BARSTEWARD_MINUTES),
+            WarningValue = 5
+        }
     }
 }
 

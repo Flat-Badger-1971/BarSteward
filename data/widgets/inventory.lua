@@ -1897,7 +1897,7 @@ BS.widgets[BS.W_RECIPE_WATCH] = {
         local link = BS.MakeItemLink(itemId, itemName)
         local itemType = GetItemLinkItemType(link)
         local lootedBy = ZO_CachedStrFormat("<<C:1>>", receivedBy)
-        local player = GetUnitName("player")
+        local player = BS.CHAR.name
 
         if (player ~= lootedBy) then
             return 0

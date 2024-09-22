@@ -96,6 +96,11 @@ function BS.VersionCheck()
 
         BS.Vars:SetCommon(true, "Updates", 3000)
     end
+
+    if (needsUpdate(3109)) then
+        BS.Vars.Controls[BS.W_ALLIANCE_POINTS].Cat = BS.CATNAMES.PvP
+        BS.Vars.Controls[BS.W_RANDOM_BATTLEGROUND].Cat = BS.CATNAMES.PvP
+    end
 end
 
 function BS.SetVersionCheck()

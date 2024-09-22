@@ -1,7 +1,6 @@
 local BS = _G.BarSteward
 
 BS.LAM = _G.LibAddonMenu2
-BS.VERSION = "3.1.8"
 
 local panel = {
     type = "panel",
@@ -1318,6 +1317,21 @@ local function checkPvPOnly(defaults, widgetControls, vars, key)
             end,
             width = "full",
             default = defaults.PvPOnly
+        }
+    end
+    if (defaults.PvPNever ~= nil) then
+        widgetControls[#widgetControls + 1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_PVP_NEVER),
+            getFunc = function()
+                return vars.PvPNever
+            end,
+            setFunc = function(value)
+                vars.PvPNever = value
+                BS.RefreshBar(key)
+            end,
+            width = "full",
+            default = defaults.PvPNever
         }
     end
 end

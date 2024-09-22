@@ -55,7 +55,7 @@ local function updateTooltip(
     return ttt
 end
 
-local function currencyWidget(currencyType, widgetIndex, text, eventList, hideWhenTrue)
+function BS.CurrencyWidget(currencyType, widgetIndex, text, eventList, hideWhenTrue)
     local name = "gold"
 
     if (currencyType == _G.CURT_ALLIANCE_POINTS) then
@@ -84,7 +84,7 @@ local function currencyWidget(currencyType, widgetIndex, text, eventList, hideWh
                 ((currencyType == _G.CURT_MONEY) and BS.Vars:GetCommon("Gold") or
                 BS.Vars:GetCommon("OtherCurrencies", currencyType)) or
                 {}
-            local thisCharacter = GetUnitName("player")
+            local thisCharacter = BS.CHAR.name
             local charactertt = ""
             local useSeparators = BS.GetVar("UseSeparators", widgetIndex)
 
@@ -169,32 +169,6 @@ local function currencyWidget(currencyType, widgetIndex, text, eventList, hideWh
 
     return widgetCode
 end
-
-BS.widgets[BS.W_ALLIANCE_POINTS] =
-    currencyWidget(
-    _G.CURT_ALLIANCE_POINTS,
-    BS.W_ALLIANCE_POINTS,
-    {
-        bag = _G.BARSTEWARD_GOLD_BAG,
-        bank = _G.BARSTEWARD_GOLD_BANK,
-        combined = _G.BARSTEWARD_GOLD_COMBINED,
-        display = _G.BARSTEWARD_GOLD_DISPLAY,
-        everyWhere = _G.BARSTEWARD_GOLD_EVERYWHERE,
-        separated = _G.BARSTEWARD_GOLD_SEPARATED,
-        title = BS.Format(_G.SI_GAMEPAD_INVENTORY_ALLIANCE_POINTS)
-    },
-    {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_ALLIANCE_POINT_UPDATE},
-    function()
-        if (BS.Vars.Controls[BS.W_ALLIANCE_POINTS].PvPOnly == true) then
-            local mapContentType = GetMapContentType()
-            local isPvP = (mapContentType == _G.MAP_CONTENT_AVA or mapContentType == _G.MAP_CONTENT_BATTLEGROUND)
-
-            return not isPvP
-        end
-
-        return false
-    end
-)
 
 BS.widgets[BS.W_CROWN_GEMS] = {
     name = "crownGems",
@@ -326,7 +300,7 @@ BS.widgets[BS.W_EVENT_TICKETS] = {
 }
 
 BS.widgets[BS.W_GOLD] =
-    currencyWidget(
+    BS.CurrencyWidget(
     _G.CURT_MONEY,
     BS.W_GOLD,
     {
@@ -370,32 +344,6 @@ BS.widgets[BS.W_SEALS_OF_ENDEAVOUR] = {
         ZO_ShowSealStore()
     end
 }
-
-BS.widgets[BS.W_TELVAR_STONES] =
-    currencyWidget(
-    _G.CURT_TELVAR_STONES,
-    BS.W_TELVAR_STONES,
-    {
-        bag = _G.BARSTEWARD_GOLD_BAG,
-        bank = _G.BARSTEWARD_GOLD_BANK,
-        combined = _G.BARSTEWARD_GOLD_COMBINED,
-        display = _G.BARSTEWARD_GOLD_DISPLAY,
-        everyWhere = _G.BARSTEWARD_GOLD_EVERYWHERE,
-        separated = _G.BARSTEWARD_GOLD_SEPARATED,
-        title = BS.Format(_G.SI_GAMEPAD_INVENTORY_TELVAR_STONES)
-    },
-    _G.EVENT_TELVAR_STONE_UPDATE,
-    function()
-        if (BS.Vars.Controls[BS.W_TELVAR_STONES].PvPOnly == true) then
-            local mapContentType = GetMapContentType()
-            local isPvP = (mapContentType == _G.MAP_CONTENT_AVA or mapContentType == _G.MAP_CONTENT_BATTLEGROUND)
-
-            return not isPvP
-        end
-
-        return false
-    end
-)
 
 BS.widgets[BS.W_TRANSMUTE_CRYSTALS] = {
     name = "transmuteCrystals",
@@ -474,7 +422,7 @@ BS.widgets[BS.W_UNDAUNTED_KEYS] = {
 }
 
 BS.widgets[BS.W_WRIT_VOUCHERS] =
-    currencyWidget(
+    BS.CurrencyWidget(
     _G.CURT_WRIT_VOUCHERS,
     BS.W_WRIT_VOUCHERS,
     {

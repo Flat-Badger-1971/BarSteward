@@ -458,7 +458,7 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
         local this = BS.W_CRAFTING_DAILIES
         local update = true
         local added, done, ready
-        local character = GetUnitName("player")
+        local character = BS.CHAR.name
         local iconString = "icons/mapkey/mapkey_%s"
         local DAILY_COLOURS = {
             ["done"] = BS.COLOURS.Green,

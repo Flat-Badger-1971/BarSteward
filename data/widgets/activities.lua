@@ -1,17 +1,68 @@
 local BS = _G.BarSteward
 local star = BS.Icon("targetmarkers/target_gold_star_64")
 
+local function getColourOptions(widgetIndex)
+    local colours = {["Red"] = "Danger", ["Amber"] = "Warning", ["Green"] = "Ok"}
+    local vars = BS.Vars.Controls[widgetIndex]
+    local index = 2
+    local settings = {
+        [1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_USE_RAG),
+            getFunc = function()
+                return BS.Vars.Controls[widgetIndex].UseRag
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[widgetIndex].UseRag = value
+                BS.RefreshWidget(widgetIndex)
+            end,
+            width = "full",
+            default = false
+        }
+    }
+
+    for colour, default in pairs(colours) do
+        local c = colour .. "Colour"
+
+        settings[index] = {
+            type = "colorpicker",
+            name = GetString(_G["BARSTEWARD_" .. colour:upper()]),
+            getFunc = function()
+                return unpack(vars[c] or BS.Vars["Default" .. default .. "Colour"])
+            end,
+            setFunc = function(r, g, b, a)
+                if (BS.CompareColours({r, g, b, a}, BS.Vars["Default" .. default .. "Colour"])) then
+                    vars[c] = nil
+                else
+                    vars[c] = {r, g, b, a}
+                end
+
+                BS.RefreshWidget(widgetIndex)
+            end,
+            width = "full",
+            default = unpack(BS.Vars["Default" .. default .. "Colour"]),
+            disabled = function()
+                return not BS.Vars.Controls[widgetIndex].UseRag
+            end
+        }
+
+        index = index + 1
+    end
+
+    return settings
+end
+
 local function configureWidget(widget, complete, maxComplete, activityType, tasks, hideLimit, defaultTooltip)
     local widgetIndex = activityType == _G.TIMED_ACTIVITY_TYPE_DAILY and BS.W_DAILY_ENDEAVOURS or BS.W_WEEKLY_ENDEAVOURS
     local colour = BS.GetColour(widgetIndex, true)
 
     if (BS.GetVar("UseRag", widgetIndex)) then
         if (complete > 0 and complete < maxComplete) then
-            colour = BS.COLOURS.DefaultWarningColour
+            colour = BS.GetColour(widgetIndex, "Amber", "DefaultWarningColour", true)
         elseif (complete == maxComplete) then
-            colour = BS.COLOURS.DefaultOkColour
+            colour = BS.GetColour(widgetIndex, "Green", "DefaultOkColour", true)
         else
-            colour = BS.COLOURS.DefaultDangerColour
+            colour = BS.GetColour(widgetIndex, "Red", "DefaultDangerColour", true)
         end
     end
 
@@ -151,21 +202,9 @@ BS.widgets[BS.W_DAILY_ENDEAVOURS] = {
     complete = function()
         return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(_G.TIMED_ACTIVITY_TYPE_DAILY)
     end,
-    customSettings = {
-        [1] = {
-            type = "checkbox",
-            name = GetString(_G.BARSTEWARD_USE_RAG),
-            getFunc = function()
-                return BS.Vars.Controls[BS.W_DAILY_ENDEAVOURS].UseRag
-            end,
-            setFunc = function(value)
-                BS.Vars.Controls[BS.W_DAILY_ENDEAVOURS].UseRag = value
-                BS.RefreshWidget(BS.W_DAILY_ENDEAVOURS)
-            end,
-            width = "full",
-            default = false
-        }
-    }
+    customSettings = function()
+        return getColourOptions(BS.W_DAILY_ENDEAVOURS)
+    end
 }
 
 BS.widgets[BS.W_WEEKLY_ENDEAVOURS] = {
@@ -193,21 +232,9 @@ BS.widgets[BS.W_WEEKLY_ENDEAVOURS] = {
     complete = function()
         return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(_G.TIMED_ACTIVITY_TYPE_WEEKLY)
     end,
-    customSettings = {
-        [1] = {
-            type = "checkbox",
-            name = GetString(_G.BARSTEWARD_USE_RAG),
-            getFunc = function()
-                return BS.Vars.Controls[BS.W_WEEKLY_ENDEAVOURS].UseRag
-            end,
-            setFunc = function(value)
-                BS.Vars.Controls[BS.W_WEEKLY_ENDEAVOURS].UseRag = value
-                BS.RefreshWidget(BS.W_WEEKLY_ENDEAVOURS)
-            end,
-            width = "full",
-            default = false
-        }
-    }
+    customSettings = function()
+        return getColourOptions(BS.W_WEEKLY_ENDEAVOURS)
+    end
 }
 
 BS.widgets[BS.W_ENDEAVOUR_PROGRESS] = {
@@ -655,7 +682,7 @@ local function setTracker(widgetIndex, resetSeconds, tooltip)
         BS.Vars:SetCommon({}, "Trackers", widgetIndex)
     end
 
-    local thisCharacter = GetUnitName("player")
+    local thisCharacter = BS.CHAR.name
 
     if (not BS.Vars:GetCommon("Trackers", widgetIndex, thisCharacter)) then
         BS.Vars:SetCommon({}, "Trackers", widgetIndex, thisCharacter)
@@ -940,7 +967,7 @@ BS.widgets[BS.W_CRAFTING_MOTIFS] = {
     end
 }
 
-local function getActivityRewardInfo(activityTypes)
+function BS.GetActivityRewardInfo(activityTypes)
     local result = {}
     for _, activityType in ipairs(activityTypes) do
         local locationsData = ZO_ACTIVITY_FINDER_ROOT_MANAGER:GetLocationsData(activityType)
@@ -978,7 +1005,7 @@ local function getActivityRewardInfo(activityTypes)
     return result
 end
 
-local function getActvityOutput(data)
+function BS.GetActvityOutput(data)
     if (data.output ~= "") then
         data.output = data.output .. " "
         data.normalisedOutput = data.normalisedOutput .. " "
@@ -1015,7 +1042,7 @@ BS.widgets[BS.W_RANDOM_DUNGEON] = {
     name = "randomDungeon",
     update = function(widget)
         local activities = {_G.LFG_ACTIVITY_DUNGEON, _G.LFG_ACTIVITY_MASTER_DUNGEON}
-        local dungeonInfo = getActivityRewardInfo(activities)
+        local dungeonInfo = BS.GetActivityRewardInfo(activities)
         local data = {
             output = "",
             normalisedOutput = "",
@@ -1029,14 +1056,14 @@ BS.widgets[BS.W_RANDOM_DUNGEON] = {
             data.activityData = nd
             data.label = _G.SI_DUNGEONDIFFICULTY1
             data.icon = BS.DUNGEON[_G.LFG_ACTIVITY_DUNGEON]
-            data = getActvityOutput(data)
+            data = BS.GetActvityOutput(data)
         end
 
         if (vd) then
             data.activityData = vd
             data.label = _G.SI_DUNGEONDIFFICULTY2
             data.icon = BS.DUNGEON[_G.LFG_ACTIVITY_MASTER_DUNGEON]
-            data = getActvityOutput(data)
+            data = BS.GetActvityOutput(data)
         end
 
         widget:SetValue(data.output, data.normalisedOutput)
@@ -1057,63 +1084,12 @@ BS.widgets[BS.W_RANDOM_DUNGEON] = {
     end
 }
 
-BS.widgets[BS.W_RANDOM_BATTLEGROUND] = {
-    -- v1.4.23
-    name = "randomBattleground",
-    update = function(widget)
-        local activities = {_G.LFG_ACTIVITY_BATTLE_GROUND_LOW_LEVEL, _G.LFG_ACTIVITY_BATTLE_GROUND_NON_CHAMPION}
-        local bgInfo = getActivityRewardInfo(activities)
-        local data = {
-            output = "",
-            normalisedOutput = "",
-            eligibleCount = 0,
-            tt = BS.Format(_G.SI_BATTLEGROUND_FINDER_RANDOM_FILTER_TEXT)
-        }
-        local ll = bgInfo[_G.LFG_ACTIVITY_BATTLE_GROUND_LOW_LEVEL] -- Random Battleground
-        --local cp = bgInfo[_G.LFG_ACTIVITY_BATTLE_GROUND_CHAMPION]
-        local np = bgInfo[_G.LFG_ACTIVITY_BATTLE_GROUND_NON_CHAMPION] -- Group Battleground
-        local battleground = ll
-        local icon = BS.BATTLEGROUND_ICON[_G.LFG_ACTIVITY_BATTLE_GROUND_LOW_LEVEL]
-
-        if (np) then
-            if (np.meetsRequirements) then
-                battleground = np
-                icon = BS.BATTLEGROUND_ICON[_G.LFG_ACTIVITY_BATTLE_GROUND_NON_CHAMPION]
-            end
-        end
-
-        data.activityData = battleground
-        data.label = ""
-        data.icon = icon
-
-        if (battleground) then
-            data = getActvityOutput(data)
-        end
-
-        widget:SetValue(data.output, data.normalisedOutput)
-        widget:SetTooltip(data.tt)
-
-        return data.eligibleCount
-    end,
-    event = _G.EVENT_PLAYER_ACTIVATED,
-    icon = "icons/store_battleground",
-    hideWhenEqual = 0,
-    tooltip = BS.Format(_G.SI_BATTLEGROUND_FINDER_RANDOM_FILTER_TEXT),
-    onLeftClick = function()
-        if (IsInGamepadPreferredMode()) then
-            SCENE_MANAGER:Show("gamepadDungeonFinder")
-        else
-            SCENE_MANAGER:Show("groupMenuKeyboard")
-        end
-    end
-}
-
 BS.widgets[BS.W_RANDOM_TRIBUTE] = {
     -- v1.4.23
     name = "randomTribute",
     update = function(widget)
         local activities = {_G.LFG_ACTIVITY_TRIBUTE_COMPETITIVE, _G.LFG_ACTIVITY_TRIBUTE_CASUAL}
-        local bgInfo = getActivityRewardInfo(activities)
+        local bgInfo = BS.GetActivityRewardInfo(activities)
         local data = {
             output = "",
             normalisedOutput = "",
@@ -1127,14 +1103,14 @@ BS.widgets[BS.W_RANDOM_TRIBUTE] = {
             data.activityData = nt
             data.label = _G.SI_LFGACTIVITY10
             data.icon = BS.TRIBUTE_ICON[_G.LFG_ACTIVITY_TRIBUTE_CASUAL]
-            data = getActvityOutput(data)
+            data = BS.GetActvityOutput(data)
         end
 
         if (ct) then
             data.activityData = ct
             data.label = _G.SI_LFGACTIVITY9
             data.icon = BS.TRIBUTE_ICON[_G.LFG_ACTIVITY_TRIBUTE_COMPETITIVE]
-            data = getActvityOutput(data)
+            data = BS.GetActvityOutput(data)
         end
 
         widget:SetValue(data.output, data.normalisedOutput)
@@ -1313,7 +1289,7 @@ BS.widgets[BS.W_DAILY_COUNT] = {
         checkReset()
         zo_callLater(
             function()
-                local player = GetUnitName("player")
+                local player = BS.CHAR.name
 
                 if (not BS.Vars:GetCommon("dailyQuestCount", player)) then
                     BS.Vars:SetCommon({}, "dailyQuestCount", player)
@@ -1490,7 +1466,7 @@ BS.widgets[BS.W_DAILY_PLEDGES] = {
 
         local update = true
         local added, done
-        local character = GetUnitName("player")
+        local character = BS.CHAR.name
         local maxPledges = 3
 
         checkReset()

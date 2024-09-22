@@ -147,6 +147,9 @@ BS.W_DAILY_PLEDGES = 138
 BS.W_BOUNTY_AMOUNT = 139
 BS.W_ARMOURY_BUILD = 140
 BS.W_ENLIGHTENED = 141
+BS.W_CAMPAIGN_TIER = 142
+BS.W_CONT_ATT = 143
+BS.W_AYLEID_HEALTH = 144
 
 BS.WRITS = {
     [_G.CRAFTING_TYPE_ALCHEMY] = {
@@ -430,7 +433,8 @@ BS.CATNAMES = {
     Social = 11,
     Thievery = 12,
     Assistants = 13,
-    InfiniteArchive = 14
+    InfiniteArchive = 14,
+    PvP = 15
 }
 
 BS.CATEGORIES = {
@@ -459,7 +463,8 @@ BS.CATEGORIES = {
     [BS.CATNAMES.InfiniteArchive] = {
         name = _G.SI_ENDLESS_DUNGEON_HUD_TRACKER_TITLE,
         icon = "icons/poi/poi_endlessdungeon_complete"
-    }
+    },
+    [BS.CATNAMES.PvP] = {name = _G.SI_GROUPFINDERCATEGORY4, icon = "icons/u41_pvp_reward_container"}
 }
 
 BS.ASSISTANTS = {
@@ -620,3 +625,21 @@ BS.ITEM_TYPE_ICON = {
     },
     [_G.ITEMTYPE_CONTAINER] = {icon = "icons/justice_stolen_wax_sealed_heavy_sack", name = _G.SI_ITEMTYPE18}
 }
+
+BS.CHAR = {
+    alliance = GetUnitAlliance("player"),
+    class = GetUnitClass("player"),
+    classId = GetUnitClassId("player"),
+    id = GetCurrentCharacterId(),
+    gender = GetUnitGender("player"),
+    name = GetUnitName("player"),
+    race = GetUnitRace("player")
+}
+
+BS.CHAR.allianceColour = GetAllianceColor(BS.CHAR.alliance)
+BS.CHAR.allianceIcon = ZO_GetAllianceIcon(BS.CHAR.alliance)
+BS.CHAR.allianceName = GetAllianceName(BS.CHAR.alliance)
+BS.CHAR.classIcon = GetClassIcon(BS.CHAR.classId)
+
+BS.CONTINUOUS_ATTACK = {[39248] = true, [45614] = true}
+BS.AYLEID_HEALTH = {[21263] = true}

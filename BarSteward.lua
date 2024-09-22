@@ -30,6 +30,7 @@ end
 
 function BS.ContinueIntialising()
     BS.Vars = BS.CreateSavedVariablesManager("BarStewardSavedVars", BS.Defaults, BS.CommonDefaults)
+    BS.GetAddonVersion()
     BS.CheckVars(BS.Vars)
 
     if (BS.NewVars) then

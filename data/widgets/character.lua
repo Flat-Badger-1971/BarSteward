@@ -96,6 +96,13 @@ BS.widgets[BS.W_ZONE] = {
     event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_ZONE_CHANGED},
     icon = "tradinghouse/gamepad/gp_tradinghouse_trophy_treasure_map",
     tooltip = BS.Format(_G.SI_ANTIQUITY_SCRYABLE_CURRENT_ZONE_SUBCATEGORY),
+    hideWhenTrue = function()
+        if (BS.Vars.Controls[BS.W_ZONE].PvPNever == true) then
+            return BS.IsPvP()
+        end
+
+        return false
+    end,
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("worldMap")
@@ -109,17 +116,14 @@ BS.widgets[BS.W_PLAYER_NAME] = {
     -- v1.0.3
     name = "playerName",
     update = function(widget)
-        local playerName = GetUnitName("player")
+        local playerName = BS.CHAR.name
         local this = BS.W_PLAYER_NAME
 
         widget:SetValue(ZO_FormatUserFacingDisplayName(playerName))
         widget:SetColour(BS.GetColour(this, true))
 
         if (BS.GetVar("ShowClassIcon", this)) then
-            local classId = GetUnitClassId("player")
-            local icon = GetClassIcon(classId)
-
-            widget:SetIcon(icon)
+            widget:SetIcon(BS.CHAR.classIcon)
         end
 
         return widget:GetValue()
@@ -155,7 +159,7 @@ BS.widgets[BS.W_RACE] = {
     -- v1.0.3
     name = "playerRace",
     update = function(widget)
-        widget:SetValue(BS.Format(GetUnitRace("player")))
+        widget:SetValue(BS.Format(BS.CHAR.race))
         widget:SetColour(BS.GetColour(BS.W_RACE, true))
 
         return widget:GetValue()
@@ -170,11 +174,10 @@ BS.widgets[BS.W_CLASS] = {
     name = "playerClass",
     update = function(widget)
         local this = BS.W_CLASS
-        local classId = GetUnitClassId("player")
-        local icon = GetClassIcon(classId)
+        local icon = BS.CHAR.classIcon
 
         if (not BS.GetVar("NoValue", this)) then
-            widget:SetValue(BS.Format(GetUnitClass("player")))
+            widget:SetValue(BS.Format(BS.CHAR.class))
             widget:SetColour(BS.GetColour(this, true))
         end
 
@@ -206,9 +209,8 @@ BS.widgets[BS.W_ALLIANCE] = {
     -- v1.0.3
     name = "playerAlliance",
     update = function(widget)
-        local alliance = GetUnitAlliance("player")
-        local icon = ZO_GetAllianceIcon(alliance)
-        local colour = GetAllianceColor(alliance)
+        local icon = BS.CHAR.allianceIcon
+        local colour = BS.CHAR.allianceColour
 
         if (icon:find("daggerfall")) then
             icon = "scoredisplay/blueflag"
@@ -219,7 +221,7 @@ BS.widgets[BS.W_ALLIANCE] = {
         end
 
         if (not BS.GetVar("NoValue", BS.W_ALLIANCE)) then
-            widget:SetValue(" " .. BS.Format(GetAllianceName(alliance)))
+            widget:SetValue(" " .. BS.Format(BS.CHAR.allianceName))
             widget:SetColour(colour)
         end
 
@@ -1117,47 +1119,12 @@ BS.widgets[BS.W_VAMPIRISM_FEED_TIMER] = {
     hideWhenEqual = 0
 }
 
-local function scanBuffs(buffList, widgetIndex)
-    local numberOfBuffs = GetNumBuffs("player")
-    local buffs = {}
-
-    if (numberOfBuffs > 0) then
-        for buffNum = 1, numberOfBuffs do
-            local buffName, _, timeEnding, _, _, _, _, _, _, _, abilityId = GetUnitBuffInfo("player", buffNum)
-
-            if (buffList[abilityId]) then
-                local timeNow = GetGameTimeMilliseconds()
-                local remaining = timeEnding - timeNow / 1000
-                local formattedTime =
-                    BS.SecondsToTime(
-                    remaining,
-                    true,
-                    false,
-                    BS.GetVar("HideSeconds", widgetIndex),
-                    BS.GetVar("Format", widgetIndex)
-                )
-
-                local ttt = BS.COLOURS.White:Colorize(BS.Format(buffName)) .. BS.LF
-
-                ttt = ttt .. BS.Format(GetAbilityDescription(abilityId))
-
-                table.insert(
-                    buffs,
-                    {remaining = remaining, formattedTime = formattedTime, ttt = ttt, buffName = buffName}
-                )
-            end
-        end
-    end
-
-    return buffs
-end
-
 BS.widgets[BS.W_FOOD_BUFF] = {
     -- v2.0.17
     name = "foodBuff",
     update = function(widget)
         local this = BS.W_FOOD_BUFF
-        local buffs = scanBuffs(BS.FOOD_BUFFS, this)
+        local buffs = BS.ScanBuffs(BS.FOOD_BUFFS, this)
 
         if (#buffs > 0) then
             local buff = buffs[1]
@@ -1187,74 +1154,12 @@ BS.widgets[BS.W_FOOD_BUFF] = {
     tooltip = BS.Format(_G.BARSTEWARD_FOOD_BUFF)
 }
 
-BS.widgets[BS.W_AP_BUFF] = {
-    -- v2.1.2
-    name = "apBuff",
-    update = function(widget)
-        local this = BS.W_AP_BUFF
-        local buffs = scanBuffs(BS.AP_BUFFS, this)
-        local lowest = {remaining = 99999}
-        local ttt = BS.Format(_G.BARSTEWARD_AP_BUFF) .. BS.LF
-
-        if (#buffs > 0) then
-            for _, buff in ipairs(buffs) do
-                ttt = ttt .. BS.LF
-
-                if (#buffs > 1) then
-                    ttt = ttt .. buff.buffName .. ": " .. buff.formattedTime
-                else
-                    ttt = ttt .. BS.LF .. buff.ttt
-                end
-
-                buff.ttt = ttt
-
-                if (buff.remaining < lowest.remaining) then
-                    lowest = buff
-                end
-            end
-
-            widget:SetValue(lowest.formattedTime)
-            widget:SetColour(BS.GetTimeColour(lowest.remaining, this, 60, true, true))
-            widget:SetTooltip(lowest.ttt)
-
-            if (BS.GetVar("Announce", this) and (BS.GetVar("WarningValue", this) * 60) == BS.ToInt(lowest.remaining)) then
-                local buffMessage =
-                    ZO_CachedStrFormat(GetString(_G.BARSTEWARD_WARNING_EXPIRING), BS.Format(lowest.buffName))
-                BS.Announce(GetString(_G.BARSTEWARD_WARNING), buffMessage, this)
-            end
-
-            return lowest.remaining
-        end
-
-        local value = BS.SecondsToTime(0, true, false, BS.GetVar("HideSeconds", this), BS.GetVar("Format", this))
-
-        widget:SetValue(value)
-        widget:SetColour(BS.GetTimeColour(0, this, 60, true, true))
-
-        return 0
-    end,
-    timer = 1000,
-    hideWhenEqual = 0,
-    hideWhenTrue = function()
-        if (BS.Vars.Controls[BS.W_AP_BUFF].PvPOnly == true) then
-            local mapContentType = GetMapContentType()
-            local isPvP = (mapContentType == _G.MAP_CONTENT_AVA or mapContentType == _G.MAP_CONTENT_BATTLEGROUND)
-
-            return not isPvP
-        end
-
-        return false
-    end,
-    icon = "icons/crownstore_skillline_alliancewar_assault",
-    tooltip = BS.Format(_G.BARSTEWARD_AP_BUFF)
-}
-
 BS.widgets[BS.W_XP_BUFF] = {
     -- v2.1.2
     name = "apBuff",
     update = function(widget)
         local this = BS.W_XP_BUFF
-        local buffs = scanBuffs(BS.XP_BUFFS, this)
+        local buffs = BS.ScanBuffs(BS.XP_BUFFS, this)
         local lowest = {remaining = 99999}
         local ttt = BS.Format(_G.BARSTEWARD_XP_BUFF) .. BS.LF
 
@@ -1627,25 +1532,26 @@ BS.widgets[BS.W_ENLIGHTENED] = {
     name = "enlightened",
     update = function(widget)
         local available = IsEnlightenedAvailableForCharacter()
-        local amount = GetEnlightenedPool()
+        local poolAmount = GetEnlightenedPool()
         local multiplier = GetEnlightenedMultiplier() + 1
         local this = BS.W_ENLIGHTENED
         local useSeparators = BS.GetVar("UseSeparators", this)
 
         if (available) then
-            amount = amount * multiplier
+            poolAmount = poolAmount * multiplier
         else
-            amount = 0
+            poolAmount = 0
         end
 
-        amount = tostring(useSeparators and BS.AddSeparators(amount) or amount)
+        local amount = tostring(useSeparators and BS.AddSeparators(poolAmount) or poolAmount)
 
         widget:SetColour(BS.GetColour(this, true))
         widget:SetValue(amount)
 
-        return amount or 0
+        return poolAmount or 0
     end,
+    hideWhenEqual = 0,
     event = {_G.EVENT_ENLIGHTENED_STATE_LOST, _G.EVENT_ENLIGHTENED_STATE_GAINED, _G.EVENT_EXPERIENCE_UPDATE},
-    icon = "icons/ability_templar_reflective_light",
+    icon = "icons/quest_elsweyr_evilcadwell_head",
     tooltip = GetString(_G.BARSTEWARD_ENLIGHTENED)
 }
