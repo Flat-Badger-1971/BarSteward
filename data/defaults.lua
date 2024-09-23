@@ -834,7 +834,7 @@ BS.Defaults = {
             Experimental = true,
             PvPOnly = false,
             Progress = true,
-            Requires = "RewardTracker"
+            Requires = "RewardsTracker"
         },
         [BS.W_CONT_ATT] = {
             Announce = false,
