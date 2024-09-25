@@ -1882,14 +1882,23 @@ end
 function BS.GetAddonVersion()
     local manager = GetAddOnManager()
     local numAddons = manager:GetNumAddOns()
+    local version = "?"
 
-    for addon = 1,numAddons do
+    for addon = 1, numAddons do
         local name = manager:GetAddOnInfo(addon)
 
         if (name == BS.Name) then
-            BS.VERSION = manager:GetAddOnVersion(addon)
+            version = tostring(manager:GetAddOnVersion(addon))
+            local major = version:sub(1, 1)
+            local minor = version:sub(2, 2)
+            local revision = version:sub(3)
+
+            version = string.format("%s.%s.%s", major, minor, revision)
+            break
         end
     end
+
+    return version
 end
 
 function BS.ScanBuffs(buffList, widgetIndex)

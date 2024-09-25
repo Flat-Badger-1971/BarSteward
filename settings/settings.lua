@@ -2,17 +2,6 @@ local BS = _G.BarSteward
 
 BS.LAM = _G.LibAddonMenu2
 
-local panel = {
-    type = "panel",
-    name = "Bar Steward",
-    displayName = "|cff9900Bar |r|c4f34ebSteward|r",
-    author = "Flat Badger",
-    version = BS.VERSION,
-    registerForDefaults = true,
-    registerForRefresh = true,
-    slashCommand = "/bs"
-}
-
 BS.SoundLastPlayed = {}
 
 -- populate the sound selection and lookup tables
@@ -2410,6 +2399,18 @@ local function getWidgetSettings()
 end
 
 function BS.RegisterSettings()
+    local version = BS.GetAddonVersion()
+    local panel = {
+        type = "panel",
+        name = "Bar Steward",
+        displayName = "|cff9900Bar |r|c4f34ebSteward|r",
+        author = "Flat Badger",
+        version = version,
+        registerForDefaults = true,
+        registerForRefresh = true,
+        slashCommand = "/bs"
+    }
+
     zo_callLater(
         function()
             initialise()

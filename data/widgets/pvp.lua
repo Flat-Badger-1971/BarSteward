@@ -303,7 +303,7 @@ BS.widgets[BS.W_CONT_ATT] = {
         widget:SetColour(BS.GetTimeColour(0, this, 60, true, true))
         return 0
     end,
-    --timer = 1000,
+    timer = 1000,
     hideWhenTrue = function()
         if (BS.Vars.Controls[BS.W_CONT_ATT].PvPOnly == true) then
             return not BS.IsPvP()
