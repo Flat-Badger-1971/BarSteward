@@ -618,7 +618,8 @@ function baseBar:AddWidgets(widgets)
         local noValue = BS.Vars.Controls[metadata.id].NoValue or false
         local noIcon = BS.Vars.Controls[metadata.id].NoIcon or false
 
-        metadata.widget = BS.CreateWidget(metadata, self.bar, tooltipAnchor, self.valueSide, noValue, self.settings, noIcon)
+        metadata.widget =
+            BS.CreateWidget(metadata, self.bar, tooltipAnchor, self.valueSide, noValue, self.settings, noIcon)
 
         -- register widgets that need to watch for events
         if (metadata.event) then
@@ -649,11 +650,15 @@ function baseBar:AddWidgets(widgets)
         -- register wigdets that need to update after a set interval
         if (metadata.timer) then
             if (metadata.name == "time") then
+                BS.timeFunction = function()
+                    self:DoUpdate(metadata)
+                end
+
                 EVENT_MANAGER:RegisterForUpdate(
                     string.format("%s%s", BS.Name, metadata.name),
                     metadata.timer,
                     function()
-                        self:DoUpdate(metadata)
+                        BS.timeFunction()
                     end
                 )
             else
@@ -706,7 +711,7 @@ function baseBar:AddWidgets(widgets)
 
         if (self.orientation == "horizontal") then
             if (firstWidget) then
-                    metadata.widget:SetAnchor(LEFT, self.bar, LEFT)
+                metadata.widget:SetAnchor(LEFT, self.bar, LEFT)
             else
                 metadata.widget:SetAnchor(LEFT, previousWidget.control, RIGHT)
             end

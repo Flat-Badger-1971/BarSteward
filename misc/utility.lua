@@ -344,7 +344,7 @@ function BS.DisableUpdates(includeTime)
         end
     end
 
-    if (includeTime and BS.timeFunction) then
+    if (includeTime) then
         EVENT_MANAGER:UnregisterForUpdate(BS.Name .. "time")
     end
 end
