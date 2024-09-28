@@ -333,19 +333,23 @@ function BS.UnregisterForUpdate(time, func)
     local needsUnregistration = unregisterForUpdate(time, func)
 
     if (needsUnregistration) then
-        EVENT_MANAGER:UnregisterForUpdate(BS.Name .. tostring(time), time)
+        EVENT_MANAGER:UnregisterForUpdate(BS.Name .. tostring(time))
     end
 end
 
-function BS.DisableUpdates()
+function BS.DisableUpdates(includeTime)
     for time, funcs in pairs(timerFunctions) do
         if (#funcs ~= 0) then
             EVENT_MANAGER:UnregisterForUpdate(string.format("%s%s", BS.Name, tostring(time)))
         end
     end
+
+    if (includeTime and BS.timeFunction) then
+        EVENT_MANAGER:UnregisterForUpdate(BS.Name .. "time")
+    end
 end
 
-function BS.EnableUpdates()
+function BS.EnableUpdates(includeTime)
     for time, funcs in pairs(timerFunctions) do
         if (#funcs ~= 0) then
             EVENT_MANAGER:RegisterForUpdate(
@@ -356,6 +360,16 @@ function BS.EnableUpdates()
                 end
             )
         end
+    end
+
+    if (includeTime and BS.timeFunction) then
+        EVENT_MANAGER:RegisterForUpdate(
+            BS.Name .. "time",
+            1000,
+            function()
+                BS.timeFunction()
+            end
+        )
     end
 end
 -- end timers
@@ -1882,14 +1896,23 @@ end
 function BS.GetAddonVersion()
     local manager = GetAddOnManager()
     local numAddons = manager:GetNumAddOns()
+    local version = "?"
 
-    for addon = 1,numAddons do
+    for addon = 1, numAddons do
         local name = manager:GetAddOnInfo(addon)
 
         if (name == BS.Name) then
-            BS.VERSION = manager:GetAddOnVersion(addon)
+            version = tostring(manager:GetAddOnVersion(addon))
+            local major = version:sub(1, 1)
+            local minor = version:sub(2, 2)
+            local revision = version:sub(3)
+
+            version = string.format("%s.%s.%s", major, minor, revision)
+            break
         end
     end
+
+    return version
 end
 
 function BS.ScanBuffs(buffList, widgetIndex)

@@ -371,10 +371,6 @@ BS.Defaults = {
             HideWhenComplete = false,
             Progress = true
         },
-        [BS.W_TROPHY_VAULT_KEYS] = {
-            Autohide = true,
-            Cat = cat.Inventory
-        },
         [BS.W_LOCKPICKS] = {
             Cat = cat.Inventory,
             ColourValues = "okc,wv,wc,dv,dc",
@@ -862,6 +858,27 @@ BS.Defaults = {
         }
     }
 }
+
+if (_G.CURT_IMPERIAL_FRAGMENTS) then
+    BS.Defaults.Controls[BS.W_IMPERIAL_FRAGMENTS] = {
+        Cat = cat.Currency,
+        UseSeparators = false
+    }
+
+    BS.Defaults.Controls[BS.W_TANLORIN] = {
+        Cat = cat.Companions
+    }
+
+    BS.Defaults.Controls[BS.W_ZERITH] = {
+        Cat = cat.Companions
+    }
+else
+    -- redundant as of patch 44
+    BS.Defaults.Controls[BS.W_TROPHY_VAULT_KEYS] = {
+        Autohide = true,
+        Cat = cat.Inventory
+    }
+end
 
 BS.CommonDefaults = {
     CharacterList = {},

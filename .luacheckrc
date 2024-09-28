@@ -319,6 +319,8 @@ read_globals = {
     "GetCurrencyAmount",
     "GetCurrentCampaignId",
     "GetCurrentCharacterId",
+    "GetCurrencyKeyboardIcon",
+    "GetCurrencyName",
     "GetCurrencyPlayerStoredLocation",
     "GetCurrentMapId",
     "GetCVar",

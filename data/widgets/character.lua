@@ -312,21 +312,24 @@ BS.widgets[BS.W_SKILL_POINTS] = {
 
 -- based on Ye Olde Speed
 -- estimate of units per meter based on some of the tiles in Alinor
-local UNITS_PER_METER = 200
-local DEFAULT_SPEED = 660
+local getUnitRawWorldPosition, getGameTimeMilliseconds = GetUnitRawWorldPosition, GetGameTimeMilliseconds
 
-local function GetCurrentPos()
-    local _, posX, _, posY = GetUnitRawWorldPosition("player")
-    local timestamp = GetGameTimeMilliseconds()
+local function getCurrentPos()
+    local _, posX, _, posY = getUnitRawWorldPosition("player")
+    local timestamp = getGameTimeMilliseconds()
 
     return {posX, posY, timestamp}
 end
 
-local function getSpeed(widget)
-    BS.currentPosition = GetCurrentPos()
+local UNITS_PER_METER = 200
+local DEFAULT_SPEED = 660
+local currentPosition, lastPosition
 
-    local x1, y1, t1 = unpack(BS.currentPosition)
-    local x2, y2, t2 = unpack(BS.lastPosition or BS.currentPosition)
+local function getSpeed(widget)
+    currentPosition = getCurrentPos()
+
+    local x1, y1, t1 = unpack(currentPosition)
+    local x2, y2, t2 = unpack(lastPosition or currentPosition)
     local distance = math.sqrt(math.pow(x1 - x2, 2) + math.pow(y1 - y2, 2))
     local timeDelta = (t1 - t2) / 1000
     local speed, speedText, fixWidth
@@ -375,7 +378,7 @@ local function getSpeed(widget)
 
     widget:SetValue(speedText, fixWidth)
 
-    BS.lastPosition = BS.currentPosition
+    lastPosition = currentPosition
 
     return speed
 end

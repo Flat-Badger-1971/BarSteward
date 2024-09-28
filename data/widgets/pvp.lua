@@ -297,13 +297,13 @@ BS.widgets[BS.W_CONT_ATT] = {
             return buff.remaining
         end
 
-        local value = BS.SecondsToTime(0, true, false, BS.GetVar("HideSeconds", this), BS.GetVar("Format", this))
+        local value = BS.SecondsToTime(0, true, true, BS.GetVar("HideSeconds", this), BS.GetVar("Format", this))
 
         widget:SetValue(value)
         widget:SetColour(BS.GetTimeColour(0, this, 60, true, true))
         return 0
     end,
-    --timer = 1000,
+    timer = 1000,
     hideWhenTrue = function()
         if (BS.Vars.Controls[BS.W_CONT_ATT].PvPOnly == true) then
             return not BS.IsPvP()
@@ -340,7 +340,7 @@ BS.widgets[BS.W_AYLEID_HEALTH] = {
             return buff.remaining
         end
 
-        local value = BS.SecondsToTime(0, true, false, BS.GetVar("HideSeconds", this), BS.GetVar("Format", this))
+        local value = BS.SecondsToTime(0, true, true, BS.GetVar("HideSeconds", this), BS.GetVar("Format", this))
 
         widget:SetValue(value)
         widget:SetColour(BS.GetTimeColour(0, this, 60, true, true))
