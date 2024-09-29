@@ -1991,7 +1991,13 @@ local function checkExperimental(defaults, widgetControls)
 end
 
 local function getWidgetName(id)
-    local widgetName = BS.widgets[id].tooltip:gsub(":", "")
+    local tooltip = BS.widgets[id].tooltip
+
+    if (type(tooltip) == "function") then
+        tooltip = tooltip()
+    end
+
+    local widgetName = tooltip:gsub(":", "")
 
     if (BS.Vars.Controls[id].Bar ~= 0) then
         widgetName = "|c4c9900" .. widgetName .. "|r"
@@ -2012,7 +2018,7 @@ local function getWidgetSettings()
 
     local ordered = {}
 
-    for key, widget in ipairs(widgets) do
+    for key, widget in pairs(widgets) do
         if (not widget.Hidden) then
             table.insert(ordered, {key = key, widget = widget})
         end
@@ -2031,7 +2037,17 @@ local function getWidgetSettings()
         table.sort(
             ordered,
             function(a, b)
-                return BS.widgets[a.key].tooltip < BS.widgets[b.key].tooltip
+                local tta = BS.widgets[a.key].tooltip
+                local ttb = BS.widgets[b.key].tooltip
+
+                if (type(tta) == "function") then
+                    tta = tta()
+                end
+                if (type(ttb) == "function") then
+                    ttb = ttb()
+                end
+
+                return tta < ttb
             end
         )
     end

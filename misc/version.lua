@@ -101,6 +101,20 @@ function BS.VersionCheck()
         BS.Vars.Controls[BS.W_ALLIANCE_POINTS].Cat = BS.CATNAMES.PvP
         BS.Vars.Controls[BS.W_RANDOM_BATTLEGROUND].Cat = BS.CATNAMES.PvP
     end
+
+    if (needsUpdate(3200) and _G.CURT_IMPERIAL_FRAGMENTS) then
+        local tvk = BS.Vars.Controls[BS.W_TROPHY_VAULT_KEYS]
+
+        if (tvk) then
+            if (tvk.Bar ~= 0) then
+                BS.Vars.Controls[BS.W_IMPERIAL_FRAGMENTS].Bar = tvk.Bar
+                BS.Vars.Controls[BS.W_IMPERIAL_FRAGMENTS].Order = tvk.Order
+                BS.Vars.Controls[BS.W_IMPERIAL_FRAGMENTS].NoIcon = tvk.NoIcon
+                BS.Vars.Controls[BS.W_IMPERIAL_FRAGMENTS].NoValue = tvk.NoValue
+                BS.Vars.Controls[BS.W_TROPHY_VAULT_KEYS] = nil
+            end
+        end
+    end
 end
 
 function BS.SetVersionCheck()

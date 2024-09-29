@@ -12,16 +12,12 @@ local function getcrownStoreCurrencies(invert, widgetIndex)
                 end
 
                 local amount = GetCurrencyAmount(currencyType, GetCurrencyPlayerStoredLocation(currencyType))
-                local icon = info.icon
+                local icon = GetCurrencyKeyboardIcon(currencyType)
+                local name = BS.Format(GetCurrencyName(currencyType))
 
                 amount = tostring(useSeparators and BS.AddSeparators(amount) or amount)
-
-                if (not icon:find(".dds")) then
-                    icon = "/esoui/art/currency/" .. icon .. ".dds"
-                end
-
                 crownStoreInfo = crownStoreInfo .. BS.Icon(icon) .. " "
-                crownStoreInfo = crownStoreInfo .. BS.COLOURS.White:Colorize(BS.Format(info.text))
+                crownStoreInfo = crownStoreInfo .. BS.COLOURS.White:Colorize(name)
                 crownStoreInfo = crownStoreInfo .. " " .. amount
             end
         end
@@ -39,13 +35,13 @@ local function updateTooltip(
     allCharacters,
     currencyType,
     widgetIndex)
-    local ttt = text.title .. BS.LF
+    local ttt = BS.Format(GetCurrencyName(currencyType)) .. BS.LF
     local gold = BS.COLOURS.ZOSGold
 
     ttt = ttt .. gold:Colorize(tostring(currencyInBag)) .. " " .. GetString(text.bag) .. BS.LF
     ttt = ttt .. gold:Colorize(tostring(currencyInBank)) .. " " .. GetString(text.bank) .. BS.LF
     ttt = ttt .. gold:Colorize(tostring(combined)) .. " " .. GetString(text.combined) .. BS.LF .. BS.LF
-    ttt = ttt .. charactertt .. BS.LF
+    ttt = ttt .. charactertt
     ttt = ttt .. gold:Colorize(tostring(allCharacters)) .. " " .. GetString(text.everyWhere)
 
     if (currencyType ~= _G.CURT_MONEY) then
@@ -64,15 +60,12 @@ function BS.CurrencyWidget(currencyType, widgetIndex, text, eventList, hideWhenT
         name = "telvarStones"
     elseif (currencyType == _G.CURT_WRIT_VOUCHERS) then
         name = "writVouchers"
+    elseif (currencyType == _G.CURT_IMPERIAL_FRAGMENTS) then
+        name = "imperialFragments"
     end
 
     local ctype = (currencyType == _G.CURT_MONEY) and "GoldType" or "CurrencyType"
-    local icon = BS.CURRENCIES[currencyType].icon
-
-    if (not icon:find(".dds")) then
-        icon = "/esoui/art/currency/" .. icon .. ".dds"
-    end
-
+    local icon = GetCurrencyKeyboardIcon(currencyType)
     local widgetCode = {
         name = name,
         update = function(widget)
@@ -146,7 +139,7 @@ function BS.CurrencyWidget(currencyType, widgetIndex, text, eventList, hideWhenT
             return widget:GetValue()
         end,
         event = eventList,
-        tooltip = text.title,
+        tooltip = BS.Format(GetCurrencyName(currencyType)),
         icon = icon,
         customOptions = {
             name = GetString(text.display),
@@ -183,7 +176,7 @@ BS.widgets[BS.W_CROWN_GEMS] = {
         widget:SetValue(gems)
         widget:SetColour(BS.GetColour(this, true))
 
-        local tt = GetString(_G.BARSTEWARD_CROWN_GEMS) .. BS.LF
+        local tt = BS.Format(GetCurrencyName(_G.CURT_CROWN_GEMS)) .. BS.LF
 
         tt = tt .. getcrownStoreCurrencies(false, this)
 
@@ -192,8 +185,10 @@ BS.widgets[BS.W_CROWN_GEMS] = {
         return widget:GetValue()
     end,
     event = {_G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED, _G.EVENT_CROWN_UPDATE, _G.EVENT_CROWN_GEM_UPDATE},
-    tooltip = GetString(_G.BARSTEWARD_CROWN_GEMS),
-    icon = "currency/currency_crown_gems",
+    tooltip = function()
+        return BS.Format(GetCurrencyName(_G.CURT_CROWN_GEMS))
+    end,
+    icon = GetCurrencyKeyboardIcon(_G.CURT_CROWN_GEMS),
     onLeftClick = function()
         SCENE_MANAGER:Show("show_market")
     end
@@ -212,7 +207,7 @@ BS.widgets[BS.W_CROWNS] = {
         widget:SetValue(crowns)
         widget:SetColour(BS.GetColour(this, true))
 
-        local tt = GetString(_G.BARSTEWARD_CROWNS) .. BS.LF
+        local tt = BS.Format(GetCurrencyName(_G.CURT_CROWNS)) .. BS.LF
 
         tt = tt .. getcrownStoreCurrencies(false, this)
 
@@ -221,8 +216,10 @@ BS.widgets[BS.W_CROWNS] = {
         return widget:GetValue()
     end,
     event = {_G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED, _G.EVENT_CROWN_UPDATE, _G.EVENT_CROWN_GEM_UPDATE},
-    tooltip = GetString(_G.BARSTEWARD_CROWNS),
-    icon = "currency/currency_crowns_32",
+    tooltip = function()
+        return BS.Format(GetCurrencyName(_G.CURT_CROWNS))
+    end,
+    icon = GetCurrencyKeyboardIcon(_G.CURT_CROWNS),
     onLeftClick = function()
         SCENE_MANAGER:Show("show_market")
     end
@@ -280,15 +277,17 @@ BS.widgets[BS.W_EVENT_TICKETS] = {
         widget:SetColour(colour)
         widget:SetValue(value, widthValue)
 
-        local tt = getcrownStoreCurrencies(true, this)
+        local tt = BS.Format(GetCurrencyName(_G.CURT_EVENT_TICKETS)) .. BS.LF .. getcrownStoreCurrencies(true, this)
 
         widget:SetTooltip(tt)
 
         return value
     end,
     event = _G.EVENT_CURRENCY_UPDATE,
-    tooltip = GetString(_G.BARSTEWARD_EVENT_TICKETS),
-    icon = "currency/currency_eventticket",
+    tooltip = function()
+        return BS.Format(GetCurrencyName(_G.CURT_EVENT_TICKETS))
+    end,
+    icon = GetCurrencyKeyboardIcon(_G.CURT_EVENT_TICKETS),
     customOptions = {
         name = GetString(_G.BARSTEWARD_DEBOUNCE),
         tooltip = GetString(_G.BARSTEWARD_DEBOUNCE_DESC),
@@ -309,8 +308,7 @@ BS.widgets[BS.W_GOLD] =
         combined = _G.BARSTEWARD_GOLD_COMBINED,
         display = _G.BARSTEWARD_GOLD_DISPLAY,
         everyWhere = _G.BARSTEWARD_GOLD_EVERYWHERE,
-        separated = _G.BARSTEWARD_GOLD_SEPARATED,
-        title = BS.Format(_G.SI_GAMEPAD_INVENTORY_AVAILABLE_FUNDS)
+        separated = _G.BARSTEWARD_GOLD_SEPARATED
     },
     _G.EVENT_MONEY_UPDATE
 )
@@ -328,7 +326,7 @@ BS.widgets[BS.W_SEALS_OF_ENDEAVOUR] = {
         widget:SetValue(seals)
         widget:SetColour(BS.GetColour(this, true))
 
-        local tt = BS.Format(_G.SI_CROWN_STORE_MENU_SEALS_STORE_LABEL) .. BS.LF
+        local tt = BS.Format(GetCurrencyName(_G.CURT_ENDEAVOR_SEALS)) .. BS.LF
 
         tt = tt .. getcrownStoreCurrencies(false, this)
 
@@ -337,8 +335,8 @@ BS.widgets[BS.W_SEALS_OF_ENDEAVOUR] = {
         return widget:GetValue()
     end,
     event = {_G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED, _G.EVENT_CURRENCY_UPDATE},
-    tooltip = BS.Format(_G.SI_CROWN_STORE_MENU_SEALS_STORE_LABEL),
-    icon = "currency/currency_seals_of_endeavor_64",
+    tooltip = BS.Format(GetCurrencyName(_G.CURT_ENDEAVOR_SEALS)),
+    icon = GetCurrencyKeyboardIcon(_G.CURT_ENDEAVOR_SEALS),
     onLeftClick = function()
         SCENE_MANAGER:Show("show_market")
         ZO_ShowSealStore()
@@ -393,15 +391,15 @@ BS.widgets[BS.W_TRANSMUTE_CRYSTALS] = {
         widget:SetValue(value)
         widget:SetColour(colour)
 
-        local tt = getcrownStoreCurrencies(true, this)
+        local tt = BS.Format(GetCurrencyName(_G.CURT_CHAOTIC_CREATIA)) .. BS.LF .. getcrownStoreCurrencies(true, this)
 
         widget:SetTooltip(tt)
 
         return value
     end,
     event = {_G.EVENT_CURRENCY_UPDATE, _G.EVENT_QUEST_COMPLETE_DIALOG},
-    tooltip = GetString(_G.BARSTEWARD_TRANSMUTE_CRYSTALS),
-    icon = "currency/currency_seedcrystal_64"
+    tooltip = BS.Format(GetCurrencyName(_G.CURT_CHAOTIC_CREATIA)),
+    icon = GetCurrencyKeyboardIcon(_G.CURT_CHAOTIC_CREATIA)
 }
 
 BS.widgets[BS.W_UNDAUNTED_KEYS] = {
@@ -410,15 +408,17 @@ BS.widgets[BS.W_UNDAUNTED_KEYS] = {
         widget:SetValue(GetCurrencyAmount(_G.CURT_UNDAUNTED_KEYS, _G.CURRENCY_LOCATION_ACCOUNT))
         widget:SetColour(BS.GetColour(BS.W_UNDAUNTED_KEYS, true))
 
-        local tt = getcrownStoreCurrencies(true, BS.W_UNDAUNTED_KEYS)
+        local tt =
+            BS.Format(GetCurrencyName(_G.CURT_UNDAUNTED_KEYS)) ..
+            BS.LF .. getcrownStoreCurrencies(true, BS.W_UNDAUNTED_KEYS)
 
         widget:SetTooltip(tt)
 
         return widget:GetValue()
     end,
     event = {_G.EVENT_CURRENCY_UPDATE, _G.EVENT_QUEST_COMPLETE_DIALOG},
-    tooltip = GetString(_G.BARSTEWARD_UNDAUNTED_KEYS),
-    icon = "icons/quest_key_002"
+    tooltip = BS.Format(GetCurrencyName(_G.CURT_UNDAUNTED_KEYS)),
+    icon = GetCurrencyKeyboardIcon(_G.CURT_UNDAUNTED_KEYS)
 }
 
 BS.widgets[BS.W_WRIT_VOUCHERS] =
@@ -431,8 +431,7 @@ BS.widgets[BS.W_WRIT_VOUCHERS] =
         combined = _G.BARSTEWARD_GOLD_COMBINED,
         display = _G.BARSTEWARD_GOLD_DISPLAY,
         everyWhere = _G.BARSTEWARD_GOLD_EVERYWHERE,
-        separated = _G.BARSTEWARD_GOLD_SEPARATED,
-        title = GetString(_G.BARSTEWARD_WRIT_VOUCHERS)
+        separated = _G.BARSTEWARD_GOLD_SEPARATED
     },
     _G.EVENT_WRIT_VOUCHER_UPDATE
 )
@@ -454,7 +453,7 @@ BS.widgets[BS.W_ARCHIVAL_FRAGMENTS] = {
         widget:SetValue(qty)
         widget:SetColour(BS.GetColour(this, true))
 
-        local tt = GetString(_G.BARSTEWARD_ARCHIVAL_FRAGMENTS) .. BS.LF
+        local tt = BS.Format(GetCurrencyName(_G.CURT_ARCHIVAL_FORTUNES)) .. BS.LF
 
         tt = tt .. getcrownStoreCurrencies(false, this)
 
@@ -463,9 +462,40 @@ BS.widgets[BS.W_ARCHIVAL_FRAGMENTS] = {
         return widget:GetValue()
     end,
     event = _G.EVENT_CURRENCY_UPDATE,
-    tooltip = GetString(_G.BARSTEWARD_ARCHIVAL_FRAGMENTS),
-    icon = "currency/archivalfragments_mipmaps",
+    tooltip = BS.Format(GetCurrencyName(_G.CURT_ARCHIVAL_FORTUNES)),
+    icon = GetCurrencyKeyboardIcon(_G.CURT_ARCHIVAL_FORTUNES),
     onLeftClick = function()
         SCENE_MANAGER:Show("show_market")
     end
+}
+
+BS.widgets[BS.W_IMPERIAL_FRAGMENTS] = {
+    name = "imperialFragments",
+    update = function(widget, event, ...)
+        local update = event == "initial"
+
+        if (event ~= "initial") then
+            local lootType = select(6, ...)
+
+            if (lootType == _G.LOOT_TYPE_IMPERIAL_FRAGMENTS) then
+                update = true
+            end
+        end
+
+        if (update) then
+            widget:SetValue(GetCurrencyAmount(_G.CURT_IMPERIAL_FRAGMENTS, _G.CURRENCY_LOCATION_ACCOUNT))
+            widget:SetColour(BS.GetColour(BS.W_IMPERIAL_FRAGMENTS, true))
+
+            local tt =
+                BS.Format(GetCurrencyName(_G.CURT_IMPERIAL_FRAGMENTS)) ..
+                BS.LF .. getcrownStoreCurrencies(true, BS.W_IMPERIAL_FRAGMENTS)
+
+            widget:SetTooltip(tt)
+
+            return widget:GetValue()
+        end
+    end,
+    event = _G.EVENT_LOOT_RECEIVED,
+    tooltip = BS.Format(GetCurrencyName(_G.CURT_IMPERIAL_FRAGMENTS)),
+    icon = GetCurrencyKeyboardIcon(_G.CURT_IMPERIAL_FRAGMENTS)
 }

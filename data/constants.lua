@@ -150,6 +150,7 @@ BS.W_ENLIGHTENED = 141
 BS.W_CAMPAIGN_TIER = 142
 BS.W_CONT_ATT = 143
 BS.W_AYLEID_HEALTH = 144
+BS.W_IMPERIAL_FRAGMENTS = 145
 
 BS.WRITS = {
     [_G.CRAFTING_TYPE_ALCHEMY] = {
@@ -362,41 +363,17 @@ BS.BOTH = 3
 BS.ACTIVE_BAR = 4
 
 BS.CURRENCIES = {
-    [_G.CURT_MONEY] = {icon = "currency_gold_64", crownStore = false, text = _G.SI_GAMEPAD_INVENTORY_AVAILABLE_FUNDS},
-    [_G.CURT_CROWNS] = {icon = "currency_crowns_32", crownStore = true, text = _G.BARSTEWARD_CROWNS},
-    [_G.CURT_CROWN_GEMS] = {icon = "currency_crown_gems", crownStore = true, text = _G.BARSTEWARD_CROWN_GEMS},
-    [_G.CURT_WRIT_VOUCHERS] = {icon = "currency_writvoucher_64", crownStore = false, text = _G.BARSTEWARD_WRIT_VOUCHERS},
-    [_G.CURT_TELVAR_STONES] = {
-        icon = "currency_telvar_64",
-        crownStore = false,
-        text = _G.SI_GAMEPAD_INVENTORY_TELVAR_STONES
-    },
-    [_G.CURT_EVENT_TICKETS] = {icon = "currency_eventticket", crownStore = false, text = _G.BARSTEWARD_EVENT_TICKETS},
-    [_G.CURT_ENDEAVOR_SEALS] = {
-        icon = "currency_seals_of_endeavor_64",
-        crownStore = true,
-        text = _G.SI_CROWN_STORE_MENU_SEALS_STORE_LABEL
-    },
-    [_G.CURT_UNDAUNTED_KEYS] = {
-        icon = "/esoui/art/icons/quest_key_002.dds",
-        crownStore = false,
-        text = _G.BARSTEWARD_UNDAUNTED_KEYS
-    },
-    [_G.CURT_ALLIANCE_POINTS] = {
-        icon = "alliancepoints_64",
-        crownStore = false,
-        text = _G.SI_GAMEPAD_INVENTORY_ALLIANCE_POINTS
-    },
-    [_G.CURT_CHAOTIC_CREATIA] = {
-        icon = "currency_seedcrystal_64",
-        crownStore = false,
-        text = _G.BARSTEWARD_TRANSMUTE_CRYSTALS
-    },
-    [_G.CURT_ENDLESS_DUNGEON or _G.CURT_ARCHIVAL_FORTUNES] = {
-        icon = "archivalfragments_mipmaps",
-        crownStore = true,
-        text = _G.BARSTEWARD_ARCHIVAL_FRAGMENTS
-    }
+    [_G.CURT_MONEY] = {crownStore = false},
+    [_G.CURT_CROWNS] = {crownStore = true},
+    [_G.CURT_CROWN_GEMS] = {crownStore = true},
+    [_G.CURT_WRIT_VOUCHERS] = {crownStore = false},
+    [_G.CURT_TELVAR_STONES] = {crownStore = false},
+    [_G.CURT_EVENT_TICKETS] = {crownStore = false},
+    [_G.CURT_ENDEAVOR_SEALS] = {crownStore = true},
+    [_G.CURT_UNDAUNTED_KEYS] = {crownStore = false},
+    [_G.CURT_ALLIANCE_POINTS] = {crownStore = false},
+    [_G.CURT_CHAOTIC_CREATIA] = {crownStore = false},
+    [_G.CURT_ENDLESS_DUNGEON or _G.CURT_ARCHIVAL_FORTUNES] = {crownStore = true}
 }
 
 -- update 44
@@ -415,6 +392,7 @@ BS.FRAGMENT_TYPES = {
     _G.SPECIALIZED_ITEMTYPE_TROPHY_UPGRADE_FRAGMENT
 }
 
+
 BS.L_SHALIDORS_LIBRARY = 1
 BS.L_EIDETIC_MEMORY = 2
 BS.L_CRAFTING_MOTIFS = 4
@@ -427,6 +405,17 @@ BS.COMPANION_DEFIDS = {
     [BS.W_SHARP] = 8,
     [BS.W_AZANDAR] = 9
 }
+
+-- *** update 44 ***
+if (_G.CURT_IMPERIAL_FRAGMENTS) then
+    BS.CURRENCIES[_G.CURT_IMPERIAL_FRAGMENTS] = {crownStore = true}
+    BS.FRAGMENT_TYPES[_G.SPECIALIZED_ITEMTYPE_TROPHY_KEY_FRAGMENT] = nil
+    BS.W_TANLORIN = 146
+    BS.W_ZERITH = 147
+    BS.COMPANION_DEFIDS[BS.W_TANLORIN] = 12
+    BS.COMPANION_DEFIDS[BS.W_ZERITH] = 13
+end
+-- *****************
 
 BS.CATNAMES = {
     Abilities = 1,

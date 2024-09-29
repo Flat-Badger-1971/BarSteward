@@ -66,6 +66,7 @@ function manager:ConvertToAccountSettings()
         end
 
         self:SetCommon(nil, "CharacterSettings", self._characterId)
+        self._useCharacterSettings = false
     end
 end
 
@@ -83,6 +84,7 @@ function manager:ConvertToCharacterSettings()
         end
 
         self:SetCommon(true, "CharacterSettings", self._characterId)
+        self._useCharacterSettings = true
     end
 end
 
@@ -106,6 +108,7 @@ function manager:Copy(server, account, character, copyToAccount)
         self:SetAccount(characterSettings)
     else
         self:SetCharacter(characterSettings)
+        self:ConvertToCharacterSettings()
     end
 
     -- reload the saved vars to reflect the changes

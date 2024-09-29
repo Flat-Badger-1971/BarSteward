@@ -1,3 +1,10 @@
+[color=#ff9900][b]Version: 3.2.0 ---------------[/b][/color]
+Update 44 changes
+Disable timers during logout
+Fixed issue copying settings to character
+Code refactor
+Added Imperial Fragments widget
+
 [color=#ff9900][b]Version: 3.1.11 ---------------[/b][/color]
 Enabled continuous attack widget
 
