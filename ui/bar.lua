@@ -647,7 +647,7 @@ function baseBar:AddWidgets(widgets)
             end
         end
 
-        -- register wigdets that need to update after a set interval
+        -- register widgets that need to update after a set interval
         if (metadata.timer) then
             if (metadata.name == "time") then
                 BS.timeFunction = function()

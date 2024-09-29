@@ -376,6 +376,15 @@ BS.CURRENCIES = {
     [_G.CURT_ENDLESS_DUNGEON or _G.CURT_ARCHIVAL_FORTUNES] = {crownStore = true}
 }
 
+-- update 44
+-- if (_G.CURT_IMPERIAL_FRAGMENTS) then
+--     BS.CURRENCIES[_G.CURT_IMPERIAL_FRAGMENTS] = {
+--         icon = "",
+--         crownStore = true,
+--         text = 0
+--     }
+-- end
+
 BS.FRAGMENT_TYPES = {
     _G.SPECIALIZED_ITEMTYPE_TROPHY_KEY_FRAGMENT,
     _G.SPECIALIZED_ITEMTYPE_TROPHY_RECIPE_FRAGMENT,
