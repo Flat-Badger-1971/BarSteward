@@ -2019,7 +2019,7 @@ local function getWidgetSettings()
     local ordered = {}
 
     for key, widget in pairs(widgets) do
-        if (not widget.Hidden) then
+        if (not widget.Hidden and key < 1000) then
             table.insert(ordered, {key = key, widget = widget})
         end
     end

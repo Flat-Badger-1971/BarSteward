@@ -44,14 +44,14 @@ BS.widgets[BS.W_FRIENDS] = {
             end
         end
 
-        tt = tt .. addToTooltip(online, textureFunctions)
-        tt = tt .. addToTooltip(other, textureFunctions)
+        local ttt = addToTooltip(online, textureFunctions)
+        ttt = ttt .. addToTooltip(other, textureFunctions)
 
         if (not BS.GetVar("OnlineOnly", this)) then
-            tt = tt .. addToTooltip(offline, textureFunctions)
+            ttt = ttt .. addToTooltip(offline, textureFunctions)
         end
 
-        widget:SetTooltip(BS.COLOURS.White:Colorize(tt))
+        widget:SetTooltip(tt .. BS.COLOURS.White:Colorize(ttt))
         widget:SetValue(#online .. (BS.GetVar("HideLimit", this) and "" or ("/" .. #masterList)))
         widget:SetColour(BS.GetColour(this, true))
 
@@ -235,14 +235,14 @@ BS.widgets[BS.W_GUILD_FRIENDS] = {
             tCount = tCount + 1
         end
 
-        tt = tt .. addToTooltip(online, textureFunctions)
-        tt = tt .. addToTooltip(other, textureFunctions)
+        local ttt = addToTooltip(online, textureFunctions)
+        ttt = ttt .. addToTooltip(other, textureFunctions)
 
         if (not BS.GetVar("OnlineOnly", this)) then
-            tt = tt .. addToTooltip(offline, textureFunctions)
+            ttt = ttt .. addToTooltip(offline, textureFunctions)
         end
 
-        widget:SetTooltip(BS.COLOURS.White:Colorize(tt))
+        widget:SetTooltip(tt .. BS.COLOURS.White:Colorize(ttt))
         widget:SetValue(oCount .. (BS.GetVar("HideLimit", this) and "" or ("/" .. tCount)))
         widget:SetColour(BS.GetColour(this, true))
 

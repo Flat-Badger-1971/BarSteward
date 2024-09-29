@@ -42,9 +42,8 @@ BS.widgets[BS.W_MOUNT_TRAINING] = {
         widget:SetColour(colour)
         widget:SetValue(time)
 
-        local ttt = GetString(_G.BARSTEWARD_MOUNT_TRAINING) .. BS.LF .. BS.LF
-
-        ttt = ttt .. GetString(_G.BARSTEWARD_TRAINING_PROGRESS)
+        local tt = GetString(_G.BARSTEWARD_MOUNT_TRAINING) .. BS.LF .. BS.LF
+        local ttt = GetString(_G.BARSTEWARD_TRAINING_PROGRESS)
 
         for trainingType, texture in pairs(_G.STABLE_TRAINING_TEXTURES) do
             local icon = string.format("%s%s ", BS.LF, BS.Icon(texture))
@@ -56,7 +55,7 @@ BS.widgets[BS.W_MOUNT_TRAINING] = {
             ttt = BS.COLOURS.White:Colorize(ttt)
         end
 
-        widget:SetTooltip(ttt)
+        widget:SetTooltip(tt .. ttt)
 
         return remaining
     end,
