@@ -145,6 +145,27 @@ function BS.ContinueIntialising()
     )
 
     BS.GridChanged = true
+
+    -- handle logout / quit
+    -- disable timer based widgets to prevent errors
+    -- trying to access destroyed objects
+    ZO_PreHook("Logout", function()
+        if (not BS.disabledTimers) then
+            BS.DisableUpdates(true)
+        end
+    end)
+
+    ZO_PreHook("Quit", function()
+        if (not BS.disabledTimers) then
+            BS.DisableUpdates(true)
+        end
+    end)
+
+    ZO_PostHook("CancelLogout", function()
+        if (not BS.disabledTimers) then
+            BS.EnableUpdates(true)
+        end
+    end)
 end
 
 local function Initialise()

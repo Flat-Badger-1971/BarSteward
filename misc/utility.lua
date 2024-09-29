@@ -337,15 +337,19 @@ function BS.UnregisterForUpdate(time, func)
     end
 end
 
-function BS.DisableUpdates()
+function BS.DisableUpdates(includeTime)
     for time, funcs in pairs(timerFunctions) do
         if (#funcs ~= 0) then
             EVENT_MANAGER:UnregisterForUpdate(string.format("%s%s", BS.Name, tostring(time)))
         end
     end
+
+    if (includeTime) then
+        EVENT_MANAGER:UnregisterForUpdate(BS.Name .. "time")
+    end
 end
 
-function BS.EnableUpdates()
+function BS.EnableUpdates(includeTime)
     for time, funcs in pairs(timerFunctions) do
         if (#funcs ~= 0) then
             EVENT_MANAGER:RegisterForUpdate(
@@ -356,6 +360,16 @@ function BS.EnableUpdates()
                 end
             )
         end
+    end
+
+    if (includeTime) then
+        EVENT_MANAGER:RegisterForUpdate(
+            BS.Name .. "time",
+            1000,
+            function()
+                BS.timeFunction()
+            end
+        )
     end
 end
 -- end timers
