@@ -3,7 +3,8 @@ Update 44 changes
 Disable timers during logout
 Fixed issue copying settings to character
 Currency code refactor
-Added Imperial Fragments widget (replaces Trophy Vault Keys widget)
+Added Imperial Fragments widget (u44 only, replaces Trophy Vault Keys widget)
+Bugfixes
 
 [color=#ff9900][b]Version: 3.1.11 ---------------[/b][/color]
 Enabled continuous attack widget
