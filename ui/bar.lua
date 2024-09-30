@@ -590,6 +590,24 @@ function baseBar:DoUpdate(metadata, ...)
     end
 end
 
+function baseBar:CheckPvP()
+    local pvpOnly = BS.Vars.Bars[self.index].PvPOnly
+
+    if (pvpOnly) then
+        local isPvP = BS.IsPvP()
+
+        if (isPvP) then
+            if (self.hidden) then
+                self:Show()
+            end
+        else
+            if (not self.hidden) then
+                self:Hide()
+            end
+        end
+    end
+end
+
 function baseBar:AddWidgets(widgets)
     local tooltipAnchorTrans = BS.Vars.Bars[self.index].TooltipAnchor
     local tooltipAnchor
@@ -839,6 +857,13 @@ function BS.CreateBar(barSettings)
     if (bar.bar:IsHidden()) then
         bar.bar:SetHidden(false)
     end
+
+    BS.RegisterForEvent(
+        _G.EVENT_PLAYER_ACTIVATED,
+        function()
+            bar:CheckPvP()
+        end
+    )
 
     return bar
 end

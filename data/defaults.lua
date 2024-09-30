@@ -22,6 +22,7 @@ BS.Defaults = {
     FishingLoot = {},
     Font = "Default",
     FontSize = 18,
+    FontStyle = "Soft Shadow Thin",
     GridSize = 10,
     HideDuringCombat = false,
     IconSize = 32,

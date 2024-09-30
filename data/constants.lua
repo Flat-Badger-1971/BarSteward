@@ -216,6 +216,14 @@ BS.FONTS = {
     ["Futura Bold"] = "EsoUI/Common/Fonts/FuturaStd-Condensed.slug"
 }
 
+BS.FONT_STYLES = {
+    ["None"] = "",
+    ["Shadow"] = "|shadow",
+    ["Soft Shadow Thick"] = "|soft-shadow-thick",
+    ["Soft Shadow Thin"] = "|soft-shadow-thin",
+    ["Thick Outline"] = "|thick-outline"
+}
+
 BS.CRAFTING_SCENES = {"alchemy", "enchanting", "provisioner", "smithing"}
 BS.BANKING_SCENES = {"bank", "guildBank", "houseBank"}
 BS.INVENTORY_SCENES = {"inventory"}
@@ -376,22 +384,12 @@ BS.CURRENCIES = {
     [_G.CURT_ENDLESS_DUNGEON or _G.CURT_ARCHIVAL_FORTUNES] = {crownStore = true}
 }
 
--- update 44
--- if (_G.CURT_IMPERIAL_FRAGMENTS) then
---     BS.CURRENCIES[_G.CURT_IMPERIAL_FRAGMENTS] = {
---         icon = "",
---         crownStore = true,
---         text = 0
---     }
--- end
-
 BS.FRAGMENT_TYPES = {
     _G.SPECIALIZED_ITEMTYPE_TROPHY_KEY_FRAGMENT,
     _G.SPECIALIZED_ITEMTYPE_TROPHY_RECIPE_FRAGMENT,
     _G.SPECIALIZED_ITEMTYPE_TROPHY_RUNEBOX_FRAGMENT,
     _G.SPECIALIZED_ITEMTYPE_TROPHY_UPGRADE_FRAGMENT
 }
-
 
 BS.L_SHALIDORS_LIBRARY = 1
 BS.L_EIDETIC_MEMORY = 2

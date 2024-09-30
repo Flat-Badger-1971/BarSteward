@@ -4,6 +4,8 @@ Disable timers during logout
 Fixed issue copying settings to character
 Currency code refactor
 Added Imperial Fragments widget (u44 only, replaces Trophy Vault Keys widget)
+Added bar level option to only show in PvP zones
+Added font style setting
 Bugfixes
 
 [color=#ff9900][b]Version: 3.1.11 ---------------[/b][/color]

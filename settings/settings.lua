@@ -11,12 +11,17 @@ end
 
 -- populate the lookup tables
 local fontNames = {}
+local fontStyles = {}
 local backgroundNames = {}
 local borderNames = {}
 
 do
     for font, _ in pairs(BS.FONTS) do
         table.insert(fontNames, font)
+    end
+
+    for style, _ in pairs(BS.FONT_STYLES) do
+        table.insert(fontStyles, style)
     end
 
     for background, _ in pairs(BS.BACKGROUNDS) do
@@ -147,9 +152,25 @@ local function initialise()
             BS.Vars.Font = value
 
             BS.RegenerateAllBars()
-            _G.BarSteward_SampleText.desc:SetFont(BS.GetFont(value))
+            _G.BarSteward_SampleText.desc:SetFont(BS.GetFont({Font = value}))
         end,
         default = BS.Defaults.Font
+    }
+
+    BS.options[#BS.options + 1] = {
+        type = "dropdown",
+        name = GetString(_G.BARSTEWARD_FONT_STYLE),
+        choices = fontStyles,
+        getFunc = function()
+            return BS.Vars.FontStyle
+        end,
+        setFunc = function(value)
+            BS.Vars.FontStyle = value
+
+            BS.RegenerateAllBars()
+            _G.BarSteward_SampleText.desc:SetFont(BS.GetFont({Style = value}))
+        end,
+        default = BS.Defaults.FontStyle
     }
 
     BS.options[#BS.options + 1] = {
@@ -164,7 +185,7 @@ local function initialise()
             BS.Vars.FontSize = value
 
             BS.RegenerateAllBars()
-            _G.BarSteward_SampleText.desc:SetFont(BS.GetFont())
+            _G.BarSteward_SampleText.desc:SetFont(BS.GetFont({Size = value}))
         end,
         default = BS.Defaults.FontSize
     }
@@ -647,7 +668,24 @@ local function getBarSettings()
 
         controls[#controls + 1] = {
             type = "checkbox",
-            name = GetString(_G["BARSTEWARD_SHOW_EVERYWHERE"]),
+            name = GetString(_G.BARSTEWARD_PVP_ONLY),
+            getFunc = function()
+                return vars.PvPOnly or false
+            end,
+            setFunc = function(value)
+                vars.PvPOnly = value
+
+                local barObject = BS.BarObjectPool:GetActiveObject(BS.BarObjects[idx])
+
+                barObject:CheckPvP()
+            end,
+            width = "full",
+            default = false
+        }
+
+        controls[#controls + 1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_SHOW_EVERYWHERE),
             getFunc = function()
                 return vars.ShowEverywhere or false
             end,
@@ -798,6 +836,24 @@ local function getBarSettings()
                 _G[ref].desc:SetFont(BS.GetFont(vars))
             end,
             default = BS.Defaults.Font,
+            disabled = function()
+                return not vars.Override
+            end
+        }
+
+        controls[#controls + 1] = {
+            type = "dropdown",
+            name = GetString(_G.BARSTEWARD_FONT_STYLE),
+            choices = fontStyles,
+            getFunc = function()
+                return vars.FontStyle or BS.Vars.FontStyle
+            end,
+            setFunc = function(value)
+                vars.FontStyle = value
+                BS.RegenerateBar(idx)
+                _G[ref].desc:SetFont(BS.GetFont(vars))
+            end,
+            default = BS.Defaults.FontStyle,
             disabled = function()
                 return not vars.Override
             end

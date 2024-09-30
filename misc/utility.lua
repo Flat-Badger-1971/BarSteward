@@ -567,6 +567,7 @@ end
 function BS.GetFont(vars)
     local font = BS.FONTS[BS.Vars.Font]
     local size = BS.Vars.FontSize
+    local style = BS.FONT_STYLES[BS.Vars.FontStyle]
 
     if (vars) then
         if (vars.Font) then
@@ -576,12 +577,14 @@ function BS.GetFont(vars)
         if (vars.FontSize) then
             size = vars.FontSize
         end
+
+        if (vars.FontStyle) then
+            style = BS.FONT_STYLES[vars.FontStyle]
+        end
     end
 
-    local hasShadow = "|soft-shadow-thin"
-
     if (font and size) then
-        return font .. "|" .. size .. hasShadow
+        return string.format("%s|%s%s", font, size, style)
     else
         return ""
     end
