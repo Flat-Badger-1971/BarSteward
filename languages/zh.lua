@@ -428,12 +428,8 @@ L("XP_BUFF", "经验值加成")
 L("ACCOUNT_WIDE", "同步玩家账户下所有角色的设置")
 L("ACCOUNT_WIDE_TOOLTIP", "以下的所有设置将会同步至你的每一个角色")
 
--- based on pChat by Puddy, Ayantir, Baertram, DesertDwellers
-L(
-    "BACKUP_DIALOG_TEXT",
-    "Bar Steward 需要对您的 SavedVariables 进行结构性更改。\n\n" ..
-        "请 |cff0000登出|r 并**备份**你的 SavedVariables！\n\n" ..
-            "按 |cffff00取消|r 按钮打开一个解释如何操作的链接。\n\n备份完成后，按 |cffff00确认|r 按钮继续加载 Bar Steward 并允许其进行更改。"
-)
-L("BACKUP_WARNING", "记得先退出！")
+-- Slash commands
+L("SLASH_ENABLE", "使能够")
+L("SLASH_HIDE", "隐藏")
+L("SLASH_SHOW", "展示")
 --luacheck: pop

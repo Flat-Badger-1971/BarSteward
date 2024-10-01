@@ -455,14 +455,8 @@ L("XP_BUFF", "Erfahrungspunkte Buff")
 L("ACCOUNT_WIDE", "Accountweite Einstellungen")
 L("ACCOUNT_WIDE_TOOLTIP", "Alle Einstellungen sind für alle deine Charaktere identisch.")
 
--- based on pChat by Puddy, Ayantir, Baertram, DesertDwellers
-L(
-    "BACKUP_DIALOG_TEXT",
-    "Bar Steward muss strukturelle Änderungen an Ihren SavedVariables vornehmen.\n\n" ..
-        "Bitte |cFF0000!logge dich aus!|r und **SICHERE** deine SavedVariables!\n\n" ..
-            "Klicken Sie auf die Schaltfläche |cffff00Abbrechen|r, um einen Link zu öffnen, der die Vorgehensweise erklärt.\n\n" ..
-                "Wenn Ihre Sicherung abgeschlossen ist, klicken Sie auf die Schaltfläche |cffff00Confirm|r, " ..
-                    "um mit dem Laden von Bar Steward fortzufahren und ihm zu ermöglichen, die Änderungen vorzunehmen."
-)
-L("BACKUP_WARNING", "Denk daran dich zuerst AUSZULOGGEN!")
+-- Slash commands
+L("SLASH_ENABLE", "aktivieren")
+L("SLASH_HIDE", "verstecken")
+L("SLASH_SHOW", "zeigen")
 --luacheck: pop

@@ -1959,6 +1959,46 @@ function BS.IsPvP()
     return (mapContentType == _G.MAP_CONTENT_AVA or mapContentType == _G.MAP_CONTENT_BATTLEGROUND)
 end
 
+function BS.FindBar(barName)
+    for index, barData in pairs(BS.Vars.Bars) do
+        if (barData.Name:lower() == barName:lower()) then
+            return BS.BarObjectPool:GetActiveObject(BS.BarObjects[index]), index
+        end
+    end
+end
+
+function BS.RegisterHooks()
+    -- handle logout / quit
+    -- disable timer based widgets to prevent errors
+    -- trying to access destroyed objects
+    ZO_PreHook(
+        "Logout",
+        function()
+            if (not BS.disabledTimers) then
+                BS.DisableUpdates(true)
+            end
+        end
+    )
+
+    ZO_PreHook(
+        "Quit",
+        function()
+            if (not BS.disabledTimers) then
+                BS.DisableUpdates(true)
+            end
+        end
+    )
+
+    ZO_PostHook(
+        "CancelLogout",
+        function()
+            if (not BS.disabledTimers) then
+                BS.EnableUpdates(true)
+            end
+        end
+    )
+end
+
 -- developer utility functions
 -- luacheck: push ignore 113
 function BS.FindItem(text)

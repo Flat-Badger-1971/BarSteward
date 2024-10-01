@@ -145,55 +145,11 @@ function BS.ContinueIntialising()
     )
 
     BS.GridChanged = true
-
-    -- handle logout / quit
-    -- disable timer based widgets to prevent errors
-    -- trying to access destroyed objects
-    ZO_PreHook("Logout", function()
-        if (not BS.disabledTimers) then
-            BS.DisableUpdates(true)
-        end
-    end)
-
-    ZO_PreHook("Quit", function()
-        if (not BS.disabledTimers) then
-            BS.DisableUpdates(true)
-        end
-    end)
-
-    ZO_PostHook("CancelLogout", function()
-        if (not BS.disabledTimers) then
-            BS.EnableUpdates(true)
-        end
-    end)
-
+    BS.RegisterHooks()
 end
 
 local function Initialise()
-    -- *** utiltity ***
-    if (_G.SLASH_COMMANDS["/rl"] == nil) then
-        _G.SLASH_COMMANDS["/rl"] = function()
-            ReloadUI()
-        end
-    end
-
-    if (_G.SLASH_COMMANDS["/rld"] == nil) then
-        _G.SLASH_COMMANDS["/rld"] = function()
-            if (_G.LibDebugLogger) then
-                _G.LibDebugLogger:ClearLog()
-            end
-            ReloadUI()
-        end
-    end
-
-    -- if (_G.SLASH_COMMANDS["/bslang"] == nil) then
-    --     _G.SLASH_COMMANDS["/bslang"] = function(lang)
-    --         SetCVar("language.2", lang)
-    --     end
-    -- end
-
-    -- ***
-
+    BS.RegisterSlashCommands()
     BS.RegisterDialogues()
     BS.RegisterColours()
     BS.ContinueIntialising()

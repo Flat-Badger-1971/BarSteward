@@ -2497,8 +2497,7 @@ function BS.RegisterSettings()
         author = "Flat Badger",
         version = version,
         registerForDefaults = true,
-        registerForRefresh = true,
-        slashCommand = "/bs"
+        registerForRefresh = true
     }
 
     zo_callLater(
