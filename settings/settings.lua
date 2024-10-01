@@ -2128,13 +2128,31 @@ local function getWidgetSettings()
         table.sort(
             used,
             function(a, b)
-                return BS.widgets[a.key].tooltip < BS.widgets[b.key].tooltip
+                local tta, ttb = BS.widgets[a.key].tooltip, BS.widgets[b.key].tooltip
+
+                if (type(tta) == "function") then
+                    tta = tta()
+                end
+                if (type(ttb) == "function") then
+                    ttb = ttb()
+                end
+
+                return tta < ttb
             end
         )
         table.sort(
             unused,
             function(a, b)
-                return BS.widgets[a.key].tooltip < BS.widgets[b.key].tooltip
+                local tta, ttb = BS.widgets[a.key].tooltip, BS.widgets[b.key].tooltip
+
+                if (type(tta) == "function") then
+                    tta = tta()
+                end
+                if (type(ttb) == "function") then
+                    ttb = ttb()
+                end
+
+                return tta < ttb
             end
         )
 

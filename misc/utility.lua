@@ -1906,11 +1906,11 @@ function BS.GetAddonVersion()
 
         if (name == BS.Name) then
             version = tostring(manager:GetAddOnVersion(addon))
-            local major = version:sub(1, 1)
-            local minor = version:sub(2, 2)
-            local revision = version:sub(3)
+            local major = tonumber(version:sub(1, 1))
+            local minor = tonumber(version:sub(2, 2))
+            local revision = tonumber(version:sub(3))
 
-            version = string.format("%s.%s.%s", major, minor, revision)
+            version = string.format("%d.%d.%d", major, minor, revision)
             break
         end
     end
