@@ -399,7 +399,7 @@ BS.widgets[BS.W_TRANSMUTE_CRYSTALS] = {
     end,
     event = {_G.EVENT_CURRENCY_UPDATE, _G.EVENT_QUEST_COMPLETE_DIALOG},
     tooltip = BS.Format(GetCurrencyName(_G.CURT_CHAOTIC_CREATIA)),
-    icon = GetCurrencyKeyboardIcon(_G.CURT_CHAOTIC_CREATIA)
+    icon = "currency/currency_seedcrystals_multi_mipmap"
 }
 
 BS.widgets[BS.W_UNDAUNTED_KEYS] = {
