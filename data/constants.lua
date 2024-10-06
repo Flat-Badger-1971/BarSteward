@@ -1,6 +1,18 @@
-_G.BarSteward = {Name = "BarSteward"}
+_G.BarSteward = {
+    Name = "BarSteward",
+    --too much hassle to refactor the whole addon to use classes properly, so adding a callback manager here
+    CallbackManager = ZO_CallbackObject:Subclass():New()
+}
 
 local BS = _G.BarSteward
+
+function BS.RegisterCallback(...)
+    BS.CallbackManager:RegisterCallback(...)
+end
+
+function BS.FireCallbacks(...)
+    BS.CallbackManager:FireCallbacks(...)
+end
 
 -- linefeed character
 BS.LF = string.char(10)
@@ -639,3 +651,26 @@ BS.CHAR.classIcon = GetClassIcon(BS.CHAR.classId)
 
 BS.CONTINUOUS_ATTACK = {[39248] = true, [45614] = true}
 BS.AYLEID_HEALTH = {[21263] = true, [100862] = true}
+BS.CRIMEQUESTS = {
+    5532,
+    5536,
+    5540,
+    5572,
+    5573,
+    5575,
+    5577,
+    5584,
+    5586,
+    5587,
+    5588,
+    5589,
+    "5590,5594",
+    "5616,5627",
+    "5629,5647",
+    "5649,5685",
+    "5687,5711",
+    5713,
+    5714,
+    5719,
+    5726
+}

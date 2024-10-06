@@ -819,7 +819,7 @@ local function updateLoreBooks()
             categories[categoryIndex] = category
         end
 
-        CALLBACK_MANAGER:FireCallbacks(BS.Name .. "CB_Lorebooks_Updated", categories)
+        BS.FireCallbacks("LorebooksUpdated", categories)
     end
 end
 
@@ -858,7 +858,7 @@ BS.widgets[BS.W_LOREBOOKS] = {
 
         return #categories
     end,
-    callback = {[CALLBACK_MANAGER] = {BS.Name .. "CB_Lorebooks_Updated"}},
+    callback = {[BS] = {"LorebooksUpdated"}},
     icon = "icons/quest_book_001",
     tooltip = GetString(_G.BARSTEWARD_LOREBOOKS),
     onLeftClick = function()
@@ -919,7 +919,7 @@ BS.widgets[BS.W_SHALIDORS_LIBRARY] = {
 
         return known
     end,
-    callback = {[CALLBACK_MANAGER] = {BS.Name .. "CB_Lorebooks_Updated"}},
+    callback = {[BS] = {"LorebooksUpdated"}},
     icon = "icons/housing_sum_fur_booksfloatingset003",
     tooltip = BS.Format(_G.SI_ZONECOMPLETIONTYPE11),
     onLeftClick = function()
@@ -955,7 +955,7 @@ BS.widgets[BS.W_CRAFTING_MOTIFS] = {
 
         return known
     end,
-    callback = {[CALLBACK_MANAGER] = {BS.Name .. "CB_Lorebooks_Updated"}},
+    callback = {[BS] = {"LorebooksUpdated"}},
     icon = "icons/u34_crafting_style_item_sybranic_marine",
     tooltip = GetString(_G.BARSTEWARD_CRAFTING_MOTIFS),
     onLeftClick = function()

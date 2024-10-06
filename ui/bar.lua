@@ -590,21 +590,27 @@ function baseBar:DoUpdate(metadata, ...)
     end
 end
 
+function baseBar:CheckHide(hide)
+    if (hide and (not self.hidden)) then
+        self:Hide()
+    elseif ((not hide) and self.hidden) then
+        self:Show()
+    end
+end
+
 function baseBar:CheckPvP()
     local pvpOnly = BS.Vars.Bars[self.index].PvPOnly
 
     if (pvpOnly) then
-        local isPvP = BS.IsPvP()
+        self:CheckHide(not BS.IsPvP())
+    end
+end
 
-        if (isPvP) then
-            if (self.hidden) then
-                self:Show()
-            end
-        else
-            if (not self.hidden) then
-                self:Hide()
-            end
-        end
+function baseBar:CheckCrime()
+    local crimeOnly = BS.Vars.Bars[self.index].CrimeOnly
+
+    if (crimeOnly) then
+        self:CheckHide(not BS.IsUpToSomething())
     end
 end
 
@@ -862,6 +868,13 @@ function BS.CreateBar(barSettings)
         _G.EVENT_PLAYER_ACTIVATED,
         function()
             bar:CheckPvP()
+        end
+    )
+
+    BS.RegisterCallback(
+        "CriminalActivityUpdate",
+        function()
+            bar:CheckCrime()
         end
     )
 

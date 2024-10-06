@@ -12,6 +12,7 @@ BS.Defaults = {
     BackBarIcon = "/esoui/art/tradinghouse/tradinghouse_weapons_1h_sword_up.dds",
     Categories = true,
     CategoriesCount = true,
+    CheckCrime = false,
     DefaultCombatColour = {0.3686274588, 0, 0, 1},
     DefaultColour = {(249 / 255), (249 / 255), (249 / 255), 1},
     DefaultDangerColour = {(204 / 255), 0, 0, 1},

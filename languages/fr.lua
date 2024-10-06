@@ -99,6 +99,11 @@ L(
     "Sélectionnez le texte ci-dessous, puis utilisez ctrl-c pour le copier. Le texte peut ensuite être collé dans la case 'Importer la barre' de Bar Steward pour un autre utilisateur."
 )
 L("COPY_SETTINGS", "Paramètres de copie")
+L("CRAFTING_MOTIFS", "Motifs d'artisanat")
+L("CRIME_ONLY", "Afficher uniquement lorsqu'un crime est détecté")
+L("CRIME_ONLY_DETECTION", "Activer la détection de crime")
+L("CRIME_ONLY_TOOLTIP", "La détection comprend l'acceptation d'une quête de vol/de la Confrérie noire, le transport d'objets volés ou la possession d'une prime")
+L("CRIME_ONLY_CONDITION", "La détection de crime doit être activée")
 L("DAILY_CRAFTING", "Commandes d'artisanat journalières")
 L("DAILY_ENDEAVOUR_PROGRESS", "Progression d'Efforts journaliers")
 L("DAILY_ENDEAVOUR_TIME", "Temps d'Efforts journaliers restant")

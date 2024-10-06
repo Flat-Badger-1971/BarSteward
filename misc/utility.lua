@@ -1997,6 +1997,127 @@ function BS.RegisterHooks()
             end
         end
     )
+
+    BS.CheckCriminalActivity()
+end
+
+function BS.BuildList(listInfo)
+    local list = {}
+
+    for _, info in ipairs(listInfo) do
+        if (type(info) == "string") then
+            local comma = info:find(",")
+            local s, e = tonumber(info:sub(1, comma - 1)), tonumber(info:sub(comma + 1))
+
+            for i = s, e do
+                list[GetQuestName(i)] = true
+            end
+        else
+            list[GetQuestName(info)] = true
+        end
+    end
+
+    return list
+end
+
+BS.UpToSomething = {
+    bounty = false,
+    stealing = false,
+    crimeQuest = false
+}
+
+function BS.IsUpToSomething()
+    return BS.UpToSomething.bounty or BS.UpToSomething.stealing or BS.UpToSomething.crimeQuest
+end
+
+-- need to check on inventory callback, quest list updated callback and
+
+function BS.CheckCriminalActivity()
+    if (BS.Vars.CheckCrime) then
+        local bountyFunc = function(bounty)
+            if (bounty.infamyMeterState.isTrespassing or bounty.infamyMeterState.bounty > 0) then
+                if (BS.UpToSomething.bounty == false) then
+                    BS.UpToSomething.bounty = true
+                    BS.FireCallbacks("CriminalActivityUpdate", BS.IsUpToSomething())
+                end
+            else
+                if (BS.UpToSomething.bounty) then
+                    BS.UpToSomething.bounty = false
+                    BS.FireCallbacks("CriminalActivityUpdate", BS.IsUpToSomething())
+                end
+            end
+        end
+
+        local bagFunc = function()
+            if (BS.HasStolenItemsInInventory()) then
+                if (BS.UpToSomething.stealing == false) then
+                    BS.UpToSomething.stealing = true
+                    BS.FireCallbacks("CriminalActivityUpdate", BS.IsUpToSomething())
+                end
+            else
+                if (BS.UpToSomething.stealing) then
+                    BS.UpToSomething.stealing = false
+                    BS.FireCallbacks("CriminalActivityUpdate", BS.IsUpToSomething())
+                end
+            end
+        end
+
+        local questFunc = function()
+            if (BS.HasCriminalQuest()) then
+                if (BS.UpToSomething.crimeQuest == false) then
+                    BS.UpToSomething.crimeQuest = true
+                    BS.FireCallbacks("CriminalActivityUpdate", BS.IsUpToSomething())
+                end
+            else
+                if (BS.UpToSomething.crimeQuest) then
+                    BS.UpToSomething.crimeQuest = false
+                    BS.FireCallbacks("CriminalActivityUpdate", BS.IsUpToSomething())
+                end
+            end
+        end
+
+        SecurePostHook(_G.HUD_INFAMY_METER, "UpdateInfamyMeterState", bountyFunc)
+        _G.SHARED_INVENTORY:RegisterCallback("SingleSlotInventoryUpdate", bagFunc)
+        _G.QUEST_JOURNAL_MANAGER:RegisterCallback("QuestListUpdated", questFunc)
+
+        BS.RegisterForEvent(
+            _G.EVENT_PLAYER_ACTIVATED,
+            function()
+                bagFunc()
+                questFunc()
+            end
+        )
+    end
+end
+
+function BS.HasStolenItemsInInventory()
+    local filteredItems =
+        SHARED_INVENTORY:GenerateFullSlotData(
+        function(itemdata)
+            return itemdata.stolen == true
+        end,
+        _G.BAG_BACKPACK
+    )
+
+    return #filteredItems > 0
+end
+
+function BS.HasCriminalQuest()
+    if (not BS.CrimeQuests) then
+        BS.CrimeQuests = BS.BuildList(BS.CRIMEQUESTS)
+    end
+
+    local journalQuests = QUEST_JOURNAL_MANAGER:GetQuestList()
+
+    for _, quest in ipairs(journalQuests) do
+        if (quest.questType == _G.QUEST_TYPE_GUILD) then
+            if (BS.CrimeQuests[quest.name]) then
+                return true
+            end
+        end
+    end
+
+    return false
 end
 
 -- developer utility functions

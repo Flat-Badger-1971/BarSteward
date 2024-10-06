@@ -230,6 +230,21 @@ local function initialise()
 
     BS.options[#BS.options + 1] = {
         type = "checkbox",
+        name = GetString(_G.BARSTEWARD_CRIME_ONLY_DETECTION),
+        tooltip = GetString(_G.BARSTEWARD_CRIME_ONLY_TOOLTIP),
+        getFunc = function()
+            return BS.Vars.CheckCrime or false
+        end,
+        setFunc = function(value)
+            BS.Vars.CheckCrime = value
+        end,
+        requiresReload = true,
+        width = "full",
+        default = false
+    }
+
+    BS.options[#BS.options + 1] = {
+        type = "checkbox",
         name = GetString(_G.BARSTEWARD_HIDE_DURING_COMBAT),
         getFunc = function()
             return BS.Vars.HideDuringCombat or false
@@ -681,6 +696,31 @@ local function getBarSettings()
             end,
             width = "full",
             default = false
+        }
+
+        controls[#controls + 1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_CRIME_ONLY),
+            tooltip = string.format(
+                "%s.%s",
+                GetString(_G.BARSTEWARD_CRIME_ONLY_TOOLTIP),
+                BS.Vars.CrimeCheck and "" or GetString(_G.BARSTEWARD_CRIME_ONLY_CONDITION)
+            ),
+            getFunc = function()
+                return vars.CrimeOnly or false
+            end,
+            setFunc = function(value)
+                vars.CrimeOnly = value
+
+                local barObject = BS.BarObjectPool:GetActiveObject(BS.BarObjects[idx])
+
+                barObject:CheckCrime()
+            end,
+            width = "full",
+            default = false,
+            disabled = function()
+                return not BS.Vars.CheckCrime
+            end
         }
 
         controls[#controls + 1] = {

@@ -165,7 +165,7 @@ zo_callLater(
                 _G.RewardsTracker.campaign,
                 "refresh",
                 function()
-                    CALLBACK_MANAGER:FireCallbacks("BarSteward_RewardsTracker_Refresh")
+                    BS:FireCallbacks("RewardsTrackerRefresh")
                 end
             )
         end
@@ -245,7 +245,7 @@ BS.widgets[BS.W_CAMPAIGN_TIER] = {
         _G.EVENT_ASSIGNED_CAMPAIGN_CHANGED,
         _G.EVENT_CAMPAIGN_LEADERBOARD_DATA_RECEIVED
     },
-    callback = {[CALLBACK_MANAGER] = {"BarSteward_RewardsTracker_Refresh"}},
+    callback = {[BS] = {"RewardsTrackerRefresh"}},
     hideWhenTrue = function()
         if (BS.Vars.Controls[BS.W_CAMPAIGN_TIER].PvPOnly == true) then
             return not BS.IsPvP()
