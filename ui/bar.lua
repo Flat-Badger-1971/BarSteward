@@ -469,6 +469,10 @@ end
 function baseBar:DoUpdate(metadata, ...)
     -- update the widget and capture the raw value for use in HideWhen
 
+    if (BS.LoggingOut) then
+        return
+    end
+
     if (self.destroyed) then
         return
     end

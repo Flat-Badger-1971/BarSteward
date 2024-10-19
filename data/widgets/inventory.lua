@@ -1509,8 +1509,7 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
                     GetString(_G.BARSTEWARD_MAIN_BAR)
 
                 tt = string.format("%s%s%s ", tt, BS.LF, BS.Icon(poison.icon))
-                tt =
-                    string.format("%s%s %s (%d)", tt, BS.COLOURS.White:Colorize(poison.name), slotName, poison.count)
+                tt = string.format("%s%s %s (%d)", tt, BS.COLOURS.White:Colorize(poison.name), slotName, poison.count)
 
                 if (selected == BS.ACTIVE_BAR) then
                     if

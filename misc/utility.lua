@@ -1976,6 +1976,7 @@ function BS.RegisterHooks()
         function()
             if (not BS.disabledTimers) then
                 BS.DisableUpdates(true)
+                BS.LoggingOut = true
             end
         end
     )
@@ -1985,6 +1986,7 @@ function BS.RegisterHooks()
         function()
             if (not BS.disabledTimers) then
                 BS.DisableUpdates(true)
+                BS.LoggingOut = true
             end
         end
     )
@@ -1994,6 +1996,7 @@ function BS.RegisterHooks()
         function()
             if (not BS.disabledTimers) then
                 BS.EnableUpdates(true)
+                BS.LoggingOut = false
             end
         end
     )
