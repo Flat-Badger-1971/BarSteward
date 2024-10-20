@@ -358,11 +358,13 @@ BS.widgets[BS.W_LEADS] = {
                     recovered = leadInfo:GetNumRecovered()
                 }
 
-                table.insert(leads, lead)
+                if (not (BS.GetVar("HideFound", this) and (lead.recovered > 0))) then
+                    table.insert(leads, lead)
 
-                if (not lead.inProgress) then
-                    if (lead.remaining < minTime) then
-                        minTime = lead.remaining
+                    if (not lead.inProgress) then
+                        if (lead.remaining < minTime) then
+                            minTime = lead.remaining
+                        end
                     end
                 end
             end
@@ -490,6 +492,17 @@ BS.widgets[BS.W_LEADS] = {
             end,
             setFunc = function(value)
                 BS.Vars.Controls[BS.W_LEADS].ShowFound = value
+            end,
+            default = false
+        },
+        [4] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_HIDE_FOUND),
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_LEADS].HideFound or false
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_LEADS].HideFound = value
             end,
             default = false
         }

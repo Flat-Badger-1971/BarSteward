@@ -301,6 +301,7 @@ BS.widgets[BS.W_CONT_ATT] = {
 
         widget:SetValue(value)
         widget:SetColour(BS.GetTimeColour(0, this, 60, true, true))
+
         return 0
     end,
     timer = 1000,
