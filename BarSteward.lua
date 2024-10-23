@@ -29,6 +29,7 @@ local function trackOtherCurrency(currency)
 end
 
 function BS.ContinueIntialising()
+    BS.LC = _G.LibFBCommon
     BS.Vars = BS.CreateSavedVariablesManager("BarStewardSavedVars", BS.Defaults, BS.CommonDefaults)
     BS.GetAddonVersion()
     BS.CheckVars(BS.Vars)

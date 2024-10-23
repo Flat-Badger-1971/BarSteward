@@ -530,7 +530,7 @@ function BS.Announce(header, message, widgetIconNumber, lifespan, sound, otherIc
 
     if (widgetIconNumber) then
         messageParams:SetIconData(
-            BS.FormatIcon(otherIcon or BS.widgets[widgetIconNumber].icon, "achievements/achievements_iconbg")
+            BS.FormatIcon(otherIcon or BS.widgets[widgetIconNumber].icon)
         )
     end
 
@@ -787,7 +787,7 @@ function BS.ColourToQuality(r, g, b)
 end
 
 function BS.ColourToIcon(r, g, b)
-    local quality = BS.ColourToQuality(r, g, b, 1)
+    local quality = BS.ColourToQuality(r, g, b)
 
     return BS.FormatIcon(BS.ITEM_COLOUR_ICON[quality or 1])
 end
@@ -899,6 +899,7 @@ function BS.CompareColours(c1, c2)
     for _, colour in ipairs(colours) do
         for idx, value in pairs(colour) do
             local rounded = tonumber(string.format("%.3g", value))
+
             colour[idx] = rounded
         end
     end
@@ -2130,6 +2131,7 @@ function BS.FindItem(text)
         SHARED_INVENTORY:GenerateFullSlotData(
         function(itemdata)
             local match = itemdata.name:find(text)
+
             return match ~= nil
         end,
         _G.BAG_BACKPACK
