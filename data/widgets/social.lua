@@ -31,7 +31,7 @@ BS.widgets[BS.W_FRIENDS] = {
         local this = BS.W_FRIENDS
         local masterList = FRIENDS_LIST_MANAGER:GetMasterList()
         local offline, online, other = {}, {}, {}
-        local tt = BS.Format(_G.SI_SOCIAL_MENU_CONTACTS)
+        local tt = BS.LC.Format(_G.SI_SOCIAL_MENU_CONTACTS)
         local textureFunctions = ZO_SocialList_GetPlatformTextureFunctions()
 
         for _, friend in ipairs(masterList) do
@@ -94,7 +94,7 @@ BS.widgets[BS.W_FRIENDS] = {
         _G.EVENT_PLAYER_STATUS_CHANGED,
         _G.EVENT_FRIEND_CHARACTER_ZONE_CHANGED
     },
-    tooltip = BS.Format(_G.SI_GAMEPAD_SOCIAL_FOOTER_NUM_ONLINE),
+    tooltip = BS.LC.Format(_G.SI_GAMEPAD_SOCIAL_FOOTER_NUM_ONLINE),
     icon = "chatwindow/chat_friendsonline_up",
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
@@ -155,7 +155,7 @@ end
 local guildMasterList = {}
 
 local function getMasterList()
-    BS.Clear(guildMasterList)
+    BS.LC.Clear(guildMasterList)
 
     local guildId = BS.guildId
     local localPlayerIndex = GetPlayerGuildMemberIndex(guildId)
@@ -206,7 +206,7 @@ BS.widgets[BS.W_GUILD_FRIENDS] = {
         local masterList = BS.Vars:GetCommon("GuildFriendAnnounce")
         local online, offline, other = {}, {}, {}
         local oCount, tCount = 0, 0
-        local tt = BS.Format(_G.BARSTEWARD_GUILD_FRIENDS)
+        local tt = BS.LC.Format(_G.BARSTEWARD_GUILD_FRIENDS)
         local textureFunctions = ZO_SocialList_GetPlatformTextureFunctions()
 
         for member, gid in pairs(masterList) do
@@ -279,7 +279,7 @@ BS.widgets[BS.W_GUILD_FRIENDS] = {
         _G.EVENT_PLAYER_ACTIVATED,
         _G.EVENT_GUILD_MEMBER_PLAYER_STATUS_CHANGED
     },
-    tooltip = BS.Format(_G.BARSTEWARD_GUILD_FRIENDS_ONLINE),
+    tooltip = BS.LC.Format(_G.BARSTEWARD_GUILD_FRIENDS_ONLINE),
     icon = "guild/guildheraldry_indexicon_crest_up",
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then

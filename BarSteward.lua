@@ -41,12 +41,12 @@ function BS.ContinueIntialising()
     end
 
     -- gold tracker
-    BS.RegisterForEvent(_G.EVENT_PLAYER_ACTIVATED, trackGold)
-    BS.RegisterForEvent(_G.EVENT_MONEY_UPDATE, trackGold)
+    BS.EventManager:RegisterForEvent(_G.EVENT_PLAYER_ACTIVATED, trackGold)
+    BS.EventManager:RegisterForEvent(_G.EVENT_MONEY_UPDATE, trackGold)
 
     -- tel var tracker
     trackOtherCurrency(_G.CURT_TELVAR_STONES)
-    BS.RegisterForEvent(
+    BS.EventManager:RegisterForEvent(
         _G.EVENT_TELVAR_STONE_UPDATE,
         function()
             trackOtherCurrency(_G.CURT_TELVAR_STONES)
@@ -55,7 +55,7 @@ function BS.ContinueIntialising()
 
     -- alliance points tracker
     trackOtherCurrency(_G.CURT_ALLIANCE_POINTS)
-    BS.RegisterForEvent(
+    BS.EventManager:RegisterForEvent(
         _G.EVENT_ALLIANCE_POINT_UPDATE,
         function()
             trackOtherCurrency(_G.CURT_ALLIANCE_POINTS)
@@ -64,7 +64,7 @@ function BS.ContinueIntialising()
 
     -- writ voucher tracker
     trackOtherCurrency(_G.CURT_WRIT_VOUCHERS)
-    BS.RegisterForEvent(
+    BS.EventManager:RegisterForEvent(
         _G.EVENT_WRIT_VOUCHER_UPDATE,
         function()
             trackOtherCurrency(_G.CURT_WRIT_VOUCHERS)
@@ -104,7 +104,7 @@ function BS.ContinueIntialising()
     BS.AddHousingWidgets(0)
 
     -- performance
-    BS.RegisterForEvent(
+    BS.EventManager:RegisterForEvent(
         _G.EVENT_PLAYER_COMBAT_STATE,
         function(_, inCombat)
             BS.CheckPerformance(inCombat)
@@ -129,7 +129,7 @@ function BS.ContinueIntialising()
     -- handle quest info
     BS.GetQuestInfo()
 
-    BS.RegisterForEvent(
+    BS.EventManager:RegisterForEvent(
         _G.EVENT_PLAYER_ACTIVATED,
         function()
             if (BS.Vars.Controls[BS.W_CHESTS_FOUND].Bar == 0) then

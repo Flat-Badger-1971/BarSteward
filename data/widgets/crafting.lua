@@ -142,7 +142,7 @@ BS.widgets[BS.W_ALL_CRAFTING] = {
     update = function(widget)
         local this = BS.W_ALL_CRAFTING
         local timers = {}
-        local text, ttt = "", BS.Format(_G.SI_GAMEPAD_SMITHING_CURRENT_RESEARCH_HEADER) .. BS.LF
+        local text, ttt = "", BS.LC.Format(_G.SI_GAMEPAD_SMITHING_CURRENT_RESEARCH_HEADER) .. BS.LF
         local totalInUse, totalMaxResearch = 0, 0
 
         for _, craftingType in ipairs(allTypes) do
@@ -181,7 +181,7 @@ BS.widgets[BS.W_ALL_CRAFTING] = {
     end,
     timer = 1000,
     icon = "icons/housing_gen_crf_clothingattunabletable001",
-    tooltip = BS.Format(_G.SI_GAMEPAD_SMITHING_CURRENT_RESEARCH_HEADER),
+    tooltip = BS.LC.Format(_G.SI_GAMEPAD_SMITHING_CURRENT_RESEARCH_HEADER),
     customSettings = getSettings(BS.W_ALL_CRAFTING)
 }
 
@@ -199,7 +199,7 @@ BS.widgets[BS.W_BLACKSMITHING] = {
         widget:SetColour(colour)
         widget:SetValue(display)
 
-        local ttt = BS.Format(_G.SI_TRADESKILLTYPE1)
+        local ttt = BS.LC.Format(_G.SI_TRADESKILLTYPE1)
 
         for slot = 1, maxResearch do
             ttt =
@@ -219,7 +219,7 @@ BS.widgets[BS.W_BLACKSMITHING] = {
     end,
     timer = 1000,
     icon = "icons/servicemappins/servicepin_smithy",
-    tooltip = BS.Format(_G.SI_TRADESKILLTYPE1),
+    tooltip = BS.LC.Format(_G.SI_TRADESKILLTYPE1),
     hideWhenEqual = 0,
     fullyUsed = function()
         return fullyUsed[_G.CRAFTING_TYPE_BLACKSMITHING]
@@ -244,7 +244,7 @@ BS.widgets[BS.W_WOODWORKING] = {
         widget:SetColour(colour)
         widget:SetValue(display)
 
-        local ttt = BS.Format(_G.SI_TRADESKILLTYPE6)
+        local ttt = BS.LC.Format(_G.SI_TRADESKILLTYPE6)
 
         for slot = 1, maxResearch do
             ttt =
@@ -264,7 +264,7 @@ BS.widgets[BS.W_WOODWORKING] = {
     end,
     timer = 1000,
     icon = "icons/servicemappins/servicepin_woodworking",
-    tooltip = BS.Format(_G.SI_TRADESKILLTYPE6),
+    tooltip = BS.LC.Format(_G.SI_TRADESKILLTYPE6),
     hideWhenEqual = 0,
     fullyUsed = function()
         return fullyUsed[_G.CRAFTING_TYPE_WOODWORKING]
@@ -289,7 +289,7 @@ BS.widgets[BS.W_CLOTHING] = {
         widget:SetColour(colour)
         widget:SetValue(display)
 
-        local ttt = BS.Format(_G.SI_TRADESKILLTYPE2)
+        local ttt = BS.LC.Format(_G.SI_TRADESKILLTYPE2)
 
         for slot = 1, maxResearch do
             ttt =
@@ -309,7 +309,7 @@ BS.widgets[BS.W_CLOTHING] = {
     end,
     timer = 1000,
     icon = "icons/servicemappins/servicepin_outfitter",
-    tooltip = BS.Format(_G.SI_TRADESKILLTYPE2),
+    tooltip = BS.LC.Format(_G.SI_TRADESKILLTYPE2),
     hideWhenEqual = 0,
     fullyUsed = function()
         return fullyUsed[_G.CRAFTING_TYPE_CLOTHIER]
@@ -334,7 +334,7 @@ BS.widgets[BS.W_JEWELCRAFTING] = {
         widget:SetColour(colour)
         widget:SetValue(display)
 
-        local ttt = BS.Format(_G.SI_TRADESKILLTYPE7)
+        local ttt = BS.LC.Format(_G.SI_TRADESKILLTYPE7)
 
         for slot = 1, maxResearch do
             ttt =
@@ -354,7 +354,7 @@ BS.widgets[BS.W_JEWELCRAFTING] = {
     end,
     timer = 1000,
     icon = "icons/icon_jewelrycrafting_symbol",
-    tooltip = BS.Format(_G.SI_TRADESKILLTYPE7),
+    tooltip = BS.LC.Format(_G.SI_TRADESKILLTYPE7),
     hideWhenEqual = 0,
     fullyUsed = function()
         return fullyUsed[_G.CRAFTING_TYPE_JEWELRYCRAFTING]
@@ -384,7 +384,7 @@ local function updateQualifications()
     return qualifiedCount
 end
 
-BS.RegisterForEvent(
+BS.EventManager:RegisterForEvent(
     _G.EVENT_ACHIEVEMENT_UPDATED,
     function(_, achievementId)
         if (BS.CRAFTING_ACHIEVEMENT_IDS[achievementId]) then
@@ -450,7 +450,7 @@ local function getReadyForHandIn(character)
 end
 
 -- check once a minute for daily reset
-BS.RegisterForUpdate(60000, checkReset)
+BS.TimerManager:RegisterForUpdate(60000, checkReset)
 
 BS.widgets[BS.W_CRAFTING_DAILIES] = {
     name = "craftingDailies",
@@ -664,7 +664,7 @@ local function getRecipeList()
             local known, _, _, _, _, _, _, resultItemId = GetRecipeInfo(recipeListIndex, recipeIndex)
 
             if (not BS.IGNORE_RECIPE[resultItemId]) then
-                local link = BS.MakeItemLink(resultItemId)
+                local link = BS.LC.MakeItemLink(resultItemId)
                 local itemType, sit = GetItemLinkItemType(link)
 
                 if (itemType + sit ~= 0) then
@@ -698,11 +698,11 @@ local function getRecipeList()
     end
 end
 
-local food = BS.Format(_G.SI_ITEMTYPE4)
-local drink = BS.Format(_G.SI_ITEMTYPE12)
+local food = BS.LC.Format(_G.SI_ITEMTYPE4)
+local drink = BS.LC.Format(_G.SI_ITEMTYPE12)
 local foodAndDrink = food .. " + " .. drink
-local furnishing = BS.Format(_G.SI_ITEMTYPE61)
-local recipes = BS.Format(_G.SI_ITEMTYPEDISPLAYCATEGORY21)
+local furnishing = BS.LC.Format(_G.SI_ITEMTYPE61)
+local recipes = BS.LC.Format(_G.SI_ITEMTYPEDISPLAYCATEGORY21)
 
 BS.widgets[BS.W_RECIPES] = {
     -- v1.4.6
@@ -757,7 +757,7 @@ BS.widgets[BS.W_RECIPES] = {
         if (vars.Display == drink) then
             display = BS.unknownRecipeLinks[_G.ITEMTYPE_DRINK]
         elseif (vars.Display == foodAndDrink) then
-            display = BS.MergeTables(display, BS.unknownRecipeLinks[_G.ITEMTYPE_DRINK])
+            display = BS.LC.MergeTables(display, BS.unknownRecipeLinks[_G.ITEMTYPE_DRINK])
         elseif (vars.Display == furnishing) then
             display = BS.unknownRecipeLinks[_G.ITEMTYPE_FURNISHING]
         end
@@ -766,7 +766,7 @@ BS.widgets[BS.W_RECIPES] = {
             -- chat router insists on having the name, even though the link works in game
             local itemName = GetItemLinkName(link)
             local itemId = GetItemLinkItemId(link)
-            local newLink = BS.MakeItemLink(itemId, itemName)
+            local newLink = BS.LC.MakeItemLink(itemId, itemName)
 
             CHAT_ROUTER:AddSystemMessage(newLink)
         end

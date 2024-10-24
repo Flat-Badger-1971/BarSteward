@@ -11,7 +11,7 @@ local startFunction = function(t)
 
         if (BS.TimerRunning[t] == 0) then
             BS.TimerRunning[t] = nil
-            BS.UnregisterForUpdate(1000, timerFunctions[t])
+            BS.TimerManager:UnregisterForUpdate(1000, timerFunctions[t])
 
             local sound = BS.Vars[string.format("Timer%dSound", t)]
 
@@ -52,16 +52,16 @@ local function getTimers()
 
             local seconds =
                 BS.TimerRunning[timer] and BS.TimerRunning[timer] or (((nums[1] or 0) * 60) + (nums[2] or 0))
-            local formatted = BS.SecondsToMinutes(seconds)
+            local formatted = BS.LC.SecondsToMinutes(seconds)
             local title =
                 string.format("%s  %s - %s", BS.TimerRunning[timer] and stopButton or startButton, formatted, timerName)
             local timerFunction = function()
                 if (BS.TimerRunning[timer]) then
                     BS.TimerRunning[timer] = nil
-                    BS.UnregisterForUpdate(1000, timerFunctions[timer])
+                    BS.TimerManager:UnregisterForUpdate(1000, timerFunctions[timer])
                 else
                     BS.TimerRunning[timer] = seconds
-                    BS.RegisterForUpdate(1000, timerFunctions[timer])
+                    BS.TimerManager:RegisterForUpdate(1000, timerFunctions[timer])
                 end
             end
 
@@ -72,7 +72,7 @@ local function getTimers()
 
     if (added == 0) then
         AddMenuItem(
-            BS.Format(_G.BARSTEWARD_TIMER_NONE),
+            BS.LC.Format(_G.BARSTEWARD_TIMER_NONE),
             function()
                 BS.LAM:OpenToPanel(BS.OptionsPanel)
             end
@@ -81,7 +81,7 @@ local function getTimers()
 end
 
 local note =
-    "|cffff00" .. BS.Format(_G.BARSTEWARD_TIMER_NOTE) .. BS.LF .. BS.Format(_G.BARSTEWARD_TIMER_WARNING) .. "|r"
+    "|cffff00" .. BS.LC.Format(_G.BARSTEWARD_TIMER_NOTE) .. BS.LF .. BS.LC.Format(_G.BARSTEWARD_TIMER_WARNING) .. "|r"
 local timers = {
     [1] = {
         type = "description",
@@ -102,7 +102,7 @@ do
             controls = {
                 [1] = {
                     type = "checkbox",
-                    name = BS.Format(_G.SI_ADDONLOADSTATE2),
+                    name = BS.LC.Format(_G.SI_ADDONLOADSTATE2),
                     getFunc = function()
                         return BS.Vars[string.format("Timer%dEnabled", timer)]
                     end,
@@ -127,7 +127,7 @@ do
                 },
                 [3] = {
                     type = "editbox",
-                    name = BS.Format(_G.SI_ADDON_MANAGER_NAME),
+                    name = BS.LC.Format(_G.SI_ADDON_MANAGER_NAME),
                     getFunc = function()
                         return BS.Vars[string.format("Timer%dName", timer)] or
                             ZO_CachedStrFormat(_G.BARSTEWARD_TIMER, ZO_CachedStrFormat("<<n:1>>", timer))
@@ -194,14 +194,14 @@ BS.widgets = {
                 format = BS.GetVar("TimeFormat12")
             end
 
-            local time = BS.FormatTime(format)
+            local time = BS.LC.FormatTime(format)
 
             widget:SetValue(time)
             widget:SetColour(BS.GetColour(this, true))
 
             widget:SetTooltip(
-                BS.Format(_G.SI_TRADINGHOUSELISTINGSORTTYPE0) ..
-                    BS.LF .. BS.COLOURS.White:Colorize(BS.Format(_G.BARSTEWARD_TIMER_TIP))
+                BS.LC.Format(_G.SI_TRADINGHOUSELISTINGSORTTYPE0) ..
+                    BS.LF .. BS.COLOURS.White:Colorize(BS.LC.Format(_G.BARSTEWARD_TIMER_TIP))
             )
 
             return widget:GetValue()
@@ -212,12 +212,12 @@ BS.widgets = {
             ShowMenu()
         end,
         timer = 1000,
-        tooltip = BS.Format(_G.SI_TRADINGHOUSELISTINGSORTTYPE0),
+        tooltip = BS.LC.Format(_G.SI_TRADINGHOUSELISTINGSORTTYPE0),
         icon = "hud/gamepad/gp_radialicon_defer_down",
         customSettings = {
             [1] = {
                 type = "submenu",
-                name = "|c34cceb" .. BS.Format(_G.BARSTEWARD_TIMERS) .. "|r",
+                name = "|c34cceb" .. BS.LC.Format(_G.BARSTEWARD_TIMERS) .. "|r",
                 controls = timers
             }
         }
@@ -369,7 +369,7 @@ BS.widgets = {
 
             if (BS.LibClock) then
                 local tamrielTime = BS.LibClock:GetTime()
-                local time = BS.FormatTime(format, nil, tamrielTime)
+                local time = BS.LC.FormatTime(format, nil, tamrielTime)
                 local phase = getMoonPhaseIcon() or 5
 
                 widget:SetIcon("BarSteward/assets/moon/" .. phase .. ".dds")

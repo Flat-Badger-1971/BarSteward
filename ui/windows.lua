@@ -162,7 +162,7 @@ function BS.CreateAlignmentFrame(alignBars)
     frame.button:SetHandler("OnClicked", onClick)
 
     frame.close = BS.CreateButton(name .. "_close", frame, 100, 32)
-    frame.close:SetText(BS.Format(_G.SI_DIALOG_CLOSE))
+    frame.close:SetText(BS.LC.Format(_G.SI_DIALOG_CLOSE))
     frame.close:SetAnchor(TOPLEFT, frame.button, TOPRIGHT, 150, 0)
     frame.close:SetHandler(
         "OnClicked",
@@ -434,7 +434,7 @@ function BS.CreateWidgetOrderTool(bars)
     frame.button:SetHandler("OnClicked", onClick)
 
     frame.close = BS.CreateButton(nil, frame, 100, 32)
-    frame.close:SetText(BS.Format(_G.SI_DIALOG_CLOSE))
+    frame.close:SetText(BS.LC.Format(_G.SI_DIALOG_CLOSE))
     frame.close:SetAnchor(TOPLEFT, frame.button, TOPRIGHT, 170, 0)
     frame.close:SetHandler(
         "OnClicked",
@@ -587,7 +587,7 @@ local function CreateTool(heading, toolName, varName, setupFunc, guild)
         frame.guild:SetFont("ZoFontGame")
         frame.guild:SetColor(0.8, 0.8, 0.6, 1)
         frame.guild:SetAnchor(TOPLEFT, frame.divider, TOPLEFT, 50, 10)
-        frame.guild:SetText(BS.Format(_G.SI_SKILLTYPE5))
+        frame.guild:SetText(BS.LC.Format(_G.SI_SKILLTYPE5))
         frame.guild:SetDimensions(350)
 
         local guilds = getGuilds()
@@ -873,7 +873,7 @@ function BS.CreateExportFrame()
     )
 
     frame.close = BS.CreateButton(name .. "_close", frame, 100, 32)
-    frame.close:SetText(BS.Format(_G.SI_DIALOG_CLOSE))
+    frame.close:SetText(BS.LC.Format(_G.SI_DIALOG_CLOSE))
     frame.close:SetAnchor(BOTTOMRIGHT, frame, BOTTOMRIGHT, -20, -200)
     frame.close:SetHandler(
         "OnClicked",
@@ -1032,7 +1032,7 @@ function BS.CreateCopyFrame()
     frame.fromlabel:SetFont("$(MEDIUM_FONT)|$(KB_18)|$(soft-shadow-fix)")
     frame.fromlabel:SetColor(1, 1, 0, 1)
     frame.fromlabel:SetAnchor(TOPLEFT, frame.divider, BOTTOMLEFT, 40, 20)
-    frame.fromlabel:SetText(BS.Format(_G.SI_MAIL_INBOX_FROM_COLUMN))
+    frame.fromlabel:SetText(BS.LC.Format(_G.SI_MAIL_INBOX_FROM_COLUMN))
     frame.fromlabel:SetDimensions(100, 24)
 
     frame.serverlabel = WINDOW_MANAGER:CreateControl(name .. "_serverLabel", frame, CT_LABEL)
@@ -1049,7 +1049,7 @@ function BS.CreateCopyFrame()
     frame.accountlabel:SetFont("$(MEDIUM_FONT)|$(KB_18)|$(soft-shadow-fix)")
     frame.accountlabel:SetColor(0.98, 0.98, 0.98, 1)
     frame.accountlabel:SetAnchor(TOPLEFT, frame.serverlabel, BOTTOMLEFT, 0, 20)
-    frame.accountlabel:SetText(BS.Format(_G.SI_CURRENCYLOCATION3))
+    frame.accountlabel:SetText(BS.LC.Format(_G.SI_CURRENCYLOCATION3))
     frame.accountlabel:SetDimensions(100, 24)
 
     frame.accounts = BS.CreateComboBox(name .. "_account", frame, 250, 32, nil, nil, accountSelected)
@@ -1060,7 +1060,7 @@ function BS.CreateCopyFrame()
     frame.characterlabel:SetFont("$(MEDIUM_FONT)|$(KB_18)|$(soft-shadow-fix)")
     frame.characterlabel:SetColor(0.98, 0.98, 0.98, 1)
     frame.characterlabel:SetAnchor(TOPLEFT, frame.accountlabel, BOTTOMLEFT, 0, 20)
-    frame.characterlabel:SetText(BS.Format(_G.SI_CURRENCYLOCATION0))
+    frame.characterlabel:SetText(BS.LC.Format(_G.SI_CURRENCYLOCATION0))
     frame.characterlabel:SetDimensions(100, 24)
 
     frame.characters = BS.CreateComboBox(name .. "_character", frame, 250, 32, nil, nil, characterSelected)
@@ -1075,7 +1075,7 @@ function BS.CreateCopyFrame()
     frame.tolabel:SetFont("$(MEDIUM_FONT)|$(KB_18)|$(soft-shadow-fix)")
     frame.tolabel:SetColor(1, 1, 0, 1)
     frame.tolabel:SetAnchor(TOPLEFT, frame.characterlabel, BOTTOMLEFT, -10, 20)
-    frame.tolabel:SetText(BS.Format(_G.SI_GAMEPAD_MAIL_SEND_TO))
+    frame.tolabel:SetText(BS.LC.Format(_G.SI_GAMEPAD_MAIL_SEND_TO))
     frame.tolabel:SetDimensions(100, 24)
 
     frame.thisaccount = WINDOW_MANAGER:CreateControlFromVirtual(name .. "_acc_sel", frame, "ZO_CheckButton")
@@ -1131,7 +1131,7 @@ function BS.CreateCopyFrame()
     frame.warning:SetDimensions(390, 72)
 
     frame.close = BS.CreateButton(name .. "_close", frame, 100, 32)
-    frame.close:SetText(BS.Format(_G.SI_CANCEL))
+    frame.close:SetText(BS.LC.Format(_G.SI_CANCEL))
     frame.close:SetAnchor(BOTTOMRIGHT, frame, BOTTOMRIGHT, -20, -140)
     frame.close:SetHandler(
         "OnClicked",
@@ -1141,7 +1141,7 @@ function BS.CreateCopyFrame()
     )
 
     frame.ok = BS.CreateButton(name .. "_ok", frame, 100, 32)
-    frame.ok:SetText(BS.Format(_G.SI_OK))
+    frame.ok:SetText(BS.LC.Format(_G.SI_OK))
     frame.ok:SetAnchor(RIGHT, frame.close, LEFT, -20, 0)
     frame.ok:SetHandler(
         "OnClicked",

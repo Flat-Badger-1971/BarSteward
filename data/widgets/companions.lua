@@ -17,7 +17,7 @@ BS.widgets[BS.W_RAPPORT] = {
         end
 
         local percent = math.max(zo_roundToNearest(rapportPcValue / rapportPcMax, 0.01), 0)
-        local r, g, b = BS.Gradient(percent, rlr, rlg, rlb, rmr, rmg, rmb, rdr, rdg, rdb)
+        local r, g, b = BS.LC.Gradient(percent, rlr, rlg, rlb, rmr, rmg, rmb, rdr, rdg, rdb)
 
         widget:SetColour(r, g, b, 1)
         widget:SetValue(rapportValue)
@@ -80,7 +80,7 @@ BS.widgets[BS.W_COMPANION_LEVEL] = {
         local progress = (currentXPInLevel or 0) .. " / " .. totalXPInLevel
 
         if (progress == "0 / 0") then
-            progress = BS.Format(_G.SI_EXPERIENCE_LIMIT_REACHED)
+            progress = BS.LC.Format(_G.SI_EXPERIENCE_LIMIT_REACHED)
         end
 
         ttt = ttt .. BS.COLOURS.White:Colorize(progress)

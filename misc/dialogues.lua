@@ -3,7 +3,7 @@ local BS = _G.BarSteward
 function BS.RegisterDialogues()
     local buttons = {
         {
-            text = BS.Format(_G.SI_OK),
+            text = BS.LC.Format(_G.SI_OK),
             callback = function()
             end
         }
@@ -35,7 +35,7 @@ function BS.RegisterDialogues()
             mainText = {text = GetString(_G.BARSTEWARD_RELOAD_MSG)},
             buttons = {
                 {
-                    text = BS.Format(_G.SI_OK),
+                    text = BS.LC.Format(_G.SI_OK),
                     callback = function()
                         zo_callLater(
                             function()
@@ -50,17 +50,17 @@ function BS.RegisterDialogues()
         ReloadQuestion = {
             title = {text = "Bar Steward"},
             mainText = {
-                text = string.format("%s %s?", GetString(_G.BARSTEWARD_SETTINGS), BS.Format(_G.SI_ADDON_MANAGER_RELOAD))
+                text = string.format("%s %s?", GetString(_G.BARSTEWARD_SETTINGS), BS.LC.Format(_G.SI_ADDON_MANAGER_RELOAD))
             },
             buttons = {
                 {
-                    text = BS.Format(_G.SI_DIALOG_NO),
+                    text = BS.LC.Format(_G.SI_DIALOG_NO),
                     callback = function()
                         BS.BarIndex = nil
                     end
                 },
                 {
-                    text = BS.Format(_G.SI_DIALOG_YES),
+                    text = BS.LC.Format(_G.SI_DIALOG_YES),
                     callback = function()
                         zo_callLater(
                             function()
@@ -77,13 +77,13 @@ function BS.RegisterDialogues()
             mainText = {text = GetString(_G.BARSTEWARD_REMOVE_WARNING)},
             buttons = {
                 {
-                    text = BS.Format(_G.SI_CANCEL),
+                    text = BS.LC.Format(_G.SI_CANCEL),
                     callback = function()
                         BS.BarIndex = nil
                     end
                 },
                 {
-                    text = BS.Format(_G.SI_OK),
+                    text = BS.LC.Format(_G.SI_OK),
                     callback = function()
                         BS.RemoveBar()
                     end
@@ -95,7 +95,7 @@ function BS.RegisterDialogues()
             mainText = {text = GetString(_G.BARSTEWARD_GENERIC_REMOVE_WARNING)},
             buttons = {
                 {
-                    text = BS.Format(_G.SI_CANCEL),
+                    text = BS.LC.Format(_G.SI_CANCEL),
                     callback = function(dialog)
                         if (dialog.data and dialog.data.func) then
                             dialog.data.func()
@@ -103,7 +103,7 @@ function BS.RegisterDialogues()
                     end
                 },
                 {
-                    text = BS.Format(_G.SI_OK),
+                    text = BS.LC.Format(_G.SI_OK),
                     callback = function(dialog)
                         if (dialog.data and dialog.data.func) then
                             dialog.data.func()
@@ -117,7 +117,7 @@ function BS.RegisterDialogues()
             mainText = {text = GetString(_G.BARSTEWARD_RESIZE_MESSAGE)},
             buttons = {
                 {
-                    text = BS.Format(_G.SI_DIALOG_YES),
+                    text = BS.LC.Format(_G.SI_DIALOG_YES),
                     callback = function()
                         zo_callLater(
                             function()
@@ -128,7 +128,7 @@ function BS.RegisterDialogues()
                     end
                 },
                 {
-                    text = BS.Format(_G.SI_DIALOG_NO)
+                    text = BS.LC.Format(_G.SI_DIALOG_NO)
                 }
             }
         },
@@ -138,23 +138,23 @@ function BS.RegisterDialogues()
             buttons = buttons
         },
         Delete = {
-            title = {text = BS.Format(_G.SI_KEYCODE19)},
+            title = {text = BS.LC.Format(_G.SI_KEYCODE19)},
             mainText = {
                 text = function()
-                    local characters = BS.Join(BS.forDeletion)
+                    local characters = BS.LC.Join(BS.forDeletion)
 
                     return zo_strformat(GetString(_G.BARSTEWARD_DELETE_FOR), characters)
                 end
             },
             buttons = {
                 {
-                    text = BS.Format(_G.SI_DIALOG_YES),
+                    text = BS.LC.Format(_G.SI_DIALOG_YES),
                     callback = function()
                         BS.DeleteTrackedData()
                     end
                 },
                 {
-                    text = BS.Format(_G.SI_DIALOG_NO)
+                    text = BS.LC.Format(_G.SI_DIALOG_NO)
                 }
             }
         },
@@ -167,13 +167,13 @@ function BS.RegisterDialogues()
             },
             buttons = {
                 {
-                    text = BS.Format(_G.SI_DIALOG_YES),
+                    text = BS.LC.Format(_G.SI_DIALOG_YES),
                     callback = function()
                         BS.DoImport()
                     end
                 },
                 {
-                    text = BS.Format(_G.SI_DIALOG_NO)
+                    text = BS.LC.Format(_G.SI_DIALOG_NO)
                 }
             }
         },
@@ -184,14 +184,14 @@ function BS.RegisterDialogues()
             },
             buttons = {
                 {
-                    text = BS.Format(_G.SI_DIALOG_YES),
+                    text = BS.LC.Format(_G.SI_DIALOG_YES),
                     callback = function()
                         BS.ReplaceMain = true
                         BS.DoImport()
                     end
                 },
                 {
-                    text = BS.Format(_G.SI_DIALOG_NO),
+                    text = BS.LC.Format(_G.SI_DIALOG_NO),
                     callback = function()
                         BS.ReplaceMain = false
                     end
@@ -206,14 +206,14 @@ function BS.RegisterDialogues()
             },
             buttons = {
                 {
-                    text = BS.Format(_G.SI_DIALOG_CONFIRM),
+                    text = BS.LC.Format(_G.SI_DIALOG_CONFIRM),
                     callback = function()
                         BS.ConvertFromLibSavedVars()
                         BS.ContinueIntialising()
                     end
                 },
                 {
-                    text = BS.Format(_G.SI_CANCEL),
+                    text = BS.LC.Format(_G.SI_CANCEL),
                     callback = function()
                         ZO_Alert(
                             _G.UI_ALERT_CATEGORY,

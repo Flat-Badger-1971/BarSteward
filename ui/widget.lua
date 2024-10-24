@@ -622,7 +622,7 @@ function BS.CreateWidget(metadata, parent, tooltipAnchor, valueSide, noValue, ba
     -- try to resuse the original widget
     local widgetKey = BS.WidgetObjects[metadata.id]
     local widget, key = BS.WidgetObjectPool:AcquireObject(widgetKey)
-    local extant = BS.GetByValue(BS.WidgetObjects, key)
+    local extant = BS.LC.GetByValue(BS.WidgetObjects, key)
 
     -- if this object was being used by something else previously, clear it
     -- so a new one will be created

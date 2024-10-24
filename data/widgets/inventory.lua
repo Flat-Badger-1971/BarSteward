@@ -9,7 +9,7 @@ BS.widgets[BS.W_BAG_SPACE] = {
         local noLimitColour = BS.GetVar("NoLimitColour", this) and BS.COLOURS.White or BS.COLOURS.Yellow
         local value = bagUsed .. (BS.GetVar("HideLimit", this) and "" or (noLimitColour:Colorize("/" .. bagSize)))
         local widthValue = bagUsed .. (BS.GetVar("HideLimit", this) and "" or ("/" .. bagSize))
-        local pcUsed = math.floor((bagUsed / bagSize) * 100)
+        local pcUsed = BS.LC.ToPercent(bagUsed / bagSize)
         local colour = BS.GetColour(this, "Ok", true)
 
         if (pcUsed >= BS.GetVar("WarningValue", this) and pcUsed < BS.GetVar("DangerValue", this)) then
@@ -62,7 +62,7 @@ BS.widgets[BS.W_BAG_SPACE] = {
         _G.EVENT_INVENTORY_FULL_UPDATE
     },
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
-    tooltip = BS.Format(_G.SI_GAMEPAD_MAIL_INBOX_INVENTORY):gsub(":", ""),
+    tooltip = BS.LC.Format(_G.SI_GAMEPAD_MAIL_INBOX_INVENTORY):gsub(":", ""),
     icon = "tooltips/icon_bag",
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
@@ -100,7 +100,7 @@ BS.widgets[BS.W_BANK_SPACE] = {
 
         local value = bagUsed .. (BS.GetVar("HideLimit", this) and "" or (noLimitColour:Colorize("/" .. bagSize)))
         local widthValue = bagUsed .. (BS.GetVar("HideLimit", this) and "" or ("/" .. bagSize))
-        local pcUsed = math.floor((bagUsed / bagSize) * 100)
+        local pcUsed = BS.LC.ToPercent(bagUsed / bagSize)
         local colour = BS.GetColour(this, "Ok", true)
 
         if (pcUsed >= BS.GetVar("WarningValue", this) and pcUsed < BS.GetVar("DangerValue", this)) then
@@ -311,7 +311,7 @@ BS.widgets[BS.W_REPAIRS_KITS] = {
             return "vendor/vendor_tabicon_repair_up"
         end
     end,
-    tooltip = BS.Format(_G.SI_HOOK_POINT_STORE_REPAIR_KIT_HEADER):gsub(":", ""),
+    tooltip = BS.LC.Format(_G.SI_HOOK_POINT_STORE_REPAIR_KIT_HEADER):gsub(":", ""),
     customSettings = {
         [1] = {
             type = "checkbox",
@@ -392,7 +392,7 @@ BS.widgets[BS.W_SOUL_GEMS] = {
 local function getDetail(data)
     local wcount = data.stackCount
     local colour = GetItemQualityColor(data.displayQuality)
-    local name = colour:Colorize(BS.Format(data.name))
+    local name = colour:Colorize(BS.LC.Format(data.name))
 
     if (data.bagId == _G.BAG_BACKPACK) then
         name = BS.BAGICON .. " " .. name
@@ -512,7 +512,7 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
         local writText = {}
 
         for type, counts in pairs(writDetail) do
-            local writType = BS.Format(GetString("SI_TRADESKILLTYPE", type))
+            local writType = BS.LC.Format(GetString("SI_TRADESKILLTYPE", type))
 
             if (counts.bagCount > 0) then
                 writType = string.format("%s %s %d", writType, BS.BAGICON, counts.bagCount)
@@ -663,7 +663,7 @@ BS.widgets[BS.W_LOCKPICKS] = {
         return available
     end,
     event = {_G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE, _G.EVENT_LOCKPICK_BROKE},
-    tooltip = BS.Format(_G.SI_GAMEPAD_LOCKPICK_PICKS_REMAINING),
+    tooltip = BS.LC.Format(_G.SI_GAMEPAD_LOCKPICK_PICKS_REMAINING),
     icon = "icons/lockpick"
 }
 
@@ -680,13 +680,13 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
 
         for itemId, _ in pairs(itemIds) do
             if (not linkCache[itemId]) then
-                local link = BS.MakeItemLink(itemId)
+                local link = BS.LC.MakeItemLink(itemId)
                 local name = GetItemLinkName(link)
 
                 if (name ~= "") then
                     linkCache[itemId] = {
                         icon = GetItemLinkIcon(link),
-                        name = BS.Format(name)
+                        name = BS.LC.Format(name)
                     }
                 end
             end
@@ -792,7 +792,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
             end
 
             widget:SetColour(BS.GetColour(this, true))
-            widget:SetValue(BS.Trim(countText), BS.Trim(plainCountText))
+            widget:SetValue(BS.LC.Trim(countText), BS.LC.Trim(plainCountText))
         end
 
         widget:SetTooltip(ttt)
@@ -879,13 +879,13 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
 
         for itemId, _ in pairs(itemIds) do
             if (not linkCache[itemId]) then
-                local link = BS.MakeItemLink(itemId)
+                local link = BS.LC.MakeItemLink(itemId)
                 local name = GetItemLinkName(link)
 
                 if (name ~= "") then
                     linkCache[itemId] = {
                         icon = GetItemLinkIcon(link),
-                        name = BS.Format(name)
+                        name = BS.LC.Format(name)
                     }
                 end
             end
@@ -937,12 +937,12 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
                     return ""
                 end
 
-                local link = BS.MakeItemLink(BS.Vars.NewItemId)
+                local link = BS.LC.MakeItemLink(BS.Vars.NewItemId)
                 local name = GetItemLinkName(link)
 
                 if (name ~= "") then
                     local icon = GetItemLinkIcon(link)
-                    name = BS.Icon(icon) .. " " .. BS.Format(name)
+                    name = BS.Icon(icon) .. " " .. BS.LC.Format(name)
                 end
 
                 return name
@@ -952,7 +952,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
 
         settings[#settings + 1] = {
             type = "button",
-            name = BS.Format(_G.SI_GAMEPAD_TRADE_ADD),
+            name = BS.LC.Format(_G.SI_GAMEPAD_TRADE_ADD),
             func = function()
                 if (BS.Vars:GetCommon("WatchedItems", tonumber(BS.Vars.NewItemId)) == nil) then
                     BS.Vars:SetCommon(true, "WatchedItems", tonumber(BS.Vars.NewItemId))
@@ -968,7 +968,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
                     return true
                 end
 
-                local link = BS.MakeItemLink(BS.Vars.NewItemId)
+                local link = BS.LC.MakeItemLink(BS.Vars.NewItemId)
                 local name = GetItemLinkName(link)
 
                 return name == ""
@@ -978,7 +978,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
 
         settings[#settings + 1] = {
             type = "button",
-            name = BS.Format(_G.SI_DIALOG_REMOVE),
+            name = BS.LC.Format(_G.SI_DIALOG_REMOVE),
             func = function()
                 BS.Vars:SetCommon(nil, "WatchedItems", tonumber(BS.Vars.NewItemId))
                 BS.Vars.NewItemId = nil
@@ -990,7 +990,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
                     return true
                 end
 
-                local link = BS.MakeItemLink(BS.Vars.NewItemId)
+                local link = BS.LC.MakeItemLink(BS.Vars.NewItemId)
                 local name = GetItemLinkName(link)
 
                 return name == ""
@@ -1030,7 +1030,7 @@ local function scanCategoryData(categoryData, collectibleType, collectibleTable,
                         {
                             id = id,
                             unlocked = collectibleData:IsUnlocked(),
-                            name = BS.Format(collectibleData:GetName()),
+                            name = BS.LC.Format(collectibleData:GetName()),
                             combinedId = combinedCollectibleId,
                             combinationUnlocked = unlocked
                         }
@@ -1098,7 +1098,7 @@ local function randomOnLeftClick(collectibleTable, widgetIndex)
 
     if (usable) then
         local widget = BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[widgetIndex])
-        local name = BS.Format(GetCollectibleName(collectibleId))
+        local name = BS.LC.Format(GetCollectibleName(collectibleId))
 
         local tt = BS.widgets[widgetIndex].tooltip .. BS.LF
 
@@ -1239,7 +1239,7 @@ BS.widgets[BS.W_RANDOM_EMOTE] = {
             widget:SetTooltip(tt)
 
             if (BS.Vars.Controls[BS.W_RANDOM_EMOTE].Print) then
-                local name = BS.Format(displayName)
+                local name = BS.LC.Format(displayName)
                 local output = BS.COLOURS.ZOSGold:Colorize("Bar Steward") .. ": " .. name
 
                 CHAT_ROUTER:AddSystemMessage(output)
@@ -1302,11 +1302,11 @@ BS.widgets[BS.W_CONTAINERS] = {
             _G.BAG_BACKPACK
         )
 
-        return itemScan(widget, filteredItems, BS.W_CONTAINERS, BS.Format(_G.SI_ITEMTYPEDISPLAYCATEGORY26))
+        return itemScan(widget, filteredItems, BS.W_CONTAINERS, BS.LC.Format(_G.SI_ITEMTYPEDISPLAYCATEGORY26))
     end,
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
     icon = "icons/mail_armor_container",
-    tooltip = BS.Format(_G.SI_ITEMTYPEDISPLAYCATEGORY26),
+    tooltip = BS.LC.Format(_G.SI_ITEMTYPEDISPLAYCATEGORY26),
     hideWhenEqual = 0,
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
@@ -1329,11 +1329,11 @@ BS.widgets[BS.W_TREASURE] = {
             _G.BAG_BACKPACK
         )
 
-        return itemScan(widget, filteredItems, BS.W_TREASURE, BS.Format(_G.SI_ITEMTYPE56))
+        return itemScan(widget, filteredItems, BS.W_TREASURE, BS.LC.Format(_G.SI_ITEMTYPE56))
     end,
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
     icon = "icons/quest_strosmkai_open_treasure_chest",
-    tooltip = BS.Format(_G.SI_ITEMTYPE56),
+    tooltip = BS.LC.Format(_G.SI_ITEMTYPE56),
     hideWhenEqual = 0,
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
@@ -1356,11 +1356,11 @@ BS.widgets[BS.W_FURNISHINGS] = {
             _G.BAG_BACKPACK
         )
 
-        return itemScan(widget, filteredItems, BS.W_FURNISHINGS, BS.Format(_G.SI_ITEMFILTERTYPE21))
+        return itemScan(widget, filteredItems, BS.W_FURNISHINGS, BS.LC.Format(_G.SI_ITEMFILTERTYPE21))
     end,
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
     icon = "icons/servicemappins/servicepin_furnishings",
-    tooltip = BS.Format(_G.SI_ITEMFILTERTYPE21),
+    tooltip = BS.LC.Format(_G.SI_ITEMFILTERTYPE21),
     hideWhenEqual = 0,
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
@@ -1385,12 +1385,12 @@ BS.widgets[BS.W_COMPANION_GEAR] = {
             _G.BAG_BACKPACK
         )
 
-        return itemScan(widget, filteredItems, BS.W_COMPANION_GEAR, BS.Format(_G.SI_ITEMFILTERTYPE27))
+        return itemScan(widget, filteredItems, BS.W_COMPANION_GEAR, BS.LC.Format(_G.SI_ITEMFILTERTYPE27))
     end,
     event = _G.EVENT_PLAYER_ACTIVATED,
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
     icon = "inventory/inventory_trait_companionequipment_icon",
-    tooltip = BS.Format(_G.SI_ITEMFILTERTYPE27),
+    tooltip = BS.LC.Format(_G.SI_ITEMFILTERTYPE27),
     hideWhenEqual = 0,
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
@@ -1415,12 +1415,12 @@ BS.widgets[BS.W_MUSEUM] = {
             _G.BAG_BACKPACK
         )
 
-        return itemScan(widget, filteredItems, BS.W_MUSEUM, BS.Format(_G.SI_SPECIALIZEDITEMTYPE103))
+        return itemScan(widget, filteredItems, BS.W_MUSEUM, BS.LC.Format(_G.SI_SPECIALIZEDITEMTYPE103))
     end,
     event = _G.EVENT_PLAYER_ACTIVATED,
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
     icon = "icons/servicemappins/servicepin_museum",
-    tooltip = BS.Format(_G.SI_SPECIALIZEDITEMTYPE103),
+    tooltip = BS.LC.Format(_G.SI_SPECIALIZEDITEMTYPE103),
     hideWhenEqual = 0,
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
@@ -1557,7 +1557,7 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
                 return poisonBars[BS.Vars.Controls[BS.W_EQUIPPED_POISON].PoisonBar or BS.MAIN_BAR]
             end,
             setFunc = function(value)
-                local index = BS.GetByValue(poisonBars, value)
+                local index = BS.LC.GetByValue(poisonBars, value)
                 BS.Vars.Controls[BS.W_EQUIPPED_POISON].PoisonBar = index
 
                 BS.RefreshWidget(BS.W_EQUIPPED_POISON)
@@ -1649,7 +1649,7 @@ BS.widgets[BS.W_FRAGMENTS] = {
         )
 
         for _, info in ipairs(fragmentsForDisplay) do
-            local collectibleName = BS.Format(info.name)
+            local collectibleName = BS.LC.Format(info.name)
 
             if (info.collected + info.uncollected + info.unnecessary > 0) then
                 if (info.collected and (info.unnecessary == 0) and info.collected > 0) then
@@ -1690,7 +1690,7 @@ BS.widgets[BS.W_FRAGMENTS] = {
 
         if (uncollectedtt:len() > 0) then
             uncollectedtt = BS.COLOURS.Grey:Colorize(uncollectedtt)
-            tt = tt .. GetString(_G.BARSTEWARD_NOT_COLLECTED) .. BS.LF .. BS.Trim(uncollectedtt) .. "|r"
+            tt = tt .. GetString(_G.BARSTEWARD_NOT_COLLECTED) .. BS.LF .. BS.LC.Trim(uncollectedtt) .. "|r"
         end
 
         widget:SetTooltip(tt)
@@ -1782,7 +1782,7 @@ BS.widgets[BS.W_RUNEBOXES] = {
 
         for id, info in pairs(fragmentInfo) do
             if (id > 1000000) then
-                icon = GetItemLinkIcon(BS.MakeItemLink(tonumber(id - 1000000)))
+                icon = GetItemLinkIcon(BS.LC.MakeItemLink(tonumber(id - 1000000)))
             else
                 icon = ZO_COLLECTIBLE_DATA_MANAGER:GetCollectibleDataById(id):GetIcon()
             end
@@ -1840,7 +1840,7 @@ BS.widgets[BS.W_RUNEBOXES] = {
 
         for _, info in ipairs(uncollected) do
             ttext = string.format("%s%s%s ", ttext, BS.LF, BS.Icon(info.icon))
-            ttext = string.format("%s%s 0/%d", ttext, BS.Format(info.name), info.quantity)
+            ttext = string.format("%s%s 0/%d", ttext, BS.LC.Format(info.name), info.quantity)
         end
 
         widget:SetTooltip(tt .. BS.COLOURS.Grey:Colorize(ttext))
@@ -1876,7 +1876,7 @@ local function getFoundRecipesTooltip()
 
     for _, info in ipairs(tttable) do
         local colour = GetItemQualityColor(info.displayQuality)
-        local name = colour:Colorize(BS.Format(info.name))
+        local name = colour:Colorize(BS.LC.Format(info.name))
 
         tt = tt .. BS.LF .. name .. "|r" .. ((info.qty > 1) and (" (" .. info.qty .. ")") or "")
 
@@ -1893,7 +1893,7 @@ BS.widgets[BS.W_RECIPE_WATCH] = {
     name = "recipeWatch",
     update = function(widget, event, receivedBy, itemName, quantity, _, _, _, _, _, itemId)
         local this = BS.W_RECIPE_WATCH
-        local link = BS.MakeItemLink(itemId, itemName)
+        local link = BS.LC.MakeItemLink(itemId, itemName)
         local itemType = GetItemLinkItemType(link)
         local lootedBy = ZO_CachedStrFormat("<<C:1>>", receivedBy)
         local player = BS.CHAR.name
@@ -1929,7 +1929,7 @@ BS.widgets[BS.W_RECIPE_WATCH] = {
 
         if (BS.GetVar("Announce", this)) then
             local icolour = GetItemQualityColor(displayQuality)
-            local iname = icolour:Colorize(BS.Format(itemName))
+            local iname = icolour:Colorize(BS.LC.Format(itemName))
 
             BS.Vars:SetCommon(os.time(), "PreviousAnnounceTime", this)
             BS.Announce(
@@ -1951,7 +1951,7 @@ BS.widgets[BS.W_RECIPE_WATCH] = {
     hideWhenEqual = 0,
     onLeftClick = function()
         if (BS.Vars.FoundRecipes) then
-            BS.Clear(BS.Vars.FoundRecipes)
+            BS.LC.Clear(BS.Vars.FoundRecipes)
             BS.Vars.FoundCount = 0
             ZO_Tooltips_HideTextTooltip()
             BS.RefreshWidget(BS.W_RECIPE_WATCH)
@@ -1975,7 +1975,7 @@ local function getMin(charges, slots, equipped)
 
     equipped =
         equipped or
-        {pc = GetString(_G.BARSTEWARD_NOT_APPLICABLE), name = BS.Format(_G.SI_GAMEPAD_INVENTORY_EMPTY_TOOLTIP)}
+        {pc = GetString(_G.BARSTEWARD_NOT_APPLICABLE), name = BS.LC.Format(_G.SI_GAMEPAD_INVENTORY_EMPTY_TOOLTIP)}
 
     for slot, info in pairs(charges) do
         if (ZO_IsElementInNumericallyIndexedTable(slots, slot)) then
@@ -2027,11 +2027,11 @@ BS.widgets[BS.W_WEAPON_CHARGE] = {
             local raw = 101
 
             if (charges > -1) then
-                raw = math.floor((charges / maxCharges) * 100)
+                raw = BS.LC.ToPercent(charges / maxCharges)
                 pc = string.format("%d%%", raw or 0)
             end
 
-            local name = BS.Format(GetItemName(_G.BAG_WORN, slot))
+            local name = BS.LC.Format(GetItemName(_G.BAG_WORN, slot))
 
             if (name ~= "") then
                 weaponCharges[slot] = {pc = pc, name = name, raw = raw}

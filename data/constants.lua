@@ -15,7 +15,7 @@ function BS.FireCallbacks(...)
 end
 
 -- linefeed character
-BS.LF = string.char(10)
+BS.LF = BS.LC.LF
 
 -- widgets
 BS.W_TIME = 1

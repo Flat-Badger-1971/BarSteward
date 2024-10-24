@@ -1,63 +1,18 @@
 local BS = _G.BarSteward
 
 function BS.SecondsToTime(seconds, hideDays, hideHours, hideSeconds, format, hideDaysWhenZero)
-    local time = ""
-    local days = math.floor(seconds / 86400)
-    local remaining = seconds
-    local hideWhenZeroDays = hideDaysWhenZero == true and days == 0
-
-    hideDays = hideDays or hideWhenZeroDays
-
-    if (days > 0) then
-        remaining = seconds - (days * 86400)
-    end
-
-    local hours = math.floor(remaining / 3600)
-
-    if (hours > 0) then
-        remaining = remaining - (hours * 3600)
-    end
-
-    local minutes = math.floor(remaining / 60)
-
-    if (minutes > 0) then
-        remaining = remaining - (minutes * 60)
-    end
-
-    remaining = math.floor(remaining)
-
-    if ((format or "01:12:04:10") ~= "01:12:04:10" and format ~= "01:12:04") then
-        if (hideSeconds) then
-            if (hideDays) then
-                time = ZO_CachedStrFormat(_G.BARSTEWARD_TIMER_FORMAT_TEXT_NO_DAYS, hours, minutes)
-            else
-                time = ZO_CachedStrFormat(_G.BARSTEWARD_TIMER_FORMAT_TEXT, days, hours, minutes)
-            end
-        else
-            if (hideDays) then
-                time =
-                    ZO_CachedStrFormat(_G.BARSTEWARD_TIMER_FORMAT_TEXT_WITH_SECONDS_NO_DAYS, hours, minutes, remaining)
-            else
-                time = ZO_CachedStrFormat(_G.BARSTEWARD_TIMER_FORMAT_TEXT_WITH_SECONDS, days, hours, minutes, remaining)
-            end
-        end
-    else
-        if (not hideDays) then
-            time = string.format("%02d", days) .. ":"
-        end
-
-        if (not hideHours) then
-            time = time .. string.format("%02d", hours) .. ":"
-        end
-
-        time = time .. string.format("%02d", minutes)
-
-        if (not hideSeconds) then
-            time = time .. ":" .. string.format("%02d", remaining)
-        end
-    end
-
-    return time
+    return BS.LC.SecondsToTime(
+        seconds,
+        hideDays,
+        hideHours,
+        hideSeconds,
+        format,
+        hideDaysWhenZero,
+        _G.BARSTEWARD_TIMER_FORMAT_TEXT,
+        _G.BARSTEWARD_TIMER_FORMAT_TEXT_NO_DAYS,
+        _G.BARSTEWARD_TIMER_FORMAT_TEXT_WITH_SECONDS_NO_DAYS,
+        _G.BARSTEWARD_TIMER_FORMAT_TEXT_WITH_SECONDS
+    )
 end
 
 function BS.SetLockState(frame, lock)
@@ -76,303 +31,8 @@ function BS.SetLockState(frame, lock)
     frame.lock:SetMouseOverTexture(lockMouseOver)
 end
 
--- from https://wowwiki-archive.fandom.com/wiki/USERAPI_ColorGradient
-function BS.Gradient(perc, ...)
-    if perc >= 1 then
-        local r, g, b = select(select("#", ...) - 2, ...)
-        return r, g, b
-    elseif perc <= 0 then
-        local r, g, b = ...
-        return r, g, b
-    end
-
-    local num = select("#", ...) / 3
-
-    local segment, relperc = math.modf(perc * (num - 1))
-    local r1, g1, b1, r2, g2, b2 = select((segment * 3) + 1, ...)
-
-    return r1 + (r2 - r1) * relperc, g1 + (g2 - g1) * relperc, b1 + (b2 - b1) * relperc
-end
-
--- Return a formatted time
--- from https://esoui.com/forums/showthread.php?t=4507
-function BS.FormatTime(format, timeString, tamrielTime)
-    -- split up default timestamp
-    local hours, minutes, seconds
-
-    if (tamrielTime) then
-        hours, minutes, seconds = tamrielTime.hour, tamrielTime.minute, tamrielTime.second
-
-        if (tostring(minutes):len() == 1) then
-            minutes = "0" .. minutes
-        end
-
-        if (tostring(seconds):len() == 1) then
-            seconds = "0" .. seconds
-        end
-    else
-        timeString = timeString or GetTimeString()
-        hours, minutes, seconds = timeString:match("([^%:]+):([^%:]+):([^%:]+)")
-    end
-
-    local hoursNoLead = tonumber(hours) -- hours without leading zero
-    local hours12NoLead = (hoursNoLead - 1) % 12 + 1
-    local hours12
-
-    if (hours12NoLead < 10) then
-        hours12 = "0" .. hours12NoLead
-    else
-        hours12 = hours12NoLead
-    end
-
-    local pUp = "AM"
-    local pLow = "am"
-
-    if (hoursNoLead >= 12) then
-        pUp = "PM"
-        pLow = "pm"
-    end
-
-    -- create new one
-    local time = format
-    time = time:gsub("HH", hours)
-    time = time:gsub("H", hoursNoLead)
-    time = time:gsub("hh", hours12)
-    time = time:gsub("h", hours12NoLead)
-    time = time:gsub("m", minutes)
-    time = time:gsub("s", seconds)
-    time = time:gsub("A", pUp)
-    time = time:gsub("a", pLow)
-
-    return time
-end
-
-function BS.ToPercent(qty, total)
-    local pc = tonumber(qty) / tonumber(total)
-    pc = math.floor(pc * 100)
-
-    return pc
-end
-
--- from LibEventHandler
--- avoids requiring the library (addon is already released)
--- needed to allow multiple functions to be registered against an event
-local eventFunctions = {}
-
-local function callEventFunctions(event, ...)
-    if (#eventFunctions[event] == 0) then
-        return
-    end
-
-    for i = 1, #eventFunctions[event] do
-        eventFunctions[event][i](event, ...)
-    end
-end
-
-local function registerForEvent(event, func)
-    if (event == nil or func == nil) then
-        return
-    end
-
-    if (not eventFunctions[event]) then
-        eventFunctions[event] = {}
-    end
-
-    if (#eventFunctions[event] ~= 0) then
-        local numOfFuncs = #eventFunctions[event]
-
-        for i = 1, numOfFuncs do
-            if (eventFunctions[event][i] == func) then
-                return false
-            end
-        end
-
-        eventFunctions[event][numOfFuncs + 1] = func
-
-        return false
-    else
-        eventFunctions[event][1] = func
-
-        return true
-    end
-end
-
-function BS.RegisterForEvent(event, func)
-    local needsRegistration = registerForEvent(event, func)
-
-    if (needsRegistration) then
-        EVENT_MANAGER:RegisterForEvent(BS.Name, event, callEventFunctions)
-    end
-end
-
-local function unregisterForEvent(event, func)
-    if (event == nil or func == nil) then
-        return
-    end
-
-    if (#eventFunctions[event] ~= 0) then
-        local numOfFuncs = #eventFunctions[event]
-        for i = 1, numOfFuncs, 1 do
-            if eventFunctions[event][i] == func then
-                eventFunctions[event][i] = eventFunctions[event][numOfFuncs]
-                eventFunctions[event][numOfFuncs] = nil
-
-                numOfFuncs = numOfFuncs - 1
-
-                if numOfFuncs == 0 then
-                    return true
-                end
-
-                return false
-            end
-        end
-
-        return false
-    else
-        return false
-    end
-end
-
-function BS.UnregisterForEvent(event, func)
-    local needsUnregistration = unregisterForEvent(event, func)
-
-    if (needsUnregistration) then
-        EVENT_MANAGER:UnregisterForEvent(BS.Name, event)
-    end
-end
-
---- end events
-
--- timers
--- simplifies enabling/disabling all timers at once
-local timerFunctions = {}
-
-local function callTimerFunctions(time)
-    if (#timerFunctions[time] == 0) then
-        return
-    end
-
-    for i = 1, #timerFunctions[time] do
-        if (timerFunctions[time][i]) then
-            timerFunctions[time][i]()
-        end
-    end
-end
-
-local function registerForUpdate(time, func)
-    if (time == nil or func == nil) then
-        return
-    end
-
-    if (not timerFunctions[time]) then
-        timerFunctions[time] = {}
-    end
-
-    if (#timerFunctions[time] ~= 0) then
-        local numOfFuncs = #timerFunctions[time]
-
-        for i = 1, numOfFuncs do
-            if (timerFunctions[time][i] == func) then
-                return false
-            end
-        end
-
-        timerFunctions[time][numOfFuncs + 1] = func
-
-        return false
-    else
-        timerFunctions[time][1] = func
-
-        return true
-    end
-end
-
-function BS.RegisterForUpdate(time, func)
-    local needsRegistration = registerForUpdate(time, func)
-
-    if (needsRegistration) then
-        EVENT_MANAGER:RegisterForUpdate(
-            BS.Name .. tostring(time),
-            time,
-            function()
-                callTimerFunctions(time)
-            end
-        )
-    end
-end
-
-local function unregisterForUpdate(time, func)
-    if (time == nil or func == nil) then
-        return
-    end
-
-    if (#timerFunctions[time] ~= 0) then
-        local numOfFuncs = #timerFunctions[time]
-        for i = 1, numOfFuncs, 1 do
-            if (timerFunctions[time][i] == func) then
-                timerFunctions[time][i] = timerFunctions[time][numOfFuncs]
-                timerFunctions[time][numOfFuncs] = nil
-
-                numOfFuncs = numOfFuncs - 1
-
-                if (numOfFuncs == 0) then
-                    return true
-                end
-
-                return false
-            end
-        end
-
-        return false
-    else
-        return false
-    end
-end
-
-function BS.UnregisterForUpdate(time, func)
-    local needsUnregistration = unregisterForUpdate(time, func)
-
-    if (needsUnregistration) then
-        EVENT_MANAGER:UnregisterForUpdate(BS.Name .. tostring(time))
-    end
-end
-
-function BS.DisableUpdates(includeTime)
-    for time, funcs in pairs(timerFunctions) do
-        if (#funcs ~= 0) then
-            EVENT_MANAGER:UnregisterForUpdate(string.format("%s%s", BS.Name, tostring(time)))
-        end
-    end
-
-    if (includeTime) then
-        EVENT_MANAGER:UnregisterForUpdate(BS.Name .. "time")
-    end
-end
-
-function BS.EnableUpdates(includeTime)
-    for time, funcs in pairs(timerFunctions) do
-        if (#funcs ~= 0) then
-            EVENT_MANAGER:RegisterForUpdate(
-                string.format("%s%s", BS.Name, tostring(time)),
-                time,
-                function()
-                    callTimerFunctions(time)
-                end
-            )
-        end
-    end
-
-    if (includeTime and BS.timeFunction) then
-        EVENT_MANAGER:RegisterForUpdate(
-            BS.Name .. "time",
-            1000,
-            function()
-                BS.timeFunction()
-            end
-        )
-    end
-end
--- end timers
+BS.EventManager = BS.LC.EventManager:New(BS.Name)
+BS.TimerManager = BS.LC.TimerManager:New(BS.Name)
 
 function BS.CheckPerformance(inCombat)
     if (BS.Vars.DisableTimersInCombat) then
@@ -381,15 +41,15 @@ function BS.CheckPerformance(inCombat)
         end
 
         if (inCombat and BS.disabledTimers == nil) then
-            BS.DisableUpdates()
+            BS.TimerManager:DisableUpdates()
             BS.disabledTimers = true
         elseif (BS.disabledTimers ~= nil) then
-            BS.EnableUpdates()
+            BS.TimerManager:EnableUpdates()
             BS.disabledTimers = nil
         end
     else
         if (BS.disabledTimers ~= nil) then
-            BS.EnableUpdates()
+            BS.TimerManager:EnableUpdates()
             BS.disabledTimers = nil
         end
     end
@@ -427,29 +87,7 @@ function BS.AddSeparators(number)
     local grouping = tonumber(GetString(_G.BARSTEWARD_NUMBER_GROUPING))
     local separator = BS.Vars.NumberSeparator or GetString(_G.BARSTEWARD_NUMBER_SEPARATOR)
 
-    if type(number) ~= "number" or number < 0 or number == 0 or not number then
-        return number
-    else
-        local t = {}
-        local int = math.floor(number)
-
-        if int == 0 then
-            t[#t + 1] = 0
-        else
-            local digits = math.log10(int)
-            local segments = math.floor(digits / grouping)
-            local groups = 10 ^ grouping
-            t[#t + 1] = math.floor(int / groups ^ segments)
-            for i = segments - 1, 0, -1 do
-                t[#t + 1] = separator
-                t[#t + 1] = ("%0" .. grouping .. "d"):format(math.floor(int / groups ^ i) % groups)
-            end
-        end
-
-        local s = table.concat(t)
-
-        return s
-    end
+    return BS.LC.AddSeparators(number, grouping, separator)
 end
 
 -- based on Wykkyd toolbar
@@ -498,43 +136,14 @@ function BS.IsTraitResearchComplete(craftingType)
     return complete
 end
 
-function BS.Split(s, delimiter)
-    local result = {}
-
-    delimiter = delimiter or ","
-
-    for match in (s .. delimiter):gmatch("(.-)" .. delimiter) do
-        table.insert(result, match)
-    end
-
-    return result
-end
-
-function BS.Join(values)
-    local outputTable = {}
-
-    for value, _ in pairs(values) do
-        table.insert(outputTable, ZO_FormatUserFacingCharacterName(value))
-    end
-
-    return table.concat(outputTable, ", ")
-end
-
 function BS.Announce(header, message, widgetIconNumber, lifespan, sound, otherIcon)
-    local messageParams = CENTER_SCREEN_ANNOUNCE:CreateMessageParams(_G.CSA_CATEGORY_LARGE_TEXT)
-
-    messageParams:SetSound(sound or "Justice_NowKOS")
-    messageParams:SetText(header or "Test Header", message or "Test Message")
-    messageParams:SetLifespanMS(lifespan or 6000)
-    messageParams:SetCSAType(_G.CENTER_SCREEN_ANNOUNCE_TYPE_SYSTEM_BROADCAST)
+    local iconData
 
     if (widgetIconNumber) then
-        messageParams:SetIconData(
-            BS.FormatIcon(otherIcon or BS.widgets[widgetIconNumber].icon)
-        )
+        iconData = BS.FormatIcon(otherIcon or BS.widgets[widgetIconNumber].icon)
     end
 
-    CENTER_SCREEN_ANNOUNCE:AddMessageWithParams(messageParams)
+    BS.LC.ScreenAnnounce(header, message, iconData, lifespan, sound)
 end
 
 -- ensure all widget ordering is in a continuous
@@ -628,13 +237,6 @@ function BS.RemoveFromAllScenes(barIndex)
     end
 end
 
-function BS.VersionDelta(version)
-    local currentVersion = BS.VERSION:gsub("%.", "")
-    local checkVersion = version:gsub("%.", "")
-
-    return tonumber(currentVersion) - tonumber(checkVersion)
-end
-
 function BS.ForceResize(widgetIndex)
     local widget = BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[widgetIndex])
 
@@ -682,50 +284,6 @@ function BS.RefreshAll()
     end
 end
 
-function BS.Repeat(input, times)
-    local output = {}
-
-    for _ = 1, times do
-        table.insert(output, input)
-    end
-
-    return output
-end
-
-function BS.MakeItemLink(itemId, name)
-    return ZO_LinkHandler_CreateLink(name or "", nil, _G.ITEM_LINK_TYPE, itemId, unpack(BS.Repeat(0, 20)))
-end
-
-function BS.Trim(stringValue)
-    return stringValue:gsub("^%s*(.-)%s*$", "%1")
-end
-
-function BS.MergeTables(t1, t2)
-    local output = {}
-
-    for _, value in ipairs(t1) do
-        output[#output + 1] = value
-    end
-
-    for _, value in ipairs(t2) do
-        output[#output + 1] = value
-    end
-
-    return output
-end
-
-function BS.Filter(t, filterFunc)
-    local out = {}
-
-    for k, v in pairs(t) do
-        if (filterFunc(v, k, t)) then
-            table.insert(out, v)
-        end
-    end
-
-    return out
-end
-
 function BS.ResizeBar(barIndex)
     if ((barIndex or 0) == 0) then
         return
@@ -767,63 +325,10 @@ function BS.ResizeBar(barIndex)
     end
 end
 
-local itemColours = {}
-
-do
-    for quality = _G.ITEM_DISPLAY_QUALITY_TRASH, _G.ITEM_DISPLAY_QUALITY_MYTHIC_OVERRIDE do
-        itemColours[quality] = {GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_ITEM_QUALITY_COLORS, quality)}
-    end
-end
-
-function BS.ColourToQuality(r, g, b)
-    for quality, rgba in pairs(itemColours) do
-        local rc, gc, bc = math.floor(rgba[1] * 100), math.floor(rgba[2] * 100), math.floor(rgba[3] * 100)
-        local ri, gi, bi = math.floor(r * 100), math.floor(g * 100), math.floor(b * 100)
-
-        if (rc == ri and gc == gi and bc == bi) then
-            return quality
-        end
-    end
-end
-
 function BS.ColourToIcon(r, g, b)
-    local quality = BS.ColourToQuality(r, g, b)
+    local quality = BS.LC.ColourToQuality(r, g, b)
 
     return BS.FormatIcon(BS.ITEM_COLOUR_ICON[quality or 1])
-end
-
--- get then next unused index number from the table's values
-function BS.GetNextIndex(t)
-    local nextIndex = 1
-    local tmpTable = {}
-
-    for _, value in pairs(t) do
-        table.insert(tmpTable, value)
-    end
-
-    table.sort(tmpTable)
-
-    for _, value in ipairs(tmpTable) do
-        if (value ~= nextIndex) then
-            return nextIndex
-        end
-
-        nextIndex = nextIndex + 1
-    end
-
-    return nextIndex
-end
-
-function BS.GetByValue(t, v)
-    for key, value in pairs(t) do
-        if (type(value) == "table") then
-            if (ZO_IsElementInNumericallyIndexedTable(value, v)) then
-                return key
-            end
-        elseif (value == v) then
-            return key
-        end
-    end
 end
 
 function BS.GetWritType(itemId)
@@ -844,83 +349,12 @@ function BS.ToWritFields(item_link)
         itemId = tonumber(parsedLink[4]),
         writType = BS.GetWritType(tonumber(parsedLink[4])),
         subType = tonumber(parsedLink[5]),
-        itemType = BS.GetByValue(BS.WRIT_ITEM_TYPES, tonumber(parsedLink[10])) or 0,
+        itemType = BS.LC.GetByValue(BS.WRIT_ITEM_TYPES, tonumber(parsedLink[10])) or 0,
         itemQuality = tonumber(parsedLink[12]),
         motifNumber = tonumber(parsedLink[15])
     }
 
     return bsValues
-end
-
-function BS.Format(value, ...)
-    local text = value
-
-    if (type(value) == "number") then
-        text = GetString(value)
-    end
-
-    return ZO_CachedStrFormat("<<C:1>>", text, ...)
-end
-
--- https://gist.github.com/tylerneylon/81333721109155b2d244
-local function deepCopy(obj, seen)
-    if (type(obj) ~= "table") then
-        return obj
-    end
-
-    if (seen and seen[obj]) then
-        return seen[obj]
-    end
-
-    local s = seen or {}
-    local res = {}
-
-    s[obj] = res
-
-    for k, v in pairs(obj) do
-        res[deepCopy(k, s)] = deepCopy(v, s)
-    end
-
-    return setmetatable(res, getmetatable(obj))
-end
-
-function BS.SimpleTableCompare(t1, t2)
-    return table.concat(t1) == table.concat(t2)
-end
-
-function BS.ToInt(num)
-    return tonumber(string.format("%.0f", num))
-end
-
-function BS.CompareColours(c1, c2)
-    local colours = {c1, c2}
-
-    -- just compare colours down to 3 decimal places
-    for _, colour in ipairs(colours) do
-        for idx, value in pairs(colour) do
-            local rounded = tonumber(string.format("%.3g", value))
-
-            colour[idx] = rounded
-        end
-    end
-
-    return BS.SimpleTableCompare(c1, c2)
-end
-
-function BS.Count(input, searchFor)
-    local _, count = input:gsub(searchFor, "")
-
-    return count
-end
-
-function BS.Search(values, searchFor)
-    for _, value in ipairs(values) do
-        if (searchFor:find(value)) then
-            return true
-        end
-    end
-
-    return false
 end
 
 local function addQuotes(value, sub)
@@ -990,10 +424,10 @@ local function convert(value)
         return false
     end
 
-    local count = BS.Count(value, "%-")
+    local count = BS.LC.Count(value, "%-")
 
     if (count == 3) then
-        local array = BS.Split(value, "%-")
+        local array = BS.LC.Split(value, "%-")
 
         for index, val in pairs(array) do
             val = val:gsub("%%", "")
@@ -1016,14 +450,14 @@ local function generateTable(input)
     assert(input:find("w::"), GetString(_G.BARSTEWARD_IMPORT_ERROR_WIDGET))
 
     local widgetStartPos = input:find("w::")
-    local barData = BS.Split(input:sub(4, widgetStartPos - 1), "%^")
-    local widgetData = BS.Split(input:sub(widgetStartPos + 3), "%^")
+    local barData = BS.LC.Split(input:sub(4, widgetStartPos - 1), "%^")
+    local widgetData = BS.LC.Split(input:sub(widgetStartPos + 3), "%^")
 
     local barObject = {}
 
     -- convert bar data to a table
     for _, token in pairs(barData) do
-        local info = BS.Split(token, "#")
+        local info = BS.LC.Split(token, "#")
 
         if (info[1]) then
             -- check for backdrop.colour
@@ -1043,7 +477,7 @@ local function generateTable(input)
     local widgetsObject = {}
 
     for _, token in pairs(widgetData) do
-        local info = BS.Split(token, "#")
+        local info = BS.LC.Split(token, "#")
 
         if (info[1] and info[1] ~= "%") then
             if (info[1]:sub(1, 1) == "@") then
@@ -1062,7 +496,7 @@ local function generateTable(input)
 end
 
 function BS.ExportBar(barNumber)
-    local destBar = deepCopy(BS.Vars.Bars[barNumber])
+    local destBar = BS.LC.DeepCopy(BS.Vars.Bars[barNumber])
 
     -- remove any default values, no point keeping those
     for k, v in pairs(destBar) do
@@ -1074,7 +508,7 @@ function BS.ExportBar(barNumber)
     end
 
     if (destBar.Backdrop.Colour) then
-        if (BS.SimpleTableCompare(destBar.Backdrop.Colour, BS.Defaults.Bars[1].Backdrop.Colour)) then
+        if (BS.LC.SimpleTableCompare(destBar.Backdrop.Colour, BS.Defaults.Bars[1].Backdrop.Colour)) then
             destBar.Backdrop.Colour = nil
         end
     end
@@ -1086,7 +520,7 @@ function BS.ExportBar(barNumber)
     end
 
     if (destBar.CombatColour) then
-        if (BS.SimpleTableCompare(destBar.CombatColour, BS.Defaults.DefaultCombatColour)) then
+        if (BS.LC.SimpleTableCompare(destBar.CombatColour, BS.Defaults.DefaultCombatColour)) then
             destBar.CombatColour = nil
         end
     end
@@ -1107,7 +541,7 @@ function BS.ExportBar(barNumber)
         -- ignore housing widgets - they are too client specific
         if (widgetIndex < 1000) then
             if (widgetSettings.Bar == barNumber) then
-                forExport.Controls[widgetIndex] = deepCopy(widgetSettings)
+                forExport.Controls[widgetIndex] = BS.LC.DeepCopy(widgetSettings)
                 forExport.Controls[widgetIndex].Bar = nil
                 forExport.Controls[widgetIndex].Exclude = nil
 
@@ -1329,19 +763,6 @@ function BS.ImportBar(data, replaceMain)
     end
 end
 
-function BS.GetNearest(input, factor)
-    local remaining = input % factor
-    local lower = input - remaining
-    local upper = lower + factor
-    local result = lower
-
-    if ((input - lower) > (upper - input)) then
-        result = upper
-    end
-
-    return result
-end
-
 local function getWidgets(barIndex)
     local widgets = {}
 
@@ -1495,7 +916,7 @@ function BS.DestroyBar(barIndex)
     local barName = BS.Vars.Bars[barIndex].Name
 
     BS.alignBars =
-        BS.Filter(
+        BS.LC.Filter(
         BS.alignBars,
         function(v)
             return v ~= barName
@@ -1503,7 +924,7 @@ function BS.DestroyBar(barIndex)
     )
 
     BS.Bars =
-        BS.Filter(
+        BS.LC.Filter(
         BS.Bars,
         function(v)
             return v ~= barName
@@ -1559,48 +980,12 @@ function BS.RegenerateAllBars(barsToRegenerate)
     end
 end
 
-function BS.SentenceCase(text)
-    local initial = text:sub(1, 1):upper()
-    local rest = text:sub(2)
-
-    return initial .. rest
-end
-
-function BS.FormatIcon(path)
-    if (path:find("BarSteward")) then
-        return path
-    end
-
-    if (not path:lower():find("esoui")) then
-        path = "/esoui/art/" .. path
-    end
-
-    if (not path:find(".dds")) then
-        path = path .. ".dds"
-    end
-
-    return path
-end
-
 function BS.Icon(path, colour, width, height)
-    width = width or 16
-    height = height or 16
-
     if (not path:find("BarSteward")) then
         path = BS.FormatIcon(path)
     end
 
-    local texture = zo_iconFormat(path, width, height)
-
-    if (colour) then
-        if (type(colour) == "table") then
-            texture = colour:Colorize(texture:gsub("|t$", ":inheritColor|t"))
-        else
-            texture = string.format("|c%s%s|r", colour, texture:gsub("|t$", ":inheritColor|t"))
-        end
-    end
-
-    return texture
+    return BS.LC.GetIconTexture(path, colour, width, height)
 end
 
 function BS.GetVar(name, widget)
@@ -1684,7 +1069,7 @@ function BS.GetColour(this, colourType, default, useZoColours)
     local retColour = BS.GetVar(colour, this) or defColour
 
     if (useZoColours) then
-        return BS.NewColour(retColour)
+        return BS.LC.Colour(retColour)
     else
         return retColour
     end
@@ -1775,36 +1160,11 @@ function BS.PopulateSoundOptions()
     end
 end
 
-function BS.SecondsToMinutes(secondsValue)
-    local minutes = math.floor(secondsValue / 60)
-    local seconds = secondsValue - (minutes * 60)
-
-    return string.format("%d:%02d", minutes, seconds)
-end
-
--- generic table element count (#table only works correctly on sequentially numerically indexed tables)
-function BS.CountElements(t)
-    local count = 0
-
-    for _ in next, t do
-        count = count + 1
-    end
-
-    return count
-end
-
 function BS.ToggleBar(index)
     local bar = BS.BarObjectPool:GetActiveObject(BS.BarObjects[index])
 
     if (bar) then
         bar:Toggle()
-    end
-end
-
--- clear *any* table
-function BS.Clear(t)
-    for k in next, t do
-        rawset(t, k, nil)
     end
 end
 
@@ -1860,104 +1220,43 @@ function BS.HideWhenDead()
     end
 end
 
-function BS.NewColour(r, g, b, a)
-    if type(r) == "string" then
-        return ZO_ColorDef:New(r)
-    elseif type(r) == "table" then
-        if (r.r and r.g and r.b) then
-            return ZO_ColorDef:New(r)
-        else
-            return ZO_ColorDef:New(r[1], r[2], r[3], r[4])
-        end
-    else
-        return ZO_ColorDef:New(r, g, b, a)
-    end
-end
-
 function BS.RegisterColours()
     BS.COLOURS = {
-        DefaultCombatColour = BS.NewColour(BS.Defaults.DefaultCombatColour),
-        DefaultColour = BS.NewColour(BS.Defaults.DefaultColour),
-        DefaultDangerColour = BS.NewColour(BS.Defaults.DefaultDangerColour),
-        DefaultMaxColour = BS.NewColour(BS.Defaults.DefaultMaxColour),
-        DefaultWarningColour = BS.NewColour(BS.Defaults.DefaultWarningColour),
-        DefaultOkColour = BS.NewColour(BS.Defaults.DefaultOkColour),
-        Blue = BS.NewColour("34a4eb"),
-        Green = BS.NewColour("00ff00"),
-        Grey = BS.NewColour("bababa"),
-        Red = BS.NewColour("f90000"),
-        Yellow = BS.NewColour("ffff00"),
-        White = BS.NewColour("f9f9f9"),
-        ZOSBlue = BS.NewColour("3a92ff"),
-        ZOSGold = BS.NewColour("ccaa1a"),
-        ZOSGreen = BS.NewColour("2dc50e"),
-        ZOSGrey = BS.NewColour("e6e6e6"),
-        ZOSOrange = BS.NewColour("e58b27"),
-        ZOSPurple = BS.NewColour("a02ef7")
+        DefaultCombatColour = BS.LC.Colour(BS.Defaults.DefaultCombatColour),
+        DefaultColour = BS.LC.Colour(BS.Defaults.DefaultColour),
+        DefaultDangerColour = BS.LC.Colour(BS.Defaults.DefaultDangerColour),
+        DefaultMaxColour = BS.LC.Colour(BS.Defaults.DefaultMaxColour),
+        DefaultWarningColour = BS.LC.Colour(BS.Defaults.DefaultWarningColour),
+        DefaultOkColour = BS.LC.Colour(BS.Defaults.DefaultOkColour),
+        Blue = BS.LC.Colour("34a4eb"),
+        Green = BS.LC.Colour("00ff00"),
+        Grey = BS.LC.Colour("bababa"),
+        Red = BS.LC.Colour("f90000"),
+        Yellow = BS.LC.Colour("ffff00"),
+        White = BS.LC.Colour("f9f9f9"),
+        ZOSBlue = BS.LC.Colour("3a92ff"),
+        ZOSGold = BS.LC.Colour("ccaa1a"),
+        ZOSGreen = BS.LC.Colour("2dc50e"),
+        ZOSGrey = BS.LC.Colour("e6e6e6"),
+        ZOSOrange = BS.LC.Colour("e58b27"),
+        ZOSPurple = BS.LC.Colour("a02ef7")
     }
 end
 
-function BS.GetAddonVersion()
-    local manager = GetAddOnManager()
-    local numAddons = manager:GetNumAddOns()
-    local version = "?"
-
-    for addon = 1, numAddons do
-        local name = manager:GetAddOnInfo(addon)
-
-        if (name == BS.Name) then
-            version = tostring(manager:GetAddOnVersion(addon))
-            local major = tonumber(version:sub(1, 1))
-            local minor = tonumber(version:sub(2, 2))
-            local revision = tonumber(version:sub(3))
-
-            version = string.format("%d.%d.%d", major, minor, revision)
-            break
-        end
-    end
-
-    return version
-end
-
 function BS.ScanBuffs(buffList, widgetIndex)
-    local numberOfBuffs = GetNumBuffs("player")
-    local buffs = {}
-
-    if (numberOfBuffs > 0) then
-        for buffNum = 1, numberOfBuffs do
-            local buffName, _, timeEnding, _, _, _, _, _, _, _, abilityId = GetUnitBuffInfo("player", buffNum)
-
-            if (buffList[abilityId]) then
-                local timeNow = GetGameTimeMilliseconds()
-                local remaining = timeEnding - timeNow / 1000
-                local formattedTime =
-                    BS.SecondsToTime(
-                    remaining,
-                    true,
-                    false,
-                    BS.GetVar("HideSeconds", widgetIndex),
-                    BS.GetVar("Format", widgetIndex)
-                )
-
-                local ttt = BS.COLOURS.White:Colorize(BS.Format(buffName)) .. BS.LF
-
-                ttt = ttt .. BS.Format(GetAbilityDescription(abilityId))
-
-                table.insert(
-                    buffs,
-                    {remaining = remaining, formattedTime = formattedTime, ttt = ttt, buffName = buffName}
-                )
-            end
-        end
+    local formatter = function(remaining)
+        return BS.SecondsToTime(
+            remaining,
+            true,
+            false,
+            BS.GetVar("HideSeconds", widgetIndex),
+            BS.GetVar("Format", widgetIndex)
+        )
     end
+
+    local buffs = BS.LC.ScanBuffs(buffList, formatter)
 
     return buffs
-end
-
-function BS.IsPvP()
-    local mapContentType = GetMapContentType()
-
-    return (mapContentType == _G.MAP_CONTENT_AVA or mapContentType == _G.MAP_CONTENT_BATTLEGROUND)
 end
 
 function BS.FindBar(barName)
@@ -2005,25 +1304,6 @@ function BS.RegisterHooks()
     BS.CheckCriminalActivity()
 end
 
-function BS.BuildList(listInfo)
-    local list = {}
-
-    for _, info in ipairs(listInfo) do
-        if (type(info) == "string") then
-            local comma = info:find(",")
-            local s, e = tonumber(info:sub(1, comma - 1)), tonumber(info:sub(comma + 1))
-
-            for i = s, e do
-                list[GetQuestName(i)] = true
-            end
-        else
-            list[GetQuestName(info)] = true
-        end
-    end
-
-    return list
-end
-
 BS.UpToSomething = {
     bounty = false,
     stealing = false,
@@ -2053,7 +1333,7 @@ function BS.CheckCriminalActivity()
         end
 
         local bagFunc = function()
-            if (BS.HasStolenItemsInInventory()) then
+            if (BS.LC.IsCarryingStolenItems()) then
                 if (BS.UpToSomething.stealing == false) then
                     BS.UpToSomething.stealing = true
                     BS.FireCallbacks("CriminalActivityUpdate", BS.IsUpToSomething())
@@ -2094,21 +1374,9 @@ function BS.CheckCriminalActivity()
     end
 end
 
-function BS.HasStolenItemsInInventory()
-    local filteredItems =
-        SHARED_INVENTORY:GenerateFullSlotData(
-        function(itemdata)
-            return itemdata.stolen == true
-        end,
-        _G.BAG_BACKPACK
-    )
-
-    return #filteredItems > 0
-end
-
 function BS.HasCriminalQuest()
     if (not BS.CrimeQuests) then
-        BS.CrimeQuests = BS.BuildList(BS.CRIMEQUESTS)
+        BS.CrimeQuests = BS.LC.BuildList(BS.CRIMEQUESTS)
     end
 
     local journalQuests = QUEST_JOURNAL_MANAGER:GetQuestList()

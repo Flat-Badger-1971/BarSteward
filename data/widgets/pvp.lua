@@ -10,7 +10,7 @@ BS.widgets[BS.W_RANDOM_BATTLEGROUND] = {
             output = "",
             normalisedOutput = "",
             eligibleCount = 0,
-            tt = BS.Format(_G.SI_BATTLEGROUND_FINDER_RANDOM_FILTER_TEXT)
+            tt = BS.LC.Format(_G.SI_BATTLEGROUND_FINDER_RANDOM_FILTER_TEXT)
         }
         local ll = bgInfo[_G.LFG_ACTIVITY_BATTLE_GROUND_LOW_LEVEL] -- Random Battleground
         --local cp = bgInfo[_G.LFG_ACTIVITY_BATTLE_GROUND_CHAMPION]
@@ -41,7 +41,7 @@ BS.widgets[BS.W_RANDOM_BATTLEGROUND] = {
     event = _G.EVENT_PLAYER_ACTIVATED,
     icon = "icons/store_battleground",
     hideWhenEqual = 0,
-    tooltip = BS.Format(_G.SI_BATTLEGROUND_FINDER_RANDOM_FILTER_TEXT),
+    tooltip = BS.LC.Format(_G.SI_BATTLEGROUND_FINDER_RANDOM_FILTER_TEXT),
     onLeftClick = function()
         if (IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("gamepadDungeonFinder")
@@ -62,12 +62,12 @@ BS.widgets[BS.W_ALLIANCE_POINTS] =
         display = _G.BARSTEWARD_GOLD_DISPLAY,
         everyWhere = _G.BARSTEWARD_GOLD_EVERYWHERE,
         separated = _G.BARSTEWARD_GOLD_SEPARATED,
-        title = BS.Format(_G.SI_GAMEPAD_INVENTORY_ALLIANCE_POINTS)
+        title = BS.LC.Format(_G.SI_GAMEPAD_INVENTORY_ALLIANCE_POINTS)
     },
     {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_ALLIANCE_POINT_UPDATE},
     function()
         if (BS.Vars.Controls[BS.W_ALLIANCE_POINTS].PvPOnly == true) then
-            return not BS.IsPvP()
+            return not BS.LC.IsInPvPZone()
         end
 
         return false
@@ -85,12 +85,12 @@ BS.widgets[BS.W_TELVAR_STONES] =
         display = _G.BARSTEWARD_GOLD_DISPLAY,
         everyWhere = _G.BARSTEWARD_GOLD_EVERYWHERE,
         separated = _G.BARSTEWARD_GOLD_SEPARATED,
-        title = BS.Format(_G.SI_GAMEPAD_INVENTORY_TELVAR_STONES)
+        title = BS.LC.Format(_G.SI_GAMEPAD_INVENTORY_TELVAR_STONES)
     },
     _G.EVENT_TELVAR_STONE_UPDATE,
     function()
         if (BS.Vars.Controls[BS.W_TELVAR_STONES].PvPOnly == true) then
-            return not BS.IsPvP()
+            return not BS.LC.IsInPvPZone()
         end
 
         return false
@@ -104,7 +104,7 @@ BS.widgets[BS.W_AP_BUFF] = {
         local this = BS.W_AP_BUFF
         local buffs = BS.ScanBuffs(BS.AP_BUFFS, this)
         local lowest = {remaining = 99999}
-        local ttt = BS.Format(_G.BARSTEWARD_AP_BUFF) .. BS.LF
+        local ttt = BS.LC.Format(_G.BARSTEWARD_AP_BUFF) .. BS.LF
 
         if (#buffs > 0) then
             for _, buff in ipairs(buffs) do
@@ -127,9 +127,9 @@ BS.widgets[BS.W_AP_BUFF] = {
             widget:SetColour(BS.GetTimeColour(lowest.remaining, this, 60, true, true))
             widget:SetTooltip(lowest.ttt)
 
-            if (BS.GetVar("Announce", this) and (BS.GetVar("WarningValue", this) * 60) == BS.ToInt(lowest.remaining)) then
+            if (BS.GetVar("Announce", this) and (BS.GetVar("WarningValue", this) * 60) == BS.LC.ToInt(lowest.remaining)) then
                 local buffMessage =
-                    ZO_CachedStrFormat(GetString(_G.BARSTEWARD_WARNING_EXPIRING), BS.Format(lowest.buffName))
+                    ZO_CachedStrFormat(GetString(_G.BARSTEWARD_WARNING_EXPIRING), BS.LC.Format(lowest.buffName))
                 BS.Announce(GetString(_G.BARSTEWARD_WARNING), buffMessage, this)
             end
 
@@ -147,13 +147,13 @@ BS.widgets[BS.W_AP_BUFF] = {
     hideWhenEqual = 0,
     hideWhenTrue = function()
         if (BS.Vars.Controls[BS.W_AP_BUFF].PvPOnly == true) then
-            return not BS.IsPvP()
+            return not BS.LC.IsInPvPZone()
         end
 
         return false
     end,
     icon = "icons/crownstore_skillline_alliancewar_assault",
-    tooltip = BS.Format(_G.BARSTEWARD_AP_BUFF)
+    tooltip = BS.LC.Format(_G.BARSTEWARD_AP_BUFF)
 }
 
 -- some code for this based is based on and reliant on
@@ -209,7 +209,7 @@ BS.widgets[BS.W_CAMPAIGN_TIER] = {
             widget:SetColour(BS.GetColour(this, true))
         end
 
-        local tt = BS.Format(_G.SI_CAMPAIGN_SCORING_END_OF_CAMPAIGN_REWARD_TIER) .. BS.LF .. BS.LF
+        local tt = BS.LC.Format(_G.SI_CAMPAIGN_SCORING_END_OF_CAMPAIGN_REWARD_TIER) .. BS.LF .. BS.LF
 
         if (data) then
             local info = GetAvARankName(BS.CHAR.gender, GetUnitAvARank("player")) .. BS.LF
@@ -229,7 +229,7 @@ BS.widgets[BS.W_CAMPAIGN_TIER] = {
             end
         end
 
-        widget:SetTooltip(BS.Trim(tt))
+        widget:SetTooltip(BS.LC.Trim(tt))
 
         return progress == maxProgress
     end,
@@ -248,13 +248,13 @@ BS.widgets[BS.W_CAMPAIGN_TIER] = {
     callback = {[BS] = {"RewardsTrackerRefresh"}},
     hideWhenTrue = function()
         if (BS.Vars.Controls[BS.W_CAMPAIGN_TIER].PvPOnly == true) then
-            return not BS.IsPvP()
+            return not BS.LC.IsInPvPZone()
         end
 
         return false
     end,
     icon = "campaign/campaign_tabicon_summary_up",
-    tooltip = BS.Format(_G.SI_CAMPAIGN_SCORING_END_OF_CAMPAIGN_REWARD_TIER),
+    tooltip = BS.LC.Format(_G.SI_CAMPAIGN_SCORING_END_OF_CAMPAIGN_REWARD_TIER),
     customSettings = {
         [1] = {
             type = "checkbox",
@@ -272,7 +272,7 @@ BS.widgets[BS.W_CAMPAIGN_TIER] = {
     }
 }
 
-local ca = BS.Format(GetAbilityName(45614))
+local ca = BS.LC.Format(GetAbilityName(45614))
 
 BS.widgets[BS.W_CONT_ATT] = {
     -- v3.1.9
@@ -288,7 +288,7 @@ BS.widgets[BS.W_CONT_ATT] = {
             widget:SetColour(BS.GetTimeColour(buff.remaining, this, 60, true, true))
             widget:SetTooltip(buff.ttt)
 
-            if (BS.GetVar("Announce", this) and (BS.GetVar("WarningValue", this) * 60) == BS.ToInt(buff.remaining)) then
+            if (BS.GetVar("Announce", this) and (BS.GetVar("WarningValue", this) * 60) == BS.LC.ToInt(buff.remaining)) then
                 local buffMessage =
                     ZO_CachedStrFormat(GetString(_G.BARSTEWARD_WARNING_EXPIRING), ca)
                 BS.Announce(GetString(_G.BARSTEWARD_WARNING), buffMessage, this)
@@ -307,7 +307,7 @@ BS.widgets[BS.W_CONT_ATT] = {
     timer = 1000,
     hideWhenTrue = function()
         if (BS.Vars.Controls[BS.W_CONT_ATT].PvPOnly == true) then
-            return not BS.IsPvP()
+            return not BS.LC.IsInPvPZone()
         end
 
         return false
@@ -316,7 +316,7 @@ BS.widgets[BS.W_CONT_ATT] = {
     tooltip = ca
 }
 
-local ah = BS.Format(GetAbilityName(21263))
+local ah = BS.LC.Format(GetAbilityName(21263))
 
 BS.widgets[BS.W_AYLEID_HEALTH] = {
     -- v3.1.9
@@ -332,7 +332,7 @@ BS.widgets[BS.W_AYLEID_HEALTH] = {
             widget:SetColour(BS.GetTimeColour(buff.remaining, this, 60, true, true))
             widget:SetTooltip(buff.ttt)
 
-            if (BS.GetVar("Announce", this) and (BS.GetVar("WarningValue", this) * 60) == BS.ToInt(buff.remaining)) then
+            if (BS.GetVar("Announce", this) and (BS.GetVar("WarningValue", this) * 60) == BS.LC.ToInt(buff.remaining)) then
                 local buffMessage =
                     ZO_CachedStrFormat(GetString(_G.BARSTEWARD_WARNING_EXPIRING), ah)
                 BS.Announce(GetString(_G.BARSTEWARD_WARNING), buffMessage, this)
@@ -350,7 +350,7 @@ BS.widgets[BS.W_AYLEID_HEALTH] = {
     timer = 1000,
     hideWhenTrue = function()
         if (BS.Vars.Controls[BS.W_AYLEID_HEALTH].PvPOnly == true) then
-            return not BS.IsPvP()
+            return not BS.LC.IsInPvPZone()
         end
 
         return false

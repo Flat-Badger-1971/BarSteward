@@ -9,7 +9,7 @@ EVENT_MANAGER:RegisterForEvent(
     end
 )
 
-BS.RegisterForEvent(
+BS.EventManager:RegisterForEvent(
     _G.EVENT_PLAYER_ACTIVATED,
     function()
         trainingActive = true
@@ -47,7 +47,7 @@ BS.widgets[BS.W_MOUNT_TRAINING] = {
 
         for trainingType, texture in pairs(_G.STABLE_TRAINING_TEXTURES) do
             local icon = string.format("%s%s ", BS.LF, BS.Icon(texture))
-            local ttype = string.format("%s ", BS.Format(GetString("SI_RIDINGTRAINTYPE", trainingType)))
+            local ttype = string.format("%s ", BS.LC.Format(GetString("SI_RIDINGTRAINTYPE", trainingType)))
             local val, maxVal = STABLE_MANAGER:GetStats(trainingType)
             local tcol = (val == maxVal) and BS.COLOURS.DefaultOkColour or BS.COLOURS.DefaultWarningColour
 
