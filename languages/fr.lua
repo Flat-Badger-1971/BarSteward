@@ -67,7 +67,10 @@ L("BOTH", "Les deux")
 L("BOTTOM", "En bas")
 L("BOUNTY_AMOUNT", "Montant de la prime")
 L("BUTTON_ALIGN", "Aligner")
-L("BUILD_INFO", "Les informations de construction seront mises à jour lorsque vous équiperez ou enregistrerez une construction")
+L(
+    "BUILD_INFO",
+    "Les informations de construction seront mises à jour lorsque vous équiperez ou enregistrerez une construction"
+)
 L("CATEGORY_ABILITIES", "Abilities")
 L("CATEGORY_ACTIVITIES", "Activities")
 L("CATEGORY_CHARACTER", "Character")
@@ -102,7 +105,10 @@ L("COPY_SETTINGS", "Paramètres de copie")
 L("CRAFTING_MOTIFS", "Motifs d'artisanat")
 L("CRIME_ONLY", "Afficher uniquement lorsqu'un crime est détecté")
 L("CRIME_ONLY_DETECTION", "Activer la détection de crime")
-L("CRIME_ONLY_TOOLTIP", "La détection comprend l'acceptation d'une quête de vol/de la Confrérie noire, le transport d'objets volés ou la possession d'une prime")
+L(
+    "CRIME_ONLY_TOOLTIP",
+    "La détection comprend l'acceptation d'une quête de vol/de la Confrérie noire, le transport d'objets volés ou la possession d'une prime"
+)
 L("CRIME_ONLY_CONDITION", "La détection de crime doit être activée")
 L("DAILY_CRAFTING", "Commandes d'artisanat journalières")
 L("DAILY_ENDEAVOUR_PROGRESS", "Progression d'Efforts journaliers")
@@ -452,4 +458,9 @@ L("ACCOUNT_WIDE_TOOLTIP", "Tous les réglages ci-dessous seront les mêmes pour 
 L("SLASH_ENABLE", "activer")
 L("SLASH_HIDE", "cacher")
 L("SLASH_SHOW", "montrer")
+
+L(
+    "LIB_TEXT",
+    "Ce module complémentaire nécessite désormais LibFBCommon. Veuillez l'installer et le recharger. Veuillez ignorer les erreurs éventuelles jusqu'à ce que ce module soit installé."
+)
 -- luacheck: pop

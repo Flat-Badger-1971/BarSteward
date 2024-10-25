@@ -197,33 +197,6 @@ function BS.RegisterDialogues()
                     end
                 }
             }
-        },
-        -- based on pChat by Puddy, Ayantir, Baertram, DesertDwellers
-        Backup = {
-            title = {text = "|cff9900Bar |r|c4f34ebSteward|r"},
-            mainText = {
-                text = GetString(_G.BARSTEWARD_BACKUP_DIALOG_TEXT)
-            },
-            buttons = {
-                {
-                    text = BS.LC.Format(_G.SI_DIALOG_CONFIRM),
-                    callback = function()
-                        BS.ConvertFromLibSavedVars()
-                        BS.ContinueIntialising()
-                    end
-                },
-                {
-                    text = BS.LC.Format(_G.SI_CANCEL),
-                    callback = function()
-                        ZO_Alert(
-                            _G.UI_ALERT_CATEGORY,
-                            _G.SOUNDS.AVA_GATE_OPENED,
-                            GetString(_G.BARSTEWARD_BACKUP_WARNING)
-                        )
-                        RequestOpenUnsafeURL("https://www.esoui.com/forums/showthread.php?t=9235")
-                    end
-                }
-            }
         }
     }
 

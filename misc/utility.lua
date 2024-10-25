@@ -980,6 +980,22 @@ function BS.RegenerateAllBars(barsToRegenerate)
     end
 end
 
+function BS.FormatIcon(path)
+    if (path:find("BarSteward")) then
+        return path
+    end
+
+    if (not path:lower():find("esoui")) then
+        path = "/esoui/art/" .. path
+    end
+
+    if (not path:find(".dds")) then
+        path = path .. ".dds"
+    end
+
+    return path
+end
+
 function BS.Icon(path, colour, width, height)
     if (not path:find("BarSteward")) then
         path = BS.FormatIcon(path)
@@ -1275,7 +1291,7 @@ function BS.RegisterHooks()
         "Logout",
         function()
             if (not BS.disabledTimers) then
-                BS.DisableUpdates(true)
+                BS.TimerManager:DisableUpdates(true)
                 BS.LoggingOut = true
             end
         end
@@ -1285,7 +1301,7 @@ function BS.RegisterHooks()
         "Quit",
         function()
             if (not BS.disabledTimers) then
-                BS.DisableUpdates(true)
+                BS.TimerManager:DisableUpdates(true)
                 BS.LoggingOut = true
             end
         end
@@ -1295,7 +1311,7 @@ function BS.RegisterHooks()
         "CancelLogout",
         function()
             if (not BS.disabledTimers) then
-                BS.EnableUpdates(true)
+                BS.TimerManager:EnableUpdates(true)
                 BS.LoggingOut = false
             end
         end
@@ -1364,7 +1380,7 @@ function BS.CheckCriminalActivity()
         _G.SHARED_INVENTORY:RegisterCallback("SingleSlotInventoryUpdate", bagFunc)
         _G.QUEST_JOURNAL_MANAGER:RegisterCallback("QuestListUpdated", questFunc)
 
-        BS.RegisterForEvent(
+        BS.EventManager:RegisterForEvent(
             _G.EVENT_PLAYER_ACTIVATED,
             function()
                 bagFunc()

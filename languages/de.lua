@@ -99,7 +99,10 @@ L("COPY_SETTINGS", "Einstellungen kopieren")
 L("CRAFTING_MOTIFS", "Stilbücher")
 L("CRIME_ONLY", "Nur anzeigen, wenn ein Verbrechen erkannt wurde")
 L("CRIME_ONLY_DETECTION", "Kriminalitätserkennung aktivieren")
-L("CRIME_ONLY_TOOLTIP", "Zur Entdeckung gehört das Annehmen einer Diebstahls-/Dunkle-Bruderschaft-Quest, das Tragen gestohlener Gegenstände oder das Aussetzen eines Kopfgeldes")
+L(
+    "CRIME_ONLY_TOOLTIP",
+    "Zur Entdeckung gehört das Annehmen einer Diebstahls-/Dunkle-Bruderschaft-Quest, das Tragen gestohlener Gegenstände oder das Aussetzen eines Kopfgeldes"
+)
 L("CRIME_ONLY_CONDITION", "Die Verbrechenserkennung muss aktiviert sein")
 L("DAILY_CRAFTING", "Tägl. Handwerksschriebe")
 L("DAILY_ENDEAVOUR_PROGRESS_BEST", "Tägl. Bestrebungen - größter Fortschritt")
@@ -465,3 +468,8 @@ L("SLASH_ENABLE", "aktivieren")
 L("SLASH_HIDE", "verstecken")
 L("SLASH_SHOW", "zeigen")
 --luacheck: pop
+
+L(
+    "LIB_TEXT",
+    "Dieses Add-on erfordert jetzt LibFBCommon. Bitte installieren Sie es und laden Sie es neu. Bitte ignorieren Sie alle Fehler, bis dies installiert wurde."
+)

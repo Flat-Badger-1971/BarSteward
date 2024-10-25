@@ -1,10 +1,32 @@
 _G.BarSteward = {
     Name = "BarSteward",
     --too much hassle to refactor the whole addon to use classes properly, so adding a callback manager here
-    CallbackManager = ZO_CallbackObject:Subclass():New()
+    CallbackManager = ZO_CallbackObject:Subclass():New(),
+    LC = _G.LibFBCommon
 }
 
 local BS = _G.BarSteward
+
+if (not BS.LC) then
+    ZO_Dialogs_RegisterCustomDialog(
+        BS.Name .. "LibWarning",
+        {
+            title = {text = "|cff9900Bar |r|c4f34ebSteward|r"},
+            mainText = {
+                text = GetString(_G.BARSTEWARD_LIB_TEXT)
+            },
+            buttons = {
+                {
+                    text = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_DIALOG_CONFIRM)),
+                    callback = function()
+                    end
+                }
+            }
+        }
+    )
+
+    ZO_Dialogs_ShowDialog(BS.Name .. "LibWarning")
+end
 
 function BS.RegisterCallback(...)
     BS.CallbackManager:RegisterCallback(...)

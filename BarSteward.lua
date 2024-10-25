@@ -29,9 +29,8 @@ local function trackOtherCurrency(currency)
 end
 
 function BS.ContinueIntialising()
-    BS.LC = _G.LibFBCommon
     BS.Vars = BS.CreateSavedVariablesManager("BarStewardSavedVars", BS.Defaults, BS.CommonDefaults)
-    BS.GetAddonVersion()
+    BS.LC.GetAddonVersion()
     BS.CheckVars(BS.Vars)
 
     if (BS.NewVars) then
@@ -150,8 +149,8 @@ function BS.ContinueIntialising()
 end
 
 local function Initialise()
-    BS.RegisterSlashCommands()
     BS.RegisterDialogues()
+    BS.RegisterSlashCommands()
     BS.RegisterColours()
     BS.ContinueIntialising()
 end
