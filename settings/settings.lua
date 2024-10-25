@@ -1244,7 +1244,7 @@ local function getCV(index)
     local lookup = {}
 
     if ((var or "") ~= "") then
-        for _, val in ipairs(BS.Split(var)) do
+        for _, val in ipairs(BS.LC.Split(var)) do
             lookup[val] = true
         end
 
@@ -1741,11 +1741,11 @@ local function checkTime(widgetControls, key)
     local timeSamples24 = {}
 
     for _, format in ipairs(twelveFormats) do
-        table.insert(timeSamples12, BS.FormatTime(format, "09:23:12"))
+        table.insert(timeSamples12, BS.LC.FormatTime(format, "09:23:12"))
     end
 
     for _, format in ipairs(twentyFourFormats) do
-        table.insert(timeSamples24, BS.FormatTime(format, "09:23:12"))
+        table.insert(timeSamples24, BS.LC.FormatTime(format, "09:23:12"))
     end
 
     if (key == BS.W_TIME or (key == BS.W_TAMRIEL_TIME and BS.LibClock ~= nil)) then
@@ -1770,13 +1770,13 @@ local function checkTime(widgetControls, key)
             choices = timeSamples12,
             getFunc = function()
                 local format = timeVars.TimeFormat12 or BS.Defaults.TimeFormat12
-                return BS.FormatTime(format, "09:23:12")
+                return BS.LC.FormatTime(format, "09:23:12")
             end,
             setFunc = function(value)
                 local format
 
                 for _, f in ipairs(twelveFormats) do
-                    if (BS.FormatTime(f, "09:23:12") == value) then
+                    if (BS.LC.FormatTime(f, "09:23:12") == value) then
                         format = f
                         break
                     end
@@ -1796,13 +1796,13 @@ local function checkTime(widgetControls, key)
             choices = timeSamples24,
             getFunc = function()
                 local format = timeVars.TimeFormat24 or BS.Defaults.TimeFormat24
-                return BS.FormatTime(format, "09:23:12")
+                return BS.LC.FormatTime(format, "09:23:12")
             end,
             setFunc = function(value)
                 local format
 
                 for _, f in ipairs(twentyFourFormats) do
-                    if (BS.FormatTime(f, "09:23:12") == value) then
+                    if (BS.LC.FormatTime(f, "09:23:12") == value) then
                         format = f
                         break
                     end
@@ -1857,7 +1857,7 @@ local function checkColourOptions(widgetControls, vars, key)
                     return unpack(vars.Colour or BS.Vars.DefaultColour)
                 end,
                 setFunc = function(r, g, b, a)
-                    if (BS.CompareColours({r, g, b, a}, BS.Vars.DefaultColour)) then
+                    if (BS.LC.CompareColours({r, g, b, a}, BS.Vars.DefaultColour)) then
                         vars.Colour = nil
                     else
                         vars.Colour = {r, g, b, a}
@@ -1878,7 +1878,7 @@ local function checkColourOptions(widgetControls, vars, key)
                     return unpack(vars.OkColour or BS.Vars.DefaultOkColour)
                 end,
                 setFunc = function(r, g, b, a)
-                    if (BS.CompareColours({r, g, b, a}, BS.Vars.DefaultOkColour)) then
+                    if (BS.LC.CompareColours({r, g, b, a}, BS.Vars.DefaultOkColour)) then
                         vars.OkColour = nil
                     else
                         vars.OkColour = {r, g, b, a}
@@ -1899,7 +1899,7 @@ local function checkColourOptions(widgetControls, vars, key)
                     return unpack(vars.WarningColour or BS.Vars.DefaultWarningColour)
                 end,
                 setFunc = function(r, g, b, a)
-                    if (BS.CompareColours({r, g, b, a}, BS.Vars.DefaultWarningColour)) then
+                    if (BS.LC.CompareColours({r, g, b, a}, BS.Vars.DefaultWarningColour)) then
                         vars.WarningColour = nil
                     else
                         vars.WarningColour = {r, g, b, a}
@@ -1920,7 +1920,7 @@ local function checkColourOptions(widgetControls, vars, key)
                     return unpack(vars.DangerColour or BS.Vars.DefaultDangerColour)
                 end,
                 setFunc = function(r, g, b, a)
-                    if (BS.CompareColours({r, g, b, a}, BS.Vars.DefaultDangerColour)) then
+                    if (BS.LC.CompareColours({r, g, b, a}, BS.Vars.DefaultDangerColour)) then
                         vars.DangerColour = nil
                     else
                         vars.DangerColour = {r, g, b, a}
@@ -1941,7 +1941,7 @@ local function checkColourOptions(widgetControls, vars, key)
                     return unpack(vars.MaxColour or BS.Vars.DefaultMaxColour)
                 end,
                 setFunc = function(r, g, b, a)
-                    if (BS.CompareColours({r, g, b, a}, BS.Vars.DefaultMaxColour)) then
+                    if (BS.LC.CompareColours({r, g, b, a}, BS.Vars.DefaultMaxColour)) then
                         vars.MaxColour = nil
                     else
                         vars.MaxColour = {r, g, b, a}
@@ -2151,14 +2151,14 @@ local function getWidgetSettings()
     if (BS.Vars.WidgetSortOrderUsed) then
         -- sort the widget settings into used/unused
         local used =
-            BS.Filter(
+            BS.LC.Filter(
             ordered,
             function(v)
                 return BS.Vars.Controls[v.key].Bar > 0
             end
         )
         local unused =
-            BS.Filter(
+            BS.LC.Filter(
             ordered,
             function(v)
                 return BS.Vars.Controls[v.key].Bar == 0
@@ -2196,7 +2196,7 @@ local function getWidgetSettings()
             end
         )
 
-        ordered = BS.MergeTables(used, unused)
+        ordered = BS.LC.MergeTables(used, unused)
     end
 
     local controls = {
@@ -2529,7 +2529,7 @@ local function getWidgetSettings()
 end
 
 function BS.RegisterSettings()
-    local version = BS.GetAddonVersion()
+    local version = BS.LC.GetAddonVersion(BS.Name)
     local panel = {
         type = "panel",
         name = "Bar Steward",

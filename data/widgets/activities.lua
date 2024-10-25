@@ -31,7 +31,7 @@ local function getColourOptions(widgetIndex)
                 return unpack(vars[c] or BS.Vars["Default" .. default .. "Colour"])
             end,
             setFunc = function(r, g, b, a)
-                if (BS.CompareColours({r, g, b, a}, BS.Vars["Default" .. default .. "Colour"])) then
+                if (BS.LC.CompareColours({r, g, b, a}, BS.Vars["Default" .. default .. "Colour"])) then
                     vars[c] = nil
                 else
                     vars[c] = {r, g, b, a}
@@ -321,14 +321,14 @@ end
 
 BS.isScryingUnlocked = false
 
-BS.RegisterForEvent(
+BS.EventManager:RegisterForEvent(
     _G.EVENT_PLAYER_ACTIVATED,
     function()
         BS.isScryingUnlocked = ZO_IsScryingUnlocked()
     end
 )
 
-BS.RegisterForEvent(
+BS.EventManager:RegisterForEvent(
     _G.EVENT_SKILL_LINE_ADDED,
     function()
         BS.isScryingUnlocked = ZO_IsScryingUnlocked()
@@ -348,11 +348,11 @@ BS.widgets[BS.W_LEADS] = {
             if (DoesAntiquityHaveLead(antiquityId)) then
                 local leadInfo = ANTIQUITY_DATA_MANAGER:GetOrCreateAntiquityData(antiquityId)
                 local lead = {
-                    name = BS.Format(leadInfo:GetName()),
+                    name = BS.LC.Format(leadInfo:GetName()),
                     colourName = leadInfo:GetColorizedFormattedName(),
                     remaining = leadInfo:GetLeadTimeRemainingS(),
                     quality = leadInfo:GetQuality(),
-                    zone = BS.Format(GetZoneNameById(leadInfo:GetZoneId())),
+                    zone = BS.LC.Format(GetZoneNameById(leadInfo:GetZoneId())),
                     id = antiquityId,
                     inProgress = GetNumAntiquityDigSites(antiquityId) > 0,
                     recovered = leadInfo:GetNumRecovered()
@@ -403,7 +403,7 @@ BS.widgets[BS.W_LEADS] = {
             widget:SetColour(timeColour)
             widget:SetValue(value)
 
-            local ttt = BS.Format(_G.SI_ANTIQUITY_SUBHEADING_ACTIVE_LEADS)
+            local ttt = BS.LC.Format(_G.SI_ANTIQUITY_SUBHEADING_ACTIVE_LEADS)
 
             -- sort by time remaining
             table.sort(
@@ -450,7 +450,7 @@ BS.widgets[BS.W_LEADS] = {
     end,
     timer = 1000,
     icon = GetAntiquityLeadIcon(),
-    tooltip = BS.Format(_G.SI_ANTIQUITY_SUBHEADING_ACTIVE_LEADS),
+    tooltip = BS.LC.Format(_G.SI_ANTIQUITY_SUBHEADING_ACTIVE_LEADS),
     hideWhenEqual = 99999999,
     hideWhenTrue = function()
         return not BS.isScryingUnlocked
@@ -605,7 +605,7 @@ BS.widgets[BS.W_TRIBUTE_CLUB_RANK] = {
         else
             local rank = GetTributePlayerClubRank()
             local xp, totalxp = GetTributePlayerExperienceInCurrentClubRank()
-            local percent = zo_floor(xp / totalxp * 100)
+            local percent = BS.LC.ToPercent(xp, totalxp)
             local icon = string.format("Tribute/tributeClubRank_%d", rank)
             local rankName = zo_strformat(GetString("SI_TRIBUTECLUBRANK", rank))
             local displayRank = rank + 1
@@ -647,13 +647,13 @@ BS.widgets[BS.W_ACHIEVEMENT_POINTS] = {
         local value = earnedPoints
 
         if (BS.GetVar("ShowPercent", this)) then
-            value = math.floor((earnedPoints / totalPoints) * 100) .. "%"
+            value = BS.LC.ToPercent(earnedPoints, totalPoints, true)
         end
 
         widget:SetValue(value)
         widget:SetColour(BS.GetColour(this, true))
 
-        local ttt = BS.Format(_G.SI_ACHIEVEMENTS_OVERALL) .. BS.LF
+        local ttt = BS.LC.Format(_G.SI_ACHIEVEMENTS_OVERALL) .. BS.LF
 
         ttt = ttt .. BS.COLOURS.White:Colorize(earnedPoints .. "/" .. totalPoints)
 
@@ -668,7 +668,7 @@ BS.widgets[BS.W_ACHIEVEMENT_POINTS] = {
         _G.EVENT_ACHIEVEMENTS_UPDATED
     },
     icon = "journal/journal_tabicon_achievements_up",
-    tooltip = BS.Format(_G.SI_ACHIEVEMENTS_OVERALL),
+    tooltip = BS.LC.Format(_G.SI_ACHIEVEMENTS_OVERALL),
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("achievements")
@@ -736,14 +736,14 @@ function BS.IsShadowyVendorUnlocked()
     return (rank > 3) and active
 end
 
-BS.RegisterForEvent(
+BS.EventManager:RegisterForEvent(
     _G.EVENT_PLAYER_ACTIVATED,
     function()
         BS.isShadowyVendorUnlocked = BS.IsShadowyVendorUnlocked()
     end
 )
 
-BS.RegisterForEvent(
+BS.EventManager:RegisterForEvent(
     _G.EVENT_SKILL_LINE_ADDED,
     function()
         BS.isShadowyVendorUnlocked = BS.IsShadowyVendorUnlocked()
@@ -836,10 +836,10 @@ local function updateLoreBooks()
     end
 end
 
-BS.RegisterForEvent(_G.EVENT_PLAYER_ACTIVATED, updateLoreBooks)
-BS.RegisterForEvent(_G.EVENT_LORE_BOOK_LEARNED, updateLoreBooks)
-BS.RegisterForEvent(_G.EVENT_STYLE_LEARNED, updateLoreBooks)
-BS.RegisterForEvent(_G.EVENT_TRAIT_LEARNED, updateLoreBooks)
+BS.EventManager:RegisterForEvent(_G.EVENT_PLAYER_ACTIVATED, updateLoreBooks)
+BS.EventManager:RegisterForEvent(_G.EVENT_LORE_BOOK_LEARNED, updateLoreBooks)
+BS.EventManager:RegisterForEvent(_G.EVENT_STYLE_LEARNED, updateLoreBooks)
+BS.EventManager:RegisterForEvent(_G.EVENT_TRAIT_LEARNED, updateLoreBooks)
 
 BS.widgets[BS.W_LOREBOOKS] = {
     -- v1.4.5
@@ -934,7 +934,7 @@ BS.widgets[BS.W_SHALIDORS_LIBRARY] = {
     end,
     callback = {[BS] = {"LorebooksUpdated"}},
     icon = "icons/housing_sum_fur_booksfloatingset003",
-    tooltip = BS.Format(_G.SI_ZONECOMPLETIONTYPE11),
+    tooltip = BS.LC.Format(_G.SI_ZONECOMPLETIONTYPE11),
     onLeftClick = function()
         if (IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("loreLibraryGamepad")
@@ -1002,7 +1002,7 @@ function BS.GetActivityRewardInfo(activityTypes)
                                     xpReward = xpReward,
                                     displayName = zo_strformat(_G.SI_ACTIVITY_FINDER_REWARD_NAME_FORMAT, displayName),
                                     icon = icon,
-                                    colour = BS.NewColour({r = red, g = green, b = blue}),
+                                    colour = BS.LC.Colour({r = red, g = green, b = blue}),
                                     active = location:IsActive() or false,
                                     meetsRequirements = location:DoesPlayerMeetLevelRequirements()
                                 }
@@ -1036,7 +1036,7 @@ function BS.GetActvityOutput(data)
 
     data.normalisedOutput = data.normalisedOutput .. "XXXXXXX"
 
-    data.tt = data.tt .. BS.LF .. BS.COLOURS.White:Colorize(BS.Format(data.label)) .. " "
+    data.tt = data.tt .. BS.LF .. BS.COLOURS.White:Colorize(BS.LC.Format(data.label)) .. " "
 
     if (data.activityData.meetsRequirements) then
         local cdt = ZO_CommaDelimitNumber(data.activityData.xpReward)
@@ -1044,7 +1044,7 @@ function BS.GetActvityOutput(data)
         data.tt = data.tt .. data.activityData.colour:Colorize(data.activityData.displayName) .. " "
         data.tt = data.tt .. zo_strformat(_G.SI_ACTIVITY_FINDER_REWARD_XP_FORMAT, cdt)
     else
-        data.tt = data.tt .. BS.COLOURS.Red:Colorize(BS.Format(_G.SI_HOUSE_TEMPLATE_UNMET_REQUIREMENTS_TEXT))
+        data.tt = data.tt .. BS.COLOURS.Red:Colorize(BS.LC.Format(_G.SI_HOUSE_TEMPLATE_UNMET_REQUIREMENTS_TEXT))
     end
 
     return data
@@ -1147,7 +1147,7 @@ BS.widgets[BS.W_RANDOM_TRIBUTE] = {
 -- widget based on InfoPanel
 
 local function isChest(name)
-    return BS.Search({"Truhe", "Coffre", "Chest", "сундук", "胸部"}, name)
+    return BS.LC.Search({"Truhe", "Coffre", "Chest", "сундук", "胸部"}, name)
 end
 
 BS.widgets[BS.W_CHESTS_FOUND] = {
@@ -1348,7 +1348,7 @@ BS.widgets[BS.W_DAILY_COUNT] = {
                 BS.ResizeBar(BS.GetVar("Bar", BS.W_DAILY_COUNT))
 
                 local ttt = GetString(_G.BARSTEWARD_DAILY_QUEST_COUNT) .. BS.LF
-                local ttext = BS.Format(_G.SI_DLC_BOOK_QUEST_STATUS_ACCEPTED) .. ": " .. added .. BS.LF
+                local ttext = BS.LC.Format(_G.SI_DLC_BOOK_QUEST_STATUS_ACCEPTED) .. ": " .. added .. BS.LF
 
                 ttext = ttext .. zo_strformat(_G.SI_NOTIFYTEXT_QUEST_COMPLETE, complete)
                 ttt = ttt .. BS.COLOURS.White:Colorize(ttext)
@@ -1411,7 +1411,7 @@ BS.widgets[BS.W_FISHING] = {
         end
 
         local loot = ""
-        local tt = BS.Format(_G.SI_GUILDACTIVITYATTRIBUTEVALUE9)
+        local tt = BS.LC.Format(_G.SI_GUILDACTIVITYATTRIBUTEVALUE9)
         local typeCount = 0
 
         for lootType, count in pairs(BS.Vars.FishingLoot) do
@@ -1433,19 +1433,19 @@ BS.widgets[BS.W_FISHING] = {
         if (loot:len() == 0) then
             widget:SetValue(0)
         else
-            widget:SetValue(BS.Trim(loot), setwidth)
+            widget:SetValue(BS.LC.Trim(loot), setwidth)
             widget:SetTooltip(tt)
         end
     end,
     event = _G.EVENT_LOOT_RECEIVED,
     icon = "icons/fishing_discus_blue_turquoise",
     onLeftClick = function()
-        BS.Clear(BS.Vars.FishingLoot)
+        BS.LC.Clear(BS.Vars.FishingLoot)
         BS.RefreshBar(BS.W_FISHING)
         BS.ForceResize(BS.W_FISHING)
         BS.ResizeBar(BS.GetVar("Bar", BS.W_FISHING))
     end,
-    tooltip = BS.Format(_G.SI_GUILDACTIVITYATTRIBUTEVALUE9)
+    tooltip = BS.LC.Format(_G.SI_GUILDACTIVITYATTRIBUTEVALUE9)
 }
 
 local function getPledgeIds()
@@ -1456,7 +1456,7 @@ local function getPledgeIds()
             local id = data[2]
             local questName = GetQuestName(id)
 
-            pledges[BS.Format(questName)] = true
+            pledges[BS.LC.Format(questName)] = true
         end
     end
 
@@ -1464,7 +1464,7 @@ local function getPledgeIds()
 end
 
 -- check once a minute for daily reset
-BS.RegisterForUpdate(60000, checkReset)
+BS.TimerManager:RegisterForUpdate(60000, checkReset)
 
 BS.widgets[BS.W_DAILY_PLEDGES] = {
     name = "dailyPledges",
@@ -1496,9 +1496,9 @@ BS.widgets[BS.W_DAILY_PLEDGES] = {
             addedName = 1
         end
 
-        completeName = BS.Format((type(completeName) == "string") and completeName or "null")
-        addedName = BS.Format((type(addedName) == "string") and addedName or "null")
-        removedName = BS.Format((type(removedName) == "string") and removedName or "null")
+        completeName = BS.LC.Format((type(completeName) == "string") and completeName or "null")
+        addedName = BS.LC.Format((type(addedName) == "string") and addedName or "null")
+        removedName = BS.LC.Format((type(removedName) == "string") and removedName or "null")
 
         if (BS.Pledges[completeName]) then
             BS.Vars:SetCommon("done", "pledges", character, completeName)
@@ -1563,7 +1563,7 @@ BS.widgets[BS.W_DAILY_PLEDGES] = {
                         local charPledges = BS.Vars:GetCommon("pledges", char)
                         local stext
 
-                        if (charPledges and (BS.CountElements(charPledges) > 0)) then
+                        if (charPledges and (BS.LC.CountElements(charPledges) > 0)) then
                             local dccolour = ccolour
                             local cadded = BS.CountState("added", char, true)
                             local cdone = BS.CountState("done", char, true)
@@ -1585,7 +1585,7 @@ BS.widgets[BS.W_DAILY_PLEDGES] = {
                 end
             end
 
-            widget:SetTooltip(BS.Trim(ttt .. charPledgesTT))
+            widget:SetTooltip(BS.LC.Trim(ttt .. charPledgesTT))
         end
 
         return done == maxPledges

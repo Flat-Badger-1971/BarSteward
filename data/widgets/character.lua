@@ -13,7 +13,7 @@ BS.widgets[BS.W_MUNDUS_STONE] = {
             if (BS.MUNDUS_STONES[id]) then
                 mundusIcon = icon
                 mundusId = id
-                mundusName = BS.Format(name)
+                mundusName = BS.LC.Format(name)
 
                 if (BS.GetVar("Shorten", this)) then
                     local colonPosition = mundusName:find(":")
@@ -30,8 +30,8 @@ BS.widgets[BS.W_MUNDUS_STONE] = {
             widget:SetValue(mundusName)
             widget:SetColour(BS.GetColour(this, true))
 
-            local tt = BS.Format(_G.SI_CONFIRM_MUNDUS_STONE_TITLE) .. BS.LF
-            local desc = BS.Format(GetAbilityDescription(mundusId))
+            local tt = BS.LC.Format(_G.SI_CONFIRM_MUNDUS_STONE_TITLE) .. BS.LF
+            local desc = BS.LC.Format(GetAbilityDescription(mundusId))
 
             tt = tt .. BS.COLOURS.White:Colorize(desc)
 
@@ -39,7 +39,7 @@ BS.widgets[BS.W_MUNDUS_STONE] = {
 
             return mundusName
         else
-            widget:SetValue(BS.Format(_G.SI_CRAFTING_INVALID_ITEM_STYLE))
+            widget:SetValue(BS.LC.Format(_G.SI_CRAFTING_INVALID_ITEM_STYLE))
             widget:SetColour(BS.GetColour(this, "Danger", true))
         end
 
@@ -48,7 +48,7 @@ BS.widgets[BS.W_MUNDUS_STONE] = {
     event = _G.EVENT_EFFECT_CHANGED,
     filter = {[_G.EVENT_EFFECT_CHANGED] = {_G.REGISTER_FILTER_UNIT_TAG, "player"}},
     icon = "icons/ability_mundusstones_002",
-    tooltip = BS.Format(_G.SI_CONFIRM_MUNDUS_STONE_TITLE),
+    tooltip = BS.LC.Format(_G.SI_CONFIRM_MUNDUS_STONE_TITLE),
     hideWhenEqual = "",
     customSettings = {
         [1] = {
@@ -88,17 +88,17 @@ BS.widgets[BS.W_ZONE] = {
     -- v1.0.3
     name = "currentZone",
     update = function(widget)
-        widget:SetValue(BS.Format(GetUnitZone("player")))
+        widget:SetValue(BS.LC.Format(GetUnitZone("player")))
         widget:SetColour(BS.GetColour(BS.W_ZONE, true))
 
         return widget:GetValue()
     end,
     event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_ZONE_CHANGED},
     icon = "tradinghouse/gamepad/gp_tradinghouse_trophy_treasure_map",
-    tooltip = BS.Format(_G.SI_ANTIQUITY_SCRYABLE_CURRENT_ZONE_SUBCATEGORY),
+    tooltip = BS.LC.Format(_G.SI_ANTIQUITY_SCRYABLE_CURRENT_ZONE_SUBCATEGORY),
     hideWhenTrue = function()
         if (BS.Vars.Controls[BS.W_ZONE].PvPNever == true) then
-            return BS.IsPvP()
+            return BS.LC.IsInPvPZone()
         end
 
         return false
@@ -130,7 +130,7 @@ BS.widgets[BS.W_PLAYER_NAME] = {
     end,
     event = _G.EVENT_PLAYER_ACTIVATED,
     icon = "charactercreate/charactercreate_faceicon_up",
-    tooltip = BS.Format(_G.SI_CUSTOMER_SERVICE_ASK_FOR_HELP_PLAYER_NAME),
+    tooltip = BS.LC.Format(_G.SI_CUSTOMER_SERVICE_ASK_FOR_HELP_PLAYER_NAME),
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             SYSTEMS:GetObject("mainMenu"):ToggleCategory(_G.MENU_CATEGORY_CHARACTER)
@@ -159,14 +159,14 @@ BS.widgets[BS.W_RACE] = {
     -- v1.0.3
     name = "playerRace",
     update = function(widget)
-        widget:SetValue(BS.Format(BS.CHAR.race))
+        widget:SetValue(BS.LC.Format(BS.CHAR.race))
         widget:SetColour(BS.GetColour(BS.W_RACE, true))
 
         return widget:GetValue()
     end,
     event = _G.EVENT_PLAYER_ACTIVATED,
     icon = "charactercreate/charactercreate_raceicon_up",
-    tooltip = BS.Format(_G.SI_COLLECTIBLERESTRICTIONTYPE1)
+    tooltip = BS.LC.Format(_G.SI_COLLECTIBLERESTRICTIONTYPE1)
 }
 
 BS.widgets[BS.W_CLASS] = {
@@ -177,7 +177,7 @@ BS.widgets[BS.W_CLASS] = {
         local icon = BS.CHAR.classIcon
 
         if (not BS.GetVar("NoValue", this)) then
-            widget:SetValue(BS.Format(BS.CHAR.class))
+            widget:SetValue(BS.LC.Format(BS.CHAR.class))
             widget:SetColour(BS.GetColour(this, true))
         end
 
@@ -187,7 +187,7 @@ BS.widgets[BS.W_CLASS] = {
     end,
     event = _G.EVENT_PLAYER_ACTIVATED,
     icon = "charactercreate/charactercreate_classicon_up",
-    tooltip = BS.Format(_G.SI_COLLECTIBLERESTRICTIONTYPE3),
+    tooltip = BS.LC.Format(_G.SI_COLLECTIBLERESTRICTIONTYPE3),
     customSettings = {
         [1] = {
             type = "checkbox",
@@ -221,7 +221,7 @@ BS.widgets[BS.W_ALLIANCE] = {
         end
 
         if (not BS.GetVar("NoValue", BS.W_ALLIANCE)) then
-            widget:SetValue(" " .. BS.Format(BS.CHAR.allianceName))
+            widget:SetValue(" " .. BS.LC.Format(BS.CHAR.allianceName))
             widget:SetColour(colour)
         end
 
@@ -234,7 +234,7 @@ BS.widgets[BS.W_ALLIANCE] = {
     end,
     event = _G.EVENT_PLAYER_ACTIVATED,
     icon = "scoredisplay/blueflag",
-    tooltip = BS.Format(_G.SI_COLLECTIBLERESTRICTIONTYPE2),
+    tooltip = BS.LC.Format(_G.SI_COLLECTIBLERESTRICTIONTYPE2),
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("campaignOverview")
@@ -272,7 +272,7 @@ BS.widgets[BS.W_SKYSHARDS] = {
         widget:SetValue(discoveredInZone .. "/" .. inZoneSkyshards)
         widget:SetColour(BS.GetColour(BS.W_SKYSHARDS, true))
 
-        local ttt = BS.Format(_G.SI_MAPFILTER15) .. BS.LF
+        local ttt = BS.LC.Format(_G.SI_MAPFILTER15) .. BS.LF
         local stext = zo_strformat(GetString(_G.BARSTEWARD_SKYSHARDS_SKILL_POINTS), skillSkyShards)
 
         ttt = ttt .. BS.COLOURS.White:Colorize(stext)
@@ -283,7 +283,7 @@ BS.widgets[BS.W_SKYSHARDS] = {
     end,
     event = _G.EVENT_SKYSHARDS_UPDATED,
     icon = "mappins/skyshard_complete",
-    tooltip = BS.Format(_G.SI_MAPFILTER15)
+    tooltip = BS.LC.Format(_G.SI_MAPFILTER15)
 }
 
 BS.widgets[BS.W_SKILL_POINTS] = {
@@ -421,13 +421,13 @@ BS.widgets[BS.W_PLAYER_LEVEL] = {
         if (level ~= GetMaxLevel()) then
             xp = GetUnitXP("player")
             xpMax = GetNumExperiencePointsInLevel(level)
-            xpPc = math.floor((xp / xpMax) * 100)
+            xpPc = BS.LC.ToPercent(xp, xpMax)
         end
 
         widget:SetValue(level .. " (" .. xpPc .. "%)")
 
-        local ttt = BS.Format(_G.SI_CAMPAIGNLEVELREQUIREMENTTYPE1) .. BS.LF
-        local ttext = BS.Format(_G.SI_STAT_GAMEPAD_EXPERIENCE_LABEL) .. "  "
+        local ttt = BS.LC.Format(_G.SI_CAMPAIGNLEVELREQUIREMENTTYPE1) .. BS.LF
+        local ttext = BS.LC.Format(_G.SI_STAT_GAMEPAD_EXPERIENCE_LABEL) .. "  "
 
         ttext = ttext .. xp .. " / " .. xpMax
         ttt = ttt .. BS.COLOURS.White:Colorize(ttext)
@@ -438,7 +438,7 @@ BS.widgets[BS.W_PLAYER_LEVEL] = {
     end,
     event = {_G.EVENT_EXPERIENCE_UPDATE, _G.EVENT_LEVEL_UPDATE},
     icon = "icons/alchemy/crafting_alchemy_trait_heroism_match",
-    tooltip = BS.Format(_G.SI_CAMPAIGNLEVELREQUIREMENTTYPE1),
+    tooltip = BS.LC.Format(_G.SI_CAMPAIGNLEVELREQUIREMENTTYPE1),
     hideWhenEqual = GetMaxLevel()
 }
 
@@ -602,7 +602,7 @@ local function updateWidget()
         ttt = ttt .. BS.COLOURS.White:Colorize(GetString(_G.BARSTEWARD_PREVIOUS_ENCOUNTER)) .. BS.LF
 
         if (name) then
-            ttt = ttt .. BS.COLOURS.ZOSPurple:Colorize(BS.Format(name)) .. BS.LF
+            ttt = ttt .. BS.COLOURS.ZOSPurple:Colorize(BS.LC.Format(name)) .. BS.LF
         end
 
         ttt =
@@ -639,14 +639,14 @@ local function checkLibCombat()
     return false
 end
 
-BS.RegisterForEvent(
+BS.EventManager:RegisterForEvent(
     _G.EVENT_PLAYER_COMBAT_STATE,
     function(_, inCombat)
         if (inCombat ~= BS.inCombat) then
             if (inCombat) then
                 BS.inCombat = true
                 maxDamage = 0
-                BS.Clear(damage)
+                BS.LC.Clear(damage)
             else
                 BS.inCombat = false
             end
@@ -656,8 +656,8 @@ BS.RegisterForEvent(
     end
 )
 
-BS.RegisterForEvent(_G.EVENT_PLAYER_DEAD, BS.HideWhenDead)
-BS.RegisterForEvent(_G.EVENT_PLAYER_ALIVE, BS.HideWhenDead)
+BS.EventManager:RegisterForEvent(_G.EVENT_PLAYER_DEAD, BS.HideWhenDead)
+BS.EventManager:RegisterForEvent(_G.EVENT_PLAYER_ALIVE, BS.HideWhenDead)
 
 BS.widgets[BS.W_DPS] = {
     name = "dps",
@@ -704,7 +704,7 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
     update = function(widget)
         local earned = GetPlayerChampionPointsEarned()
         local xp, xplvl = GetPlayerChampionXP(), GetNumChampionXPInChampionPoint(earned)
-        local pc = math.floor((xp / xplvl) * 100)
+        local pc = BS.LC.ToPercent(xp / xplvl)
         local disciplineType = GetChampionPointPoolForRank(earned + 1)
         local disciplineData = CHAMPION_DATA_MANAGER:FindChampionDisciplineDataByType(disciplineType)
         local cpicon = disciplineData:GetHUDIcon()
@@ -728,7 +728,7 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
 
             icons[disciplineName] = icon
 
-            local name = BS.Format(disciplineName)
+            local name = BS.LC.Format(disciplineName)
             local toSpend = disciplineData:GetNumSavedUnspentPoints()
 
             unspent = unspent + toSpend
@@ -755,7 +755,7 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
                 ttt = ttt .. BS.LF .. BS.LF .. GetString(_G.BARSTEWARD_UNSLOTTED)
                 for discipline, empty in pairs(emptySlots) do
                     ttt = ttt .. BS.LF
-                    ttt = ttt .. icons[discipline] .. " " .. BS.Format(discipline) .. " - " .. empty
+                    ttt = ttt .. icons[discipline] .. " " .. BS.LC.Format(discipline) .. " - " .. empty
                     unslotted = unslotted + empty
                 end
             end
@@ -763,7 +763,7 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
             local ttext = ZO_CommaDelimitNumber(xp) .. " / " .. ZO_CommaDelimitNumber(xplvl)
 
             ttt = ttt .. BS.LF .. BS.LF
-            ttt = ttt .. BS.Format(_G.SI_STAT_GAMEPAD_EXPERIENCE_LABEL) .. BS.LF
+            ttt = ttt .. BS.LC.Format(_G.SI_STAT_GAMEPAD_EXPERIENCE_LABEL) .. BS.LF
             ttt = ttt .. BS.COLOURS.White:Colorize(ttext)
 
             widget:SetTooltip(ttt)
@@ -795,7 +795,7 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
     end,
     event = {_G.EVENT_EXPERIENCE_UPDATE, _G.EVENT_UNSPENT_CHAMPION_POINTS_CHANGED},
     icon = "champion/champion_points_magicka_icon-hud",
-    tooltip = BS.Format(_G.SI_STAT_GAMEPAD_CHAMPION_POINTS_LABEL),
+    tooltip = BS.LC.Format(_G.SI_STAT_GAMEPAD_CHAMPION_POINTS_LABEL),
     hideWhenEqual = 0,
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
@@ -845,7 +845,7 @@ BS.widgets[BS.W_PLAYER_LOCATION] = {
             area = GetPlayerLocationName()
         end
 
-        widget:SetValue(BS.Format(area))
+        widget:SetValue(BS.LC.Format(area))
         widget:SetColour(BS.GetColour(BS.W_PLAYER_LOCATION, true))
 
         return widget:GetValue()
@@ -878,13 +878,13 @@ BS.widgets[BS.W_PLAYER_EXPERIENCE] = {
     update = function(widget)
         local earned = GetPlayerChampionPointsEarned()
         local xp, xplvl = GetPlayerChampionXP(), GetNumChampionXPInChampionPoint(earned)
-        local pc = math.floor((xp / xplvl) * 100)
+        local pc = BS.LC.ToPercent(xp / xplvl)
         local this = BS.W_PLAYER_EXPERIENCE
         local out
 
         if (GetUnitLevel("player") < BS.MAX_PLAYER_LEVEL) then
             xp, xplvl = GetUnitXP("player"), GetUnitXPMax("player")
-            pc = math.floor((xp / xplvl) * 100)
+            pc = BS.LC.ToPercent(xp / xplvl)
         end
 
         if (BS.GetVar("ShowPercent", this)) then
@@ -939,7 +939,7 @@ BS.widgets[BS.W_VAMPIRISM] = {
         local text = GetString(_G.BARSTEWARD_NOT_VAMPIRE)
 
         if (isVampire) then
-            text = BS.Format(name)
+            text = BS.LC.Format(name)
 
             if (ending - started > 0) then
                 widget:StartCooldown(ending - GetGameTimeSeconds(), ending - started, true)
@@ -949,7 +949,7 @@ BS.widgets[BS.W_VAMPIRISM] = {
         widget:SetValue(text)
         widget:SetColour(BS.GetColour(BS.W_VAMPIRISM, true))
 
-        local tt = BS.Format(_G.SI_CURSETYPE1)
+        local tt = BS.LC.Format(_G.SI_CURSETYPE1)
         tt = tt .. BS.LF .. BS.COLOURS.White:Colorize(text)
 
         widget:SetTooltip(tt)
@@ -963,7 +963,7 @@ BS.widgets[BS.W_VAMPIRISM] = {
     event = _G.EVENT_EFFECT_CHANGED,
     filter = {[_G.EVENT_EFFECT_CHANGED] = {_G.REGISTER_FILTER_UNIT_TAG, "player"}},
     icon = "icons/ability_u26_vampire_infection_stage4",
-    tooltip = BS.Format(_G.SI_CURSETYPE1),
+    tooltip = BS.LC.Format(_G.SI_CURSETYPE1),
     cooldown = true,
     hideWhenEqual = ""
 }
@@ -1017,10 +1017,10 @@ BS.widgets[BS.W_VAMPIRISM_TIMER] = {
 
         widget:SetValue(value, plainValue)
 
-        local tt = BS.Format(_G.SI_CURSETYPE1)
+        local tt = BS.LC.Format(_G.SI_CURSETYPE1)
 
         if (isVampire) then
-            tt = tt .. BS.LF .. BS.COLOURS.White:Colorize(BS.Format(name))
+            tt = tt .. BS.LF .. BS.COLOURS.White:Colorize(BS.LC.Format(name))
         end
 
         widget:SetTooltip(tt)
@@ -1103,7 +1103,7 @@ BS.widgets[BS.W_VAMPIRISM_FEED_TIMER] = {
         local tt = GetString(_G.BARSTEWARD_VAMPIRE_FEED_TIMER)
 
         if (isVampireWithFeed) then
-            tt = tt .. BS.LF .. BS.COLOURS.White:Colorize(BS.Format(name))
+            tt = tt .. BS.LF .. BS.COLOURS.White:Colorize(BS.LC.Format(name))
         end
 
         widget:SetTooltip(tt)
@@ -1136,7 +1136,7 @@ BS.widgets[BS.W_FOOD_BUFF] = {
             widget:SetColour(BS.GetTimeColour(buff.remaining, this, 60, true, true))
             widget:SetTooltip(buff.ttt)
 
-            if (BS.GetVar("Announce", this) and (BS.GetVar("WarningValue", this) * 60) == BS.ToInt(buff.remaining)) then
+            if (BS.GetVar("Announce", this) and (BS.GetVar("WarningValue", this) * 60) == BS.LC.ToInt(buff.remaining)) then
                 local buffMessage =
                     ZO_CachedStrFormat(GetString(_G.BARSTEWARD_WARNING_EXPIRING), GetString(_G.BARSTEWARD_FOOD_BUFF))
                 BS.Announce(GetString(_G.BARSTEWARD_WARNING), buffMessage, this)
@@ -1154,7 +1154,7 @@ BS.widgets[BS.W_FOOD_BUFF] = {
     timer = 1000,
     hideWhenEqual = 0,
     icon = "icons/store_tricolor_food_01",
-    tooltip = BS.Format(_G.BARSTEWARD_FOOD_BUFF)
+    tooltip = BS.LC.Format(_G.BARSTEWARD_FOOD_BUFF)
 }
 
 BS.widgets[BS.W_XP_BUFF] = {
@@ -1164,7 +1164,7 @@ BS.widgets[BS.W_XP_BUFF] = {
         local this = BS.W_XP_BUFF
         local buffs = BS.ScanBuffs(BS.XP_BUFFS, this)
         local lowest = {remaining = 99999}
-        local ttt = BS.Format(_G.BARSTEWARD_XP_BUFF) .. BS.LF
+        local ttt = BS.LC.Format(_G.BARSTEWARD_XP_BUFF) .. BS.LF
 
         if (#buffs > 0) then
             for _, buff in ipairs(buffs) do
@@ -1187,9 +1187,9 @@ BS.widgets[BS.W_XP_BUFF] = {
             widget:SetColour(BS.GetTimeColour(lowest.remaining, this, 60, true, true))
             widget:SetTooltip(lowest.ttt)
 
-            if (BS.GetVar("Announce", this) and (BS.GetVar("WarningValue", this) * 60) == BS.ToInt(lowest.remaining)) then
+            if (BS.GetVar("Announce", this) and (BS.GetVar("WarningValue", this) * 60) == BS.LC.ToInt(lowest.remaining)) then
                 local buffMessage =
-                    ZO_CachedStrFormat(GetString(_G.BARSTEWARD_WARNING_EXPIRING), BS.Format(lowest.buffName))
+                    ZO_CachedStrFormat(GetString(_G.BARSTEWARD_WARNING_EXPIRING), BS.LC.Format(lowest.buffName))
                 BS.Announce(GetString(_G.BARSTEWARD_WARNING), buffMessage, this)
             end
 
@@ -1206,7 +1206,7 @@ BS.widgets[BS.W_XP_BUFF] = {
     hideWhenEqual = 0,
     timer = 1000,
     icon = "icons/icon_experience",
-    tooltip = BS.Format(_G.BARSTEWARD_XP_BUFF)
+    tooltip = BS.LC.Format(_G.BARSTEWARD_XP_BUFF)
 }
 
 local function changeStatus()
@@ -1227,7 +1227,7 @@ BS.widgets[BS.W_PLAYER_STATUS] = {
     update = function(widget, _, _, newStatus)
         local status = newStatus or GetPlayerStatus()
         local icon = ZO_GetGamepadPlayerStatusIcon(status)
-        local text = BS.Format(_G["SI_PLAYERSTATUS" .. status])
+        local text = BS.LC.Format(_G["SI_PLAYERSTATUS" .. status])
 
         widget:SetIcon(icon)
         widget:SetValue(text)
@@ -1238,7 +1238,7 @@ BS.widgets[BS.W_PLAYER_STATUS] = {
     event = _G.EVENT_PLAYER_STATUS_CHANGED,
     icon = "contacts/gamepad/gp_social_status_online",
     onLeftClick = changeStatus,
-    tooltip = BS.Format(_G.SI_FRIENDS_LIST_PANEL_TOOLTIP_STATUS),
+    tooltip = BS.LC.Format(_G.SI_FRIENDS_LIST_PANEL_TOOLTIP_STATUS),
     customSettings = {
         [1] = {
             type = "checkbox",
@@ -1263,7 +1263,7 @@ BS.widgets[BS.W_LFG_ROLE] = {
     update = function(widget)
         local role = GetSelectedLFGRole()
         local icon = GetRoleIcon(role)
-        local text = BS.Format(_G["SI_LFGROLE" .. role])
+        local text = BS.LC.Format(_G["SI_LFGROLE" .. role])
 
         widget:SetIcon(icon)
         widget:SetValue(text)
@@ -1281,7 +1281,7 @@ BS.widgets[BS.W_LFG_ROLE] = {
             SCENE_MANAGER:Show("groupMenuKeyboard")
         end
     end,
-    tooltip = BS.Format(_G.SI_GAMEPAD_GROUP_PREFERRED_ROLES_HEADER),
+    tooltip = BS.LC.Format(_G.SI_GAMEPAD_GROUP_PREFERRED_ROLES_HEADER),
     customSettings = {
         [1] = {
             type = "checkbox",
@@ -1305,9 +1305,9 @@ BS.widgets[BS.W_TITLE] = {
     name = "playerTitle",
     update = function(widget, event, unitTag)
         if (event == "initial" or unitTag == "player") then
-            local title = BS.Format(GetUnitTitle("player"))
+            local title = BS.LC.Format(GetUnitTitle("player"))
 
-            widget:SetValue((title == "") and BS.Format(_G.SI_STATS_NO_TITLE) or title)
+            widget:SetValue((title == "") and BS.LC.Format(_G.SI_STATS_NO_TITLE) or title)
 
             return title
         end
@@ -1322,7 +1322,7 @@ BS.widgets[BS.W_TITLE] = {
             SCENE_MANAGER:Show("stats")
         end
     end,
-    tooltip = BS.Format(_G.SI_STATS_TITLE)
+    tooltip = BS.LC.Format(_G.SI_STATS_TITLE)
 }
 
 BS.widgets[BS.W_BOUNTY] = {
@@ -1331,7 +1331,7 @@ BS.widgets[BS.W_BOUNTY] = {
     update = function(widget)
         local bounty = GetFullBountyPayoffAmount()
         local infamy = GetInfamyLevel(GetInfamy())
-        local infamyText = BS.Format(_G["SI_INFAMYTHRESHOLDSTYPE" .. infamy])
+        local infamyText = BS.LC.Format(_G["SI_INFAMYTHRESHOLDSTYPE" .. infamy])
         local secondsTillClear = GetSecondsUntilBountyDecaysToZero()
         local this = BS.W_BOUNTY
         local colour = BS.COLOURS.DefaultColour
@@ -1340,7 +1340,7 @@ BS.widgets[BS.W_BOUNTY] = {
         widget:SetColour(colour)
         widget:SetValue(remaining)
 
-        local tt = BS.Format(_G.SI_STATS_BOUNTY_LABEL) .. BS.LF .. BS.LF
+        local tt = BS.LC.Format(_G.SI_STATS_BOUNTY_LABEL) .. BS.LF .. BS.LF
         local formatted = zo_strformat(_G.SI_JUSTICE_INFAMY_LEVEL_CHANGED, infamyText)
 
         formatted = zo_strformat("<<zC:1>>", formatted)
@@ -1356,7 +1356,7 @@ BS.widgets[BS.W_BOUNTY] = {
     timer = 1000,
     hideWhenEqual = 0,
     icon = "stats/justice_bounty_icon-red",
-    tooltip = BS.Format(_G.SI_STATS_BOUNTY_LABEL)
+    tooltip = BS.LC.Format(_G.SI_STATS_BOUNTY_LABEL)
 }
 
 local function findAccount(account, server, allAccounts)
@@ -1374,8 +1374,8 @@ BS.widgets[BS.W_DAILY_REWARD] = {
         local worldname = {"EU", "NA"}
         local rewardIndex = GetDailyLoginClaimableRewardIndex()
         local secondsTillReset = GetTimeUntilNextDailyLoginRewardClaimS()
-        local claimed = BS.COLOURS.Green:Colorize(BS.Format(_G.SI_DAILY_LOGIN_REWARDS_CLAIMED_TILE_NARRATION))
-        local unclaimed = BS.COLOURS.Red:Colorize(BS.Format(_G.SI_GIFT_INVENTORY_UNCLAIMED_GIFTS_HEADER))
+        local claimed = BS.COLOURS.Green:Colorize(BS.LC.Format(_G.SI_DAILY_LOGIN_REWARDS_CLAIMED_TILE_NARRATION))
+        local unclaimed = BS.COLOURS.Red:Colorize(BS.LC.Format(_G.SI_GIFT_INVENTORY_UNCLAIMED_GIFTS_HEADER))
         local dailyRewardClaimed
 
         if (rewardIndex == nil) then
@@ -1416,13 +1416,13 @@ BS.widgets[BS.W_DAILY_REWARD] = {
         end
 
         widget:SetValue(accountCount .. "/" .. claimedAccountCount)
-        widget:SetTooltip(BS.Format(_G.SI_DAILY_LOGIN_REWARDS_CLAIMED_ANNOUNCEMENT) .. accountList)
+        widget:SetTooltip(BS.LC.Format(_G.SI_DAILY_LOGIN_REWARDS_CLAIMED_ANNOUNCEMENT) .. accountList)
 
         return claimedAccountCount
     end,
     event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_DAILY_LOGIN_REWARDS_CLAIMED},
     icon = "icons/achievement_u27_loyalty_reward",
-    tooltip = BS.Format(_G.SI_DAILY_LOGIN_REWARDS_CLAIMED_ANNOUNCEMENT)
+    tooltip = BS.LC.Format(_G.SI_DAILY_LOGIN_REWARDS_CLAIMED_ANNOUNCEMENT)
 }
 
 local goldIcon = BS.Icon("currency/currency_gold_64")
@@ -1433,13 +1433,13 @@ BS.widgets[BS.W_BOUNTY_AMOUNT] = {
     update = function(widget)
         local bounty = GetFullBountyPayoffAmount()
         local infamy = GetInfamyLevel(GetInfamy())
-        local infamyText = BS.Format(_G["SI_INFAMYTHRESHOLDSTYPE" .. infamy])
+        local infamyText = BS.LC.Format(_G["SI_INFAMYTHRESHOLDSTYPE" .. infamy])
         local colour = BS.GetColour(BS.W_BOUNTY_AMOUNT)
 
         widget:SetColour(colour)
         widget:SetValue(bounty .. goldIcon)
 
-        local tt = BS.Format(_G.BARSTEWARD_BOUNTY_AMOUNT) .. BS.LF .. BS.LF
+        local tt = BS.LC.Format(_G.BARSTEWARD_BOUNTY_AMOUNT) .. BS.LF .. BS.LF
         local formatted = zo_strformat(_G.SI_JUSTICE_INFAMY_LEVEL_CHANGED, infamyText)
 
         formatted = zo_strformat("<<zC:1>>", formatted)
@@ -1453,7 +1453,7 @@ BS.widgets[BS.W_BOUNTY_AMOUNT] = {
     timer = 1000,
     hideWhenEqual = 0,
     icon = "icons/store_bounty_expunger_medium",
-    tooltip = BS.Format(_G.BARSTEWARD_BOUNTY_AMOUNT)
+    tooltip = BS.LC.Format(_G.BARSTEWARD_BOUNTY_AMOUNT)
 }
 
 BS.widgets[BS.W_ARMOURY_BUILD] = {
@@ -1485,9 +1485,9 @@ BS.widgets[BS.W_ARMOURY_BUILD] = {
         widget:SetColour(colour)
         widget:SetValue(armouryInfo.name or "?")
 
-        local tt = BS.Format(_G.SI_ARMORY_TITLE) .. BS.LF
+        local tt = BS.LC.Format(_G.SI_ARMORY_TITLE) .. BS.LF
 
-        tt = tt .. BS.LF .. BS.Format(_G.BARSTEWARD_BUILD_INFO)
+        tt = tt .. BS.LF .. BS.LC.Format(_G.BARSTEWARD_BUILD_INFO)
 
         if (armouryInfo.index) then
             local equipped = BS.COLOURS.White:Colorize(armouryInfo.name)
@@ -1508,7 +1508,7 @@ BS.widgets[BS.W_ARMOURY_BUILD] = {
             local formatter = GetString(_G.SI_GAMEPAD_SECTION_HEADER_EQUIPPED_ITEM)
             local text = ZO_CachedStrFormat(formatter, date)
 
-            tt = tt .. BS.LF .. BS.LF .. BS.Format(text)
+            tt = tt .. BS.LF .. BS.LF .. BS.LC.Format(text)
         end
 
         widget.tooltip = tt
@@ -1519,7 +1519,7 @@ BS.widgets[BS.W_ARMOURY_BUILD] = {
     callback = {[_G.ZO_ARMORY_MANAGER] = {"BuildListUpdated"}},
     hideWhenEqual = 0,
     icon = "icons/housing_gen_crf_armorycraftingbase001",
-    tooltip = BS.Format(_G.SI_ARMORY_TITLE),
+    tooltip = BS.LC.Format(_G.SI_ARMORY_TITLE),
     onLeftClick = function()
         for _, id in ipairs(BS.ARMOURY_ASSISTANTS) do
             if (IsCollectibleUsable(id)) then

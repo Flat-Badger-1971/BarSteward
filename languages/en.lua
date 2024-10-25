@@ -458,4 +458,6 @@ L("ACCOUNT_WIDE_TOOLTIP", "All the settings below will be the same for each of y
 L("SLASH_ENABLE", "enable")
 L("SLASH_HIDE", "hide")
 L("SLASH_SHOW", "show")
+
+L("LIB_TEXT","This addon now requires LibFBCommon. Please install it and reload. Please disregard any errors until this has been installed.")
 --luacheck: pop

@@ -1,8 +1,6 @@
-[color=#ff9900][b]Version: 3.2.3 ---------------[/b][/color]
+[color=#ff9900][b]Version: 3.2.2 ---------------[/b][/color]
 Fixed logout issue on PTS
 Added an option to hide leads that have already been find
-
-[color=#ff9900][b]Version: 3.2.2 ---------------[/b][/color]
 Update transmute crystal widget icon
 Slash commands added to hide/show and enable/disable a bar by name
 'Crime mode detection' added

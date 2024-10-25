@@ -1,0 +1,9 @@
+{
+    "diagnostics.disable": [
+        "undefined-global",
+        "deprecated",
+        "need-check-nil",
+        "undefined-field",
+        "lowercase-global"
+    ]
+}

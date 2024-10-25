@@ -43,8 +43,8 @@ function baseBar:Initialise()
         local gridSize = BS.Vars.GridSize
 
         if (BS.Vars.SnapToGrid) then
-            snapX = BS.GetNearest(xPos, gridSize)
-            snapY = BS.GetNearest(yPos, gridSize)
+            snapX = BS.LC.GetNearest(xPos, gridSize)
+            snapY = BS.LC.GetNearest(yPos, gridSize)
 
             self.bar:ClearAnchors()
             self.bar:SetAnchor(self.barAnchor, GuiRoot, TOPLEFT, snapX, snapY)
@@ -233,7 +233,7 @@ end
 
 function baseBar:SetCombatFunction()
     -- change the bar's colour during combat if required by the user
-    BS.RegisterForEvent(
+    BS.EventManager:RegisterForEvent(
         _G.EVENT_PLAYER_COMBAT_STATE,
         function()
             if (BS.Vars.Bars[BS.MAIN_BAR].CombatColourChange) then
@@ -363,7 +363,7 @@ function baseBar:AddToScenes()
         SCENE_MANAGER:GetScene("hudui"):AddFragment(self.bar.fragment)
 
         for _, scene in ipairs(BS.SCENES) do
-            BS.AddToScenes(BS.SentenceCase(scene), self.index, self.bar)
+            BS.AddToScenes(BS.LC.ToSentenceCase(scene), self.index, self.bar)
         end
     end
 end
@@ -374,7 +374,7 @@ function baseBar:RemoveFromScenes(override)
         SCENE_MANAGER:GetScene("hudui"):RemoveFragment(self.bar.fragment)
 
         for _, scene in ipairs(BS.SCENES) do
-            BS.RemoveFromScenes(BS.SentenceCase(scene), self.bar)
+            BS.RemoveFromScenes(BS.LC.ToSentenceCase(scene), self.bar)
         end
     end
 end
@@ -606,7 +606,7 @@ function baseBar:CheckPvP()
     local pvpOnly = BS.Vars.Bars[self.index].PvPOnly
 
     if (pvpOnly) then
-        self:CheckHide(not BS.IsPvP())
+        self:CheckHide(not BS.LC.IsInPvPZone())
     end
 end
 
@@ -660,7 +660,7 @@ function baseBar:AddWidgets(widgets)
             end
 
             for _, event in ipairs(events) do
-                BS.RegisterForEvent(
+                BS.EventManager:RegisterForEvent(
                     event,
                     function(...)
                         self:DoUpdate(metadata, ...)
@@ -677,26 +677,12 @@ function baseBar:AddWidgets(widgets)
 
         -- register widgets that need to update after a set interval
         if (metadata.timer) then
-            if (metadata.name == "time") then
-                BS.timeFunction = function()
+            BS.TimerManager:RegisterForUpdate(
+                metadata.timer,
+                function()
                     self:DoUpdate(metadata)
                 end
-
-                EVENT_MANAGER:RegisterForUpdate(
-                    string.format("%s%s", BS.Name, metadata.name),
-                    metadata.timer,
-                    function()
-                        BS.timeFunction()
-                    end
-                )
-            else
-                BS.RegisterForUpdate(
-                    metadata.timer,
-                    function()
-                        self:DoUpdate(metadata)
-                    end
-                )
-            end
+            )
         end
 
         -- register widgets that need to respond to callbacks
@@ -833,7 +819,7 @@ function BS.CreateBar(barSettings)
 
     local barKey = BS.BarObjects[barSettings.index]
     local bar, key = BS.BarObjectPool:AcquireObject(barKey)
-    local extant = BS.GetByValue(BS.BarObjects, key)
+    local extant = BS.LC.GetByValue(BS.BarObjects, key)
 
     -- if this object was being used by something else previously, clear it
     -- so a new one will be created
@@ -868,7 +854,7 @@ function BS.CreateBar(barSettings)
         bar.bar:SetHidden(false)
     end
 
-    BS.RegisterForEvent(
+    BS.EventManager:RegisterForEvent(
         _G.EVENT_PLAYER_ACTIVATED,
         function()
             bar:CheckPvP()
