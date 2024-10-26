@@ -165,7 +165,7 @@ zo_callLater(
                 _G.RewardsTracker.campaign,
                 "refresh",
                 function()
-                    BS:FireCallbacks("RewardsTrackerRefresh")
+                    BS.FireCallbacks("RewardsTrackerRefresh")
                 end
             )
         end
