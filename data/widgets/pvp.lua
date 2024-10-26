@@ -217,7 +217,7 @@ BS.widgets[BS.W_CAMPAIGN_TIER] = {
             info = info .. GetCampaignName(id) .. BS.LF
             info = info .. ZO_CachedStrFormat(_G.BARSTEWARD_TIER_POINTS, tier, data.points) .. BS.LF
 
-            tt = tt .. BS.COLOURS.White:Colorize(info)
+            tt = tt .. BS.LC.White:Colorize(info)
 
             for _, char in ipairs(_G.LibCharacter:GetCharacters(nil, _G.LibCharacter.SORT_NAME)) do
                 if (campaign.owner.settings.data.characters[char.id]) then

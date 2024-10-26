@@ -52,7 +52,7 @@ BS.widgets[BS.W_MOUNT_TRAINING] = {
             local tcol = (val == maxVal) and BS.COLOURS.DefaultOkColour or BS.COLOURS.DefaultWarningColour
 
             ttt = string.format("%s%s%s%s/%s", ttt, icon, ttype, tcol:Colorize(val), maxVal)
-            ttt = BS.COLOURS.White:Colorize(ttt)
+            ttt = BS.LC.White:Colorize(ttt)
         end
 
         widget:SetTooltip(tt .. ttt)

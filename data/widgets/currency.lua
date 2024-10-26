@@ -17,7 +17,7 @@ local function getcrownStoreCurrencies(invert, widgetIndex)
 
                 amount = tostring(useSeparators and BS.AddSeparators(amount) or amount)
                 crownStoreInfo = crownStoreInfo .. BS.Icon(icon) .. " "
-                crownStoreInfo = crownStoreInfo .. BS.COLOURS.White:Colorize(name)
+                crownStoreInfo = crownStoreInfo .. BS.LC.White:Colorize(name)
                 crownStoreInfo = crownStoreInfo .. " " .. amount
             end
         end
@@ -36,7 +36,7 @@ local function updateTooltip(
     currencyType,
     widgetIndex)
     local ttt = BS.LC.Format(GetCurrencyName(currencyType)) .. BS.LF
-    local gold = BS.COLOURS.ZOSGold
+    local gold = BS.LC.ZOSGold
 
     ttt = ttt .. gold:Colorize(tostring(currencyInBag)) .. " " .. GetString(text.bag) .. BS.LF
     ttt = ttt .. gold:Colorize(tostring(currencyInBank)) .. " " .. GetString(text.bank) .. BS.LF
@@ -90,7 +90,7 @@ function BS.CurrencyWidget(currencyType, widgetIndex, text, eventList, hideWhenT
                         string.format(
                         "%s%s %s%s",
                         charactertt,
-                        BS.COLOURS.ZOSGold:Colorize(num),
+                        BS.LC.ZOSGold:Colorize(num),
                         ZO_FormatUserFacingDisplayName(character),
                         BS.LF
                     )
@@ -231,7 +231,7 @@ BS.widgets[BS.W_EVENT_TICKETS] = {
         local this = BS.W_EVENT_TICKETS
         local tickets = GetCurrencyAmount(_G.CURT_EVENT_TICKETS, _G.CURRENCY_LOCATION_ACCOUNT)
         local maxTickets = GetMaxPossibleCurrency(_G.CURT_EVENT_TICKETS, _G.CURRENCY_LOCATION_ACCOUNT)
-        local noLimitColour = BS.GetVar("NoLimitColour", this) and BS.COLOURS.White or BS.COLOURS.Yellow
+        local noLimitColour = BS.GetVar("NoLimitColour", this) and BS.LC.White or BS.LC.Yellow
         local value =
             tickets .. (BS.GetVar("HideLimit", this) and "" or (noLimitColour:Colorize("/" .. tostring(maxTickets))))
         local widthValue = tickets .. (BS.GetVar("HideLimit", this) and "" or ("/" .. tostring(maxTickets)))

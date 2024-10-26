@@ -104,7 +104,7 @@ function BS.AddHousingWidgets(idx, widgets)
                 if (BS.Vars.Controls[varId].Bar == idx) then
                     if (idx > 0) then
                         local tooltip =
-                            vars.Name .. BS.LF .. BS.COLOURS.White:Colorize(house.name .. BS.LF .. house.location)
+                            vars.Name .. BS.LF .. BS.LC.White:Colorize(house.name .. BS.LF .. house.location)
 
                         local widget = {
                             name = "house_" .. id,
@@ -398,7 +398,7 @@ function BS.GetPortToHouseSettings()
 
     if (_G.PortToFriend) then
         local ptfIcon = BS.Icon(BS.FRIENDS_ICON)
-        local ptfText = BS.COLOURS.ZOSGreen:Colorize(zo_strformat(GetString(_G.BARSTEWARD_PORT_TO_HOUSE_PTF), ptfIcon))
+        local ptfText = BS.LC.ZOSGreen:Colorize(zo_strformat(GetString(_G.BARSTEWARD_PORT_TO_HOUSE_PTF), ptfIcon))
         controls[#controls + 1] = {
             type = "description",
             text = ptfText,

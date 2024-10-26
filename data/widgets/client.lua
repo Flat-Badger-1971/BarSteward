@@ -201,7 +201,7 @@ BS.widgets = {
 
             widget:SetTooltip(
                 BS.LC.Format(_G.SI_TRADINGHOUSELISTINGSORTTYPE0) ..
-                    BS.LF .. BS.COLOURS.White:Colorize(BS.LC.Format(_G.BARSTEWARD_TIMER_TIP))
+                    BS.LF .. BS.LC.White:Colorize(BS.LC.Format(_G.BARSTEWARD_TIMER_TIP))
             )
 
             return widget:GetValue()

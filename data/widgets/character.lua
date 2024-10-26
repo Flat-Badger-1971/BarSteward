@@ -33,7 +33,7 @@ BS.widgets[BS.W_MUNDUS_STONE] = {
             local tt = BS.LC.Format(_G.SI_CONFIRM_MUNDUS_STONE_TITLE) .. BS.LF
             local desc = BS.LC.Format(GetAbilityDescription(mundusId))
 
-            tt = tt .. BS.COLOURS.White:Colorize(desc)
+            tt = tt .. BS.LC.White:Colorize(desc)
 
             widget:SetTooltip(tt)
 
@@ -275,7 +275,7 @@ BS.widgets[BS.W_SKYSHARDS] = {
         local ttt = BS.LC.Format(_G.SI_MAPFILTER15) .. BS.LF
         local stext = zo_strformat(GetString(_G.BARSTEWARD_SKYSHARDS_SKILL_POINTS), skillSkyShards)
 
-        ttt = ttt .. BS.COLOURS.White:Colorize(stext)
+        ttt = ttt .. BS.LC.White:Colorize(stext)
 
         widget:SetTooltip(ttt)
 
@@ -430,7 +430,7 @@ BS.widgets[BS.W_PLAYER_LEVEL] = {
         local ttext = BS.LC.Format(_G.SI_STAT_GAMEPAD_EXPERIENCE_LABEL) .. "  "
 
         ttext = ttext .. xp .. " / " .. xpMax
-        ttt = ttt .. BS.COLOURS.White:Colorize(ttext)
+        ttt = ttt .. BS.LC.White:Colorize(ttext)
 
         widget:SetTooltip(ttt)
 
@@ -597,12 +597,12 @@ local function updateWidget()
         dpsWidget:SetIcon(icon)
 
         local ttt = GetString(_G.BARSTEWARD_DPS) .. BS.LF
-        local gold = BS.COLOURS.ZOSGold
+        local gold = BS.LC.ZOSGold
 
-        ttt = ttt .. BS.COLOURS.White:Colorize(GetString(_G.BARSTEWARD_PREVIOUS_ENCOUNTER)) .. BS.LF
+        ttt = ttt .. BS.LC.White:Colorize(GetString(_G.BARSTEWARD_PREVIOUS_ENCOUNTER)) .. BS.LF
 
         if (name) then
-            ttt = ttt .. BS.COLOURS.ZOSPurple:Colorize(BS.LC.Format(name)) .. BS.LF
+            ttt = ttt .. BS.LC.ZOSPurple:Colorize(BS.LC.Format(name)) .. BS.LF
         end
 
         ttt =
@@ -764,7 +764,7 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
 
             ttt = ttt .. BS.LF .. BS.LF
             ttt = ttt .. BS.LC.Format(_G.SI_STAT_GAMEPAD_EXPERIENCE_LABEL) .. BS.LF
-            ttt = ttt .. BS.COLOURS.White:Colorize(ttext)
+            ttt = ttt .. BS.LC.White:Colorize(ttext)
 
             widget:SetTooltip(ttt)
         end
@@ -777,14 +777,14 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
                 value = earned
                 plainValue = earned
             else
-                value = earned .. " (" .. BS.COLOURS.Yellow:Colorize(unspent) .. ")"
+                value = earned .. " (" .. BS.LC.Yellow:Colorize(unspent) .. ")"
                 plainValue = earned .. " (" .. unspent .. ")"
             end
         end
 
         if (BS.GetVar("ShowUnslottedCount", this) and unslotted > 0) then
             plainValue = plainValue .. " - " .. unslotted
-            value = value .. " - " .. BS.COLOURS.Red:Colorize(unslotted)
+            value = value .. " - " .. BS.LC.Red:Colorize(unslotted)
         end
 
         widget:SetColour(BS.GetColour(this, true))
@@ -904,7 +904,7 @@ BS.widgets[BS.W_PLAYER_EXPERIENCE] = {
         local ttt = GetString(_G.BARSTEWARD_PLAYER_EXPERIENCE) .. BS.LF
         local ttext = xp .. " / " .. xplvl .. BS.LF .. pc .. "%"
 
-        ttt = ttt .. BS.COLOURS.White:Colorize(ttext)
+        ttt = ttt .. BS.LC.White:Colorize(ttext)
 
         widget:SetTooltip(ttt)
 
@@ -950,7 +950,7 @@ BS.widgets[BS.W_VAMPIRISM] = {
         widget:SetColour(BS.GetColour(BS.W_VAMPIRISM, true))
 
         local tt = BS.LC.Format(_G.SI_CURSETYPE1)
-        tt = tt .. BS.LF .. BS.COLOURS.White:Colorize(text)
+        tt = tt .. BS.LF .. BS.LC.White:Colorize(text)
 
         widget:SetTooltip(tt)
 
@@ -1020,7 +1020,7 @@ BS.widgets[BS.W_VAMPIRISM_TIMER] = {
         local tt = BS.LC.Format(_G.SI_CURSETYPE1)
 
         if (isVampire) then
-            tt = tt .. BS.LF .. BS.COLOURS.White:Colorize(BS.LC.Format(name))
+            tt = tt .. BS.LF .. BS.LC.White:Colorize(BS.LC.Format(name))
         end
 
         widget:SetTooltip(tt)
@@ -1103,7 +1103,7 @@ BS.widgets[BS.W_VAMPIRISM_FEED_TIMER] = {
         local tt = GetString(_G.BARSTEWARD_VAMPIRE_FEED_TIMER)
 
         if (isVampireWithFeed) then
-            tt = tt .. BS.LF .. BS.COLOURS.White:Colorize(BS.LC.Format(name))
+            tt = tt .. BS.LF .. BS.LC.White:Colorize(BS.LC.Format(name))
         end
 
         widget:SetTooltip(tt)
@@ -1347,7 +1347,7 @@ BS.widgets[BS.W_BOUNTY] = {
 
         local ttext = zo_strformat(_G.SI_JUSTICE_BOUNTY_SET, bounty):gsub("%.", "") .. BS.LF .. formatted
 
-        tt = tt .. BS.COLOURS.White:Colorize(ttext)
+        tt = tt .. BS.LC.White:Colorize(ttext)
 
         widget.tooltip = tt
 
@@ -1374,8 +1374,8 @@ BS.widgets[BS.W_DAILY_REWARD] = {
         local worldname = {"EU", "NA"}
         local rewardIndex = GetDailyLoginClaimableRewardIndex()
         local secondsTillReset = GetTimeUntilNextDailyLoginRewardClaimS()
-        local claimed = BS.COLOURS.Green:Colorize(BS.LC.Format(_G.SI_DAILY_LOGIN_REWARDS_CLAIMED_TILE_NARRATION))
-        local unclaimed = BS.COLOURS.Red:Colorize(BS.LC.Format(_G.SI_GIFT_INVENTORY_UNCLAIMED_GIFTS_HEADER))
+        local claimed = BS.LC.Green:Colorize(BS.LC.Format(_G.SI_DAILY_LOGIN_REWARDS_CLAIMED_TILE_NARRATION))
+        local unclaimed = BS.LC.Red:Colorize(BS.LC.Format(_G.SI_GIFT_INVENTORY_UNCLAIMED_GIFTS_HEADER))
         local dailyRewardClaimed
 
         if (rewardIndex == nil) then
@@ -1399,7 +1399,7 @@ BS.widgets[BS.W_DAILY_REWARD] = {
                 accountCount = accountCount + 1
 
                 local acc = findAccount(account, servername, allAccounts)
-                local detail = BS.COLOURS.White:Colorize(string.format("%s (%s):", account, server))
+                local detail = BS.LC.White:Colorize(string.format("%s (%s):", account, server))
 
                 if (acc) then
                     if ((acc.resetTime or 0) <= os.time()) then
@@ -1444,7 +1444,7 @@ BS.widgets[BS.W_BOUNTY_AMOUNT] = {
 
         formatted = zo_strformat("<<zC:1>>", formatted)
 
-        tt = tt .. BS.COLOURS.White:Colorize(formatted)
+        tt = tt .. BS.LC.White:Colorize(formatted)
 
         widget.tooltip = tt
 
@@ -1490,14 +1490,14 @@ BS.widgets[BS.W_ARMOURY_BUILD] = {
         tt = tt .. BS.LF .. BS.LC.Format(_G.BARSTEWARD_BUILD_INFO)
 
         if (armouryInfo.index) then
-            local equipped = BS.COLOURS.White:Colorize(armouryInfo.name)
+            local equipped = BS.LC.White:Colorize(armouryInfo.name)
 
             tt = tt .. BS.LF .. BS.LF
             tt = tt .. equipped .. BS.LF
 
             if (armouryInfo.outfit ~= GetString(_G.SI_NO_OUTFIT_EQUIP_ENTRY)) then
                 local outfit =
-                    BS.COLOURS.White:Colorize(
+                    BS.LC.White:Colorize(
                     ZO_CachedStrFormat(GetString(_G.SI_ARMORY_OUTFIT_LABEL), armouryInfo.outfit)
                 )
 

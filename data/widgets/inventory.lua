@@ -6,7 +6,7 @@ BS.widgets[BS.W_BAG_SPACE] = {
         local this = BS.W_BAG_SPACE
         local bagSize = GetBagSize(_G.BAG_BACKPACK)
         local bagUsed = GetNumBagUsedSlots(_G.BAG_BACKPACK)
-        local noLimitColour = BS.GetVar("NoLimitColour", this) and BS.COLOURS.White or BS.COLOURS.Yellow
+        local noLimitColour = BS.GetVar("NoLimitColour", this) and BS.LC.White or BS.LC.Yellow
         local value = bagUsed .. (BS.GetVar("HideLimit", this) and "" or (noLimitColour:Colorize("/" .. bagSize)))
         local widthValue = bagUsed .. (BS.GetVar("HideLimit", this) and "" or ("/" .. bagSize))
         local pcUsed = BS.LC.ToPercent(bagUsed / bagSize)
@@ -91,7 +91,7 @@ BS.widgets[BS.W_BANK_SPACE] = {
         local this = BS.W_BANK_SPACE
         local bagSize = GetBagSize(_G.BAG_BANK)
         local bagUsed = GetNumBagUsedSlots(_G.BAG_BANK)
-        local noLimitColour = BS.GetVar("NoLimitColour", this) and BS.COLOURS.White or BS.COLOURS.Yellow
+        local noLimitColour = BS.GetVar("NoLimitColour", this) and BS.LC.White or BS.LC.Yellow
 
         if (IsESOPlusSubscriber()) then
             bagSize = bagSize + GetBagSize(_G.BAG_SUBSCRIBER_BANK)
@@ -349,7 +349,7 @@ BS.widgets[BS.W_SOUL_GEMS] = {
         local displayValue = filledCount
         local widthValue = filledCount
         local displayIcon = filledIcon
-        local both = BS.COLOURS.Green:Colorize(filledCount) .. "/" .. emptyCount
+        local both = BS.LC.Green:Colorize(filledCount) .. "/" .. emptyCount
 
         if (BS.GetVar("GemType", this) == GetString(_G.BARSTEWARD_EMPTY)) then
             displayValue = emptyCount
@@ -507,7 +507,7 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
         ttext = ttext .. zo_strformat(GetString(_G.BARSTEWARD_WRITS_SURVEYS), surveys) .. BS.LF
         ttext = ttext .. zo_strformat(GetString(_G.BARSTEWARD_WRITS_MAPS), maps)
 
-        ttt = ttt .. BS.COLOURS.White:Colorize(ttext)
+        ttt = ttt .. BS.LC.White:Colorize(ttext)
 
         local writText = {}
 
@@ -756,7 +756,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
 
                 ttt = ttt .. BS.LF
                 ttt = ttt .. (bagType == "bag" and BS.BAGICON or BS.BANKICON)
-                ttt = ttt .. " " .. zoIcon .. " " .. (key.colour or BS.COLOURS.White):Colorize(key.name)
+                ttt = ttt .. " " .. zoIcon .. " " .. (key.colour or BS.LC.White):Colorize(key.name)
                 ttt = ttt .. " (" .. key.count .. ")"
             end
         end
@@ -786,7 +786,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
                         local zoIcon = BS.Icon(data.icon)
 
                         ttt = ttt .. BS.LF .. BS.BAGICON .. " " .. zoIcon .. " "
-                        ttt = ttt .. (data.colour or BS.COLOURS.White):Colorize(data.name) .. " (0)"
+                        ttt = ttt .. (data.colour or BS.LC.White):Colorize(data.name) .. " (0)"
                     end
                 end
             end
@@ -1102,15 +1102,15 @@ local function randomOnLeftClick(collectibleTable, widgetIndex)
 
         local tt = BS.widgets[widgetIndex].tooltip .. BS.LF
 
-        tt = tt .. BS.COLOURS.White:Colorize(GetString(_G.BARSTEWARD_RANDOM_RECENT)) .. BS.LF
-        tt = tt .. BS.COLOURS.ZOSGold:Colorize(name)
+        tt = tt .. BS.LC.White:Colorize(GetString(_G.BARSTEWARD_RANDOM_RECENT)) .. BS.LF
+        tt = tt .. BS.LC.ZOSGold:Colorize(name)
 
         widget:SetTooltip(tt)
 
         UseCollectible(collectibleId)
 
         if (BS.GetVar("Print", widgetIndex)) then
-            local output = BS.COLOURS.ZOSGold:Colorize("Bar Steward") .. ": " .. name
+            local output = BS.LC.ZOSGold:Colorize("Bar Steward") .. ": " .. name
 
             CHAT_ROUTER:AddSystemMessage(output)
         end
@@ -1233,14 +1233,14 @@ BS.widgets[BS.W_RANDOM_EMOTE] = {
             local widget = BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[BS.W_RANDOM_EMOTE])
             local tt = BS.widgets[BS.W_RANDOM_EMOTE].tooltip .. BS.LF
 
-            tt = tt .. BS.COLOURS.White:Colorize(GetString(_G.BARSTEWARD_RANDOM_RECENT)) .. BS.LF
-            tt = tt .. BS.COLOURS.ZOSGold:Colorize(displayName)
+            tt = tt .. BS.LC.White:Colorize(GetString(_G.BARSTEWARD_RANDOM_RECENT)) .. BS.LF
+            tt = tt .. BS.LC.ZOSGold:Colorize(displayName)
 
             widget:SetTooltip(tt)
 
             if (BS.Vars.Controls[BS.W_RANDOM_EMOTE].Print) then
                 local name = BS.LC.Format(displayName)
-                local output = BS.COLOURS.ZOSGold:Colorize("Bar Steward") .. ": " .. name
+                local output = BS.LC.ZOSGold:Colorize("Bar Steward") .. ": " .. name
 
                 CHAT_ROUTER:AddSystemMessage(output)
             end
@@ -1281,7 +1281,7 @@ local function itemScan(widget, filteredItems, widgetIndex, name)
                 ttext = ttext .. " " .. "(" .. qty .. ")"
             end
 
-            tt = tt .. BS.LF .. BS.COLOURS.White:Colorize(ttext)
+            tt = tt .. BS.LF .. BS.LC.White:Colorize(ttext)
         end
     end
 
@@ -1509,7 +1509,7 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
                     GetString(_G.BARSTEWARD_MAIN_BAR)
 
                 tt = string.format("%s%s%s ", tt, BS.LF, BS.Icon(poison.icon))
-                tt = string.format("%s%s %s (%d)", tt, BS.COLOURS.White:Colorize(poison.name), slotName, poison.count)
+                tt = string.format("%s%s %s (%d)", tt, BS.LC.White:Colorize(poison.name), slotName, poison.count)
 
                 if (selected == BS.ACTIVE_BAR) then
                     if
@@ -1612,7 +1612,7 @@ BS.widgets[BS.W_FRAGMENTS] = {
 
         if (unnecessary > 0) then
             plainText = text .. "/" .. unnecessary
-            text = text .. "/" .. BS.COLOURS.Yellow:Colorize(unnecessary)
+            text = text .. "/" .. BS.LC.Yellow:Colorize(unnecessary)
         end
 
         widget:SetValue(text, plainText)
@@ -1654,14 +1654,14 @@ BS.widgets[BS.W_FRAGMENTS] = {
             if (info.collected + info.uncollected + info.unnecessary > 0) then
                 if (info.collected and (info.unnecessary == 0) and info.collected > 0) then
                     collectedtt = string.format("%s%s ", collectedtt, BS.Icon(info.icon))
-                    collectedtt = string.format("%s%s ", collectedtt, BS.COLOURS.White:Colorize(collectibleName))
+                    collectedtt = string.format("%s%s ", collectedtt, BS.LC.White:Colorize(collectibleName))
                     collectedtt =
-                        string.format("%s%s", collectedtt, BS.COLOURS.Green:Colorize(tostring(info.collected)))
+                        string.format("%s%s", collectedtt, BS.LC.Green:Colorize(tostring(info.collected)))
                     collectedtt =
                         string.format(
                         "%s / %s%s",
                         collectedtt,
-                        BS.COLOURS.Green:Colorize(tostring(info.collected + info.uncollected)),
+                        BS.LC.Green:Colorize(tostring(info.collected + info.uncollected)),
                         BS.LF
                     )
                 end
@@ -1671,7 +1671,7 @@ BS.widgets[BS.W_FRAGMENTS] = {
                     unnecessarytt = string.format("%s%s %d", unnecessarytt, collectibleName, info.unnecessary)
                     unnecessarytt =
                         string.format("%s / %d%s", unnecessarytt, info.unnecessary + info.uncollected, BS.LF)
-                    unnecessarytt = BS.COLOURS.Yellow:Colorize(unnecessarytt)
+                    unnecessarytt = BS.LC.Yellow:Colorize(unnecessarytt)
                 end
 
                 if (info.collected and (info.unnecessary == 0) and info.collected == 0) then
@@ -1689,7 +1689,7 @@ BS.widgets[BS.W_FRAGMENTS] = {
         end
 
         if (uncollectedtt:len() > 0) then
-            uncollectedtt = BS.COLOURS.Grey:Colorize(uncollectedtt)
+            uncollectedtt = BS.LC.Grey:Colorize(uncollectedtt)
             tt = tt .. GetString(_G.BARSTEWARD_NOT_COLLECTED) .. BS.LF .. BS.LC.Trim(uncollectedtt) .. "|r"
         end
 
@@ -1768,7 +1768,7 @@ BS.widgets[BS.W_RUNEBOXES] = {
 
         if (unnecessary > 0) then
             plainText = text .. "/" .. unnecessary
-            text = text .. "/" .. BS.COLOURS.Yellow:Colorize(unnecessary)
+            text = text .. "/" .. BS.LC.Yellow:Colorize(unnecessary)
         end
 
         widget:SetValue(text, plainText)
@@ -1810,18 +1810,18 @@ BS.widgets[BS.W_RUNEBOXES] = {
             if (info.collected + info.required + info.unnecessary > 0) then
                 if (info.collected and (info.unnecessary == 0)) then
                     collectedtt = string.format("%s%s ", collectedtt, BS.Icon(info.icon))
-                    collectedtt = string.format("%s%s ", collectedtt, BS.COLOURS.White:Colorize(info.name))
+                    collectedtt = string.format("%s%s ", collectedtt, BS.LC.White:Colorize(info.name))
                     collectedtt =
-                        string.format("%s%s", collectedtt, BS.COLOURS.Green:Colorize(tostring(info.collected)))
+                        string.format("%s%s", collectedtt, BS.LC.Green:Colorize(tostring(info.collected)))
                     collectedtt =
-                        string.format("%s / %s%s", collectedtt, BS.COLOURS.Green:Colorize(info.required), BS.LF)
+                        string.format("%s / %s%s", collectedtt, BS.LC.Green:Colorize(info.required), BS.LF)
                 end
 
                 if (info.unnecessary > 0) then
                     unnecessarytt = string.format("%s%s ", unnecessarytt, BS.Icon(info.icon))
                     unnecessarytt = string.format("%s%s %d", unnecessarytt, info.name, info.unnecessary)
                     unnecessarytt = string.format("%s / %d%s", unnecessarytt, info.required, BS.LF)
-                    unnecessarytt = BS.COLOURS.Yellow:Colorize(unnecessarytt)
+                    unnecessarytt = BS.LC.Yellow:Colorize(unnecessarytt)
                 end
             end
         end
@@ -1843,7 +1843,7 @@ BS.widgets[BS.W_RUNEBOXES] = {
             ttext = string.format("%s%s 0/%d", ttext, BS.LC.Format(info.name), info.quantity)
         end
 
-        widget:SetTooltip(tt .. BS.COLOURS.Grey:Colorize(ttext))
+        widget:SetTooltip(tt .. BS.LC.Grey:Colorize(ttext))
 
         return collected
     end,

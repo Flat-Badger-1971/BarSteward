@@ -9,7 +9,7 @@ local function addToTooltip(friendList, textureFunctions)
         local noChar = not friend.hasCharacter or (zo_strlen(friend.characterName) <= 0)
 
         if (BS.Vars:GetCommon("FriendAnnounce", friend.displayName) == true and (friend.online)) then
-            textColourDef = BS.COLOURS.ZOSGreen
+            textColourDef = BS.LC.ZOSGreen
         end
 
         local colourise = noChar and "" or BS.Icon(textureFunctions.allianceIcon(friend.alliance))
@@ -51,7 +51,7 @@ BS.widgets[BS.W_FRIENDS] = {
             ttt = ttt .. addToTooltip(offline, textureFunctions)
         end
 
-        widget:SetTooltip(tt .. BS.COLOURS.White:Colorize(ttt))
+        widget:SetTooltip(tt .. BS.LC.White:Colorize(ttt))
         widget:SetValue(#online .. (BS.GetVar("HideLimit", this) and "" or ("/" .. #masterList)))
         widget:SetColour(BS.GetColour(this, true))
 
@@ -242,7 +242,7 @@ BS.widgets[BS.W_GUILD_FRIENDS] = {
             ttt = ttt .. addToTooltip(offline, textureFunctions)
         end
 
-        widget:SetTooltip(tt .. BS.COLOURS.White:Colorize(ttt))
+        widget:SetTooltip(tt .. BS.LC.White:Colorize(ttt))
         widget:SetValue(oCount .. (BS.GetVar("HideLimit", this) and "" or ("/" .. tCount)))
         widget:SetColour(BS.GetColour(this, true))
 

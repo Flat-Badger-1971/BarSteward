@@ -18,7 +18,7 @@ BS.widgets[BS.W_ARCHIVE_PORT] = {
 }
 
 local function wrap(value)
-    return BS.COLOURS.White:Colorize(value)
+    return BS.LC.White:Colorize(value)
 end
 
 local function getBuffs()
@@ -112,7 +112,7 @@ BS.widgets[BS.W_INFINITE_ARCHIVE_PROGRESS] = {
                 )
             else
                 widget:SetValue(
-                    string.format("%s %d: %s", arc, arcCounter, BS.COLOURS.Yellow:Colorize(tostring(pc) .. "%"))
+                    string.format("%s %d: %s", arc, arcCounter, BS.LC.Yellow:Colorize(tostring(pc) .. "%"))
                 )
             end
 
@@ -295,9 +295,9 @@ BS.widgets[BS.W_INFINITE_ARCHIVE_SCORE] = {
         local soloScore = BS.Vars.EndlessHighest[_G.ENDLESS_DUNGEON_GROUP_TYPE_SOLO] or 0
         local duoScore = BS.Vars.EndlessHighest[_G.ENDLESS_DUNGEON_GROUP_TYPE_DUO] or 0
         local ttt = GetString(_G.BARSTEWARD_INFINITE_ARCHIVE_SCORE) .. BS.LF
-        local yellow = BS.COLOURS.Yellow
+        local yellow = BS.LC.Yellow
 
-        ttt = ttt .. BS.COLOURS.White:Colorize(BS.LC.Format(_G.BARSTEWARD_HIGHEST)) .. BS.LF
+        ttt = ttt .. BS.LC.White:Colorize(BS.LC.Format(_G.BARSTEWARD_HIGHEST)) .. BS.LF
         ttt =
             string.format(
             "%s%s: %s%s%s: %s",

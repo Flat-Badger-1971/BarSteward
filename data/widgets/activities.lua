@@ -119,15 +119,15 @@ local function getTimedActivityProgress(activityType, widget, hideLimit, default
             local progress = GetTimedActivityProgress(idx)
             local pcProgress = progress / max
             local ttext = name .. "  (" .. progress .. "/" .. max .. ")"
-            local colour = BS.COLOURS.Grey
+            local colour = BS.LC.Grey
 
             if (progress > 0 and progress < max and complete ~= maxComplete) then
-                colour = BS.COLOURS.Yellow
+                colour = BS.LC.Yellow
             elseif (complete == maxComplete and max ~= progress) then
-                colour = BS.COLOURS.Grey
+                colour = BS.LC.Grey
             elseif (max == progress) then
                 complete = complete + 1
-                colour = BS.COLOURS.Green
+                colour = BS.LC.Green
             end
 
             -- get reward info
@@ -255,7 +255,7 @@ BS.widgets[BS.W_ENDEAVOUR_PROGRESS] = {
             local ttt = GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS_BEST) .. BS.LF
             local taskInfo = maxTask.name .. BS.LF .. BS.LF .. maxTask.description
 
-            ttt = ttt .. BS.COLOURS.White:Colorize(taskInfo)
+            ttt = ttt .. BS.LC.White:Colorize(taskInfo)
 
             widget:SetTooltip(ttt)
 
@@ -304,12 +304,12 @@ BS.widgets[BS.W_ENDEAVOUR_PROGRESS] = {
 
 local function getLeadColour(lead)
     local difficultyColours = {
-        [_G.ANTIQUITY_DIFFICULTY_TRIVIAL] = BS.COLOURS.ZOSGrey,
-        [_G.ANTIQUITY_DIFFICULTY_SIMPLE] = BS.COLOURS.ZOSGreen,
-        [_G.ANTIQUITY_DIFFICULTY_INTERMEDIATE] = BS.COLOURS.ZOSBlue,
-        [_G.ANTIQUITY_DIFFICULTY_ADVANCED] = BS.COLOURS.ZOSPurple,
-        [_G.ANTIQUITY_DIFFICULTY_MASTER] = BS.COLOURS.ZOSGold,
-        [_G.ANTIQUITY_DIFFICULTY_ULTIMATE] = BS.COLOURS.ZOSOrange
+        [_G.ANTIQUITY_DIFFICULTY_TRIVIAL] = BS.LC.ZOSGrey,
+        [_G.ANTIQUITY_DIFFICULTY_SIMPLE] = BS.LC.ZOSGreen,
+        [_G.ANTIQUITY_DIFFICULTY_INTERMEDIATE] = BS.LC.ZOSBlue,
+        [_G.ANTIQUITY_DIFFICULTY_ADVANCED] = BS.LC.ZOSPurple,
+        [_G.ANTIQUITY_DIFFICULTY_MASTER] = BS.LC.ZOSGold,
+        [_G.ANTIQUITY_DIFFICULTY_ULTIMATE] = BS.LC.ZOSOrange
     }
 
     if ((lead.quality or 0) == 0) then
@@ -378,7 +378,7 @@ BS.widgets[BS.W_LEADS] = {
 
             if (#leads == 1 and leads[1].inProgress) then
                 value = GetString(_G.BARSTEWARD_IN_PROGRESS)
-                timeColour = BS.COLOURS.ZOSOrange
+                timeColour = BS.LC.ZOSOrange
                 minTime = 0
             else
                 value =
@@ -428,7 +428,7 @@ BS.widgets[BS.W_LEADS] = {
 
                 if (lead.inProgress) then
                     time = GetString(_G.BARSTEWARD_IN_PROGRESS)
-                    timeColour = BS.COLOURS.ZOSOrange
+                    timeColour = BS.LC.ZOSOrange
                 else
                     timeColour = BS.GetTimeColour(lead.remaining, this, nil, true, true)
                 end
@@ -622,7 +622,7 @@ BS.widgets[BS.W_TRIBUTE_CLUB_RANK] = {
             local text = displayRank .. " - " .. rankName .. BS.LF .. BS.LF
 
             text = text .. xp .. " / " .. totalxp .. ((rank == 7) and "" or " (" .. percent .. "%)")
-            ttt = ttt .. BS.COLOURS.White:Colorize(text)
+            ttt = ttt .. BS.LC.White:Colorize(text)
 
             widget:SetTooltip(ttt)
         end
@@ -655,7 +655,7 @@ BS.widgets[BS.W_ACHIEVEMENT_POINTS] = {
 
         local ttt = BS.LC.Format(_G.SI_ACHIEVEMENTS_OVERALL) .. BS.LF
 
-        ttt = ttt .. BS.COLOURS.White:Colorize(earnedPoints .. "/" .. totalPoints)
+        ttt = ttt .. BS.LC.White:Colorize(earnedPoints .. "/" .. totalPoints)
 
         widget:SetTooltip(ttt)
 
@@ -718,7 +718,7 @@ local function setTracker(widgetIndex, resetSeconds, tooltip)
             local formattedTime =
                 BS.SecondsToTime(timeRemaining, true, false, BS.Vars.Controls[BS.W_SHADOWY_VENDOR_TIME].HideSeconds)
 
-            tooltip = tooltip .. BS.LF .. BS.COLOURS.Yellow:Colorize(formattedTime) .. " "
+            tooltip = tooltip .. BS.LF .. BS.LC.Yellow:Colorize(formattedTime) .. " "
             tooltip = tooltip .. ZO_FormatUserFacingDisplayName(character)
         end
     end
@@ -855,7 +855,7 @@ BS.widgets[BS.W_LOREBOOKS] = {
 
         for _, category in pairs(categories) do
             local metrics = string.format("%s/%s", category.numKnownBooks, category.totalBooks)
-            local cat = BS.COLOURS.White:Colorize(category.name)
+            local cat = BS.LC.White:Colorize(category.name)
 
             tt = string.format("%s%s%s %s", tt, BS.LF, cat, metrics)
 
@@ -1036,7 +1036,7 @@ function BS.GetActvityOutput(data)
 
     data.normalisedOutput = data.normalisedOutput .. "XXXXXXX"
 
-    data.tt = data.tt .. BS.LF .. BS.COLOURS.White:Colorize(BS.LC.Format(data.label)) .. " "
+    data.tt = data.tt .. BS.LF .. BS.LC.White:Colorize(BS.LC.Format(data.label)) .. " "
 
     if (data.activityData.meetsRequirements) then
         local cdt = ZO_CommaDelimitNumber(data.activityData.xpReward)
@@ -1044,7 +1044,7 @@ function BS.GetActvityOutput(data)
         data.tt = data.tt .. data.activityData.colour:Colorize(data.activityData.displayName) .. " "
         data.tt = data.tt .. zo_strformat(_G.SI_ACTIVITY_FINDER_REWARD_XP_FORMAT, cdt)
     else
-        data.tt = data.tt .. BS.COLOURS.Red:Colorize(BS.LC.Format(_G.SI_HOUSE_TEMPLATE_UNMET_REQUIREMENTS_TEXT))
+        data.tt = data.tt .. BS.LC.Red:Colorize(BS.LC.Format(_G.SI_HOUSE_TEMPLATE_UNMET_REQUIREMENTS_TEXT))
     end
 
     return data
@@ -1202,7 +1202,7 @@ BS.widgets[BS.W_DAILY_PROGRESS] = {
 
             local ttt = GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS_BEST) .. BS.LF
 
-            ttt = ttt .. BS.COLOURS.White:Colorize(maxTask.name .. BS.LF .. BS.LF .. maxTask.description)
+            ttt = ttt .. BS.LC.White:Colorize(maxTask.name .. BS.LF .. BS.LF .. maxTask.description)
 
             widget:SetTooltip(ttt)
 
@@ -1351,7 +1351,7 @@ BS.widgets[BS.W_DAILY_COUNT] = {
                 local ttext = BS.LC.Format(_G.SI_DLC_BOOK_QUEST_STATUS_ACCEPTED) .. ": " .. added .. BS.LF
 
                 ttext = ttext .. zo_strformat(_G.SI_NOTIFYTEXT_QUEST_COMPLETE, complete)
-                ttt = ttt .. BS.COLOURS.White:Colorize(ttext)
+                ttt = ttt .. BS.LC.White:Colorize(ttext)
 
                 widget:SetTooltip(ttt)
             end,
@@ -1425,7 +1425,7 @@ BS.widgets[BS.W_FISHING] = {
 
                 local ttext = zo_strformat("<<1>> <<2>> <<m:3>>", BS.Icon(info.icon), count, GetString(info.name))
 
-                tt = tt .. BS.LF .. BS.COLOURS.White:Colorize(ttext)
+                tt = tt .. BS.LF .. BS.LC.White:Colorize(ttext)
             end
         end
         local setwidth = string.rep("8", typeCount)

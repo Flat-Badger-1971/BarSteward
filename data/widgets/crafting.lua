@@ -207,7 +207,7 @@ BS.widgets[BS.W_BLACKSMITHING] = {
                 "%s%s%s",
                 ttt,
                 BS.LF,
-                BS.COLOURS.White:Colorize(
+                BS.LC.White:Colorize(
                     slot .. " - " .. getDisplay(researchSlots[_G.CRAFTING_TYPE_BLACKSMITHING][slot] or 0, this)
                 )
             )
@@ -252,7 +252,7 @@ BS.widgets[BS.W_WOODWORKING] = {
                 "%s%s%s",
                 ttt,
                 BS.LF,
-                BS.COLOURS.White:Colorize(
+                BS.LC.White:Colorize(
                     slot .. " - " .. getDisplay(researchSlots[_G.CRAFTING_TYPE_WOODWORKING][slot] or 0, this)
                 )
             )
@@ -297,7 +297,7 @@ BS.widgets[BS.W_CLOTHING] = {
                 "%s%s%s",
                 ttt,
                 BS.LF,
-                BS.COLOURS.White:Colorize(
+                BS.LC.White:Colorize(
                     slot .. " - " .. getDisplay(researchSlots[_G.CRAFTING_TYPE_CLOTHIER][slot] or 0, this)
                 )
             )
@@ -342,7 +342,7 @@ BS.widgets[BS.W_JEWELCRAFTING] = {
                 "%s%s%s",
                 ttt,
                 BS.LF,
-                BS.COLOURS.White:Colorize(
+                BS.LC.White:Colorize(
                     slot .. " - " .. getDisplay(researchSlots[_G.CRAFTING_TYPE_JEWELRYCRAFTING][slot] or 0, this)
                 )
             )
@@ -461,9 +461,9 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
         local character = BS.CHAR.name
         local iconString = "icons/mapkey/mapkey_%s"
         local DAILY_COLOURS = {
-            ["done"] = BS.COLOURS.Green,
-            ["ready"] = BS.COLOURS.Blue,
-            ["added"] = BS.COLOURS.Yellow
+            ["done"] = BS.LC.Green,
+            ["ready"] = BS.LC.Cyan,
+            ["added"] = BS.LC.Yellow
         }
 
         checkReset()
@@ -518,7 +518,7 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
             colour = BS.COLOURS.DefaultOkColour
             BS.Vars:SetCommon(true, "dailyQuests", character, "complete")
         elseif (ready == qualifiedCount) then
-            colour = BS.COLOURS.ZOSBlue
+            colour = BS.LC.ZOSBlue
         elseif (added == qualifiedCount) then
             colour = BS.COLOURS.DefaultWarningColour
             BS.Vars:SetCommon(true, "dailyQuests", character, "pickedup")
@@ -535,7 +535,7 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
                         local cvar = BS.Vars:GetCommon("dailyQuests", character, cname)
                         local ciconName = iconString:format(info.icon)
 
-                        colour = cvar and DAILY_COLOURS[cvar] or BS.COLOURS.Grey
+                        colour = cvar and DAILY_COLOURS[cvar] or BS.LC.Grey
 
                         tName = BS.Icon(ciconName, colour, 20, 20)
                         output = string.format("%s %s", output, tName)
@@ -559,7 +559,7 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
 
                 if (tready) then
                     ttext = string.format("%s - %s", name, GetString(_G.BARSTEWARD_READY))
-                    ttext = BS.COLOURS.Blue:Colorize(ttext)
+                    ttext = BS.LC.Cyan:Colorize(ttext)
                     ttt = string.format("%s%s", ttt, ttext)
                 elseif (tdone) then
                     ttext = string.format("%s - %s", name, GetString(_G.BARSTEWARD_COMPLETED))
@@ -718,7 +718,7 @@ BS.widgets[BS.W_RECIPES] = {
         local allFurnishing = BS.recipeList.furnishing.known + BS.recipeList.furnishing.unknown
         local tt = recipes
         local this = BS.W_RECIPES
-        local white, gold = BS.COLOURS.White, BS.COLOURS.ZOSGold
+        local white, gold = BS.LC.White, BS.LC.ZOSGold
 
         tt = tt .. BS.LF .. gold:Colorize(BS.recipeList.food.known .. "/" .. allFood)
         tt = tt .. white:Colorize(" " .. food) .. BS.LF

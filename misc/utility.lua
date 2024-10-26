@@ -1243,19 +1243,7 @@ function BS.RegisterColours()
         DefaultDangerColour = BS.LC.Colour(BS.Defaults.DefaultDangerColour),
         DefaultMaxColour = BS.LC.Colour(BS.Defaults.DefaultMaxColour),
         DefaultWarningColour = BS.LC.Colour(BS.Defaults.DefaultWarningColour),
-        DefaultOkColour = BS.LC.Colour(BS.Defaults.DefaultOkColour),
-        Blue = BS.LC.Colour("34a4eb"),
-        Green = BS.LC.Colour("00ff00"),
-        Grey = BS.LC.Colour("bababa"),
-        Red = BS.LC.Colour("f90000"),
-        Yellow = BS.LC.Colour("ffff00"),
-        White = BS.LC.Colour("f9f9f9"),
-        ZOSBlue = BS.LC.Colour("3a92ff"),
-        ZOSGold = BS.LC.Colour("ccaa1a"),
-        ZOSGreen = BS.LC.Colour("2dc50e"),
-        ZOSGrey = BS.LC.Colour("e6e6e6"),
-        ZOSOrange = BS.LC.Colour("e58b27"),
-        ZOSPurple = BS.LC.Colour("a02ef7")
+        DefaultOkColour = BS.LC.Colour(BS.Defaults.DefaultOkColour)
     }
 end
 
