@@ -26,7 +26,6 @@ data/defaults.lua
 data/encoding.lua
 data/runeboxes.lua
 data/slash.lua
-data/sounds.lua
 
 misc/utility.lua
 misc/version.lua

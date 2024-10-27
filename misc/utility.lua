@@ -174,13 +174,13 @@ function BS.CleanUpBarOrder(barNumber)
 end
 
 function BS.GetFont(vars)
-    local font = BS.FONTS[BS.Vars.Font]
+    local font = BS.Vars.Font
     local size = BS.Vars.FontSize
-    local style = BS.FONT_STYLES[BS.Vars.FontStyle]
+    local style = BS.Vars.FontStyle
 
     if (vars) then
         if (vars.Font) then
-            font = BS.FONTS[vars.Font]
+            font = vars.Font
         end
 
         if (vars.FontSize) then
@@ -188,15 +188,11 @@ function BS.GetFont(vars)
         end
 
         if (vars.FontStyle) then
-            style = BS.FONT_STYLES[vars.FontStyle]
+            style = vars.FontStyle
         end
     end
 
-    if (font and size) then
-        return string.format("%s|%s%s", font, size, style)
-    else
-        return ""
-    end
+    return BS.LC.GetFont(font, size, style)
 end
 
 function BS.AddToScenes(sceneType, barIndex, bar, override)
@@ -318,7 +314,7 @@ function BS.ResizeBar(barIndex)
             bar.border:SetEdgeColor(0, 0, 0, 0)
         elseif (bar.ToggleState ~= "hidden") then
             if ((BS.Vars.Bars[barIndex].Border or 99) ~= 99) then
-                bar.border:SetEdgeTexture(unpack(BS.BORDERS[BS.Vars.Bars[barIndex].Border]))
+                bar.border:SetEdgeTexture(unpack(BS.LC.Borders[BS.Vars.Bars[barIndex].Border]))
                 bar.border:SetEdgeColor(1, 1, 1, 1)
             end
         end
@@ -1163,17 +1159,7 @@ function BS.GetQuestInfo()
 end
 
 function BS.PopulateSoundOptions()
-    BS.SoundChoices = {}
-    BS.SoundLookup = {}
-
-    for _, v in ipairs(BS.Sounds) do
-        if (_G.SOUNDS[v] ~= nil) then
-            local soundName = _G.SOUNDS[v]:gsub("_", " ")
-
-            table.insert(BS.SoundChoices, soundName)
-            BS.SoundLookup[soundName] = _G.SOUNDS[v]
-        end
-    end
+    BS.SoundChoices, BS.SoundLookup = BS.LC.GetSoundDropdownOptions()
 end
 
 function BS.ToggleBar(index)

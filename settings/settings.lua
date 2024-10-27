@@ -10,32 +10,9 @@ if (not BS.SoundChoices) then
 end
 
 -- populate the lookup tables
-local fontNames = {}
-local fontStyles = {}
-local backgroundNames = {}
-local borderNames = {}
-
-do
-    for font, _ in pairs(BS.FONTS) do
-        table.insert(fontNames, font)
-    end
-
-    for style, _ in pairs(BS.FONT_STYLES) do
-        table.insert(fontStyles, style)
-    end
-
-    for background, _ in pairs(BS.BACKGROUNDS) do
-        table.insert(backgroundNames, GetString("BARSTEWARD_BACKGROUND_STYLE_", background))
-    end
-
-    table.insert(backgroundNames, " ")
-
-    for border, _ in pairs(BS.BORDERS) do
-        table.insert(borderNames, GetString("BARSTEWARD_BORDER_STYLE_", border))
-    end
-
-    table.insert(borderNames, " ")
-end
+local fontNames, fontStyles = BS.LC.GetFontNamesAndStyles()
+local backgroundNames, borderNames =
+    BS.LC.GetBackgroundAndBorders("BARSTEWARD_BACKGROUND_STYLE_", "BARSTEWARD_BORDER_STYLE_")
 
 local function initialise()
     BS.options = {}
@@ -484,7 +461,7 @@ local function getBarSettings()
                     if (value == " ") then
                         vars.Background = 99
                     else
-                        for id, _ in pairs(BS.BACKGROUNDS) do
+                        for id, _ in pairs(BS.LC.Backgrounds) do
                             if (GetString("BARSTEWARD_BACKGROUND_STYLE_", id) == value) then
                                 vars.Background = id
                                 break
@@ -518,7 +495,7 @@ local function getBarSettings()
                     if (value == " ") then
                         vars.Border = 99
                     else
-                        for id, _ in pairs(BS.BORDERS) do
+                        for id, _ in pairs(BS.LC.Borders) do
                             if (GetString("BARSTEWARD_BORDER_STYLE_", id) == value) then
                                 vars.Border = id
                                 break
@@ -530,7 +507,7 @@ local function getBarSettings()
 
                     if (bar) then
                         if (vars.Border ~= 99) then
-                            border = BS.BORDERS[vars.Border]
+                            border = BS.LC.Borders[vars.Border]
                             bar.bar.border:SetEdgeColor(1, 1, 1, 1)
                         else
                             bar.bar.border:SetEdgeColor(0, 0, 0, 0)

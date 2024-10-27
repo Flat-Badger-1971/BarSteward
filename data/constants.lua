@@ -239,25 +239,6 @@ BS.MUNDUS_STONES = {
 BS.BAGICON = zo_iconFormat("/esoui/art/tooltips/icon_bag.dds")
 BS.BANKICON = zo_iconFormat("/esoui/art/tooltips/icon_bank.dds")
 
-BS.FONTS = {
-    ["Default"] = "$(MEDIUM_FONT)",
-    ["Univers55"] = "EsoUi/Common/Fonts/Univers55.slug",
-    ["ESO Bold"] = "$(BOLD_FONT)",
-    ["Antique"] = "$(ANTIQUE_FONT)",
-    ["Handwritten"] = "$(HANDWRITTEN_FONT)",
-    ["Trajan"] = "$(STONE_TABLET_FONT)",
-    ["Futura"] = "EsoUI/Common/Fonts/FuturaStd-CondensedLight.slug",
-    ["Futura Bold"] = "EsoUI/Common/Fonts/FuturaStd-Condensed.slug"
-}
-
-BS.FONT_STYLES = {
-    ["None"] = "",
-    ["Shadow"] = "|shadow",
-    ["Soft Shadow Thick"] = "|soft-shadow-thick",
-    ["Soft Shadow Thin"] = "|soft-shadow-thin",
-    ["Thick Outline"] = "|thick-outline"
-}
-
 BS.CRAFTING_SCENES = {"alchemy", "enchanting", "provisioner", "smithing"}
 BS.BANKING_SCENES = {"bank", "guildBank", "houseBank"}
 BS.INVENTORY_SCENES = {"inventory"}
@@ -371,33 +352,6 @@ BS.WRIT_ITEM_TYPES = {
 
 BS.VAMPIRE_STAGES = {[135397] = 1, [135399] = 2, [135400] = 3, [135402] = 4, [135412] = 5}
 BS.VAMPIRE_FEED = {[40359] = true}
-
-BS.BACKGROUNDS = {
-    [1] = "actionbar/quickslotbg",
-    [2] = "announcewindow/blackfade",
-    [3] = "antiquities/codex_missing_document",
-    [4] = "antiquities/icon_backdrop",
-    [5] = "interaction/conversation_textbg",
-    [6] = "interaction/conversationwindow_overlay_important",
-    [7] = "miscellaneous/dialog_scrollinset_left",
-    [8] = "achievements/achievements_iconbg",
-    [9] = "actionbar/abilitycooldowninsert",
-    [10] = "ava/ava_bonuses_left",
-    [11] = "campaign/overview_scoringbg_aldmeri_left",
-    [12] = "campaign/overview_scoringbg_daggerfall_left",
-    [13] = "campaign/overview_scoringbg_ebonheart_left",
-    [14] = "art/champion/champion_sky_cloud1"
-}
-
-BS.BORDERS = {
-    [1] = {"/esoui/art/worldmap/worldmap_frame_edge.dds", 128, 16},
-    [2] = {"/esoui/art/crafting/crafting_tooltip_glow_edge_blue64.dds", 256, 8},
-    [3] = {"/esoui/art/crafting/crafting_tooltip_glow_edge_gold64.dds", 256, 8},
-    [4] = {"/esoui/art/crafting/crafting_tooltip_glow_edge_red64.dds", 256, 8},
-    [5] = {"/esoui/art/chatwindow/gamepad/gp_hud_chatwindowbg_edge.dds", 512, 4},
-    [6] = {"/esoui/art/interaction/conversationborder.dds", 128, 8},
-    [7] = {"/esoui/art/market/market_highlightedge16.dds", 128, 16}
-}
 
 BS.MAIN_BAR = 1
 BS.BACK_BAR = 2
