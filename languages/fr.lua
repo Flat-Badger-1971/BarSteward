@@ -459,8 +459,4 @@ L("SLASH_ENABLE", "activer")
 L("SLASH_HIDE", "cacher")
 L("SLASH_SHOW", "montrer")
 
-L(
-    "LIB_TEXT",
-    "Ce module complémentaire nécessite désormais LibFBCommon. Veuillez l'installer et le recharger. Veuillez ignorer les erreurs éventuelles jusqu'à ce que ce module soit installé."
-)
 -- luacheck: pop

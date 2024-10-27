@@ -99,7 +99,10 @@ L("COPY_SETTINGS", "Copy Settings")
 L("CRAFTING_MOTIFS", "Crafting Motifs")
 L("CRIME_ONLY", "Only show when crime detected")
 L("CRIME_ONLY_DETECTION", "Enable Crime Detection")
-L("CRIME_ONLY_TOOLTIP", "Detection includes accepting a theft/Dark Brotherhood quest, carrying stolen items or having a bounty")
+L(
+    "CRIME_ONLY_TOOLTIP",
+    "Detection includes accepting a theft/Dark Brotherhood quest, carrying stolen items or having a bounty"
+)
 L("CRIME_ONLY_CONDITION", "Crime Detection must be enabled")
 L("DAILY_CRAFTING", "Daily Crafting Writs")
 L("DAILY_ENDEAVOUR_PROGRESS_BEST", "Daily Endeavour Best Progress")
@@ -458,6 +461,4 @@ L("ACCOUNT_WIDE_TOOLTIP", "All the settings below will be the same for each of y
 L("SLASH_ENABLE", "enable")
 L("SLASH_HIDE", "hide")
 L("SLASH_SHOW", "show")
-
-L("LIB_TEXT","This addon now requires LibFBCommon. Please install it and reload. Please disregard any errors until this has been installed.")
 --luacheck: pop

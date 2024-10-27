@@ -468,8 +468,3 @@ L("SLASH_ENABLE", "aktivieren")
 L("SLASH_HIDE", "verstecken")
 L("SLASH_SHOW", "zeigen")
 --luacheck: pop
-
-L(
-    "LIB_TEXT",
-    "Dieses Add-on erfordert jetzt LibFBCommon. Bitte installieren Sie es und laden Sie es neu. Bitte ignorieren Sie alle Fehler, bis dies installiert wurde."
-)

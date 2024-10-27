@@ -437,6 +437,4 @@ L("ACCOUNT_WIDE_TOOLTIP", "以下的所有设置将会同步至你的每一个�
 L("SLASH_ENABLE", "使能够")
 L("SLASH_HIDE", "隐藏")
 L("SLASH_SHOW", "展示")
-
-L("LIB_TEXT","此插件现在需要 LibFBCommon。请安装并重新加载。安装完成之前，请忽略任何错误。")
 --luacheck: pop
