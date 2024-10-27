@@ -146,6 +146,30 @@ function BS.ContinueIntialising()
 
     BS.GridChanged = true
     BS.RegisterHooks()
+
+    local libWarning = BS.Vars:GetCommon("LibWarning")
+
+    if (not _G.LibFBCommon and not libWarning) then
+        ZO_Dialogs_RegisterCustomDialog(
+            "BarStewardLibWarning",
+            {
+                title = {text = "|cff9900Bar |r|c4f34ebSteward|r"},
+                mainText = {
+                    text = GetString(_G.ARCHIVEHELPER_LIB_TEXT)
+                },
+                buttons = {
+                    {
+                        text = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_DIALOG_CONFIRM)),
+                        callback = function()
+                            BS.Vars:SetCommon(true, "LibWarning")
+                        end
+                    }
+                }
+            }
+        )
+
+        ZO_Dialogs_ShowDialog("BarStewardLibWarning")
+    end
 end
 
 local function Initialise()

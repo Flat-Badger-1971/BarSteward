@@ -459,3 +459,5 @@ L("SLASH_ENABLE", "enable")
 L("SLASH_HIDE", "hide")
 L("SLASH_SHOW", "show")
 --luacheck: pop
+
+L("LFC", "The next version of this addon will require LibFSCommon. Please install it before the next release.")

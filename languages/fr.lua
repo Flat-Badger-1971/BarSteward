@@ -453,3 +453,5 @@ L("SLASH_ENABLE", "activer")
 L("SLASH_HIDE", "cacher")
 L("SLASH_SHOW", "montrer")
 -- luacheck: pop
+
+L("LFC", "La prochaine version de ce module complémentaire nécessitera LibFSCommon. Veuillez l'installer avant la prochaine version.")
