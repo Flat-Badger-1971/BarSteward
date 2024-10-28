@@ -155,7 +155,7 @@ function BS.ContinueIntialising()
             {
                 title = {text = "|cff9900Bar |r|c4f34ebSteward|r"},
                 mainText = {
-                    text = GetString(_G.ARCHIVEHELPER_LIB_TEXT)
+                    text = GetString(_G.BARSTEWARD_LFC)
                 },
                 buttons = {
                     {
