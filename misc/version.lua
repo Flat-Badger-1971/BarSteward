@@ -102,20 +102,29 @@ function BS.VersionCheck()
         BS.Vars.Controls[BS.W_RANDOM_BATTLEGROUND].Cat = BS.CATNAMES.PvP
     end
 
-    if (needsUpdate(3203) and _G.CURT_IMPERIAL_FRAGMENTS) then
-        local tvk = BS.Vars.Controls[145]
+    if (needsUpdate(3204) and _G.CURT_IMPERIAL_FRAGMENTS) then
+        local servers = BS.Vars:GetServers()
 
-        if (tvk) then
-            if (tvk.Bar ~= 0) then
-                BS.Vars.Controls[BS.W_IMPERIAL_FRAGMENTS].Bar = tvk.Bar
-                BS.Vars.Controls[BS.W_IMPERIAL_FRAGMENTS].Order = tvk.Order
-                BS.Vars.Controls[BS.W_IMPERIAL_FRAGMENTS].NoIcon = tvk.NoIcon
-                BS.Vars.Controls[BS.W_IMPERIAL_FRAGMENTS].NoValue = tvk.NoValue
-                BS.Vars.Controls[145] = nil
+        for _, server in ipairs(servers) do
+            local accounts = BS.Vars:GetAccounts(server)
+
+            for _, account in ipairs(accounts) do
+                local chars = BS.Vars:GetCharacters(server, account, false)
+
+                for _, char in ipairs(chars) do
+                    local cid = BS.Vars:GetCharacterId(server, account, char)
+                    local vars = BS.Vars:SearchPath(true, server, account, cid, "Controls")
+
+                    if (vars) then
+                        if (vars[145]) then
+                            vars[145] = nil
+                        end
+                    end
+                end
             end
         end
 
-        BS.Vars:SetCommon(true, "Updates", 3203)
+        BS.Vars:SetCommon(true, "Updates", 3204)
     end
 end
 
