@@ -162,6 +162,14 @@ function manager:GetAccounts(server)
     return accounts
 end
 
+function manager:SearchPath(withRaw, ...)
+    if (withRaw) then
+        return searchPath(self:GetRawTable(), ...)
+    else
+        return searchPath(...)
+    end
+end
+
 -- return the character id from the saved vars file for the given character name
 function manager:GetCharacterId(server, account, character)
     local characters = self._serverInformation[server][account]
