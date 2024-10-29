@@ -857,30 +857,19 @@ BS.Defaults = {
             PvPOnly = false,
             Units = GetString(_G.BARSTEWARD_MINUTES),
             WarningValue = 5
+        },
+        [BS.W_IMPERIAL_FRAGMENTS] = {
+            Cat = cat.Currency,
+            UseSeparators = false
+        },
+        [BS.W_TANLORIN] = {
+            Cat = cat.Companions
+        },
+        [BS.W_ZERITH] = {
+            Cat = cat.Companions
         }
     }
 }
-
-if (_G.CURT_IMPERIAL_FRAGMENTS) then
-    BS.Defaults.Controls[BS.W_IMPERIAL_FRAGMENTS] = {
-        Cat = cat.Currency,
-        UseSeparators = false
-    }
-
-    BS.Defaults.Controls[BS.W_TANLORIN] = {
-        Cat = cat.Companions
-    }
-
-    BS.Defaults.Controls[BS.W_ZERITH] = {
-        Cat = cat.Companions
-    }
-else
-    -- redundant as of patch 44
-    BS.Defaults.Controls[BS.W_TROPHY_VAULT_KEYS] = {
-        Autohide = true,
-        Cat = cat.Inventory
-    }
-end
 
 BS.CommonDefaults = {
     CharacterList = {},
