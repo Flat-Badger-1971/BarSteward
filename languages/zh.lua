@@ -439,4 +439,4 @@ L("SLASH_HIDE", "隐藏")
 L("SLASH_SHOW", "展示")
 --luacheck: pop
 
-L("LFC", "此插件的下一版本将需要 LibFSCommon。请在下一版本发布之前安装它。")
+L("LFC", "此插件的下一版本将需要 LibFBCommon。请在下一版本发布之前安装它。")
