@@ -4,17 +4,19 @@ BS.LAM = _G.LibAddonMenu2
 
 BS.SoundLastPlayed = {}
 
--- populate the sound selection and lookup tables
-if (not BS.SoundChoices) then
-    BS.PopulateSoundOptions()
-end
-
--- populate the lookup tables
-local fontNames, fontStyles = BS.LC.GetFontNamesAndStyles()
-local backgroundNames, borderNames =
-    BS.LC.GetBackgroundAndBorders("BARSTEWARD_BACKGROUND_STYLE_", "BARSTEWARD_BORDER_STYLE_")
+local fontNames, fontStyles, backgroundNames, borderNames
 
 local function initialise()
+    -- populate the lookup tables
+    fontNames, fontStyles = BS.LC.GetFontNamesAndStyles()
+    backgroundNames, borderNames =
+        BS.LC.GetBackgroundsAndBorders("BARSTEWARD_BACKGROUND_STYLE_", "BARSTEWARD_BORDER_STYLE_")
+
+    -- populate the sound selection and lookup tables
+    if (not BS.SoundChoices) then
+        BS.PopulateSoundOptions()
+    end
+
     BS.options = {}
     BS.options[#BS.options + 1] = {
         type = "divider",
