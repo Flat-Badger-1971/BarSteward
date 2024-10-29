@@ -1,8 +1,8 @@
 [color=#ff9900][b]Version: 3.2.3 ---------------[/b][/color]
 New library warning
-Fixed logout issue on PTS
+Fixed logout issue
 Fixed issue with missing widgets
-Added an option to hide leads that have already been find
+Added an option to hide leads that have already been found
 
 [color=#ff9900][b]Version: 3.2.2 ---------------[/b][/color]
 Update transmute crystal widget icon
