@@ -1,8 +1,7 @@
-[color=#ff9900][b]Version: 3.2.4 ---------------[/b][/color]
-New library warning
-
 [color=#ff9900][b]Version: 3.2.3 ---------------[/b][/color]
+New library warning
 Fixed logout issue on PTS
+Fixed issue with missing widgets
 Added an option to hide leads that have already been find
 
 [color=#ff9900][b]Version: 3.2.2 ---------------[/b][/color]

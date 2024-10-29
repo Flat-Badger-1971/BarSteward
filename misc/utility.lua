@@ -530,7 +530,7 @@ function BS.Announce(header, message, widgetIconNumber, lifespan, sound, otherIc
 
     if (widgetIconNumber) then
         messageParams:SetIconData(
-            BS.FormatIcon(otherIcon or BS.widgets[widgetIconNumber].icon, "achievements/achievements_iconbg")
+            BS.FormatIcon(otherIcon or BS.widgets[widgetIconNumber].icon)
         )
     end
 
