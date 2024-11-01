@@ -187,7 +187,7 @@ BS.widgets[BS.W_SCRYING] = {
                     widget:SetColour(BS.GetColour(this, true))
                 end
 
-                local tt = name .. BS.LFj
+                local tt = name .. BS.LF
                 local ttt = BS.LC.Format(_G.SI_STAT_TRADESKILL_RANK) .. " " .. rank .. BS.LF
 
                 ttt = ttt .. ZO_CachedStrFormat(_G.SI_EXPERIENCE_CURRENT_MAX, currentProgress, maxProgress)
@@ -218,5 +218,20 @@ BS.widgets[BS.W_SCRYING] = {
         local lineData = SKILLS_DATA_MANAGER:GetSkillLineDataById(lineId)
 
         return BS.LC.Format(lineData:GetName())
-    end
+    end,
+    customSettings = {
+        [1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_USE_PROGRESS),
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_SCRYING].Progress or false
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_SCRYING].Progress = value
+            end,
+            requiresReload = true,
+            default = false,
+            width = "full"
+        }
+    }
 }

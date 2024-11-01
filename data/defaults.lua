@@ -870,7 +870,7 @@ BS.Defaults = {
         },
         [BS.W_SCRYING] = {
             Cat = cat.Abilities,
-            Progress = false
+            Progress = true
         }
     }
 }
