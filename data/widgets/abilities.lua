@@ -155,3 +155,63 @@ BS.widgets[BS.W_ACTIVE_BAR] = {
         }
     }
 }
+
+BS.widgets[BS.W_SCRYING] = {
+    -- v3.2.6
+    name = "scrying",
+    update = function(widget, event, skillType, skillLineIndex)
+        local lineId = GetAntiquityScryingSkillLineId()
+        local scryType, scryIndex = GetSkillLineIndicesFromSkillLineId(lineId)
+
+        if (event == "initial" or (skillType == scryType and skillLineIndex == scryIndex)) then
+            local this = BS.W_SCRYING
+            local useProgress = BS.GetVar("Progress", this)
+
+            if (ZO_IsScryingUnlocked()) then
+                if (useProgress) then
+                    widget:SetProgress(0, 0, 1)
+                else
+                    widget:SetValue("0")
+                end
+            else
+                local lineData = SKILLS_DATA_MANAGER:GetSkillLineDataById(lineId)
+                local name = BS.Format(lineData:GetName())
+                local rank = lineData:GetCurrentRank()
+                local lastXP, nextXP, currentXP = lineData:GetRankXPValues()
+                local currentProgress, maxProgress = (currentXP - lastXP), (nextXP - lastXP)
+
+                if (useProgress) then
+                    widget:SetProgress(currentProgress, 0, maxProgress, rank)
+                else
+                    widget:SetValue(string.format("%s (%s/%s)", rank, currentProgress, maxProgress))
+                    widget:SetColour(BS.GetColour(this, true))
+                end
+
+                local ttt = name .. BS.LF
+
+                ttt = ttt .. BS.Format(_G.SI_STAT_TRADESKILL_RANK) .. " " .. rank .. BS.LF
+                ttt = ttt .. BS.Format(_G.SI_EXPERIENCE_CURRENT_MAX, currentProgress, maxProgress)
+
+                widget:SetTooltip(ttt)
+
+                return rank
+            end
+        end
+    end,
+    gradient = function()
+        local startg = {GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, _G.INTERFACE_GENERAL_COLOR_STATUS_BAR_START)}
+        local endg = {GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, _G.INTERFACE_GENERAL_COLOR_STATUS_BAR_END)}
+        local s = BS.Vars.Controls[BS.W_SCRYING].GradientStart or startg
+        local e = BS.Vars.Controls[BS.W_SCRYING].GradientEnd or endg
+
+        return s, e
+    end,
+    event = _G.EVENT_SKILL_XP_UPDATE,
+    icon = "icons/ability_scrying_05b",
+    tooltip = function()
+        local lineId = GetAntiquityScryingSkillLineId()
+        local lineData = SKILLS_DATA_MANAGER:GetSkillLineDataById(lineId)
+
+        return BS.Format(lineData:GetName())
+    end
+}

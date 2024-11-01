@@ -163,6 +163,7 @@ BS.W_ENLIGHTENED = 141
 BS.W_CAMPAIGN_TIER = 142
 BS.W_CONT_ATT = 143
 BS.W_AYLEID_HEALTH = 144
+BS.W_SCRYING = 145
 
 BS.WRITS = {
     [_G.CRAFTING_TYPE_ALCHEMY] = {
@@ -603,7 +604,7 @@ BS.CHAR.allianceIcon = ZO_GetAllianceIcon(BS.CHAR.alliance)
 BS.CHAR.allianceName = GetAllianceName(BS.CHAR.alliance)
 BS.CHAR.classIcon = GetClassIcon(BS.CHAR.classId)
 
-BS.CONTINUOUS_ATTACK = {[39248] = true, [45614] = true}
+BS.CONTINUOUS_ATTACK = {[39248] = true, [45614] = true, [45617] = true}
 BS.AYLEID_HEALTH = {[21263] = true, [100862] = true}
 BS.CRIMEQUESTS = {
     5532,

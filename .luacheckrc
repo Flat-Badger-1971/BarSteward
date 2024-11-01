@@ -157,6 +157,11 @@ read_globals = {
             RegisterCallback = {read_only = true}
         }
     },
+    ["SKILLS_DATA_MANAGER"] = {
+        fields = {
+            GetSkillLineDataById = {read_only = true}
+        }
+    },
     ["STABLE_MANAGER"] = {
         fields = {
             GetStats = {read_only = true}
@@ -287,6 +292,7 @@ read_globals = {
     "GetAntiquityLeadTimeRemainingSeconds",
     "GetAntiquityName",
     "GetAntiquityQuality",
+    "GetAntiquityScryingSkillLineId",
     "GetAntiquityZoneId",
     "GetAssignedCampaignId",
     "GetAvailableSkillPoints",

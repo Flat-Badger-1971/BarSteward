@@ -867,6 +867,9 @@ BS.Defaults = {
         },
         [BS.W_ZERITH] = {
             Cat = cat.Companions
+        },
+        [BS.W_SCRYING] = {
+            Cat = cat.Abilities
         }
     }
 }

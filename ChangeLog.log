@@ -1,5 +1,13 @@
+[color=#ff9900][b]Version: 3.2.6 ---------------[/b][/color]
+New LibFBCommon library now required
+Correct Continuous attack id (thanks Durnik)
+Added scrying level widget
+
+[color=#ff9900][b]Version: 3.2.5 ---------------[/b][/color]
+OMG! sorry - not having a good day, should be fine now
+
 [color=#ff9900][b]Version: 3.2.4 ---------------[/b][/color]
-Require new library
+Ensure previous missing widget fix is applied to all profiles
 
 [color=#ff9900][b]Version: 3.2.3 ---------------[/b][/color]
 New library warning

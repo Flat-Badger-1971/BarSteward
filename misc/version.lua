@@ -102,7 +102,7 @@ function BS.VersionCheck()
         BS.Vars.Controls[BS.W_RANDOM_BATTLEGROUND].Cat = BS.CATNAMES.PvP
     end
 
-    if (needsUpdate(3204) and _G.CURT_IMPERIAL_FRAGMENTS) then
+    if (needsUpdate(3204)) then
         local servers = BS.Vars:GetServers()
 
         for _, server in ipairs(servers) do

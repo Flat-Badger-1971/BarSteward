@@ -272,7 +272,7 @@ BS.widgets[BS.W_CAMPAIGN_TIER] = {
     }
 }
 
-local ca = BS.LC.Format(GetAbilityName(45614))
+local ca = BS.LC.Format(GetAbilityName(45617))
 
 BS.widgets[BS.W_CONT_ATT] = {
     -- v3.1.9
