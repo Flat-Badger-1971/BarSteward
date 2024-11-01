@@ -604,7 +604,7 @@ BS.CHAR.allianceIcon = ZO_GetAllianceIcon(BS.CHAR.alliance)
 BS.CHAR.allianceName = GetAllianceName(BS.CHAR.alliance)
 BS.CHAR.classIcon = GetClassIcon(BS.CHAR.classId)
 
-BS.CONTINUOUS_ATTACK = {[39248] = true, [45614] = true, [45617] = true}
+BS.CONTINUOUS_ATTACK = {[39248] = true, [45614] = true, [45615] = true, [45616] = true, [45617] = true}
 BS.AYLEID_HEALTH = {[21263] = true, [100862] = true}
 BS.CRIMEQUESTS = {
     5532,

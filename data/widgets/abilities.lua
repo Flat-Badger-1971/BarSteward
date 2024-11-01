@@ -167,7 +167,7 @@ BS.widgets[BS.W_SCRYING] = {
             local this = BS.W_SCRYING
             local useProgress = BS.GetVar("Progress", this)
 
-            if (ZO_IsScryingUnlocked()) then
+            if (not ZO_IsScryingUnlocked()) then
                 if (useProgress) then
                     widget:SetProgress(0, 0, 1)
                 else
@@ -175,7 +175,7 @@ BS.widgets[BS.W_SCRYING] = {
                 end
             else
                 local lineData = SKILLS_DATA_MANAGER:GetSkillLineDataById(lineId)
-                local name = BS.Format(lineData:GetName())
+                local name = BS.LC.Format(lineData:GetName())
                 local rank = lineData:GetCurrentRank()
                 local lastXP, nextXP, currentXP = lineData:GetRankXPValues()
                 local currentProgress, maxProgress = (currentXP - lastXP), (nextXP - lastXP)
@@ -187,12 +187,14 @@ BS.widgets[BS.W_SCRYING] = {
                     widget:SetColour(BS.GetColour(this, true))
                 end
 
-                local ttt = name .. BS.LF
+                local tt = name .. BS.LFj
+                local ttt = BS.LC.Format(_G.SI_STAT_TRADESKILL_RANK) .. " " .. rank .. BS.LF
 
-                ttt = ttt .. BS.Format(_G.SI_STAT_TRADESKILL_RANK) .. " " .. rank .. BS.LF
-                ttt = ttt .. BS.Format(_G.SI_EXPERIENCE_CURRENT_MAX, currentProgress, maxProgress)
+                ttt = ttt .. ZO_CachedStrFormat(_G.SI_EXPERIENCE_CURRENT_MAX, currentProgress, maxProgress)
 
-                widget:SetTooltip(ttt)
+                tt = tt .. BS.LC.White:Colorize(ttt)
+
+                widget:SetTooltip(tt)
 
                 return rank
             end
@@ -207,11 +209,14 @@ BS.widgets[BS.W_SCRYING] = {
         return s, e
     end,
     event = _G.EVENT_SKILL_XP_UPDATE,
+    callback = {
+        [SKILLS_DATA_MANAGER] = {event = "FullSystemUpdated", label = "initial"}
+    },
     icon = "icons/ability_scrying_05b",
     tooltip = function()
         local lineId = GetAntiquityScryingSkillLineId()
         local lineData = SKILLS_DATA_MANAGER:GetSkillLineDataById(lineId)
 
-        return BS.Format(lineData:GetName())
+        return BS.LC.Format(lineData:GetName())
     end
 }

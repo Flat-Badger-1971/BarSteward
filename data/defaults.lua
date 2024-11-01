@@ -869,7 +869,8 @@ BS.Defaults = {
             Cat = cat.Companions
         },
         [BS.W_SCRYING] = {
-            Cat = cat.Abilities
+            Cat = cat.Abilities,
+            Progress = false
         }
     }
 }
