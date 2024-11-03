@@ -107,12 +107,25 @@ function BS.VersionCheck()
                     local vars = BS.Vars:SearchPath(true, server, account, cid, "Controls")
 
                     if (vars) then
-                        vars[BS.W_CHAMPION_POINTS].Cat=BS.CATNAMES.Abilities
-                        vars[BS.W_MUNDUS_STONE].Cat=BS.CATNAMES.Abilities
-                        vars[BS.W_SKILL_POINTS].Cat=BS.CATNAMES.Abilities
-                        vars[BS.W_VAMPIRISM].Cat=BS.CATNAMES.Abilities
-                        vars[BS.W_VAMPIRISM_TIMER].Cat=BS.CATNAMES.Abilities
-                        vars[BS.W_VAMPIRISM_FEED_TIMER].Cat=BS.CATNAMES.Abilities
+                        if (vars[BS.CHAMPION_POINTS]) then
+                            vars[BS.CHAMPION_POINTS].Cat = BS.CATNAMES.Abilities
+                        end
+                        if (vars[BS.W_MUNDUS_STONE]) then
+                            vars[BS.W_MUNDUS_STONE].Cat = BS.CATNAMES.Abilities
+                        end
+                        if (vars[BS.W_SKILL_POINTS]) then
+                            vars[BS.W_SKILL_POINTS].Cat = BS.CATNAMES.Abilities
+                        end
+                        if (vars[BS.W_VAMPIRISM]) then
+                            vars[BS.W_VAMPIRISM].Cat = BS.CATNAMES.Abilities
+                        end
+                        if (vars[BS.W_VAMPIRISM_TIMER]) then
+                            vars[BS.W_VAMPIRISM_TIMER].Cat = BS.CATNAMES.Abilities
+                        end
+                        if (vars[BS.W_VAMPIRISM_FEED_TIMER]) then
+                            vars[BS.W_VAMPIRISM_FEED_TIMER].Cat = BS.CATNAMES.Abilities
+                        end
+
                         vars.Categories = nil
                     end
                 end
