@@ -2260,19 +2260,6 @@ local function getWidgetSettings()
         },
         [6] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_CATEGORY_USE),
-            getFunc = function()
-                return BS.Vars.Categories or false
-            end,
-            setFunc = function(value)
-                BS.Vars.Categories = value
-            end,
-            width = "full",
-            default = false,
-            requiresReload = true
-        },
-        [7] = {
-            type = "checkbox",
             name = GetString(_G.BARSTEWARD_CATEGORY_INCLUDE),
             getFunc = function()
                 return BS.Vars.CategoriesCount or false
@@ -2282,9 +2269,6 @@ local function getWidgetSettings()
             end,
             width = "full",
             default = false,
-            disabled = function()
-                return not BS.Vars.Categories
-            end,
             requiresReload = true
         }
     }
@@ -2332,25 +2316,22 @@ local function getWidgetSettings()
         default = GetString(_G.BARSTEWARD_NUMBER_SEPARATOR)
     }
 
-    local numBaseControls = #controls
     local categories = {}
     local categoryIndex = {}
 
-    if (BS.Vars.Categories) then
-        for k, cat in pairs(BS.CATEGORIES) do
-            categories[k] = {
-                type = "submenu",
-                name = GetString(cat.name),
-                icon = BS.FormatIcon(cat.icon),
-                controls = {},
-                reference = "BarStewardCategory" .. k
-            }
+    for k, cat in pairs(BS.CATEGORIES) do
+        categories[k] = {
+            type = "submenu",
+            name = GetString(cat.name),
+            icon = BS.FormatIcon(cat.icon),
+            controls = {},
+            reference = "BarStewardCategory" .. k
+        }
 
-            categoryIndex[k] = 1
-        end
+        categoryIndex[k] = 1
     end
 
-    for idx, w in ipairs(ordered) do
+    for _, w in ipairs(ordered) do
         local k = w.key
         local v = w.widget
         local widgetControls = {}
@@ -2462,40 +2443,38 @@ local function getWidgetSettings()
             reference = "BarStewardWidgets" .. k
         }
 
-        if (BS.Vars.Categories) then
-            categories[vars.Cat].controls[categoryIndex[vars.Cat]] = widgetData
-            categoryIndex[vars.Cat] = categoryIndex[vars.Cat] + 1
-        else
-            controls[idx + numBaseControls] = widgetData
-        end
+        categories[vars.Cat].controls[categoryIndex[vars.Cat]] = widgetData
+        categoryIndex[vars.Cat] = categoryIndex[vars.Cat] + 1
     end
 
-    if (BS.Vars.Categories) then
-        local cats = {}
+    local cats = {}
 
-        for _, cat in pairs(categories) do
-            if (BS.Vars.CategoriesCount) then
-                cat.name =
-                    string.format(
-                    "%s  %s",
-                    cat.name,
-                    BS.COLOURS.DefaultWarningColour:Colorize(" " .. tostring(#cat.controls))
-                )
-            end
-
-            table.insert(cats, {name = cat.name, value = cat})
+    for _, cat in pairs(categories) do
+        if (BS.Vars.CategoriesCount) then
+            cat.name =
+                string.format(
+                "%s  %s",
+                cat.name,
+                BS.COLOURS.DefaultWarningColour:Colorize(" " .. tostring(#cat.controls))
+            )
         end
 
-        table.sort(
-            cats,
-            function(a, b)
-                return a.name < b.name
-            end
-        )
+        table.insert(cats, {name = cat.name, value = cat})
+    end
 
-        for _, v in ipairs(cats) do
-            controls[#controls + 1] = v.value
+    table.sort(
+        cats,
+        function(a, b)
+            return a.name < b.name
         end
+    )
+
+    -- add search
+    controls[#controls+1] = BS.AddSearch()
+    --
+
+    for _, v in ipairs(cats) do
+        controls[#controls + 1] = v.value
     end
 
     BS.options[#BS.options + 1] = {

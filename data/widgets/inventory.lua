@@ -1391,7 +1391,7 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
         if (selected == BS.BACK_BAR) then
             slots = backup
         elseif (selected == BS.BOTH) then
-            slots = BS.MergeTables(slots, backup)
+            slots = BS.LC.MergeTables(slots, backup)
         elseif (selected == BS.ACTIVE_BAR) then
             if (activeWeaponPair == _G.ACTIVE_WEAPON_PAIR_BACKUP) then
                 slots = backup
@@ -1951,7 +1951,7 @@ BS.widgets[BS.W_WEAPON_CHARGE] = {
         local slots = {_G.EQUIP_SLOT_MAIN_HAND, _G.EQUIP_SLOT_OFF_HAND}
         local backup = {_G.EQUIP_SLOT_BACKUP_MAIN, _G.EQUIP_SLOT_BACKUP_OFF}
         local activeWeaponPair = GetActiveWeaponPairInfo()
-        local weapons = BS.MergeTables(slots, backup)
+        local weapons = BS.LC.MergeTables(slots, backup)
         local weaponCharges = {}
         -- luacheck: push ignore 311
         local min = {}

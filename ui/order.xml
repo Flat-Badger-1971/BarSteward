@@ -27,5 +27,20 @@
                 </Control>
             </Controls>
         </Control>
+        <Control name="BarSteward_Search_Template" tier="medium" resizeToFitDescendents="true" virtual="true" mouseEnabled="true">
+            <Controls>
+                <Texture name="$(parent)Border" textureFile="/esoui/art/miscellaneous/entryhighlight.dds">
+                    <AnchorFill />
+                </Texture>
+                <Texture name="$(parent)Icon">
+                    <Dimensions x="32" y="32" />
+                    <Anchor point="LEFT" />
+                </Texture>
+                <Label name="$(parent)Title" font="ZoFontGame" VerticalAlignment="CENTER">
+                    <Dimensions x="300" y="32" />
+                    <Anchor point="LEFT" relativeTo="$(parent)Icon" relativePoint="RIGHT" offsetX="10" offsetY="0" />
+                </Label>
+            </Controls>
+        </Control>
     </Controls>
 </GuiXml>

@@ -248,14 +248,14 @@ BS.Defaults = {
         [BS.W_CHAMPION_POINTS] = {
             Autohide = true,
             Bar = 1,
-            Cat = cat.Character,
+            Cat = cat.Abilities,
             SoundWhenEquals = false,
             SoundWhenEqualsSound = "Daily Login Reward Claim Fanfare",
             UseSeparators = false
         },
         [BS.W_MUNDUS_STONE] = {
             Autohide = true,
-            Cat = cat.Character,
+            Cat = cat.Abilities,
             ColourValues = "c,dc"
         },
         [BS.W_DURABILITY] = {
@@ -355,7 +355,7 @@ BS.Defaults = {
         },
         [BS.W_SKILL_POINTS] = {
             Autohide = true,
-            Cat = cat.Character,
+            Cat = cat.Abilities,
             Colour = {0, 1, 0, 1}
         },
         [BS.W_WRITS_SURVEYS] = {
@@ -581,11 +581,11 @@ BS.Defaults = {
         },
         [BS.W_VAMPIRISM] = {
             Autohide = true,
-            Cat = cat.Character
+            Cat = cat.Abilities
         },
         [BS.W_VAMPIRISM_TIMER] = {
             Autohide = true,
-            Cat = cat.Character,
+            Cat = cat.Abilities,
             ColourValues = "okc,wv,wc,dv,dc",
             DangerValue = 5,
             HideSeconds = false,
@@ -595,7 +595,7 @@ BS.Defaults = {
         },
         [BS.W_VAMPIRISM_FEED_TIMER] = {
             Autohide = true,
-            Cat = cat.Character,
+            Cat = cat.Abilities,
             ColourValues = "okc,wv,wc,dv,dc",
             DangerValue = 5,
             HideDaysWhenZero = false,

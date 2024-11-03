@@ -1,3 +1,8 @@
+[color=#ff9900][b]Version: 3.2.8 ---------------[/b][/color]
+Basic search function added
+Removed option to not use widget categories
+Fixed incorrect reference to MergeTables
+
 [color=#ff9900][b]Version: 3.2.7 ---------------[/b][/color]
 Fixed percentage display issue with some widgets
 
