@@ -1,3 +1,6 @@
+[color=#ff9900][b]Version: 3.2.7 ---------------[/b][/color]
+Fixed percentage display issue with some widgets
+
 [color=#ff9900][b]Version: 3.2.6 ---------------[/b][/color]
 New LibFBCommon library now required
 Correct Continuous attack id (thanks Durnik)

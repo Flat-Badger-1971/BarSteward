@@ -704,7 +704,7 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
     update = function(widget)
         local earned = GetPlayerChampionPointsEarned()
         local xp, xplvl = GetPlayerChampionXP(), GetNumChampionXPInChampionPoint(earned)
-        local pc = BS.LC.ToPercent(xp / xplvl)
+        local pc = BS.LC.ToPercent(xp, xplvl)
         local disciplineType = GetChampionPointPoolForRank(earned + 1)
         local disciplineData = CHAMPION_DATA_MANAGER:FindChampionDisciplineDataByType(disciplineType)
         local cpicon = disciplineData:GetHUDIcon()
@@ -878,7 +878,7 @@ BS.widgets[BS.W_PLAYER_EXPERIENCE] = {
     update = function(widget)
         local earned = GetPlayerChampionPointsEarned()
         local xp, xplvl = GetPlayerChampionXP(), GetNumChampionXPInChampionPoint(earned)
-        local pc = BS.LC.ToPercent(xp / xplvl)
+        local pc = BS.LC.ToPercent(xp, xplvl)
         local this = BS.W_PLAYER_EXPERIENCE
         local out
 

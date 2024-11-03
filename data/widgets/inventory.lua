@@ -9,7 +9,7 @@ BS.widgets[BS.W_BAG_SPACE] = {
         local noLimitColour = BS.GetVar("NoLimitColour", this) and BS.COLOURS.White or BS.COLOURS.Yellow
         local value = bagUsed .. (BS.GetVar("HideLimit", this) and "" or (noLimitColour:Colorize("/" .. bagSize)))
         local widthValue = bagUsed .. (BS.GetVar("HideLimit", this) and "" or ("/" .. bagSize))
-        local pcUsed = BS.LC.ToPercent(bagUsed / bagSize)
+        local pcUsed = BS.LC.ToPercent(bagUsed, bagSize)
         local colour = BS.GetColour(this, "Ok", true)
 
         if (pcUsed >= BS.GetVar("WarningValue", this) and pcUsed < BS.GetVar("DangerValue", this)) then
@@ -100,7 +100,7 @@ BS.widgets[BS.W_BANK_SPACE] = {
 
         local value = bagUsed .. (BS.GetVar("HideLimit", this) and "" or (noLimitColour:Colorize("/" .. bagSize)))
         local widthValue = bagUsed .. (BS.GetVar("HideLimit", this) and "" or ("/" .. bagSize))
-        local pcUsed = BS.LC.ToPercent(bagUsed / bagSize)
+        local pcUsed = BS.LC.ToPercent(bagUsed, bagSize)
         local colour = BS.GetColour(this, "Ok", true)
 
         if (pcUsed >= BS.GetVar("WarningValue", this) and pcUsed < BS.GetVar("DangerValue", this)) then
@@ -1963,7 +1963,7 @@ BS.widgets[BS.W_WEAPON_CHARGE] = {
             local raw = 101
 
             if (charges > -1) then
-                raw = BS.LC.ToPercent(charges / maxCharges)
+                raw = BS.LC.ToPercent(charges, maxCharges)
                 pc = string.format("%d%%", raw or 0)
             end
 
