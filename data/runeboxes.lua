@@ -47,7 +47,7 @@ function BS.GetCollectibleId(bagId, slotIndex)
 
         for runeboxItemId, fragmentData in pairs(RUNEBOX_FRAGMENTS) do
             if (ZO_IsElementInNumericallyIndexedTable(fragmentData.fragments, itemId)) then
-                collectibleId = fragmentData.cid or GetItemLinkContainerCollectibleId(BS.MakeItemLink(runeboxItemId))
+                collectibleId = fragmentData.cid or GetItemLinkContainerCollectibleId(BS.LC.MakeItemLink(runeboxItemId))
                 quantity = fragmentData.total or #fragmentData.fragments
                 break
             end
