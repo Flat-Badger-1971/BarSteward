@@ -2325,7 +2325,7 @@ local function getWidgetSettings()
             name = GetString(cat.name),
             icon = BS.FormatIcon(cat.icon),
             controls = {},
-            reference = "BarStewardCategory" .. k
+            reference = "BarStewardCategory_" .. k
         }
 
         categoryIndex[k] = 1
@@ -2488,7 +2488,7 @@ end
 
 function BS.RegisterSettings()
     local version = BS.LC.GetAddonVersion(BS.Name)
-    local panel = {
+    BS.Panel = {
         type = "panel",
         name = "Bar Steward",
         displayName = "|cff9900Bar |r|c4f34ebSteward|r",
@@ -2506,7 +2506,7 @@ function BS.RegisterSettings()
             getWidgetSettings()
             BS.GetPortToHouseSettings()
             getBarSettings()
-            BS.OptionsPanel = BS.LAM:RegisterAddonPanel("BarStewardOptionsPanel", panel)
+            BS.OptionsPanel = BS.LAM:RegisterAddonPanel("BarStewardOptionsPanel", BS.Panel)
             BS.LAM:RegisterOptionControls("BarStewardOptionsPanel", BS.options)
         end,
         500

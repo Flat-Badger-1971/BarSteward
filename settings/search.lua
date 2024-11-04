@@ -102,6 +102,43 @@ local function updateList(res)
     return dataItems
 end
 
+function BS.scrollDataIntoView(list, data)
+    local targetIndex = data.sortIndex
+    if not targetIndex then return end
+
+    local scrollMin, scrollMax = list.scrollbar:GetMinMax()
+    local scrollTop = list.scrollbar:GetValue()
+    local controlHeight = 47 --list.uniformControlHeight or list.controlHeight
+    local targetMin = controlHeight * (targetIndex - 1) - 64
+    -- subtracting 64 ain't arbitrary, it's the maximum fading height
+    -- (libraries/zo_templates/scrolltemplates.lua/UpdateScrollFade)
+
+    if targetMin < scrollTop then
+        ZO_ScrollList_ScrollAbsolute(list, zo_max(targetMin, scrollMin))
+    else
+        local listHeight = ZO_ScrollList_GetHeight(list)
+        local targetMax = controlHeight * targetIndex + 64 - listHeight
+
+        if targetMax > scrollTop then
+            ZO_ScrollList_ScrollAbsolute(list, zo_min(targetMax, scrollMax))
+        end
+    end
+end
+
+--open submenu
+--[[
+local function AnimateSubmenu(clicked)
+    local control = clicked:GetParent()
+    if control.disabled then return end
+
+    control.open = not control.open
+    if control.open then
+        control.animation:PlayFromStart()
+    else
+        control.animation:PlayFromEnd()
+    end
+end
+]]--
 local function setupDataRow(rowControl, data)
     local icon = data.icon
     local title = rowControl:GetNamedChild("Title")
@@ -110,6 +147,11 @@ local function setupDataRow(rowControl, data)
     title:SetText(BS.LC.ToSentenceCase(data.widget))
 
     rowControl:GetNamedChild("Icon"):SetTexture(BS.FormatIcon(icon))
+
+    rowControl:SetHandler("OnMouseDoubleClick", function(self)
+        d("click")
+        scrollDataIntoView(BarStewardOptionsPanel.container, {sortIndex=23})
+    end)
 end
 
 local function createScrollList(parent)
