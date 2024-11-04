@@ -89,7 +89,7 @@ function BS.GetNoneCollected(collecting)
             local icon, name, unlocked
 
             if (type(id) == "string") then
-                local link = BS.MakeItemLink(tonumber(id))
+                local link = BS.LC.MakeItemLink(tonumber(id))
 
                 icon = GetItemLinkIcon(link)
                 name = GetItemLinkName(link)
