@@ -461,4 +461,7 @@ L("ACCOUNT_WIDE_TOOLTIP", "All the settings below will be the same for each of y
 L("SLASH_ENABLE", "enable")
 L("SLASH_HIDE", "hide")
 L("SLASH_SHOW", "show")
+
+-- Search
+L("DOUBLE_CLICK", "(double-click to locate)")
 --luacheck: pop

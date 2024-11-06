@@ -52,7 +52,7 @@ function BS.GetMaintenanceSettings()
         type = "submenu",
         name = GetString(_G.BARSTEWARD_MAINTENANCE),
         controls = controls,
-        reference = "Maintenance",
+        reference = "BarStewardMaintenance",
         icon = "/esoui/art/compass/ava_mine_daggerfall.dds"
     }
 end

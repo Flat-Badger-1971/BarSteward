@@ -1039,7 +1039,7 @@ local function getBarSettings()
             type = "submenu",
             name = data.Name,
             controls = controls,
-            reference = "BarStewardBar" .. idx,
+            reference = "BarStewardBar_" .. idx,
             icon = function()
                 if (idx == 1) then
                     return "/esoui/art/compass/compass_dragon.dds"
@@ -1173,7 +1173,7 @@ local function getPerformanceSettings()
         type = "submenu",
         name = GetString(_G.BARSTEWARD_PERFORMANCE),
         controls = controls,
-        reference = "Performance",
+        reference = "BarStewardPerformance",
         icon = "/esoui/art/ava/avacapturebar_fill_aldmeri.dds"
     }
 end
@@ -2440,7 +2440,7 @@ local function getWidgetSettings()
             icon = BS.FormatIcon(iconInfo),
             iconTextureCoords = textureCoords,
             controls = widgetControls,
-            reference = "BarStewardWidgets" .. k
+            reference = "BarStewardWidget_" .. k
         }
 
         categories[vars.Cat].controls[categoryIndex[vars.Cat]] = widgetData
