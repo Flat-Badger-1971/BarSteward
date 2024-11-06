@@ -437,4 +437,7 @@ L("ACCOUNT_WIDE_TOOLTIP", "以下的所有设置将会同步至你的每一个�
 L("SLASH_ENABLE", "使能够")
 L("SLASH_HIDE", "隐藏")
 L("SLASH_SHOW", "展示")
+
+-- Search
+L("DOUBLE_CLICK", "（双击定位）")
 --luacheck: pop

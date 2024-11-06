@@ -467,4 +467,7 @@ L("ACCOUNT_WIDE_TOOLTIP", "Alle Einstellungen sind für alle deine Charaktere id
 L("SLASH_ENABLE", "aktivieren")
 L("SLASH_HIDE", "verstecken")
 L("SLASH_SHOW", "zeigen")
+
+-- Search
+L("DOUBLE_CLICK", "(zum Suchen doppelklicken)")
 --luacheck: pop

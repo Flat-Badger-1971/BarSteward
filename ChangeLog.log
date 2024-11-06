@@ -1,3 +1,7 @@
+[color=#ff9900][b]Version: 3.2.12 ---------------[/b][/color]
+Changed search algorithm
+Double-clicking a search result will attempt to open the widget's settings
+
 [color=#ff9900][b]Version: 3.2.11 ---------------[/b][/color]
 Fixed issue with runebox code (missed ref)
 

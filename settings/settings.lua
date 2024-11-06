@@ -1039,7 +1039,7 @@ local function getBarSettings()
             type = "submenu",
             name = data.Name,
             controls = controls,
-            reference = "BarStewardBar" .. idx,
+            reference = "BarStewardBar_" .. idx,
             icon = function()
                 if (idx == 1) then
                     return "/esoui/art/compass/compass_dragon.dds"
@@ -1173,7 +1173,7 @@ local function getPerformanceSettings()
         type = "submenu",
         name = GetString(_G.BARSTEWARD_PERFORMANCE),
         controls = controls,
-        reference = "Performance",
+        reference = "BarStewardPerformance",
         icon = "/esoui/art/ava/avacapturebar_fill_aldmeri.dds"
     }
 end
@@ -2325,7 +2325,7 @@ local function getWidgetSettings()
             name = GetString(cat.name),
             icon = BS.FormatIcon(cat.icon),
             controls = {},
-            reference = "BarStewardCategory" .. k
+            reference = "BarStewardCategory_" .. k
         }
 
         categoryIndex[k] = 1
@@ -2440,7 +2440,7 @@ local function getWidgetSettings()
             icon = BS.FormatIcon(iconInfo),
             iconTextureCoords = textureCoords,
             controls = widgetControls,
-            reference = "BarStewardWidgets" .. k
+            reference = "BarStewardWidget_" .. k
         }
 
         categories[vars.Cat].controls[categoryIndex[vars.Cat]] = widgetData
@@ -2488,7 +2488,7 @@ end
 
 function BS.RegisterSettings()
     local version = BS.LC.GetAddonVersion(BS.Name)
-    local panel = {
+    BS.Panel = {
         type = "panel",
         name = "Bar Steward",
         displayName = "|cff9900Bar |r|c4f34ebSteward|r",
@@ -2506,7 +2506,7 @@ function BS.RegisterSettings()
             getWidgetSettings()
             BS.GetPortToHouseSettings()
             getBarSettings()
-            BS.OptionsPanel = BS.LAM:RegisterAddonPanel("BarStewardOptionsPanel", panel)
+            BS.OptionsPanel = BS.LAM:RegisterAddonPanel("BarStewardOptionsPanel", BS.Panel)
             BS.LAM:RegisterOptionControls("BarStewardOptionsPanel", BS.options)
         end,
         500

@@ -20,21 +20,24 @@ local function createLookup()
             icon = icon()
         end
 
-        local words = BS.LC.Split(tt, " ")
         local category = GetString(BS.CATEGORIES[defaults.Cat].name)
 
-        for _, word in pairs(words) do
-            table.insert(
-                lookup,
-                {word = word:lower(), widget = string.format("%s %s %s", category, arrow, tt), icon = icon}
-            )
-        end
+        table.insert(
+            lookup,
+            {
+                widget = string.format("%s %s %s", category, arrow, tt),
+                icon = icon,
+                category = defaults.Cat,
+                rawname = tt:lower(),
+                id = index
+            }
+        )
     end
 end
 
 local function alreadyAdded(data)
     for _, widget in ipairs(results) do
-        if (widget.widget == data.widget) then
+        if (widget.rawname == data.rawname) then
             return true
         end
     end
@@ -44,35 +47,9 @@ end
 
 local function search(text)
     ZO_ClearNumericallyIndexedTable(results)
-    local distance
 
     for _, info in ipairs(lookup) do
-        if (text:find(" ")) then
-            -- multiple words
-            local words = BS.LC.Split(text, " ")
-            local tempdistance, count = 0, 0
-
-            for _, word in ipairs(words) do
-                if (BS.LC.Trim(word):len() > 2) then
-                    local d = BS.LC.Distance(info.word, word:lower())
-
-                    if (d < 3) then
-                        tempdistance = tempdistance + d
-                        count = count + 1
-                    end
-                end
-            end
-
-            if (count > 0) then
-                distance = tempdistance / count
-            else
-                distance = 99
-            end
-        else
-            distance = BS.LC.Distance(info.word, text:lower())
-        end
-
-        if (distance < 3) then
+        if (info.rawname:find(text:lower())) then
             if (not alreadyAdded(info)) then
                 table.insert(results, info)
             end
@@ -88,18 +65,49 @@ end
 
 local function updateList(res)
     local dataItems = {}
-    local itemKey = 1
 
-    for key, widget in ipairs(res) do
-        dataItems[itemKey] = {
+    for index, widget in ipairs(res) do
+        dataItems[index] = {
             widget = widget.widget,
             icon = widget.icon,
-            key = key
+            category = widget.category,
+            id = widget.id
         }
-        itemKey = itemKey + 1
     end
 
     return dataItems
+end
+
+local function contractSubmenus()
+    -- probably overkill, but keeps thinks clean
+    local submenus = {"BarStewardPerformance", "BarStewardMaintenance", "BarStewardSearch", "BarStewardPortToHouse"}
+
+    for widget, _ in pairs(BS.Defaults.Controls) do
+        local submenu = string.format("BarStewardWidget_%s", widget)
+
+        table.insert(submenus, submenu)
+    end
+
+    for category, _ in pairs(BS.CATEGORIES) do
+        local submenu = string.format("BarStewardCategory_%s", category)
+
+        table.insert(submenus, submenu)
+    end
+
+    for bar, _ in pairs(BS.Vars.Bars) do
+        local submenu = string.format("BarStewardBar_%s", bar)
+
+        table.insert(submenus, submenu)
+    end
+
+    for _, submenu in ipairs(submenus) do
+        local menu = _G[submenu]
+
+        if (menu) then
+            menu.open = false
+            menu.animation:PlayFromStart()
+        end
+    end
 end
 
 local function setupDataRow(rowControl, data)
@@ -110,6 +118,37 @@ local function setupDataRow(rowControl, data)
     title:SetText(BS.LC.ToSentenceCase(data.widget))
 
     rowControl:GetNamedChild("Icon"):SetTexture(BS.FormatIcon(icon))
+    rowControl.data = data
+
+    rowControl:SetHandler(
+        "OnMouseDoubleClick",
+        function(self)
+            local container = _G.BarStewardOptionsPanel.container
+
+            contractSubmenus()
+
+            local category = _G["BarStewardCategory_" .. self.data.category]
+            local widget = _G["BarStewardWidget_" .. self.data.id]
+
+            if (not category.open) then
+                category.open = true
+                category.animation:PlayFromEnd()
+            end
+
+            if (not widget.open) then
+                widget.open = true
+                widget.animation:PlayFromEnd()
+            end
+
+            -- wait for animations to finish
+            zo_callLater(
+                function()
+                    ZO_Scroll_ScrollControlIntoCentralView(container, category)
+                end,
+                600
+            )
+        end
+    )
 end
 
 local function createScrollList(parent)
@@ -147,13 +186,22 @@ local function createSearchControl(parent)
         function(control)
             local text = control:GetText()
 
-            if (text:len() > 2) then
+            if (text:len() > 0) then
                 local r = search(text)
                 local dataItems = updateList(r)
 
                 parent.scrollList:Update(dataItems)
+
+                if (parent.scrollList:IsHidden()) then
+                    parent.scrollList:SetHidden(false)
+                    parent:SetResizeToFitDescendents(false)
+                    parent:SetResizeToFitDescendents(true)
+                end
             else
                 parent.scrollList:Clear()
+                parent.scrollList:SetHidden(true)
+                parent:SetResizeToFitDescendents(false)
+                parent:SetResizeToFitDescendents(true)
             end
         end
     )
@@ -162,8 +210,16 @@ local function createSearchControl(parent)
     parent.searchText.bg:SetAnchorFill()
 
     parent.scrollList = createScrollList(parent)
-    parent.scrollList:SetAnchor(TOPLEFT, parent.searchText, BOTTOMLEFT, 0, 20)
+    parent.scrollList:SetAnchor(TOPLEFT, parent.searchText, BOTTOMLEFT, 0, 40)
     parent.scrollList:SetDimensions(parent:GetWidth() - 10, 300)
+    parent.scrollList:SetHidden(true)
+    parent:SetResizeToFitDescendents(true)
+
+    parent.hint = WINDOW_MANAGER:CreateControl(nil, parent.scrollList, CT_LABEL)
+    parent.hint:SetAnchor(TOPLEFT, parent.scrollList, TOPLEFT, 0, -30)
+    parent.hint:SetText(GetString(_G.BARSTEWARD_DOUBLE_CLICK))
+    parent.hint:SetDimensions(parent:GetWidth(), 20)
+    parent.hint:SetFont("$(MEDIUM_FONT)|14")
 end
 
 function BS.AddSearch()
@@ -172,9 +228,7 @@ function BS.AddSearch()
     local searchControl = {
         [1] = {
             type = "custom",
-            reference = "BS_Search",
             createFunc = createSearchControl,
-            --refreshFunc=function(control)end,
             minHeight = 100,
             maxHeight = 300,
             width = "full"
@@ -185,7 +239,8 @@ function BS.AddSearch()
         type = "submenu",
         name = BS.LC.Format(_G.SI_GAMECAMERAACTIONTYPE1),
         icon = "esoui/art/miscellaneous/search_icon.dds",
-        controls = searchControl
+        controls = searchControl,
+        reference = "BarStewardSearch"
     }
 
     return searchSub

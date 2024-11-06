@@ -459,4 +459,6 @@ L("SLASH_ENABLE", "activer")
 L("SLASH_HIDE", "cacher")
 L("SLASH_SHOW", "montrer")
 
+-- Search
+L("DOUBLE_CLICK", "(double-cliquez pour localiser)")
 -- luacheck: pop
