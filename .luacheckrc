@@ -600,6 +600,7 @@ read_globals = {
             New = {read_only = true}
         }
     },
+    "ZO_InitializingObject",
     "ZO_IsElementInNumericallyIndexedTable",
     "ZO_IsScryingUnlocked",
     "ZO_LinkHandler_CreateLink",

@@ -164,6 +164,9 @@ BS.W_CAMPAIGN_TIER = 142
 BS.W_CONT_ATT = 143
 BS.W_AYLEID_HEALTH = 144
 BS.W_SCRYING = 145
+BS.W_TANLORIN = 146
+BS.W_ZERITH = 147
+BS.W_MYTHIC = 148
 
 BS.WRITS = {
     [_G.CRAFTING_TYPE_ALCHEMY] = {
@@ -186,17 +189,6 @@ BS.WRITS = {
     [_G.CRAFTING_TYPE_JEWELRYCRAFTING] = {138789, 138799, 153737, 153739},
     [_G.CRAFTING_TYPE_PROVISIONING] = {119693},
     [_G.CRAFTING_TYPE_WOODWORKING] = {119681, 119682, 121530, 121531}
-}
-
-BS.TROPHY_VAULT_KEYS = {
-    [64491] = true,
-    [64568] = true,
-    [64572] = true,
-    [64574] = true,
-    [64576] = true,
-    [64570] = true,
-    [69404] = true,
-    [69405] = true
 }
 
 BS.MUNDUS_STONES = {
@@ -348,7 +340,8 @@ BS.CURRENCIES = {
     [_G.CURT_UNDAUNTED_KEYS] = {crownStore = false},
     [_G.CURT_ALLIANCE_POINTS] = {crownStore = false},
     [_G.CURT_CHAOTIC_CREATIA] = {crownStore = false},
-    [_G.CURT_ENDLESS_DUNGEON or _G.CURT_ARCHIVAL_FORTUNES] = {crownStore = true}
+    [_G.CURT_ARCHIVAL_FORTUNES] = {crownStore = true},
+    [_G.CURT_IMPERIAL_FRAGMENTS] = {crownStore = true}
 }
 
 BS.FRAGMENT_TYPES = {
@@ -368,19 +361,10 @@ BS.COMPANION_DEFIDS = {
     [BS.W_EMBER] = 5,
     [BS.W_ISOBEL] = 6,
     [BS.W_SHARP] = 8,
-    [BS.W_AZANDAR] = 9
+    [BS.W_AZANDAR] = 9,
+    [BS.W_TANLORIN] = 12,
+    [BS.W_ZERITH] = 13
 }
-
--- *** update 44 ***
-if (_G.CURT_IMPERIAL_FRAGMENTS) then
-    BS.CURRENCIES[_G.CURT_IMPERIAL_FRAGMENTS] = {crownStore = true}
-    BS.FRAGMENT_TYPES[_G.SPECIALIZED_ITEMTYPE_TROPHY_KEY_FRAGMENT] = nil
-    BS.W_TANLORIN = 146
-    BS.W_ZERITH = 147
-    BS.COMPANION_DEFIDS[BS.W_TANLORIN] = 12
-    BS.COMPANION_DEFIDS[BS.W_ZERITH] = 13
-end
--- *****************
 
 BS.CATNAMES = {
     Abilities = 1,

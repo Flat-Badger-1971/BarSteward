@@ -5,7 +5,7 @@
 ## AddOnVersion: 3212
 ## Version: 3.2.12
 ## SavedVariables: BarStewardSavedVars
-## DependsOn: LibFBCommon>=1002 LibAddonMenu-2.0>=35
+## DependsOn: LibFBCommon>=1003 LibAddonMenu-2.0>=35
 ## OptionalDependsOn: BanditsUserInterface WritWorthy>=70302 LibClockTST>=1 LibCombat>=62 PortToFriendsHouse>=92 LibCharacterKnowledge>=16 Taneth>=21 LibUndauntedPledges>=100000 RewardsTracker>=80
 
 # DISCLAIMER:
@@ -47,6 +47,7 @@ data/widgets/riding.lua
 data/widgets/social.lua
 data/widgets/thievery.lua
 
+settings/creator.lua
 settings/maintenance.lua
 settings/search.lua
 settings/settings.lua

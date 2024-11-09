@@ -2045,3 +2045,47 @@ BS.widgets[BS.W_SCRIBING_INK] = {
     icon = "/icons/item_grimoire_ink",
     tooltip = ZO_Scribing_Manager.GetFormattedScribingInkName()
 }
+
+BS.widgets[BS.W_MYTHIC] = {
+    -- v3.2.13
+    name = "equippedMythic",
+    update = function(widget)
+        local mythic = BS.LC.Format(_G.SI_ANTIALIASINGTYPE0)
+        local colour = BS.LC.White
+        local filteredItems =
+            SHARED_INVENTORY:GenerateFullSlotData(
+            function(itemdata)
+                local quality = GetItemDisplayQuality(itemdata.bagId, itemdata.slotIndex)
+
+                return quality == _G.ITEM_DISPLAY_QUALITY_MYTHIC_OVERRIDE
+            end,
+            _G.BAG_WORN
+        )
+
+        if (#filteredItems > 0) then
+            local item = filteredItems[1]
+
+            mythic = BS.LC.Format(item.name)
+            colour = BS.LC.ZOSOrange
+            widget:SetIcon(item.iconFile)
+        else
+            widget:SetIcon("icons/u42_mythic_meta")
+        end
+
+        widget:SetValue(mythic)
+        widget:SetColour(colour)
+
+        return mythic
+    end,
+    event = _G.EVENT_PLAYER_ACTIVATED,
+    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
+    icon = "icons/u42_mythic_meta",
+    tooltip = BS.LC.Format(_G.SI_ITEMDISPLAYQUALITY6),
+    onLeftClick = function()
+        if (not IsInGamepadPreferredMode()) then
+            SCENE_MANAGER:Show("inventory")
+        else
+            SCENE_MANAGER:Show("gamepad_inventory_root")
+        end
+    end
+}

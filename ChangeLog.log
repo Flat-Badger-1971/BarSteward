@@ -1,3 +1,10 @@
+[color=#ff9900][b]Version: 3.2.13 ---------------[/b][/color]
+Replaced the blank in background and border dropdowns with "None"
+Option added for vampire stage to show roman numeral stage only
+Slash command added to move bars (/bs move/bewegen/déplacer/移动)
+Added mythic widget to show currently equipped mythic
+Code refactor
+
 [color=#ff9900][b]Version: 3.2.12 ---------------[/b][/color]
 Changed search algorithm
 Double-clicking a search result will attempt to open the widget's settings

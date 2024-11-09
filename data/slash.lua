@@ -34,8 +34,13 @@ function BS.RegisterSlashCommands()
             -- open Bar Steward's settings
             BS.LAM:OpenToPanel(BS.OptionsPanel)
         else
-            local cmd = options[1]
+            local cmd = options[1]:lower()
             local param = options[2]
+
+            if (param) then
+                param = param:lower()
+            end
+
             -- hide the bar
             if (cmd == GetString(_G.BARSTEWARD_SLASH_HIDE)) then
                 local bar = BS.FindBar(param)
@@ -70,6 +75,8 @@ function BS.RegisterSlashCommands()
                         BS.GenerateBar(id)
                     end
                 end
+            elseif (cmd == BS.LC.Format(_G.SI_HOUSINGEDITORCOMMANDTYPE1):lower()) then
+                BS.ShowFrameMovers(true)
             elseif (cmd == "lang") then
                 -- change the UI language (intended for dev only)
                 SetCVar("language.2", param)

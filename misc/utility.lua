@@ -1394,6 +1394,27 @@ function BS.HasCriminalQuest()
     return false
 end
 
+function BS.ShowFrameMovers(value)
+    for index, _ in pairs(BS.Vars.Bars) do
+        local bar = BS.BarObjectPool:GetActiveObject(BS.BarObjects[index])
+
+        if (bar) then
+            bar.bar:SetMovable(value)
+            bar.bar.overlay:SetHidden(not value)
+        end
+    end
+
+    local frame = BS.lock or BS.CreateLockButton()
+
+    if (value) then
+        SCENE_MANAGER:Show("hudui")
+        frame.fragment:SetHiddenForReason("disabled", false)
+        SetGameCameraUIMode(true)
+    else
+        frame.fragment:SetHiddenForReason("disabled", true)
+    end
+end
+
 -- developer utility functions
 -- luacheck: push ignore 113
 function BS.FindItem(text)

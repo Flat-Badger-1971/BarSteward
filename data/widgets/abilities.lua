@@ -235,3 +235,499 @@ BS.widgets[BS.W_SCRYING] = {
         }
     }
 }
+
+BS.widgets[BS.W_VAMPIRISM] = {
+    -- v1.4.37
+    name = "vampirismStage",
+    update = function(widget)
+        local this = BS.W_VAMPIRISM
+        local name, icon, stage
+        local isVampire = false
+        local started, ending
+
+        for buffNum = 1, GetNumBuffs("player") do
+            local buffName, buffStarted, buffEnding, _, _, buffIcon, _, _, _, _, id = GetUnitBuffInfo("player", buffNum)
+
+            if (BS.VAMPIRE_STAGES[id]) then
+                ending = buffEnding
+                icon = buffIcon
+                isVampire = true
+                name = buffName
+                stage = BS.VAMPIRE_STAGES[id]
+                started = buffStarted
+                break
+            end
+        end
+
+        local displayText
+        local text = GetString(_G.BARSTEWARD_NOT_VAMPIRE)
+
+        if (isVampire) then
+            text = BS.LC.Format(name)
+
+            if (ending - started > 0) then
+                widget:StartCooldown(ending - GetGameTimeSeconds(), ending - started, true)
+            end
+        end
+
+        if (BS.GetVar("Numeric", this)) then
+            displayText = ZO_CachedStrFormat("<<R:1>>", stage)
+        else
+            displayText = text
+        end
+
+        widget:SetValue(displayText)
+        widget:SetColour(BS.GetColour(this, true))
+
+        local tt = BS.LC.Format(_G.SI_CURSETYPE1)
+        tt = tt .. BS.LF .. BS.COLOURS.White:Colorize(text)
+
+        widget:SetTooltip(tt)
+
+        if (icon) then
+            widget:SetIcon(icon)
+        end
+
+        return isVampire and "vampire" or ""
+    end,
+    event = _G.EVENT_EFFECT_CHANGED,
+    filter = {[_G.EVENT_EFFECT_CHANGED] = {_G.REGISTER_FILTER_UNIT_TAG, "player"}},
+    icon = "icons/ability_u26_vampire_infection_stage4",
+    tooltip = BS.LC.Format(_G.SI_CURSETYPE1),
+    cooldown = true,
+    hideWhenEqual = "",
+    customSettings = {
+        [1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_VAMPIRE_STAGE_NUMERIC),
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_VAMPIRISM].Numeric
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_VAMPIRISM].Numeric = value
+                BS.RefreshWidget(BS.W_VAMPIRISM)
+            end,
+            width = "full",
+            default = false
+        }
+    }
+}
+
+BS.widgets[BS.W_VAMPIRISM_TIMER] = {
+    -- v1.4.37
+    name = "vampirismTimer",
+    update = function(widget)
+        local name, plainValue, value
+        local isVampire = false
+        local ending, stage
+        local this = BS.W_VAMPIRISM_TIMER
+
+        for buffNum = 1, GetNumBuffs("player") do
+            local buffName, _, buffEnding, _, _, _, _, _, _, _, id = GetUnitBuffInfo("player", buffNum)
+
+            if (BS.VAMPIRE_STAGES[id]) then
+                ending = buffEnding
+                isVampire = true
+                name = buffName
+                stage = BS.VAMPIRE_STAGES[id]
+                break
+            end
+        end
+
+        local remaining = 0
+        local time = ""
+        local colour = BS.COLOURS.DefaultOkColour
+
+        if (isVampire) then
+            remaining = ending - GetGameTimeSeconds()
+
+            if (remaining < 0) then
+                remaining = 0
+            end
+
+            time = BS.SecondsToTime(remaining, true, false, BS.GetVar("HideSeconds", this), BS.GetVar("Format", this))
+            colour = BS.GetTimeColour(remaining, this, 60, true, true)
+        end
+
+        widget:SetColour(colour)
+
+        if (BS.GetVar("ShowStage", this)) then
+            if (BS.GetVar("Numeric", this)) then
+                local s = ZO_CachedStrFormat("<<R:1>>", stage)
+
+                plainValue = zo_strformat(GetString(_G.BARSTEWARD_VAMPIRE_STAGE_NUMERALS), time, "", s, "xxxx")
+                value = zo_strformat(GetString(_G.BARSTEWARD_VAMPIRE_STAGE_NUMERALS), time, "|cf9f9f9", s, "|r")
+            else
+                plainValue = zo_strformat(GetString(_G.BARSTEWARD_VAMPIRE_STAGE), time, "", stage, "xxxx")
+                value = zo_strformat(GetString(_G.BARSTEWARD_VAMPIRE_STAGE), time, "|cf9f9f9", stage, "|r")
+            end
+        else
+            plainValue = time
+            value = time
+        end
+
+        widget:SetValue(value, plainValue)
+
+        local tt = GetString(_G.BARSTEWARD_VAMPIRE_STAGE_TIMER)
+
+        if (isVampire) then
+            tt = tt .. BS.LF .. BS.COLOURS.White:Colorize(BS.LC.Format(name))
+        end
+
+        widget:SetTooltip(tt)
+
+        return remaining
+    end,
+    timer = 1000,
+    event = _G.EVENT_EFFECT_CHANGED,
+    filter = {[_G.EVENT_EFFECT_CHANGED] = {_G.REGISTER_FILTER_UNIT_TAG, "player"}},
+    icon = "icons/store_vampirebite_01",
+    tooltip = GetString(_G.BARSTEWARD_VAMPIRE_STAGE_TIMER),
+    hideWhenEqual = 0,
+    customSettings = {
+        [1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_VAMPIRE_SHOW_STAGE),
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_VAMPIRISM_TIMER].ShowStage or false
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_VAMPIRISM_TIMER].ShowStage = value
+                BS.RefreshWidget(BS.W_VAMPIRISM_TIMER)
+            end,
+            width = "full",
+            default = false
+        },
+        [2] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_VAMPIRE_STAGE_NUMERIC),
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_VAMPIRISM_TIMER].Numeric
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_VAMPIRISM_TIMER].Numeric = value
+                BS.RefreshWidget(BS.W_VAMPIRISM_TIMER)
+            end,
+            disabled = function()
+                return not BS.Vars.Controls[BS.W_VAMPIRISM_TIMER].ShowStage
+            end,
+            width = "full",
+            default = false
+        }
+    }
+}
+
+BS.widgets[BS.W_VAMPIRISM_FEED_TIMER] = {
+    -- v1.4.37
+    name = "vampirismFeedTimer",
+    update = function(widget)
+        local name, icon
+        local isVampireWithFeed = false
+        local ending
+        local this = BS.W_VAMPIRISM_FEED_TIMER
+
+        for buffNum = 1, GetNumBuffs("player") do
+            local buffName, _, buffEnding, _, _, buffIcon, _, _, _, _, id = GetUnitBuffInfo("player", buffNum)
+
+            if (BS.VAMPIRE_FEED[id]) then
+                isVampireWithFeed = true
+                name = buffName
+                ending = buffEnding
+                icon = buffIcon
+                break
+            end
+        end
+
+        local remaining = 0
+        local time = ""
+        local colour = BS.COLOURS.DefaultOkColour
+
+        if (isVampireWithFeed) then
+            remaining = ending - GetGameTimeSeconds()
+
+            if (remaining > 0) then
+                time =
+                    BS.SecondsToTime(
+                    remaining,
+                    false,
+                    false,
+                    BS.GetVar("HideSeconds", this),
+                    BS.GetVar("Format", this),
+                    BS.GetVar("HideDaysWhenZero", this)
+                )
+
+                colour = BS.GetTimeColour(remaining, this, 60, true, true)
+            end
+        end
+
+        widget:SetColour(colour)
+        widget:SetValue(time)
+
+        local tt = GetString(_G.BARSTEWARD_VAMPIRE_FEED_TIMER)
+
+        if (isVampireWithFeed) then
+            tt = tt .. BS.LF .. BS.COLOURS.White:Colorize(BS.LC.Format(name))
+        end
+
+        widget:SetTooltip(tt)
+
+        if (icon) then
+            widget:SetIcon(icon)
+        end
+
+        return remaining
+    end,
+    timer = 1000,
+    event = _G.EVENT_EFFECT_CHANGED,
+    filter = {[_G.EVENT_EFFECT_CHANGED] = {_G.REGISTER_FILTER_UNIT_TAG, "player"}},
+    icon = "icons/ability_u26_vampire_synergy_feed",
+    tooltip = GetString(_G.BARSTEWARD_VAMPIRE_FEED_TIMER),
+    hideWhenEqual = 0
+}
+
+local function getEmptySlotCount()
+    local emptySlots = {}
+    local championBar = CHAMPION_PERKS:GetChampionBar()
+    local foundEmpty = false
+
+    if (championBar) then
+        for slot = 1, championBar:GetNumSlots() do
+            if (championBar:GetSlot(slot):GetSavedChampionSkillData() == nil) then
+                local disciplineId = GetRequiredChampionDisciplineIdForSlot(slot, _G.HOTBAR_CATEGORY_CHAMPION)
+                local disciplineName = GetChampionDisciplineName(disciplineId)
+
+                emptySlots[disciplineName] = (emptySlots[disciplineName] or 0) + 1
+                foundEmpty = true
+            end
+        end
+    end
+
+    return emptySlots, foundEmpty
+end
+
+BS.widgets[BS.W_CHAMPION_POINTS] = {
+    name = "championPoints",
+    update = function(widget)
+        local earned = GetPlayerChampionPointsEarned()
+        local xp, xplvl = GetPlayerChampionXP(), GetNumChampionXPInChampionPoint(earned)
+        local pc = BS.LC.ToPercent(xp, xplvl)
+        local disciplineType = GetChampionPointPoolForRank(earned + 1)
+        local disciplineData = CHAMPION_DATA_MANAGER:FindChampionDisciplineDataByType(disciplineType)
+        local cpicon = disciplineData:GetHUDIcon()
+        local this = BS.W_CHAMPION_POINTS
+        local cp = {}
+
+        if (BS.GetVar("UseSeparators", this) == true) then
+            earned = BS.AddSeparators(earned)
+        end
+
+        local icons = {}
+        local unspent = 0
+
+        for disciplineIndex = 1, GetNumChampionDisciplines() do
+            local id = GetChampionDisciplineId(disciplineIndex)
+
+            disciplineData = CHAMPION_DATA_MANAGER:FindChampionDisciplineDataById(id)
+
+            local icon = BS.Icon(disciplineData:GetHUDIcon())
+            local disciplineName = GetChampionDisciplineName(id)
+
+            icons[disciplineName] = icon
+
+            local name = BS.LC.Format(disciplineName)
+            local toSpend = disciplineData:GetNumSavedUnspentPoints()
+
+            unspent = unspent + toSpend
+
+            table.insert(cp, icon .. " " .. name .. " - " .. toSpend)
+        end
+
+        local unslotted = 0
+
+        if (#cp > 0) then
+            local ttt = GetString(_G.BARSTEWARD_UNSPENT)
+
+            for _, c in ipairs(cp) do
+                if (ttt ~= "") then
+                    ttt = ttt .. BS.LF
+                end
+
+                ttt = ttt .. c
+            end
+
+            local emptySlots, foundEmpty = getEmptySlotCount()
+
+            if (foundEmpty) then
+                ttt = ttt .. BS.LF .. BS.LF .. GetString(_G.BARSTEWARD_UNSLOTTED)
+                for discipline, empty in pairs(emptySlots) do
+                    ttt = ttt .. BS.LF
+                    ttt = ttt .. icons[discipline] .. " " .. BS.LC.Format(discipline) .. " - " .. empty
+                    unslotted = unslotted + empty
+                end
+            end
+
+            local ttext = ZO_CommaDelimitNumber(xp) .. " / " .. ZO_CommaDelimitNumber(xplvl)
+
+            ttt = ttt .. BS.LF .. BS.LF
+            ttt = ttt .. BS.LC.Format(_G.SI_STAT_GAMEPAD_EXPERIENCE_LABEL) .. BS.LF
+            ttt = ttt .. BS.COLOURS.White:Colorize(ttext)
+
+            widget:SetTooltip(ttt)
+        end
+
+        local value = earned .. " (" .. pc .. "%)"
+        local plainValue = value
+
+        if (BS.GetVar("ShowUnspent", this)) then
+            if (unspent == 0) then
+                value = earned
+                plainValue = earned
+            else
+                value = earned .. " (" .. BS.COLOURS.Yellow:Colorize(unspent) .. ")"
+                plainValue = earned .. " (" .. unspent .. ")"
+            end
+        end
+
+        if (BS.GetVar("ShowUnslottedCount", this) and unslotted > 0) then
+            plainValue = plainValue .. " - " .. unslotted
+            value = value .. " - " .. BS.COLOURS.Red:Colorize(unslotted)
+        end
+
+        widget:SetColour(BS.GetColour(this, true))
+        widget:SetValue(value, plainValue)
+        widget:SetIcon(cpicon)
+
+        return earned
+    end,
+    event = {_G.EVENT_EXPERIENCE_UPDATE, _G.EVENT_UNSPENT_CHAMPION_POINTS_CHANGED},
+    icon = "champion/champion_points_magicka_icon-hud",
+    tooltip = BS.LC.Format(_G.SI_STAT_GAMEPAD_CHAMPION_POINTS_LABEL),
+    hideWhenEqual = 0,
+    onLeftClick = function()
+        if (not IsInGamepadPreferredMode()) then
+            MAIN_MENU_KEYBOARD:ShowScene("championPerks")
+        else
+            MAIN_MENU_GAMEPAD:ShowScene("gamepad_championPerks_root")
+        end
+    end,
+    customSettings = {
+        [1] = {
+            name = GetString(_G.BARSTEWARD_UNSLOTTED_OPTION),
+            tooltip = GetString(_G.BARSTEWARD_UNSLOTTED_TOOLTIP),
+            type = "checkbox",
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_CHAMPION_POINTS].ShowUnslottedCount
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_CHAMPION_POINTS].ShowUnslottedCount = value
+                BS.RefreshWidget(BS.W_CHAMPION_POINTS)
+            end,
+            width = "full",
+            default = false
+        },
+        [2] = {
+            name = GetString(_G.BARSTEWARD_SHOW_UNSPENT),
+            type = "checkbox",
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_CHAMPION_POINTS].ShowUnspent
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_CHAMPION_POINTS].ShowUnspent = value
+                BS.RefreshWidget(BS.W_CHAMPION_POINTS)
+            end,
+            width = "full",
+            default = false
+        }
+    }
+}
+
+BS.widgets[BS.W_SKILL_POINTS] = {
+    -- v1.2.2
+    name = "skillPoints",
+    update = function(widget)
+        local unspent = GetAvailableSkillPoints()
+
+        widget:SetValue(unspent)
+        widget:SetColour(BS.GetColour(BS.W_SKILL_POINTS, nil, "DefaultOkColour", true))
+
+        return unspent
+    end,
+    event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_SKILL_POINTS_CHANGED},
+    icon = "campaign/campaignbrowser_indexicon_normal_up",
+    tooltip = GetString(_G.BARSTEWARD_SKILL_POINTS),
+    hideWhenEqual = 0,
+    onLeftClick = function()
+        if (not IsInGamepadPreferredMode()) then
+            SCENE_MANAGER:Show("skills")
+        else
+            SCENE_MANAGER:Show("gamepad_skills_root")
+        end
+    end
+}
+
+BS.widgets[BS.W_MUNDUS_STONE] = {
+    -- v1.0.1
+    name = "mundusstone",
+    update = function(widget)
+        local this = BS.W_MUNDUS_STONE
+        local mundusId, mundusName, mundusIcon
+
+        for buffNum = 1, GetNumBuffs("player") do
+            local name, _, _, _, _, icon, _, _, _, _, id = GetUnitBuffInfo("player", buffNum)
+
+            if (BS.MUNDUS_STONES[id]) then
+                mundusIcon = icon
+                mundusId = id
+                mundusName = BS.LC.Format(name)
+
+                if (BS.GetVar("Shorten", this)) then
+                    local colonPosition = mundusName:find(":")
+
+                    mundusName = mundusName:gsub(mundusName:sub(1, colonPosition + 1), "")
+                end
+
+                break
+            end
+        end
+
+        if (mundusId ~= nil) then
+            widget:SetIcon(mundusIcon)
+            widget:SetValue(mundusName)
+            widget:SetColour(BS.GetColour(this, true))
+
+            local tt = BS.LC.Format(_G.SI_CONFIRM_MUNDUS_STONE_TITLE) .. BS.LF
+            local desc = BS.LC.Format(GetAbilityDescription(mundusId))
+
+            tt = tt .. BS.COLOURS.White:Colorize(desc)
+
+            widget:SetTooltip(tt)
+
+            return mundusName
+        else
+            widget:SetValue(BS.LC.Format(_G.SI_CRAFTING_INVALID_ITEM_STYLE))
+            widget:SetColour(BS.GetColour(this, "Danger", true))
+        end
+
+        return ""
+    end,
+    event = _G.EVENT_EFFECT_CHANGED,
+    filter = {[_G.EVENT_EFFECT_CHANGED] = {_G.REGISTER_FILTER_UNIT_TAG, "player"}},
+    icon = "icons/ability_mundusstones_002",
+    tooltip = BS.LC.Format(_G.SI_CONFIRM_MUNDUS_STONE_TITLE),
+    hideWhenEqual = "",
+    customSettings = {
+        [1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_SHORTEN),
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_MUNDUS_STONE].Shorten or false
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_MUNDUS_STONE].Shorten = value
+                BS.RefreshWidget(BS.W_MUNDUS_STONE)
+            end,
+            width = "full",
+            default = false
+        }
+    }
+}

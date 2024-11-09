@@ -212,6 +212,7 @@ L(
     "INVERT_TOOLTIP",
     "Change the logic so values higher than those entered trigger the colour change. Default behaviour triggers on lower values."
 )
+L("INVERT_HIDE", "Invert logic")
 L("ITEM_EXISTS", "This item has already been added to the watchlist.")
 L("ITEM_ID", "Item id")
 L("ITEM_INVALID", "Invalid Item Id")
@@ -418,6 +419,8 @@ L("VALUE_SIDE", "Value Side")
 L("VAMPIRE_FEED_TIMER", "Vampire feed timer")
 L("VAMPIRE_SHOW_STAGE", "Show stage")
 L("VAMPIRE_STAGE", "<<1>> <<2>>(Stage <<3>>)<<4>>")
+L("VAMPIRE_STAGE_NUMERALS", "<<1>> <<2>>(<<3>>)<<4>>")
+L("VAMPIRE_STAGE_NUMERIC", "Only show stage number")
 L("VAMPIRE_STAGE_TIMER", "Vampirism stage timer")
 L("VERTICAL", "Vertical")
 L("WARN_INSTANCE", "Warn when entering an instance")

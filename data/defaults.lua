@@ -871,6 +871,9 @@ BS.Defaults = {
         [BS.W_SCRYING] = {
             Cat = cat.Abilities,
             Progress = true
+        },
+        [BS.W_MYTHIC] = {
+            Cat = cat.Inventory
         }
     }
 }

@@ -212,6 +212,7 @@ L(
     "INVERT_TOOLTIP",
     "Ändere die Logik, sodass Werte höher als diese den Farbwechsel auslösen. Das Standard Verhalten ist, dass niedrigere Werte den Wechsel auslösen."
 )
+L("INVERT_HIDE", "Drehe Logik")
 L("ITEM_EXISTS", "Dieses Teil wurde bereits zur Beobachtungsliste hinzugefügt.")
 L("ITEM_ID", "Teilenummer")
 L("ITEM_INVALID", "Ungültige Teilenummer")
@@ -422,6 +423,7 @@ L(
 L("VALUE", "Wert")
 L("VALUE_SIDE", "Werteseite")
 L("VAMPIRE_FEED_TIMER", "Vampir Fütterungszeit")
+L("VAMPIRE_STAGE_NUMERIC", "Nur Statusnummer anzeigen")
 L("VAMPIRE_SHOW_STAGE", "Status anzeigen")
 L("VAMPIRE_STAGE", "<<1>> <<2>>(Status <<3>>)<<4>>")
 L("VAMPIRE_STAGE_TIMER", "Vampirismus Zustandszeit")
