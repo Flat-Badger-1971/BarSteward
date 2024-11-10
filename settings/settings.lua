@@ -1428,8 +1428,6 @@ local function getWidgetSettings()
         categoryIndex[k] = 1
     end
 
-    local creator = BS.Creator:New()
-
     for _, w in ipairs(ordered) do
         local k = w.key
         local v = w.widget
@@ -1437,8 +1435,6 @@ local function getWidgetSettings()
         local disabled = false
         local vars = BS.Vars.Controls[k]
         local defaults = BS.Defaults.Controls[k]
-
-        creator:Setup(widgetControls, defaults, vars, k)
 
         if (not BS.Vars.Bars) then
             break
@@ -1452,7 +1448,7 @@ local function getWidgetSettings()
             }
             disabled = true
         else
-            creator:CheckExperimental()
+            BS.CheckExperimental(defaults, widgetControls)
 
             widgetControls[#widgetControls + 1] = {
                 type = "dropdown",
@@ -1499,7 +1495,7 @@ local function getWidgetSettings()
         end
 
         if (not disabled) then
-            creator:AddSettings()
+            BS.AddSettings(defaults, widgetControls, vars, k)
         end
 
         local textureCoords = nil
