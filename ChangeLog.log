@@ -1,3 +1,6 @@
+[color=#ff9900][b]Version: 3.2.15 ---------------[/b][/color]
+Fixed issue with callback reference for Lorebooks widgets
+
 [color=#ff9900][b]Version: 3.2.14 ---------------[/b][/color]
 Settings rework and bug fixing
 

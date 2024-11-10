@@ -823,7 +823,7 @@ local function updateLoreBooks()
 
             for collectionIndex = 1, numCollections do
                 local _, _, numKnownBooks, totalBooks, hidden = GetLoreCollectionInfo(categoryIndex, collectionIndex)
-                if not hidden then
+                if (not hidden) then
                     category.numKnownBooks = category.numKnownBooks + numKnownBooks
                     category.totalBooks = category.totalBooks + totalBooks
                 end
@@ -871,7 +871,7 @@ BS.widgets[BS.W_LOREBOOKS] = {
 
         return #categories
     end,
-    callback = {[BS] = {"LorebooksUpdated"}},
+    callback = {[BS.CallbackManager] = {"LorebooksUpdated"}},
     icon = "icons/quest_book_001",
     tooltip = GetString(_G.BARSTEWARD_LOREBOOKS),
     onLeftClick = function()
@@ -932,7 +932,7 @@ BS.widgets[BS.W_SHALIDORS_LIBRARY] = {
 
         return known
     end,
-    callback = {[BS] = {"LorebooksUpdated"}},
+    callback = {[BS.CallbackManager] = {"LorebooksUpdated"}},
     icon = "icons/housing_sum_fur_booksfloatingset003",
     tooltip = BS.LC.Format(_G.SI_ZONECOMPLETIONTYPE11),
     onLeftClick = function()
@@ -968,7 +968,7 @@ BS.widgets[BS.W_CRAFTING_MOTIFS] = {
 
         return known
     end,
-    callback = {[BS] = {"LorebooksUpdated"}},
+    callback = {[BS.CallbackManager] = {"LorebooksUpdated"}},
     icon = "icons/u34_crafting_style_item_sybranic_marine",
     tooltip = GetString(_G.BARSTEWARD_CRAFTING_MOTIFS),
     onLeftClick = function()
