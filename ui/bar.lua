@@ -708,6 +708,21 @@ function baseBar:AddWidgets(widgets)
             end
         end
 
+        -- register widgets that need to use hooks
+        if (metadata.hook) then
+            for object, methods in pairs(metadata.callback) do
+                for _, method in ipairs(methods) do
+                    SecurePostHook(
+                        object,
+                        method,
+                        function(...)
+                            self:DoUpdate(metadata, ...)
+                        end
+                    )
+                end
+            end
+        end
+
         -- register LibCharacterKnowledge callback
         if (metadata.callbackLCK) then
             if (BS.LibCK) then
