@@ -710,7 +710,7 @@ function baseBar:AddWidgets(widgets)
 
         -- register widgets that need to use hooks
         if (metadata.hook) then
-            for object, methods in pairs(metadata.callback) do
+            for object, methods in pairs(metadata.hook) do
                 for _, method in ipairs(methods) do
                     SecurePostHook(
                         object,
