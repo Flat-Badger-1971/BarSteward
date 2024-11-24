@@ -1415,6 +1415,120 @@ function BS.ShowFrameMovers(value)
     end
 end
 
+function BS.IsTracked(id)
+    local ids = BS.Vars.AchievementTracking or {}
+
+    return ids[id]
+end
+
+function BS.Track(self, id, track)
+    local ids = BS.Vars.AchievementTracking or {}
+
+    ids[id] = track
+    BS.Vars.AchievementTracking = ids
+    self:Show(id)
+end
+
+function BS.TrackAchievements()
+    if (BS.Vars.Controls[BS.W_ACHIEVEMENT_TRACKER].Bar ~= 0) then
+        -- luacheck: push ignore 112 113
+        BS.OriginalAchievmentFunction = Achievement.OnClicked
+        BS.OriginalApplyColour = ZO_Achievements_ApplyTextColorToLabel
+
+        local trackedLabel = BS.LC.ZOSOrange:Colorize(GetString(_G.BARSTEWARD_TRACKED))
+
+        function ZO_Achievements_ApplyTextColorToLabel(label, ...)
+            if (label:GetName():find("Title")) then
+                local parent = label:GetParent()
+                local id = parent.achievement.achievementId
+
+                if (BS.IsTracked(id)) then
+                    label:SetText(label:GetText() .. "  " .. trackedLabel)
+                end
+            end
+
+            BS.OriginalApplyColour(label, ...)
+        end
+
+        function Achievement:OnClicked(button)
+            local id = self:GetId()
+            local tracked = BS.IsTracked(id)
+            local text = tracked and GetString(_G.BARSTEWARD_UNTRACK) or GetString(_G.BARSTEWARD_TRACK)
+
+            if button == _G.MOUSE_BUTTON_INDEX_LEFT then
+                self:ToggleCollapse()
+                self:RefreshTooltip(self.control)
+            elseif button == _G.MOUSE_BUTTON_INDEX_RIGHT and IsChatSystemAvailableForCurrentPlatform() then
+                ClearMenu()
+                AddMenuItem(
+                    GetString(_G.SI_ITEM_ACTION_LINK_TO_CHAT),
+                    function()
+                        ZO_LinkHandler_InsertLink(ZO_LinkHandler_CreateChatLink(GetAchievementLink, self:GetId()))
+                    end
+                )
+                AddMenuItem(
+                    text,
+                    function()
+                        BS.Track(self, id, not tracked)
+                    end
+                )
+                ShowMenu(self.control)
+            end
+
+            BS.Tracking = true
+        end
+    -- luacheck: pop
+    end
+end
+
+function BS.EventNotifier(id)
+    local status = ACHIEVEMENTS_MANAGER:GetAchievementStatus(id)
+    if
+        (status == _G.ZO_ACHIEVEMENTS_COMPLETION_STATUS.IN_PROGRESS or
+            status == _G.ZO_ACHIEVEMENTS_COMPLETION_STATUS.IN_PROGRESS)
+     then
+        local announce = true
+
+        if (announce) then
+            local name, _, _, icon = GetAchievementInfo(id)
+            local stepsRemaining = 0
+
+            for criteria = 1, GetAchievementNumCriteria(id) do
+                local _, completed, required = GetAchievementCriterion(id, criteria)
+
+                if (completed ~= required) then
+                    stepsRemaining = stepsRemaining + (required - completed)
+                end
+            end
+
+            if (stepsRemaining > 0) then
+                local message =
+                    ZO_CachedStrFormat(
+                    GetString(_G.ARCHIVEHELPER_PROGRESS),
+                    BS.LC.Yellow:Colorize(name),
+                    stepsRemaining
+                )
+                BS.LC.ScreenAnnounce(BS.LC.Format(_G.ARCHIVEHELPER_PROGRESS_ACHIEVEMENT), message, icon)
+            end
+        end
+    end
+end
+
+function BS.HideGoldenPursuitsDefaultUI()
+    local gp = BS.W_GOLDEN_PURSUITS
+
+    if (BS.GetVar("Bar", gp) > 0) then
+        if (BS.GetVar("HideDefault", gp)) then
+            _G.PROMOTIONAL_EVENT_TRACKER:GetFragment():SetHiddenForReason(
+                "BarStewardHidden",
+                true,
+                _G.DEFAULT_HUD_DURATION,
+                _G.DEFAULT_HUD_DURATION
+            )
+        end
+    end
+end
+
 -- developer utility functions
 -- luacheck: push ignore 113
 function BS.FindItem(text)

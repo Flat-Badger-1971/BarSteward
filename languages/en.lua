@@ -166,6 +166,9 @@ L("GOLD_COMBINED", "Bank and bags")
 L("GOLD_DISPLAY", "Display")
 L("GOLD_EVERYWHERE", "Everywhere")
 L("GOLD_SEPARATED", "Bank/bags")
+
+L("GOLDEN_PURSUITS_HIDE_DEFAULT", "Hide default tracker")
+
 L("GREEN", "Green")
 L("GRID_SIZE", "Snap to grid Size")
 L("GRID_SIZE_VISIBLE", "Visible grid Size")
@@ -464,6 +467,12 @@ L("ACCOUNT_WIDE_TOOLTIP", "All the settings below will be the same for each of y
 L("SLASH_ENABLE", "enable")
 L("SLASH_HIDE", "hide")
 L("SLASH_SHOW", "show")
+
+-- Tracking
+L("TRACK" ,"Track with Bar Steward")
+L("TRACKED", "Tracked")
+L("TRACKER", "Achievement Tracker")
+L("UNTRACK","Untrack with Bar Steward")
 
 -- Search
 L("DOUBLE_CLICK", "(double-click to locate)")

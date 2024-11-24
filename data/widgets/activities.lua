@@ -1600,3 +1600,72 @@ BS.widgets[BS.W_DAILY_PLEDGES] = {
     tooltip = GetString(_G.BARSTEWARD_DAILY_PLEDGES),
     hideWhenEqual = true
 }
+
+BS.widgets[BS.W_ACHIEVEMENT_TRACKER] = {
+    -- v3.2.17
+    name = "achTracker",
+    update = function(widget, event, updatedId, _, awardedId)
+        if (not BS.Tracking) then
+            BS.TrackAchievements()
+        end
+
+        local id = event == _G.EVENT_ACHIEVEMENT_UPDATED and updatedId or awardedId
+
+        if (BS.IsTracked(id)) then
+        end
+
+        widget:SetValue("")
+
+        --widget:SetColour(BS.GetColour(BS.W_SHALIDORS_LIBRARY, true))
+
+        return
+    end,
+    event = {_G.EVENT_ACHIEVEMENT_AWARDED, _G.EVENT_ACHIEVEMENT_UPDATED},
+    icon = "icons/achievement_102",
+    tooltip = GetString(_G.BARSTEWARD_TRACKER)
+    -- onLeftClick = function()
+    --     if (IsInGamepadPreferredMode()) then
+    --         SCENE_MANAGER:Show("loreLibraryGamepad")
+    --     else
+    --         SCENE_MANAGER:Show("loreLibrary")
+    --     end
+    -- end
+}
+
+BS.widgets[BS.W_GOLDEN_PURSUITS] = {
+    -- v3.2.17
+    name = "goldenPursuits",
+    update = function(widget)
+        widget:SetValue("")
+
+        --widget:SetColour(BS.GetColour(BS.W_SHALIDORS_LIBRARY, true))
+
+        return
+    end,
+    event = nil,
+    icon = "icons/event_confetti_kit",
+    tooltip = BS.LC.Format(_G.SI_PROMOTIONAL_EVENT_TRACKER_HEADER),
+    -- onLeftClick = function()
+    --     if (IsInGamepadPreferredMode()) then
+    --         SCENE_MANAGER:Show("loreLibraryGamepad")
+    --     else
+    --         SCENE_MANAGER:Show("loreLibrary")
+    --     end
+    -- end
+    customSettings = {
+        [1] = {
+            type = "checkbox",
+            name = GetString(_G.BARSTEWARD_GOLDEN_PURSUITS_HIDE_DEFAULT),
+            getFunc = function()
+                return BS.GetVar("HideDefault", BS.W_GOLDEN_PURSUITS)
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_GOLDEN_PURSUITS].HideDefault = value
+                if (value) then
+                    BS.HideGoldenPursuitsDefaultUI()
+                end
+            end,
+            width = "full"
+        }
+    }
+}

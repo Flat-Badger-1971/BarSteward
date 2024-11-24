@@ -123,7 +123,7 @@ L("DECIMAL_PLACES", "Nachkommastellen")
 L("DEFAULT_COLOUR", "Standardfarbe")
 L("DELETE", "Erfasste Charakterdaten dauerhaft löschen")
 L("DELETE_FOR", "Erfasste Charakterdaten löschen für <<1>>?")
-L("DELIVER", "liefern")
+L("DELIVER", "Beliefert")
 L("DISABLE", "Deaktiviere")
 L("DISPLAY", "Zeige an")
 L("DPS", "DPS (Schaden pro Sekunde)")
@@ -469,6 +469,12 @@ L("ACCOUNT_WIDE_TOOLTIP", "Alle Einstellungen sind für alle deine Charaktere id
 L("SLASH_ENABLE", "aktivieren")
 L("SLASH_HIDE", "verstecken")
 L("SLASH_SHOW", "zeigen")
+
+-- Tracking
+L("TRACK" ,"Mit Bar Steward verfolgen")
+L("TRACKED", "Verfolgt")
+L("TRACKER", "Erfolgstracker")
+L("UNTRACK","Mit Bar Steward untracken")
 
 -- Search
 L("DOUBLE_CLICK", "(zum Suchen doppelklicken)")

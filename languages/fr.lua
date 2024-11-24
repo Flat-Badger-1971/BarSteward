@@ -466,6 +466,12 @@ L("SLASH_ENABLE", "activer")
 L("SLASH_HIDE", "cacher")
 L("SLASH_SHOW", "montrer")
 
+-- Tracking
+L("TRACK" ,"Suivre avec Bar Steward")
+L("TRACKED", "Suivie")
+L("TRACKER", "Suivi des réalisations")
+L("UNTRACK","Désuivre avec Bar Steward")
+
 -- Search
 L("DOUBLE_CLICK", "(double-cliquez pour localiser)")
 -- luacheck: pop

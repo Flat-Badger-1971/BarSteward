@@ -146,6 +146,10 @@ function BS.ContinueIntialising()
 
     BS.GridChanged = true
     BS.RegisterHooks()
+
+    if (BS.Vars.Controls[BS.W_GOLDEN_PURSUITS].HideDefault) then
+        BS.HideGoldenPursuitsDefaultUI()
+    end
 end
 
 local function Initialise()

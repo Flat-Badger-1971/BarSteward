@@ -439,6 +439,12 @@ L("SLASH_ENABLE", "使能够")
 L("SLASH_HIDE", "隐藏")
 L("SLASH_SHOW", "展示")
 
+-- Tracking
+L("TRACK" ,"使用 Bar Steward 跟踪")
+L("TRACKED", "履带式")
+L("TRACKER", "成就追踪器")
+L("UNTRACK","使用 Bar Steward 取消跟踪")
+
 -- Search
 L("DOUBLE_CLICK", "（双击定位）")
 --luacheck: pop

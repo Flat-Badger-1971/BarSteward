@@ -1566,6 +1566,7 @@ end
 
 function BS.RegisterSettings()
     local version = BS.LC.GetAddonVersion(BS.Name)
+
     BS.Panel = {
         type = "panel",
         name = "Bar Steward",

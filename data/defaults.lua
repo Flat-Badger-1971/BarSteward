@@ -874,6 +874,13 @@ BS.Defaults = {
         },
         [BS.W_MYTHIC] = {
             Cat = cat.Inventory
+        },
+        [BS.W_ACHIEVEMENT_TRACKER] = {
+            Cat = cat.Activities
+        },
+        [BS.W_GOLDEN_PURSUITS] = {
+            Cat = cat.Activities,
+            HideDefault = false
         }
     }
 }
