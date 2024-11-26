@@ -765,7 +765,7 @@ local function getWidgets(barIndex)
     -- get the widgets for this bar
     for id, info in ipairs(BS.Vars.Controls) do
         if (id ~= BS.W_PORT) then
-            if (info.Bar == barIndex) then
+            if (info.Bar == barIndex and not (BS.Defaults.Controls[id].Hidden)) then
                 local add = true
 
                 if (info.Requires) then
@@ -1032,6 +1032,22 @@ function BS.GetVar(name, widget)
     end
 
     return value
+end
+
+function BS.SetVar(value, name, widget)
+    local continue = false
+
+    if (BS) then
+        if (BS.Vars) then
+            if (BS.Vars.Controls) then
+                continue = true
+            end
+        end
+    end
+
+    if (continue) then
+        BS.Vars.Controls[widget][name] = value
+    end
 end
 
 function BS.GetTimeColour(value, this, multiplier, useOK, useZoColours)
@@ -1416,16 +1432,28 @@ function BS.ShowFrameMovers(value)
 end
 
 function BS.IsTracked(id)
-    local ids = BS.Vars.AchievementTracking or {}
+    local ids = BS.Vars:GetCommon("AchievementTracking") or {}
 
-    return ids[id]
+    if (id) then
+        return ids[id]
+    else
+        return ids
+    end
+end
+
+function BS.SetTracked(id, track)
+    local ids = BS.Vars:GetCommon("AchievementTracking") or {}
+
+    if (track == false) then
+        track = nil
+    end
+
+    ids[id] = track
+    BS.Vars:SetCommon(ids, "AchievementTracking")
 end
 
 function BS.Track(self, id, track)
-    local ids = BS.Vars.AchievementTracking or {}
-
-    ids[id] = track
-    BS.Vars.AchievementTracking = ids
+    BS.SetTracked(id, track)
     self:Show(id)
 end
 
@@ -1435,7 +1463,7 @@ function BS.TrackAchievements()
         BS.OriginalAchievmentFunction = Achievement.OnClicked
         BS.OriginalApplyColour = ZO_Achievements_ApplyTextColorToLabel
 
-        local trackedLabel = BS.LC.ZOSOrange:Colorize(GetString(_G.BARSTEWARD_TRACKED))
+        local trackedLabel = BS.LC.ZOSOrange:Colorize(BS.LC.Format(_G.SI_SCREEN_NARRATION_TRACKED_ICON_NARRATION))
 
         function ZO_Achievements_ApplyTextColorToLabel(label, ...)
             if (label:GetName():find("Title")) then
@@ -1469,7 +1497,15 @@ function BS.TrackAchievements()
                 AddMenuItem(
                     text,
                     function()
-                        BS.Track(self, id, not tracked)
+                        local value = not tracked
+
+                        if (value == false) then
+                            ---@diagnostic disable-next-line: cast-local-type
+                            value = nil
+                        end
+
+                        BS.Track(self, id, value)
+                        BS.RefreshWidget(BS.W_ACHIEVEMENT_TRACKER)
                     end
                 )
                 ShowMenu(self.control)
@@ -1481,50 +1517,52 @@ function BS.TrackAchievements()
     end
 end
 
-function BS.EventNotifier(id)
+function BS.AchievementNotifier(id, checkAnnounce)
     local status = ACHIEVEMENTS_MANAGER:GetAchievementStatus(id)
-    if
-        (status == _G.ZO_ACHIEVEMENTS_COMPLETION_STATUS.IN_PROGRESS or
-            status == _G.ZO_ACHIEVEMENTS_COMPLETION_STATUS.IN_PROGRESS)
-     then
-        local announce = true
+    local name, _, _, icon = GetAchievementInfo(id)
+    local announce = BS.GetVar("Announce", BS.W_ACHIEVEMENT_TRACKER) and checkAnnounce
+    local stepsRemaining = 0
+    local numCriteria = GetAchievementNumCriteria(id)
+    local totalCriteria = numCriteria
 
-        if (announce) then
-            local name, _, _, icon = GetAchievementInfo(id)
-            local stepsRemaining = 0
+    for criteria = 1, numCriteria do
+        local _, completed, required = GetAchievementCriterion(id, criteria)
 
-            for criteria = 1, GetAchievementNumCriteria(id) do
-                local _, completed, required = GetAchievementCriterion(id, criteria)
+        if (completed ~= required) then
+            stepsRemaining = stepsRemaining + (required - completed)
+        end
 
-                if (completed ~= required) then
-                    stepsRemaining = stepsRemaining + (required - completed)
-                end
-            end
-
-            if (stepsRemaining > 0) then
-                local message =
-                    ZO_CachedStrFormat(
-                    GetString(_G.ARCHIVEHELPER_PROGRESS),
-                    BS.LC.Yellow:Colorize(name),
-                    stepsRemaining
-                )
-                BS.LC.ScreenAnnounce(BS.LC.Format(_G.ARCHIVEHELPER_PROGRESS_ACHIEVEMENT), message, icon)
-            end
+        if (numCriteria == 1) then
+            totalCriteria = required
         end
     end
+
+    if (announce and (status == _G.ZO_ACHIEVEMENTS_COMPLETION_STATUS.IN_PROGRESS)) then
+        if (stepsRemaining > 0) then
+            local message =
+                ZO_CachedStrFormat(GetString(_G.BARSTEWARD_PROGRESS), BS.LC.Yellow:Colorize(name), stepsRemaining)
+
+            BS.LC.ScreenAnnounce(BS.LC.Format(_G.BARSTEWARD_PROGRESS_ACHIEVEMENT), message, icon)
+        end
+    end
+
+    return name, icon, stepsRemaining, totalCriteria
 end
 
 function BS.HideGoldenPursuitsDefaultUI()
     local gp = BS.W_GOLDEN_PURSUITS
 
-    if (BS.GetVar("Bar", gp) > 0) then
-        if (BS.GetVar("HideDefault", gp)) then
-            _G.PROMOTIONAL_EVENT_TRACKER:GetFragment():SetHiddenForReason(
-                "BarStewardHidden",
-                true,
-                _G.DEFAULT_HUD_DURATION,
-                _G.DEFAULT_HUD_DURATION
-            )
+    if (not IsPromotionalEventSystemLocked()) then
+        if (BS.GetVar("Bar", gp) > 0) then
+            if (BS.GetVar("HideDefault", gp)) then
+                -- _G.PROMOTIONAL_EVENT_TRACKER:GetFragment():SetHiddenForReason(
+                --     "BarStewardHidden",
+                --     true,
+                --     _G.DEFAULT_HUD_DURATION,
+                --     _G.DEFAULT_HUD_DURATION
+                -- )
+                _G.PROMOTIONAL_EVENT_TRACKER:SetHidden(true)
+            end
         end
     end
 end

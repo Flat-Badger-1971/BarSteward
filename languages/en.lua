@@ -166,9 +166,7 @@ L("GOLD_COMBINED", "Bank and bags")
 L("GOLD_DISPLAY", "Display")
 L("GOLD_EVERYWHERE", "Everywhere")
 L("GOLD_SEPARATED", "Bank/bags")
-
 L("GOLDEN_PURSUITS_HIDE_DEFAULT", "Hide default tracker")
-
 L("GREEN", "Green")
 L("GRID_SIZE", "Snap to grid Size")
 L("GRID_SIZE_VISIBLE", "Visible grid Size")
@@ -297,8 +295,11 @@ L("PREVIOUS_ENCOUNTER_AVERAGE", "Average DPS")
 L("PREVIOUS_ENCOUNTER_DURATION", "Duration")
 L("PREVIOUS_ENCOUNTER_MAXIMUM", "Maximum DPS")
 L("PICKED_UP", "Picked up")
+L("PROGRESS", "<<1>> criteria advanced. <<2>> remaining.")
+L("PROGRESS_ACHIEVEMENT", "Achievement progress")
 L("PROGRESS_GRADIENT_END", "Gradient end")
 L("PROGRESS_GRADIENT_START", "Gradient start")
+L("PROGRESS_SCREEN", "Announce on screen")
 L("PROGRESS_VALUE", "Progress value")
 L("PVP_NEVER", "Don't show in PvP")
 L("PVP_ONLY", "Only show in PvP")
@@ -470,8 +471,8 @@ L("SLASH_SHOW", "show")
 
 -- Tracking
 L("TRACK" ,"Track with Bar Steward")
-L("TRACKED", "Tracked")
 L("TRACKER", "Achievement Tracker")
+L("TRACKER_INFO","Right-click an achievement to track it with Bar Steward")
 L("UNTRACK","Untrack with Bar Steward")
 
 -- Search

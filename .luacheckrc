@@ -4,6 +4,11 @@ max_line_length = 160
 -- globals used within addons
 --globals = {"CF"}
 read_globals = {
+    ["ACHIEVEMENTS"] = {
+        fields = {
+            ShowSummary = {read_only = true}
+        }
+    },
     ["ACHIEVEMENTS_MANAGER"] = {
         fields = {
             GetAchievementStatus = {read_only = true}
@@ -283,6 +288,7 @@ read_globals = {
     "GetActiveCompanionRapport",
     "GetActiveCompanionRapportLevel",
     "GetActiveCompanionRapportLevelDescription",
+    "GetActivePromotionalEventCampaignKey",
     "GetActiveWeaponPairInfo",
     "GetAddOnManager",
     "GetAllianceColor",
@@ -408,6 +414,7 @@ read_globals = {
     "GetMinimumRapport",
     "GetNextAntiquityId",
     "GetNonCombatBonus",
+    "GetNumActivePromotionalEventCampaigns",
     "GetNumAntiquitiesRecovered",
     "GetNumAntiquityDigSites",
     "GetNumBagUsedSlots",
@@ -528,6 +535,7 @@ read_globals = {
     "IsItemPlaceableFurniture",
     "IsItemRepairKit",
     "IsItemStolen",
+    "IsPromotionalEventSystemLocked",
     "IsSlotUsed",
     "IsUnitDead",
     "IsUnitGrouped",

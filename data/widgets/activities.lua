@@ -531,7 +531,6 @@ local function getDisplay(timeRemaining, widgetIndex)
     return display
 end
 
--- TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(activityType)
 local function getTimedActivityTimeRemaining(activityType, this, widget)
     local secondsRemaining = TIMED_ACTIVITIES_MANAGER:GetTimedActivityTypeTimeRemainingSeconds(activityType)
     local colour = BS.GetTimeColour(secondsRemaining, this, nil, true, true)
@@ -1601,6 +1600,27 @@ BS.widgets[BS.W_DAILY_PLEDGES] = {
     hideWhenEqual = true
 }
 
+local function resetAchTracker()
+    local achs = BS.IsTracked()
+
+    for id, _ in pairs(achs) do
+        achs[id] = "ready"
+    end
+
+    BS.Vars:SetCommon(achs, "AchievementTracking")
+end
+
+local function checkAchReset()
+    local lastResetTime = BS.GetLastDailyResetTime()
+
+    if (lastResetTime) then
+        resetAchTracker()
+        BS.Vars:SetCommon(lastResetTime, "lastDailyReset")
+    end
+end
+
+local achievements = {}
+
 BS.widgets[BS.W_ACHIEVEMENT_TRACKER] = {
     -- v3.2.17
     name = "achTracker",
@@ -1610,48 +1630,303 @@ BS.widgets[BS.W_ACHIEVEMENT_TRACKER] = {
         end
 
         local id = event == _G.EVENT_ACHIEVEMENT_UPDATED and updatedId or awardedId
+        local this = BS.W_ACHIEVEMENT_TRACKER
+        local tracked = BS.IsTracked()
+        local completed, achCount = 0, BS.LC.CountElements(tracked)
+        local daily = BS.GetVar("Daily", this)
 
-        if (BS.IsTracked(id)) then
+        if (BS.IsTracked(id) and event ~= "initial") then
+            local name, icon, stepsRemaining, stepsRequired = BS.AchievementNotifier(id, true)
+
+            achievements[id] = {
+                name = name,
+                icon = icon,
+                completed = stepsRemaining == 0,
+                remaining = stepsRemaining,
+                required = stepsRequired,
+                updated = true
+            }
+
+            if (daily) then
+                BS.SetTracked(id, "done")
+            end
+        elseif (event == "initial") then
+            for achId, track in pairs(tracked) do
+                if (track) then
+                    local name, icon, stepsRemaining, stepsRequired = BS.AchievementNotifier(achId, false)
+
+                    achievements[achId] = {
+                        name = name,
+                        icon = icon,
+                        completed = stepsRemaining == 0,
+                        remaining = stepsRemaining,
+                        required = stepsRequired
+                    }
+
+                    completed = completed + ((stepsRemaining == 0) and 1 or 0)
+
+                    if (daily and (track == "done")) then
+                        achievements[achId].updated = true
+                    end
+                end
+            end
         end
 
-        widget:SetValue("")
+        if (daily) then
+            checkAchReset()
+            completed =
+                BS.LC.CountElements(
+                BS.LC.Filter(
+                    achievements,
+                    function(v)
+                        return v.updated == true
+                    end
+                )
+            )
+        end
 
-        --widget:SetColour(BS.GetColour(BS.W_SHALIDORS_LIBRARY, true))
+        local usePc = BS.GetVar("ShowPercent", this)
+        local value =
+            usePc and BS.LC.ToPercent(completed, achCount, true) or
+            string.format("%s/%s", tostring(completed), tostring(achCount))
 
-        return
+        widget:SetValue(value)
+        widget:SetColour(BS.GetColour(this, true))
+
+        local tt = GetString(_G.BARSTEWARD_TRACKER) .. BS.LF
+
+        for _, data in pairs(achievements) do
+            local done = data.required - data.remaining
+            local required = data.required
+            local colour = daily and BS.LC.Grey or BS.LC.Yellow
+            local t
+
+            if (daily) then
+                if (data.updated) then
+                    colour = BS.LC.ZOSGreen
+                end
+                t = colour:Colorize(data.name)
+            else
+                if (data.completed) then
+                    done = required
+                    colour = BS.LC.ZOSGreen
+                end
+
+                local progress =
+                    usePc and BS.LC.ToPercent(done, required, true) or
+                    string.format("%s/%s", tostring(done), tostring(required))
+                t = string.format("%s - %s", colour:Colorize(data.name), BS.LC.White:Colorize(progress))
+            end
+
+            tt = string.format("%s%s%s", tt, BS.LF, t)
+        end
+
+        widget:SetTooltip(BS.LC.Trim(tt))
+
+        return #achievements
     end,
     event = {_G.EVENT_ACHIEVEMENT_AWARDED, _G.EVENT_ACHIEVEMENT_UPDATED},
-    icon = "icons/achievement_102",
-    tooltip = GetString(_G.BARSTEWARD_TRACKER)
-    -- onLeftClick = function()
-    --     if (IsInGamepadPreferredMode()) then
-    --         SCENE_MANAGER:Show("loreLibraryGamepad")
-    --     else
-    --         SCENE_MANAGER:Show("loreLibrary")
-    --     end
-    -- end
+    icon = "icons/housing_u42_mb_eye",
+    tooltip = GetString(_G.BARSTEWARD_TRACKER),
+    onLeftClick = function()
+        if (IsInGamepadPreferredMode()) then
+            SCENE_MANAGER:Show("achievementsGamepad")
+        else
+            SCENE_MANAGER:Show("achievements")
+        end
+    end,
+    customSettings = {
+        [1] = {
+            type = "checkbox",
+            name = BS.LC.Format(_G.SI_TIMEDACTIVITYTYPE0),
+            getFunc = function()
+                return BS.GetVar("Daily", BS.W_ACHIEVEMENT_TRACKER)
+            end,
+            setFunc = function(value)
+                local overall = BS.GetVar("Overall", BS.W_ACHIEVEMENT_TRACKER)
+
+                if (value and overall) then
+                    BS.SetVar(false, "Overall", BS.W_ACHIEVEMENT_TRACKER)
+                end
+
+                BS.SetVar(value, "Daily", BS.W_ACHIEVEMENT_TRACKER)
+                BS.RefreshWidget(BS.W_ACHIEVEMENT_TRACKER)
+            end,
+            width = "full",
+            default = false
+        },
+        [2] = {
+            type = "checkbox",
+            name = BS.LC.Format(_G.SI_CAMPAIGN_LEADERBOARDS_OVERALL),
+            getFunc = function()
+                return BS.GetVar("Overall", BS.W_ACHIEVEMENT_TRACKER)
+            end,
+            setFunc = function(value)
+                local overall = BS.GetVar("Daily", BS.W_ACHIEVEMENT_TRACKER)
+
+                if (value and overall) then
+                    BS.SetVar(false, "Daily", BS.W_ACHIEVEMENT_TRACKER)
+                end
+
+                BS.SetVar(value, "Overall", BS.W_ACHIEVEMENT_TRACKER)
+                BS.RefreshWidget(BS.W_ACHIEVEMENT_TRACKER)
+            end,
+            width = "full",
+            default = true
+        },
+        [3] = {
+            type = "checkbox",
+            name = BS.LC.Format(_G.BARSTEWARD_PROGRESS_SCREEN),
+            getFunc = function()
+                return BS.GetVar("Announce", BS.W_ACHIEVEMENT_TRACKER)
+            end,
+            setFunc = function(value)
+                BS.SetVar(value, "Announce", BS.W_ACHIEVEMENT_TRACKER)
+            end,
+            width = "full"
+        },
+        [4] = {
+            type = "description",
+            text = BS.LC.Yellow:Colorize(GetString(_G.BARSTEWARD_TRACKER_INFO)),
+            width = "full"
+        }
+    }
 }
 
 BS.widgets[BS.W_GOLDEN_PURSUITS] = {
     -- v3.2.17
     name = "goldenPursuits",
     update = function(widget)
-        widget:SetValue("")
+        local campaigns = GetNumActivePromotionalEventCampaigns()
+        local completed, max = 0, 0
+        local activityData, campaign, milestoneData = {}, {}, {}
+        local rewards, claimed = 0, 0
+        --BS.HideGoldenPursuitsDefaultUI()
 
-        --widget:SetColour(BS.GetColour(BS.W_SHALIDORS_LIBRARY, true))
+        if (campaigns > 0) then
+            local campaignKey = GetActivePromotionalEventCampaignKey(1)
+            local campaignData = _G.PROMOTIONAL_EVENT_MANAGER:GetCampaignDataByKey(campaignKey)
 
-        return
+            if (campaignData) then
+                campaign.name = campaignData:GetDisplayName()
+                campaign.isRewardClaimed = campaignData:IsRewardClaimed()
+                campaign.canClaimReward = campaignData:CanClaimReward()
+
+                rewards = rewards + (campaign.canClaimReward and 1 or 0)
+                claimed = claimed + (campaign.isRewardClaimed and 1 or 0)
+
+                local milestones = campaignData:GetMilestones()
+
+                if (milestones and #milestones > 0) then
+                    for _, milestone in pairs(milestones) do
+                        local canClaim, hasClaimed = milestone:CanClaimReward(), milestone:IsRewardClaimed()
+
+                        table.insert(
+                            milestoneData,
+                            {
+                                hasReachedMilestone = milestone:HasReachedMilestone(),
+                                isRewardClaimed = hasClaimed,
+                                canClaimReward = canClaim
+                            }
+                        )
+
+                        rewards = rewards + (canClaim and 1 or 0)
+                        claimed = claimed + (hasClaimed and 1 or 0)
+                    end
+                end
+
+                local activities = campaignData:GetActivities()
+
+                completed = campaignData:GetNumActivitiesCompleted()
+                max = campaignData:GetCapstoneRewardThreshold()
+
+                if (activities and #activities > 0) then
+                    for _, activity in pairs(activities) do
+                        local canClaim, hasClaimed = activity:CanClaimReward(), activity:IsRewardClaimed()
+
+                        table.insert(
+                            activityData,
+                            {
+                                name = activity:GetDisplayName(),
+                                progress = activity:GetProgress(),
+                                maxProgress = activity:GetCompletionThreshold(),
+                                canClaimReward = canClaim,
+                                isRewardClaimed = hasClaimed
+                            }
+                        )
+
+                        rewards = rewards + (canClaim and 1 or 0)
+                        claimed = claimed + (hasClaimed and 1 or 0)
+                    end
+
+                    table.sort(
+                        activityData,
+                        function(a, b)
+                            return a.name < b.name
+                        end
+                    )
+                end
+            end
+
+            local unclaimedRewards = (rewards > 0) and BS.Icon("mappins/ava_attackburst_32") or ""
+
+            widget:SetValue(completed .. "/" .. max .. unclaimedRewards)
+        else
+            widget:SetValue(BS.LC.Format(_G.SI_MARKET_SUBSCRIPTION_PAGE_SUBSCRIPTION_STATUS_NOT_ACTIVE))
+        end
+
+        widget:SetColour(BS.GetColour(BS.W_GOLDEN_PURSUITS, true))
+
+        local tt = BS.LC.Format(_G.SI_PROMOTIONAL_EVENT_TRACKER_HEADER)
+
+        if (campaign.name) then
+            -- tt = tt .. BS.LF
+            -- tt = tt .. campaign.name
+            tt = tt .. BS.LF .. BS.LF
+            if (rewards > 0) then
+                tt = tt .. BS.LC.Format(_G.SI_PLAYER_TO_PLAYER_PROMOTIONAL_EVENT_CLAIMABLE_REWARD)
+            else
+                tt = tt .. ZO_CachedStrFormat(_G.SI_PROMOTIONAL_EVENT_REWARDS_CLAIMED_ANNOUNCEMENT, claimed)
+            end
+        end
+
+        if (#activityData > 0) then
+            tt = tt .. BS.LF .. BS.LF
+
+            for _, activity in pairs(activityData) do
+                local n = string.format("%s:", activity.name)
+                local c = BS.LC.White
+
+                if (activity.progress > 0) then
+                    if (activity.progress < activity.maxProgress) then
+                        c = BS.LC.Yellow
+                    else
+                        c = BS.LC.Green
+                    end
+                end
+
+                n = c:Colorize(n)
+                tt = tt .. string.format("%s %s/%s%s", n, activity.progress, activity.maxProgress, BS.LF)
+            end
+        end
+
+        widget:SetTooltip(BS.LC.Trim(tt))
+
+        return max
     end,
-    event = nil,
+    hideWhenTrue = function()
+        return GetNumActivePromotionalEventCampaigns() == 0
+    end,
+    callback = {[_G.PROMOTIONAL_EVENT_MANAGER] = {"CampaignsUpdated", "RewardsClaimed"}},
+    event = {
+        _G.EVENT_PROMOTIONAL_EVENTS_ACTIVITY_PROGRESS_UPDATED,
+        _G.EVENT_PROMOTIONAL_EVENTS_ACTIVITY_TRACKING_UPDATED
+    },
     icon = "icons/event_confetti_kit",
     tooltip = BS.LC.Format(_G.SI_PROMOTIONAL_EVENT_TRACKER_HEADER),
-    -- onLeftClick = function()
-    --     if (IsInGamepadPreferredMode()) then
-    --         SCENE_MANAGER:Show("loreLibraryGamepad")
-    --     else
-    --         SCENE_MANAGER:Show("loreLibrary")
-    --     end
-    -- end
+    onLeftClick = function()
+        _G.PROMOTIONAL_EVENT_MANAGER:ShowPromotionalEventScene()
+    end,
     customSettings = {
         [1] = {
             type = "checkbox",

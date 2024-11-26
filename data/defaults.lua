@@ -876,9 +876,12 @@ BS.Defaults = {
             Cat = cat.Inventory
         },
         [BS.W_ACHIEVEMENT_TRACKER] = {
-            Cat = cat.Activities
+            Cat = cat.Activities,
+            Overall = true,
+            ShowPercent = true
         },
         [BS.W_GOLDEN_PURSUITS] = {
+            Autohide = false,
             Cat = cat.Activities,
             HideDefault = false
         }
