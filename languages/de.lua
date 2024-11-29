@@ -476,9 +476,9 @@ L("SLASH_SHOW", "zeigen")
 
 -- Tracking
 L("TRACK" ,"Mit Bar Steward verfolgen")
-L("TRACKER", "Erfolgstracker")
-L("TRACKER_INFO","Klicken Sie mit der rechten Maustaste auf einen Erfolg, um ihn mit Bar Steward zu verfolgen")
-L("UNTRACK","Mit Bar Steward untracken")
+L("TRACKER", "Errungenschaftstracker")
+L("TRACKER_INFO","Klicken Sie mit der rechten Maustaste auf eine Errungenschaft, um sie mit Bar Steward zu verfolgen")
+L("UNTRACK","Mit Bar Steward entfolgen")
 
 -- Search
 L("DOUBLE_CLICK", "(zum Suchen doppelklicken)")
