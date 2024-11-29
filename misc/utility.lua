@@ -1136,7 +1136,7 @@ function BS.UpdateIconGap(barNumber)
     end
 end
 
-function BS.GetLastDailyResetTime(counts)
+function BS.GetLastDailyResetTime(counts, ach)
     local timeRemaining =
         TIMED_ACTIVITIES_MANAGER:GetTimedActivityTypeTimeRemainingSeconds(_G.TIMED_ACTIVITY_TYPE_DAILY)
     local secondsInADay = 86400
@@ -1148,6 +1148,14 @@ function BS.GetLastDailyResetTime(counts)
         end
 
         if ((BS.Vars:GetCommon("lastDailyResetCounts") + secondsInADay) < os.time()) then
+            return lastResetTime
+        end
+    elseif (ach) then
+        if (BS.Vars:GetCommon("lastDailyResetAch") == nil) then
+            BS.Vars:SetCommon(lastResetTime, "lastDailyResetAch")
+        end
+
+        if ((BS.Vars:GetCommon("lastDailyResetAch") + secondsInADay) < os.time()) then
             return lastResetTime
         end
     else
@@ -1431,6 +1439,40 @@ function BS.ShowFrameMovers(value)
     end
 end
 
+local function updateTrackedAchiementCategories()
+    local ids = BS.IsTracked()
+
+    if (BS.TrackedCategories) then
+        BS.LC.Clear(BS.TrackedCategories)
+    else
+        BS.TrackedCategories = {}
+    end
+
+    for id, _ in pairs(ids) do
+        local topLevelIndex, categoryIndex = GetCategoryInfoFromAchievementId(id)
+
+        if (not BS.TrackedCategories[topLevelIndex]) then
+            BS.TrackedCategories[topLevelIndex] = {}
+        end
+
+        table.insert(BS.TrackedCategories[topLevelIndex], categoryIndex)
+    end
+end
+
+function BS.IsTrackedCategory(topIndex, catIndex)
+    if (not BS.TrackedCategories) then
+        updateTrackedAchiementCategories()
+    end
+
+    if (catIndex) then
+        if (BS.TrackedCategories[topIndex]) then
+            return ZO_IsElementInNumericallyIndexedTable(BS.TrackedCategories[topIndex], catIndex)
+        end
+    else
+        return BS.TrackedCategories[topIndex] ~= nil
+    end
+end
+
 function BS.IsTracked(id)
     local ids = BS.Vars:GetCommon("AchievementTracking") or {}
 
@@ -1450,11 +1492,13 @@ function BS.SetTracked(id, track)
 
     ids[id] = track
     BS.Vars:SetCommon(ids, "AchievementTracking")
+    updateTrackedAchiementCategories()
 end
 
 function BS.Track(self, id, track)
     BS.SetTracked(id, track)
     self:Show(id)
+    _G.ACHIEVEMENTS:BuildCategories()
 end
 
 function BS.TrackAchievements()
@@ -1476,6 +1520,24 @@ function BS.TrackAchievements()
             end
 
             BS.OriginalApplyColour(label, ...)
+        end
+
+        local origAddCat = _G.ACHIEVEMENTS.AddCategory
+
+        _G.ACHIEVEMENTS.AddCategory = function(self, lookup, tree, nodeTemplate, parent, categoryIndex, name, ...)
+            if (parent) then
+                local data = parent:GetData()
+
+                if (BS.IsTrackedCategory(data.categoryIndex, categoryIndex)) then
+                    name = name .. " " .. BS.LC.ZOSOrange:Colorize("*")
+                end
+            else
+                if (BS.IsTrackedCategory(categoryIndex)) then
+                    name = name .. " " .. BS.LC.ZOSOrange:Colorize("*")
+                end
+            end
+
+            return origAddCat(self, lookup, tree, nodeTemplate, parent, categoryIndex, name, ...)
         end
 
         function Achievement:OnClicked(button)
@@ -1535,6 +1597,10 @@ function BS.AchievementNotifier(id, checkAnnounce)
         if (numCriteria == 1) then
             totalCriteria = required
         end
+    end
+
+    if (name) then
+        name = zo_strformat(name)
     end
 
     if (announce and (status == _G.ZO_ACHIEVEMENTS_COMPLETION_STATUS.IN_PROGRESS)) then

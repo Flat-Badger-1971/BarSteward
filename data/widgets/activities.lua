@@ -1611,11 +1611,11 @@ local function resetAchTracker()
 end
 
 local function checkAchReset()
-    local lastResetTime = BS.GetLastDailyResetTime()
+    local lastResetTime = BS.GetLastDailyResetTime(nil, true)
 
     if (lastResetTime) then
         resetAchTracker()
-        BS.Vars:SetCommon(lastResetTime, "lastDailyReset")
+        BS.Vars:SetCommon(lastResetTime, "lastDailyResetAch")
     end
 end
 
