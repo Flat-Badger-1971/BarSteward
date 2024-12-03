@@ -1636,12 +1636,15 @@ BS.widgets[BS.W_ACHIEVEMENT_TRACKER] = {
         local daily = BS.GetVar("Daily", this)
 
         if (BS.IsTracked(id) and event ~= "initial") then
+            -- TODO: update achievementId for staged achievements
+            -- TODO: option to remove completed achievements
+            -- TODO: sort out daily reset
             local name, icon, stepsRemaining, stepsRequired = BS.AchievementNotifier(id, true)
 
             achievements[id] = {
-                name = name,
-                icon = icon,
                 completed = stepsRemaining == 0,
+                icon = icon,
+                name = name,
                 remaining = stepsRemaining,
                 required = stepsRequired,
                 updated = true
@@ -1654,11 +1657,14 @@ BS.widgets[BS.W_ACHIEVEMENT_TRACKER] = {
             for achId, track in pairs(tracked) do
                 if (track) then
                     local name, icon, stepsRemaining, stepsRequired = BS.AchievementNotifier(achId, false)
+                    local topLevelIndex = GetCategoryInfoFromAchievementId(achId)
+                    local catName = GetAchievementCategoryInfo(topLevelIndex)
 
                     achievements[achId] = {
-                        name = name,
-                        icon = icon,
+                        category = BS.LC.Format(catName),
                         completed = stepsRemaining == 0,
+                        icon = icon,
+                        name = name,
                         remaining = stepsRemaining,
                         required = stepsRequired
                     }
@@ -1694,8 +1700,33 @@ BS.widgets[BS.W_ACHIEVEMENT_TRACKER] = {
         widget:SetColour(BS.GetColour(this, true))
 
         local tt = GetString(_G.BARSTEWARD_TRACKER) .. BS.LF
+        local tttable = {}
 
-        for _, data in pairs(achievements) do
+        for _, ach in pairs(achievements) do
+            table.insert(
+                tttable,
+                {
+                    category = ach.category,
+                    completed = ach.completed,
+                    name = ach.name,
+                    remaining = ach.remaining,
+                    required = ach.required,
+                    updated = ach.updated
+                }
+            )
+        end
+
+        table.sort(
+            tttable,
+            function(a, b)
+                local compa = a.category .. a.name
+                local compb = b.category .. b.name
+
+                return compa < compb
+            end
+        )
+
+        for _, data in ipairs(tttable) do
             local done = data.required - data.remaining
             local required = data.required
             local colour = daily and BS.LC.Grey or BS.LC.Yellow
@@ -1705,18 +1736,17 @@ BS.widgets[BS.W_ACHIEVEMENT_TRACKER] = {
                 if (data.updated) then
                     colour = BS.LC.ZOSGreen
                 end
-                t = colour:Colorize(data.name)
             else
                 if (data.completed) then
                     done = required
                     colour = BS.LC.ZOSGreen
                 end
-
-                local progress =
-                    usePc and BS.LC.ToPercent(done, required, true) or
-                    string.format("%s/%s", tostring(done), tostring(required))
-                t = string.format("%s - %s", colour:Colorize(data.name), BS.LC.White:Colorize(progress))
             end
+
+            local progress =
+                usePc and BS.LC.ToPercent(done, required, true) or
+                string.format("%s/%s", tostring(done), tostring(required))
+            t = string.format("%s - %s - %s", data.category, colour:Colorize(data.name), BS.LC.White:Colorize(progress))
 
             tt = string.format("%s%s%s", tt, BS.LF, t)
         end

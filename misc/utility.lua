@@ -1501,46 +1501,80 @@ function BS.Track(self, id, track)
     _G.ACHIEVEMENTS:BuildCategories()
 end
 
+local function getTextColour(self)
+    if (self.selected) then
+        return BS.LC.Yellow:UnpackRGBA()
+    elseif (self.mouseover) then
+        return BS.LC.OrangeHighlight:UnpackRGBA()
+    else
+        return BS.LC.ZOSOrange:UnpackRGBA()
+    end
+end
+
 function BS.TrackAchievements()
     if (BS.Vars.Controls[BS.W_ACHIEVEMENT_TRACKER].Bar ~= 0) then
-        -- luacheck: push ignore 112 113
-        BS.OriginalAchievmentFunction = Achievement.OnClicked
-        BS.OriginalApplyColour = ZO_Achievements_ApplyTextColorToLabel
-
         local trackedLabel = BS.LC.ZOSOrange:Colorize(BS.LC.Format(_G.SI_SCREEN_NARRATION_TRACKED_ICON_NARRATION))
 
-        function ZO_Achievements_ApplyTextColorToLabel(label, ...)
-            if (label:GetName():find("Title")) then
-                local parent = label:GetParent()
-                local id = parent.achievement.achievementId
+        SCENE_MANAGER:GetScene("achievements"):RegisterCallback(
+            "StateChange",
+            function(_, newState)
+                if (newState == _G.SCENE_SHOWN) then
+                    if (not BS.AchSetup) then
+                        local tree = _G.ACHIEVEMENTS.categoryTree
+                        local subcat = tree.templateInfo.ZO_TreeLabelSubCategory
+                        local cat = tree.templateInfo.ZO_IconHeader
 
-                if (BS.IsTracked(id)) then
-                    label:SetText(label:GetText() .. "  " .. trackedLabel)
+                        BS.AchCatSetup = cat.setupFunction
+                        cat.setupFunction = function(node, control, data, ...)
+                            BS.AchCatSetup(node, control, data, ...)
+
+                            if (BS.IsTrackedCategory(data.categoryIndex)) then
+                                control.text.GetTextColor = getTextColour
+
+                                ZO_SelectableLabel_SetNormalColor(control.text, BS.LC.ZOSOrange)
+                            end
+                        end
+
+                        BS.AchSetup = subcat.setupFunction
+                        subcat.setupFunction = function(node, control, data, ...)
+                            BS.AchSetup(node, control, data, ...)
+
+                            local tracked
+
+                            if (not data.isFakedSubcategory and data.parentData) then
+                                tracked = BS.IsTrackedCategory(data.parentData.categoryIndex, data.categoryIndex)
+                            end
+
+                            if (tracked) then
+                                control.GetTextColor = getTextColour
+
+                                ZO_SelectableLabel_SetNormalColor(control, BS.LC.ZOSOrange)
+                            end
+                        end
+
+                        _G.ACHIEVEMENTS.refreshGroups:RefreshAll("FullUpdate")
+                    end
                 end
             end
+        )
 
-            BS.OriginalApplyColour(label, ...)
-        end
+        if (not BS.OriginalApplyColour) then
+            BS.OriginalApplyColour = ZO_Achievements_ApplyTextColorToLabel
+            function ZO_Achievements_ApplyTextColorToLabel(label, ...)
+                if (label:GetName():find("Title")) then
+                    local parent = label:GetParent()
+                    local id = parent.achievement.achievementId
 
-        local origAddCat = _G.ACHIEVEMENTS.AddCategory
-
-        _G.ACHIEVEMENTS.AddCategory = function(self, lookup, tree, nodeTemplate, parent, categoryIndex, name, ...)
-            if (parent) then
-                local data = parent:GetData()
-
-                if (BS.IsTrackedCategory(data.categoryIndex, categoryIndex)) then
-                    name = name .. " " .. BS.LC.ZOSOrange:Colorize("*")
+                    if (BS.IsTracked(id)) then
+                        label:SetText(label:GetText() .. "  " .. trackedLabel)
+                    end
                 end
-            else
-                if (BS.IsTrackedCategory(categoryIndex)) then
-                    name = name .. " " .. BS.LC.ZOSOrange:Colorize("*")
-                end
+
+                BS.OriginalApplyColour(label, ...)
             end
-
-            return origAddCat(self, lookup, tree, nodeTemplate, parent, categoryIndex, name, ...)
         end
 
-        function Achievement:OnClicked(button)
+        function _G.Achievement:OnClicked(button)
             local id = self:GetId()
             local tracked = BS.IsTracked(id)
             local text = tracked and GetString(_G.BARSTEWARD_UNTRACK) or GetString(_G.BARSTEWARD_TRACK)
@@ -1575,7 +1609,6 @@ function BS.TrackAchievements()
 
             BS.Tracking = true
         end
-    -- luacheck: pop
     end
 end
 
