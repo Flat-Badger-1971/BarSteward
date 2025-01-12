@@ -1,4 +1,4 @@
--- Russian localization by @SilverWF (EU)
+-- Russian localisation by @SilverWF (EU)
 -- luacheck: push ignore 631
 local L = function(t, v)
     ZO_CreateStringId("BARSTEWARD_" .. t, v)
