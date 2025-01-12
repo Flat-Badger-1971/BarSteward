@@ -75,7 +75,7 @@ function BS.RegisterSlashCommands()
                         BS.GenerateBar(id)
                     end
                 end
-            elseif (cmd == BS.LC.Format(_G.SI_HOUSINGEDITORCOMMANDTYPE1):lower()) then
+            elseif (cmd == BS.LC.Format(SI_HOUSINGEDITORCOMMANDTYPE1):lower()) then
                 BS.ShowFrameMovers(true)
             elseif (cmd == "lang") then
                 -- change the UI language (intended for dev only)

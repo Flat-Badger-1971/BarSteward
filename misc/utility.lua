@@ -92,11 +92,11 @@ end
 
 -- based on Wykkyd toolbar
 function BS.ResetNudge()
-    if (ZO_CompassFrame:GetTop()) ~= 40 then
-        ZO_CompassFrame:ClearAnchors()
-        ZO_CompassFrame:SetAnchor(TOP, GuiRoot, TOP, 0, 40)
-        ZO_TargetUnitFramereticleover:ClearAnchors()
-        ZO_TargetUnitFramereticleover:SetAnchor(TOP, GuiRoot, TOP, 0, 88)
+    if (_G.ZO_CompassFrame:GetTop()) ~= 40 then
+        _G.ZO_CompassFrame:ClearAnchors()
+        _G.ZO_CompassFrame:SetAnchor(TOP, GuiRoot, TOP, 0, 40)
+        _G.ZO_TargetUnitFramereticleover:ClearAnchors()
+        _G.ZO_TargetUnitFramereticleover:SetAnchor(TOP, GuiRoot, TOP, 0, 88)
     end
 end
 
@@ -104,15 +104,15 @@ function BS.NudgeCompass()
     local bar1Top = BS.BarObjectPool:GetActiveObject(BS.BarObjects[1]).bar:GetTop()
 
     if (bar1Top <= 80) then
-        if (ZO_CompassFrame:GetTop() ~= bar1Top + 70) then
-            ZO_CompassFrame:ClearAnchors()
-            ZO_CompassFrame:SetAnchor(TOP, GuiRoot, TOP, 0, bar1Top + 70)
-            ZO_TargetUnitFramereticleover:ClearAnchors()
-            ZO_TargetUnitFramereticleover:SetAnchor(TOP, GuiRoot, TOP, 0, bar1Top + 118)
+        if (_G.ZO_CompassFrame:GetTop() ~= bar1Top + 70) then
+            _G.ZO_CompassFrame:ClearAnchors()
+            _G.ZO_CompassFrame:SetAnchor(TOP, GuiRoot, TOP, 0, bar1Top + 70)
+            _G.ZO_TargetUnitFramereticleover:ClearAnchors()
+            _G.ZO_TargetUnitFramereticleover:SetAnchor(TOP, GuiRoot, TOP, 0, bar1Top + 118)
         end
     elseif (bar1Top <= 100) then
-        ZO_TargetUnitFramereticleover:ClearAnchors()
-        ZO_TargetUnitFramereticleover:SetAnchor(TOP, GuiRoot, TOP, 0, bar1Top + 50)
+        _G.ZO_TargetUnitFramereticleover:ClearAnchors()
+        _G.ZO_TargetUnitFramereticleover:SetAnchor(TOP, GuiRoot, TOP, 0, bar1Top + 50)
     else
         BS.ResetNudge()
     end
@@ -1560,6 +1560,7 @@ function BS.TrackAchievements()
 
         if (not BS.OriginalApplyColour) then
             BS.OriginalApplyColour = ZO_Achievements_ApplyTextColorToLabel
+            -- luacheck: ignore 121
             function ZO_Achievements_ApplyTextColorToLabel(label, ...)
                 if (label:GetName():find("Title")) then
                     local parent = label:GetParent()
@@ -1654,13 +1655,12 @@ function BS.HideGoldenPursuitsDefaultUI()
     if (not IsPromotionalEventSystemLocked()) then
         if (BS.GetVar("Bar", gp) > 0) then
             if (BS.GetVar("HideDefault", gp)) then
-                -- _G.PROMOTIONAL_EVENT_TRACKER:GetFragment():SetHiddenForReason(
-                --     "BarStewardHidden",
-                --     true,
-                --     _G.DEFAULT_HUD_DURATION,
-                --     _G.DEFAULT_HUD_DURATION
-                -- )
-                _G.PROMOTIONAL_EVENT_TRACKER:SetHidden(true)
+                _G.PROMOTIONAL_EVENT_TRACKER:GetFragment():SetHiddenForReason(
+                    "BarStewardHidden",
+                    true,
+                    _G.DEFAULT_HUD_DURATION,
+                    _G.DEFAULT_HUD_DURATION
+                )
             end
         end
     end

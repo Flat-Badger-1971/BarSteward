@@ -3,14 +3,14 @@ local trainingActive = true
 
 EVENT_MANAGER:RegisterForEvent(
     BS.Name,
-    _G.EVENT_RIDING_SKILL_IMPROVEMENT,
+    EVENT_RIDING_SKILL_IMPROVEMENT,
     function()
         trainingActive = true
     end
 )
 
 BS.EventManager:RegisterForEvent(
-    _G.EVENT_PLAYER_ACTIVATED,
+    EVENT_PLAYER_ACTIVATED,
     function()
         trainingActive = true
     end

@@ -172,7 +172,7 @@ local function createSearchControl(parent)
 
     parent.label = WINDOW_MANAGER:CreateControl(nil, parent, CT_LABEL)
     parent.label:SetAnchor(TOPLEFT)
-    parent.label:SetText(BS.LC.Format(_G.SI_GAMEPAD_HELP_SEARCH_PROMPT))
+    parent.label:SetText(BS.LC.Format(SI_GAMEPAD_HELP_SEARCH_PROMPT))
     parent.label:SetDimensions(parent:GetWidth(), 20)
     parent.label:SetFont(font)
 
@@ -237,7 +237,7 @@ function BS.AddSearch()
 
     local searchSub = {
         type = "submenu",
-        name = BS.LC.Format(_G.SI_GAMECAMERAACTIONTYPE1),
+        name = BS.LC.Format(SI_GAMECAMERAACTIONTYPE1),
         icon = "esoui/art/miscellaneous/search_icon.dds",
         controls = searchControl,
         reference = "BarStewardSearch"

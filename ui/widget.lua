@@ -17,7 +17,7 @@ function baseWidget:Initialise()
 
     if (BS.DEBUG or BS.DEBUGC) then
         self.overlay = self.overlay or WINDOW_MANAGER:CreateControl(nil, self.control, CT_CONTROL)
-        self.overlay:SetDrawTier(_G.DT_HIGH)
+        self.overlay:SetDrawTier(DT_HIGH)
         self.overlay:ClearAnchors()
         self.overlay:SetAnchorFill(self.bar)
 
@@ -64,7 +64,7 @@ function baseWidget:CreateSpacer()
 
     if (BS.DEBUG or BS.DEBUGS) then
         self.spacer.overlay = self.spacer.overlay or WINDOW_MANAGER:CreateControl(nil, self.spacer, CT_CONTROL)
-        self.spacer.overlay:SetDrawTier(_G.DT_HIGH)
+        self.spacer.overlay:SetDrawTier(DT_HIGH)
         self.spacer.overlay:ClearAnchors()
         self.spacer.overlay:SetAnchorFill(self.spacer)
 
@@ -144,11 +144,11 @@ function baseWidget:SetOnClick(onLeftClick, onRightClick)
         self.control:SetHandler(
             "OnMouseDown",
             function(_, button)
-                if (button == _G.MOUSE_BUTTON_INDEX_LEFT) then
+                if (button == MOUSE_BUTTON_INDEX_LEFT) then
                     if (onLeftClick) then
                         onLeftClick()
                     end
-                elseif (button == _G.MOUSE_BUTTON_INDEX_RIGHT) then
+                elseif (button == MOUSE_BUTTON_INDEX_RIGHT) then
                     if (onRightClick) then
                         onRightClick()
                     elseif (onLeftClick) then
@@ -217,7 +217,7 @@ function baseWidget:CreateProgress(progress, gradient, transition)
 
             self.value =
                 self.value or WINDOW_MANAGER:CreateControlFromVirtual(nil, self.control, "ZO_RollingMeterLabel")
-            self.value:SetHorizontalAlignment(_G.TEXT_ALIGN_LEFT)
+            self.value:SetHorizontalAlignment(TEXT_ALIGN_LEFT)
             self.value:SetResizeToFitLabels(true)
             self.value.transitionManager = self.value:GetOrCreateTransitionManager()
             self.value.transitionManager:SetMaxTransitionSteps(50)
@@ -238,7 +238,7 @@ function baseWidget:CreateProgress(progress, gradient, transition)
 
         if (BS.DEBUG or BS.DEBUGV) then
             self.value.overlay = self.value.overlay or WINDOW_MANAGER:CreateControl(nil, self.value, CT_CONTROL)
-            self.value.overlay:SetDrawTier(_G.DT_HIGH)
+            self.value.overlay:SetDrawTier(DT_HIGH)
             self.value.overlay:ClearAnchors()
             self.value.overlay:SetAnchorFill(self.value)
 

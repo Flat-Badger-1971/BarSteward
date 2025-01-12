@@ -425,7 +425,7 @@ function BS.AddSettings(defaults, controls, vars, key)
             name = GetString(_G.BARSTEWARD_PROGRESS_GRADIENT_START),
             getFunc = function()
                 local startg = {
-                    GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, _G.INTERFACE_GENERAL_COLOR_STATUS_BAR_START)
+                    GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_START)
                 }
                 local colour = vars.GradientStart or startg
                 local r, g, b = unpack(colour)
@@ -437,7 +437,7 @@ function BS.AddSettings(defaults, controls, vars, key)
 
                 local widget = BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[key])
                 local endg = {
-                    GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, _G.INTERFACE_GENERAL_COLOR_STATUS_BAR_END)
+                    GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_END)
                 }
                 local er, eg, eb = unpack(vars.GradientEnd or endg)
 
@@ -445,7 +445,7 @@ function BS.AddSettings(defaults, controls, vars, key)
             end,
             width = "full",
             default = function()
-                return GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, _G.INTERFACE_GENERAL_COLOR_STATUS_BAR_START)
+                return GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_START)
             end
         }
 
@@ -454,7 +454,7 @@ function BS.AddSettings(defaults, controls, vars, key)
             name = GetString(_G.BARSTEWARD_PROGRESS_GRADIENT_END),
             getFunc = function()
                 local endg = {
-                    GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, _G.INTERFACE_GENERAL_COLOR_STATUS_BAR_END)
+                    GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_END)
                 }
                 local colour = vars.GradientEnd or endg
                 local r, g, b = unpack(colour)
@@ -466,7 +466,7 @@ function BS.AddSettings(defaults, controls, vars, key)
 
                 local widget = BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[key])
                 local startg = {
-                    GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, _G.INTERFACE_GENERAL_COLOR_STATUS_BAR_START)
+                    GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_START)
                 }
                 local sr, sg, sb = unpack(vars.GradientStart or startg)
 
@@ -732,7 +732,7 @@ function BS.AddSettings(defaults, controls, vars, key)
 
                     BS.RefreshWidget(key)
                 end,
-                textType = _G.TEXT_TYPE_NUMERIC,
+                textType = TEXT_TYPE_NUMERIC,
                 isMultiLine = false,
                 width = "half",
                 default = nil
@@ -755,7 +755,7 @@ function BS.AddSettings(defaults, controls, vars, key)
 
                     BS.RefreshWidget(key)
                 end,
-                textType = _G.TEXT_TYPE_NUMERIC,
+                textType = TEXT_TYPE_NUMERIC,
                 isMultiLine = false,
                 width = "half",
                 default = nil
@@ -778,7 +778,7 @@ function BS.AddSettings(defaults, controls, vars, key)
 
                     BS.RefreshWidget(key)
                 end,
-                textType = _G.TEXT_TYPE_NUMERIC,
+                textType = TEXT_TYPE_NUMERIC,
                 isMultiLine = false,
                 width = "half",
                 default = nil

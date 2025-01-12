@@ -170,7 +170,7 @@ end
 BS.LF = BS.LC.LF
 
 BS.WRITS = {
-    [_G.CRAFTING_TYPE_ALCHEMY] = {
+    [CRAFTING_TYPE_ALCHEMY] = {
         119696,
         110698,
         119699,
@@ -184,12 +184,12 @@ BS.WRITS = {
         119819,
         119820
     },
-    [_G.CRAFTING_TYPE_BLACKSMITHING] = {119563, 119680, 121527, 121529},
-    [_G.CRAFTING_TYPE_CLOTHIER] = {119694, 119695, 121532, 121533},
-    [_G.CRAFTING_TYPE_ENCHANTING] = {119564, 121528},
-    [_G.CRAFTING_TYPE_JEWELRYCRAFTING] = {138789, 138799, 153737, 153739},
-    [_G.CRAFTING_TYPE_PROVISIONING] = {119693},
-    [_G.CRAFTING_TYPE_WOODWORKING] = {119681, 119682, 121530, 121531}
+    [CRAFTING_TYPE_BLACKSMITHING] = {119563, 119680, 121527, 121529},
+    [CRAFTING_TYPE_CLOTHIER] = {119694, 119695, 121532, 121533},
+    [CRAFTING_TYPE_ENCHANTING] = {119564, 121528},
+    [CRAFTING_TYPE_JEWELRYCRAFTING] = {138789, 138799, 153737, 153739},
+    [CRAFTING_TYPE_PROVISIONING] = {119693},
+    [CRAFTING_TYPE_WOODWORKING] = {119681, 119682, 121530, 121531}
 }
 
 BS.MUNDUS_STONES = {
@@ -228,23 +228,23 @@ BS.CRAFTING_ACHIEVEMENT_IDS = {
 }
 
 BS.CRAFTING_ACHIEVEMENT = {
-    [_G.CRAFTING_TYPE_ALCHEMY] = {achievementId = 1145, criterionIndex = 1, icon = "alchemist"},
-    [_G.CRAFTING_TYPE_BLACKSMITHING] = {achievementId = 1145, criterionIndex = 2, icon = "smithy"},
-    [_G.CRAFTING_TYPE_CLOTHIER] = {achievementId = 1145, criterionIndex = 3, icon = "clothier"},
-    [_G.CRAFTING_TYPE_ENCHANTING] = {achievementId = 1145, criterionIndex = 4, icon = "enchanter"},
-    [_G.CRAFTING_TYPE_JEWELRYCRAFTING] = {achievementId = 2225, criterionIndex = 1, icon = "jewelrycrafting"},
-    [_G.CRAFTING_TYPE_PROVISIONING] = {achievementId = 1145, criterionIndex = 5, icon = "inn"},
-    [_G.CRAFTING_TYPE_WOODWORKING] = {achievementId = 1145, criterionIndex = 6, icon = "woodworker"}
+    [CRAFTING_TYPE_ALCHEMY] = {achievementId = 1145, criterionIndex = 1, icon = "alchemist"},
+    [CRAFTING_TYPE_BLACKSMITHING] = {achievementId = 1145, criterionIndex = 2, icon = "smithy"},
+    [CRAFTING_TYPE_CLOTHIER] = {achievementId = 1145, criterionIndex = 3, icon = "clothier"},
+    [CRAFTING_TYPE_ENCHANTING] = {achievementId = 1145, criterionIndex = 4, icon = "enchanter"},
+    [CRAFTING_TYPE_JEWELRYCRAFTING] = {achievementId = 2225, criterionIndex = 1, icon = "jewelrycrafting"},
+    [CRAFTING_TYPE_PROVISIONING] = {achievementId = 1145, criterionIndex = 5, icon = "inn"},
+    [CRAFTING_TYPE_WOODWORKING] = {achievementId = 1145, criterionIndex = 6, icon = "woodworker"}
 }
 
 BS.CRAFTING_DAILY = {
-    [_G.CRAFTING_TYPE_ALCHEMY] = GetString(_G.BARSTEWARD_WRIT_ALCHEMY),
-    [_G.CRAFTING_TYPE_BLACKSMITHING] = GetString(_G.BARSTEWARD_WRIT_BLACKSMITHING),
-    [_G.CRAFTING_TYPE_CLOTHIER] = GetString(_G.BARSTEWARD_WRIT_CLOTHIER),
-    [_G.CRAFTING_TYPE_ENCHANTING] = GetString(_G.BARSTEWARD_WRIT_ENCHANTING),
-    [_G.CRAFTING_TYPE_JEWELRYCRAFTING] = GetString(_G.BARSTEWARD_WRIT_JEWELLERY),
-    [_G.CRAFTING_TYPE_PROVISIONING] = GetString(_G.BARSTEWARD_WRIT_PROVISIONING),
-    [_G.CRAFTING_TYPE_WOODWORKING] = GetString(_G.BARSTEWARD_WRIT_WOODWORKING)
+    [CRAFTING_TYPE_ALCHEMY] = GetString(_G.BARSTEWARD_WRIT_ALCHEMY),
+    [CRAFTING_TYPE_BLACKSMITHING] = GetString(_G.BARSTEWARD_WRIT_BLACKSMITHING),
+    [CRAFTING_TYPE_CLOTHIER] = GetString(_G.BARSTEWARD_WRIT_CLOTHIER),
+    [CRAFTING_TYPE_ENCHANTING] = GetString(_G.BARSTEWARD_WRIT_ENCHANTING),
+    [CRAFTING_TYPE_JEWELRYCRAFTING] = GetString(_G.BARSTEWARD_WRIT_JEWELLERY),
+    [CRAFTING_TYPE_PROVISIONING] = GetString(_G.BARSTEWARD_WRIT_PROVISIONING),
+    [CRAFTING_TYPE_WOODWORKING] = GetString(_G.BARSTEWARD_WRIT_WOODWORKING)
 }
 
 BS.PERFECT_ROE = 64222
@@ -268,8 +268,8 @@ BS.FADE_OUT_TIME = 750
 BS.CLICK = "miscellaneous/icon_lmb"
 
 BS.DUNGEON = {
-    [_G.LFG_ACTIVITY_DUNGEON] = "leveluprewards/levelup_dungeon_64",
-    [_G.LFG_ACTIVITY_MASTER_DUNGEON] = "leveluprewards/levelup_veteran_dungeon_64"
+    [LFG_ACTIVITY_DUNGEON] = "leveluprewards/levelup_dungeon_64",
+    [LFG_ACTIVITY_MASTER_DUNGEON] = "leveluprewards/levelup_veteran_dungeon_64"
 }
 
 BS.INELIGIBLE_ICON = "castbar/forbiddenaction"
@@ -280,23 +280,23 @@ BS.ARTIFACT_ICON = "battlegrounds/battlegrounds_teamicon_purple_64"
 BS.LEGENDARY_ICON = "market/keyboard/esoplus_chalice_gold2_64"
 
 BS.ITEM_COLOUR_ICON = {
-    [_G.ITEM_DISPLAY_QUALITY_NORMAL] = BS.NORMAL_ICON,
-    [_G.ITEM_DISPLAY_QUALITY_MAGIC] = BS.MAGIC_ICON,
-    [_G.ITEM_DISPLAY_QUALITY_ARCANE] = BS.ARCANE_ICON,
-    [_G.ITEM_DISPLAY_QUALITY_ARTIFACT] = BS.ARTIFACT_ICON,
-    [_G.ITEM_DISPLAY_QUALITY_LEGENDARY] = BS.LEGENDARY_ICON,
-    [_G.ITEM_DISPLAY_QUALITY_MYTHIC_OVERRIDE] = BS.LEGENDARY_ICON
+    [ITEM_DISPLAY_QUALITY_NORMAL] = BS.NORMAL_ICON,
+    [ITEM_DISPLAY_QUALITY_MAGIC] = BS.MAGIC_ICON,
+    [ITEM_DISPLAY_QUALITY_ARCANE] = BS.ARCANE_ICON,
+    [ITEM_DISPLAY_QUALITY_ARTIFACT] = BS.ARTIFACT_ICON,
+    [ITEM_DISPLAY_QUALITY_LEGENDARY] = BS.LEGENDARY_ICON,
+    [ITEM_DISPLAY_QUALITY_MYTHIC_OVERRIDE] = BS.LEGENDARY_ICON
 }
 
 BS.BATTLEGROUND_ICON = {
-    [_G.LFG_ACTIVITY_BATTLE_GROUND_LOW_LEVEL] = "icons/battleground_medal_murderballcarry_001",
-    [_G.LFG_ACTIVITY_BATTLE_GROUND_NON_CHAMPION] = "icons/battleground_medal_murderballcarry_002",
-    [_G.LFG_ACTIVITY_BATTLE_GROUND_CHAMPION] = "icons/battleground_medal_murderballcarry_003"
+    [LFG_ACTIVITY_BATTLE_GROUND_LOW_LEVEL] = "icons/battleground_medal_murderballcarry_001",
+    [LFG_ACTIVITY_BATTLE_GROUND_NON_CHAMPION] = "icons/battleground_medal_murderballcarry_002",
+    [LFG_ACTIVITY_BATTLE_GROUND_CHAMPION] = "icons/battleground_medal_murderballcarry_003"
 }
 
 BS.TRIBUTE_ICON = {
-    [_G.LFG_ACTIVITY_TRIBUTE_CASUAL] = "icons/u34_tribute_quest3",
-    [_G.LFG_ACTIVITY_TRIBUTE_COMPETITIVE] = "icons/u34_tribute_pvedaily30"
+    [LFG_ACTIVITY_TRIBUTE_CASUAL] = "icons/u34_tribute_quest3",
+    [LFG_ACTIVITY_TRIBUTE_COMPETITIVE] = "icons/u34_tribute_pvedaily30"
 }
 
 BS.FRIENDS_ICON = "/esoui/art/chatwindow/chat_friendsonline_up.dds"
@@ -306,20 +306,20 @@ BS.MAX_BINDINGS = 20
 
 -- info from Writ Worthy
 BS.WRIT_ITEM_TYPES = {
-    [_G.ITEM_STYLE_CHAPTER_HELMETS] = {26, 35, 44},
-    [_G.ITEM_STYLE_CHAPTER_GLOVES] = {34, 43, 52},
-    [_G.ITEM_STYLE_CHAPTER_BOOTS] = {32, 41, 50},
-    [_G.ITEM_STYLE_CHAPTER_LEGS] = {31, 40, 49},
-    [_G.ITEM_STYLE_CHAPTER_CHESTS] = {28, 37, 46, 75},
-    [_G.ITEM_STYLE_CHAPTER_BELTS] = {30, 39, 48},
-    [_G.ITEM_STYLE_CHAPTER_SHOULDERS] = {29, 38, 47},
-    [_G.ITEM_STYLE_CHAPTER_SWORDS] = {59, 67},
-    [_G.ITEM_STYLE_CHAPTER_MACES] = {56, 69},
-    [_G.ITEM_STYLE_CHAPTER_AXES] = {53, 68},
-    [_G.ITEM_STYLE_CHAPTER_DAGGERS] = {62},
-    [_G.ITEM_STYLE_CHAPTER_STAVES] = {71, 72, 73, 74},
-    [_G.ITEM_STYLE_CHAPTER_SHIELDS] = {65},
-    [_G.ITEM_STYLE_CHAPTER_BOWS] = {70}
+    [ITEM_STYLE_CHAPTER_HELMETS] = {26, 35, 44},
+    [ITEM_STYLE_CHAPTER_GLOVES] = {34, 43, 52},
+    [ITEM_STYLE_CHAPTER_BOOTS] = {32, 41, 50},
+    [ITEM_STYLE_CHAPTER_LEGS] = {31, 40, 49},
+    [ITEM_STYLE_CHAPTER_CHESTS] = {28, 37, 46, 75},
+    [ITEM_STYLE_CHAPTER_BELTS] = {30, 39, 48},
+    [ITEM_STYLE_CHAPTER_SHOULDERS] = {29, 38, 47},
+    [ITEM_STYLE_CHAPTER_SWORDS] = {59, 67},
+    [ITEM_STYLE_CHAPTER_MACES] = {56, 69},
+    [ITEM_STYLE_CHAPTER_AXES] = {53, 68},
+    [ITEM_STYLE_CHAPTER_DAGGERS] = {62},
+    [ITEM_STYLE_CHAPTER_STAVES] = {71, 72, 73, 74},
+    [ITEM_STYLE_CHAPTER_SHIELDS] = {65},
+    [ITEM_STYLE_CHAPTER_BOWS] = {70}
 }
 
 BS.VAMPIRE_STAGES = {[135397] = 1, [135399] = 2, [135400] = 3, [135402] = 4, [135412] = 5}
@@ -331,25 +331,25 @@ BS.BOTH = 3
 BS.ACTIVE_BAR = 4
 
 BS.CURRENCIES = {
-    [_G.CURT_MONEY] = {crownStore = false},
-    [_G.CURT_CROWNS] = {crownStore = true},
-    [_G.CURT_CROWN_GEMS] = {crownStore = true},
-    [_G.CURT_WRIT_VOUCHERS] = {crownStore = false},
-    [_G.CURT_TELVAR_STONES] = {crownStore = false},
-    [_G.CURT_EVENT_TICKETS] = {crownStore = false},
-    [_G.CURT_ENDEAVOR_SEALS] = {crownStore = true},
-    [_G.CURT_UNDAUNTED_KEYS] = {crownStore = false},
-    [_G.CURT_ALLIANCE_POINTS] = {crownStore = false},
-    [_G.CURT_CHAOTIC_CREATIA] = {crownStore = false},
-    [_G.CURT_ARCHIVAL_FORTUNES] = {crownStore = true},
-    [_G.CURT_IMPERIAL_FRAGMENTS] = {crownStore = true}
+    [CURT_MONEY] = {crownStore = false},
+    [CURT_CROWNS] = {crownStore = true},
+    [CURT_CROWN_GEMS] = {crownStore = true},
+    [CURT_WRIT_VOUCHERS] = {crownStore = false},
+    [CURT_TELVAR_STONES] = {crownStore = false},
+    [CURT_EVENT_TICKETS] = {crownStore = false},
+    [CURT_ENDEAVOR_SEALS] = {crownStore = true},
+    [CURT_UNDAUNTED_KEYS] = {crownStore = false},
+    [CURT_ALLIANCE_POINTS] = {crownStore = false},
+    [CURT_CHAOTIC_CREATIA] = {crownStore = false},
+    [CURT_ARCHIVAL_FORTUNES] = {crownStore = true},
+    [CURT_IMPERIAL_FRAGMENTS] = {crownStore = true}
 }
 
 BS.FRAGMENT_TYPES = {
-    _G.SPECIALIZED_ITEMTYPE_TROPHY_KEY_FRAGMENT,
-    _G.SPECIALIZED_ITEMTYPE_TROPHY_RECIPE_FRAGMENT,
-    _G.SPECIALIZED_ITEMTYPE_TROPHY_RUNEBOX_FRAGMENT,
-    _G.SPECIALIZED_ITEMTYPE_TROPHY_UPGRADE_FRAGMENT
+    SPECIALIZED_ITEMTYPE_TROPHY_KEY_FRAGMENT,
+    SPECIALIZED_ITEMTYPE_TROPHY_RECIPE_FRAGMENT,
+    SPECIALIZED_ITEMTYPE_TROPHY_RUNEBOX_FRAGMENT,
+    SPECIALIZED_ITEMTYPE_TROPHY_UPGRADE_FRAGMENT
 }
 
 BS.L_SHALIDORS_LIBRARY = 1
@@ -409,10 +409,10 @@ BS.CATEGORIES = {
     [BS.CATNAMES.Thievery] = {name = _G.BARSTEWARD_CATEGORY_THIEVERY, icon = "icons/mapkey/mapkey_fence"},
     [BS.CATNAMES.Assistants] = {name = _G.BARSTEWARD_ASSISTANTS, icon = "icons/assistant_premiumbanker_01"},
     [BS.CATNAMES.InfiniteArchive] = {
-        name = _G.SI_ENDLESS_DUNGEON_HUD_TRACKER_TITLE,
+        name = SI_ENDLESS_DUNGEON_HUD_TRACKER_TITLE,
         icon = "icons/poi/poi_endlessdungeon_complete"
     },
-    [BS.CATNAMES.PvP] = {name = _G.SI_GROUPFINDERCATEGORY4, icon = "icons/u41_pvp_reward_container"}
+    [BS.CATNAMES.PvP] = {name = SI_GROUPFINDERCATEGORY4, icon = "icons/u41_pvp_reward_container"}
 }
 
 BS.ASSISTANTS = {
@@ -448,9 +448,9 @@ BS.ARMOURY_ASSISTANTS = {
 BS.INFINITE_ARCHIVE_NODE_INDEX = 550
 
 BS.INFINITE_ARCHIVE_MAX_COUNTS = {
-    [_G.ENDLESS_DUNGEON_COUNTER_TYPE_STAGE] = 3,
-    [_G.ENDLESS_DUNGEON_COUNTER_TYPE_CYCLE] = 3,
-    [_G.ENDLESS_DUNGEON_COUNTER_TYPE_ARC] = 5
+    [ENDLESS_DUNGEON_COUNTER_TYPE_STAGE] = 3,
+    [ENDLESS_DUNGEON_COUNTER_TYPE_CYCLE] = 3,
+    [ENDLESS_DUNGEON_COUNTER_TYPE_ARC] = 5
 }
 
 BS.FOOD_BUFFS = {
@@ -560,18 +560,18 @@ BS.MAX_DAILY_QUESTS = 50
 BS.MAX_TIMERS = 5
 
 BS.ITEM_TYPE_ICON = {
-    [_G.ITEMTYPE_FISH] = {
+    [ITEMTYPE_FISH] = {
         icon = "icons/fishing_salmon_variant_red",
-        name = _G.SI_PROVISIONERSPECIALINGREDIENTTYPE_TRADINGHOUSERECIPECATEGORY4
+        name = SI_PROVISIONERSPECIALINGREDIENTTYPE_TRADINGHOUSERECIPECATEGORY4
     },
-    [_G.ITEMTYPE_COLLECTIBLE] = {icon = "icons/crafting_fishing_trophy_perch", name = _G.SI_SPECIALIZEDITEMTYPE80},
-    [_G.ITEMTYPE_TRASH] = {icon = "inventory/inventory_tabicon_trash_up", name = _G.SI_ITEMTYPE48},
-    [_G.ITEMTYPE_LURE] = {icon = "inventory/inventory_tabicon_bait_up", name = _G.SI_FISHING_WHEEL_NARRATION},
-    [_G.ITEMTYPE_FURNISHING] = {
+    [ITEMTYPE_COLLECTIBLE] = {icon = "icons/crafting_fishing_trophy_perch", name = SI_SPECIALIZEDITEMTYPE80},
+    [ITEMTYPE_TRASH] = {icon = "inventory/inventory_tabicon_trash_up", name = SI_ITEMTYPE48},
+    [ITEMTYPE_LURE] = {icon = "inventory/inventory_tabicon_bait_up", name = SI_FISHING_WHEEL_NARRATION},
+    [ITEMTYPE_FURNISHING] = {
         icon = "inventory/inventory_tabicon_furnishing_material_up",
-        name = _G.SI_HOUSING_PREVIEW_TEMPLATE_FURNISHINGS
+        name = SI_HOUSING_PREVIEW_TEMPLATE_FURNISHINGS
     },
-    [_G.ITEMTYPE_CONTAINER] = {icon = "icons/justice_stolen_wax_sealed_heavy_sack", name = _G.SI_ITEMTYPE18}
+    [ITEMTYPE_CONTAINER] = {icon = "icons/justice_stolen_wax_sealed_heavy_sack", name = SI_ITEMTYPE18}
 }
 
 BS.CHAR = {

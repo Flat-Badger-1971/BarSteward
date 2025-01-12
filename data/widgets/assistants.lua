@@ -10,7 +10,7 @@ for k, v in pairs(BS.ASSISTANTS) do
         name = string.format("assistant%d", k),
         update = function(widget)
             local this = k
-            local name = ZO_CachedStrFormat(_G.SI_UNIT_NAME, GetCollectibleName(v))
+            local name = ZO_CachedStrFormat(SI_UNIT_NAME, GetCollectibleName(v))
 
             widget:SetValue(name)
             widget:SetColour(BS.GetColour(this, true))
@@ -20,7 +20,7 @@ for k, v in pairs(BS.ASSISTANTS) do
         event = _G.EVENT_PLAYER_ACTIVATED,
         tooltip = zo_strformat(
             GetString(_G.BARSTEWARD_ASSISTANT_WIDGET),
-            ZO_CachedStrFormat(_G.SI_UNIT_NAME, GetCollectibleName(v))
+            ZO_CachedStrFormat(SI_UNIT_NAME, GetCollectibleName(v))
         ),
         icon = assistantIcons[k],
         onLeftClick = function()

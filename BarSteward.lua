@@ -9,14 +9,14 @@ if (GetDisplayName() == "@Flat-Badger") then
 end
 
 local function trackGold()
-    local goldInBag = GetCurrencyAmount(_G.CURT_MONEY, _G.CURRENCY_LOCATION_CHARACTER)
+    local goldInBag = GetCurrencyAmount(CURT_MONEY, CURRENCY_LOCATION_CHARACTER)
     local character = GetUnitName("player")
 
     BS.Vars:SetCommon(goldInBag, "Gold", character)
 end
 
 local function trackOtherCurrency(currency)
-    local currencyInBag = GetCurrencyAmount(currency, _G.CURRENCY_LOCATION_CHARACTER)
+    local currencyInBag = GetCurrencyAmount(currency, CURRENCY_LOCATION_CHARACTER)
     local character = GetUnitName("player")
 
     if (BS.Vars:GetCommon("OtherCurrencies", currency) == nil) then
@@ -40,33 +40,33 @@ function BS.ContinueIntialising()
     end
 
     -- gold tracker
-    BS.EventManager:RegisterForEvent(_G.EVENT_PLAYER_ACTIVATED, trackGold)
-    BS.EventManager:RegisterForEvent(_G.EVENT_MONEY_UPDATE, trackGold)
+    BS.EventManager:RegisterForEvent(EVENT_PLAYER_ACTIVATED, trackGold)
+    BS.EventManager:RegisterForEvent(EVENT_MONEY_UPDATE, trackGold)
 
     -- tel var tracker
-    trackOtherCurrency(_G.CURT_TELVAR_STONES)
+    trackOtherCurrency(CURT_TELVAR_STONES)
     BS.EventManager:RegisterForEvent(
-        _G.EVENT_TELVAR_STONE_UPDATE,
+        EVENT_TELVAR_STONE_UPDATE,
         function()
-            trackOtherCurrency(_G.CURT_TELVAR_STONES)
+            trackOtherCurrency(CURT_TELVAR_STONES)
         end
     )
 
     -- alliance points tracker
-    trackOtherCurrency(_G.CURT_ALLIANCE_POINTS)
+    trackOtherCurrency(CURT_ALLIANCE_POINTS)
     BS.EventManager:RegisterForEvent(
-        _G.EVENT_ALLIANCE_POINT_UPDATE,
+        EVENT_ALLIANCE_POINT_UPDATE,
         function()
-            trackOtherCurrency(_G.CURT_ALLIANCE_POINTS)
+            trackOtherCurrency(CURT_ALLIANCE_POINTS)
         end
     )
 
     -- writ voucher tracker
-    trackOtherCurrency(_G.CURT_WRIT_VOUCHERS)
+    trackOtherCurrency(CURT_WRIT_VOUCHERS)
     BS.EventManager:RegisterForEvent(
-        _G.EVENT_WRIT_VOUCHER_UPDATE,
+        EVENT_WRIT_VOUCHER_UPDATE,
         function()
-            trackOtherCurrency(_G.CURT_WRIT_VOUCHERS)
+            trackOtherCurrency(CURT_WRIT_VOUCHERS)
         end
     )
 
@@ -104,7 +104,7 @@ function BS.ContinueIntialising()
 
     -- performance
     BS.EventManager:RegisterForEvent(
-        _G.EVENT_PLAYER_COMBAT_STATE,
+        EVENT_PLAYER_COMBAT_STATE,
         function(_, inCombat)
             BS.CheckPerformance(inCombat)
         end
@@ -129,7 +129,7 @@ function BS.ContinueIntialising()
     BS.GetQuestInfo()
 
     BS.EventManager:RegisterForEvent(
-        _G.EVENT_PLAYER_ACTIVATED,
+        EVENT_PLAYER_ACTIVATED,
         function()
             if (BS.Vars.Controls[BS.W_CHESTS_FOUND].Bar == 0) then
                 return
@@ -164,9 +164,9 @@ function BS.OnAddonLoaded(_, addonName)
         return
     end
 
-    EVENT_MANAGER:UnregisterForEvent(BS.Name, _G.EVENT_ADD_ON_LOADED)
+    EVENT_MANAGER:UnregisterForEvent(BS.Name, EVENT_ADD_ON_LOADED)
 
     Initialise()
 end
 
-EVENT_MANAGER:RegisterForEvent(BS.Name, _G.EVENT_ADD_ON_LOADED, BS.OnAddonLoaded)
+EVENT_MANAGER:RegisterForEvent(BS.Name, EVENT_ADD_ON_LOADED, BS.OnAddonLoaded)

@@ -4,8 +4,8 @@ BS.widgets[BS.W_BAG_SPACE] = {
     name = "bagSpace",
     update = function(widget, _, _, _, newItem)
         local this = BS.W_BAG_SPACE
-        local bagSize = GetBagSize(_G.BAG_BACKPACK)
-        local bagUsed = GetNumBagUsedSlots(_G.BAG_BACKPACK)
+        local bagSize = GetBagSize(BAG_BACKPACK)
+        local bagUsed = GetNumBagUsedSlots(BAG_BACKPACK)
         local noLimitColour = BS.GetVar("NoLimitColour", this) and BS.COLOURS.White or BS.COLOURS.Yellow
         local value = bagUsed .. (BS.GetVar("HideLimit", this) and "" or (noLimitColour:Colorize("/" .. bagSize)))
         local widthValue = bagUsed .. (BS.GetVar("HideLimit", this) and "" or ("/" .. bagSize))
@@ -57,12 +57,12 @@ BS.widgets[BS.W_BAG_SPACE] = {
         return pcUsed
     end,
     event = {
-        _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
-        _G.EVENT_INVENTORY_BAG_CAPACITY_CHANGED,
-        _G.EVENT_INVENTORY_FULL_UPDATE
+        EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
+        EVENT_INVENTORY_BAG_CAPACITY_CHANGED,
+        EVENT_INVENTORY_FULL_UPDATE
     },
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
-    tooltip = BS.LC.Format(_G.SI_GAMEPAD_MAIL_INBOX_INVENTORY):gsub(":", ""),
+    tooltip = BS.LC.Format(SI_GAMEPAD_MAIL_INBOX_INVENTORY):gsub(":", ""),
     icon = "tooltips/icon_bag",
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
@@ -84,18 +84,17 @@ BS.widgets[BS.W_BAG_SPACE] = {
 BS.widgets[BS.W_BANK_SPACE] = {
     name = "bankSpace",
     update = function(widget, eventId, bagId)
-        if (eventId == _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE and bagId ~= _G.BAG_BANK) then
+        if (eventId == EVENT_INVENTORY_SINGLE_SLOT_UPDATE and bagId ~= BAG_BANK) then
             return
         end
 
         local this = BS.W_BANK_SPACE
-        local bagSize = GetBagSize(_G.BAG_BANK)
-        local bagUsed = GetNumBagUsedSlots(_G.BAG_BANK)
+        local bagSize = GetBagSize(BAG_BANK)
+        local bagUsed = GetNumBagUsedSlots(BAG_BANK) + GetNumBagUsedSlots(BAG_SUBSCRIBER_BANK)
         local noLimitColour = BS.GetVar("NoLimitColour", this) and BS.COLOURS.White or BS.COLOURS.Yellow
 
         if (IsESOPlusSubscriber()) then
-            bagSize = bagSize + GetBagSize(_G.BAG_SUBSCRIBER_BANK)
-            bagUsed = bagUsed + GetNumBagUsedSlots(_G.BAG_SUBSCRIBER_BANK)
+            bagSize = bagSize + GetBagSize(BAG_SUBSCRIBER_BANK)
         end
 
         local value = bagUsed .. (BS.GetVar("HideLimit", this) and "" or (noLimitColour:Colorize("/" .. bagSize)))
@@ -133,9 +132,9 @@ BS.widgets[BS.W_BANK_SPACE] = {
         return pcUsed
     end,
     event = {
-        _G.EVENT_CLOSE_BANK,
-        _G.EVENT_INVENTORY_BAG_CAPACITY_CHANGED,
-        _G.EVENT_INVENTORY_BANK_CAPACITY_CHANGED
+        EVENT_CLOSE_BANK,
+        EVENT_INVENTORY_BAG_CAPACITY_CHANGED,
+        EVENT_INVENTORY_BANK_CAPACITY_CHANGED
     },
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
     tooltip = GetString(_G.BARSTEWARD_BANK),
@@ -145,7 +144,7 @@ BS.widgets[BS.W_BANK_SPACE] = {
 BS.widgets[BS.W_REPAIR_COST] = {
     name = "itemRepairCost",
     update = function(widget, _, _, _, _, _, updateReason)
-        if (updateReason == nil or updateReason == _G.INVENTORY_UPDATE_REASON_DURABILITY_CHANGE) then
+        if (updateReason == nil or updateReason == INVENTORY_UPDATE_REASON_DURABILITY_CHANGE) then
             local this = BS.W_REPAIR_COST
             local repairCost = GetRepairAllCost()
 
@@ -161,7 +160,7 @@ BS.widgets[BS.W_REPAIR_COST] = {
 
         return widget:GetValue()
     end,
-    event = _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
+    event = EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
     icon = "ava/ava_resourcestatus_tabicon_defense_inactive",
     tooltip = GetString(_G.BARSTEWARD_REPAIR_COST),
     hideWhenEqual = 0,
@@ -175,36 +174,36 @@ BS.widgets[BS.W_REPAIR_COST] = {
 }
 
 local ignoreSlots = {
-    [_G.EQUIP_SLOT_NECK] = true,
-    [_G.EQUIP_SLOT_RING1] = true,
-    [_G.EQUIP_SLOT_RING2] = true,
-    [_G.EQUIP_SLOT_COSTUME] = true,
-    [_G.EQUIP_SLOT_POISON] = true,
-    [_G.EQUIP_SLOT_BACKUP_POISON] = true,
-    [_G.EQUIP_SLOT_MAIN_HAND] = true,
-    [_G.EQUIP_SLOT_BACKUP_MAIN] = true,
-    [_G.EQUIP_SLOT_BACKUP_OFF] = true
+    [EQUIP_SLOT_NECK] = true,
+    [EQUIP_SLOT_RING1] = true,
+    [EQUIP_SLOT_RING2] = true,
+    [EQUIP_SLOT_COSTUME] = true,
+    [EQUIP_SLOT_POISON] = true,
+    [EQUIP_SLOT_BACKUP_POISON] = true,
+    [EQUIP_SLOT_MAIN_HAND] = true,
+    [EQUIP_SLOT_BACKUP_MAIN] = true,
+    [EQUIP_SLOT_BACKUP_OFF] = true
 }
 
 BS.widgets[BS.W_DURABILITY] = {
     -- v1.0.1
     name = "durability",
     update = function(widget, bagId)
-        if (bagId ~= _G.BAG_WORN and bagId ~= "initial") then
+        if (bagId ~= BAG_WORN and bagId ~= "initial") then
             return
         end
 
         -- find item with lowest durability
         local lowest = 100
-        local lowestType = _G.ITEMTYPE_ARMOR
+        local lowestType = ITEMTYPE_ARMOR
         local items = {}
         local this = BS.W_DURABILITY
 
-        for slot = 0, GetBagSize(_G.BAG_WORN) do
+        for slot = 0, GetBagSize(BAG_WORN) do
             if (not ignoreSlots[slot]) then
                 local colour = BS.GetColour(this, "Ok", true)
-                local itemName = ZO_CachedStrFormat("<<C:1>>", GetItemName(_G.BAG_WORN, slot))
-                local condition = GetItemCondition(_G.BAG_WORN, slot)
+                local itemName = ZO_CachedStrFormat("<<C:1>>", GetItemName(BAG_WORN, slot))
+                local condition = GetItemCondition(BAG_WORN, slot)
 
                 if (itemName ~= "") then
                     if (condition <= BS.GetVar("OkValue", this) and condition >= BS.GetVar("DangerValue", this)) then
@@ -217,7 +216,7 @@ BS.widgets[BS.W_DURABILITY] = {
 
                     if (lowest > condition) then
                         lowest = condition
-                        lowestType = GetItemType(_G.BAG_WORN, slot)
+                        lowestType = GetItemType(BAG_WORN, slot)
                     end
                 end
             end
@@ -238,7 +237,7 @@ BS.widgets[BS.W_DURABILITY] = {
         widget:SetColour(colour)
 
         if (lowest <= BS.GetVar("DangerValue", this)) then
-            if (lowestType == _G.ITEMTYPE_WEAPON) then
+            if (lowestType == ITEMTYPE_WEAPON) then
                 widget:SetIcon("hud/broken_weapon")
             else
                 widget:SetIcon("hud/broken_armor")
@@ -283,7 +282,7 @@ BS.widgets[BS.W_REPAIRS_KITS] = {
             function(itemdata)
                 return IsItemRepairKit(itemdata.bagId, itemdata.slotIndex)
             end,
-            _G.BAG_BACKPACK
+            BAG_BACKPACK
         )
 
         for _, item in ipairs(filteredItems) do
@@ -311,7 +310,7 @@ BS.widgets[BS.W_REPAIRS_KITS] = {
             return "vendor/vendor_tabicon_repair_up"
         end
     end,
-    tooltip = BS.LC.Format(_G.SI_HOOK_POINT_STORE_REPAIR_KIT_HEADER):gsub(":", ""),
+    tooltip = BS.LC.Format(SI_HOOK_POINT_STORE_REPAIR_KIT_HEADER):gsub(":", ""),
     customSettings = {
         [1] = {
             type = "checkbox",
@@ -338,8 +337,8 @@ BS.widgets[BS.W_SOUL_GEMS] = {
     update = function(widget)
         local this = BS.W_SOUL_GEMS
         local level = GetUnitEffectiveLevel("player")
-        local filledCount = select(3, GetSoulGemInfo(_G.SOUL_GEM_TYPE_FILLED, level))
-        local emptyCount = select(3, GetSoulGemInfo(_G.SOUL_GEM_TYPE_EMPTY, level))
+        local filledCount = select(3, GetSoulGemInfo(SOUL_GEM_TYPE_FILLED, level))
+        local emptyCount = select(3, GetSoulGemInfo(SOUL_GEM_TYPE_EMPTY, level))
 
         if (BS.GetVar("UseSeparators", this) == true) then
             filledCount = BS.AddSeparators(filledCount)
@@ -373,7 +372,7 @@ BS.widgets[BS.W_SOUL_GEMS] = {
 
         return widget:GetValue()
     end,
-    event = _G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
+    event = EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
     icon = "icons/soulgem_006_filled",
     tooltip = GetString(_G.BARSTEWARD_SOUL_GEMS),
     customOptions = {
@@ -394,7 +393,7 @@ local function getDetail(data)
     local colour = GetItemQualityColor(data.displayQuality)
     local name = colour:Colorize(BS.LC.Format(data.name))
 
-    if (data.bagId == _G.BAG_BACKPACK) then
+    if (data.bagId == BAG_BACKPACK) then
         name = BS.BAGICON .. " " .. name
     else
         name = BS.BANKICON .. " " .. name
@@ -421,19 +420,19 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
         local surveys = 0
         local maps = 0
         local detail = {}
-        local bags = {_G.BAG_BACKPACK, _G.BAG_BANK}
+        local bags = {BAG_BACKPACK, BAG_BANK}
         local writDetail = {}
         local canDo = {}
         local wwCache = {}
         local useWW = (_G.WritWorthy ~= nil) and (BS.Vars.UseWritWorthy == true)
 
         if (IsESOPlusSubscriber()) then
-            table.insert(bags, _G.BAG_SUBSCRIBER_BANK)
+            table.insert(bags, BAG_SUBSCRIBER_BANK)
         end
 
         for _, bag in pairs(bags) do
             for _, data in pairs(_G.SHARED_INVENTORY.bagCache[bag]) do
-                if (data.specializedItemType == _G.SPECIALIZED_ITEMTYPE_MASTER_WRIT) then
+                if (data.specializedItemType == SPECIALIZED_ITEMTYPE_MASTER_WRIT) then
                     writs = writs + 1
                     local itemId = GetItemId(bag, data.slotIndex)
                     local type = BS.GetWritType(itemId)
@@ -443,7 +442,7 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
                             writDetail[type] = {bankCount = 0, bagCount = 0}
                         end
 
-                        local btype = (bag == _G.BAG_BACKPACK) and "bagCount" or "bankCount"
+                        local btype = (bag == BAG_BACKPACK) and "bagCount" or "bankCount"
 
                         writDetail[type][btype] = writDetail[type][btype] + 1
 
@@ -469,12 +468,12 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
                     end
                 end
 
-                if (data.specializedItemType == _G.SPECIALIZED_ITEMTYPE_TROPHY_SURVEY_REPORT) then
+                if (data.specializedItemType == SPECIALIZED_ITEMTYPE_TROPHY_SURVEY_REPORT) then
                     surveys = surveys + data.stackCount
                     table.insert(detail, getDetail(data))
                 end
 
-                if (data.specializedItemType == _G.SPECIALIZED_ITEMTYPE_TROPHY_TREASURE_MAP) then
+                if (data.specializedItemType == SPECIALIZED_ITEMTYPE_TROPHY_TREASURE_MAP) then
                     maps = maps + data.stackCount
                     table.insert(detail, getDetail(data))
                 end
@@ -598,8 +597,8 @@ BS.widgets[BS.W_LOCKPICKS] = {
 
         return available
     end,
-    event = {_G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE, _G.EVENT_LOCKPICK_BROKE},
-    tooltip = BS.LC.Format(_G.SI_GAMEPAD_LOCKPICK_PICKS_REMAINING),
+    event = {EVENT_INVENTORY_SINGLE_SLOT_UPDATE, EVENT_LOCKPICK_BROKE},
+    tooltip = BS.LC.Format(SI_GAMEPAD_LOCKPICK_PICKS_REMAINING),
     icon = "icons/lockpick"
 }
 
@@ -629,15 +628,15 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
         end
 
         local count = {}
-        local bags = {_G.BAG_BACKPACK, _G.BAG_BANK}
+        local bags = {BAG_BACKPACK, BAG_BANK}
         local keys = {bag = {}, bank = {}}
 
         if (IsESOPlusSubscriber()) then
-            table.insert(bags, _G.BAG_SUBSCRIBER_BANK)
+            table.insert(bags, BAG_SUBSCRIBER_BANK)
         end
 
         if (HasCraftBagAccess()) then
-            table.insert(bags, _G.BAG_VIRTUAL)
+            table.insert(bags, BAG_VIRTUAL)
         end
 
         for _, bag in pairs(bags) do
@@ -655,7 +654,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
 
                             count[itemId] = count[itemId] + cnt
 
-                            local location = bag == _G.BAG_BANK and "bank" or "bag"
+                            local location = bag == BAG_BANK and "bank" or "bag"
 
                             if (not keys[location][itemId]) then
                                 local icon = linkCache[itemId].icon
@@ -888,7 +887,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
 
         settings[#settings + 1] = {
             type = "button",
-            name = BS.LC.Format(_G.SI_GAMEPAD_TRADE_ADD),
+            name = BS.LC.Format(SI_GAMEPAD_TRADE_ADD),
             func = function()
                 if (BS.Vars:GetCommon("WatchedItems", tonumber(BS.Vars.NewItemId)) == nil) then
                     BS.Vars:SetCommon(true, "WatchedItems", tonumber(BS.Vars.NewItemId))
@@ -914,7 +913,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
 
         settings[#settings + 1] = {
             type = "button",
-            name = BS.LC.Format(_G.SI_DIALOG_REMOVE),
+            name = BS.LC.Format(SI_DIALOG_REMOVE),
             func = function()
                 BS.Vars:SetCommon(nil, "WatchedItems", tonumber(BS.Vars.NewItemId))
                 BS.Vars.NewItemId = nil
@@ -1029,7 +1028,7 @@ local function randomOnLeftClick(collectibleTable, widgetIndex)
         collectibleId = collectibleTable[collectibleIndex]
         tryCount = tryCount + 1
 
-        usable = IsCollectibleUsable(collectibleId, _G.GAMEPLAY_ACTOR_CATEGORY_PLAYER)
+        usable = IsCollectibleUsable(collectibleId, GAMEPLAY_ACTOR_CATEGORY_PLAYER)
     until (usable == true or tryCount == 10)
 
     if (usable) then
@@ -1066,15 +1065,15 @@ BS.widgets[BS.W_RANDOM_MEMENTO] = {
     -- v1.4.7
     name = "randomMemento",
     update = function(widget, event)
-        if (#mementos == 0 or event == _G.EVENT_COLLECTION_UPDATED) then
-            getCollectibles(_G.COLLECTIBLE_CATEGORY_TYPE_MEMENTO, mementos)
+        if (#mementos == 0 or event == EVENT_COLLECTION_UPDATED) then
+            getCollectibles(COLLECTIBLE_CATEGORY_TYPE_MEMENTO, mementos)
         end
 
         widget:SetValue(BS.Icon("buttons/pointsplus_highlight"), "___")
 
         return 0
     end,
-    event = _G.EVENT_COLLECTION_UPDATED,
+    event = EVENT_COLLECTION_UPDATED,
     tooltip = GetString(_G.BARSTEWARD_RANDOM_MEMENTO),
     icon = "icons/collectible_memento_blizzard",
     cooldown = true,
@@ -1087,15 +1086,15 @@ BS.widgets[BS.W_RANDOM_PET] = {
     -- v1.4.7
     name = "randomPet",
     update = function(widget, event)
-        if (#pets == 0 or event == _G.EVENT_COLLECTION_UPDATED) then
-            getCollectibles(_G.COLLECTIBLE_CATEGORY_TYPE_VANITY_PET, pets)
+        if (#pets == 0 or event == EVENT_COLLECTION_UPDATED) then
+            getCollectibles(COLLECTIBLE_CATEGORY_TYPE_VANITY_PET, pets)
         end
 
         widget:SetValue(BS.Icon("buttons/pointsplus_highlight"), "___")
 
         return 0
     end,
-    event = _G.EVENT_COLLECTION_UPDATED,
+    event = EVENT_COLLECTION_UPDATED,
     tooltip = GetString(_G.BARSTEWARD_RANDOM_PET),
     icon = "icons/pet_sphynxlynx",
     cooldown = true,
@@ -1108,15 +1107,15 @@ BS.widgets[BS.W_RANDOM_MOUNT] = {
     -- v1.4.7
     name = "randomMount",
     update = function(widget, event)
-        if (#mounts == 0 or event == _G.EVENT_COLLECTION_UPDATED) then
-            getCollectibles(_G.COLLECTIBLE_CATEGORY_TYPE_MOUNT, mounts)
+        if (#mounts == 0 or event == EVENT_COLLECTION_UPDATED) then
+            getCollectibles(COLLECTIBLE_CATEGORY_TYPE_MOUNT, mounts)
         end
 
         widget:SetValue(BS.Icon("buttons/pointsplus_highlight"), "___")
 
         return 0
     end,
-    event = _G.EVENT_COLLECTION_UPDATED,
+    event = EVENT_COLLECTION_UPDATED,
     tooltip = GetString(_G.BARSTEWARD_RANDOM_MOUNT),
     icon = "collections/random_anymount",
     onLeftClick = function()
@@ -1128,7 +1127,7 @@ BS.widgets[BS.W_RANDOM_EMOTE] = {
     -- v1.4.7
     name = "randomEmote",
     update = function(widget, event)
-        if (#emotes == 0 or event == _G.EVENT_COLLECTION_UPDATED) then
+        if (#emotes == 0 or event == EVENT_COLLECTION_UPDATED) then
             getEmotes()
         end
 
@@ -1136,7 +1135,7 @@ BS.widgets[BS.W_RANDOM_EMOTE] = {
 
         return 0
     end,
-    event = _G.EVENT_COLLECTION_UPDATED,
+    event = EVENT_COLLECTION_UPDATED,
     tooltip = GetString(_G.BARSTEWARD_RANDOM_EMOTE),
     icon = "icons/emotes/emotecategoryicon_fidget_personality",
     onLeftClick = function()
@@ -1233,16 +1232,16 @@ BS.widgets[BS.W_CONTAINERS] = {
         local filteredItems =
             SHARED_INVENTORY:GenerateFullSlotData(
             function(itemdata)
-                return itemdata.itemType == _G.ITEMTYPE_CONTAINER
+                return itemdata.itemType == ITEMTYPE_CONTAINER
             end,
-            _G.BAG_BACKPACK
+            BAG_BACKPACK
         )
 
-        return itemScan(widget, filteredItems, BS.W_CONTAINERS, BS.LC.Format(_G.SI_ITEMTYPEDISPLAYCATEGORY26))
+        return itemScan(widget, filteredItems, BS.W_CONTAINERS, BS.LC.Format(SI_ITEMTYPEDISPLAYCATEGORY26))
     end,
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
     icon = "icons/mail_armor_container",
-    tooltip = BS.LC.Format(_G.SI_ITEMTYPEDISPLAYCATEGORY26),
+    tooltip = BS.LC.Format(SI_ITEMTYPEDISPLAYCATEGORY26),
     hideWhenEqual = 0,
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
@@ -1260,16 +1259,16 @@ BS.widgets[BS.W_TREASURE] = {
         local filteredItems =
             SHARED_INVENTORY:GenerateFullSlotData(
             function(itemdata)
-                return itemdata.itemType == _G.ITEMTYPE_TREASURE
+                return itemdata.itemType == ITEMTYPE_TREASURE
             end,
-            _G.BAG_BACKPACK
+            BAG_BACKPACK
         )
 
-        return itemScan(widget, filteredItems, BS.W_TREASURE, BS.LC.Format(_G.SI_ITEMTYPE56))
+        return itemScan(widget, filteredItems, BS.W_TREASURE, BS.LC.Format(SI_ITEMTYPE56))
     end,
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
     icon = "icons/quest_strosmkai_open_treasure_chest",
-    tooltip = BS.LC.Format(_G.SI_ITEMTYPE56),
+    tooltip = BS.LC.Format(SI_ITEMTYPE56),
     hideWhenEqual = 0,
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
@@ -1289,14 +1288,14 @@ BS.widgets[BS.W_FURNISHINGS] = {
             function(itemdata)
                 return IsItemPlaceableFurniture(itemdata.bagId, itemdata.slotIndex)
             end,
-            _G.BAG_BACKPACK
+            BAG_BACKPACK
         )
 
-        return itemScan(widget, filteredItems, BS.W_FURNISHINGS, BS.LC.Format(_G.SI_ITEMFILTERTYPE21))
+        return itemScan(widget, filteredItems, BS.W_FURNISHINGS, BS.LC.Format(SI_ITEMFILTERTYPE21))
     end,
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
     icon = "icons/servicemappins/servicepin_furnishings",
-    tooltip = BS.LC.Format(_G.SI_ITEMFILTERTYPE21),
+    tooltip = BS.LC.Format(SI_ITEMFILTERTYPE21),
     hideWhenEqual = 0,
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
@@ -1316,17 +1315,17 @@ BS.widgets[BS.W_COMPANION_GEAR] = {
             function(itemdata)
                 local filterTypes = {GetItemFilterTypeInfo(itemdata.bagId, itemdata.slotIndex)}
 
-                return ZO_IsElementInNumericallyIndexedTable(filterTypes, _G.ITEMFILTERTYPE_COMPANION)
+                return ZO_IsElementInNumericallyIndexedTable(filterTypes, ITEMFILTERTYPE_COMPANION)
             end,
-            _G.BAG_BACKPACK
+            BAG_BACKPACK
         )
 
-        return itemScan(widget, filteredItems, BS.W_COMPANION_GEAR, BS.LC.Format(_G.SI_ITEMFILTERTYPE27))
+        return itemScan(widget, filteredItems, BS.W_COMPANION_GEAR, BS.LC.Format(SI_ITEMFILTERTYPE27))
     end,
-    event = _G.EVENT_PLAYER_ACTIVATED,
+    event = EVENT_PLAYER_ACTIVATED,
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
     icon = "inventory/inventory_trait_companionequipment_icon",
-    tooltip = BS.LC.Format(_G.SI_ITEMFILTERTYPE27),
+    tooltip = BS.LC.Format(SI_ITEMFILTERTYPE27),
     hideWhenEqual = 0,
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
@@ -1346,17 +1345,17 @@ BS.widgets[BS.W_MUSEUM] = {
             function(itemdata)
                 local _, specialType = GetItemType(itemdata.bagId, itemdata.slotIndex)
 
-                return specialType == _G.SPECIALIZED_ITEMTYPE_TROPHY_MUSEUM_PIECE
+                return specialType == SPECIALIZED_ITEMTYPE_TROPHY_MUSEUM_PIECE
             end,
-            _G.BAG_BACKPACK
+            BAG_BACKPACK
         )
 
-        return itemScan(widget, filteredItems, BS.W_MUSEUM, BS.LC.Format(_G.SI_SPECIALIZEDITEMTYPE103))
+        return itemScan(widget, filteredItems, BS.W_MUSEUM, BS.LC.Format(SI_SPECIALIZEDITEMTYPE103))
     end,
-    event = _G.EVENT_PLAYER_ACTIVATED,
+    event = EVENT_PLAYER_ACTIVATED,
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
     icon = "icons/servicemappins/servicepin_museum",
-    tooltip = BS.LC.Format(_G.SI_SPECIALIZEDITEMTYPE103),
+    tooltip = BS.LC.Format(SI_SPECIALIZEDITEMTYPE103),
     hideWhenEqual = 0,
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
@@ -1378,9 +1377,9 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
     -- v1.4.35
     name = "equippedPoison",
     update = function(widget)
-        local main = {_G.EQUIP_SLOT_MAIN_HAND, _G.EQUIP_SLOT_OFF_HAND}
-        local backup = {_G.EQUIP_SLOT_BACKUP_MAIN, _G.EQUIP_SLOT_BACKUP_OFF}
-        local slots = {_G.EQUIP_SLOT_MAIN_HAND, _G.EQUIP_SLOT_OFF_HAND}
+        local main = {EQUIP_SLOT_MAIN_HAND, EQUIP_SLOT_OFF_HAND}
+        local backup = {EQUIP_SLOT_BACKUP_MAIN, EQUIP_SLOT_BACKUP_OFF}
+        local slots = {EQUIP_SLOT_MAIN_HAND, EQUIP_SLOT_OFF_HAND}
         local poisons = {}
         local hasPoison, poisonCount, poisonName, icon, link
         local count = 0
@@ -1393,7 +1392,7 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
         elseif (selected == BS.BOTH) then
             slots = BS.LC.MergeTables(slots, backup)
         elseif (selected == BS.ACTIVE_BAR) then
-            if (activeWeaponPair == _G.ACTIVE_WEAPON_PAIR_BACKUP) then
+            if (activeWeaponPair == ACTIVE_WEAPON_PAIR_BACKUP) then
                 slots = backup
             end
         end
@@ -1450,9 +1449,9 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
                 if (selected == BS.ACTIVE_BAR) then
                     if
                         ((ZO_IsElementInNumericallyIndexedTable(backup, poison.slot) and
-                            activeWeaponPair == _G.ACTIVE_WEAPON_PAIR_BACKUP) or
+                            activeWeaponPair == ACTIVE_WEAPON_PAIR_BACKUP) or
                             (ZO_IsElementInNumericallyIndexedTable(slots, poison.slot) and
-                                (activeWeaponPair == _G.ACTIVE_WEAPON_PAIR_MAIN)))
+                                (activeWeaponPair == ACTIVE_WEAPON_PAIR_MAIN)))
                      then
                         widget:SetIcon(poison.icon)
                     end
@@ -1473,7 +1472,7 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
         return count
     end,
     callback = {[CALLBACK_MANAGER] = {"WornSlotUpdate"}},
-    event = _G.EVENT_ACTIVE_WEAPON_PAIR_CHANGED,
+    event = EVENT_ACTIVE_WEAPON_PAIR_CHANGED,
     tooltip = GetString(_G.BARSTEWARD_EQUIPPED_POISON),
     icon = "icons/crafting_poison_001_cyan_003",
     hideWhenEqual = 0,
@@ -1514,7 +1513,7 @@ BS.widgets[BS.W_FRAGMENTS] = {
         local fragmentInfo = {}
         local frags = {}
 
-        getCollectibles(_G.COLLECTIBLE_CATEGORY_TYPE_COMBINATION_FRAGMENT, frags, true, true)
+        getCollectibles(COLLECTIBLE_CATEGORY_TYPE_COMBINATION_FRAGMENT, frags, true, true)
 
         for _, fragmentData in ipairs(frags) do
             BS.CollectibleId = fragmentData.id
@@ -1650,10 +1649,10 @@ BS.widgets[BS.W_RUNEBOXES] = {
         local unnecessary = 0
         local fragmentInfo = {}
 
-        local bags = {_G.BAG_BACKPACK, _G.BAG_BANK}
+        local bags = {BAG_BACKPACK, BAG_BANK}
 
         if (IsESOPlusSubscriber()) then
-            table.insert(bags, _G.BAG_SUBSCRIBER_BANK)
+            table.insert(bags, BAG_SUBSCRIBER_BANK)
         end
 
         local filteredItems =
@@ -1849,7 +1848,7 @@ BS.widgets[BS.W_RECIPE_WATCH] = {
             widget:SetColour(BS.GetColour(this, true))
         end
 
-        if (itemType ~= _G.ITEMTYPE_RECIPE) then
+        if (itemType ~= ITEMTYPE_RECIPE) then
             return
         end
 
@@ -1881,7 +1880,7 @@ BS.widgets[BS.W_RECIPE_WATCH] = {
 
         return BS.Vars.FoundCount
     end,
-    event = _G.EVENT_LOOT_RECEIVED,
+    event = EVENT_LOOT_RECEIVED,
     icon = "icons/event_newlifefestival_2016_recipe",
     tooltip = GetString(_G.BARSTEWARD_RECIPES),
     hideWhenEqual = 0,
@@ -1896,9 +1895,9 @@ BS.widgets[BS.W_RECIPE_WATCH] = {
 }
 
 local function getCharges(slot)
-    local link = GetItemLink(_G.BAG_WORN, slot)
+    local link = GetItemLink(BAG_WORN, slot)
 
-    if (link and IsItemChargeable(_G.BAG_WORN, slot)) then
+    if (link and IsItemChargeable(BAG_WORN, slot)) then
         return GetItemLinkNumEnchantCharges(link), GetItemLinkMaxEnchantCharges(link)
     else
         return -1, -1
@@ -1911,7 +1910,7 @@ local function getMin(charges, slots, equipped)
 
     equipped =
         equipped or
-        {pc = GetString(_G.BARSTEWARD_NOT_APPLICABLE), name = BS.LC.Format(_G.SI_GAMEPAD_INVENTORY_EMPTY_TOOLTIP)}
+        {pc = GetString(_G.BARSTEWARD_NOT_APPLICABLE), name = BS.LC.Format(SI_GAMEPAD_INVENTORY_EMPTY_TOOLTIP)}
 
     for slot, info in pairs(charges) do
         if (ZO_IsElementInNumericallyIndexedTable(slots, slot)) then
@@ -1948,8 +1947,8 @@ BS.widgets[BS.W_WEAPON_CHARGE] = {
     -- v1.5.8
     name = "weaponCharge",
     update = function(widget)
-        local slots = {_G.EQUIP_SLOT_MAIN_HAND, _G.EQUIP_SLOT_OFF_HAND}
-        local backup = {_G.EQUIP_SLOT_BACKUP_MAIN, _G.EQUIP_SLOT_BACKUP_OFF}
+        local slots = {EQUIP_SLOT_MAIN_HAND, EQUIP_SLOT_OFF_HAND}
+        local backup = {EQUIP_SLOT_BACKUP_MAIN, EQUIP_SLOT_BACKUP_OFF}
         local activeWeaponPair = GetActiveWeaponPairInfo()
         local weapons = BS.LC.MergeTables(slots, backup)
         local weaponCharges = {}
@@ -1967,27 +1966,23 @@ BS.widgets[BS.W_WEAPON_CHARGE] = {
                 pc = string.format("%d%%", raw or 0)
             end
 
-            local name = BS.LC.Format(GetItemName(_G.BAG_WORN, slot))
+            local name = BS.LC.Format(GetItemName(BAG_WORN, slot))
 
             if (name ~= "") then
                 weaponCharges[slot] = {pc = pc, name = name, raw = raw}
             end
         end
 
-        if (activeWeaponPair == _G.ACTIVE_WEAPON_PAIR_BACKUP) then
+        if (activeWeaponPair == ACTIVE_WEAPON_PAIR_BACKUP) then
             min =
                 getMin(
                 weaponCharges,
                 backup,
-                weaponCharges[_G.EQUIP_SLOT_BACKUP_MAIN] or weaponCharges[_G.EQUIP_SLOT_BACKUP_OFF]
+                weaponCharges[EQUIP_SLOT_BACKUP_MAIN] or weaponCharges[EQUIP_SLOT_BACKUP_OFF]
             )
         else
             min =
-                getMin(
-                weaponCharges,
-                slots,
-                weaponCharges[_G.EQUIP_SLOT_MAIN_HAND] or weaponCharges[_G.EQUIP_SLOT_OFF_HAND]
-            )
+                getMin(weaponCharges, slots, weaponCharges[EQUIP_SLOT_MAIN_HAND] or weaponCharges[EQUIP_SLOT_OFF_HAND])
         end
 
         local colour = getColour(min.raw or 0)
@@ -2007,7 +2002,7 @@ BS.widgets[BS.W_WEAPON_CHARGE] = {
 
         return min.raw
     end,
-    event = {_G.EVENT_INVENTORY_SINGLE_SLOT_UPDATE, _G.EVENT_ACTIVE_WEAPON_PAIR_CHANGED},
+    event = {EVENT_INVENTORY_SINGLE_SLOT_UPDATE, EVENT_ACTIVE_WEAPON_PAIR_CHANGED},
     icon = "icons/alchemy/crafting_alchemy_trait_weaponcrit_match",
     tooltip = GetString(_G.BARSTEWARD_WEAPON_CHARGE),
     onLeftClick = function()
@@ -2025,8 +2020,7 @@ BS.widgets[BS.W_SCRIBING_INK] = {
     update = function(widget)
         local this = BS.W_SCRIBING_INK
         local inkLink = GetScribingInkItemLink()
-        local inkCount =
-            GetItemLinkInventoryCount(inkLink, _G.INVENTORY_COUNT_BAG_OPTION_BACKPACK_AND_BANK_AND_CRAFT_BAG)
+        local inkCount = GetItemLinkInventoryCount(inkLink, INVENTORY_COUNT_BAG_OPTION_BACKPACK_AND_BANK_AND_CRAFT_BAG)
 
         local colour = BS.GetColour(this, "Ok", true)
 
@@ -2043,23 +2037,23 @@ BS.widgets[BS.W_SCRIBING_INK] = {
     end,
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
     icon = "/icons/item_grimoire_ink",
-    tooltip = ZO_Scribing_Manager.GetFormattedScribingInkName()
+    tooltip = _G.ZO_Scribing_Manager.GetFormattedScribingInkName()
 }
 
 BS.widgets[BS.W_MYTHIC] = {
     -- v3.2.13
     name = "equippedMythic",
     update = function(widget)
-        local mythic = BS.LC.Format(_G.SI_ANTIALIASINGTYPE0)
+        local mythic = BS.LC.Format(SI_ANTIALIASINGTYPE0)
         local colour = BS.LC.White
         local filteredItems =
             SHARED_INVENTORY:GenerateFullSlotData(
             function(itemdata)
                 local quality = GetItemDisplayQuality(itemdata.bagId, itemdata.slotIndex)
 
-                return quality == _G.ITEM_DISPLAY_QUALITY_MYTHIC_OVERRIDE
+                return quality == ITEM_DISPLAY_QUALITY_MYTHIC_OVERRIDE
             end,
-            _G.BAG_WORN
+            BAG_WORN
         )
 
         if (#filteredItems > 0) then
@@ -2077,10 +2071,10 @@ BS.widgets[BS.W_MYTHIC] = {
 
         return mythic
     end,
-    event = _G.EVENT_PLAYER_ACTIVATED,
+    event = EVENT_PLAYER_ACTIVATED,
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
     icon = "icons/u42_mythic_meta",
-    tooltip = BS.LC.Format(_G.SI_ITEMDISPLAYQUALITY6),
+    tooltip = BS.LC.Format(SI_ITEMDISPLAYQUALITY6),
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("inventory")

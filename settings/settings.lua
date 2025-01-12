@@ -7,7 +7,7 @@ BS.SoundLastPlayed = {}
 local fontNames, fontStyles, backgroundNames, borderNames, none
 
 local function initialise()
-    none = BS.LC.Format(_G.SI_ANTIALIASINGTYPE0)
+    none = BS.LC.Format(SI_ANTIALIASINGTYPE0)
 
     -- populate the lookup tables
     fontNames, fontStyles = BS.LC.GetFontNamesAndStyles()
@@ -949,7 +949,7 @@ local function getBarSettings()
 
             controls[#controls + 1] = {
                 type = "button",
-                name = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_COLLECTIBLE_ACTION_RENAME)),
+                name = ZO_CachedStrFormat("<<C:1>>", GetString(SI_COLLECTIBLE_ACTION_RENAME)),
                 func = function()
                     BS.RenameBar(idx)
                 end,
@@ -967,7 +967,7 @@ local function getBarSettings()
 
             controls[#controls + 1] = {
                 type = "button",
-                name = "|ce60000" .. GetString(_G.SI_GAMEPAD_MAIL_SEND_DETACH_ITEM) .. "|r",
+                name = "|ce60000" .. GetString(SI_GAMEPAD_MAIL_SEND_DETACH_ITEM) .. "|r",
                 func = function()
                     BS.RemoveBarCheck(idx)
                 end,
@@ -1455,7 +1455,7 @@ local function getWidgetSettings()
                 name = GetString(_G.BARSTEWARD_BAR),
                 choices = barNames,
                 getFunc = function()
-                    local barName = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_DAMAGETYPE0))
+                    local barName = ZO_CachedStrFormat("<<C:1>>", GetString(SI_DAMAGETYPE0))
 
                     if (v.Bar ~= 0) then
                         barName = BS.Vars.Bars[v.Bar].Name

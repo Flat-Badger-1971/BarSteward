@@ -53,7 +53,7 @@ local function getColourOptions(widgetIndex)
 end
 
 local function configureWidget(widget, complete, maxComplete, activityType, tasks, hideLimit, defaultTooltip)
-    local widgetIndex = activityType == _G.TIMED_ACTIVITY_TYPE_DAILY and BS.W_DAILY_ENDEAVOURS or BS.W_WEEKLY_ENDEAVOURS
+    local widgetIndex = activityType == TIMED_ACTIVITY_TYPE_DAILY and BS.W_DAILY_ENDEAVOURS or BS.W_WEEKLY_ENDEAVOURS
     local colour = BS.GetColour(widgetIndex, true)
 
     if (BS.GetVar("UseRag", widgetIndex)) then
@@ -73,7 +73,7 @@ local function configureWidget(widget, complete, maxComplete, activityType, task
         local tooltipText = defaultTooltip or ""
         local maxValue, maxIndex, allEqual = 0, 0, true
 
-        if (activityType == _G.TIMED_ACTIVITY_TYPE_DAILY) then
+        if (activityType == TIMED_ACTIVITY_TYPE_DAILY) then
             for _, t in ipairs(tasks) do
                 if (t.value > maxValue) then
                     if (maxValue > 0) then
@@ -86,7 +86,7 @@ local function configureWidget(widget, complete, maxComplete, activityType, task
         end
 
         for _, t in ipairs(tasks) do
-            if (activityType == _G.TIMED_ACTIVITY_TYPE_DAILY) then
+            if (activityType == TIMED_ACTIVITY_TYPE_DAILY) then
                 if (not allEqual) then
                     if (t.index == maxIndex) then
                         t.text = string.format("%s%s %s %s%s", star, star, t.text, star, star)
@@ -182,25 +182,25 @@ BS.widgets[BS.W_DAILY_ENDEAVOURS] = {
     name = "dailyEndeavourProgress",
     update = function(widget)
         return getTimedActivityProgress(
-            _G.TIMED_ACTIVITY_TYPE_DAILY,
+            TIMED_ACTIVITY_TYPE_DAILY,
             widget,
             BS.GetVar("HideLimit", BS.W_DAILY_ENDEAVOURS),
             GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS)
         )
     end,
-    event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED},
+    event = {EVENT_PLAYER_ACTIVATED, EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED},
     icon = "journal/u26_progress_digsite_checked_incomplete",
     tooltip = GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS),
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
-            GROUP_MENU_KEYBOARD:ShowCategory(_G.TIMED_ACTIVITIES_FRAGMENT)
-            TIMED_ACTIVITIES_KEYBOARD:SetCurrentActivityType(_G.TIMED_ACTIVITY_TYPE_DAILY)
+            GROUP_MENU_KEYBOARD:ShowCategory(TIMED_ACTIVITIES_FRAGMENT)
+            TIMED_ACTIVITIES_KEYBOARD:SetCurrentActivityType(TIMED_ACTIVITY_TYPE_DAILY)
         else
             ZO_ACTIVITY_FINDER_ROOT_GAMEPAD:ShowCategory(TIMED_ACTIVITIES_GAMEPAD:GetCategoryData())
         end
     end,
     complete = function()
-        return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(_G.TIMED_ACTIVITY_TYPE_DAILY)
+        return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(TIMED_ACTIVITY_TYPE_DAILY)
     end,
     customSettings = function()
         return getColourOptions(BS.W_DAILY_ENDEAVOURS)
@@ -212,25 +212,25 @@ BS.widgets[BS.W_WEEKLY_ENDEAVOURS] = {
     name = "weeklyEndeavourProgress",
     update = function(widget)
         return getTimedActivityProgress(
-            _G.TIMED_ACTIVITY_TYPE_WEEKLY,
+            TIMED_ACTIVITY_TYPE_WEEKLY,
             widget,
             BS.GetVar("HideLimit", BS.W_WEEKLY_ENDEAVOURS),
             GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS)
         )
     end,
-    event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED},
+    event = {EVENT_PLAYER_ACTIVATED, EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED},
     icon = "journal/u26_progress_digsite_checked_complete",
     tooltip = GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS),
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
-            GROUP_MENU_KEYBOARD:ShowCategory(_G.TIMED_ACTIVITIES_FRAGMENT)
-            TIMED_ACTIVITIES_KEYBOARD:SetCurrentActivityType(_G.TIMED_ACTIVITY_TYPE_WEEKLY)
+            GROUP_MENU_KEYBOARD:ShowCategory(TIMED_ACTIVITIES_FRAGMENT)
+            TIMED_ACTIVITIES_KEYBOARD:SetCurrentActivityType(TIMED_ACTIVITY_TYPE_WEEKLY)
         else
             ZO_ACTIVITY_FINDER_ROOT_GAMEPAD:ShowCategory(TIMED_ACTIVITIES_GAMEPAD:GetCategoryData())
         end
     end,
     complete = function()
-        return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(_G.TIMED_ACTIVITY_TYPE_WEEKLY)
+        return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(TIMED_ACTIVITY_TYPE_WEEKLY)
     end,
     customSettings = function()
         return getColourOptions(BS.W_WEEKLY_ENDEAVOURS)
@@ -242,7 +242,7 @@ BS.widgets[BS.W_ENDEAVOUR_PROGRESS] = {
     name = "weeklyEndeavourBar",
     update = function(widget)
         local this = BS.W_ENDEAVOUR_PROGRESS
-        local _, maxTask = getTimedActivityProgress(_G.TIMED_ACTIVITY_TYPE_WEEKLY, nil)
+        local _, maxTask = getTimedActivityProgress(TIMED_ACTIVITY_TYPE_WEEKLY, nil)
 
         if (maxTask.name and maxTask.maxProgress) then
             if (BS.GetVar("Progress", this)) then
@@ -265,25 +265,25 @@ BS.widgets[BS.W_ENDEAVOUR_PROGRESS] = {
         end
     end,
     gradient = function()
-        local startg = {GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, _G.INTERFACE_GENERAL_COLOR_STATUS_BAR_START)}
-        local endg = {GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, _G.INTERFACE_GENERAL_COLOR_STATUS_BAR_END)}
+        local startg = {GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_START)}
+        local endg = {GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_END)}
         local s = BS.Vars.Controls[BS.W_ENDEAVOUR_PROGRESS].GradientStart or startg
         local e = BS.Vars.Controls[BS.W_ENDEAVOUR_PROGRESS].GradientEnd or endg
 
         return s, e
     end,
-    event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED},
+    event = {EVENT_PLAYER_ACTIVATED, EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED},
     icon = "journal/u26_progress_digsite_marked_complete",
     tooltip = GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS_BEST),
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
-            GROUP_MENU_KEYBOARD:ShowCategory(_G.TIMED_ACTIVITIES_FRAGMENT)
+            GROUP_MENU_KEYBOARD:ShowCategory(TIMED_ACTIVITIES_FRAGMENT)
         else
             ZO_ACTIVITY_FINDER_ROOT_GAMEPAD:ShowCategory(TIMED_ACTIVITIES_GAMEPAD:GetCategoryData())
         end
     end,
     complete = function()
-        return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(_G.TIMED_ACTIVITY_TYPE_WEEKLY)
+        return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(TIMED_ACTIVITY_TYPE_WEEKLY)
     end,
     customSettings = {
         [1] = {
@@ -304,12 +304,12 @@ BS.widgets[BS.W_ENDEAVOUR_PROGRESS] = {
 
 local function getLeadColour(lead)
     local difficultyColours = {
-        [_G.ANTIQUITY_DIFFICULTY_TRIVIAL] = BS.COLOURS.ZOSGrey,
-        [_G.ANTIQUITY_DIFFICULTY_SIMPLE] = BS.COLOURS.ZOSGreen,
-        [_G.ANTIQUITY_DIFFICULTY_INTERMEDIATE] = BS.COLOURS.ZOSBlue,
-        [_G.ANTIQUITY_DIFFICULTY_ADVANCED] = BS.COLOURS.ZOSPurple,
-        [_G.ANTIQUITY_DIFFICULTY_MASTER] = BS.COLOURS.ZOSGold,
-        [_G.ANTIQUITY_DIFFICULTY_ULTIMATE] = BS.COLOURS.ZOSOrange
+        [ANTIQUITY_DIFFICULTY_TRIVIAL] = BS.COLOURS.ZOSGrey,
+        [ANTIQUITY_DIFFICULTY_SIMPLE] = BS.COLOURS.ZOSGreen,
+        [ANTIQUITY_DIFFICULTY_INTERMEDIATE] = BS.COLOURS.ZOSBlue,
+        [ANTIQUITY_DIFFICULTY_ADVANCED] = BS.COLOURS.ZOSPurple,
+        [ANTIQUITY_DIFFICULTY_MASTER] = BS.COLOURS.ZOSGold,
+        [ANTIQUITY_DIFFICULTY_ULTIMATE] = BS.COLOURS.ZOSOrange
     }
 
     if ((lead.quality or 0) == 0) then
@@ -322,14 +322,14 @@ end
 BS.isScryingUnlocked = false
 
 BS.EventManager:RegisterForEvent(
-    _G.EVENT_PLAYER_ACTIVATED,
+    EVENT_PLAYER_ACTIVATED,
     function()
         BS.isScryingUnlocked = ZO_IsScryingUnlocked()
     end
 )
 
 BS.EventManager:RegisterForEvent(
-    _G.EVENT_SKILL_LINE_ADDED,
+    EVENT_SKILL_LINE_ADDED,
     function()
         BS.isScryingUnlocked = ZO_IsScryingUnlocked()
     end
@@ -403,7 +403,7 @@ BS.widgets[BS.W_LEADS] = {
             widget:SetColour(timeColour)
             widget:SetValue(value)
 
-            local ttt = BS.LC.Format(_G.SI_ANTIQUITY_SUBHEADING_ACTIVE_LEADS)
+            local ttt = BS.LC.Format(SI_ANTIQUITY_SUBHEADING_ACTIVE_LEADS)
 
             -- sort by time remaining
             table.sort(
@@ -438,7 +438,7 @@ BS.widgets[BS.W_LEADS] = {
                 ttt = ttt .. timeColour:Colorize(time)
 
                 if (BS.GetVar("ShowFound", this)) then
-                    local found = zo_strformat(_G.SI_ANTIQUITY_TIMES_ACQUIRED, lead.recovered)
+                    local found = zo_strformat(SI_ANTIQUITY_TIMES_ACQUIRED, lead.recovered)
                     ttt = ttt .. " - " .. found
                 end
             end
@@ -450,7 +450,7 @@ BS.widgets[BS.W_LEADS] = {
     end,
     timer = 1000,
     icon = GetAntiquityLeadIcon(),
-    tooltip = BS.LC.Format(_G.SI_ANTIQUITY_SUBHEADING_ACTIVE_LEADS),
+    tooltip = BS.LC.Format(SI_ANTIQUITY_SUBHEADING_ACTIVE_LEADS),
     hideWhenEqual = 99999999,
     hideWhenTrue = function()
         return not BS.isScryingUnlocked
@@ -551,18 +551,18 @@ BS.widgets[BS.W_DAILY_ENDEAVOUR_TIME] = {
     -- v1.2.18
     name = "dailyEndeavourTime",
     update = function(widget)
-        return getTimedActivityTimeRemaining(_G.TIMED_ACTIVITY_TYPE_DAILY, BS.W_DAILY_ENDEAVOUR_TIME, widget)
+        return getTimedActivityTimeRemaining(TIMED_ACTIVITY_TYPE_DAILY, BS.W_DAILY_ENDEAVOUR_TIME, widget)
     end,
     timer = 1000,
-    event = _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED,
+    event = EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED,
     complete = function()
-        return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(_G.TIMED_ACTIVITY_TYPE_DAILY)
+        return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(TIMED_ACTIVITY_TYPE_DAILY)
     end,
     icon = "journal/u26_progress_digsite_unknown_incomplete",
     tooltip = GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_TIME),
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
-            GROUP_MENU_KEYBOARD:ShowCategory(_G.TIMED_ACTIVITIES_FRAGMENT)
+            GROUP_MENU_KEYBOARD:ShowCategory(TIMED_ACTIVITIES_FRAGMENT)
         else
             ZO_ACTIVITY_FINDER_ROOT_GAMEPAD:ShowCategory(TIMED_ACTIVITIES_GAMEPAD:GetCategoryData())
         end
@@ -573,21 +573,21 @@ BS.widgets[BS.W_WEEKLY_ENDEAVOUR_TIME] = {
     -- v1.2.18
     name = "weeklyEndeavourTime",
     update = function(widget)
-        return getTimedActivityTimeRemaining(_G.TIMED_ACTIVITY_TYPE_WEEKLY, BS.W_WEEKLY_ENDEAVOUR_TIME, widget)
+        return getTimedActivityTimeRemaining(TIMED_ACTIVITY_TYPE_WEEKLY, BS.W_WEEKLY_ENDEAVOUR_TIME, widget)
     end,
     timer = 1000,
-    event = _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED,
+    event = EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED,
     icon = "journal/u26_progress_digsite_unknown_complete",
     tooltip = GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_TIME),
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
-            GROUP_MENU_KEYBOARD:ShowCategory(_G.TIMED_ACTIVITIES_FRAGMENT)
+            GROUP_MENU_KEYBOARD:ShowCategory(TIMED_ACTIVITIES_FRAGMENT)
         else
             ZO_ACTIVITY_FINDER_ROOT_GAMEPAD:ShowCategory(TIMED_ACTIVITIES_GAMEPAD:GetCategoryData())
         end
     end,
     complete = function()
-        return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(_G.TIMED_ACTIVITY_TYPE_WEEKLY)
+        return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(TIMED_ACTIVITY_TYPE_WEEKLY)
     end
 }
 
@@ -627,10 +627,10 @@ BS.widgets[BS.W_TRIBUTE_CLUB_RANK] = {
         end
     end,
     event = {
-        _G.EVENT_PLAYER_ACTIVATED,
-        _G.EVENT_TRIBUTE_CLUB_RANK_CHANGED,
-        _G.EVENT_TRIBUTE_CLUB_EXPERIENCE_GAINED,
-        _G.EVENT_TRIBUTE_CLUB_INIT
+        EVENT_PLAYER_ACTIVATED,
+        EVENT_TRIBUTE_CLUB_RANK_CHANGED,
+        EVENT_TRIBUTE_CLUB_EXPERIENCE_GAINED,
+        EVENT_TRIBUTE_CLUB_INIT
     },
     icon = "tribute/tributeclubrank_7",
     tooltip = GetString(_G.BARSTEWARD_TRIBUTE_RANK)
@@ -652,7 +652,7 @@ BS.widgets[BS.W_ACHIEVEMENT_POINTS] = {
         widget:SetValue(value)
         widget:SetColour(BS.GetColour(this, true))
 
-        local ttt = BS.LC.Format(_G.SI_ACHIEVEMENTS_OVERALL) .. BS.LF
+        local ttt = BS.LC.Format(SI_ACHIEVEMENTS_OVERALL) .. BS.LF
 
         ttt = ttt .. BS.COLOURS.White:Colorize(earnedPoints .. "/" .. totalPoints)
 
@@ -661,13 +661,13 @@ BS.widgets[BS.W_ACHIEVEMENT_POINTS] = {
         return widget:GetValue()
     end,
     event = {
-        _G.EVENT_PLAYER_ACTIVATED,
-        _G.EVENT_ACHIEVEMENT_UPDATED,
-        _G.EVENT_ACHIEVEMENT_AWARDED,
-        _G.EVENT_ACHIEVEMENTS_UPDATED
+        EVENT_PLAYER_ACTIVATED,
+        EVENT_ACHIEVEMENT_UPDATED,
+        EVENT_ACHIEVEMENT_AWARDED,
+        EVENT_ACHIEVEMENTS_UPDATED
     },
     icon = "journal/journal_tabicon_achievements_up",
-    tooltip = BS.LC.Format(_G.SI_ACHIEVEMENTS_OVERALL),
+    tooltip = BS.LC.Format(SI_ACHIEVEMENTS_OVERALL),
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("achievements")
@@ -682,7 +682,7 @@ BS.widgets[BS.W_PLEDGES_TIME] = {
     -- same time as any other daily activity
     name = "dailyPledgesTime",
     update = function(widget)
-        return getTimedActivityTimeRemaining(_G.TIMED_ACTIVITY_TYPE_DAILY, BS.W_PLEDGES_TIME, widget)
+        return getTimedActivityTimeRemaining(TIMED_ACTIVITY_TYPE_DAILY, BS.W_PLEDGES_TIME, widget)
     end,
     timer = 1000,
     icon = "icons/undaunted_bigcoffer",
@@ -736,14 +736,14 @@ function BS.IsShadowyVendorUnlocked()
 end
 
 BS.EventManager:RegisterForEvent(
-    _G.EVENT_PLAYER_ACTIVATED,
+    EVENT_PLAYER_ACTIVATED,
     function()
         BS.isShadowyVendorUnlocked = BS.IsShadowyVendorUnlocked()
     end
 )
 
 BS.EventManager:RegisterForEvent(
-    _G.EVENT_SKILL_LINE_ADDED,
+    EVENT_SKILL_LINE_ADDED,
     function()
         BS.isShadowyVendorUnlocked = BS.IsShadowyVendorUnlocked()
     end
@@ -776,7 +776,7 @@ BS.widgets[BS.W_LFG_TIME] = {
     name = "lfgTime",
     update = function(widget)
         local this = BS.W_LFG_TIME
-        local timeToReset = GetLFGCooldownTimeRemainingSeconds(_G.LFG_COOLDOWN_DUNGEON_REWARD_GRANTED)
+        local timeToReset = GetLFGCooldownTimeRemainingSeconds(LFG_COOLDOWN_DUNGEON_REWARD_GRANTED)
         local remaining = BS.SecondsToTime(timeToReset, true, false, BS.GetVar("HideSeconds", this))
 
         widget:SetColour(BS.COLOURS.DefaultColour)
@@ -835,10 +835,10 @@ local function updateLoreBooks()
     end
 end
 
-BS.EventManager:RegisterForEvent(_G.EVENT_PLAYER_ACTIVATED, updateLoreBooks)
-BS.EventManager:RegisterForEvent(_G.EVENT_LORE_BOOK_LEARNED, updateLoreBooks)
-BS.EventManager:RegisterForEvent(_G.EVENT_STYLE_LEARNED, updateLoreBooks)
-BS.EventManager:RegisterForEvent(_G.EVENT_TRAIT_LEARNED, updateLoreBooks)
+BS.EventManager:RegisterForEvent(EVENT_PLAYER_ACTIVATED, updateLoreBooks)
+BS.EventManager:RegisterForEvent(EVENT_LORE_BOOK_LEARNED, updateLoreBooks)
+BS.EventManager:RegisterForEvent(EVENT_STYLE_LEARNED, updateLoreBooks)
+BS.EventManager:RegisterForEvent(EVENT_TRAIT_LEARNED, updateLoreBooks)
 
 BS.widgets[BS.W_LOREBOOKS] = {
     -- v1.4.5
@@ -933,7 +933,7 @@ BS.widgets[BS.W_SHALIDORS_LIBRARY] = {
     end,
     callback = {[BS.CallbackManager] = {"LorebooksUpdated"}},
     icon = "icons/housing_sum_fur_booksfloatingset003",
-    tooltip = BS.LC.Format(_G.SI_ZONECOMPLETIONTYPE11),
+    tooltip = BS.LC.Format(SI_ZONECOMPLETIONTYPE11),
     onLeftClick = function()
         if (IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("loreLibraryGamepad")
@@ -999,7 +999,7 @@ function BS.GetActivityRewardInfo(activityTypes)
                                 result[activityType] = {
                                     typeName = location:GetNameKeyboard(),
                                     xpReward = xpReward,
-                                    displayName = zo_strformat(_G.SI_ACTIVITY_FINDER_REWARD_NAME_FORMAT, displayName),
+                                    displayName = zo_strformat(SI_ACTIVITY_FINDER_REWARD_NAME_FORMAT, displayName),
                                     icon = icon,
                                     colour = BS.LC.Colour({r = red, g = green, b = blue}),
                                     active = location:IsActive() or false,
@@ -1041,9 +1041,9 @@ function BS.GetActvityOutput(data)
         local cdt = ZO_CommaDelimitNumber(data.activityData.xpReward)
 
         data.tt = data.tt .. data.activityData.colour:Colorize(data.activityData.displayName) .. " "
-        data.tt = data.tt .. zo_strformat(_G.SI_ACTIVITY_FINDER_REWARD_XP_FORMAT, cdt)
+        data.tt = data.tt .. zo_strformat(SI_ACTIVITY_FINDER_REWARD_XP_FORMAT, cdt)
     else
-        data.tt = data.tt .. BS.COLOURS.Red:Colorize(BS.LC.Format(_G.SI_HOUSE_TEMPLATE_UNMET_REQUIREMENTS_TEXT))
+        data.tt = data.tt .. BS.COLOURS.Red:Colorize(BS.LC.Format(SI_HOUSE_TEMPLATE_UNMET_REQUIREMENTS_TEXT))
     end
 
     return data
@@ -1053,7 +1053,7 @@ BS.widgets[BS.W_RANDOM_DUNGEON] = {
     -- v1.4.22
     name = "randomDungeon",
     update = function(widget)
-        local activities = {_G.LFG_ACTIVITY_DUNGEON, _G.LFG_ACTIVITY_MASTER_DUNGEON}
+        local activities = {LFG_ACTIVITY_DUNGEON, LFG_ACTIVITY_MASTER_DUNGEON}
         local dungeonInfo = BS.GetActivityRewardInfo(activities)
         local data = {
             output = "",
@@ -1061,20 +1061,20 @@ BS.widgets[BS.W_RANDOM_DUNGEON] = {
             eligibleCount = 0,
             tt = GetString(_G.BARSTEWARD_RANDOM_DUNGEON)
         }
-        local nd = dungeonInfo[_G.LFG_ACTIVITY_DUNGEON]
-        local vd = dungeonInfo[_G.LFG_ACTIVITY_MASTER_DUNGEON]
+        local nd = dungeonInfo[LFG_ACTIVITY_DUNGEON]
+        local vd = dungeonInfo[LFG_ACTIVITY_MASTER_DUNGEON]
 
         if (nd) then
             data.activityData = nd
-            data.label = _G.SI_DUNGEONDIFFICULTY1
-            data.icon = BS.DUNGEON[_G.LFG_ACTIVITY_DUNGEON]
+            data.label = SI_DUNGEONDIFFICULTY1
+            data.icon = BS.DUNGEON[LFG_ACTIVITY_DUNGEON]
             data = BS.GetActvityOutput(data)
         end
 
         if (vd) then
             data.activityData = vd
-            data.label = _G.SI_DUNGEONDIFFICULTY2
-            data.icon = BS.DUNGEON[_G.LFG_ACTIVITY_MASTER_DUNGEON]
+            data.label = SI_DUNGEONDIFFICULTY2
+            data.icon = BS.DUNGEON[LFG_ACTIVITY_MASTER_DUNGEON]
             data = BS.GetActvityOutput(data)
         end
 
@@ -1083,7 +1083,7 @@ BS.widgets[BS.W_RANDOM_DUNGEON] = {
 
         return data.eligibleCount
     end,
-    event = _G.EVENT_PLAYER_ACTIVATED,
+    event = EVENT_PLAYER_ACTIVATED,
     icon = "icons/achievement_update11_dungeons_019",
     hideWhenEqual = 0,
     tooltip = GetString(_G.BARSTEWARD_RANDOM_DUNGEON),
@@ -1100,7 +1100,7 @@ BS.widgets[BS.W_RANDOM_TRIBUTE] = {
     -- v1.4.23
     name = "randomTribute",
     update = function(widget)
-        local activities = {_G.LFG_ACTIVITY_TRIBUTE_COMPETITIVE, _G.LFG_ACTIVITY_TRIBUTE_CASUAL}
+        local activities = {LFG_ACTIVITY_TRIBUTE_COMPETITIVE, LFG_ACTIVITY_TRIBUTE_CASUAL}
         local bgInfo = BS.GetActivityRewardInfo(activities)
         local data = {
             output = "",
@@ -1108,20 +1108,20 @@ BS.widgets[BS.W_RANDOM_TRIBUTE] = {
             eligibleCount = 0,
             tt = GetString(_G.BARSTEWARD_RANDOM_TRIBUTE)
         }
-        local ct = bgInfo[_G.LFG_ACTIVITY_TRIBUTE_COMPETITIVE]
-        local nt = bgInfo[_G.LFG_ACTIVITY_TRIBUTE_CASUAL]
+        local ct = bgInfo[LFG_ACTIVITY_TRIBUTE_COMPETITIVE]
+        local nt = bgInfo[LFG_ACTIVITY_TRIBUTE_CASUAL]
 
         if (nt) then
             data.activityData = nt
-            data.label = _G.SI_LFGACTIVITY10
-            data.icon = BS.TRIBUTE_ICON[_G.LFG_ACTIVITY_TRIBUTE_CASUAL]
+            data.label = SI_LFGACTIVITY10
+            data.icon = BS.TRIBUTE_ICON[LFG_ACTIVITY_TRIBUTE_CASUAL]
             data = BS.GetActvityOutput(data)
         end
 
         if (ct) then
             data.activityData = ct
-            data.label = _G.SI_LFGACTIVITY9
-            data.icon = BS.TRIBUTE_ICON[_G.LFG_ACTIVITY_TRIBUTE_COMPETITIVE]
+            data.label = SI_LFGACTIVITY9
+            data.icon = BS.TRIBUTE_ICON[LFG_ACTIVITY_TRIBUTE_COMPETITIVE]
             data = BS.GetActvityOutput(data)
         end
 
@@ -1130,7 +1130,7 @@ BS.widgets[BS.W_RANDOM_TRIBUTE] = {
 
         return data.eligibleCount
     end,
-    event = _G.EVENT_PLAYER_ACTIVATED,
+    event = EVENT_PLAYER_ACTIVATED,
     icon = "icons/u34_tribute_tutorial",
     hideWhenEqual = 0,
     tooltip = GetString(_G.BARSTEWARD_RANDOM_TRIBUTE),
@@ -1154,7 +1154,7 @@ BS.widgets[BS.W_CHESTS_FOUND] = {
     name = "chestsFound",
     update = function(widget, _, result, targetName)
         if (BS.Vars.DungeonInfo.IsInDungeon) then
-            if (result == _G.CLIENT_INTERACT_RESULT_SUCCESS and isChest(targetName)) then
+            if (result == CLIENT_INTERACT_RESULT_SUCCESS and isChest(targetName)) then
                 local x, y, _ = GetMapPlayerPosition("player")
                 local delta = 0.003
 
@@ -1176,7 +1176,7 @@ BS.widgets[BS.W_CHESTS_FOUND] = {
 
         return BS.Vars.DungeonInfo.ChestCount
     end,
-    event = {_G.EVENT_CLIENT_INTERACT_RESULT, _G.EVENT_PLAYER_ACTIVATED},
+    event = {EVENT_CLIENT_INTERACT_RESULT, EVENT_PLAYER_ACTIVATED},
     hideWhenTrue = function()
         return not IsUnitInDungeon("player")
     end,
@@ -1188,7 +1188,7 @@ BS.widgets[BS.W_DAILY_PROGRESS] = {
     -- v1.5.4
     name = "dailyEndeavourBar",
     update = function(widget)
-        local _, maxTask = getTimedActivityProgress(_G.TIMED_ACTIVITY_TYPE_DAILY, nil, nil, nil, true)
+        local _, maxTask = getTimedActivityProgress(TIMED_ACTIVITY_TYPE_DAILY, nil, nil, nil, true)
         local this = BS.W_DAILY_PROGRESS
 
         if (maxTask.name and maxTask.maxProgress) then
@@ -1211,25 +1211,25 @@ BS.widgets[BS.W_DAILY_PROGRESS] = {
         end
     end,
     gradient = function()
-        local startg = {GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, _G.INTERFACE_GENERAL_COLOR_STATUS_BAR_START)}
-        local endg = {GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, _G.INTERFACE_GENERAL_COLOR_STATUS_BAR_END)}
+        local startg = {GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_START)}
+        local endg = {GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_END)}
         local s = BS.Vars.Controls[BS.W_DAILY_PROGRESS].GradientStart or startg
         local e = BS.Vars.Controls[BS.W_DAILY_PROGRESS].GradientEnd or endg
 
         return s, e
     end,
-    event = {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED},
+    event = {EVENT_PLAYER_ACTIVATED, EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED},
     icon = "journal/u26_progress_digsite_marked_incomplete",
     tooltip = GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS_BEST),
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
-            GROUP_MENU_KEYBOARD:ShowCategory(_G.TIMED_ACTIVITIES_FRAGMENT)
+            GROUP_MENU_KEYBOARD:ShowCategory(TIMED_ACTIVITIES_FRAGMENT)
         else
             ZO_ACTIVITY_FINDER_ROOT_GAMEPAD:ShowCategory(TIMED_ACTIVITIES_GAMEPAD:GetCategoryData())
         end
     end,
     complete = function()
-        return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(_G.TIMED_ACTIVITY_TYPE_DAILY)
+        return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(TIMED_ACTIVITY_TYPE_DAILY)
     end,
     customSettings = {
         [1] = {
@@ -1309,23 +1309,23 @@ BS.widgets[BS.W_DAILY_COUNT] = {
 
                 local counts = BS.Vars:GetCommon("dailyQuestCount", player)
 
-                if (eventId == _G.EVENT_QUEST_ADDED) then
+                if (eventId == EVENT_QUEST_ADDED) then
                     local quest = findQuest(param1)
 
                     if (quest) then
-                        if (quest.repeatableType == _G.QUEST_REPEAT_DAILY) then
+                        if (quest.repeatableType == QUEST_REPEAT_DAILY) then
                             counts[param2] = "added"
                         end
                     end
                 end
 
-                if (eventId == _G.EVENT_QUEST_REMOVED) then
+                if (eventId == EVENT_QUEST_REMOVED) then
                     if (param1 ~= true) then
                         counts[param3] = nil
                     end
                 end
 
-                if (eventId == _G.EVENT_QUEST_COMPLETE) then
+                if (eventId == EVENT_QUEST_COMPLETE) then
                     if (counts[param1] ~= nil) then
                         counts[param1] = "complete"
                     end
@@ -1347,9 +1347,9 @@ BS.widgets[BS.W_DAILY_COUNT] = {
                 BS.ResizeBar(BS.GetVar("Bar", BS.W_DAILY_COUNT))
 
                 local ttt = GetString(_G.BARSTEWARD_DAILY_QUEST_COUNT) .. BS.LF
-                local ttext = BS.LC.Format(_G.SI_DLC_BOOK_QUEST_STATUS_ACCEPTED) .. ": " .. added .. BS.LF
+                local ttext = BS.LC.Format(SI_DLC_BOOK_QUEST_STATUS_ACCEPTED) .. ": " .. added .. BS.LF
 
-                ttext = ttext .. zo_strformat(_G.SI_NOTIFYTEXT_QUEST_COMPLETE, complete)
+                ttext = ttext .. zo_strformat(SI_NOTIFYTEXT_QUEST_COMPLETE, complete)
                 ttt = ttt .. BS.COLOURS.White:Colorize(ttext)
 
                 widget:SetTooltip(ttt)
@@ -1358,16 +1358,16 @@ BS.widgets[BS.W_DAILY_COUNT] = {
         )
     end,
     event = {
-        _G.EVENT_QUEST_ADDED,
-        _G.EVENT_QUEST_REMOVED,
-        _G.EVENT_QUEST_COMPLETE
+        EVENT_QUEST_ADDED,
+        EVENT_QUEST_REMOVED,
+        EVENT_QUEST_COMPLETE
     },
     icon = "floatingmarkers/repeatablequest_available_icon",
     tooltip = GetString(_G.BARSTEWARD_DAILY_QUEST_COUNT)
 }
 
 SecurePostHook(
-    IsInGamepadPreferredMode() and _G.FISHING_GAMEPAD or _G.FISHING_KEYBOARD,
+    IsInGamepadPreferredMode() and FISHING_GAMEPAD or FISHING_KEYBOARD,
     "PrepareForInteraction",
     function()
         local isFishing = false
@@ -1375,7 +1375,7 @@ SecurePostHook(
         if (not SCENE_MANAGER:IsInUIMode()) then
             local additionalInfo = select(5, GetGameCameraInteractableActionInfo())
 
-            if (additionalInfo == _G.ADDITIONAL_INTERACT_INFO_FISHING_NODE) then
+            if (additionalInfo == ADDITIONAL_INTERACT_INFO_FISHING_NODE) then
                 if (GetFishingLure() ~= 0) then
                     isFishing = true
                 end
@@ -1395,7 +1395,7 @@ BS.widgets[BS.W_FISHING] = {
     -- v3.0.0
     name = "fishing",
     update = function(widget, event, ...)
-        if (event == _G.EVENT_LOOT_RECEIVED) then
+        if (event == EVENT_LOOT_RECEIVED) then
             if ((os.time() - fishingTimeout) > (BS.lastTrigger or 0)) then
                 BS.isFishing = false
             end
@@ -1410,7 +1410,7 @@ BS.widgets[BS.W_FISHING] = {
         end
 
         local loot = ""
-        local tt = BS.LC.Format(_G.SI_GUILDACTIVITYATTRIBUTEVALUE9)
+        local tt = BS.LC.Format(SI_GUILDACTIVITYATTRIBUTEVALUE9)
         local typeCount = 0
 
         for lootType, count in pairs(BS.Vars.FishingLoot) do
@@ -1436,7 +1436,7 @@ BS.widgets[BS.W_FISHING] = {
             widget:SetTooltip(tt)
         end
     end,
-    event = _G.EVENT_LOOT_RECEIVED,
+    event = EVENT_LOOT_RECEIVED,
     icon = "icons/fishing_discus_blue_turquoise",
     onLeftClick = function()
         BS.LC.Clear(BS.Vars.FishingLoot)
@@ -1444,7 +1444,7 @@ BS.widgets[BS.W_FISHING] = {
         BS.ForceResize(BS.W_FISHING)
         BS.ResizeBar(BS.GetVar("Bar", BS.W_FISHING))
     end,
-    tooltip = BS.LC.Format(_G.SI_GUILDACTIVITYATTRIBUTEVALUE9)
+    tooltip = BS.LC.Format(SI_GUILDACTIVITYATTRIBUTEVALUE9)
 }
 
 local function getPledgeIds()
@@ -1491,7 +1491,7 @@ BS.widgets[BS.W_DAILY_PLEDGES] = {
             BS.Vars:SetCommon({}, "pledges", character)
         end
 
-        if (event == _G.EVENT_QUEST_CONDITION_COUNTER_CHANGED) then
+        if (event == EVENT_QUEST_CONDITION_COUNTER_CHANGED) then
             addedName = 1
         end
 
@@ -1590,10 +1590,10 @@ BS.widgets[BS.W_DAILY_PLEDGES] = {
         return done == maxPledges
     end,
     event = {
-        _G.EVENT_QUEST_ADDED,
-        _G.EVENT_QUEST_REMOVED,
-        _G.EVENT_QUEST_COMPLETE,
-        _G.EVENT_QUEST_CONDITION_COUNTER_CHANGED
+        EVENT_QUEST_ADDED,
+        EVENT_QUEST_REMOVED,
+        EVENT_QUEST_COMPLETE,
+        EVENT_QUEST_CONDITION_COUNTER_CHANGED
     },
     icon = "icons/event_undaunted_commendation",
     tooltip = GetString(_G.BARSTEWARD_DAILY_PLEDGES),
@@ -1629,7 +1629,7 @@ BS.widgets[BS.W_ACHIEVEMENT_TRACKER] = {
             BS.TrackAchievements()
         end
 
-        local id = event == _G.EVENT_ACHIEVEMENT_UPDATED and updatedId or awardedId
+        local id = event == EVENT_ACHIEVEMENT_UPDATED and updatedId or awardedId
         local this = BS.W_ACHIEVEMENT_TRACKER
         local tracked = BS.IsTracked()
         local completed, achCount = 0, BS.LC.CountElements(tracked)
@@ -1719,8 +1719,8 @@ BS.widgets[BS.W_ACHIEVEMENT_TRACKER] = {
         table.sort(
             tttable,
             function(a, b)
-                local compa = a.category .. a.name
-                local compb = b.category .. b.name
+                local compa = (a.category or "") .. (a.name or "")
+                local compb = (b.category or "") .. (b.name or "")
 
                 return compa < compb
             end
@@ -1755,7 +1755,7 @@ BS.widgets[BS.W_ACHIEVEMENT_TRACKER] = {
 
         return #achievements
     end,
-    event = {_G.EVENT_ACHIEVEMENT_AWARDED, _G.EVENT_ACHIEVEMENT_UPDATED},
+    event = {EVENT_ACHIEVEMENT_AWARDED, EVENT_ACHIEVEMENT_UPDATED},
     icon = "icons/housing_u42_mb_eye",
     tooltip = GetString(_G.BARSTEWARD_TRACKER),
     onLeftClick = function()
@@ -1768,7 +1768,7 @@ BS.widgets[BS.W_ACHIEVEMENT_TRACKER] = {
     customSettings = {
         [1] = {
             type = "checkbox",
-            name = BS.LC.Format(_G.SI_TIMEDACTIVITYTYPE0),
+            name = BS.LC.Format(SI_TIMEDACTIVITYTYPE0),
             getFunc = function()
                 return BS.GetVar("Daily", BS.W_ACHIEVEMENT_TRACKER)
             end,
@@ -1787,7 +1787,7 @@ BS.widgets[BS.W_ACHIEVEMENT_TRACKER] = {
         },
         [2] = {
             type = "checkbox",
-            name = BS.LC.Format(_G.SI_CAMPAIGN_LEADERBOARDS_OVERALL),
+            name = BS.LC.Format(SI_CAMPAIGN_LEADERBOARDS_OVERALL),
             getFunc = function()
                 return BS.GetVar("Overall", BS.W_ACHIEVEMENT_TRACKER)
             end,
@@ -1835,7 +1835,7 @@ BS.widgets[BS.W_GOLDEN_PURSUITS] = {
 
         if (campaigns > 0) then
             local campaignKey = GetActivePromotionalEventCampaignKey(1)
-            local campaignData = _G.PROMOTIONAL_EVENT_MANAGER:GetCampaignDataByKey(campaignKey)
+            local campaignData = PROMOTIONAL_EVENT_MANAGER:GetCampaignDataByKey(campaignKey)
 
             if (campaignData) then
                 campaign.name = campaignData:GetDisplayName()
@@ -1902,21 +1902,21 @@ BS.widgets[BS.W_GOLDEN_PURSUITS] = {
 
             widget:SetValue(completed .. "/" .. max .. unclaimedRewards)
         else
-            widget:SetValue(BS.LC.Format(_G.SI_MARKET_SUBSCRIPTION_PAGE_SUBSCRIPTION_STATUS_NOT_ACTIVE))
+            widget:SetValue(BS.LC.Format(SI_MARKET_SUBSCRIPTION_PAGE_SUBSCRIPTION_STATUS_NOT_ACTIVE))
         end
 
         widget:SetColour(BS.GetColour(BS.W_GOLDEN_PURSUITS, true))
 
-        local tt = BS.LC.Format(_G.SI_PROMOTIONAL_EVENT_TRACKER_HEADER)
+        local tt = BS.LC.Format(SI_PROMOTIONAL_EVENT_TRACKER_HEADER)
 
         if (campaign.name) then
             -- tt = tt .. BS.LF
             -- tt = tt .. campaign.name
             tt = tt .. BS.LF .. BS.LF
             if (rewards > 0) then
-                tt = tt .. BS.LC.Format(_G.SI_PLAYER_TO_PLAYER_PROMOTIONAL_EVENT_CLAIMABLE_REWARD)
+                tt = tt .. BS.LC.Format(SI_PLAYER_TO_PLAYER_PROMOTIONAL_EVENT_CLAIMABLE_REWARD)
             else
-                tt = tt .. ZO_CachedStrFormat(_G.SI_PROMOTIONAL_EVENT_REWARDS_CLAIMED_ANNOUNCEMENT, claimed)
+                tt = tt .. ZO_CachedStrFormat(SI_PROMOTIONAL_EVENT_REWARDS_CLAIMED_ANNOUNCEMENT, claimed)
             end
         end
 
@@ -1947,15 +1947,15 @@ BS.widgets[BS.W_GOLDEN_PURSUITS] = {
     hideWhenTrue = function()
         return GetNumActivePromotionalEventCampaigns() == 0
     end,
-    callback = {[_G.PROMOTIONAL_EVENT_MANAGER] = {"CampaignsUpdated", "RewardsClaimed"}},
+    callback = {[PROMOTIONAL_EVENT_MANAGER] = {"CampaignsUpdated", "RewardsClaimed"}},
     event = {
-        _G.EVENT_PROMOTIONAL_EVENTS_ACTIVITY_PROGRESS_UPDATED,
-        _G.EVENT_PROMOTIONAL_EVENTS_ACTIVITY_TRACKING_UPDATED
+        EVENT_PROMOTIONAL_EVENTS_ACTIVITY_PROGRESS_UPDATED,
+        EVENT_PROMOTIONAL_EVENTS_ACTIVITY_TRACKING_UPDATED
     },
     icon = "icons/event_confetti_kit",
-    tooltip = BS.LC.Format(_G.SI_PROMOTIONAL_EVENT_TRACKER_HEADER),
+    tooltip = BS.LC.Format(SI_PROMOTIONAL_EVENT_TRACKER_HEADER),
     onLeftClick = function()
-        _G.PROMOTIONAL_EVENT_MANAGER:ShowPromotionalEventScene()
+        PROMOTIONAL_EVENT_MANAGER:ShowPromotionalEventScene()
     end,
     customSettings = {
         [1] = {

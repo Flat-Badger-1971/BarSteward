@@ -8,7 +8,7 @@ BS.widgets[BS.W_ARCHIVE_PORT] = {
 
         return 0
     end,
-    event = _G.EVENT_PLAYER_ACTIVATED,
+    event = EVENT_PLAYER_ACTIVATED,
     tooltip = GetString(_G.BARSTEWARD_INFINITE_ARCHIVE_PORT),
     icon = "icons/poi/poi_endlessdungeon_complete",
     cooldown = true,
@@ -22,7 +22,7 @@ local function wrap(value)
 end
 
 local function getBuffs()
-    local buffTypes = {_G.ENDLESS_DUNGEON_BUFF_TYPE_VERSE, _G.ENDLESS_DUNGEON_BUFF_TYPE_VISION}
+    local buffTypes = {ENDLESS_DUNGEON_BUFF_TYPE_VERSE, ENDLESS_DUNGEON_BUFF_TYPE_VISION}
     local buffEntries = {}
 
     for _, buffTypeV in ipairs(buffTypes) do
@@ -57,7 +57,7 @@ local function getBuffs()
     return buffEntries
 end
 
-local arc = BS.LC.Format(_G["SI_ENDLESSDUNGEONCOUNTERTYPE" .. _G.ENDLESS_DUNGEON_COUNTER_TYPE_ARC])
+local arc = BS.LC.Format(_G["SI_ENDLESSDUNGEONCOUNTERTYPE" .. ENDLESS_DUNGEON_COUNTER_TYPE_ARC])
 local currentScore = 0
 local arcIcon = "endlessdungeon/icon_progression_arc"
 local cycleIcon = "endlessdungeon/icon_progression_cycle"
@@ -88,11 +88,11 @@ BS.widgets[BS.W_INFINITE_ARCHIVE_PROGRESS] = {
 
         local stageCounter, cycleCounter, arcCounter = ENDLESS_DUNGEON_MANAGER:GetProgression()
         local maxProgressPerArc =
-            BS.INFINITE_ARCHIVE_MAX_COUNTS[_G.ENDLESS_DUNGEON_COUNTER_TYPE_CYCLE] *
-            BS.INFINITE_ARCHIVE_MAX_COUNTS[_G.ENDLESS_DUNGEON_COUNTER_TYPE_ARC]
+            BS.INFINITE_ARCHIVE_MAX_COUNTS[ENDLESS_DUNGEON_COUNTER_TYPE_CYCLE] *
+            BS.INFINITE_ARCHIVE_MAX_COUNTS[ENDLESS_DUNGEON_COUNTER_TYPE_ARC]
         local currentProgress =
             (stageCounter - 1) +
-            ((cycleCounter - 1) * BS.INFINITE_ARCHIVE_MAX_COUNTS[_G.ENDLESS_DUNGEON_COUNTER_TYPE_CYCLE])
+            ((cycleCounter - 1) * BS.INFINITE_ARCHIVE_MAX_COUNTS[ENDLESS_DUNGEON_COUNTER_TYPE_CYCLE])
         local pc = math.ceil((currentProgress / maxProgressPerArc) * 100)
 
         if (BS.GetVar("Progress", this)) then
@@ -126,20 +126,20 @@ BS.widgets[BS.W_INFINITE_ARCHIVE_PROGRESS] = {
             ttt ..
             wrap(
                 ZO_CachedStrFormat(
-                    GetString(_G.SI_ENDLESS_DUNGEON_ATTEMPTS_REMAINING_CHANGED_ANNOUNCEMENT_SUBTITLE),
+                    GetString(SI_ENDLESS_DUNGEON_ATTEMPTS_REMAINING_CHANGED_ANNOUNCEMENT_SUBTITLE),
                     threads
                 )
             )
         ttt = ttt .. BS.LF .. BS.LF
         ttt =
-            ttt .. wrap(BS.LC.Format(_G["SI_ENDLESSDUNGEONCOUNTERTYPE" .. _G.ENDLESS_DUNGEON_COUNTER_TYPE_STAGE]) .. ": ")
+            ttt .. wrap(BS.LC.Format(_G["SI_ENDLESSDUNGEONCOUNTERTYPE" .. ENDLESS_DUNGEON_COUNTER_TYPE_STAGE]) .. ": ")
         ttt = ttt .. stageCounter .. BS.LF
         ttt =
-            ttt .. wrap(BS.LC.Format(_G["SI_ENDLESSDUNGEONCOUNTERTYPE" .. _G.ENDLESS_DUNGEON_COUNTER_TYPE_CYCLE]) .. ": ")
+            ttt .. wrap(BS.LC.Format(_G["SI_ENDLESSDUNGEONCOUNTERTYPE" .. ENDLESS_DUNGEON_COUNTER_TYPE_CYCLE]) .. ": ")
         ttt = ttt .. cycleCounter .. BS.LF
         ttt = ttt .. wrap(arc .. ": ")
         ttt = ttt .. arcCounter .. " (" .. pc .. "%)" .. BS.LF
-        ttt = ttt .. wrap(BS.LC.Format(_G.SI_ENDLESS_DUNGEON_SUMMARY_SCORE_HEADER) .. ":") .. "  " .. currentScore .. BS.LF
+        ttt = ttt .. wrap(BS.LC.Format(SI_ENDLESS_DUNGEON_SUMMARY_SCORE_HEADER) .. ":") .. "  " .. currentScore .. BS.LF
 
         local buffs = getBuffs()
         local function addBuffs(buffData)
@@ -160,20 +160,20 @@ BS.widgets[BS.W_INFINITE_ARCHIVE_PROGRESS] = {
         end
 
         if (#buffs > 0) then
-            local visions = buffs[_G.ENDLESS_DUNGEON_BUFF_TYPE_VISION]
-            local verses = buffs[_G.ENDLESS_DUNGEON_BUFF_TYPE_VERSE]
+            local visions = buffs[ENDLESS_DUNGEON_BUFF_TYPE_VISION]
+            local verses = buffs[ENDLESS_DUNGEON_BUFF_TYPE_VERSE]
 
             if (#visions + #verses > 0) then
                 ttt = ttt .. BS.LF
             end
 
             if (#visions > 0) then
-                ttt = ttt .. BS.LC.Format(_G.SI_ENDLESS_DUNGEON_SUMMARY_VISIONS_HEADER) .. BS.LF
+                ttt = ttt .. BS.LC.Format(SI_ENDLESS_DUNGEON_SUMMARY_VISIONS_HEADER) .. BS.LF
                 ttt = ttt .. addBuffs(visions) .. (#verses > 0 and BS.LF or "")
             end
 
             if (#verses > 0) then
-                ttt = ttt .. BS.LC.Format(_G.SI_ENDLESS_DUNGEON_SUMMARY_VERSES_HEADER) .. BS.LF
+                ttt = ttt .. BS.LC.Format(SI_ENDLESS_DUNGEON_SUMMARY_VERSES_HEADER) .. BS.LF
                 ttt = ttt .. addBuffs(verses)
             end
         else
@@ -186,14 +186,14 @@ BS.widgets[BS.W_INFINITE_ARCHIVE_PROGRESS] = {
         return false
     end,
     gradient = function()
-        local startg = {GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, _G.INTERFACE_GENERAL_COLOR_STATUS_BAR_START)}
-        local endg = {GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, _G.INTERFACE_GENERAL_COLOR_STATUS_BAR_END)}
+        local startg = {GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_START)}
+        local endg = {GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_END)}
         local s = BS.Vars.Controls[BS.W_INFINITE_ARCHIVE_PROGRESS].GradientStart or startg
         local e = BS.Vars.Controls[BS.W_INFINITE_ARCHIVE_PROGRESS].GradientEnd or endg
 
         return s, e
     end,
-    events = _G.EVENT_PLAYER_ACTIVATED,
+    events = EVENT_PLAYER_ACTIVATED,
     callback = {
         [ENDLESS_DUNGEON_MANAGER] = {
             {event = "DungeonStarted", label = ""},
@@ -258,8 +258,8 @@ BS.widgets[BS.W_INFINITE_ARCHIVE_SCORE] = {
     update = function(widget, event, score)
         if (type(BS.Vars.EndlessHighest) == "number") then
             BS.Vars.EndlessHighest = {
-                [_G.ENDLESS_DUNGEON_GROUP_TYPE_SOLO] = 0,
-                [_G.ENDLESS_DUNGEON_GROUP_TYPE_DUO] = BS.Vars.EndlessHighest
+                [ENDLESS_DUNGEON_GROUP_TYPE_SOLO] = 0,
+                [ENDLESS_DUNGEON_GROUP_TYPE_DUO] = BS.Vars.EndlessHighest
             }
         elseif (not BS.Vars.EndlessHighest) then
             BS.Vars.EndlessHighest = {}
@@ -290,10 +290,10 @@ BS.widgets[BS.W_INFINITE_ARCHIVE_SCORE] = {
             BS.Vars.EndlessHighest[groupType] = currentScore
         end
 
-        local solo = " " .. BS.LC.Format(_G.SI_ENDLESSDUNGEONGROUPTYPE0) .. ""
-        local duo = " " .. BS.LC.Format(_G.SI_ENDLESSDUNGEONGROUPTYPE1) .. ""
-        local soloScore = BS.Vars.EndlessHighest[_G.ENDLESS_DUNGEON_GROUP_TYPE_SOLO] or 0
-        local duoScore = BS.Vars.EndlessHighest[_G.ENDLESS_DUNGEON_GROUP_TYPE_DUO] or 0
+        local solo = " " .. BS.LC.Format(SI_ENDLESSDUNGEONGROUPTYPE0) .. ""
+        local duo = " " .. BS.LC.Format(SI_ENDLESSDUNGEONGROUPTYPE1) .. ""
+        local soloScore = BS.Vars.EndlessHighest[ENDLESS_DUNGEON_GROUP_TYPE_SOLO] or 0
+        local duoScore = BS.Vars.EndlessHighest[ENDLESS_DUNGEON_GROUP_TYPE_DUO] or 0
         local ttt = GetString(_G.BARSTEWARD_INFINITE_ARCHIVE_SCORE) .. BS.LF
         local yellow = BS.COLOURS.Yellow
 
@@ -313,7 +313,7 @@ BS.widgets[BS.W_INFINITE_ARCHIVE_SCORE] = {
 
         return false
     end,
-    events = _G.EVENT_PLAYER_ACTIVATED,
+    events = EVENT_PLAYER_ACTIVATED,
     callback = {
         [ENDLESS_DUNGEON_MANAGER] = {
             {event = "ScoreChanged", label = "ScoreChanged"},

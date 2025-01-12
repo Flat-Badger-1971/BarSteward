@@ -31,13 +31,13 @@ BS.widgets[BS.W_FRIENDS] = {
         local this = BS.W_FRIENDS
         local masterList = FRIENDS_LIST_MANAGER:GetMasterList()
         local offline, online, other = {}, {}, {}
-        local tt = BS.LC.Format(_G.SI_SOCIAL_MENU_CONTACTS)
+        local tt = BS.LC.Format(SI_SOCIAL_MENU_CONTACTS)
         local textureFunctions = ZO_SocialList_GetPlatformTextureFunctions()
 
         for _, friend in ipairs(masterList) do
             if (friend.online) then
                 table.insert(online, friend)
-            elseif (friend.status == _G.PLAYER_STATUS_OFFLINE) then
+            elseif (friend.status == PLAYER_STATUS_OFFLINE) then
                 table.insert(offline, friend)
             else
                 table.insert(other, friend)
@@ -55,8 +55,8 @@ BS.widgets[BS.W_FRIENDS] = {
         widget:SetValue(#online .. (BS.GetVar("HideLimit", this) and "" or ("/" .. #masterList)))
         widget:SetColour(BS.GetColour(this, true))
 
-        if (event == _G.EVENT_FRIEND_PLAYER_STATUS_CHANGED) then
-            if (newStatus == _G.PLAYER_STATUS_ONLINE) then
+        if (event == EVENT_FRIEND_PLAYER_STATUS_CHANGED) then
+            if (newStatus == PLAYER_STATUS_ONLINE) then
                 if (BS.GetVar("Announce", this)) then
                     if (BS.Vars:GetCommon("FriendAnnounce", displayName) == true) then
                         local announce = true
@@ -89,16 +89,16 @@ BS.widgets[BS.W_FRIENDS] = {
         return online
     end,
     event = {
-        _G.EVENT_PLAYER_ACTIVATED,
-        _G.EVENT_FRIEND_PLAYER_STATUS_CHANGED,
-        _G.EVENT_PLAYER_STATUS_CHANGED,
-        _G.EVENT_FRIEND_CHARACTER_ZONE_CHANGED
+        EVENT_PLAYER_ACTIVATED,
+        EVENT_FRIEND_PLAYER_STATUS_CHANGED,
+        EVENT_PLAYER_STATUS_CHANGED,
+        EVENT_FRIEND_CHARACTER_ZONE_CHANGED
     },
-    tooltip = BS.LC.Format(_G.SI_GAMEPAD_SOCIAL_FOOTER_NUM_ONLINE),
+    tooltip = BS.LC.Format(SI_GAMEPAD_SOCIAL_FOOTER_NUM_ONLINE),
     icon = "chatwindow/chat_friendsonline_up",
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
-            SYSTEMS:GetObject("mainMenu"):ToggleCategory(_G.MENU_CATEGORY_CONTACTS)
+            SYSTEMS:GetObject("mainMenu"):ToggleCategory(MENU_CATEGORY_CONTACTS)
         else
             SCENE_MANAGER:Show("gamepad_friends")
         end
@@ -163,7 +163,7 @@ local function getMasterList()
 
     for guildMemberIndex = 1, numGuildMembers do
         local displayName, _, _, status, _ = GetGuildMemberInfo(guildId, guildMemberIndex)
-        local online = (status ~= _G.PLAYER_STATUS_OFFLINE)
+        local online = (status ~= PLAYER_STATUS_OFFLINE)
         local isLocalPlayer = guildMemberIndex == localPlayerIndex
         local hasCharacter, rawCharacterName, zone, _, alliance = GetGuildMemberCharacterInfo(guildId, guildMemberIndex)
 
@@ -172,10 +172,10 @@ local function getMasterList()
             displayName = displayName,
             hasCharacter = hasCharacter,
             isLocalPlayer = isLocalPlayer,
-            characterName = ZO_CachedStrFormat(_G.SI_UNIT_NAME, rawCharacterName),
-            formattedZone = ZO_CachedStrFormat(_G.SI_ZONE_NAME, zone),
+            characterName = ZO_CachedStrFormat(SI_UNIT_NAME, rawCharacterName),
+            formattedZone = ZO_CachedStrFormat(SI_ZONE_NAME, zone),
             alliance = alliance,
-            formattedAllianceName = ZO_CachedStrFormat(_G.SI_ALLIANCE_NAME, GetAllianceName(alliance)),
+            formattedAllianceName = ZO_CachedStrFormat(SI_ALLIANCE_NAME, GetAllianceName(alliance)),
             status = status,
             online = online
         }
@@ -222,7 +222,7 @@ BS.widgets[BS.W_GUILD_FRIENDS] = {
                 if (info.online) then
                     table.insert(online, info)
                     oCount = oCount + 1
-                elseif (info.status == _G.PLAYER_STATUS_OFFLINE) then
+                elseif (info.status == PLAYER_STATUS_OFFLINE) then
                     table.insert(offline, info)
                 else
                     table.insert(other, info)
@@ -246,7 +246,7 @@ BS.widgets[BS.W_GUILD_FRIENDS] = {
         widget:SetValue(oCount .. (BS.GetVar("HideLimit", this) and "" or ("/" .. tCount)))
         widget:SetColour(BS.GetColour(this, true))
 
-        if (newStatus == _G.PLAYER_STATUS_ONLINE) then
+        if (newStatus == PLAYER_STATUS_ONLINE) then
             if (BS.GetVar("Announce", this) and isFriend(displayName)) then
                 local announce = true
                 local previousTime = BS.Vars:GetCommon("PreviousGuildFriendTime", displayName) or (os.time() - 3600)
@@ -276,14 +276,14 @@ BS.widgets[BS.W_GUILD_FRIENDS] = {
         return online
     end,
     event = {
-        _G.EVENT_PLAYER_ACTIVATED,
-        _G.EVENT_GUILD_MEMBER_PLAYER_STATUS_CHANGED
+        EVENT_PLAYER_ACTIVATED,
+        EVENT_GUILD_MEMBER_PLAYER_STATUS_CHANGED
     },
     tooltip = BS.LC.Format(_G.BARSTEWARD_GUILD_FRIENDS_ONLINE),
     icon = "guild/guildheraldry_indexicon_crest_up",
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
-            SYSTEMS:GetObject("mainMenu"):ToggleCategory(_G.MENU_CATEGORY_GUILDS)
+            SYSTEMS:GetObject("mainMenu"):ToggleCategory(MENU_CATEGORY_GUILDS)
         else
             SCENE_MANAGER:Show("gamepad_guilds")
         end

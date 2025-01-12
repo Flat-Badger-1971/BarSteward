@@ -28,7 +28,7 @@ function BS.CreateComboBox(name, parent, width, height, choices, default, callba
                     end
                 )
                 entry.id = idx
-                comboBox:AddItem(entry, _G.ZO_COMBOBOX_SUPRESS_UPDATE)
+                comboBox:AddItem(entry, ZO_COMBOBOX_SUPRESS_UPDATE)
             end
         end
 
@@ -208,7 +208,7 @@ function BS.PBAR()
     bar.overlay:SetAnchorFill()
     bar.overlay.left = WINDOW_MANAGER:CreateControl(name .. "OverlayLeft", bar.bg, CT_TEXTURE)
     bar.overlay.left:SetTexture("EsoUI/Art/Miscellaneous/progressbar_frame.dds")
-    bar.overlay.left:SetDrawLayer(_G.OVERLAY)
+    bar.overlay.left:SetDrawLayer(DL_OVERLAY)
     bar.overlay.left:SetTextureCoords(0, 0.0195, 0, 0.625)
     bar.overlay.left:SetWidth(10)
     bar.overlay.left:SetAnchor(TOPLEFT)
@@ -216,7 +216,7 @@ function BS.PBAR()
 
     bar.overlay.right = WINDOW_MANAGER:CreateControl(name .. "OverlayRight", bar.bg, CT_TEXTURE)
     bar.overlay.right:SetTexture("EsoUI/Art/Miscellaneous/progressbar_frame.dds")
-    bar.overlay.right:SetDrawLayer(_G.OVERLAY)
+    bar.overlay.right:SetDrawLayer(DL_OVERLAY)
     bar.overlay.right:SetTextureCoords(0.5938, 0.6133, 0, 0.625)
     bar.overlay.right:SetWidth(10)
     bar.overlay.right:SetAnchor(TOPRIGHT)
@@ -224,7 +224,7 @@ function BS.PBAR()
 
     bar.overlay.middle = WINDOW_MANAGER:CreateControl(name .. "OverlayMiddle", bar.bg, CT_TEXTURE)
     bar.overlay.middle:SetTexture("EsoUI/Art/Miscellaneous/progressbar_frame.dds")
-    bar.overlay.middle:SetDrawLayer(_G.OVERLAY)
+    bar.overlay.middle:SetDrawLayer(DL_OVERLAY)
     bar.overlay.middle:SetTextureCoords(0.0195, 0.5898, 0, 0.625)
     bar.overlay.middle:SetAnchor(TOPLEFT, bar.overlay.left, TOPRIGHT)
     bar.overlay.middle:SetAnchor(BOTTOMRIGHT, bar.overlay.right, BOTTOMLEFT)

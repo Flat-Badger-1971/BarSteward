@@ -30,7 +30,7 @@ function BS.GetMaintenanceSettings()
 
     controls[#controls + 1] = {
         type = "button",
-        name = ZO_CachedStrFormat("<<C:1>>", GetString(_G.SI_KEYCODE19)),
+        name = ZO_CachedStrFormat("<<C:1>>", GetString(SI_KEYCODE19)),
         func = function()
             local hasCharactersForDeletion = false
 

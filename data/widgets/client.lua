@@ -102,7 +102,7 @@ do
             controls = {
                 [1] = {
                     type = "checkbox",
-                    name = BS.LC.Format(_G.SI_ADDONLOADSTATE2),
+                    name = BS.LC.Format(SI_ADDONLOADSTATE2),
                     getFunc = function()
                         return BS.Vars[string.format("Timer%dEnabled", timer)]
                     end,
@@ -127,7 +127,7 @@ do
                 },
                 [3] = {
                     type = "editbox",
-                    name = BS.LC.Format(_G.SI_ADDON_MANAGER_NAME),
+                    name = BS.LC.Format(SI_ADDON_MANAGER_NAME),
                     getFunc = function()
                         return BS.Vars[string.format("Timer%dName", timer)] or
                             ZO_CachedStrFormat(_G.BARSTEWARD_TIMER, ZO_CachedStrFormat("<<n:1>>", timer))
@@ -200,7 +200,7 @@ BS.widgets = {
             widget:SetColour(BS.GetColour(this, true))
 
             widget:SetTooltip(
-                BS.LC.Format(_G.SI_TRADINGHOUSELISTINGSORTTYPE0) ..
+                BS.LC.Format(SI_TRADINGHOUSELISTINGSORTTYPE0) ..
                     BS.LF .. BS.COLOURS.White:Colorize(BS.LC.Format(_G.BARSTEWARD_TIMER_TIP))
             )
 
@@ -212,7 +212,7 @@ BS.widgets = {
             ShowMenu()
         end,
         timer = 1000,
-        tooltip = BS.LC.Format(_G.SI_TRADINGHOUSELISTINGSORTTYPE0),
+        tooltip = BS.LC.Format(SI_TRADINGHOUSELISTINGSORTTYPE0),
         icon = "hud/gamepad/gp_radialicon_defer_down",
         customSettings = {
             [1] = {

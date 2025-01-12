@@ -29,7 +29,7 @@ BS.widgets[BS.W_RAPPORT] = {
 
         return rapportValue
     end,
-    event = {_G.EVENT_COMPANION_RAPPORT_UPDATE, _G.EVENT_ACTIVE_COMPANION_STATE_CHANGED},
+    event = {EVENT_COMPANION_RAPPORT_UPDATE, EVENT_ACTIVE_COMPANION_STATE_CHANGED},
     icon = "hud/lootHistory_icon_rapportincrease_generic",
     tooltip = GetString(_G.BARSTEWARD_RAPPORT),
     hideWhenEqual = function()
@@ -80,7 +80,7 @@ BS.widgets[BS.W_COMPANION_LEVEL] = {
         local progress = (currentXPInLevel or 0) .. " / " .. totalXPInLevel
 
         if (progress == "0 / 0") then
-            progress = BS.LC.Format(_G.SI_EXPERIENCE_LIMIT_REACHED)
+            progress = BS.LC.Format(SI_EXPERIENCE_LIMIT_REACHED)
         end
 
         ttt = ttt .. BS.COLOURS.White:Colorize(progress)
@@ -89,7 +89,7 @@ BS.widgets[BS.W_COMPANION_LEVEL] = {
 
         return companionLevel
     end,
-    event = {_G.EVENT_ACTIVE_COMPANION_STATE_CHANGED, _G.EVENT_COMPANION_EXPERIENCE_GAIN},
+    event = {EVENT_ACTIVE_COMPANION_STATE_CHANGED, EVENT_COMPANION_EXPERIENCE_GAIN},
     icon = "companion/keyboard/category_u30_companions_up",
     tooltip = GetString(_G.BARSTEWARD_COMPANION_LEVEL),
     hideWhenEqual = 0,
@@ -131,17 +131,17 @@ for k, v in pairs(BS.COMPANION_DEFIDS) do
         name = string.format("companion%d", k),
         update = function(widget)
             local this = k
-            local name = ZO_CachedStrFormat(_G.SI_UNIT_NAME, GetCollectibleInfo(GetCompanionCollectibleId(v)))
+            local name = ZO_CachedStrFormat(SI_UNIT_NAME, GetCollectibleInfo(GetCompanionCollectibleId(v)))
 
             widget:SetValue(name)
             widget:SetColour(BS.GetColour(this, true))
 
             return name
         end,
-        event = _G.EVENT_PLAYER_ACTIVATED,
+        event = EVENT_PLAYER_ACTIVATED,
         tooltip = zo_strformat(
             GetString(_G.BARSTEWARD_COMPANION_WIDGET),
-            ZO_CachedStrFormat(_G.SI_UNIT_NAME, GetCollectibleInfo(GetCompanionCollectibleId(v)))
+            ZO_CachedStrFormat(SI_UNIT_NAME, GetCollectibleInfo(GetCompanionCollectibleId(v)))
         ),
         icon = companionIcons[k],
         onLeftClick = function()

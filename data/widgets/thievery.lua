@@ -15,15 +15,15 @@ BS.widgets[BS.W_STOLEN_ITEMS] = {
             function(itemdata)
                 return IsItemStolen(itemdata.bagId, itemdata.slotIndex)
             end,
-            _G.BAG_WORN,
-            _G.BAG_BACKPACK
+            BAG_WORN,
+            BAG_BACKPACK
         )
 
         for _, item in ipairs(filteredItems) do
             local icon = GetItemInfo(item.bagId, item.slotIndex)
             count = count + item.stackCount
 
-            if (item.bagId == _G.BAG_BANK or item.bagId == _G.BAG_SUBSCRIBER_BANK) then
+            if (item.bagId == BAG_BANK or item.bagId == BAG_SUBSCRIBER_BANK) then
                 bagCounts.banked = bagCounts.banked + item.stackCount
             else
                 bagCounts.carrying = bagCounts.carrying + item.stackCount
@@ -68,12 +68,23 @@ BS.widgets[BS.W_STOLEN_ITEMS] = {
                     stt = string.format("%s (%d)", stt, item.count)
                 end
 
-                stt = string.format("%s   %s%s", stt, BS.COLOURS.Yellow:Colorize(tostring(item.sellPrice * item.count)), goldIcon)
+                stt =
+                    string.format(
+                    "%s   %s%s",
+                    stt,
+                    BS.COLOURS.Yellow:Colorize(tostring(item.sellPrice * item.count)),
+                    goldIcon
+                )
                 total = total + (item.sellPrice * item.count)
             end
 
             ttt = ttt .. BS.LF .. BS.LF
-            ttt = ttt .. zo_strformat(GetString(_G.BARSTEWARD_TOTAL_VALUE), BS.COLOURS.Yellow:Colorize(tostring(total)) .. goldIcon)
+            ttt =
+                ttt ..
+                zo_strformat(
+                    GetString(_G.BARSTEWARD_TOTAL_VALUE),
+                    BS.COLOURS.Yellow:Colorize(tostring(total)) .. goldIcon
+                )
 
             ttt = ttt .. BS.COLOURS.White:Colorize(stt)
         end
@@ -115,8 +126,8 @@ BS.widgets[BS.W_FENCE_TRANSACTIONS] = {
     name = "fenceSlots",
     update = function(widget)
         local this = BS.W_FENCE_TRANSACTIONS
-        local max = FENCE_MANAGER:GetNumTotalTransactions(_G.ZO_MODE_STORE_SELL_STOLEN)
-        local used = FENCE_MANAGER:GetNumTransactionsUsed(_G.ZO_MODE_STORE_SELL_STOLEN)
+        local max = FENCE_MANAGER:GetNumTotalTransactions(ZO_MODE_STORE_SELL_STOLEN)
+        local used = FENCE_MANAGER:GetNumTransactionsUsed(ZO_MODE_STORE_SELL_STOLEN)
         local pcUsed = BS.LC.ToPercent(used, max)
         local colour = BS.GetColour(this, "Ok", true)
         local noLimitColour = BS.GetVar("NoLimitColour", this) and BS.COLOURS.White or BS.COLOURS.Green
@@ -134,7 +145,7 @@ BS.widgets[BS.W_FENCE_TRANSACTIONS] = {
 
         return used
     end,
-    event = _G.EVENT_CLOSE_STORE,
+    event = EVENT_CLOSE_STORE,
     hideWhenEqual = 0,
     icon = "vendor/vendor_tabicon_sell_up",
     tooltip = GetString(_G.BARSTEWARD_FENCE)
@@ -145,8 +156,8 @@ BS.widgets[BS.W_LAUNDER_TRANSACTIONS] = {
     name = "launderSlots",
     update = function(widget)
         local this = BS.W_LAUNDER_TRANSACTIONS
-        local max = FENCE_MANAGER:GetNumTotalTransactions(_G.ZO_MODE_STORE_LAUNDER)
-        local used = FENCE_MANAGER:GetNumTransactionsUsed(_G.ZO_MODE_STORE_LAUNDER)
+        local max = FENCE_MANAGER:GetNumTotalTransactions(ZO_MODE_STORE_LAUNDER)
+        local used = FENCE_MANAGER:GetNumTransactionsUsed(ZO_MODE_STORE_LAUNDER)
         local pcUsed = BS.LC.ToPercent(used, max)
         local colour = BS.GetColour(this, "Ok", true)
         local noLimitColour = BS.GetVar("NoLimitColour", this) and BS.COLOURS.White or BS.COLOURS.Yellow
@@ -164,7 +175,7 @@ BS.widgets[BS.W_LAUNDER_TRANSACTIONS] = {
 
         return used
     end,
-    event = _G.EVENT_CLOSE_STORE,
+    event = EVENT_CLOSE_STORE,
     hideWhenEqual = 0,
     icon = "vendor/vendor_tabicon_fence_up",
     tooltip = GetString(_G.BARSTEWARD_LAUNDER)

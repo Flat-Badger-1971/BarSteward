@@ -4,24 +4,24 @@ BS.widgets[BS.W_RANDOM_BATTLEGROUND] = {
     -- v1.4.23
     name = "randomBattleground",
     update = function(widget)
-        local activities = {_G.LFG_ACTIVITY_BATTLE_GROUND_LOW_LEVEL, _G.LFG_ACTIVITY_BATTLE_GROUND_NON_CHAMPION}
+        local activities = {LFG_ACTIVITY_BATTLE_GROUND_LOW_LEVEL, LFG_ACTIVITY_BATTLE_GROUND_NON_CHAMPION}
         local bgInfo = BS.GetActivityRewardInfo(activities)
         local data = {
             output = "",
             normalisedOutput = "",
             eligibleCount = 0,
-            tt = BS.LC.Format(_G.SI_BATTLEGROUND_FINDER_RANDOM_FILTER_TEXT)
+            tt = BS.LC.Format(SI_BATTLEGROUND_FINDER_RANDOM_FILTER_TEXT)
         }
-        local ll = bgInfo[_G.LFG_ACTIVITY_BATTLE_GROUND_LOW_LEVEL] -- Random Battleground
-        --local cp = bgInfo[_G.LFG_ACTIVITY_BATTLE_GROUND_CHAMPION]
-        local np = bgInfo[_G.LFG_ACTIVITY_BATTLE_GROUND_NON_CHAMPION] -- Group Battleground
+        local ll = bgInfo[LFG_ACTIVITY_BATTLE_GROUND_LOW_LEVEL] -- Random Battleground
+        --local cp = bgInfo[LFG_ACTIVITY_BATTLE_GROUND_CHAMPION]
+        local np = bgInfo[LFG_ACTIVITY_BATTLE_GROUND_NON_CHAMPION] -- Group Battleground
         local battleground = ll
-        local icon = BS.BATTLEGROUND_ICON[_G.LFG_ACTIVITY_BATTLE_GROUND_LOW_LEVEL]
+        local icon = BS.BATTLEGROUND_ICON[LFG_ACTIVITY_BATTLE_GROUND_LOW_LEVEL]
 
         if (np) then
             if (np.meetsRequirements) then
                 battleground = np
-                icon = BS.BATTLEGROUND_ICON[_G.LFG_ACTIVITY_BATTLE_GROUND_NON_CHAMPION]
+                icon = BS.BATTLEGROUND_ICON[LFG_ACTIVITY_BATTLE_GROUND_NON_CHAMPION]
             end
         end
 
@@ -38,10 +38,10 @@ BS.widgets[BS.W_RANDOM_BATTLEGROUND] = {
 
         return data.eligibleCount
     end,
-    event = _G.EVENT_PLAYER_ACTIVATED,
+    event = EVENT_PLAYER_ACTIVATED,
     icon = "icons/store_battleground",
     hideWhenEqual = 0,
-    tooltip = BS.LC.Format(_G.SI_BATTLEGROUND_FINDER_RANDOM_FILTER_TEXT),
+    tooltip = BS.LC.Format(SI_BATTLEGROUND_FINDER_RANDOM_FILTER_TEXT),
     onLeftClick = function()
         if (IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("gamepadDungeonFinder")
@@ -53,7 +53,7 @@ BS.widgets[BS.W_RANDOM_BATTLEGROUND] = {
 
 BS.widgets[BS.W_ALLIANCE_POINTS] =
     BS.CurrencyWidget(
-    _G.CURT_ALLIANCE_POINTS,
+    CURT_ALLIANCE_POINTS,
     BS.W_ALLIANCE_POINTS,
     {
         bag = _G.BARSTEWARD_GOLD_BAG,
@@ -62,9 +62,9 @@ BS.widgets[BS.W_ALLIANCE_POINTS] =
         display = _G.BARSTEWARD_GOLD_DISPLAY,
         everyWhere = _G.BARSTEWARD_GOLD_EVERYWHERE,
         separated = _G.BARSTEWARD_GOLD_SEPARATED,
-        title = BS.LC.Format(_G.SI_GAMEPAD_INVENTORY_ALLIANCE_POINTS)
+        title = BS.LC.Format(SI_GAMEPAD_INVENTORY_ALLIANCE_POINTS)
     },
-    {_G.EVENT_PLAYER_ACTIVATED, _G.EVENT_ALLIANCE_POINT_UPDATE},
+    {EVENT_PLAYER_ACTIVATED, EVENT_ALLIANCE_POINT_UPDATE},
     function()
         if (BS.Vars.Controls[BS.W_ALLIANCE_POINTS].PvPOnly == true) then
             return not BS.LC.IsInPvPZone()
@@ -76,7 +76,7 @@ BS.widgets[BS.W_ALLIANCE_POINTS] =
 
 BS.widgets[BS.W_TELVAR_STONES] =
     BS.CurrencyWidget(
-    _G.CURT_TELVAR_STONES,
+    CURT_TELVAR_STONES,
     BS.W_TELVAR_STONES,
     {
         bag = _G.BARSTEWARD_GOLD_BAG,
@@ -85,9 +85,9 @@ BS.widgets[BS.W_TELVAR_STONES] =
         display = _G.BARSTEWARD_GOLD_DISPLAY,
         everyWhere = _G.BARSTEWARD_GOLD_EVERYWHERE,
         separated = _G.BARSTEWARD_GOLD_SEPARATED,
-        title = BS.LC.Format(_G.SI_GAMEPAD_INVENTORY_TELVAR_STONES)
+        title = BS.LC.Format(SI_GAMEPAD_INVENTORY_TELVAR_STONES)
     },
-    _G.EVENT_TELVAR_STONE_UPDATE,
+    EVENT_TELVAR_STONE_UPDATE,
     function()
         if (BS.Vars.Controls[BS.W_TELVAR_STONES].PvPOnly == true) then
             return not BS.LC.IsInPvPZone()
@@ -209,7 +209,7 @@ BS.widgets[BS.W_CAMPAIGN_TIER] = {
             widget:SetColour(BS.GetColour(this, true))
         end
 
-        local tt = BS.LC.Format(_G.SI_CAMPAIGN_SCORING_END_OF_CAMPAIGN_REWARD_TIER) .. BS.LF .. BS.LF
+        local tt = BS.LC.Format(SI_CAMPAIGN_SCORING_END_OF_CAMPAIGN_REWARD_TIER) .. BS.LF .. BS.LF
 
         if (data) then
             local info = GetAvARankName(BS.CHAR.gender, GetUnitAvARank("player")) .. BS.LF
@@ -234,16 +234,16 @@ BS.widgets[BS.W_CAMPAIGN_TIER] = {
         return progress == maxProgress
     end,
     gradient = function()
-        local startg = {GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, _G.INTERFACE_GENERAL_COLOR_STATUS_BAR_START)}
-        local endg = {GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, _G.INTERFACE_GENERAL_COLOR_STATUS_BAR_END)}
+        local startg = {GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_START)}
+        local endg = {GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_END)}
         local s = BS.Vars.Controls[BS.W_CAMPAIGN_TIER].GradientStart or startg
         local e = BS.Vars.Controls[BS.W_CAMPAIGN_TIER].GradientEnd or endg
 
         return s, e
     end,
     events = {
-        _G.EVENT_ASSIGNED_CAMPAIGN_CHANGED,
-        _G.EVENT_CAMPAIGN_LEADERBOARD_DATA_RECEIVED
+        EVENT_ASSIGNED_CAMPAIGN_CHANGED,
+        EVENT_CAMPAIGN_LEADERBOARD_DATA_RECEIVED
     },
     callback = {[BS] = {"RewardsTrackerRefresh"}},
     hideWhenTrue = function()
@@ -254,7 +254,7 @@ BS.widgets[BS.W_CAMPAIGN_TIER] = {
         return false
     end,
     icon = "campaign/campaign_tabicon_summary_up",
-    tooltip = BS.LC.Format(_G.SI_CAMPAIGN_SCORING_END_OF_CAMPAIGN_REWARD_TIER),
+    tooltip = BS.LC.Format(SI_CAMPAIGN_SCORING_END_OF_CAMPAIGN_REWARD_TIER),
     customSettings = {
         [1] = {
             type = "checkbox",
@@ -289,8 +289,7 @@ BS.widgets[BS.W_CONT_ATT] = {
             widget:SetTooltip(buff.ttt)
 
             if (BS.GetVar("Announce", this) and (BS.GetVar("WarningValue", this) * 60) == BS.LC.ToInt(buff.remaining)) then
-                local buffMessage =
-                    ZO_CachedStrFormat(GetString(_G.BARSTEWARD_WARNING_EXPIRING), ca)
+                local buffMessage = ZO_CachedStrFormat(GetString(_G.BARSTEWARD_WARNING_EXPIRING), ca)
                 BS.Announce(GetString(_G.BARSTEWARD_WARNING), buffMessage, this)
             end
 
@@ -333,8 +332,7 @@ BS.widgets[BS.W_AYLEID_HEALTH] = {
             widget:SetTooltip(buff.ttt)
 
             if (BS.GetVar("Announce", this) and (BS.GetVar("WarningValue", this) * 60) == BS.LC.ToInt(buff.remaining)) then
-                local buffMessage =
-                    ZO_CachedStrFormat(GetString(_G.BARSTEWARD_WARNING_EXPIRING), ah)
+                local buffMessage = ZO_CachedStrFormat(GetString(_G.BARSTEWARD_WARNING_EXPIRING), ah)
                 BS.Announce(GetString(_G.BARSTEWARD_WARNING), buffMessage, this)
             end
 

@@ -23,7 +23,7 @@ function baseBar:Initialise()
     self.bar = WINDOW_MANAGER:CreateTopLevelWindow()
     self.bar.ref = self
     self.bar:SetResizeToFitDescendents(true)
-    self.bar:SetDrawLayer(_G.DL_CONTROLS)
+    self.bar:SetDrawLayer(DL_CONTROLS)
     self.bar:SetMouseEnabled(true)
     self.bar:SetClampedToScreen(true)
 
@@ -113,7 +113,7 @@ function baseBar:Initialise()
 
     self.bar.expandtlc = WINDOW_MANAGER:CreateTopLevelWindow()
     self.bar.expandtlc:SetScale(self.bar:GetScale())
-    self.bar.expandtlc:SetDrawLayer(_G.DL_BACKGROUND)
+    self.bar.expandtlc:SetDrawLayer(DL_BACKGROUND)
 
     self.bar.expandbackground = WINDOW_MANAGER:CreateControl(nil, self.bar.expandtlc, CT_BACKDROP)
     self.bar.expandbackground:ClearAnchors()
@@ -172,12 +172,12 @@ function baseBar:Initialise()
     end
 
     self.bar.border = WINDOW_MANAGER:CreateControl(nil, borderParent, CT_BACKDROP)
-    self.bar.border:SetDrawTier(_G.DT_MEDIUM)
+    self.bar.border:SetDrawTier(DT_MEDIUM)
     self.bar.border:SetCenterTexture(0, 0, 0, 0)
     self.bar.border:SetAnchorFill()
 
     self.bar.overlay = WINDOW_MANAGER:CreateControl(nil, self.bar, CT_CONTROL)
-    self.bar.overlay:SetDrawTier(_G.DT_HIGH)
+    self.bar.overlay:SetDrawTier(DT_HIGH)
     self.bar.overlay:SetAnchorFill(self.bar)
     self.bar.overlay:SetHidden(true)
     self.bar.overlay:SetMouseEnabled(true)
@@ -234,7 +234,7 @@ end
 function baseBar:SetCombatFunction()
     -- change the bar's colour during combat if required by the user
     BS.EventManager:RegisterForEvent(
-        _G.EVENT_PLAYER_COMBAT_STATE,
+        EVENT_PLAYER_COMBAT_STATE,
         function()
             if (BS.Vars.Bars[BS.MAIN_BAR].CombatColourChange) then
                 if (BS.inCombat) then
@@ -870,7 +870,7 @@ function BS.CreateBar(barSettings)
     end
 
     BS.EventManager:RegisterForEvent(
-        _G.EVENT_PLAYER_ACTIVATED,
+        EVENT_PLAYER_ACTIVATED,
         function()
             bar:CheckPvP()
         end

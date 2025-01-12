@@ -229,7 +229,7 @@ local function addSubmenu(barNames, vars, varId, house, id, controls)
             name = GetString(_G.BARSTEWARD_BAR),
             choices = barNames,
             getFunc = function()
-                local barName = BS.LC.Format(_G.SI_DAMAGETYPE0)
+                local barName = BS.LC.Format(SI_DAMAGETYPE0)
 
                 if (vars.Bar ~= 0) then
                     barName = BS.Vars.Bars[vars.Bar].Name
@@ -303,7 +303,7 @@ local function addSubmenu(barNames, vars, varId, house, id, controls)
         if (house.ptfName == nil) then
             submenuControls[#submenuControls + 1] = {
                 type = "checkbox",
-                name = BS.LC.Format(_G.SI_HOUSING_BOOK_ACTION_TRAVEL_TO_HOUSE_OUTSIDE),
+                name = BS.LC.Format(SI_HOUSING_BOOK_ACTION_TRAVEL_TO_HOUSE_OUTSIDE),
                 getFunc = function()
                     return vars.Outside
                 end,
