@@ -62,7 +62,7 @@ BS.widgets[BS.W_BAG_SPACE] = {
         EVENT_INVENTORY_FULL_UPDATE
     },
     callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
-    tooltip = BS.LC.Format(SI_GAMEPAD_MAIL_INBOX_INVENTORY):gsub(":", ""),
+    tooltip = zo_strgsub(BS.LC.Format(SI_GAMEPAD_MAIL_INBOX_INVENTORY), ":", ""),
     icon = "tooltips/icon_bag",
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
@@ -310,7 +310,7 @@ BS.widgets[BS.W_REPAIRS_KITS] = {
             return "vendor/vendor_tabicon_repair_up"
         end
     end,
-    tooltip = BS.LC.Format(SI_HOOK_POINT_STORE_REPAIR_KIT_HEADER):gsub(":", ""),
+    tooltip = zo_strgsub(BS.LC.Format(SI_HOOK_POINT_STORE_REPAIR_KIT_HEADER), ":", ""),
     customSettings = {
         [1] = {
             type = "checkbox",
@@ -727,7 +727,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
             end
 
             widget:SetColour(BS.GetColour(this, true))
-            widget:SetValue(BS.LC.Trim(countText), BS.LC.Trim(plainCountText))
+            widget:SetValue(zo_strtrim(countText), zo_strtrim(plainCountText))
         end
 
         widget:SetTooltip(ttt)
@@ -1619,13 +1619,13 @@ BS.widgets[BS.W_FRAGMENTS] = {
 
         tt = tt .. BS.LF .. collectedtt .. BS.LF
 
-        if (unnecessarytt:len() > 0) then
+        if (zo_strlen(unnecessarytt) > 0) then
             tt = tt .. GetString(_G.BARSTEWARD_ALREADY_COLLECTED) .. BS.LF .. unnecessarytt .. "|r" .. BS.LF
         end
 
-        if (uncollectedtt:len() > 0) then
+        if (zo_strlen(uncollectedtt) > 0) then
             uncollectedtt = BS.COLOURS.Grey:Colorize(uncollectedtt)
-            tt = tt .. GetString(_G.BARSTEWARD_NOT_COLLECTED) .. BS.LF .. BS.LC.Trim(uncollectedtt) .. "|r"
+            tt = tt .. GetString(_G.BARSTEWARD_NOT_COLLECTED) .. BS.LF .. zo_strtrim(uncollectedtt) .. "|r"
         end
 
         widget:SetTooltip(tt)

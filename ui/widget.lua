@@ -89,7 +89,7 @@ function baseWidget:CreateTooltip(tooltip)
         local function getTooltip()
             if (not BS.Vars.HideMouse) then
                 if (self:HasOnClick()) then
-                    if (self.tooltip:sub(1, 2) ~= "|t") then
+                    if (zo_strsub(self.tooltip, 1, 2) ~= "|t") then
                         self.tooltip = BS.Icon(BS.CLICK, nil, 32, 32) .. " " .. self.tooltip
                     end
                 end

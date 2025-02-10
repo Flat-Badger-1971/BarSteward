@@ -156,7 +156,7 @@ BS.widgets[BS.W_INFINITE_ARCHIVE_PROGRESS] = {
             end
 
             -- remove the trailing LF
-            return text:sub(1, #text - 1)
+            return zo_strsub(text, 1, #text - 1)
         end
 
         if (#buffs > 0) then
@@ -178,7 +178,7 @@ BS.widgets[BS.W_INFINITE_ARCHIVE_PROGRESS] = {
             end
         else
             -- remove the trailing LF
-            ttt = ttt:sub(1, #ttt - 1)
+            ttt = zo_strsub(ttt, 1, #ttt - 1)
         end
 
         widget:SetTooltip(ttt)

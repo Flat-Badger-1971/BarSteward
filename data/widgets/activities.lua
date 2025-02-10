@@ -26,7 +26,7 @@ local function getColourOptions(widgetIndex)
 
         settings[index] = {
             type = "colorpicker",
-            name = GetString(_G["BARSTEWARD_" .. colour:upper()]),
+            name = GetString(_G["BARSTEWARD_" .. zo_strupper(colour)]),
             getFunc = function()
                 return unpack(vars[c] or BS.Vars["Default" .. default .. "Colour"])
             end,
@@ -1420,7 +1420,7 @@ BS.widgets[BS.W_FISHING] = {
                 loot = loot .. BS.Icon(info.icon) .. " "
                 loot = loot .. count .. " "
 
-                typeCount = typeCount + 3 + tostring(count):len()
+                typeCount = typeCount + 3 + zo_strlen(tostring(count))
 
                 local ttext = zo_strformat("<<1>> <<2>> <<m:3>>", BS.Icon(info.icon), count, GetString(info.name))
 
@@ -1429,10 +1429,10 @@ BS.widgets[BS.W_FISHING] = {
         end
         local setwidth = string.rep("8", typeCount)
 
-        if (loot:len() == 0) then
+        if (zo_strlen(loot) == 0) then
             widget:SetValue(0)
         else
-            widget:SetValue(BS.LC.Trim(loot), setwidth)
+            widget:SetValue(zo_strtrim(loot), setwidth)
             widget:SetTooltip(tt)
         end
     end,
@@ -1584,7 +1584,7 @@ BS.widgets[BS.W_DAILY_PLEDGES] = {
                 end
             end
 
-            widget:SetTooltip(BS.LC.Trim(ttt .. charPledgesTT))
+            widget:SetTooltip(zo_strtrim(ttt .. charPledgesTT))
         end
 
         return done == maxPledges
@@ -1746,12 +1746,12 @@ BS.widgets[BS.W_ACHIEVEMENT_TRACKER] = {
             local progress =
                 usePc and BS.LC.ToPercent(done, required, true) or
                 string.format("%s/%s", tostring(done), tostring(required))
-            t = string.format("%s - %s - %s", data.category, colour:Colorize(data.name), BS.LC.White:Colorize(progress))
+            t = string.format("%s - %s - %s", data.category or "", colour:Colorize(data.name or ""), BS.LC.White:Colorize(progress or "0"))
 
             tt = string.format("%s%s%s", tt, BS.LF, t)
         end
 
-        widget:SetTooltip(BS.LC.Trim(tt))
+        widget:SetTooltip(zo_strtrim(tt))
 
         return #achievements
     end,
@@ -1940,7 +1940,7 @@ BS.widgets[BS.W_GOLDEN_PURSUITS] = {
             end
         end
 
-        widget:SetTooltip(BS.LC.Trim(tt))
+        widget:SetTooltip(zo_strtrim(tt))
 
         return max
     end,

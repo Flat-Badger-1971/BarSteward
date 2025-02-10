@@ -200,7 +200,7 @@ function BS.AddToScenes(sceneType, barIndex, bar, override)
         return
     end
 
-    local group = BS[sceneType:upper() .. "_SCENES"]
+    local group = BS[zo_strupper(sceneType) .. "_SCENES"]
 
     sceneType = "ShowWhilst" .. sceneType
 
@@ -216,7 +216,7 @@ function BS.RemoveFromScenes(sceneType, bar)
         return
     end
 
-    local group = BS[sceneType:upper() .. "_SCENES"]
+    local group = BS[zo_strupper(sceneType) .. "_SCENES"]
 
     for _, scene in ipairs(group) do
         SCENE_MANAGER:GetScene(scene):RemoveFragment(bar.fragment)
@@ -360,20 +360,20 @@ end
 local function cleanseAndEncode(input)
     local output = input
 
-    output = output:gsub("#true%^", "#t%^")
-    output = output:gsub("#false%^", "#f%^")
-    output = output:gsub("#" .. addQuotes(_G.BARSTEWARD_VERTICAL), "#v")
-    output = output:gsub("#" .. addQuotes(_G.BARSTEWARD_HORIZONTAL), "#h")
-    output = output:gsub("#" .. addQuotes(_G.BARSTEWARD_LEFT), "#l")
-    output = output:gsub("#" .. addQuotes(_G.BARSTEWARD_RIGHT), "#r")
-    output = output:gsub("#" .. addQuotes(_G.BARSTEWARD_TOP), "#to")
-    output = output:gsub("#" .. addQuotes(_G.BARSTEWARD_BOTTOM), "#b")
+    output = zo_strgsub(output, "#true%^", "#t%^")
+    output = zo_strgsub(output, "#false%^", "#f%^")
+    output = zo_strgsub(output, "#" .. addQuotes(_G.BARSTEWARD_VERTICAL), "#v")
+    output = zo_strgsub(output, "#" .. addQuotes(_G.BARSTEWARD_HORIZONTAL), "#h")
+    output = zo_strgsub(output, "#" .. addQuotes(_G.BARSTEWARD_LEFT), "#l")
+    output = zo_strgsub(output, "#" .. addQuotes(_G.BARSTEWARD_RIGHT), "#r")
+    output = zo_strgsub(output, "#" .. addQuotes(_G.BARSTEWARD_TOP), "#to")
+    output = zo_strgsub(output, "#" .. addQuotes(_G.BARSTEWARD_BOTTOM), "#b")
 
     for bg = 1, 14 do
-        output = output:gsub("#" .. addQuotes("BARSTEWARD_BACKGROUND_STYLE_", bg), "#bg" .. tostring(bg))
+        output = zo_strgsub(output, "#" .. addQuotes("BARSTEWARD_BACKGROUND_STYLE_", bg), "#bg" .. tostring(bg))
 
         if (bg < 8) then
-            output = output:gsub("#" .. addQuotes("BARSTEWARD_BORDER_STYLE_", bg), "#bo" .. tostring(bg))
+            output = zo_strgsub(output, "#" .. addQuotes("BARSTEWARD_BORDER_STYLE_", bg), "#bo" .. tostring(bg))
         end
     end
 
@@ -381,27 +381,27 @@ local function cleanseAndEncode(input)
 end
 
 local function decode(input)
-    local output = input:gsub("#t%^", "#true%^")
+    local output = zo_strgsub(input, "#t%^", "#true%^")
 
-    output = output:gsub("#f%^", "#false%^")
-    output = output:gsub("#v", "#" .. addQuotes(_G.BARSTEWARD_VERTICAL))
-    output = output:gsub("#h", "#" .. addQuotes(_G.BARSTEWARD_HORIZONTAL))
-    output = output:gsub("#l", "#" .. addQuotes(_G.BARSTEWARD_LEFT))
-    output = output:gsub("#r", "#" .. addQuotes(_G.BARSTEWARD_RIGHT))
-    output = output:gsub("#to", "#" .. addQuotes(_G.BARSTEWARD_TOP))
-    output = output:gsub("#b", "#" .. addQuotes(_G.BARSTEWARD_BOTTOM))
+    output = zo_strgsub(output, "#f%^", "#false%^")
+    output = zo_strgsub(output, "#v", "#" .. addQuotes(_G.BARSTEWARD_VERTICAL))
+    output = zo_strgsub(output, "#h", "#" .. addQuotes(_G.BARSTEWARD_HORIZONTAL))
+    output = zo_strgsub(output, "#l", "#" .. addQuotes(_G.BARSTEWARD_LEFT))
+    output = zo_strgsub(output, "#r", "#" .. addQuotes(_G.BARSTEWARD_RIGHT))
+    output = zo_strgsub(output, "#to", "#" .. addQuotes(_G.BARSTEWARD_TOP))
+    output = zo_strgsub(output, "#b", "#" .. addQuotes(_G.BARSTEWARD_BOTTOM))
 
     for bg = 1, 14 do
-        output = output:gsub("#bg" .. tostring(bg), "#" .. addQuotes("BARSTEWARD_BACKGROUND_STYLE_", bg))
+        output = zo_strgsub(output, "#bg" .. tostring(bg), "#" .. addQuotes("BARSTEWARD_BACKGROUND_STYLE_", bg))
 
         if (bg < 8) then
-            output = output:gsub("#bo" .. tostring(bg), "#" .. addQuotes("BARSTEWARD_BORDER_STYLE_", bg))
+            output = zo_strgsub(output, "#bo" .. tostring(bg), "#" .. addQuotes("BARSTEWARD_BORDER_STYLE_", bg))
         end
     end
 
     for keyword, abbr in pairs(BS.ENCODING) do
-        output = output:gsub("::" .. abbr .. "#", "::" .. keyword .. "#")
-        output = output:gsub("%^" .. abbr .. "#", "%^" .. keyword .. "#")
+        output = zo_strgsub(output, "::" .. abbr .. "#", "::" .. keyword .. "#")
+        output = zo_strgsub(output, "%^" .. abbr .. "#", "%^" .. keyword .. "#")
     end
 
     return output
@@ -426,7 +426,7 @@ local function convert(value)
         local array = BS.LC.Split(value, "%-")
 
         for index, val in pairs(array) do
-            val = val:gsub("%%", "")
+            val = zo_strgsub(val, "%%", "")
             array[index] = tonumber(val)
         end
 
@@ -441,13 +441,13 @@ local function convert(value)
 end
 
 local function generateTable(input)
-    assert(input:sub(1, 3) == "b::", GetString(_G.BARSTEWARD_IMPORT_ERROR_BAR))
-    assert(input:sub(-1) == "^", GetString(_G.BARSTEWARD_IMPORT_ERROR_DATA))
-    assert(input:find("w::"), GetString(_G.BARSTEWARD_IMPORT_ERROR_WIDGET))
+    assert(zo_strsub(input, 1, 3) == "b::", GetString(_G.BARSTEWARD_IMPORT_ERROR_BAR))
+    assert(zo_strsub(input, -1) == "^", GetString(_G.BARSTEWARD_IMPORT_ERROR_DATA))
+    assert(zo_strfind(input, "w::"), GetString(_G.BARSTEWARD_IMPORT_ERROR_WIDGET))
 
-    local widgetStartPos = input:find("w::")
-    local barData = BS.LC.Split(input:sub(4, widgetStartPos - 1), "%^")
-    local widgetData = BS.LC.Split(input:sub(widgetStartPos + 3), "%^")
+    local widgetStartPos = zo_strfind(input, "w::")
+    local barData = BS.LC.Split(zo_strsub(input, 4, widgetStartPos - 1), "%^")
+    local widgetData = BS.LC.Split(zo_strsub(input, widgetStartPos + 3), "%^")
 
     local barObject = {}
 
@@ -476,8 +476,8 @@ local function generateTable(input)
         local info = BS.LC.Split(token, "#")
 
         if (info[1] and info[1] ~= "%") then
-            if (info[1]:sub(1, 1) == "@") then
-                currentWidget = tonumber(info[1]:sub(2))
+            if (zo_strsub(info[1], 1, 1) == "@") then
+                currentWidget = tonumber(zo_strsub(info[1], 2))
                 widgetsObject[currentWidget] = {}
             elseif (currentWidget) then
                 widgetsObject[currentWidget][info[1]] = convert(info[2])
@@ -607,7 +607,7 @@ function BS.ExportBar(barNumber)
         output = output .. string.format("@%d^", widgetIndex)
 
         for key, value in pairs(widgetInfo) do
-            if (key:sub(-6) == "Colour" and key ~= "NoLimitColour") then
+            if (zo_strsub(key, -6) == "Colour" and key ~= "NoLimitColour") then
                 output =
                     output ..
                     string.format(
@@ -630,11 +630,11 @@ function BS.ExportBar(barNumber)
 end
 
 local function cleanAssert(message)
-    message = message:gsub("assert: ", "")
+    message = zo_strgsub(message, "assert: ", "")
 
-    local stacktraceStart = message:find("stack traceback")
+    local stacktraceStart = zo_strfind(message, "stack traceback")
 
-    message = message:sub(1, stacktraceStart - 1)
+    message = zo_strsub(message, 1, stacktraceStart - 1)
 
     return message
 end
@@ -761,6 +761,11 @@ end
 
 local function getWidgets(barIndex)
     local widgets = {}
+
+    if (barIndex == 0) then
+        d("bar zero!")
+        return widgets
+    end
 
     -- get the widgets for this bar
     for id, info in ipairs(BS.Vars.Controls) do
@@ -977,15 +982,15 @@ function BS.RegenerateAllBars(barsToRegenerate)
 end
 
 function BS.FormatIcon(path)
-    if (path:find("BarSteward")) then
+    if (zo_strfind(path, "BarSteward")) then
         return path
     end
 
-    if (not path:lower():find("esoui")) then
+    if (not zo_strfind(zo_strlower(path), "esoui")) then
         path = "/esoui/art/" .. path
     end
 
-    if (not path:find(".dds")) then
+    if (not zo_strfind(path, ".dds")) then
         path = path .. ".dds"
     end
 
@@ -993,7 +998,7 @@ function BS.FormatIcon(path)
 end
 
 function BS.Icon(path, colour, width, height)
-    if (not path:find("BarSteward")) then
+    if (not zo_strfind(path, "BarSteward")) then
         path = BS.FormatIcon(path)
     end
 
@@ -1287,7 +1292,7 @@ end
 
 function BS.FindBar(barName)
     for index, barData in pairs(BS.Vars.Bars) do
-        if (barData.Name:lower() == barName:lower()) then
+        if (zo_strlower(barData.Name) == zo_strlower(barName)) then
             return BS.BarObjectPool:GetActiveObject(BS.BarObjects[index]), index
         end
     end
@@ -1562,7 +1567,7 @@ function BS.TrackAchievements()
             BS.OriginalApplyColour = ZO_Achievements_ApplyTextColorToLabel
             -- luacheck: ignore 121
             function ZO_Achievements_ApplyTextColorToLabel(label, ...)
-                if (label:GetName():find("Title")) then
+                if (zo_strfind(label:GetName(), "Title")) then
                     local parent = label:GetParent()
                     local id = parent.achievement.achievementId
 
@@ -1672,7 +1677,7 @@ function BS.FindItem(text)
     local filteredItems =
         SHARED_INVENTORY:GenerateFullSlotData(
         function(itemdata)
-            local match = itemdata.name:find(text)
+            local match = zo_strfind(itemdata.name, text)
 
             return match ~= nil
         end,
@@ -1691,7 +1696,7 @@ function BS.FindAbility(text, start, finish)
     for abilityId = start, finish do
         local name = GetAbilityName(abilityId)
 
-        if (name:find(text)) then
+        if (zo_strfind(name, text)) then
             d(abilityId)
             d(name)
         end

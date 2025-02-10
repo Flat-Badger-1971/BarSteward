@@ -229,7 +229,7 @@ BS.widgets[BS.W_CAMPAIGN_TIER] = {
             end
         end
 
-        widget:SetTooltip(BS.LC.Trim(tt))
+        widget:SetTooltip(zo_strtrim(tt))
 
         return progress == maxProgress
     end,

@@ -22,7 +22,7 @@ function BS.RegisterSlashCommands()
     -- open options panel
     _G.SLASH_COMMANDS["/bs"] = function(parameters)
         local options = {}
-        local find = {parameters:match("^(%S*)%s*(.-)$")}
+        local find = {zo_strmatch(parameters, "^(%S*)%s*(.-)$")}
 
         for _, value in pairs(find) do
             if ((value or "") ~= "") then
@@ -34,11 +34,11 @@ function BS.RegisterSlashCommands()
             -- open Bar Steward's settings
             BS.LAM:OpenToPanel(BS.OptionsPanel)
         else
-            local cmd = options[1]:lower()
+            local cmd = zo_strlower(options[1])
             local param = options[2]
 
             if (param) then
-                param = param:lower()
+                param = zo_strlower(param)
             end
 
             -- hide the bar
@@ -55,7 +55,7 @@ function BS.RegisterSlashCommands()
                 if (bar) then
                     bar:Show()
                 end
-            elseif (cmd == GetString(_G.BARSTEWARD_DISABLE):lower()) then
+            elseif (cmd == zo_strlower(GetString(_G.BARSTEWARD_DISABLE))) then
                 -- disable the bar
                 local _, id = BS.FindBar(param)
 
@@ -75,7 +75,7 @@ function BS.RegisterSlashCommands()
                         BS.GenerateBar(id)
                     end
                 end
-            elseif (cmd == BS.LC.Format(SI_HOUSINGEDITORCOMMANDTYPE1):lower()) then
+            elseif (cmd == zo_strlower(BS.LC.Format(SI_HOUSINGEDITORCOMMANDTYPE1))) then
                 BS.ShowFrameMovers(true)
             elseif (cmd == "lang") then
                 -- change the UI language (intended for dev only)

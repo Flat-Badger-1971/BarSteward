@@ -326,13 +326,13 @@ local function addSubmenu(barNames, vars, varId, house, id, controls)
             getFunc = function()
                 local name = vars.Name
 
-                name = name:gsub("(%s+[|]t.+[|]t)", "")
+                name = zo_strgsub(name, "(%s+[|]t.+[|]t)", "")
                 return name
             end,
             setFunc = function(value)
                 vars.RawName = value
 
-                if (vars.Name:find("|t")) then
+                if (zo_strfind(vars.Name, "|t")) then
                     value = value .. " " .. BS.Icon(BS.FRIENDS_ICON)
                     vars.RawName = vars.RawName .. " XX"
                 end

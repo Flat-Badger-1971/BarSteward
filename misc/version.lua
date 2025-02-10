@@ -9,7 +9,7 @@ local function needsUpdate(version)
 end
 
 -- local function replace(current)
---     local ucase = current:upper()
+--     local ucase = zo_strupper(current)
 
 --     if (_G["BARSTEWARD_" .. ucase]) then
 --         return GetString(_G["BARSTEWARD_" .. ucase])
@@ -38,7 +38,7 @@ end
 
 --     for _, widget in pairs(widgets) do
 --         if (widget.Units) then
---             local newUnit = GetString(_G["BARSTEWARD_" .. widget.Units:upper()])
+--             local newUnit = GetString(_G["BARSTEWARD_" .. zo_strupper(widget.Units)])
 
 --             if (newUnit ~= "") then
 --                 widget.Units = newUnit

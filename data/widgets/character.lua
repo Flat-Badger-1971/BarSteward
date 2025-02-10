@@ -145,9 +145,9 @@ BS.widgets[BS.W_ALLIANCE] = {
         local icon = BS.CHAR.allianceIcon
         local colour = BS.CHAR.allianceColour
 
-        if (icon:find("daggerfall")) then
+        if (zo_strfind(icon, "daggerfall")) then
             icon = "scoredisplay/blueflag"
-        elseif (icon:find("aldmeri")) then
+        elseif (zo_strfind(icon, "aldmeri")) then
             icon = "scoredisplay/yellowflag"
         else
             icon = "scoredisplay/redflag"
@@ -279,7 +279,7 @@ local function getSpeed(widget)
 
         speed = math.floor(speed)
 
-        local unitText = GetString(_G["BARSTEWARD_" .. units:upper()])
+        local unitText = GetString(_G["BARSTEWARD_" .. zo_strupper(units)])
 
         speedText = ((type(speed) == "number") and speed or 0) .. " " .. unitText
         fixWidth = "88 mph"
@@ -310,7 +310,7 @@ BS.widgets[BS.W_SPEED] = {
             choices = unitChoices,
             getFunc = function()
                 local units = BS.Vars.Controls[BS.W_SPEED].Units
-                return GetString(_G["BARSTEWARD_" .. units:upper()])
+                return GetString(_G["BARSTEWARD_" .. zo_strupper(units)])
             end,
             setFunc = function(value)
                 BS.Vars.Controls[BS.W_SPEED].Units = value
@@ -892,7 +892,7 @@ BS.widgets[BS.W_BOUNTY] = {
 
         formatted = zo_strformat("<<zC:1>>", formatted)
 
-        local ttext = zo_strformat(SI_JUSTICE_BOUNTY_SET, bounty):gsub("%.", "") .. BS.LF .. formatted
+        local ttext = zo_strgsub(zo_strformat(SI_JUSTICE_BOUNTY_SET, bounty), "%.", "") .. BS.LF .. formatted
 
         tt = tt .. BS.COLOURS.White:Colorize(ttext)
 

@@ -45,7 +45,7 @@ local function getTimers()
                 timerName = defaultName
             end
 
-            for digits in timerValue:gmatch("%d+") do
+            for digits in zo_strgmatch(timerValue, "%d+") do
                 index = index + 1
                 nums[index] = tonumber(digits)
             end

@@ -34,7 +34,7 @@ BS.widgets[BS.W_ACTIVE_BAR] = {
                 if
                     (activeWeaponPair == ACTIVE_WEAPON_PAIR_BACKUP or
                         (activeWeaponPair == ACTIVE_WEAPON_PAIR_MAIN and not BS.GetVar("WarnOnBackOnly", this)))
-                 then
+                then
                     zo_callLater(
                         function()
                             BS.Announce(
@@ -66,7 +66,7 @@ BS.widgets[BS.W_ACTIVE_BAR] = {
 
         return activeWeaponPair
     end,
-    event = {EVENT_ACTIVE_WEAPON_PAIR_CHANGED, EVENT_PREPARE_FOR_JUMP},
+    event = { EVENT_ACTIVE_WEAPON_PAIR_CHANGED, EVENT_PREPARE_FOR_JUMP },
     icon = "tradinghouse/category_u30_equipment_up",
     tooltip = GetString(_G.BARSTEWARD_ACTIVE_BAR),
     customSettings = {
@@ -107,7 +107,7 @@ BS.widgets[BS.W_ACTIVE_BAR] = {
                 return unpack(BS.Vars.Controls[BS.W_ACTIVE_BAR].MainColour or BS.Vars.DefaultColour)
             end,
             setFunc = function(r, g, b, a)
-                BS.Vars.Controls[BS.W_ACTIVE_BAR].MainColour = {r, g, b, a}
+                BS.Vars.Controls[BS.W_ACTIVE_BAR].MainColour = { r, g, b, a }
                 BS.RefreshWidget(BS.W_ACTIVE_BAR)
             end,
             width = "full",
@@ -120,7 +120,7 @@ BS.widgets[BS.W_ACTIVE_BAR] = {
                 return unpack(BS.Vars.Controls[BS.W_ACTIVE_BAR].BackColour or BS.Vars.DefaultColour)
             end,
             setFunc = function(r, g, b, a)
-                BS.Vars.Controls[BS.W_ACTIVE_BAR].BackColour = {r, g, b, a}
+                BS.Vars.Controls[BS.W_ACTIVE_BAR].BackColour = { r, g, b, a }
                 BS.RefreshWidget(BS.W_ACTIVE_BAR)
             end,
             width = "full",
@@ -201,8 +201,8 @@ BS.widgets[BS.W_SCRYING] = {
         end
     end,
     gradient = function()
-        local startg = {GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_START)}
-        local endg = {GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_END)}
+        local startg = { GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_START) }
+        local endg = { GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_END) }
         local s = BS.Vars.Controls[BS.W_SCRYING].GradientStart or startg
         local e = BS.Vars.Controls[BS.W_SCRYING].GradientEnd or endg
 
@@ -210,7 +210,7 @@ BS.widgets[BS.W_SCRYING] = {
     end,
     event = EVENT_SKILL_XP_UPDATE,
     callback = {
-        [SKILLS_DATA_MANAGER] = {event = "FullSystemUpdated", label = "initial"}
+        [SKILLS_DATA_MANAGER] = { event = "FullSystemUpdated", label = "initial" }
     },
     icon = "icons/ability_scrying_05b",
     tooltip = function()
@@ -291,7 +291,7 @@ BS.widgets[BS.W_VAMPIRISM] = {
         return isVampire and "vampire" or ""
     end,
     event = EVENT_EFFECT_CHANGED,
-    filter = {[EVENT_EFFECT_CHANGED] = {REGISTER_FILTER_UNIT_TAG, "player"}},
+    filter = { [EVENT_EFFECT_CHANGED] = { REGISTER_FILTER_UNIT_TAG, "player" } },
     icon = "icons/ability_u26_vampire_infection_stage4",
     tooltip = BS.LC.Format(SI_CURSETYPE1),
     cooldown = true,
@@ -380,7 +380,7 @@ BS.widgets[BS.W_VAMPIRISM_TIMER] = {
     end,
     timer = 1000,
     event = EVENT_EFFECT_CHANGED,
-    filter = {[EVENT_EFFECT_CHANGED] = {REGISTER_FILTER_UNIT_TAG, "player"}},
+    filter = { [EVENT_EFFECT_CHANGED] = { REGISTER_FILTER_UNIT_TAG, "player" } },
     icon = "icons/store_vampirebite_01",
     tooltip = GetString(_G.BARSTEWARD_VAMPIRE_STAGE_TIMER),
     hideWhenEqual = 0,
@@ -448,13 +448,13 @@ BS.widgets[BS.W_VAMPIRISM_FEED_TIMER] = {
             if (remaining > 0) then
                 time =
                     BS.SecondsToTime(
-                    remaining,
-                    false,
-                    false,
-                    BS.GetVar("HideSeconds", this),
-                    BS.GetVar("Format", this),
-                    BS.GetVar("HideDaysWhenZero", this)
-                )
+                        remaining,
+                        false,
+                        false,
+                        BS.GetVar("HideSeconds", this),
+                        BS.GetVar("Format", this),
+                        BS.GetVar("HideDaysWhenZero", this)
+                    )
 
                 colour = BS.GetTimeColour(remaining, this, 60, true, true)
             end
@@ -479,7 +479,7 @@ BS.widgets[BS.W_VAMPIRISM_FEED_TIMER] = {
     end,
     timer = 1000,
     event = EVENT_EFFECT_CHANGED,
-    filter = {[EVENT_EFFECT_CHANGED] = {REGISTER_FILTER_UNIT_TAG, "player"}},
+    filter = { [EVENT_EFFECT_CHANGED] = { REGISTER_FILTER_UNIT_TAG, "player" } },
     icon = "icons/ability_u26_vampire_synergy_feed",
     tooltip = GetString(_G.BARSTEWARD_VAMPIRE_FEED_TIMER),
     hideWhenEqual = 0
@@ -599,7 +599,7 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
 
         return earned
     end,
-    event = {EVENT_EXPERIENCE_UPDATE, EVENT_UNSPENT_CHAMPION_POINTS_CHANGED},
+    event = { EVENT_EXPERIENCE_UPDATE, EVENT_UNSPENT_CHAMPION_POINTS_CHANGED },
     icon = "champion/champion_points_magicka_icon-hud",
     tooltip = BS.LC.Format(SI_STAT_GAMEPAD_CHAMPION_POINTS_LABEL),
     hideWhenEqual = 0,
@@ -652,7 +652,7 @@ BS.widgets[BS.W_SKILL_POINTS] = {
 
         return unspent
     end,
-    event = {EVENT_PLAYER_ACTIVATED, EVENT_SKILL_POINTS_CHANGED},
+    event = { EVENT_PLAYER_ACTIVATED, EVENT_SKILL_POINTS_CHANGED },
     icon = "campaign/campaignbrowser_indexicon_normal_up",
     tooltip = GetString(_G.BARSTEWARD_SKILL_POINTS),
     hideWhenEqual = 0,
@@ -667,40 +667,55 @@ BS.widgets[BS.W_SKILL_POINTS] = {
 
 BS.widgets[BS.W_MUNDUS_STONE] = {
     -- v1.0.1
+    -- api updated in u45
     name = "mundusstone",
     update = function(widget)
         local this = BS.W_MUNDUS_STONE
-        local mundusId, mundusName, mundusIcon
+        local mundusInfo = {}
+        local buffIndices = GetUnitActiveMundusStoneBuffIndices("player")
+        local value, tt, mundusName = "", "", ""
 
-        for buffNum = 1, GetNumBuffs("player") do
-            local name, _, _, _, _, icon, _, _, _, _, id = GetUnitBuffInfo("player", buffNum)
+        for _, index in ipairs({ buffIndices }) do
+            local name, _, _, _, _, icon, _, _, _, _, id = GetUnitBuffInfo("player", tonumber(index))
 
-            if (BS.MUNDUS_STONES[id]) then
-                mundusIcon = icon
-                mundusId = id
-                mundusName = BS.LC.Format(name)
-
-                if (BS.GetVar("Shorten", this)) then
-                    local colonPosition = mundusName:find(":")
-
-                    mundusName = mundusName:gsub(mundusName:sub(1, colonPosition + 1), "")
-                end
-
-                break
-            end
+            table.insert(mundusInfo, { name = name, icon = icon, id = id })
         end
 
-        if (mundusId ~= nil) then
-            widget:SetIcon(mundusIcon)
-            widget:SetValue(mundusName)
-            widget:SetColour(BS.GetColour(this, true))
+        if (#mundusInfo > 0) then
+            for idx, info in ipairs(mundusInfo) do
+                if (BS.GetVar("Shorten", this)) then
+                    local c = zo_strfind(info.name, ":")
 
-            local tt = BS.LC.Format(SI_CONFIRM_MUNDUS_STONE_TITLE) .. BS.LF
-            local desc = BS.LC.Format(GetAbilityDescription(mundusId))
+                    if (c and c > 0) then
+                        info.name = zo_strsub(info.name, c + 2)
+                    end
+                end
 
-            tt = tt .. BS.COLOURS.White:Colorize(desc)
+                if (idx == 1) then
+                    widget:SetIcon(info.icon)
+                    mundusName = info.name
+                end
 
+                if (zo_strlen(value) > 0) then
+                    value = value .. BS.LF
+                end
+
+                value = string.format("%s %s %s", value, idx == 1 and "" or BS.Icon(info.icon), BS.LC.Format(info.name))
+
+                if (zo_strlen(tt) > 0) then
+                    tt = tt .. BS.LF
+                else
+                    tt = BS.LC.Format(SI_CONFIRM_MUNDUS_STONE_TITLE) .. BS.LF
+                end
+
+                local desc = BS.LC.Format(GetAbilityDescription(info.id))
+
+                tt = tt .. BS.COLOURS.White:Colorize(desc)
+            end
+
+            widget:SetValue(value)
             widget:SetTooltip(tt)
+            widget:SetColour(BS.GetColour(this, true))
 
             return mundusName
         else
@@ -711,7 +726,7 @@ BS.widgets[BS.W_MUNDUS_STONE] = {
         return ""
     end,
     event = EVENT_EFFECT_CHANGED,
-    filter = {[EVENT_EFFECT_CHANGED] = {REGISTER_FILTER_UNIT_TAG, "player"}},
+    filter = { [EVENT_EFFECT_CHANGED] = { REGISTER_FILTER_UNIT_TAG, "player" } },
     icon = "icons/ability_mundusstones_002",
     tooltip = BS.LC.Format(SI_CONFIRM_MUNDUS_STONE_TITLE),
     hideWhenEqual = "",

@@ -281,7 +281,7 @@ end
 
 function BS.NewBar()
     local name = BS.NewBarName
-    name = name:match("^%s*(.-)%s*$")
+    name = zo_strmatch(name, "^%s*(.-)%s*$")
 
     if ((name or "") == "") then
         ZO_Dialogs_ShowDialog(BS.Name .. "NotEmpty")
@@ -346,7 +346,7 @@ end
 
 function BS.RenameBar(index)
     local name = BS.BarRename
-    name = name:match("^%s*(.-)%s*$")
+    name = zo_strmatch(name, "^%s*(.-)%s*$")
 
     if ((name or "") == "") then
         ZO_Dialogs_ShowDialog(BS.Name .. "NotEmpty")
@@ -1169,7 +1169,7 @@ local function getWidgetName(id)
         tooltip = tooltip()
     end
 
-    local widgetName = tooltip:gsub(":", "")
+    local widgetName = zo_strgsub(tooltip, ":", "")
 
     if (BS.Vars.Controls[id].Bar ~= 0) then
         widgetName = "|c4c9900" .. widgetName .. "|r"
@@ -1378,8 +1378,8 @@ local function getWidgetSettings()
     }
 
     for colourType, defaultValue in pairs(defaultColours) do
-        local i18Name = string.format("BARSTEWARD_CHANGE_DEFAULT%s", colourType:upper():gsub("_", ""))
-        local defaultName = string.format("Default%sColour", colourType:gsub("_", ""))
+        local i18Name = string.format("BARSTEWARD_CHANGE_DEFAULT%s", zo_strgsub(zo_strupper(colourType), "_", ""))
+        local defaultName = string.format("Default%sColour", zo_strgsub(colourType, "_", ""))
 
         controls[#controls + 1] = {
             type = "colorpicker",

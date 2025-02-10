@@ -28,7 +28,7 @@ local function createLookup()
                 widget = string.format("%s %s %s", category, arrow, tt),
                 icon = icon,
                 category = defaults.Cat,
-                rawname = tt:lower(),
+                rawname = zo_strlower(tt),
                 id = index
             }
         )
@@ -49,7 +49,7 @@ local function search(text)
     ZO_ClearNumericallyIndexedTable(results)
 
     for _, info in ipairs(lookup) do
-        if (info.rawname:find(text:lower())) then
+        if (zo_strfind(info.rawname, zo_strlower(text))) then
             if (not alreadyAdded(info)) then
                 table.insert(results, info)
             end
@@ -186,7 +186,7 @@ local function createSearchControl(parent)
         function(control)
             local text = control:GetText()
 
-            if (text:len() > 0) then
+            if (zo_strlen(text) > 0) then
                 local r = search(text)
                 local dataItems = updateList(r)
 
