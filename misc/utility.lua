@@ -154,7 +154,7 @@ function BS.CleanUpBarOrder(barNumber)
 
     for key, control in pairs(controls) do
         if (control.Bar == barNumber) then
-            table.insert(barTable, {key = key, control = control})
+            table.insert(barTable, { key = key, control = control })
         end
     end
 
@@ -340,7 +340,7 @@ function BS.GetWritType(itemId)
 end
 
 function BS.ToWritFields(item_link)
-    local parsedLink = {ZO_LinkHandler_ParseLink(item_link)}
+    local parsedLink = { ZO_LinkHandler_ParseLink(item_link) }
     local bsValues = {
         itemId = tonumber(parsedLink[4]),
         writType = BS.GetWritType(tonumber(parsedLink[4])),
@@ -459,9 +459,9 @@ local function generateTable(input)
             -- check for backdrop.colour
             if (info[1] == string.format("%s_%s", BS.ENCODING["Backdrop"], BS.ENCODING["Colour"])) then
                 -- check for backdrop.show
-                barObject.Backdrop = {Colour = convert(info[2])}
+                barObject.Backdrop = { Colour = convert(info[2]) }
             elseif (info[1] == string.format("%s_%s", BS.ENCODING["Backdrop"], BS.ENCODING["Show"])) then
-                barObject.Backdrop = {Show = convert(info[2])}
+                barObject.Backdrop = { Show = convert(info[2]) }
             else
                 barObject[info[1]] = convert(info[2])
             end
@@ -700,11 +700,11 @@ function BS.DoImport()
 
     BS.Vars.Bars[newBarId] = {
         Orientation = GetString(_G.BARSTEWARD_HORIZONTAL),
-        Position = {X = x, Y = y},
+        Position = { X = x, Y = y },
         Name = barname,
         Backdrop = {
             Show = data.Bar.Backdrop and data.Bar.Backdrop.Show or true,
-            Colour = data.Bar.Backdrop and data.Bar.Backdrop.Colour or {0.23, 0.23, 0.23, 0.7}
+            Colour = data.Bar.Backdrop and data.Bar.Backdrop.Colour or { 0.23, 0.23, 0.23, 0.7 }
         },
         TooltipAnchor = GetString(_G.BARSTEWARD_BOTTOM),
         ValueSide = GetString(_G.BARSTEWARD_RIGHT)
@@ -762,6 +762,11 @@ end
 local function getWidgets(barIndex)
     local widgets = {}
 
+    if (barIndex == 0) then
+        d("bar zero!")
+        return widgets
+    end
+
     -- get the widgets for this bar
     for id, info in ipairs(BS.Vars.Controls) do
         if (id ~= BS.W_PORT) then
@@ -780,7 +785,7 @@ local function getWidgets(barIndex)
                     local widget = BS.widgets[id]
 
                     widget.id = id
-                    table.insert(widgets, {info.Order, widget})
+                    table.insert(widgets, { info.Order, widget })
                 end
             end
         end
@@ -819,10 +824,10 @@ local function setBinding(barIndex, barName)
         if (barIndex < BS.MAX_BINDINGS) then
             ZO_CreateStringId(stringId, ZO_CachedStrFormat(_G.BARSTEWARD_TOGGLE, barName))
         end
-    -- else
-    --     local id = _G[stringId]
-    --     _G[stringId] = nil
-    --     _G.EsoStrings[id] = nil
+        -- else
+        --     local id = _G[stringId]
+        --     _G[stringId] = nil
+        --     _G.EsoStrings[id] = nil
     end
 end
 
@@ -834,13 +839,13 @@ function BS.GenerateBar(barIndex)
     local barData = BS.Vars.Bars[barIndex]
     local bar =
         BS.CreateBar(
-        {
-            index = barIndex,
-            position = barData.Orientation == GetString(_G.BARSTEWARD_HORIZONTAL) and TOP or LEFT,
-            scale = barData.Scale or GuiRoot:GetScale(),
-            settings = barData
-        }
-    )
+            {
+                index = barIndex,
+                position = barData.Orientation == GetString(_G.BARSTEWARD_HORIZONTAL) and TOP or LEFT,
+                scale = barData.Scale or GuiRoot:GetScale(),
+                settings = barData
+            }
+        )
 
     local widgets = getWidgets(barIndex)
 
@@ -861,7 +866,7 @@ function BS.GenerateBar(barIndex)
         BS.NudgeCompass()
         -- from Bandits UI
         -- stop the game move the compass back to its original position
-        local block = {ZO_CompassFrame_Keyboard_Template = true, ZO_CompassFrame_Gamepad_Template = true}
+        local block = { ZO_CompassFrame_Keyboard_Template = true, ZO_CompassFrame_Gamepad_Template = true }
         local ZO_ApplyTemplateToControl = _G.ApplyTemplateToControl
 
         _G.ApplyTemplateToControl = function(control, templateName)
@@ -913,19 +918,19 @@ function BS.DestroyBar(barIndex)
 
     BS.alignBars =
         BS.LC.Filter(
-        BS.alignBars,
-        function(v)
-            return v ~= barName
-        end
-    )
+            BS.alignBars,
+            function(v)
+                return v ~= barName
+            end
+        )
 
     BS.Bars =
         BS.LC.Filter(
-        BS.Bars,
-        function(v)
-            return v ~= barName
-        end
-    )
+            BS.Bars,
+            function(v)
+                return v ~= barName
+            end
+        )
 end
 
 local function refreshBarWidgets(barIndex)
@@ -1089,9 +1094,9 @@ function BS.GetColour(this, colourType, default, useZoColours)
     end
 
     if (default) then
-        defColour = BS.GetVar(default) or {0, 0, 0, 0}
+        defColour = BS.GetVar(default) or { 0, 0, 0, 0 }
     else
-        defColour = BS.GetVar(defaultColour) or {0, 0, 0, 0}
+        defColour = BS.GetVar(defaultColour) or { 0, 0, 0, 0 }
     end
 
     local retColour = BS.GetVar(colour, this) or defColour
@@ -1614,7 +1619,7 @@ function BS.TrackAchievements()
 end
 
 function BS.AchievementNotifier(id, checkAnnounce)
-    local status = ACHIEVEMENTS_MANAGER:GetAchievementStatus(id)
+    local status = BS.LC.GetAchievementStatus(id)
     local name, _, _, icon = GetAchievementInfo(id)
     local announce = BS.GetVar("Announce", BS.W_ACHIEVEMENT_TRACKER) and checkAnnounce
     local stepsRemaining = 0
@@ -1671,13 +1676,13 @@ end
 function BS.FindItem(text)
     local filteredItems =
         SHARED_INVENTORY:GenerateFullSlotData(
-        function(itemdata)
-            local match = itemdata.name:find(text)
+            function(itemdata)
+                local match = itemdata.name:find(text)
 
-            return match ~= nil
-        end,
-        _G.BAG_BACKPACK
-    )
+                return match ~= nil
+            end,
+            _G.BAG_BACKPACK
+        )
 
     for _, item in ipairs(filteredItems) do
         d(item.name)
@@ -1697,4 +1702,5 @@ function BS.FindAbility(text, start, finish)
         end
     end
 end
+
 -- luacheck: pop

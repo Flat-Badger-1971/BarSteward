@@ -1746,7 +1746,7 @@ BS.widgets[BS.W_ACHIEVEMENT_TRACKER] = {
             local progress =
                 usePc and BS.LC.ToPercent(done, required, true) or
                 string.format("%s/%s", tostring(done), tostring(required))
-            t = string.format("%s - %s - %s", data.category, colour:Colorize(data.name), BS.LC.White:Colorize(progress))
+            t = string.format("%s - %s - %s", data.category or "", colour:Colorize(data.name or ""), BS.LC.White:Colorize(progress or "0"))
 
             tt = string.format("%s%s%s", tt, BS.LF, t)
         end
