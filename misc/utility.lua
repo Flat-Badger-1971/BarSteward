@@ -1444,7 +1444,7 @@ function BS.ShowFrameMovers(value)
     end
 end
 
-local function updateTrackedAchiementCategories()
+local function updateTrackedAchievementCategories()
     local ids = BS.IsTracked()
 
     if (BS.TrackedCategories) then
@@ -1466,7 +1466,7 @@ end
 
 function BS.IsTrackedCategory(topIndex, catIndex)
     if (not BS.TrackedCategories) then
-        updateTrackedAchiementCategories()
+        updateTrackedAchievementCategories()
     end
 
     if (catIndex) then
@@ -1669,6 +1669,31 @@ function BS.HideGoldenPursuitsDefaultUI()
             end
         end
     end
+end
+
+function BS.GetAchievementsInLine(id)
+    local first = GetFirstAchievementInLine(id)
+
+    if (first == 0) then
+        return { id }
+    end
+
+    local achievements = {}
+    local nextachievement = first
+    local index = 2
+
+    achievements[first] = 1
+
+    while (nextachievement ~= 0) do
+        nextachievement = GetNextAchievementInLine(nextachievement)
+
+        if (nextachievement ~= 0) then
+            achievements[nextachievement] = index
+            index = index + 1
+        end
+    end
+
+    return achievements
 end
 
 -- developer utility functions

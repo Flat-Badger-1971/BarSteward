@@ -48,6 +48,21 @@ function BS.GetMaintenanceSettings()
         width = "full"
     }
 
+    controls[#controls + 1] = {
+        type = "description",
+        text = BS.LC.Format(_G.BARSTEWARD_CLEAN_TRACKED),
+        width = "half"
+    }
+
+    controls[#controls + 1] = {
+        type = "button",
+        name = BS.LC.Format(_G.BARSTEWARD_CLEAN),
+        func = function()
+            BS.ClearOldTrackedAchievements()
+        end,
+        width = "half"
+    }
+
     BS.options[#BS.options + 1] = {
         type = "submenu",
         name = GetString(_G.BARSTEWARD_MAINTENANCE),
@@ -99,4 +114,18 @@ function BS.DeleteTrackedData()
         end,
         500
     )
+end
+
+function BS.ClearOldTrackedAchievements()
+    local tracked = BS.IsTracked()
+
+    for _, id in ipairs(tracked) do
+        local completed = select(5, GetAchievementInfo(id))
+
+        if (completed) then
+            BS.SetTracked(id, false)
+        end
+    end
+
+    BS.RefreshWidget(BS.W_ACHIEVEMENT_TRACKER)
 end

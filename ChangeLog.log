@@ -1,7 +1,10 @@
+[color=#ff9900][b]Version: 3.3.1 ---------------[/b][/color]
+Achievement Tracker improvements
+
 [color=#ff9900][b]Version: 3.3.0 ---------------[/b][/color]
 Update 45 changes
 Handle missing data in achievement Tracker
-Add new achievement status function
+Fix achievement status issue
 
 [color=#ff9900][b]Version: 3.2.20 ---------------[/b][/color]
 Bugfix by Zelenin for bank bag space

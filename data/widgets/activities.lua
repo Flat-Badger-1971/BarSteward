@@ -2,7 +2,7 @@ local BS = _G.BarSteward
 local star = BS.Icon("targetmarkers/target_gold_star_64")
 
 local function getColourOptions(widgetIndex)
-    local colours = {["Red"] = "Danger", ["Amber"] = "Warning", ["Green"] = "Ok"}
+    local colours = { ["Red"] = "Danger", ["Amber"] = "Warning", ["Green"] = "Ok" }
     local vars = BS.Vars.Controls[widgetIndex]
     local index = 2
     local settings = {
@@ -31,10 +31,10 @@ local function getColourOptions(widgetIndex)
                 return unpack(vars[c] or BS.Vars["Default" .. default .. "Colour"])
             end,
             setFunc = function(r, g, b, a)
-                if (BS.LC.CompareColours({r, g, b, a}, BS.Vars["Default" .. default .. "Colour"])) then
+                if (BS.LC.CompareColours({ r, g, b, a }, BS.Vars["Default" .. default .. "Colour"])) then
                     vars[c] = nil
                 else
-                    vars[c] = {r, g, b, a}
+                    vars[c] = { r, g, b, a }
                 end
 
                 BS.RefreshWidget(widgetIndex)
@@ -149,7 +149,7 @@ local function getTimedActivityProgress(activityType, widget, hideLimit, default
 
             ttext = colour:Colorize(ttext) .. " " .. reward
 
-            table.insert(tasks, {text = ttext, value = rewardValue, index = idx})
+            table.insert(tasks, { text = ttext, value = rewardValue, index = idx })
 
             local add = pcProgress > maxPcProgress
 
@@ -188,7 +188,7 @@ BS.widgets[BS.W_DAILY_ENDEAVOURS] = {
             GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS)
         )
     end,
-    event = {EVENT_PLAYER_ACTIVATED, EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED},
+    event = { EVENT_PLAYER_ACTIVATED, EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED },
     icon = "journal/u26_progress_digsite_checked_incomplete",
     tooltip = GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS),
     onLeftClick = function()
@@ -218,7 +218,7 @@ BS.widgets[BS.W_WEEKLY_ENDEAVOURS] = {
             GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS)
         )
     end,
-    event = {EVENT_PLAYER_ACTIVATED, EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED},
+    event = { EVENT_PLAYER_ACTIVATED, EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED },
     icon = "journal/u26_progress_digsite_checked_complete",
     tooltip = GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS),
     onLeftClick = function()
@@ -265,14 +265,14 @@ BS.widgets[BS.W_ENDEAVOUR_PROGRESS] = {
         end
     end,
     gradient = function()
-        local startg = {GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_START)}
-        local endg = {GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_END)}
+        local startg = { GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_START) }
+        local endg = { GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_END) }
         local s = BS.Vars.Controls[BS.W_ENDEAVOUR_PROGRESS].GradientStart or startg
         local e = BS.Vars.Controls[BS.W_ENDEAVOUR_PROGRESS].GradientEnd or endg
 
         return s, e
     end,
-    event = {EVENT_PLAYER_ACTIVATED, EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED},
+    event = { EVENT_PLAYER_ACTIVATED, EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED },
     icon = "journal/u26_progress_digsite_marked_complete",
     tooltip = GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS_BEST),
     onLeftClick = function()
@@ -383,13 +383,13 @@ BS.widgets[BS.W_LEADS] = {
             else
                 value =
                     BS.SecondsToTime(
-                    minTime,
-                    false,
-                    false,
-                    true,
-                    BS.GetVar("Format", this),
-                    BS.GetVar("HideDaysWhenZero", this)
-                )
+                        minTime,
+                        false,
+                        false,
+                        true,
+                        BS.GetVar("Format", this),
+                        BS.GetVar("HideDaysWhenZero", this)
+                    )
             end
 
             if (BS.GetVar("ShowCount", this)) then
@@ -418,13 +418,13 @@ BS.widgets[BS.W_LEADS] = {
                 local ttlColour = getLeadColour(lead)
                 local time =
                     BS.SecondsToTime(
-                    lead.remaining,
-                    false,
-                    false,
-                    true,
-                    BS.GetVar("Format", this),
-                    BS.GetVar("HideDaysWhenZero", this)
-                )
+                        lead.remaining,
+                        false,
+                        false,
+                        true,
+                        BS.GetVar("Format", this),
+                        BS.GetVar("HideDaysWhenZero", this)
+                    )
 
                 if (lead.inProgress) then
                     time = GetString(_G.BARSTEWARD_IN_PROGRESS)
@@ -519,13 +519,13 @@ local function getDisplay(timeRemaining, widgetIndex)
     else
         display =
             BS.SecondsToTime(
-            timeRemaining,
-            false,
-            false,
-            BS.GetVar("HideSeconds", widgetIndex),
-            BS.GetVar("Format", widgetIndex),
-            BS.GetVar("HideDaysWhenZero", widgetIndex)
-        )
+                timeRemaining,
+                false,
+                false,
+                BS.GetVar("HideSeconds", widgetIndex),
+                BS.GetVar("Format", widgetIndex),
+                BS.GetVar("HideDaysWhenZero", widgetIndex)
+            )
     end
 
     return display
@@ -870,7 +870,7 @@ BS.widgets[BS.W_LOREBOOKS] = {
 
         return #categories
     end,
-    callback = {[BS.CallbackManager] = {"LorebooksUpdated"}},
+    callback = { [BS.CallbackManager] = { "LorebooksUpdated" } },
     icon = "icons/quest_book_001",
     tooltip = GetString(_G.BARSTEWARD_LOREBOOKS),
     onLeftClick = function()
@@ -931,7 +931,7 @@ BS.widgets[BS.W_SHALIDORS_LIBRARY] = {
 
         return known
     end,
-    callback = {[BS.CallbackManager] = {"LorebooksUpdated"}},
+    callback = { [BS.CallbackManager] = { "LorebooksUpdated" } },
     icon = "icons/housing_sum_fur_booksfloatingset003",
     tooltip = BS.LC.Format(SI_ZONECOMPLETIONTYPE11),
     onLeftClick = function()
@@ -967,7 +967,7 @@ BS.widgets[BS.W_CRAFTING_MOTIFS] = {
 
         return known
     end,
-    callback = {[BS.CallbackManager] = {"LorebooksUpdated"}},
+    callback = { [BS.CallbackManager] = { "LorebooksUpdated" } },
     icon = "icons/u34_crafting_style_item_sybranic_marine",
     tooltip = GetString(_G.BARSTEWARD_CRAFTING_MOTIFS),
     onLeftClick = function()
@@ -1001,7 +1001,7 @@ function BS.GetActivityRewardInfo(activityTypes)
                                     xpReward = xpReward,
                                     displayName = zo_strformat(SI_ACTIVITY_FINDER_REWARD_NAME_FORMAT, displayName),
                                     icon = icon,
-                                    colour = BS.LC.Colour({r = red, g = green, b = blue}),
+                                    colour = BS.LC.Colour({ r = red, g = green, b = blue }),
                                     active = location:IsActive() or false,
                                     meetsRequirements = location:DoesPlayerMeetLevelRequirements()
                                 }
@@ -1053,7 +1053,7 @@ BS.widgets[BS.W_RANDOM_DUNGEON] = {
     -- v1.4.22
     name = "randomDungeon",
     update = function(widget)
-        local activities = {LFG_ACTIVITY_DUNGEON, LFG_ACTIVITY_MASTER_DUNGEON}
+        local activities = { LFG_ACTIVITY_DUNGEON, LFG_ACTIVITY_MASTER_DUNGEON }
         local dungeonInfo = BS.GetActivityRewardInfo(activities)
         local data = {
             output = "",
@@ -1100,7 +1100,7 @@ BS.widgets[BS.W_RANDOM_TRIBUTE] = {
     -- v1.4.23
     name = "randomTribute",
     update = function(widget)
-        local activities = {LFG_ACTIVITY_TRIBUTE_COMPETITIVE, LFG_ACTIVITY_TRIBUTE_CASUAL}
+        local activities = { LFG_ACTIVITY_TRIBUTE_COMPETITIVE, LFG_ACTIVITY_TRIBUTE_CASUAL }
         local bgInfo = BS.GetActivityRewardInfo(activities)
         local data = {
             output = "",
@@ -1146,7 +1146,7 @@ BS.widgets[BS.W_RANDOM_TRIBUTE] = {
 -- widget based on InfoPanel
 
 local function isChest(name)
-    return BS.LC.Search({"Truhe", "Coffre", "Chest", "сундук", "胸部"}, name)
+    return BS.LC.Search({ "Truhe", "Coffre", "Chest", "сундук", "胸部" }, name)
 end
 
 BS.widgets[BS.W_CHESTS_FOUND] = {
@@ -1164,8 +1164,8 @@ BS.widgets[BS.W_CHESTS_FOUND] = {
                 if
                     (math.abs(BS.Vars.DungeonInfo.PreviousChest.x - x) > delta and
                         math.abs(BS.Vars.DungeonInfo.PreviousChest.y - y) > delta)
-                 then
-                    BS.Vars.DungeonInfo.PreviousChest = {x = x, y = y}
+                then
+                    BS.Vars.DungeonInfo.PreviousChest = { x = x, y = y }
                     BS.Vars.DungeonInfo.ChestCount = BS.Vars.DungeonInfo.ChestCount + 1
                 end
             end
@@ -1176,7 +1176,7 @@ BS.widgets[BS.W_CHESTS_FOUND] = {
 
         return BS.Vars.DungeonInfo.ChestCount
     end,
-    event = {EVENT_CLIENT_INTERACT_RESULT, EVENT_PLAYER_ACTIVATED},
+    event = { EVENT_CLIENT_INTERACT_RESULT, EVENT_PLAYER_ACTIVATED },
     hideWhenTrue = function()
         return not IsUnitInDungeon("player")
     end,
@@ -1211,14 +1211,14 @@ BS.widgets[BS.W_DAILY_PROGRESS] = {
         end
     end,
     gradient = function()
-        local startg = {GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_START)}
-        local endg = {GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_END)}
+        local startg = { GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_START) }
+        local endg = { GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_END) }
         local s = BS.Vars.Controls[BS.W_DAILY_PROGRESS].GradientStart or startg
         local e = BS.Vars.Controls[BS.W_DAILY_PROGRESS].GradientEnd or endg
 
         return s, e
     end,
-    event = {EVENT_PLAYER_ACTIVATED, EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED},
+    event = { EVENT_PLAYER_ACTIVATED, EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED },
     icon = "journal/u26_progress_digsite_marked_incomplete",
     tooltip = GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS_BEST),
     onLeftClick = function()
@@ -1636,10 +1636,26 @@ BS.widgets[BS.W_ACHIEVEMENT_TRACKER] = {
         local daily = BS.GetVar("Daily", this)
 
         if (BS.IsTracked(id) and event ~= "initial") then
-            -- TODO: update achievementId for staged achievements
             -- TODO: option to remove completed achievements
             -- TODO: sort out daily reset
             local name, icon, stepsRemaining, stepsRequired = BS.AchievementNotifier(id, true)
+
+            if (stepsRemaining == 0) then
+                local achsInLine = BS.GetAchievementsInLine(id)
+
+                if (achsInLine[id] < #achsInLine) then
+                    local nextInLine = BS.LC.GetByValue(achsInLine, achsInLine[id] + 1)
+
+                    BS.SetTracked(id, false)
+                    BS.SetTracked(nextInLine, true)
+
+                    id = nextInLine
+                    name, icon, stepsRemaining, stepsRequired = BS.AchievementNotifier(id, true)
+                elseif (BS.GetVar("Untrack", this)) then
+                    BS.SetTracked(id, false)
+                    achievements[id] = nil
+                end
+            end
 
             achievements[id] = {
                 completed = stepsRemaining == 0,
@@ -1682,13 +1698,13 @@ BS.widgets[BS.W_ACHIEVEMENT_TRACKER] = {
             checkAchReset()
             completed =
                 BS.LC.CountElements(
-                BS.LC.Filter(
-                    achievements,
-                    function(v)
-                        return v.updated == true
-                    end
+                    BS.LC.Filter(
+                        achievements,
+                        function(v)
+                            return v.updated == true
+                        end
+                    )
                 )
-            )
         end
 
         local usePc = BS.GetVar("ShowPercent", this)
@@ -1746,7 +1762,8 @@ BS.widgets[BS.W_ACHIEVEMENT_TRACKER] = {
             local progress =
                 usePc and BS.LC.ToPercent(done, required, true) or
                 string.format("%s/%s", tostring(done), tostring(required))
-            t = string.format("%s - %s - %s", data.category or "", colour:Colorize(data.name or ""), BS.LC.White:Colorize(progress or "0"))
+            t = string.format("%s - %s - %s", data.category or "", colour:Colorize(data.name or ""),
+                BS.LC.White:Colorize(progress or "0"))
 
             tt = string.format("%s%s%s", tt, BS.LF, t)
         end
@@ -1755,7 +1772,7 @@ BS.widgets[BS.W_ACHIEVEMENT_TRACKER] = {
 
         return #achievements
     end,
-    event = {EVENT_ACHIEVEMENT_AWARDED, EVENT_ACHIEVEMENT_UPDATED},
+    event = { EVENT_ACHIEVEMENT_AWARDED, EVENT_ACHIEVEMENT_UPDATED },
     icon = "icons/housing_u42_mb_eye",
     tooltip = GetString(_G.BARSTEWARD_TRACKER),
     onLeftClick = function()
@@ -1806,7 +1823,7 @@ BS.widgets[BS.W_ACHIEVEMENT_TRACKER] = {
         },
         [3] = {
             type = "checkbox",
-            name = BS.LC.Format(_G.BARSTEWARD_PROGRESS_SCREEN),
+            name = BS.LC.Format(BARSTEWARD_PROGRESS_SCREEN),
             getFunc = function()
                 return BS.GetVar("Announce", BS.W_ACHIEVEMENT_TRACKER)
             end,
@@ -1816,6 +1833,17 @@ BS.widgets[BS.W_ACHIEVEMENT_TRACKER] = {
             width = "full"
         },
         [4] = {
+            type = "checkbox",
+            name = BS.LC.Format(BARSTEWARD_UNTRACK_WHEN_COMPLETE),
+            getFunc = function()
+                return BS.GetVar("Untrack", BS.W_ACHIEVEMENT_TRACKER)
+            end,
+            setFunc = function(value)
+                BS.SetVar(value, "Untrack", BS.W_ACHIEVEMENT_TRACKER)
+            end,
+            width = "full"
+        },
+        [5] = {
             type = "description",
             text = BS.LC.Yellow:Colorize(GetString(_G.BARSTEWARD_TRACKER_INFO)),
             width = "full"
@@ -1947,7 +1975,7 @@ BS.widgets[BS.W_GOLDEN_PURSUITS] = {
     hideWhenTrue = function()
         return GetNumActivePromotionalEventCampaigns() == 0
     end,
-    callback = {[PROMOTIONAL_EVENT_MANAGER] = {"CampaignsUpdated", "RewardsClaimed"}},
+    callback = { [PROMOTIONAL_EVENT_MANAGER] = { "CampaignsUpdated", "RewardsClaimed" } },
     event = {
         EVENT_PROMOTIONAL_EVENTS_ACTIVITY_PROGRESS_UPDATED,
         EVENT_PROMOTIONAL_EVENTS_ACTIVITY_TRACKING_UPDATED
