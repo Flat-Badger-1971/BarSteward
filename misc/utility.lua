@@ -1497,7 +1497,7 @@ function BS.SetTracked(id, track)
 
     ids[id] = track
     BS.Vars:SetCommon(ids, "AchievementTracking")
-    updateTrackedAchiementCategories()
+    updateTrackedAchievementCategories()
 end
 
 function BS.Track(self, id, track)

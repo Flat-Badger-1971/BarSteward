@@ -119,7 +119,7 @@ end
 function BS.ClearOldTrackedAchievements()
     local tracked = BS.IsTracked()
 
-    for _, id in ipairs(tracked) do
+    for id, _ in pairs(tracked) do
         local completed = select(5, GetAchievementInfo(id))
 
         if (completed) then
