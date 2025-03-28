@@ -4,7 +4,7 @@ BS.widgets[BS.W_RANDOM_BATTLEGROUND] = {
     -- v1.4.23
     name = "randomBattleground",
     update = function(widget)
-        local activities = {LFG_ACTIVITY_BATTLE_GROUND_LOW_LEVEL, LFG_ACTIVITY_BATTLE_GROUND_NON_CHAMPION}
+        local activities = { LFG_ACTIVITY_BATTLE_GROUND_LOW_LEVEL, LFG_ACTIVITY_BATTLE_GROUND_NON_CHAMPION }
         local bgInfo = BS.GetActivityRewardInfo(activities)
         local data = {
             output = "",
@@ -12,7 +12,7 @@ BS.widgets[BS.W_RANDOM_BATTLEGROUND] = {
             eligibleCount = 0,
             tt = BS.LC.Format(SI_BATTLEGROUND_FINDER_RANDOM_FILTER_TEXT)
         }
-        local ll = bgInfo[LFG_ACTIVITY_BATTLE_GROUND_LOW_LEVEL] -- Random Battleground
+        local ll = bgInfo[LFG_ACTIVITY_BATTLE_GROUND_LOW_LEVEL]    -- Random Battleground
         --local cp = bgInfo[LFG_ACTIVITY_BATTLE_GROUND_CHAMPION]
         local np = bgInfo[LFG_ACTIVITY_BATTLE_GROUND_NON_CHAMPION] -- Group Battleground
         local battleground = ll
@@ -53,49 +53,49 @@ BS.widgets[BS.W_RANDOM_BATTLEGROUND] = {
 
 BS.widgets[BS.W_ALLIANCE_POINTS] =
     BS.CurrencyWidget(
-    CURT_ALLIANCE_POINTS,
-    BS.W_ALLIANCE_POINTS,
-    {
-        bag = _G.BARSTEWARD_GOLD_BAG,
-        bank = _G.BARSTEWARD_GOLD_BANK,
-        combined = _G.BARSTEWARD_GOLD_COMBINED,
-        display = _G.BARSTEWARD_GOLD_DISPLAY,
-        everyWhere = _G.BARSTEWARD_GOLD_EVERYWHERE,
-        separated = _G.BARSTEWARD_GOLD_SEPARATED,
-        title = BS.LC.Format(SI_GAMEPAD_INVENTORY_ALLIANCE_POINTS)
-    },
-    {EVENT_PLAYER_ACTIVATED, EVENT_ALLIANCE_POINT_UPDATE},
-    function()
-        if (BS.Vars.Controls[BS.W_ALLIANCE_POINTS].PvPOnly == true) then
-            return not BS.LC.IsInPvPZone()
-        end
+        CURT_ALLIANCE_POINTS,
+        BS.W_ALLIANCE_POINTS,
+        {
+            bag = _G.BARSTEWARD_GOLD_BAG,
+            bank = _G.BARSTEWARD_GOLD_BANK,
+            combined = _G.BARSTEWARD_GOLD_COMBINED,
+            display = _G.BARSTEWARD_GOLD_DISPLAY,
+            everyWhere = _G.BARSTEWARD_GOLD_EVERYWHERE,
+            separated = _G.BARSTEWARD_GOLD_SEPARATED,
+            title = BS.LC.Format(SI_GAMEPAD_INVENTORY_ALLIANCE_POINTS)
+        },
+        { EVENT_PLAYER_ACTIVATED, EVENT_ALLIANCE_POINT_UPDATE },
+        function()
+            if (BS.Vars.Controls[BS.W_ALLIANCE_POINTS].PvPOnly == true) then
+                return not BS.LC.IsInPvPZone()
+            end
 
-        return false
-    end
-)
+            return false
+        end
+    )
 
 BS.widgets[BS.W_TELVAR_STONES] =
     BS.CurrencyWidget(
-    CURT_TELVAR_STONES,
-    BS.W_TELVAR_STONES,
-    {
-        bag = _G.BARSTEWARD_GOLD_BAG,
-        bank = _G.BARSTEWARD_GOLD_BANK,
-        combined = _G.BARSTEWARD_GOLD_COMBINED,
-        display = _G.BARSTEWARD_GOLD_DISPLAY,
-        everyWhere = _G.BARSTEWARD_GOLD_EVERYWHERE,
-        separated = _G.BARSTEWARD_GOLD_SEPARATED,
-        title = BS.LC.Format(SI_GAMEPAD_INVENTORY_TELVAR_STONES)
-    },
-    EVENT_TELVAR_STONE_UPDATE,
-    function()
-        if (BS.Vars.Controls[BS.W_TELVAR_STONES].PvPOnly == true) then
-            return not BS.LC.IsInPvPZone()
-        end
+        CURT_TELVAR_STONES,
+        BS.W_TELVAR_STONES,
+        {
+            bag = _G.BARSTEWARD_GOLD_BAG,
+            bank = _G.BARSTEWARD_GOLD_BANK,
+            combined = _G.BARSTEWARD_GOLD_COMBINED,
+            display = _G.BARSTEWARD_GOLD_DISPLAY,
+            everyWhere = _G.BARSTEWARD_GOLD_EVERYWHERE,
+            separated = _G.BARSTEWARD_GOLD_SEPARATED,
+            title = BS.LC.Format(SI_GAMEPAD_INVENTORY_TELVAR_STONES)
+        },
+        EVENT_TELVAR_STONE_UPDATE,
+        function()
+            if (BS.Vars.Controls[BS.W_TELVAR_STONES].PvPOnly == true) then
+                return not BS.LC.IsInPvPZone()
+            end
 
-        return false
-    end
-)
+            return false
+        end
+    )
 
 BS.widgets[BS.W_AP_BUFF] = {
     -- v2.1.2
@@ -103,7 +103,7 @@ BS.widgets[BS.W_AP_BUFF] = {
     update = function(widget)
         local this = BS.W_AP_BUFF
         local buffs = BS.ScanBuffs(BS.AP_BUFFS, this)
-        local lowest = {remaining = 99999}
+        local lowest = { remaining = 99999 }
         local ttt = BS.LC.Format(_G.BARSTEWARD_AP_BUFF) .. BS.LF
 
         if (#buffs > 0) then
@@ -179,11 +179,11 @@ local function makeRow(data, character)
     local allianceIcon = ZO_GetAllianceIcon(character.alliance)
     local name =
         string.format(
-        "%s %s %s",
-        allianceColour:Colorize(string.format("|t16:24:%s:inheritcolor|t", allianceIcon)),
-        classColour:Colorize(string.format("|t24:24:%s:inheritcolor|t", GetClassIcon(character.classId))),
-        allianceColour:Colorize(character.name)
-    )
+            "%s %s %s",
+            allianceColour:Colorize(string.format("|t16:24:%s:inheritcolor|t", allianceIcon)),
+            classColour:Colorize(string.format("|t24:24:%s:inheritcolor|t", GetClassIcon(character.classId))),
+            allianceColour:Colorize(character.name)
+        )
     local rank = string.format("%s", GetAvARankName(character.gender, character.avaRank))
 
     return string.format("%s %s %s/%s", name, rank, data.tier, data.points)
@@ -234,8 +234,8 @@ BS.widgets[BS.W_CAMPAIGN_TIER] = {
         return progress == maxProgress
     end,
     gradient = function()
-        local startg = {GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_START)}
-        local endg = {GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_END)}
+        local startg = { GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_START) }
+        local endg = { GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_END) }
         local s = BS.Vars.Controls[BS.W_CAMPAIGN_TIER].GradientStart or startg
         local e = BS.Vars.Controls[BS.W_CAMPAIGN_TIER].GradientEnd or endg
 
@@ -245,7 +245,7 @@ BS.widgets[BS.W_CAMPAIGN_TIER] = {
         EVENT_ASSIGNED_CAMPAIGN_CHANGED,
         EVENT_CAMPAIGN_LEADERBOARD_DATA_RECEIVED
     },
-    callback = {[BS] = {"RewardsTrackerRefresh"}},
+    callback = { [BS] = { "RewardsTrackerRefresh" } },
     hideWhenTrue = function()
         if (BS.Vars.Controls[BS.W_CAMPAIGN_TIER].PvPOnly == true) then
             return not BS.LC.IsInPvPZone()
@@ -272,7 +272,7 @@ BS.widgets[BS.W_CAMPAIGN_TIER] = {
     }
 }
 
-local ca = BS.LC.Format(GetAbilityName(45617))
+local ca = BS.LC.Format(GetAbilityName(45617, "player"))
 
 BS.widgets[BS.W_CONT_ATT] = {
     -- v3.1.9
@@ -315,7 +315,7 @@ BS.widgets[BS.W_CONT_ATT] = {
     tooltip = ca
 }
 
-local ah = BS.LC.Format(GetAbilityName(21263))
+local ah = BS.LC.Format(GetAbilityName(21263, "player"))
 
 BS.widgets[BS.W_AYLEID_HEALTH] = {
     -- v3.1.9

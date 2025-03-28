@@ -61,13 +61,13 @@ local function getDisplay(timeRemaining, widgetIndex, inUse, maxResearch)
     else
         display =
             BS.SecondsToTime(
-            timeRemaining,
-            false,
-            false,
-            BS.GetVar("HideSeconds", widgetIndex),
-            BS.GetVar("Format", widgetIndex),
-            BS.GetVar("HideDaysWhenZero", widgetIndex)
-        )
+                timeRemaining,
+                false,
+                false,
+                BS.GetVar("HideSeconds", widgetIndex),
+                BS.GetVar("Format", widgetIndex),
+                BS.GetVar("HideDaysWhenZero", widgetIndex)
+            )
     end
 
     if (inUse ~= nil) then
@@ -149,16 +149,16 @@ BS.widgets[BS.W_ALL_CRAFTING] = {
             local timeRemaining, maxResearch, inUse = getResearchTimer(craftingType)
             local ttColour = BS.GetTimeColour(timeRemaining, this, nil, true, true)
 
-            timers[craftingType] = {timeRemaining = timeRemaining, inUse = inUse, maxResearch = maxResearch}
+            timers[craftingType] = { timeRemaining = timeRemaining, inUse = inUse, maxResearch = maxResearch }
             totalInUse = totalInUse + inUse
             totalMaxResearch = totalMaxResearch + maxResearch
 
             local ttext =
                 string.format(
-                "%s %s",
-                BS.Icon(craftingIcons[craftingType]),
-                getDisplay(timeRemaining, this, inUse, maxResearch)
-            )
+                    "%s %s",
+                    BS.Icon(craftingIcons[craftingType]),
+                    getDisplay(timeRemaining, this, inUse, maxResearch)
+                )
 
             ttt = string.format("%s%s%s", ttt, BS.LF, ttColour:Colorize(ttext))
         end
@@ -204,13 +204,13 @@ BS.widgets[BS.W_BLACKSMITHING] = {
         for slot = 1, maxResearch do
             ttt =
                 string.format(
-                "%s%s%s",
-                ttt,
-                BS.LF,
-                BS.COLOURS.White:Colorize(
-                    slot .. " - " .. getDisplay(researchSlots[CRAFTING_TYPE_BLACKSMITHING][slot] or 0, this)
+                    "%s%s%s",
+                    ttt,
+                    BS.LF,
+                    BS.COLOURS.White:Colorize(
+                        slot .. " - " .. getDisplay(researchSlots[CRAFTING_TYPE_BLACKSMITHING][slot] or 0, this)
+                    )
                 )
-            )
         end
 
         widget:SetTooltip(ttt)
@@ -249,13 +249,13 @@ BS.widgets[BS.W_WOODWORKING] = {
         for slot = 1, maxResearch do
             ttt =
                 string.format(
-                "%s%s%s",
-                ttt,
-                BS.LF,
-                BS.COLOURS.White:Colorize(
-                    slot .. " - " .. getDisplay(researchSlots[CRAFTING_TYPE_WOODWORKING][slot] or 0, this)
+                    "%s%s%s",
+                    ttt,
+                    BS.LF,
+                    BS.COLOURS.White:Colorize(
+                        slot .. " - " .. getDisplay(researchSlots[CRAFTING_TYPE_WOODWORKING][slot] or 0, this)
+                    )
                 )
-            )
         end
 
         widget:SetTooltip(ttt)
@@ -294,13 +294,13 @@ BS.widgets[BS.W_CLOTHING] = {
         for slot = 1, maxResearch do
             ttt =
                 string.format(
-                "%s%s%s",
-                ttt,
-                BS.LF,
-                BS.COLOURS.White:Colorize(
-                    slot .. " - " .. getDisplay(researchSlots[CRAFTING_TYPE_CLOTHIER][slot] or 0, this)
+                    "%s%s%s",
+                    ttt,
+                    BS.LF,
+                    BS.COLOURS.White:Colorize(
+                        slot .. " - " .. getDisplay(researchSlots[CRAFTING_TYPE_CLOTHIER][slot] or 0, this)
+                    )
                 )
-            )
         end
 
         widget:SetTooltip(ttt)
@@ -339,13 +339,13 @@ BS.widgets[BS.W_JEWELCRAFTING] = {
         for slot = 1, maxResearch do
             ttt =
                 string.format(
-                "%s%s%s",
-                ttt,
-                BS.LF,
-                BS.COLOURS.White:Colorize(
-                    slot .. " - " .. getDisplay(researchSlots[CRAFTING_TYPE_JEWELRYCRAFTING][slot] or 0, this)
+                    "%s%s%s",
+                    ttt,
+                    BS.LF,
+                    BS.COLOURS.White:Colorize(
+                        slot .. " - " .. getDisplay(researchSlots[CRAFTING_TYPE_JEWELRYCRAFTING][slot] or 0, this)
+                    )
                 )
-            )
         end
 
         widget:SetTooltip(ttt)
@@ -423,7 +423,7 @@ local function getReadyForHandIn(character)
     for _, quest in ipairs(questList) do
         if (quest.questType == QUEST_TYPE_CRAFTING and quest.repeatableType == QUEST_REPEAT_DAILY) then
             local conditionInfo = {}
-            local numConditions = GetJournalQuestNumConditions(quest.questIndex)
+            local numConditions = GetJournalQuestNumConditions(quest.questIndex, QUEST_MAIN_STEP_INDEX)
 
             QUEST_JOURNAL_MANAGER:BuildTextForConditions(
                 quest.questIndex,
@@ -650,12 +650,12 @@ BS.widgets[BS.W_CRAFTING_DAILY_TIME] = {
 
 local function getRecipeList()
     BS.recipeList = {
-        food = {known = 0, unknown = 0.},
-        drink = {known = 0, unknown = 0},
-        furnishing = {known = 0, unknown = 0}
+        food = { known = 0, unknown = 0. },
+        drink = { known = 0, unknown = 0 },
+        furnishing = { known = 0, unknown = 0 }
     }
 
-    BS.unknownRecipeLinks = {[ITEMTYPE_FOOD] = {}, [ITEMTYPE_DRINK] = {}, [ITEMTYPE_FURNISHING] = {}}
+    BS.unknownRecipeLinks = { [ITEMTYPE_FOOD] = {}, [ITEMTYPE_DRINK] = {}, [ITEMTYPE_FURNISHING] = {} }
 
     for recipeListIndex = 1, GetNumRecipeLists() do
         local name, numRecipes = GetRecipeListInfo(recipeListIndex)
@@ -747,7 +747,7 @@ BS.widgets[BS.W_RECIPES] = {
 
         return widget:GetValue()
     end,
-    event = {EVENT_PLAYER_ACTIVATED, EVENT_RECIPE_LEARNED, EVENT_MULTIPLE_RECIPES_LEARNED},
+    event = { EVENT_PLAYER_ACTIVATED, EVENT_RECIPE_LEARNED, EVENT_MULTIPLE_RECIPES_LEARNED },
     icon = "tradinghouse/tradinghouse_trophy_recipe_fragment_up",
     tooltip = recipes,
     onLeftClick = function()
@@ -773,7 +773,7 @@ BS.widgets[BS.W_RECIPES] = {
     end,
     customOptions = {
         name = GetString(_G.BARSTEWARD_RECIPES_DISPLAY),
-        choices = {food, drink, foodAndDrink, furnishing},
+        choices = { food, drink, foodAndDrink, furnishing },
         varName = "Display",
         refresh = true,
         default = food
@@ -792,7 +792,7 @@ BS.widgets[BS.W_UNKNOWN_WRIT_MOTIFS] = {
         end
 
         local writs = 0
-        local bags = {BAG_BACKPACK, BAG_BANK}
+        local bags = { BAG_BACKPACK, BAG_BANK }
         local unknown = {}
 
         if (IsESOPlusSubscriber()) then
@@ -800,22 +800,23 @@ BS.widgets[BS.W_UNKNOWN_WRIT_MOTIFS] = {
         end
 
         for _, bag in pairs(bags) do
+            ---@diagnostic disable-next-line: undefined-field
             for _, data in pairs(_G.SHARED_INVENTORY.bagCache[bag]) do
                 if (data.specializedItemType == SPECIALIZED_ITEMTYPE_MASTER_WRIT) then
                     writs = writs + 1
-                    local itemLink = GetItemLink(bag, data.slotIndex)
+                    local itemLink = GetItemLink(bag, data.slotIndex, LINK_STYLE_DEFAULT)
                     local writData = BS.ToWritFields(itemLink)
 
                     -- only interested in crafting types that use motifs
                     if
                         (writData.writType == CRAFTING_TYPE_BLACKSMITHING or writData.writType == CRAFTING_TYPE_CLOTHIER or
                             writData.writType == CRAFTING_TYPE_WOODWORKING)
-                     then
+                    then
                         local knowsMotif =
                             BS.LibCK.GetMotifKnowledgeForCharacter(
-                            tonumber(writData.motifNumber),
-                            tonumber(writData.itemType)
-                        )
+                                tonumber(writData.motifNumber),
+                                tonumber(writData.itemType)
+                            )
 
                         if (knowsMotif ~= BS.LibCK.KNOWLEDGE_KNOWN) then
                             local styleName = GetItemStyleName(writData.motifNumber)
@@ -863,9 +864,9 @@ BS.widgets[BS.W_UNKNOWN_WRIT_MOTIFS] = {
 
         return widget:GetValue()
     end,
-    event = {EVENT_LORE_BOOK_LEARNED},
+    event = { EVENT_LORE_BOOK_LEARNED },
     callbackLCK = true,
-    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
+    callback = { [SHARED_INVENTORY] = { "SingleSlotInventoryUpdate" } },
     icon = "icons/crafting_motif_binding_welkynar",
     tooltip = GetString(_G.BARSTEWARD_UNKNOWN_WRIT_MOTIFS)
 }

@@ -22,7 +22,7 @@ function BS.RegisterSlashCommands()
     -- open options panel
     _G.SLASH_COMMANDS["/bs"] = function(parameters)
         local options = {}
-        local find = {parameters:match("^(%S*)%s*(.-)$")}
+        local find = { parameters:match("^(%S*)%s*(.-)$") }
 
         for _, value in pairs(find) do
             if ((value or "") ~= "") then

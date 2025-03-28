@@ -155,7 +155,7 @@ function BS.CreateAlignmentFrame(alignBars)
 
             alignBar:ClearAnchors()
             alignBar:SetAnchor(barAnchor, GuiRoot, TOPLEFT, xPos, yPos)
-            BS.Vars.Bars[alignBar.index].Position = {X = xPos, Y = yPos}
+            BS.Vars.Bars[alignBar.index].Position = { X = xPos, Y = yPos }
         end
     end
 
@@ -519,7 +519,7 @@ function BS.UpdateFriendsList()
 
     for _, friend in ipairs(masterList) do
         local dname = ZO_FormatUserFacingDisplayName(friend.displayName) or friend.displayName
-        BS.friendDataItems[itemKey] = {name = dname}
+        BS.friendDataItems[itemKey] = { name = dname }
         itemKey = itemKey + 1
     end
 end
@@ -765,7 +765,7 @@ function BS.UpdateGuildFriendsList()
 
     for _, friend in ipairs(masterList) do
         local dname = ZO_FormatUserFacingDisplayName(friend.displayName) or friend.displayName
-        BS.guildFriendDataItems[itemKey] = {name = dname}
+        BS.guildFriendDataItems[itemKey] = { name = dname }
         itemKey = itemKey + 1
     end
 end
@@ -780,12 +780,12 @@ end
 function BS.CreateGuildFriendsTool()
     local tool =
         CreateTool(
-        GetString(_G.BARSTEWARD_GUILD_FRIENDS_MONITORING),
-        "GuildFriends",
-        "GuildFriendAnnounce",
-        setupGuildFriendsDataRow,
-        true
-    )
+            GetString(_G.BARSTEWARD_GUILD_FRIENDS_MONITORING),
+            "GuildFriends",
+            "GuildFriendAnnounce",
+            setupGuildFriendsDataRow,
+            true
+        )
     BS.selectedGuild = BS.GetGuildId(BS.firstguild)
 
     return tool
@@ -897,21 +897,21 @@ local function checkOrCreatePool(grid)
         BS.SquareObjectPool =
             ZO_ObjectPool:New(
             -- factory
-            function()
-                local square = WINDOW_MANAGER:CreateControl(nil, grid, CT_BACKDROP)
+                function()
+                    local square = WINDOW_MANAGER:CreateControl(nil, grid, CT_BACKDROP)
 
-                square:SetCenterColor(0, 0, 0, 0)
-                square:SetEdgeColor(0, 0, 0, 0.7)
-                square:SetEdgeTexture("", 2, 2, 1, 0)
+                    square:SetCenterColor(0, 0, 0, 0)
+                    square:SetEdgeColor(0, 0, 0, 0.7)
+                    square:SetEdgeTexture("", 2, 2, 1, 0)
 
-                return square
-            end,
-            --reset
-            function(square)
-                square:SetHidden(true)
-                square:ClearAnchors()
-            end
-        )
+                    return square
+                end,
+                --reset
+                function(square)
+                    square:SetHidden(true)
+                    square:ClearAnchors()
+                end
+            )
     end
 end
 

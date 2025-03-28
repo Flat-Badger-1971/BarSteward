@@ -118,7 +118,7 @@ function BS.AddHousingWidgets(idx, widgets)
                             icon = house.icon,
                             onLeftClick = function()
                                 if (house.ptfName) then
-                                    JumpToSpecificHouse(house.ptfName, id)
+                                    JumpToSpecificHouse(house.ptfName, id, false)
                                 else
                                     RequestJumpToHouse(id, vars.Outside)
                                 end
@@ -126,7 +126,7 @@ function BS.AddHousingWidgets(idx, widgets)
                             id = varId
                         }
 
-                        table.insert(widgets, {BS.Vars.Controls[varId].Order, widget})
+                        table.insert(widgets, { BS.Vars.Controls[varId].Order, widget })
                         BS.widgets[varId] = widget
                     end
 
@@ -162,7 +162,7 @@ function BS.PortToHouse(index)
     local vars = BS.Vars.Controls[1000 + id]
 
     if (house.ptfName) then
-        JumpToSpecificHouse(house.ptfName, id)
+        JumpToSpecificHouse(house.ptfName, id, false)
     else
         RequestJumpToHouse(id, vars.Outside)
     end
@@ -263,7 +263,7 @@ local function addSubmenu(barNames, vars, varId, house, id, controls)
                 return unpack(vars.Colour or BS.Vars.DefaultColour)
             end,
             setFunc = function(r, g, b, a)
-                vars.Colour = {r, g, b, a}
+                vars.Colour = { r, g, b, a }
                 BS.RefreshWidget(varId)
             end,
             width = "full",

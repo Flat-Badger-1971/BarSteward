@@ -115,7 +115,7 @@ local function initialise()
             BS.Vars.Font = value
 
             BS.RegenerateAllBars()
-            _G.BarSteward_SampleText.desc:SetFont(BS.GetFont({Font = value}))
+            _G.BarSteward_SampleText.desc:SetFont(BS.GetFont({ Font = value }))
         end,
         default = BS.Defaults.Font
     }
@@ -131,7 +131,7 @@ local function initialise()
             BS.Vars.FontStyle = value
 
             BS.RegenerateAllBars()
-            _G.BarSteward_SampleText.desc:SetFont(BS.GetFont({Style = value}))
+            _G.BarSteward_SampleText.desc:SetFont(BS.GetFont({ Style = value }))
         end,
         default = BS.Defaults.FontStyle
     }
@@ -148,7 +148,7 @@ local function initialise()
             BS.Vars.FontSize = value
 
             BS.RegenerateAllBars()
-            _G.BarSteward_SampleText.desc:SetFont(BS.GetFont({Size = value}))
+            _G.BarSteward_SampleText.desc:SetFont(BS.GetFont({ Size = value }))
         end,
         default = BS.Defaults.FontSize
     }
@@ -301,11 +301,11 @@ function BS.NewBar()
 
     BS.Vars.Bars[newBarId] = {
         Orientation = GetString(_G.BARSTEWARD_HORIZONTAL),
-        Position = {X = x, Y = y},
+        Position = { X = x, Y = y },
         Name = name,
         Backdrop = {
             Show = true,
-            Colour = {0.23, 0.23, 0.23, 0.7}
+            Colour = { 0.23, 0.23, 0.23, 0.7 }
         },
         TooltipAnchor = GetString(_G.BARSTEWARD_BOTTOM),
         ValueSide = GetString(_G.BARSTEWARD_RIGHT)
@@ -391,7 +391,7 @@ local function getBarSettings()
             [1] = {
                 type = "dropdown",
                 name = GetString(_G.BARSTEWARD_ORIENTATION),
-                choices = {GetString(_G.BARSTEWARD_HORIZONTAL), GetString(_G.BARSTEWARD_VERTICAL)},
+                choices = { GetString(_G.BARSTEWARD_HORIZONTAL), GetString(_G.BARSTEWARD_VERTICAL) },
                 getFunc = function()
                     return vars.Orientation
                 end,
@@ -421,7 +421,7 @@ local function getBarSettings()
                     return unpack(vars.Backdrop.Colour)
                 end,
                 setFunc = function(r, g, b, a)
-                    vars.Backdrop.Colour = {r, g, b, a}
+                    vars.Backdrop.Colour = { r, g, b, a }
                     BS.BarObjectPool:GetActiveObject(BS.BarObjects[idx]).bar.background:SetCenterColor(r, g, b, a)
                 end,
                 width = "full",
@@ -489,7 +489,7 @@ local function getBarSettings()
                         end
                     end
 
-                    local border = {"", 128, 2}
+                    local border = { "", 128, 2 }
 
                     if (bar) then
                         if (vars.Border ~= 99) then
@@ -762,7 +762,7 @@ local function getBarSettings()
                 return unpack(vars.CombatColour or BS.Vars.DefaultCombatColour)
             end,
             setFunc = function(r, g, b, a)
-                vars.CombatColour = {r, g, b, a}
+                vars.CombatColour = { r, g, b, a }
             end,
             width = "full",
             disabled = function()
@@ -1014,7 +1014,7 @@ local function getBarSettings()
                 local xPos, yPos = bar:GetCenter()
 
                 BS.Vars.Bars[idx].Anchor = GetString(_G.BARSTEWARD_MIDDLE)
-                BS.Vars.Bars[idx].Position = {X = xPos, Y = yPos}
+                BS.Vars.Bars[idx].Position = { X = xPos, Y = yPos }
             end,
             width = "full"
         }
@@ -1182,7 +1182,7 @@ local function getWidgetSettings()
     local widgets = BS.Vars.Controls
     local bars = BS.Vars.Bars
     local noBar = GetString(_G.BARSTEWARD_NONE_BAR)
-    local barNames = {noBar}
+    local barNames = { noBar }
 
     for _, v in ipairs(bars) do
         table.insert(barNames, v.Name)
@@ -1192,7 +1192,7 @@ local function getWidgetSettings()
 
     for key, widget in pairs(widgets) do
         if (not widget.Hidden and key < 1000) then
-            table.insert(ordered, {key = key, widget = widget})
+            table.insert(ordered, { key = key, widget = widget })
         end
     end
 
@@ -1228,18 +1228,18 @@ local function getWidgetSettings()
         -- sort the widget settings into used/unused
         local used =
             BS.LC.Filter(
-            ordered,
-            function(v)
-                return BS.Vars.Controls[v.key].Bar > 0
-            end
-        )
+                ordered,
+                function(v)
+                    return BS.Vars.Controls[v.key].Bar > 0
+                end
+            )
         local unused =
             BS.LC.Filter(
-            ordered,
-            function(v)
-                return BS.Vars.Controls[v.key].Bar == 0
-            end
-        )
+                ordered,
+                function(v)
+                    return BS.Vars.Controls[v.key].Bar == 0
+                end
+            )
 
         table.sort(
             used,
@@ -1371,10 +1371,10 @@ local function getWidgetSettings()
     }
 
     local defaultColours = {
-        ["_"] = {0.9, 0.9, 0.9, 1},
-        ["Ok"] = {0, 1, 0, 1},
-        ["Warning"] = {1, 1, 0, 1},
-        ["Danger"] = {0.8, 0, 0, 1}
+        ["_"] = { 0.9, 0.9, 0.9, 1 },
+        ["Ok"] = { 0, 1, 0, 1 },
+        ["Warning"] = { 1, 1, 0, 1 },
+        ["Danger"] = { 0.8, 0, 0, 1 }
     }
 
     for colourType, defaultValue in pairs(defaultColours) do
@@ -1388,7 +1388,7 @@ local function getWidgetSettings()
                 return unpack(BS.Vars[defaultName])
             end,
             setFunc = function(r, g, b, a)
-                BS.Vars[defaultName] = {r, g, b, a}
+                BS.Vars[defaultName] = { r, g, b, a }
                 BS.RefreshAll()
             end,
             width = "full",
@@ -1501,7 +1501,7 @@ local function getWidgetSettings()
         local textureCoords = nil
 
         if (k == BS.W_ALLIANCE) then
-            textureCoords = {0, 1, 0, 0.6}
+            textureCoords = { 0, 1, 0, 0.6 }
         end
 
         local iconInfo = BS.widgets[k].icon
@@ -1531,13 +1531,13 @@ local function getWidgetSettings()
         if (BS.Vars.CategoriesCount) then
             cat.name =
                 string.format(
-                "%s  %s",
-                cat.name,
-                BS.COLOURS.DefaultWarningColour:Colorize(" " .. tostring(#cat.controls))
-            )
+                    "%s  %s",
+                    cat.name,
+                    BS.COLOURS.DefaultWarningColour:Colorize(" " .. tostring(#cat.controls))
+                )
         end
 
-        table.insert(cats, {name = cat.name, value = cat})
+        table.insert(cats, { name = cat.name, value = cat })
     end
 
     table.sort(

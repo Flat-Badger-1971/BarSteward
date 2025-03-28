@@ -26,7 +26,7 @@ BS.widgets[BS.W_ZONE] = {
 
         return widget:GetValue()
     end,
-    event = {EVENT_PLAYER_ACTIVATED, EVENT_ZONE_CHANGED},
+    event = { EVENT_PLAYER_ACTIVATED, EVENT_ZONE_CHANGED },
     icon = "tradinghouse/gamepad/gp_tradinghouse_trophy_treasure_map",
     tooltip = BS.LC.Format(SI_ANTIQUITY_SCRYABLE_CURRENT_ZONE_SUBCATEGORY),
     hideWhenTrue = function()
@@ -227,7 +227,7 @@ local function getCurrentPos()
     local _, posX, _, posY = getUnitRawWorldPosition("player")
     local timestamp = getGameTimeMilliseconds()
 
-    return {posX, posY, timestamp}
+    return { posX, posY, timestamp }
 end
 
 local UNITS_PER_METER = 200
@@ -292,7 +292,7 @@ local function getSpeed(widget)
     return speed
 end
 
-local unitChoices = {GetString(_G.BARSTEWARD_MPH), GetString(_G.BARSTEWARD_KPH)}
+local unitChoices = { GetString(_G.BARSTEWARD_MPH), GetString(_G.BARSTEWARD_KPH) }
 
 BS.widgets[BS.W_SPEED] = {
     -- v1.2.16
@@ -329,7 +329,7 @@ BS.widgets[BS.W_PLAYER_LEVEL] = {
 
         if (level ~= GetMaxLevel()) then
             xp = GetUnitXP("player")
-            xpMax = GetNumExperiencePointsInLevel(level)
+            xpMax = GetNumExperiencePointsInLevel(level) --[[@as integer]]
             xpPc = BS.LC.ToPercent(xp, xpMax)
         end
 
@@ -345,7 +345,7 @@ BS.widgets[BS.W_PLAYER_LEVEL] = {
 
         return level
     end,
-    event = {EVENT_EXPERIENCE_UPDATE, EVENT_LEVEL_UPDATE},
+    event = { EVENT_EXPERIENCE_UPDATE, EVENT_LEVEL_UPDATE },
     icon = "icons/alchemy/crafting_alchemy_trait_heroism_match",
     tooltip = BS.LC.Format(SI_CAMPAIGNLEVELREQUIREMENTTYPE1),
     hideWhenEqual = GetMaxLevel()
@@ -486,7 +486,7 @@ local function updateWidget()
             -- luacheck: push ignore 311
             singleTargetDamage, singleTargetDamageGroup, damageTime = getSingleTargetDamage()
             icon = dpsIcon
-        -- luacheck: pop
+            -- luacheck: pop
         end
 
         damageTime = math.max(damageTime or 1, 1)
@@ -603,7 +603,7 @@ BS.widgets[BS.W_PLAYER_LOCATION] = {
 
         return widget:GetValue()
     end,
-    event = {EVENT_PLAYER_ACTIVATED, EVENT_ZONE_CHANGED},
+    event = { EVENT_PLAYER_ACTIVATED, EVENT_ZONE_CHANGED },
     icon = "icons/mapkey/mapkey_player",
     tooltip = GetString(_G.BARSTEWARD_PLAYER_LOCATION),
     onLeftClick = function()
@@ -709,7 +709,7 @@ BS.widgets[BS.W_XP_BUFF] = {
     update = function(widget)
         local this = BS.W_XP_BUFF
         local buffs = BS.ScanBuffs(BS.XP_BUFFS, this)
-        local lowest = {remaining = 99999}
+        local lowest = { remaining = 99999 }
         local ttt = BS.LC.Format(_G.BARSTEWARD_XP_BUFF) .. BS.LF
 
         if (#buffs > 0) then
@@ -817,9 +817,9 @@ BS.widgets[BS.W_LFG_ROLE] = {
         return role
     end,
     hideWhenEqual = 0,
-    callback = {[PREFERRED_ROLES] = {"LFGRoleChanged"}},
+    callback = { [PREFERRED_ROLES] = { "LFGRoleChanged" } },
     event = EVENT_GROUP_MEMBER_ROLE_CHANGED,
-    hook = {[GAMEPAD_GROUP_ROLES_BAR] = {"OnPressed"}},
+    hook = { [GAMEPAD_GROUP_ROLES_BAR] = { "OnPressed" } },
     icon = "lfg/lfg_icon_dps",
     onLeftClick = function()
         if (IsInGamepadPreferredMode()) then
@@ -918,7 +918,7 @@ BS.widgets[BS.W_DAILY_REWARD] = {
     -- v3.0.3
     name = "dailyReward",
     update = function(widget)
-        local worldname = {"EU", "NA"}
+        local worldname = { "EU", "NA" }
         local rewardIndex = GetDailyLoginClaimableRewardIndex()
         local secondsTillReset = GetTimeUntilNextDailyLoginRewardClaimS()
         local claimed = BS.COLOURS.Green:Colorize(BS.LC.Format(SI_DAILY_LOGIN_REWARDS_CLAIMED_TILE_NARRATION))
@@ -932,7 +932,7 @@ BS.widgets[BS.W_DAILY_REWARD] = {
             dailyRewardClaimed = IsDailyLoginRewardInCurrentMonthClaimed(rewardId)
         end
 
-        BS.Vars:SetCommon({claimed = dailyRewardClaimed, resetTime = os.time() + secondsTillReset}, "DailyRewards")
+        BS.Vars:SetCommon({ claimed = dailyRewardClaimed, resetTime = os.time() + secondsTillReset }, "DailyRewards")
 
         local allAccounts = BS.Vars:GetAllAccountCommon("DailyRewards")
         local accountCount, claimedAccountCount = 0, 0
@@ -967,7 +967,7 @@ BS.widgets[BS.W_DAILY_REWARD] = {
 
         return claimedAccountCount
     end,
-    event = {EVENT_PLAYER_ACTIVATED, EVENT_DAILY_LOGIN_REWARDS_CLAIMED},
+    event = { EVENT_PLAYER_ACTIVATED, EVENT_DAILY_LOGIN_REWARDS_CLAIMED },
     icon = "icons/achievement_u27_loyalty_reward",
     tooltip = BS.LC.Format(SI_DAILY_LOGIN_REWARDS_CLAIMED_ANNOUNCEMENT)
 }
@@ -1060,15 +1060,15 @@ BS.widgets[BS.W_ARMOURY_BUILD] = {
 
         return armouryInfo.buildIndex or 0
     end,
-    event = {EVENT_ARMORY_BUILD_RESTORE_RESPONSE, EVENT_ARMORY_BUILD_UPDATED},
-    callback = {[ZO_ARMORY_MANAGER] = {"BuildListUpdated"}},
+    event = { EVENT_ARMORY_BUILD_RESTORE_RESPONSE, EVENT_ARMORY_BUILD_UPDATED },
+    callback = { [ZO_ARMORY_MANAGER] = { "BuildListUpdated" } },
     hideWhenEqual = 0,
     icon = "icons/housing_gen_crf_armorycraftingbase001",
     tooltip = BS.LC.Format(SI_ARMORY_TITLE),
     onLeftClick = function()
         for _, id in ipairs(BS.ARMOURY_ASSISTANTS) do
-            if (IsCollectibleUsable(id)) then
-                UseCollectible(id)
+            if (IsCollectibleUsable(id, GAMEPLAY_ACTOR_CATEGORY_PLAYER)) then
+                UseCollectible(id, GAMEPLAY_ACTOR_CATEGORY_PLAYER)
                 return
             end
         end
@@ -1099,7 +1099,7 @@ BS.widgets[BS.W_ENLIGHTENED] = {
         return poolAmount or 0
     end,
     hideWhenEqual = 0,
-    event = {EVENT_ENLIGHTENED_STATE_LOST, EVENT_ENLIGHTENED_STATE_GAINED, EVENT_EXPERIENCE_UPDATE},
+    event = { EVENT_ENLIGHTENED_STATE_LOST, EVENT_ENLIGHTENED_STATE_GAINED, EVENT_EXPERIENCE_UPDATE },
     icon = "icons/quest_elsweyr_evilcadwell_head",
     tooltip = GetString(_G.BARSTEWARD_ENLIGHTENED)
 }

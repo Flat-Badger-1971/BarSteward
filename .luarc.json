@@ -1,9 +1,20 @@
 {
+    "$schema": "https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json",
+    "workspace.checkThirdParty": "Apply",
+    "workspace.userThirdParty": [
+        "C:\\Users\\antho\\Documents\\Elder Scrolls Online\\live\\AddOns\\LLS_Addons"
+    ],
+    "hint.enable": true,
     "diagnostics.disable": [
-        "undefined-global",
-        "deprecated",
-        "need-check-nil",
-        "undefined-field",
-        "lowercase-global"
+        "assign-type-mismatch",
+        "inject-field",
+        "param-type-mismatch"
+    ],
+    "diagnostics.neededFileStatus": {
+        "codestyle-check": "Any"
+    },
+    "diagnostics.libraryFiles": "Disable",
+    "workspace.library": [
+        "C:/Users/antho/Documents/Elder Scrolls Online/live/AddOns/LLS_Addons/eso-api/library"
     ]
 }

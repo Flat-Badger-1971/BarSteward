@@ -12,12 +12,12 @@ end
 function BS.CreateSavedVariablesManager(varsFilename, defaults, commonDefaults)
     local savedVarsManager =
         BS.LC.SavedVarsManager:New(
-        varsFilename,
-        defaults,
-        commonDefaults,
-        GetString(_G.BARSTEWARD_ACCOUNT_WIDE),
-        GetString(_G.BARSTEWARD_ACCOUNT_WIDE_TOOLTIP)
-    )
+            varsFilename,
+            defaults,
+            commonDefaults,
+            GetString(_G.BARSTEWARD_ACCOUNT_WIDE),
+            GetString(_G.BARSTEWARD_ACCOUNT_WIDE_TOOLTIP)
+        )
 
     ZO_PreHook("Logout", onLogout)
     ZO_PreHook("Quit", onLogout)

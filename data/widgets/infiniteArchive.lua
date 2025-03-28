@@ -22,7 +22,7 @@ local function wrap(value)
 end
 
 local function getBuffs()
-    local buffTypes = {ENDLESS_DUNGEON_BUFF_TYPE_VERSE, ENDLESS_DUNGEON_BUFF_TYPE_VISION}
+    local buffTypes = { ENDLESS_DUNGEON_BUFF_TYPE_VERSE, ENDLESS_DUNGEON_BUFF_TYPE_VISION }
     local buffEntries = {}
 
     for _, buffTypeV in ipairs(buffTypes) do
@@ -34,7 +34,7 @@ local function getBuffs()
                 local buffType, isAvatarVision = GetAbilityEndlessDungeonBuffType(abilityId)
                 local buffData = {
                     abilityId = abilityId,
-                    abilityName = GetAbilityName(abilityId),
+                    abilityName = GetAbilityName(abilityId, "player"),
                     buffType = buffType,
                     iconTexture = GetAbilityIcon(abilityId),
                     isAvatarVision = isAvatarVision,
@@ -186,8 +186,8 @@ BS.widgets[BS.W_INFINITE_ARCHIVE_PROGRESS] = {
         return false
     end,
     gradient = function()
-        local startg = {GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_START)}
-        local endg = {GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_END)}
+        local startg = { GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_START) }
+        local endg = { GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_END) }
         local s = BS.Vars.Controls[BS.W_INFINITE_ARCHIVE_PROGRESS].GradientStart or startg
         local e = BS.Vars.Controls[BS.W_INFINITE_ARCHIVE_PROGRESS].GradientEnd or endg
 
@@ -196,11 +196,11 @@ BS.widgets[BS.W_INFINITE_ARCHIVE_PROGRESS] = {
     events = EVENT_PLAYER_ACTIVATED,
     callback = {
         [ENDLESS_DUNGEON_MANAGER] = {
-            {event = "DungeonStarted", label = ""},
-            {event = "AttemptsRemainingChanged", label = ""},
-            {event = "ProgressionChanged", label = ""},
-            {event = "BuffStackCountChanged", label = ""},
-            {event = "ScoreChanged", label = "ScoreChanged"}
+            { event = "DungeonStarted",           label = "" },
+            { event = "AttemptsRemainingChanged", label = "" },
+            { event = "ProgressionChanged",       label = "" },
+            { event = "BuffStackCountChanged",    label = "" },
+            { event = "ScoreChanged",             label = "ScoreChanged" }
         }
     },
     icon = arcIcon,
@@ -300,14 +300,14 @@ BS.widgets[BS.W_INFINITE_ARCHIVE_SCORE] = {
         ttt = ttt .. BS.COLOURS.White:Colorize(BS.LC.Format(_G.BARSTEWARD_HIGHEST)) .. BS.LF
         ttt =
             string.format(
-            "%s%s: %s%s%s: %s",
-            ttt,
-            solo,
-            yellow:Colorize(soloScore),
-            BS.LF,
-            duo,
-            yellow:Colorize(duoScore)
-        )
+                "%s%s: %s%s%s: %s",
+                ttt,
+                solo,
+                yellow:Colorize(soloScore),
+                BS.LF,
+                duo,
+                yellow:Colorize(duoScore)
+            )
 
         widget:SetTooltip(ttt)
 
@@ -316,8 +316,8 @@ BS.widgets[BS.W_INFINITE_ARCHIVE_SCORE] = {
     events = EVENT_PLAYER_ACTIVATED,
     callback = {
         [ENDLESS_DUNGEON_MANAGER] = {
-            {event = "ScoreChanged", label = "ScoreChanged"},
-            {event = "StateChanged", label = "StageChanged"}
+            { event = "ScoreChanged", label = "ScoreChanged" },
+            { event = "StateChanged", label = "StageChanged" }
         }
     },
     icon = "campaign/overview_indexicon_scoring_up",

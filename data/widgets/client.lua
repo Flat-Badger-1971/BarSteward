@@ -201,7 +201,7 @@ BS.widgets = {
 
             widget:SetTooltip(
                 BS.LC.Format(SI_TRADINGHOUSELISTINGSORTTYPE0) ..
-                    BS.LF .. BS.COLOURS.White:Colorize(BS.LC.Format(_G.BARSTEWARD_TIMER_TIP))
+                BS.LF .. BS.COLOURS.White:Colorize(BS.LC.Format(_G.BARSTEWARD_TIMER_TIP))
             )
 
             return widget:GetValue()
@@ -349,7 +349,7 @@ BS.widgets = {
         tooltip = GetString(_G.BARSTEWARD_MEMORY),
         customOptions = {
             name = GetString(_G.BARSTEWARD_DECIMAL_PLACES),
-            choices = {0, 1, 2, 3},
+            choices = { 0, 1, 2, 3 },
             varName = "Precision",
             refresh = true,
             default = 1
@@ -385,5 +385,21 @@ BS.widgets = {
         timer = 1000,
         tooltip = GetString(_G.BARSTEWARD_TAMRIEL_TIME),
         icon = "BarSteward/assets/moon/5.dds"
+    },
+    [BS.W_SERVER] = {
+        -- v3.3.1
+        name = "server",
+        update = function(widget)
+            local this = BS.W_SERVER
+            local server = BS.LC.Format(GetWorldName())
+
+            widget:SetValue(server)
+            widget:SetColour(BS.GetColour(this, true))
+            d(server)
+            return server
+        end,
+        event = EVENT_PLAYER_ACTIVATED,
+        tooltip = GetString(_G.BARSTEWARD_SERVER),
+        icon = "login/link_loginlogo_eso"
     }
 }

@@ -80,7 +80,7 @@ end
 
 local function contractSubmenus()
     -- probably overkill, but keeps thinks clean
-    local submenus = {"BarStewardPerformance", "BarStewardMaintenance", "BarStewardSearch", "BarStewardPortToHouse"}
+    local submenus = { "BarStewardPerformance", "BarStewardMaintenance", "BarStewardSearch", "BarStewardPortToHouse" }
 
     for widget, _ in pairs(BS.Defaults.Controls) do
         local submenu = string.format("BarStewardWidget_%s", widget)
@@ -123,6 +123,7 @@ local function setupDataRow(rowControl, data)
     rowControl:SetHandler(
         "OnMouseDoubleClick",
         function(self)
+            ---@diagnostic disable-next-line: undefined-field
             local container = _G.BarStewardOptionsPanel.container
 
             contractSubmenus()

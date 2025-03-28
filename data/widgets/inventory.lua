@@ -61,7 +61,7 @@ BS.widgets[BS.W_BAG_SPACE] = {
         EVENT_INVENTORY_BAG_CAPACITY_CHANGED,
         EVENT_INVENTORY_FULL_UPDATE
     },
-    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
+    callback = { [SHARED_INVENTORY] = { "SingleSlotInventoryUpdate", "FullInventoryUpdate" } },
     tooltip = BS.LC.Format(SI_GAMEPAD_MAIL_INBOX_INVENTORY):gsub(":", ""),
     icon = "tooltips/icon_bag",
     onLeftClick = function()
@@ -74,7 +74,7 @@ BS.widgets[BS.W_BAG_SPACE] = {
     customOptions = {
         name = GetString(_G.BARSTEWARD_DEBOUNCE),
         tooltip = GetString(_G.BARSTEWARD_DEBOUNCE_DESC),
-        choices = {0, 1, 5, 10, 15, 20, 30, 40, 50, 60},
+        choices = { 0, 1, 5, 10, 15, 20, 30, 40, 50, 60 },
         varName = "DebounceTime",
         refresh = false,
         default = 5
@@ -136,7 +136,7 @@ BS.widgets[BS.W_BANK_SPACE] = {
         EVENT_INVENTORY_BAG_CAPACITY_CHANGED,
         EVENT_INVENTORY_BANK_CAPACITY_CHANGED
     },
-    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
+    callback = { [SHARED_INVENTORY] = { "SingleSlotInventoryUpdate", "FullInventoryUpdate" } },
     tooltip = GetString(_G.BARSTEWARD_BANK),
     icon = "tooltips/icon_bank"
 }
@@ -258,7 +258,7 @@ BS.widgets[BS.W_DURABILITY] = {
 
         return lowest
     end,
-    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
+    callback = { [SHARED_INVENTORY] = { "SingleSlotInventoryUpdate", "FullInventoryUpdate" } },
     icon = "inventory/inventory_tabicon_armor_up",
     tooltip = GetString(_G.BARSTEWARD_DURABILITY),
     onLeftClick = function()
@@ -279,11 +279,11 @@ BS.widgets[BS.W_REPAIRS_KITS] = {
 
         local filteredItems =
             SHARED_INVENTORY:GenerateFullSlotData(
-            function(itemdata)
-                return IsItemRepairKit(itemdata.bagId, itemdata.slotIndex)
-            end,
-            BAG_BACKPACK
-        )
+                function(itemdata)
+                    return IsItemRepairKit(itemdata.bagId, itemdata.slotIndex)
+                end,
+                BAG_BACKPACK
+            )
 
         for _, item in ipairs(filteredItems) do
             count = count + item.stackCount
@@ -302,7 +302,7 @@ BS.widgets[BS.W_REPAIRS_KITS] = {
 
         return count
     end,
-    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
+    callback = { [SHARED_INVENTORY] = { "SingleSlotInventoryUpdate", "FullInventoryUpdate" } },
     icon = function()
         if (BS.GetVar("UseAlternate", BS.W_REPAIRS_KITS)) then
             return "lfg/lfg_bonus_crate"
@@ -337,8 +337,8 @@ BS.widgets[BS.W_SOUL_GEMS] = {
     update = function(widget)
         local this = BS.W_SOUL_GEMS
         local level = GetUnitEffectiveLevel("player")
-        local filledCount = select(3, GetSoulGemInfo(SOUL_GEM_TYPE_FILLED, level))
-        local emptyCount = select(3, GetSoulGemInfo(SOUL_GEM_TYPE_EMPTY, level))
+        local filledCount = select(3, GetSoulGemInfo(SOUL_GEM_TYPE_FILLED, level, false))
+        local emptyCount = select(3, GetSoulGemInfo(SOUL_GEM_TYPE_EMPTY, level, false))
 
         if (BS.GetVar("UseSeparators", this) == true) then
             filledCount = BS.AddSeparators(filledCount)
@@ -420,7 +420,7 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
         local surveys = 0
         local maps = 0
         local detail = {}
-        local bags = {BAG_BACKPACK, BAG_BANK}
+        local bags = { BAG_BACKPACK, BAG_BANK }
         local writDetail = {}
         local canDo = {}
         local wwCache = {}
@@ -431,6 +431,7 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
         end
 
         for _, bag in pairs(bags) do
+            ---@diagnostic disable-next-line: undefined-field
             for _, data in pairs(_G.SHARED_INVENTORY.bagCache[bag]) do
                 if (data.specializedItemType == SPECIALIZED_ITEMTYPE_MASTER_WRIT) then
                     writs = writs + 1
@@ -439,7 +440,7 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
 
                     if (type ~= 0) then
                         if (writDetail[type] == nil) then
-                            writDetail[type] = {bankCount = 0, bagCount = 0}
+                            writDetail[type] = { bankCount = 0, bagCount = 0 }
                         end
 
                         local btype = (bag == BAG_BACKPACK) and "bagCount" or "bankCount"
@@ -448,7 +449,7 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
 
                         if (useWW) then
                             if (canDo[type] == nil) then
-                                canDo[type] = {canCraft = 0, cannotCraft = 0}
+                                canDo[type] = { canCraft = 0, cannotCraft = 0 }
                             end
 
                             local know_list
@@ -456,7 +457,7 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
                             if (wwCache[itemId]) then
                                 know_list = wwCache[itemId]
                             else
-                                local link = GetItemLink(bag, data.slotIndex)
+                                local link = GetItemLink(bag, data.slotIndex, LINK_STYLE_DEFAULT)
                                 _, know_list = _G.WritWorthy.ToMatKnowList(link)
                                 wwCache[itemId] = know_list
                             end
@@ -556,7 +557,7 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
 
         return widget:GetValue()
     end,
-    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
+    callback = { [SHARED_INVENTORY] = { "SingleSlotInventoryUpdate", "FullInventoryUpdate" } },
     icon = "journal/journal_tabicon_cadwell_up",
     tooltip = GetString(_G.BARSTEWARD_WRITS),
     customSettings = {
@@ -597,7 +598,7 @@ BS.widgets[BS.W_LOCKPICKS] = {
 
         return available
     end,
-    event = {EVENT_INVENTORY_SINGLE_SLOT_UPDATE, EVENT_LOCKPICK_BROKE},
+    event = { EVENT_INVENTORY_SINGLE_SLOT_UPDATE, EVENT_LOCKPICK_BROKE },
     tooltip = BS.LC.Format(SI_GAMEPAD_LOCKPICK_PICKS_REMAINING),
     icon = "icons/lockpick"
 }
@@ -628,8 +629,8 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
         end
 
         local count = {}
-        local bags = {BAG_BACKPACK, BAG_BANK}
-        local keys = {bag = {}, bank = {}}
+        local bags = { BAG_BACKPACK, BAG_BANK }
+        local keys = { bag = {}, bank = {} }
 
         if (IsESOPlusSubscriber()) then
             table.insert(bags, BAG_SUBSCRIBER_BANK)
@@ -683,7 +684,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
         local plainCountText = ""
         local foundIds = {}
 
-        for _, bagType in pairs({"bag", "bank"}) do
+        for _, bagType in pairs({ "bag", "bank" }) do
             for itemId, key in pairs(keys[bagType]) do
                 local zoIcon = BS.Icon(key.icon)
 
@@ -793,13 +794,13 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
 
         return count
     end,
-    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
+    callback = { [SHARED_INVENTORY] = { "SingleSlotInventoryUpdate", "FullInventoryUpdate" } },
     tooltip = GetString(_G.BARSTEWARD_WATCHED_ITEMS),
     icon = "icons/crafting_critter_snake_eyes",
     customOptions = {
         name = GetString(_G.BARSTEWARD_DEBOUNCE),
         tooltip = GetString(_G.BARSTEWARD_DEBOUNCE_DESC),
-        choices = {0, 1, 5, 10, 15, 20, 30, 40, 50, 60},
+        choices = { 0, 1, 5, 10, 15, 20, 30, 40, 50, 60 },
         varName = "DebounceTime",
         refresh = false,
         default = 5
@@ -1042,7 +1043,7 @@ local function randomOnLeftClick(collectibleTable, widgetIndex)
 
         widget:SetTooltip(tt)
 
-        UseCollectible(collectibleId)
+        UseCollectible(collectibleId, GAMEPLAY_ACTOR_CATEGORY_PLAYER)
 
         if (BS.GetVar("Print", widgetIndex)) then
             local output = BS.COLOURS.ZOSGold:Colorize("Bar Steward") .. ": " .. name
@@ -1231,15 +1232,15 @@ BS.widgets[BS.W_CONTAINERS] = {
     update = function(widget)
         local filteredItems =
             SHARED_INVENTORY:GenerateFullSlotData(
-            function(itemdata)
-                return itemdata.itemType == ITEMTYPE_CONTAINER
-            end,
-            BAG_BACKPACK
-        )
+                function(itemdata)
+                    return itemdata.itemType == ITEMTYPE_CONTAINER
+                end,
+                BAG_BACKPACK
+            )
 
         return itemScan(widget, filteredItems, BS.W_CONTAINERS, BS.LC.Format(SI_ITEMTYPEDISPLAYCATEGORY26))
     end,
-    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
+    callback = { [SHARED_INVENTORY] = { "SingleSlotInventoryUpdate", "FullInventoryUpdate" } },
     icon = "icons/mail_armor_container",
     tooltip = BS.LC.Format(SI_ITEMTYPEDISPLAYCATEGORY26),
     hideWhenEqual = 0,
@@ -1258,15 +1259,15 @@ BS.widgets[BS.W_TREASURE] = {
     update = function(widget)
         local filteredItems =
             SHARED_INVENTORY:GenerateFullSlotData(
-            function(itemdata)
-                return itemdata.itemType == ITEMTYPE_TREASURE
-            end,
-            BAG_BACKPACK
-        )
+                function(itemdata)
+                    return itemdata.itemType == ITEMTYPE_TREASURE
+                end,
+                BAG_BACKPACK
+            )
 
         return itemScan(widget, filteredItems, BS.W_TREASURE, BS.LC.Format(SI_ITEMTYPE56))
     end,
-    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
+    callback = { [SHARED_INVENTORY] = { "SingleSlotInventoryUpdate", "FullInventoryUpdate" } },
     icon = "icons/quest_strosmkai_open_treasure_chest",
     tooltip = BS.LC.Format(SI_ITEMTYPE56),
     hideWhenEqual = 0,
@@ -1285,15 +1286,15 @@ BS.widgets[BS.W_FURNISHINGS] = {
     update = function(widget)
         local filteredItems =
             SHARED_INVENTORY:GenerateFullSlotData(
-            function(itemdata)
-                return IsItemPlaceableFurniture(itemdata.bagId, itemdata.slotIndex)
-            end,
-            BAG_BACKPACK
-        )
+                function(itemdata)
+                    return IsItemPlaceableFurniture(itemdata.bagId, itemdata.slotIndex)
+                end,
+                BAG_BACKPACK
+            )
 
         return itemScan(widget, filteredItems, BS.W_FURNISHINGS, BS.LC.Format(SI_ITEMFILTERTYPE21))
     end,
-    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
+    callback = { [SHARED_INVENTORY] = { "SingleSlotInventoryUpdate" } },
     icon = "icons/servicemappins/servicepin_furnishings",
     tooltip = BS.LC.Format(SI_ITEMFILTERTYPE21),
     hideWhenEqual = 0,
@@ -1312,18 +1313,18 @@ BS.widgets[BS.W_COMPANION_GEAR] = {
     update = function(widget)
         local filteredItems =
             SHARED_INVENTORY:GenerateFullSlotData(
-            function(itemdata)
-                local filterTypes = {GetItemFilterTypeInfo(itemdata.bagId, itemdata.slotIndex)}
+                function(itemdata)
+                    local filterTypes = { GetItemFilterTypeInfo(itemdata.bagId, itemdata.slotIndex) }
 
-                return ZO_IsElementInNumericallyIndexedTable(filterTypes, ITEMFILTERTYPE_COMPANION)
-            end,
-            BAG_BACKPACK
-        )
+                    return ZO_IsElementInNumericallyIndexedTable(filterTypes, ITEMFILTERTYPE_COMPANION)
+                end,
+                BAG_BACKPACK
+            )
 
         return itemScan(widget, filteredItems, BS.W_COMPANION_GEAR, BS.LC.Format(SI_ITEMFILTERTYPE27))
     end,
     event = EVENT_PLAYER_ACTIVATED,
-    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
+    callback = { [SHARED_INVENTORY] = { "SingleSlotInventoryUpdate" } },
     icon = "inventory/inventory_trait_companionequipment_icon",
     tooltip = BS.LC.Format(SI_ITEMFILTERTYPE27),
     hideWhenEqual = 0,
@@ -1342,18 +1343,18 @@ BS.widgets[BS.W_MUSEUM] = {
     update = function(widget)
         local filteredItems =
             SHARED_INVENTORY:GenerateFullSlotData(
-            function(itemdata)
-                local _, specialType = GetItemType(itemdata.bagId, itemdata.slotIndex)
+                function(itemdata)
+                    local _, specialType = GetItemType(itemdata.bagId, itemdata.slotIndex)
 
-                return specialType == SPECIALIZED_ITEMTYPE_TROPHY_MUSEUM_PIECE
-            end,
-            BAG_BACKPACK
-        )
+                    return specialType == SPECIALIZED_ITEMTYPE_TROPHY_MUSEUM_PIECE
+                end,
+                BAG_BACKPACK
+            )
 
         return itemScan(widget, filteredItems, BS.W_MUSEUM, BS.LC.Format(SI_SPECIALIZEDITEMTYPE103))
     end,
     event = EVENT_PLAYER_ACTIVATED,
-    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
+    callback = { [SHARED_INVENTORY] = { "SingleSlotInventoryUpdate" } },
     icon = "icons/servicemappins/servicepin_museum",
     tooltip = BS.LC.Format(SI_SPECIALIZEDITEMTYPE103),
     hideWhenEqual = 0,
@@ -1377,9 +1378,9 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
     -- v1.4.35
     name = "equippedPoison",
     update = function(widget)
-        local main = {EQUIP_SLOT_MAIN_HAND, EQUIP_SLOT_OFF_HAND}
-        local backup = {EQUIP_SLOT_BACKUP_MAIN, EQUIP_SLOT_BACKUP_OFF}
-        local slots = {EQUIP_SLOT_MAIN_HAND, EQUIP_SLOT_OFF_HAND}
+        local main = { EQUIP_SLOT_MAIN_HAND, EQUIP_SLOT_OFF_HAND }
+        local backup = { EQUIP_SLOT_BACKUP_MAIN, EQUIP_SLOT_BACKUP_OFF }
+        local slots = { EQUIP_SLOT_MAIN_HAND, EQUIP_SLOT_OFF_HAND }
         local poisons = {}
         local hasPoison, poisonCount, poisonName, icon, link
         local count = 0
@@ -1418,7 +1419,7 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
                 end
 
                 if (add) then
-                    table.insert(poisons, {name = poisonName, count = poisonCount, slot = slot, icon = icon})
+                    table.insert(poisons, { name = poisonName, count = poisonCount, slot = slot, icon = icon })
                     count = count + poisonCount
                 end
             end
@@ -1449,10 +1450,10 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
                 if (selected == BS.ACTIVE_BAR) then
                     if
                         ((ZO_IsElementInNumericallyIndexedTable(backup, poison.slot) and
-                            activeWeaponPair == ACTIVE_WEAPON_PAIR_BACKUP) or
+                                activeWeaponPair == ACTIVE_WEAPON_PAIR_BACKUP) or
                             (ZO_IsElementInNumericallyIndexedTable(slots, poison.slot) and
                                 (activeWeaponPair == ACTIVE_WEAPON_PAIR_MAIN)))
-                     then
+                    then
                         widget:SetIcon(poison.icon)
                     end
                 elseif (selected == BS.BACK_BAR) then
@@ -1471,7 +1472,7 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
 
         return count
     end,
-    callback = {[CALLBACK_MANAGER] = {"WornSlotUpdate"}},
+    callback = { [CALLBACK_MANAGER] = { "WornSlotUpdate" } },
     event = EVENT_ACTIVE_WEAPON_PAIR_CHANGED,
     tooltip = GetString(_G.BARSTEWARD_EQUIPPED_POISON),
     icon = "icons/crafting_poison_001_cyan_003",
@@ -1518,7 +1519,7 @@ BS.widgets[BS.W_FRAGMENTS] = {
         for _, fragmentData in ipairs(frags) do
             BS.CollectibleId = fragmentData.id
             if (not fragmentInfo[fragmentData.combinedId]) then
-                fragmentInfo[fragmentData.combinedId] = {collected = 0, uncollected = 0, unnecessary = 0}
+                fragmentInfo[fragmentData.combinedId] = { collected = 0, uncollected = 0, unnecessary = 0 }
             end
 
             if (not fragmentData.combinationUnlocked) then
@@ -1594,11 +1595,11 @@ BS.widgets[BS.W_FRAGMENTS] = {
                         string.format("%s%s", collectedtt, BS.COLOURS.Green:Colorize(tostring(info.collected)))
                     collectedtt =
                         string.format(
-                        "%s / %s%s",
-                        collectedtt,
-                        BS.COLOURS.Green:Colorize(tostring(info.collected + info.uncollected)),
-                        BS.LF
-                    )
+                            "%s / %s%s",
+                            collectedtt,
+                            BS.COLOURS.Green:Colorize(tostring(info.collected + info.uncollected)),
+                            BS.LF
+                        )
                 end
 
                 if (info.unnecessary > 0) then
@@ -1635,7 +1636,7 @@ BS.widgets[BS.W_FRAGMENTS] = {
     onLeftClick = function()
         COLLECTIONS_BOOK:BrowseToCollectible(BS.CollectibleId)
     end,
-    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
+    callback = { [SHARED_INVENTORY] = { "SingleSlotInventoryUpdate", "FullInventoryUpdate" } },
     tooltip = GetString(_G.BARSTEWARD_COLLECTIBLE_FRAGMENTS),
     icon = "icons/antiquities_u30_museum_fragment07"
 }
@@ -1649,7 +1650,7 @@ BS.widgets[BS.W_RUNEBOXES] = {
         local unnecessary = 0
         local fragmentInfo = {}
 
-        local bags = {BAG_BACKPACK, BAG_BANK}
+        local bags = { BAG_BACKPACK, BAG_BANK }
 
         if (IsESOPlusSubscriber()) then
             table.insert(bags, BAG_SUBSCRIBER_BANK)
@@ -1657,11 +1658,11 @@ BS.widgets[BS.W_RUNEBOXES] = {
 
         local filteredItems =
             SHARED_INVENTORY:GenerateFullSlotData(
-            function(itemdata)
-                return ZO_IsElementInNumericallyIndexedTable(BS.FRAGMENT_TYPES, itemdata.specializedItemType)
-            end,
-            unpack(bags) -- lol :-)
-        )
+                function(itemdata)
+                    return ZO_IsElementInNumericallyIndexedTable(BS.FRAGMENT_TYPES, itemdata.specializedItemType)
+                end,
+                unpack(bags) -- lol :-)
+            )
 
         for _, item in ipairs(filteredItems) do
             local collectibleId, fragments = BS.GetCollectibleId(item.bagId, item.slotIndex)
@@ -1789,7 +1790,7 @@ BS.widgets[BS.W_RUNEBOXES] = {
             SCENE_MANAGER:Show("gamepad_inventory_root")
         end
     end,
-    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
+    callback = { [SHARED_INVENTORY] = { "SingleSlotInventoryUpdate", "FullInventoryUpdate" } },
     tooltip = GetString(_G.BARSTEWARD_RUNEBOX_FRAGMENTS),
     icon = "tradinghouse/tradinghouse_trophy_runebox_fragment_up"
 }
@@ -1855,7 +1856,7 @@ BS.widgets[BS.W_RECIPE_WATCH] = {
         local displayQuality = GetItemLinkDisplayQuality(link)
 
         if (not BS.Vars.FoundRecipes[itemId]) then
-            BS.Vars.FoundRecipes[itemId] = {name = itemName, qty = 0, displayQuality = displayQuality, known = false}
+            BS.Vars.FoundRecipes[itemId] = { name = itemName, qty = 0, displayQuality = displayQuality, known = false }
         end
 
         BS.Vars.FoundRecipes[itemId].qty = BS.Vars.FoundRecipes[itemId].qty + quantity
@@ -1895,7 +1896,7 @@ BS.widgets[BS.W_RECIPE_WATCH] = {
 }
 
 local function getCharges(slot)
-    local link = GetItemLink(BAG_WORN, slot)
+    local link = GetItemLink(BAG_WORN, slot, LINK_STYLE_DEFAULT)
 
     if (link and IsItemChargeable(BAG_WORN, slot)) then
         return GetItemLinkNumEnchantCharges(link), GetItemLinkMaxEnchantCharges(link)
@@ -1910,7 +1911,7 @@ local function getMin(charges, slots, equipped)
 
     equipped =
         equipped or
-        {pc = GetString(_G.BARSTEWARD_NOT_APPLICABLE), name = BS.LC.Format(SI_GAMEPAD_INVENTORY_EMPTY_TOOLTIP)}
+        { pc = GetString(_G.BARSTEWARD_NOT_APPLICABLE), name = BS.LC.Format(SI_GAMEPAD_INVENTORY_EMPTY_TOOLTIP) }
 
     for slot, info in pairs(charges) do
         if (ZO_IsElementInNumericallyIndexedTable(slots, slot)) then
@@ -1947,8 +1948,8 @@ BS.widgets[BS.W_WEAPON_CHARGE] = {
     -- v1.5.8
     name = "weaponCharge",
     update = function(widget)
-        local slots = {EQUIP_SLOT_MAIN_HAND, EQUIP_SLOT_OFF_HAND}
-        local backup = {EQUIP_SLOT_BACKUP_MAIN, EQUIP_SLOT_BACKUP_OFF}
+        local slots = { EQUIP_SLOT_MAIN_HAND, EQUIP_SLOT_OFF_HAND }
+        local backup = { EQUIP_SLOT_BACKUP_MAIN, EQUIP_SLOT_BACKUP_OFF }
         local activeWeaponPair = GetActiveWeaponPairInfo()
         local weapons = BS.LC.MergeTables(slots, backup)
         local weaponCharges = {}
@@ -1969,17 +1970,17 @@ BS.widgets[BS.W_WEAPON_CHARGE] = {
             local name = BS.LC.Format(GetItemName(BAG_WORN, slot))
 
             if (name ~= "") then
-                weaponCharges[slot] = {pc = pc, name = name, raw = raw}
+                weaponCharges[slot] = { pc = pc, name = name, raw = raw }
             end
         end
 
         if (activeWeaponPair == ACTIVE_WEAPON_PAIR_BACKUP) then
             min =
                 getMin(
-                weaponCharges,
-                backup,
-                weaponCharges[EQUIP_SLOT_BACKUP_MAIN] or weaponCharges[EQUIP_SLOT_BACKUP_OFF]
-            )
+                    weaponCharges,
+                    backup,
+                    weaponCharges[EQUIP_SLOT_BACKUP_MAIN] or weaponCharges[EQUIP_SLOT_BACKUP_OFF]
+                )
         else
             min =
                 getMin(weaponCharges, slots, weaponCharges[EQUIP_SLOT_MAIN_HAND] or weaponCharges[EQUIP_SLOT_OFF_HAND])
@@ -2002,7 +2003,7 @@ BS.widgets[BS.W_WEAPON_CHARGE] = {
 
         return min.raw
     end,
-    event = {EVENT_INVENTORY_SINGLE_SLOT_UPDATE, EVENT_ACTIVE_WEAPON_PAIR_CHANGED},
+    event = { EVENT_INVENTORY_SINGLE_SLOT_UPDATE, EVENT_ACTIVE_WEAPON_PAIR_CHANGED },
     icon = "icons/alchemy/crafting_alchemy_trait_weaponcrit_match",
     tooltip = GetString(_G.BARSTEWARD_WEAPON_CHARGE),
     onLeftClick = function()
@@ -2019,7 +2020,7 @@ BS.widgets[BS.W_SCRIBING_INK] = {
     name = "scribingInkCount",
     update = function(widget)
         local this = BS.W_SCRIBING_INK
-        local inkLink = GetScribingInkItemLink()
+        local inkLink = GetScribingInkItemLink(LINK_STYLE_DEFAULT)
         local inkCount = GetItemLinkInventoryCount(inkLink, INVENTORY_COUNT_BAG_OPTION_BACKPACK_AND_BANK_AND_CRAFT_BAG)
 
         local colour = BS.GetColour(this, "Ok", true)
@@ -2035,8 +2036,9 @@ BS.widgets[BS.W_SCRIBING_INK] = {
 
         return inkCount
     end,
-    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate", "FullInventoryUpdate"}},
+    callback = { [SHARED_INVENTORY] = { "SingleSlotInventoryUpdate", "FullInventoryUpdate" } },
     icon = "/icons/item_grimoire_ink",
+    ---@diagnostic disable-next-line: undefined-field
     tooltip = _G.ZO_Scribing_Manager.GetFormattedScribingInkName()
 }
 
@@ -2048,13 +2050,13 @@ BS.widgets[BS.W_MYTHIC] = {
         local colour = BS.LC.White
         local filteredItems =
             SHARED_INVENTORY:GenerateFullSlotData(
-            function(itemdata)
-                local quality = GetItemDisplayQuality(itemdata.bagId, itemdata.slotIndex)
+                function(itemdata)
+                    local quality = GetItemDisplayQuality(itemdata.bagId, itemdata.slotIndex)
 
-                return quality == ITEM_DISPLAY_QUALITY_MYTHIC_OVERRIDE
-            end,
-            BAG_WORN
-        )
+                    return quality == ITEM_DISPLAY_QUALITY_MYTHIC_OVERRIDE
+                end,
+                BAG_WORN
+            )
 
         if (#filteredItems > 0) then
             local item = filteredItems[1]
@@ -2072,7 +2074,7 @@ BS.widgets[BS.W_MYTHIC] = {
         return mythic
     end,
     event = EVENT_PLAYER_ACTIVATED,
-    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
+    callback = { [SHARED_INVENTORY] = { "SingleSlotInventoryUpdate" } },
     icon = "icons/u42_mythic_meta",
     tooltip = BS.LC.Format(SI_ITEMDISPLAYQUALITY6),
     onLeftClick = function()

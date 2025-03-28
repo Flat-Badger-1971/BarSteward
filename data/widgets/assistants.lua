@@ -24,7 +24,7 @@ for k, v in pairs(BS.ASSISTANTS) do
         ),
         icon = assistantIcons[k],
         onLeftClick = function()
-            UseCollectible(v)
+            UseCollectible(v, GAMEPLAY_ACTOR_CATEGORY_PLAYER)
         end,
         customSettings = {
             [1] = {

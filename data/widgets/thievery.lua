@@ -7,17 +7,17 @@ BS.widgets[BS.W_STOLEN_ITEMS] = {
     update = function(widget)
         local this = BS.W_STOLEN_ITEMS
         local count = 0
-        local bagCounts = {carrying = 0, banked = 0}
+        local bagCounts = { carrying = 0, banked = 0 }
         local stolen = {}
         local slotCount = 0
         local filteredItems =
             SHARED_INVENTORY:GenerateFullSlotData(
-            function(itemdata)
-                return IsItemStolen(itemdata.bagId, itemdata.slotIndex)
-            end,
-            BAG_WORN,
-            BAG_BACKPACK
-        )
+                function(itemdata)
+                    return IsItemStolen(itemdata.bagId, itemdata.slotIndex)
+                end,
+                BAG_WORN,
+                BAG_BACKPACK
+            )
 
         for _, item in ipairs(filteredItems) do
             local icon = GetItemInfo(item.bagId, item.slotIndex)
@@ -70,11 +70,11 @@ BS.widgets[BS.W_STOLEN_ITEMS] = {
 
                 stt =
                     string.format(
-                    "%s   %s%s",
-                    stt,
-                    BS.COLOURS.Yellow:Colorize(tostring(item.sellPrice * item.count)),
-                    goldIcon
-                )
+                        "%s   %s%s",
+                        stt,
+                        BS.COLOURS.Yellow:Colorize(tostring(item.sellPrice * item.count)),
+                        goldIcon
+                    )
                 total = total + (item.sellPrice * item.count)
             end
 
@@ -93,7 +93,7 @@ BS.widgets[BS.W_STOLEN_ITEMS] = {
 
         return count
     end,
-    callback = {[SHARED_INVENTORY] = {"SingleSlotInventoryUpdate"}},
+    callback = { [SHARED_INVENTORY] = { "SingleSlotInventoryUpdate" } },
     icon = "inventory/inventory_stolenitem_icon",
     tooltip = GetString(_G.BARSTEWARD_STOLEN),
     hideWhenEqual = 0,

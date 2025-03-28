@@ -91,6 +91,7 @@ function BS.AddSeparators(number)
 end
 
 -- based on Wykkyd toolbar
+--- @diagnostic disable: undefined-field
 function BS.ResetNudge()
     if (_G.ZO_CompassFrame:GetTop()) ~= 40 then
         _G.ZO_CompassFrame:ClearAnchors()
@@ -117,6 +118,8 @@ function BS.NudgeCompass()
         BS.ResetNudge()
     end
 end
+
+--- @diagnostic enable: undefined-field
 
 function BS.IsTraitResearchComplete(craftingType)
     local complete = true
@@ -477,7 +480,7 @@ local function generateTable(input)
 
         if (info[1] and info[1] ~= "%") then
             if (info[1]:sub(1, 1) == "@") then
-                currentWidget = tonumber(info[1]:sub(2))
+                currentWidget = tonumber(info[1]:sub(2)) or 0
                 widgetsObject[currentWidget] = {}
             elseif (currentWidget) then
                 widgetsObject[currentWidget][info[1]] = convert(info[2])
@@ -763,7 +766,6 @@ local function getWidgets(barIndex)
     local widgets = {}
 
     if (barIndex == 0) then
-        d("bar zero!")
         return widgets
     end
 
@@ -1457,7 +1459,7 @@ local function updateTrackedAchiementCategories()
         local topLevelIndex, categoryIndex = GetCategoryInfoFromAchievementId(id)
 
         if (not BS.TrackedCategories[topLevelIndex]) then
-            BS.TrackedCategories[topLevelIndex] = {}
+            BS.TrackedCategories[topLevelIndex or 0] = {}
         end
 
         table.insert(BS.TrackedCategories[topLevelIndex], categoryIndex)
@@ -1525,6 +1527,7 @@ function BS.TrackAchievements()
             function(_, newState)
                 if (newState == _G.SCENE_SHOWN) then
                     if (not BS.AchSetup) then
+                        ---@diagnostic disable-next-line: undefined-field
                         local tree = _G.ACHIEVEMENTS.categoryTree
                         local subcat = tree.templateInfo.ZO_TreeLabelSubCategory
                         local cat = tree.templateInfo.ZO_IconHeader
@@ -1557,6 +1560,7 @@ function BS.TrackAchievements()
                             end
                         end
 
+                        ---@diagnostic disable-next-line: undefined-field
                         _G.ACHIEVEMENTS.refreshGroups:RefreshAll("FullUpdate")
                     end
                 end
@@ -1580,6 +1584,7 @@ function BS.TrackAchievements()
             end
         end
 
+        ---@diagnostic disable-next-line: duplicate-set-field
         function _G.Achievement:OnClicked(button)
             local id = self:GetId()
             local tracked = BS.IsTracked(id)
@@ -1587,6 +1592,7 @@ function BS.TrackAchievements()
 
             if button == _G.MOUSE_BUTTON_INDEX_LEFT then
                 self:ToggleCollapse()
+                ---@diagnostic disable-next-line: undefined-field
                 self:RefreshTooltip(self.control)
             elseif button == _G.MOUSE_BUTTON_INDEX_RIGHT and IsChatSystemAvailableForCurrentPlatform() then
                 ClearMenu()
@@ -1610,6 +1616,7 @@ function BS.TrackAchievements()
                         BS.RefreshWidget(BS.W_ACHIEVEMENT_TRACKER)
                     end
                 )
+                ---@diagnostic disable-next-line: undefined-field
                 ShowMenu(self.control)
             end
 
@@ -1694,7 +1701,7 @@ end
 
 function BS.FindAbility(text, start, finish)
     for abilityId = start, finish do
-        local name = GetAbilityName(abilityId)
+        local name = GetAbilityName(abilityId, "player")
 
         if (name:find(text)) then
             d(abilityId)

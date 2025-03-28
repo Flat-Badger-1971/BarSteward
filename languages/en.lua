@@ -469,10 +469,10 @@ L("SLASH_HIDE", "hide")
 L("SLASH_SHOW", "show")
 
 -- Tracking
-L("TRACK" ,"Track with Bar Steward")
+L("TRACK", "Track with Bar Steward")
 L("TRACKER", "Achievement Tracker")
-L("TRACKER_INFO","Right-click an achievement to track it with Bar Steward")
-L("UNTRACK","Untrack with Bar Steward")
+L("TRACKER_INFO", "Right-click an achievement to track it with Bar Steward")
+L("UNTRACK", "Untrack with Bar Steward")
 
 -- Search
 L("DOUBLE_CLICK", "(double-click to locate)")

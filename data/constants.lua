@@ -153,16 +153,19 @@ _G.BarSteward = {
     W_ZERITH = 147,
     W_MYTHIC = 148,
     W_ACHIEVEMENT_TRACKER = 149,
-    W_GOLDEN_PURSUITS = 150
+    W_GOLDEN_PURSUITS = 150,
+    W_SERVER = 151
 }
 
 local BS = _G.BarSteward
 
 function BS.RegisterCallback(...)
+    ---@diagnostic disable-next-line: undefined-field
     BS.CallbackManager:RegisterCallback(...)
 end
 
 function BS.FireCallbacks(...)
+    ---@diagnostic disable-next-line: undefined-field
     BS.CallbackManager:FireCallbacks(...)
 end
 
@@ -184,12 +187,12 @@ BS.WRITS = {
         119819,
         119820
     },
-    [CRAFTING_TYPE_BLACKSMITHING] = {119563, 119680, 121527, 121529},
-    [CRAFTING_TYPE_CLOTHIER] = {119694, 119695, 121532, 121533},
-    [CRAFTING_TYPE_ENCHANTING] = {119564, 121528},
-    [CRAFTING_TYPE_JEWELRYCRAFTING] = {138789, 138799, 153737, 153739},
-    [CRAFTING_TYPE_PROVISIONING] = {119693},
-    [CRAFTING_TYPE_WOODWORKING] = {119681, 119682, 121530, 121531}
+    [CRAFTING_TYPE_BLACKSMITHING] = { 119563, 119680, 121527, 121529 },
+    [CRAFTING_TYPE_CLOTHIER] = { 119694, 119695, 121532, 121533 },
+    [CRAFTING_TYPE_ENCHANTING] = { 119564, 121528 },
+    [CRAFTING_TYPE_JEWELRYCRAFTING] = { 138789, 138799, 153737, 153739 },
+    [CRAFTING_TYPE_PROVISIONING] = { 119693 },
+    [CRAFTING_TYPE_WOODWORKING] = { 119681, 119682, 121530, 121531 }
 }
 
 BS.MUNDUS_STONES = {
@@ -211,16 +214,16 @@ BS.MUNDUS_STONES = {
 BS.BAGICON = zo_iconFormat("/esoui/art/tooltips/icon_bag.dds")
 BS.BANKICON = zo_iconFormat("/esoui/art/tooltips/icon_bank.dds")
 
-BS.CRAFTING_SCENES = {"alchemy", "enchanting", "provisioner", "smithing"}
-BS.BANKING_SCENES = {"bank", "guildBank", "houseBank"}
-BS.INVENTORY_SCENES = {"inventory"}
-BS.MAIL_SCENES = {"mailInbox", "mailSend"}
-BS.SIEGE_SCENES = {"siegeBar", "siegeBarUI"}
-BS.MENU_SCENES = {"gameMenuInGame", "mainMenuGamepad"}
-BS.INTERACTING_SCENES = {"interact"}
-BS.GUILDSTORE_SCENES = {"tradinghouse"}
-BS.DEFAULT_SCENES = {"hud", "hudui"}
-BS.SCENES = {"banking", "crafting", "default", "guildstore", "interacting", "inventory", "mail", "menu", "siege"}
+BS.CRAFTING_SCENES = { "alchemy", "enchanting", "provisioner", "smithing" }
+BS.BANKING_SCENES = { "bank", "guildBank", "houseBank" }
+BS.INVENTORY_SCENES = { "inventory" }
+BS.MAIL_SCENES = { "mailInbox", "mailSend" }
+BS.SIEGE_SCENES = { "siegeBar", "siegeBarUI" }
+BS.MENU_SCENES = { "gameMenuInGame", "mainMenuGamepad" }
+BS.INTERACTING_SCENES = { "interact" }
+BS.GUILDSTORE_SCENES = { "tradinghouse" }
+BS.DEFAULT_SCENES = { "hud", "hudui" }
+BS.SCENES = { "banking", "crafting", "default", "guildstore", "interacting", "inventory", "mail", "menu", "siege" }
 
 BS.CRAFTING_ACHIEVEMENT_IDS = {
     [1145] = true,
@@ -228,13 +231,13 @@ BS.CRAFTING_ACHIEVEMENT_IDS = {
 }
 
 BS.CRAFTING_ACHIEVEMENT = {
-    [CRAFTING_TYPE_ALCHEMY] = {achievementId = 1145, criterionIndex = 1, icon = "alchemist"},
-    [CRAFTING_TYPE_BLACKSMITHING] = {achievementId = 1145, criterionIndex = 2, icon = "smithy"},
-    [CRAFTING_TYPE_CLOTHIER] = {achievementId = 1145, criterionIndex = 3, icon = "clothier"},
-    [CRAFTING_TYPE_ENCHANTING] = {achievementId = 1145, criterionIndex = 4, icon = "enchanter"},
-    [CRAFTING_TYPE_JEWELRYCRAFTING] = {achievementId = 2225, criterionIndex = 1, icon = "jewelrycrafting"},
-    [CRAFTING_TYPE_PROVISIONING] = {achievementId = 1145, criterionIndex = 5, icon = "inn"},
-    [CRAFTING_TYPE_WOODWORKING] = {achievementId = 1145, criterionIndex = 6, icon = "woodworker"}
+    [CRAFTING_TYPE_ALCHEMY] = { achievementId = 1145, criterionIndex = 1, icon = "alchemist" },
+    [CRAFTING_TYPE_BLACKSMITHING] = { achievementId = 1145, criterionIndex = 2, icon = "smithy" },
+    [CRAFTING_TYPE_CLOTHIER] = { achievementId = 1145, criterionIndex = 3, icon = "clothier" },
+    [CRAFTING_TYPE_ENCHANTING] = { achievementId = 1145, criterionIndex = 4, icon = "enchanter" },
+    [CRAFTING_TYPE_JEWELRYCRAFTING] = { achievementId = 2225, criterionIndex = 1, icon = "jewelrycrafting" },
+    [CRAFTING_TYPE_PROVISIONING] = { achievementId = 1145, criterionIndex = 5, icon = "inn" },
+    [CRAFTING_TYPE_WOODWORKING] = { achievementId = 1145, criterionIndex = 6, icon = "woodworker" }
 }
 
 BS.CRAFTING_DAILY = {
@@ -252,11 +255,11 @@ BS.POTENT_NIRNCRUX = 56863
 
 -- these are in the game code but don't appear to be available anywhere
 BS.IGNORE_RECIPE = {
-    [64470] = true, -- Recipe: Old Orsinium Bloop Soup
+    [64470] = true,  -- Recipe: Old Orsinium Bloop Soup
     [121098] = true, -- Blueprint: Common Campfire, Outdoor
     [126863] = true, -- Diagram: Dwarven Pipeline Cap, Sealed
     [132173] = true, -- Blueprint: Witches Brazier, Primitive Log
-    [132179] = true -- Blueprint: Witches Totem, Antler Charms
+    [132179] = true  -- Blueprint: Witches Totem, Antler Charms
 }
 
 BS.COLLAPSE = "buttons/large_leftdoublearrow_up"
@@ -306,24 +309,24 @@ BS.MAX_BINDINGS = 20
 
 -- info from Writ Worthy
 BS.WRIT_ITEM_TYPES = {
-    [ITEM_STYLE_CHAPTER_HELMETS] = {26, 35, 44},
-    [ITEM_STYLE_CHAPTER_GLOVES] = {34, 43, 52},
-    [ITEM_STYLE_CHAPTER_BOOTS] = {32, 41, 50},
-    [ITEM_STYLE_CHAPTER_LEGS] = {31, 40, 49},
-    [ITEM_STYLE_CHAPTER_CHESTS] = {28, 37, 46, 75},
-    [ITEM_STYLE_CHAPTER_BELTS] = {30, 39, 48},
-    [ITEM_STYLE_CHAPTER_SHOULDERS] = {29, 38, 47},
-    [ITEM_STYLE_CHAPTER_SWORDS] = {59, 67},
-    [ITEM_STYLE_CHAPTER_MACES] = {56, 69},
-    [ITEM_STYLE_CHAPTER_AXES] = {53, 68},
-    [ITEM_STYLE_CHAPTER_DAGGERS] = {62},
-    [ITEM_STYLE_CHAPTER_STAVES] = {71, 72, 73, 74},
-    [ITEM_STYLE_CHAPTER_SHIELDS] = {65},
-    [ITEM_STYLE_CHAPTER_BOWS] = {70}
+    [ITEM_STYLE_CHAPTER_HELMETS] = { 26, 35, 44 },
+    [ITEM_STYLE_CHAPTER_GLOVES] = { 34, 43, 52 },
+    [ITEM_STYLE_CHAPTER_BOOTS] = { 32, 41, 50 },
+    [ITEM_STYLE_CHAPTER_LEGS] = { 31, 40, 49 },
+    [ITEM_STYLE_CHAPTER_CHESTS] = { 28, 37, 46, 75 },
+    [ITEM_STYLE_CHAPTER_BELTS] = { 30, 39, 48 },
+    [ITEM_STYLE_CHAPTER_SHOULDERS] = { 29, 38, 47 },
+    [ITEM_STYLE_CHAPTER_SWORDS] = { 59, 67 },
+    [ITEM_STYLE_CHAPTER_MACES] = { 56, 69 },
+    [ITEM_STYLE_CHAPTER_AXES] = { 53, 68 },
+    [ITEM_STYLE_CHAPTER_DAGGERS] = { 62 },
+    [ITEM_STYLE_CHAPTER_STAVES] = { 71, 72, 73, 74 },
+    [ITEM_STYLE_CHAPTER_SHIELDS] = { 65 },
+    [ITEM_STYLE_CHAPTER_BOWS] = { 70 }
 }
 
-BS.VAMPIRE_STAGES = {[135397] = 1, [135399] = 2, [135400] = 3, [135402] = 4, [135412] = 5}
-BS.VAMPIRE_FEED = {[40359] = true}
+BS.VAMPIRE_STAGES = { [135397] = 1, [135399] = 2, [135400] = 3, [135402] = 4, [135412] = 5 }
+BS.VAMPIRE_FEED = { [40359] = true }
 
 BS.MAIN_BAR = 1
 BS.BACK_BAR = 2
@@ -331,18 +334,18 @@ BS.BOTH = 3
 BS.ACTIVE_BAR = 4
 
 BS.CURRENCIES = {
-    [CURT_MONEY] = {crownStore = false},
-    [CURT_CROWNS] = {crownStore = true},
-    [CURT_CROWN_GEMS] = {crownStore = true},
-    [CURT_WRIT_VOUCHERS] = {crownStore = false},
-    [CURT_TELVAR_STONES] = {crownStore = false},
-    [CURT_EVENT_TICKETS] = {crownStore = false},
-    [CURT_ENDEAVOR_SEALS] = {crownStore = true},
-    [CURT_UNDAUNTED_KEYS] = {crownStore = false},
-    [CURT_ALLIANCE_POINTS] = {crownStore = false},
-    [CURT_CHAOTIC_CREATIA] = {crownStore = false},
-    [CURT_ARCHIVAL_FORTUNES] = {crownStore = true},
-    [CURT_IMPERIAL_FRAGMENTS] = {crownStore = true}
+    [CURT_MONEY] = { crownStore = false },
+    [CURT_CROWNS] = { crownStore = true },
+    [CURT_CROWN_GEMS] = { crownStore = true },
+    [CURT_WRIT_VOUCHERS] = { crownStore = false },
+    [CURT_TELVAR_STONES] = { crownStore = false },
+    [CURT_EVENT_TICKETS] = { crownStore = false },
+    [CURT_ENDEAVOR_SEALS] = { crownStore = true },
+    [CURT_UNDAUNTED_KEYS] = { crownStore = false },
+    [CURT_ALLIANCE_POINTS] = { crownStore = false },
+    [CURT_CHAOTIC_CREATIA] = { crownStore = false },
+    [CURT_ARCHIVAL_FORTUNES] = { crownStore = true },
+    [CURT_IMPERIAL_FRAGMENTS] = { crownStore = true }
 }
 
 BS.FRAGMENT_TYPES = {
@@ -386,33 +389,33 @@ BS.CATNAMES = {
 }
 
 BS.CATEGORIES = {
-    [BS.CATNAMES.Abilities] = {name = _G.BARSTEWARD_CATEGORY_ABILITIES, icon = "actionbar/stateoverlay_wound"},
-    [BS.CATNAMES.Activities] = {name = _G.BARSTEWARD_CATEGORY_ACTIVITIES, icon = "crafting/designs_tabicon_up"},
+    [BS.CATNAMES.Abilities] = { name = _G.BARSTEWARD_CATEGORY_ABILITIES, icon = "actionbar/stateoverlay_wound" },
+    [BS.CATNAMES.Activities] = { name = _G.BARSTEWARD_CATEGORY_ACTIVITIES, icon = "crafting/designs_tabicon_up" },
     [BS.CATNAMES.Character] = {
         name = _G.BARSTEWARD_CATEGORY_CHARACTER,
         icon = "charactercreate/charactercreate_bodyicon_up"
     },
-    [BS.CATNAMES.Client] = {name = _G.BARSTEWARD_CATEGORY_CLIENT, icon = "login/gamepad/loading-ouroboros"},
+    [BS.CATNAMES.Client] = { name = _G.BARSTEWARD_CATEGORY_CLIENT, icon = "login/gamepad/loading-ouroboros" },
     [BS.CATNAMES.Companions] = {
         name = _G.BARSTEWARD_CATEGORY_COMPANIONS,
         icon = "companion/keyboard/category_u30_allies_up"
     },
-    [BS.CATNAMES.Crafting] = {name = _G.BARSTEWARD_CATEGORY_CRAFTING, icon = "crafting/reconstruct_tabicon_up"},
-    [BS.CATNAMES.Currency] = {name = _G.BARSTEWARD_CATEGORY_CURRENCY, icon = "bank/bank_purchasenormal"},
+    [BS.CATNAMES.Crafting] = { name = _G.BARSTEWARD_CATEGORY_CRAFTING, icon = "crafting/reconstruct_tabicon_up" },
+    [BS.CATNAMES.Currency] = { name = _G.BARSTEWARD_CATEGORY_CURRENCY, icon = "bank/bank_purchasenormal" },
     -- [BS.CATNAMES.Housing] =  {name=_G.BARSTEWARD_CATEGORY_HOUSING,icon="icons/poi/poi_group_house_owned"},
     [BS.CATNAMES.Inventory] = {
         name = _G.BARSTEWARD_CATEGORY_INVENTORY,
         icon = "collections/collections_tabicon_outfitstyles_up"
     },
-    [BS.CATNAMES.Riding] = {name = _G.BARSTEWARD_CATEGORY_RIDING, icon = "mounts/tabicon_ridingskills_up"},
-    [BS.CATNAMES.Social] = {name = _G.BARSTEWARD_CATEGORY_SOCIAL, icon = "friends/friends_tabicon_friends"},
-    [BS.CATNAMES.Thievery] = {name = _G.BARSTEWARD_CATEGORY_THIEVERY, icon = "icons/mapkey/mapkey_fence"},
-    [BS.CATNAMES.Assistants] = {name = _G.BARSTEWARD_ASSISTANTS, icon = "icons/assistant_premiumbanker_01"},
+    [BS.CATNAMES.Riding] = { name = _G.BARSTEWARD_CATEGORY_RIDING, icon = "mounts/tabicon_ridingskills_up" },
+    [BS.CATNAMES.Social] = { name = _G.BARSTEWARD_CATEGORY_SOCIAL, icon = "friends/friends_tabicon_friends" },
+    [BS.CATNAMES.Thievery] = { name = _G.BARSTEWARD_CATEGORY_THIEVERY, icon = "icons/mapkey/mapkey_fence" },
+    [BS.CATNAMES.Assistants] = { name = _G.BARSTEWARD_ASSISTANTS, icon = "icons/assistant_premiumbanker_01" },
     [BS.CATNAMES.InfiniteArchive] = {
         name = SI_ENDLESS_DUNGEON_HUD_TRACKER_TITLE,
         icon = "icons/poi/poi_endlessdungeon_complete"
     },
-    [BS.CATNAMES.PvP] = {name = SI_GROUPFINDERCATEGORY4, icon = "icons/u41_pvp_reward_container"}
+    [BS.CATNAMES.PvP] = { name = SI_GROUPFINDERCATEGORY4, icon = "icons/u41_pvp_reward_container" }
 }
 
 BS.ASSISTANTS = {
@@ -564,14 +567,14 @@ BS.ITEM_TYPE_ICON = {
         icon = "icons/fishing_salmon_variant_red",
         name = SI_PROVISIONERSPECIALINGREDIENTTYPE_TRADINGHOUSERECIPECATEGORY4
     },
-    [ITEMTYPE_COLLECTIBLE] = {icon = "icons/crafting_fishing_trophy_perch", name = SI_SPECIALIZEDITEMTYPE80},
-    [ITEMTYPE_TRASH] = {icon = "inventory/inventory_tabicon_trash_up", name = SI_ITEMTYPE48},
-    [ITEMTYPE_LURE] = {icon = "inventory/inventory_tabicon_bait_up", name = SI_FISHING_WHEEL_NARRATION},
+    [ITEMTYPE_COLLECTIBLE] = { icon = "icons/crafting_fishing_trophy_perch", name = SI_SPECIALIZEDITEMTYPE80 },
+    [ITEMTYPE_TRASH] = { icon = "inventory/inventory_tabicon_trash_up", name = SI_ITEMTYPE48 },
+    [ITEMTYPE_LURE] = { icon = "inventory/inventory_tabicon_bait_up", name = SI_FISHING_WHEEL_NARRATION },
     [ITEMTYPE_FURNISHING] = {
         icon = "inventory/inventory_tabicon_furnishing_material_up",
         name = SI_HOUSING_PREVIEW_TEMPLATE_FURNISHINGS
     },
-    [ITEMTYPE_CONTAINER] = {icon = "icons/justice_stolen_wax_sealed_heavy_sack", name = SI_ITEMTYPE18}
+    [ITEMTYPE_CONTAINER] = { icon = "icons/justice_stolen_wax_sealed_heavy_sack", name = SI_ITEMTYPE18 }
 }
 
 BS.CHAR = {
@@ -589,8 +592,8 @@ BS.CHAR.allianceIcon = ZO_GetAllianceIcon(BS.CHAR.alliance)
 BS.CHAR.allianceName = GetAllianceName(BS.CHAR.alliance)
 BS.CHAR.classIcon = GetClassIcon(BS.CHAR.classId)
 
-BS.CONTINUOUS_ATTACK = {[39248] = true, [45614] = true, [45615] = true, [45616] = true, [45617] = true}
-BS.AYLEID_HEALTH = {[21263] = true, [100862] = true}
+BS.CONTINUOUS_ATTACK = { [39248] = true, [45614] = true, [45615] = true, [45616] = true, [45617] = true }
+BS.AYLEID_HEALTH = { [21263] = true, [100862] = true }
 BS.CRIMEQUESTS = {
     5532,
     5536,

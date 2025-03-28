@@ -443,10 +443,10 @@ L("SLASH_HIDE", "隐藏")
 L("SLASH_SHOW", "展示")
 
 -- Tracking
-L("TRACK" ,"使用 Bar Steward 跟踪")
+L("TRACK", "使用 Bar Steward 跟踪")
 L("TRACKER", "成就追踪器")
-L("TRACKER_INFO","右键点击成就，使用 Bar Steward 追踪d")
-L("UNTRACK","使用 Bar Steward 取消跟踪")
+L("TRACKER_INFO", "右键点击成就，使用 Bar Steward 追踪d")
+L("UNTRACK", "使用 Bar Steward 取消跟踪")
 
 -- Search
 L("DOUBLE_CLICK", "（双击定位）")

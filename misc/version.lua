@@ -137,7 +137,7 @@ function BS.VersionCheck()
 end
 
 function BS.SetVersionCheck()
-    local versions = {2000, 2006, 2010, 2111, 3000}
+    local versions = { 2000, 2006, 2010, 2111, 3000 }
 
     for _, version in ipairs(versions) do
         BS.Vars:SetCommon(true, "Updates", version)

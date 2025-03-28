@@ -4,6 +4,7 @@ local baseBar = ZO_Object:Subclass()
 
 function baseBar:New(...)
     local bar = ZO_Object.New(self)
+    ---@diagnostic disable-next-line: undefined-field
     bar:Initialise(...)
 
     return bar
@@ -52,7 +53,7 @@ function baseBar:Initialise()
             xPos, yPos = snapX, snapY
         end
 
-        BS.Vars.Bars[self.index].Position = {X = xPos, Y = yPos}
+        BS.Vars.Bars[self.index].Position = { X = xPos, Y = yPos }
 
         -- stop UI mode being reset too soon
         SetGameCameraUIMode(true)
@@ -238,6 +239,7 @@ function baseBar:SetCombatFunction()
         function()
             if (BS.Vars.Bars[BS.MAIN_BAR].CombatColourChange) then
                 if (BS.inCombat) then
+                    ---@diagnostic disable-next-line: undefined-field
                     if ((self.background or 99) ~= 99) then
                         if (self.expand) then
                             self.bar.expandbackground:SetCenterTexture("")
@@ -256,6 +258,7 @@ function baseBar:SetCombatFunction()
                         )
                     end
                 else
+                    ---@diagnostic disable-next-line: undefined-field
                     if ((self.background or 99) ~= 99) then
                         if (self.expand) then
                             self.bar.expandbackground:SetCenterColor(1, 1, 1, 1)
@@ -473,6 +476,7 @@ function baseBar:DoUpdate(metadata, ...)
         return
     end
 
+    ---@diagnostic disable-next-line: undefined-field
     if (self.destroyed) then
         return
     end
@@ -589,7 +593,7 @@ function baseBar:DoUpdate(metadata, ...)
 
         if (play) then
             PlaySound(sound)
-            BS.SoundLastPlayed[id] = {time = os.time(), value = value}
+            BS.SoundLastPlayed[id] = { time = os.time(), value = value }
         end
     end
 end
@@ -656,7 +660,7 @@ function baseBar:AddWidgets(widgets)
             if (type(metadata.event) == "table") then
                 events = metadata.event
             else
-                events = {metadata.event}
+                events = { metadata.event }
             end
 
             for _, event in ipairs(events) do
@@ -811,21 +815,22 @@ end
 local function checkOrCreatePool()
     if (not BS.BarObjectPool) then
         BS.BarObjects = {}
+        --- @class BarObjectPool:ZO_ObjectPool
         BS.BarObjectPool =
             ZO_ObjectPool:New(
             -- factory
-            function()
-                return baseBar:New()
-            end,
-            --reset
-            function(bar)
-                bar.destroyed = true
-                bar:RemoveFromScenes()
-                bar:Hide()
-                bar.bar:SetHidden(true)
-                bar:ClearAnchors()
-            end
-        )
+                function()
+                    return baseBar:New()
+                end,
+                --reset
+                function(bar)
+                    bar.destroyed = true
+                    bar:RemoveFromScenes()
+                    bar:Hide()
+                    bar.bar:SetHidden(true)
+                    bar:ClearAnchors()
+                end
+            )
     end
 end
 

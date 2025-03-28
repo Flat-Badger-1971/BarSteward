@@ -470,10 +470,10 @@ L("SLASH_HIDE", "cacher")
 L("SLASH_SHOW", "montrer")
 
 -- Tracking
-L("TRACK" ,"Suivre avec Bar Steward")
+L("TRACK", "Suivre avec Bar Steward")
 L("TRACKER", "Suivi des réalisations")
-L("TRACKER_INFO","Cliquez avec le bouton droit sur une réussite pour la suivre avec Bar Steward")
-L("UNTRACK","Désuivre avec Bar Steward")
+L("TRACKER_INFO", "Cliquez avec le bouton droit sur une réussite pour la suivre avec Bar Steward")
+L("UNTRACK", "Désuivre avec Bar Steward")
 
 -- Search
 L("DOUBLE_CLICK", "(double-cliquez pour localiser)")

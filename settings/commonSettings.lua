@@ -322,7 +322,7 @@ function BS.AddSettings(defaults, controls, vars, key)
         }
     end
 
-    local checks = {EQUALS = "Equals", EXCEEDS = "Over", BELOW = "Under"}
+    local checks = { EQUALS = "Equals", EXCEEDS = "Over", BELOW = "Under" }
 
     for langSuffix, varsuffix in pairs(checks) do
         if (defaults["SoundWhen" .. varsuffix] ~= nil) then
@@ -408,7 +408,7 @@ function BS.AddSettings(defaults, controls, vars, key)
                 return unpack(colour)
             end,
             setFunc = function(r, g, b, a)
-                vars.ProgressColour = {r, g, b, a}
+                vars.ProgressColour = { r, g, b, a }
 
                 local widget = BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[key])
 
@@ -433,7 +433,7 @@ function BS.AddSettings(defaults, controls, vars, key)
                 return r, g, b
             end,
             setFunc = function(r, g, b)
-                vars.GradientStart = {r, g, b}
+                vars.GradientStart = { r, g, b }
 
                 local widget = BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[key])
                 local endg = {
@@ -462,7 +462,7 @@ function BS.AddSettings(defaults, controls, vars, key)
                 return r, g, b
             end,
             setFunc = function(r, g, b)
-                vars.GradientEnd = {r, g, b}
+                vars.GradientEnd = { r, g, b }
 
                 local widget = BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[key])
                 local startg = {
@@ -518,7 +518,7 @@ function BS.AddSettings(defaults, controls, vars, key)
         controls[#controls + 1] = {
             type = "dropdown",
             name = GetString(_G.BARSTEWARD_TWELVE_TWENTY_FOUR),
-            choices = {GetString(_G.BARSTEWARD_12), GetString(_G.BARSTEWARD_24)},
+            choices = { GetString(_G.BARSTEWARD_12), GetString(_G.BARSTEWARD_24) },
             getFunc = function()
                 return timevars.TimeType or BS.Defaults.TimeType
             end,
@@ -617,10 +617,10 @@ function BS.AddSettings(defaults, controls, vars, key)
                     return unpack(vars.Colour or BS.Vars.DefaultColour)
                 end,
                 setFunc = function(r, g, b, a)
-                    if (BS.LC.CompareColours({r, g, b, a}, BS.Vars.DefaultColour)) then
+                    if (BS.LC.CompareColours({ r, g, b, a }, BS.Vars.DefaultColour)) then
                         vars.Colour = nil
                     else
-                        vars.Colour = {r, g, b, a}
+                        vars.Colour = { r, g, b, a }
                     end
 
                     BS.RefreshWidget(key)
@@ -638,10 +638,10 @@ function BS.AddSettings(defaults, controls, vars, key)
                     return unpack(vars.OkColour or BS.Vars.DefaultOkColour)
                 end,
                 setFunc = function(r, g, b, a)
-                    if (BS.LC.CompareColours({r, g, b, a}, BS.Vars.DefaultOkColour)) then
+                    if (BS.LC.CompareColours({ r, g, b, a }, BS.Vars.DefaultOkColour)) then
                         vars.OkColour = nil
                     else
-                        vars.OkColour = {r, g, b, a}
+                        vars.OkColour = { r, g, b, a }
                     end
 
                     BS.RefreshWidget(key)
@@ -659,10 +659,10 @@ function BS.AddSettings(defaults, controls, vars, key)
                     return unpack(vars.WarningColour or BS.Vars.DefaultWarningColour)
                 end,
                 setFunc = function(r, g, b, a)
-                    if (BS.LC.CompareColours({r, g, b, a}, BS.Vars.DefaultWarningColour)) then
+                    if (BS.LC.CompareColours({ r, g, b, a }, BS.Vars.DefaultWarningColour)) then
                         vars.WarningColour = nil
                     else
-                        vars.WarningColour = {r, g, b, a}
+                        vars.WarningColour = { r, g, b, a }
                     end
 
                     BS.RefreshWidget(key)
@@ -680,10 +680,10 @@ function BS.AddSettings(defaults, controls, vars, key)
                     return unpack(vars.DangerColour or BS.Vars.DefaultDangerColour)
                 end,
                 setFunc = function(r, g, b, a)
-                    if (BS.LC.CompareColours({r, g, b, a}, BS.Vars.DefaultDangerColour)) then
+                    if (BS.LC.CompareColours({ r, g, b, a }, BS.Vars.DefaultDangerColour)) then
                         vars.DangerColour = nil
                     else
-                        vars.DangerColour = {r, g, b, a}
+                        vars.DangerColour = { r, g, b, a }
                     end
 
                     BS.RefreshWidget(key)
@@ -701,10 +701,10 @@ function BS.AddSettings(defaults, controls, vars, key)
                     return unpack(vars.MaxColour or BS.Vars.DefaultMaxColour)
                 end,
                 setFunc = function(r, g, b, a)
-                    if (BS.LC.CompareColours({r, g, b, a}, BS.Vars.DefaultMaxColour)) then
+                    if (BS.LC.CompareColours({ r, g, b, a }, BS.Vars.DefaultMaxColour)) then
                         vars.MaxColour = nil
                     else
-                        vars.MaxColour = {r, g, b, a}
+                        vars.MaxColour = { r, g, b, a }
                     end
 
                     BS.RefreshWidget(key)

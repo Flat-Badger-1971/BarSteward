@@ -17,16 +17,16 @@ function BS.CreateComboBox(name, parent, width, height, choices, default, callba
             for idx, value in pairs(array) do
                 local entry =
                     ZO_ComboBox:CreateItemEntry(
-                    value,
-                    function()
-                        combo.value = value
-                        self:UpdateParent()
+                        value,
+                        function()
+                            combo.value = value
+                            self:UpdateParent()
 
-                        if (callback) then
-                            callback(value)
+                            if (callback) then
+                                callback(value)
+                            end
                         end
-                    end
-                )
+                    )
                 entry.id = idx
                 comboBox:AddItem(entry, ZO_COMBOBOX_SUPRESS_UPDATE)
             end
@@ -48,8 +48,8 @@ function BS.CreateComboBox(name, parent, width, height, choices, default, callba
     combo.UpdateParent = function(self)
         if (parent:GetType() == CT_LABEL) then
             local colour =
-                self.disabled and {0.3, 0.3, 0.3, 1} or choices[combo.value] == "Disabled" and {0.5, 0.5, 0.4, 1} or
-                {0.8, 0.8, 0.6, 1}
+                self.disabled and { 0.3, 0.3, 0.3, 1 } or choices[combo.value] == "Disabled" and { 0.5, 0.5, 0.4, 1 } or
+                { 0.8, 0.8, 0.6, 1 }
             parent:SetColor(unpack(colour))
         end
     end

@@ -5,6 +5,7 @@ local baseWidget = ZO_Object:Subclass()
 function baseWidget:New(...)
     local widget = ZO_Object.New(self)
 
+    ---@diagnostic disable-next-line: undefined-field
     widget:Initialise(...)
 
     return widget
@@ -19,6 +20,7 @@ function baseWidget:Initialise()
         self.overlay = self.overlay or WINDOW_MANAGER:CreateControl(nil, self.control, CT_CONTROL)
         self.overlay:SetDrawTier(DT_HIGH)
         self.overlay:ClearAnchors()
+        ---@diagnostic disable-next-line: undefined-field
         self.overlay:SetAnchorFill(self.bar)
 
         self.overlay.background = self.overlay.background or WINDOW_MANAGER:CreateControl(nil, self.overlay, CT_TEXTURE)
@@ -105,7 +107,7 @@ function baseWidget:CreateTooltip(tooltip)
                 local tooltiptext = getTooltip()
 
                 if (not IsInGamepadPreferredMode()) then
-                    BS.InfoTTDims = {_G.InformationTooltip:GetDimensionConstraints()}
+                    BS.InfoTTDims = { _G.InformationTooltip:GetDimensionConstraints() }
                     _G.InformationTooltip:SetDimensionConstraints(
                         BS.InfoTTDims[1],
                         BS.InfoTTDims[2],
@@ -591,28 +593,28 @@ local function checkOrCreatePool()
         BS.WidgetObjectPool =
             ZO_ObjectPool:New(
             -- factory
-            function()
-                return baseWidget:New()
-            end,
-            --reset
-            function(widget)
-                widget.control:SetHidden(true)
-                widget:SetParent(GuiRoot)
-                widget:ClearAnchors()
+                function()
+                    return baseWidget:New()
+                end,
+                --reset
+                function(widget)
+                    widget.control:SetHidden(true)
+                    widget:SetParent(GuiRoot)
+                    widget:ClearAnchors()
 
-                if (widget.value) then
-                    widget.value:SetHidden(true)
+                    if (widget.value) then
+                        widget.value:SetHidden(true)
+                    end
+
+                    if (widget.progress) then
+                        widget.progress:SetHidden(true)
+                    end
+
+                    widget.horizontalPadding = 0
+                    widget.verticalPadding = 0
+                    widget.destroyed = true
                 end
-
-                if (widget.progress) then
-                    widget.progress:SetHidden(true)
-                end
-
-                widget.horizontalPadding = 0
-                widget.verticalPadding = 0
-                widget.destroyed = true
-            end
-        )
+            )
     end
 end
 

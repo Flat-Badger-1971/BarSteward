@@ -13,13 +13,13 @@ BS.Defaults = {
     Categories = true,
     CategoriesCount = true,
     CheckCrime = false,
-    DefaultCombatColour = {0.3686274588, 0, 0, 1},
-    DefaultColour = {(249 / 255), (249 / 255), (249 / 255), 1},
-    DefaultDangerColour = {(204 / 255), 0, 0, 1},
-    DefaultMaxColour = {1, 0.5, 0, 1},
-    DefaultWarningColour = {1, 1, 0, 1},
-    DefaultOkColour = {0, 1, 0, 1},
-    DungeonInfo = {IsInDungeon = false, ChestCount = 0, PreviousChest = {x = 0, y = 0}},
+    DefaultCombatColour = { 0.3686274588, 0, 0, 1 },
+    DefaultColour = { (249 / 255), (249 / 255), (249 / 255), 1 },
+    DefaultDangerColour = { (204 / 255), 0, 0, 1 },
+    DefaultMaxColour = { 1, 0.5, 0, 1 },
+    DefaultWarningColour = { 1, 1, 0, 1 },
+    DefaultOkColour = { 0, 1, 0, 1 },
+    DungeonInfo = { IsInDungeon = false, ChestCount = 0, PreviousChest = { x = 0, y = 0 } },
     FishingLoot = {},
     Font = "Default",
     FontSize = 18,
@@ -39,12 +39,12 @@ BS.Defaults = {
             Anchor = GetString(_G.BARSTEWARD_MIDDLE),
             Backdrop = {
                 Show = true,
-                Colour = {0.23, 0.23, 0.23, 0.7}
+                Colour = { 0.23, 0.23, 0.23, 0.7 }
             },
             Name = GetString(_G.BARSTEWARD_MAIN_BAR),
             NudgeCompass = false,
             Orientation = GetString(_G.BARSTEWARD_HORIZONTAL),
-            Position = {X = x, Y = y},
+            Position = { X = x, Y = y },
             Scale = 1,
             TooltipAnchor = GetString(_G.BARSTEWARD_BOTTOM),
             ValueSide = GetString(_G.BARSTEWARD_RIGHT)
@@ -356,7 +356,7 @@ BS.Defaults = {
         [BS.W_SKILL_POINTS] = {
             Autohide = true,
             Cat = cat.Abilities,
-            Colour = {0, 1, 0, 1}
+            Colour = { 0, 1, 0, 1 }
         },
         [BS.W_WRITS_SURVEYS] = {
             Cat = cat.Inventory
@@ -884,7 +884,10 @@ BS.Defaults = {
             Autohide = false,
             Cat = cat.Activities,
             HideDefault = false
-        }
+        },
+        [BS.W_SERVER] = {
+            Cat = cat.Client
+        },
     }
 }
 

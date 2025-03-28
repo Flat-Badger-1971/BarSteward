@@ -11,28 +11,28 @@ function BS.RegisterDialogues()
 
     local dialogues = {
         NotEmpty = {
-            title = {text = GetString(_G.BARSTEWARD_NEWBAR_INVALID)},
-            mainText = {text = GetString(_G.BARSTEWARD_NEWBAR_BLANK)},
+            title = { text = GetString(_G.BARSTEWARD_NEWBAR_INVALID) },
+            mainText = { text = GetString(_G.BARSTEWARD_NEWBAR_BLANK) },
             buttons = buttons
         },
         NotEmptyGeneric = {
-            title = {text = GetString(_G.BARSTEWARD_GENERIC_INVALID)},
-            mainText = {text = GetString(_G.BARSTEWARD_GENERIC_BLANK)},
+            title = { text = GetString(_G.BARSTEWARD_GENERIC_INVALID) },
+            mainText = { text = GetString(_G.BARSTEWARD_GENERIC_BLANK) },
             buttons = buttons
         },
         Exists = {
-            title = {text = GetString(_G.BARSTEWARD_NEWBAR_INVALID)},
-            mainText = {text = GetString(_G.BARSTEWARD_NEWBAR_EXISTS)},
+            title = { text = GetString(_G.BARSTEWARD_NEWBAR_INVALID) },
+            mainText = { text = GetString(_G.BARSTEWARD_NEWBAR_EXISTS) },
             buttons = buttons
         },
         ExistsGeneric = {
-            title = {text = GetString(_G.BARSTEWARD_GENERIC_INVALID)},
-            mainText = {text = GetString(_G.BARSTEWARD_GENERIC_EXISTS)},
+            title = { text = GetString(_G.BARSTEWARD_GENERIC_INVALID) },
+            mainText = { text = GetString(_G.BARSTEWARD_GENERIC_EXISTS) },
             buttons = buttons
         },
         Reload = {
-            title = {text = "Bar Steward"},
-            mainText = {text = GetString(_G.BARSTEWARD_RELOAD_MSG)},
+            title = { text = "Bar Steward" },
+            mainText = { text = GetString(_G.BARSTEWARD_RELOAD_MSG) },
             buttons = {
                 {
                     text = BS.LC.Format(SI_OK),
@@ -48,7 +48,7 @@ function BS.RegisterDialogues()
             }
         },
         ReloadQuestion = {
-            title = {text = "Bar Steward"},
+            title = { text = "Bar Steward" },
             mainText = {
                 text = string.format("%s %s?", GetString(_G.BARSTEWARD_SETTINGS), BS.LC.Format(SI_ADDON_MANAGER_RELOAD))
             },
@@ -73,8 +73,8 @@ function BS.RegisterDialogues()
             }
         },
         Remove = {
-            title = {text = GetString(_G.BARSTEWARD_REMOVE_BAR)},
-            mainText = {text = GetString(_G.BARSTEWARD_REMOVE_WARNING)},
+            title = { text = GetString(_G.BARSTEWARD_REMOVE_BAR) },
+            mainText = { text = GetString(_G.BARSTEWARD_REMOVE_WARNING) },
             buttons = {
                 {
                     text = BS.LC.Format(SI_CANCEL),
@@ -91,8 +91,8 @@ function BS.RegisterDialogues()
             }
         },
         RemoveGeneric = {
-            title = {text = GetString(_G.BARSTEWARD_GENERIC_REMOVE)},
-            mainText = {text = GetString(_G.BARSTEWARD_GENERIC_REMOVE_WARNING)},
+            title = { text = GetString(_G.BARSTEWARD_GENERIC_REMOVE) },
+            mainText = { text = GetString(_G.BARSTEWARD_GENERIC_REMOVE_WARNING) },
             buttons = {
                 {
                     text = BS.LC.Format(SI_CANCEL),
@@ -113,8 +113,8 @@ function BS.RegisterDialogues()
             }
         },
         Resize = {
-            title = {text = "Bar Steward"},
-            mainText = {text = GetString(_G.BARSTEWARD_RESIZE_MESSAGE)},
+            title = { text = "Bar Steward" },
+            mainText = { text = GetString(_G.BARSTEWARD_RESIZE_MESSAGE) },
             buttons = {
                 {
                     text = BS.LC.Format(SI_DIALOG_YES),
@@ -133,12 +133,12 @@ function BS.RegisterDialogues()
             }
         },
         ItemExists = {
-            title = {text = GetString(_G.BARSTEWARD_ITEM_INVALID)},
-            mainText = {text = GetString(_G.BARSTEWARD_ITEM_EXISTS)},
+            title = { text = GetString(_G.BARSTEWARD_ITEM_INVALID) },
+            mainText = { text = GetString(_G.BARSTEWARD_ITEM_EXISTS) },
             buttons = buttons
         },
         Delete = {
-            title = {text = BS.LC.Format(SI_KEYCODE19)},
+            title = { text = BS.LC.Format(SI_KEYCODE19) },
             mainText = {
                 text = function()
                     local characters = BS.LC.Join(BS.forDeletion)
@@ -159,7 +159,7 @@ function BS.RegisterDialogues()
             }
         },
         Import = {
-            title = {text = GetString(_G.BARSTEWARD_IMPORT_BAR)},
+            title = { text = GetString(_G.BARSTEWARD_IMPORT_BAR) },
             mainText = {
                 text = function()
                     return zo_strformat(GetString(_G.BARSTEWARD_MOVE_WIDGETS), BS.MovingWidgets)
@@ -178,7 +178,7 @@ function BS.RegisterDialogues()
             }
         },
         Confirm = {
-            title = {text = GetString(_G.BARSTEWARD_MAIN_BAR_REPLACE)},
+            title = { text = GetString(_G.BARSTEWARD_MAIN_BAR_REPLACE) },
             mainText = {
                 text = GetString(_G.BARSTEWARD_MAIN_BAR_REPLACE_CONFIRM)
             },

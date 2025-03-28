@@ -6,9 +6,9 @@ BS.widgets[BS.W_RAPPORT] = {
         local rapportValue = GetActiveCompanionRapport()
         local rapportMax = GetMaximumRapport()
         local rapportMin = GetMinimumRapport()
-        local rdr, rdg, rdb = 0, 153 / 255, 102 / 255 -- dislike
+        local rdr, rdg, rdb = 0, 153 / 255, 102 / 255        -- dislike
         local rmr, rmg, rmb = 157 / 255, 132 / 255, 13 / 255 -- moderate
-        local rlr, rlg, rlb = 114 / 255, 35 / 255, 35 / 255 -- like
+        local rlr, rlg, rlb = 114 / 255, 35 / 255, 35 / 255  -- like
         local rapportPcValue = rapportValue - rapportMin
         local rapportPcMax = rapportMax - rapportMin
 
@@ -29,7 +29,7 @@ BS.widgets[BS.W_RAPPORT] = {
 
         return rapportValue
     end,
-    event = {EVENT_COMPANION_RAPPORT_UPDATE, EVENT_ACTIVE_COMPANION_STATE_CHANGED},
+    event = { EVENT_COMPANION_RAPPORT_UPDATE, EVENT_ACTIVE_COMPANION_STATE_CHANGED },
     icon = "hud/lootHistory_icon_rapportincrease_generic",
     tooltip = GetString(_G.BARSTEWARD_RAPPORT),
     hideWhenEqual = function()
@@ -62,7 +62,7 @@ BS.widgets[BS.W_COMPANION_LEVEL] = {
             return companionLevel
         end
 
-        local text = companionLevel
+        local text = tostring(companionLevel)
 
         if (BS.GetVar("ShowXPPC", this) and not isMaxLevel) then
             text = text .. " (" .. percent .. "%)"
@@ -89,7 +89,7 @@ BS.widgets[BS.W_COMPANION_LEVEL] = {
 
         return companionLevel
     end,
-    event = {EVENT_ACTIVE_COMPANION_STATE_CHANGED, EVENT_COMPANION_EXPERIENCE_GAIN},
+    event = { EVENT_ACTIVE_COMPANION_STATE_CHANGED, EVENT_COMPANION_EXPERIENCE_GAIN },
     icon = "companion/keyboard/category_u30_companions_up",
     tooltip = GetString(_G.BARSTEWARD_COMPANION_LEVEL),
     hideWhenEqual = 0,
@@ -145,7 +145,7 @@ for k, v in pairs(BS.COMPANION_DEFIDS) do
         ),
         icon = companionIcons[k],
         onLeftClick = function()
-            UseCollectible(GetCompanionCollectibleId(v))
+            UseCollectible(GetCompanionCollectibleId(v), GAMEPLAY_ACTOR_CATEGORY_PLAYER)
         end
     }
 end
