@@ -245,12 +245,17 @@ end
 
 local function setupDataRow(rowControl, data)
     local icon = data.icon
+    local name = data.name
 
     if (type(icon) == "function") then
         icon = icon()
     end
 
-    rowControl:GetNamedChild("Title"):SetText(data.name)
+    if (type(name) == "function") then
+        name = name()
+    end
+
+    rowControl:GetNamedChild("Title"):SetText(name)
     rowControl:GetNamedChild("Icon"):SetTexture(BS.FormatIcon(icon))
 
     local cb = rowControl:GetNamedChild("CheckBox")
@@ -263,11 +268,7 @@ local function setupDataRow(rowControl, data)
         end
     )
 
-    if (data.key ~= selected) then
-        ZO_CheckButton_SetCheckState(c, false)
-    else
-        ZO_CheckButton_SetCheckState(c, true)
-    end
+    ZO_CheckButton_SetCheckState(c, data.key == selected)
 
     if (data.key == BS.W_ALLIANCE) then
         rowControl:GetNamedChild("Icon"):SetTextureCoords(0, 1, 0, 0.6)
