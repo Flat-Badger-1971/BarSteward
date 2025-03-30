@@ -1,4 +1,4 @@
-local BS = _G.BarSteward
+local BS = BarSteward
 local researchSlots = {
     [CRAFTING_TYPE_BLACKSMITHING] = {},
     [CRAFTING_TYPE_WOODWORKING] = {},
@@ -57,7 +57,7 @@ local function getDisplay(timeRemaining, widgetIndex, inUse, maxResearch)
     local days = math.floor((hours / 24) + 0.5)
 
     if (BS.GetVar("ShowDays", widgetIndex) and days >= 1 and hours > 24) then
-        display = zo_strformat(GetString(_G.BARSTEWARD_DAYS), days)
+        display = zo_strformat(GetString(BARSTEWARD_DAYS), days)
     else
         display =
             BS.SecondsToTime(
@@ -81,7 +81,7 @@ local function getSettings(widgetIndex)
     local settings = {
         [1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_SHOW_SLOTS),
+            name = GetString(BARSTEWARD_SHOW_SLOTS),
             getFunc = function()
                 return BS.Vars.Controls[widgetIndex].ShowSlots
             end,
@@ -93,8 +93,8 @@ local function getSettings(widgetIndex)
         },
         [2] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_DAYS_ONLY),
-            tooltip = GetString(_G.BARSTEWARD_DAYS_ONLY_TOOLTIP),
+            name = GetString(BARSTEWARD_DAYS_ONLY),
+            tooltip = GetString(BARSTEWARD_DAYS_ONLY_TOOLTIP),
             getFunc = function()
                 return BS.Vars.Controls[widgetIndex].ShowDays
             end,
@@ -435,7 +435,7 @@ local function getReadyForHandIn(character)
             for info = 1, #conditionInfo do
                 local conditionText = zo_strformat("<<z:1>>", conditionInfo[info].name)
 
-                if (string.find(conditionText, GetString(_G.BARSTEWARD_DELIVER))) then
+                if (string.find(conditionText, GetString(BARSTEWARD_DELIVER))) then
                     if (BS.Vars:GetCommon("dailyQuests", character, quest.name) ~= "ready") then
                         BS.Vars:SetCommon("ready", "dailyQuests", character, quest.name)
                         update = true
@@ -548,7 +548,7 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
                 widget:SetColour(colour)
             end
 
-            local ttt = GetString(_G.BARSTEWARD_DAILY_CRAFTING) .. BS.LF
+            local ttt = GetString(BARSTEWARD_DAILY_CRAFTING) .. BS.LF
 
             for name, _ in pairs(qualifiedQuestNames) do
                 local tdone = BS.Vars:GetCommon("dailyQuests", character, name) == "done"
@@ -558,19 +558,19 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
                 local ttext
 
                 if (tready) then
-                    ttext = string.format("%s - %s", name, GetString(_G.BARSTEWARD_READY))
+                    ttext = string.format("%s - %s", name, GetString(BARSTEWARD_READY))
                     ttext = BS.COLOURS.Blue:Colorize(ttext)
                     ttt = string.format("%s%s", ttt, ttext)
                 elseif (tdone) then
-                    ttext = string.format("%s - %s", name, GetString(_G.BARSTEWARD_COMPLETED))
+                    ttext = string.format("%s - %s", name, GetString(BARSTEWARD_COMPLETED))
                     ttext = BS.COLOURS.DefaultOkColour:Colorize(ttext)
                     ttt = string.format("%s%s", ttt, ttext)
                 elseif (tadded) then
-                    ttext = string.format("%s - %s", name, GetString(_G.BARSTEWARD_PICKED_UP))
+                    ttext = string.format("%s - %s", name, GetString(BARSTEWARD_PICKED_UP))
                     ttext = BS.COLOURS.DefaultWarningColour:Colorize(ttext)
                     ttt = string.format("%s%s", ttt, ttext)
                 else
-                    ttext = string.format("%s - %s", name, GetString(_G.BARSTEWARD_NOT_PICKED_UP))
+                    ttext = string.format("%s - %s", name, GetString(BARSTEWARD_NOT_PICKED_UP))
                     ttext = tcolour:Colorize(ttext)
                     ttt = string.format("%s%s", ttt, ttext)
                 end
@@ -617,11 +617,11 @@ BS.widgets[BS.W_CRAFTING_DAILIES] = {
         EVENT_QUEST_CONDITION_COUNTER_CHANGED
     },
     icon = "icons/quest_wrothgar_item_029",
-    tooltip = GetString(_G.BARSTEWARD_DAILY_CRAFTING),
+    tooltip = GetString(BARSTEWARD_DAILY_CRAFTING),
     hideWhenEqual = true,
     customSettings = {
         [1] = {
-            name = GetString(_G.BARSTEWARD_USE_ICONS),
+            name = GetString(BARSTEWARD_USE_ICONS),
             type = "checkbox",
             getFunc = function()
                 return BS.Vars.Controls[BS.W_CRAFTING_DAILIES].UseIcons
@@ -645,7 +645,7 @@ BS.widgets[BS.W_CRAFTING_DAILY_TIME] = {
     end,
     timer = 1000,
     icon = "icons/crafting_outfitter_logo",
-    tooltip = GetString(_G.BARSTEWARD_DAILY_WRITS_TIME)
+    tooltip = GetString(BARSTEWARD_DAILY_WRITS_TIME)
 }
 
 local function getRecipeList()
@@ -772,7 +772,7 @@ BS.widgets[BS.W_RECIPES] = {
         end
     end,
     customOptions = {
-        name = GetString(_G.BARSTEWARD_RECIPES_DISPLAY),
+        name = GetString(BARSTEWARD_RECIPES_DISPLAY),
         choices = { food, drink, foodAndDrink, furnishing },
         varName = "Display",
         refresh = true,
@@ -801,7 +801,7 @@ BS.widgets[BS.W_UNKNOWN_WRIT_MOTIFS] = {
 
         for _, bag in pairs(bags) do
             ---@diagnostic disable-next-line: undefined-field
-            for _, data in pairs(_G.SHARED_INVENTORY.bagCache[bag]) do
+            for _, data in pairs(SHARED_INVENTORY.bagCache[bag]) do
                 if (data.specializedItemType == SPECIALIZED_ITEMTYPE_MASTER_WRIT) then
                     writs = writs + 1
                     local itemLink = GetItemLink(bag, data.slotIndex, LINK_STYLE_DEFAULT)
@@ -824,7 +824,7 @@ BS.widgets[BS.W_UNKNOWN_WRIT_MOTIFS] = {
                             local motifName = zo_strformat("<<C:1>> <<m:2>>", styleName, chapterName)
                             local colour = GetItemQualityColor(writData.itemQuality)
                             local name = colour:Colorize(motifName)
-                            local motifInfo = _G.LibCharacterKnowledgeInternal.GetStyleMotifItems(writData.motifNumber)
+                            local motifInfo = LibCharacterKnowledgeInternal.GetStyleMotifItems(writData.motifNumber)
 
                             if (motifInfo) then
                                 name = (motifInfo.number) .. ". " .. name
@@ -853,7 +853,7 @@ BS.widgets[BS.W_UNKNOWN_WRIT_MOTIFS] = {
         BS.ResizeBar(BS.GetVar("Bar", this))
 
         if (#display > 0) then
-            local tt = GetString(_G.BARSTEWARD_UNKNOWN_WRIT_MOTIFS)
+            local tt = GetString(BARSTEWARD_UNKNOWN_WRIT_MOTIFS)
 
             for _, motif in ipairs(display) do
                 tt = string.format("%s%s%s", tt, BS.LF, motif)
@@ -868,5 +868,5 @@ BS.widgets[BS.W_UNKNOWN_WRIT_MOTIFS] = {
     callbackLCK = true,
     callback = { [SHARED_INVENTORY] = { "SingleSlotInventoryUpdate" } },
     icon = "icons/crafting_motif_binding_welkynar",
-    tooltip = GetString(_G.BARSTEWARD_UNKNOWN_WRIT_MOTIFS)
+    tooltip = GetString(BARSTEWARD_UNKNOWN_WRIT_MOTIFS)
 }

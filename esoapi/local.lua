@@ -9,11 +9,19 @@ LibCharacterKnowledgeInternal = {}
 LibClockTST = {}
 LibCombat = {}
 LibDebugLogger = {}
-LibFBCommon = {}
 LibUndauntedPledges = {}
 PortToFriend = {}
 RewardsTracker = {}
 WritWorthy = {}
+
+--- @class  InformationTooltip:Control
+InformationTooltip = {}
+
+--- @param objectKey? any
+--- @return any
+function ZO_ObjectPool:AcquireObject(objectKey) end
+
+function ZO_ObjectPool:ReleaseAllObjects() end
 
 LIBCOMBAT_EVENT_UNITS = 0
 LIBCOMBAT_EVENT_FIGHTRECAP = 0

@@ -1,4 +1,4 @@
-local BS = _G.BarSteward
+local BS = BarSteward
 local iconPaths = {
     "/esoui/art/lfg/lfg_dps_up_64.dds",
     "/esoui/art/icons/ability_templar_ripping_spear.dds",
@@ -26,8 +26,8 @@ BS.widgets[BS.W_ACTIVE_BAR] = {
         local backIcon = BS.GetVar("BackIcon", this) or BS.Defaults.BackBarIcon
         local icon = activeWeaponPair == ACTIVE_WEAPON_PAIR_BACKUP and backIcon or mainIcon
         local text =
-            activeWeaponPair == ACTIVE_WEAPON_PAIR_BACKUP and GetString(_G.BARSTEWARD_BACK_BAR) or
-            GetString(_G.BARSTEWARD_MAIN_BAR)
+            activeWeaponPair == ACTIVE_WEAPON_PAIR_BACKUP and GetString(BARSTEWARD_BACK_BAR) or
+            GetString(BARSTEWARD_MAIN_BAR)
 
         if (event == EVENT_PREPARE_FOR_JUMP and BS.GetVar("Warn", this)) then
             if (not ignoreTypes[instanceDisplayType]) then
@@ -38,8 +38,8 @@ BS.widgets[BS.W_ACTIVE_BAR] = {
                     zo_callLater(
                         function()
                             BS.Announce(
-                                GetString(_G.BARSTEWARD_WARNING),
-                                zo_strformat(GetString(_G.BARSTEWARD_WARN_INSTANCE_MESSAGE), text),
+                                GetString(BARSTEWARD_WARNING),
+                                zo_strformat(GetString(BARSTEWARD_WARN_INSTANCE_MESSAGE), text),
                                 this,
                                 nil,
                                 nil,
@@ -68,11 +68,11 @@ BS.widgets[BS.W_ACTIVE_BAR] = {
     end,
     event = { EVENT_ACTIVE_WEAPON_PAIR_CHANGED, EVENT_PREPARE_FOR_JUMP },
     icon = "tradinghouse/category_u30_equipment_up",
-    tooltip = GetString(_G.BARSTEWARD_ACTIVE_BAR),
+    tooltip = GetString(BARSTEWARD_ACTIVE_BAR),
     customSettings = {
         [1] = {
             type = "iconpicker",
-            name = GetString(_G.BARSTEWARD_MAIN_BAR_ICON),
+            name = GetString(BARSTEWARD_MAIN_BAR_ICON),
             choices = iconPaths,
             getFunc = function()
                 return BS.Vars.Controls[BS.W_ACTIVE_BAR].MainIcon or BS.Defaults.MainBarIcon
@@ -87,7 +87,7 @@ BS.widgets[BS.W_ACTIVE_BAR] = {
         },
         [2] = {
             type = "iconpicker",
-            name = GetString(_G.BARSTEWARD_BACK_BAR_ICON),
+            name = GetString(BARSTEWARD_BACK_BAR_ICON),
             choices = iconPaths,
             getFunc = function()
                 return BS.Vars.Controls[BS.W_ACTIVE_BAR].BackIcon or BS.Defaults.MainBarIcon
@@ -102,7 +102,7 @@ BS.widgets[BS.W_ACTIVE_BAR] = {
         },
         [3] = {
             type = "colorpicker",
-            name = GetString(_G.BARSTEWARD_MAIN_BAR_TEXT),
+            name = GetString(BARSTEWARD_MAIN_BAR_TEXT),
             getFunc = function()
                 return unpack(BS.Vars.Controls[BS.W_ACTIVE_BAR].MainColour or BS.Vars.DefaultColour)
             end,
@@ -115,7 +115,7 @@ BS.widgets[BS.W_ACTIVE_BAR] = {
         },
         [4] = {
             type = "colorpicker",
-            name = GetString(_G.BARSTEWARD_BACK_BAR_TEXT),
+            name = GetString(BARSTEWARD_BACK_BAR_TEXT),
             getFunc = function()
                 return unpack(BS.Vars.Controls[BS.W_ACTIVE_BAR].BackColour or BS.Vars.DefaultColour)
             end,
@@ -128,7 +128,7 @@ BS.widgets[BS.W_ACTIVE_BAR] = {
         },
         [5] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_WARN_INSTANCE),
+            name = GetString(BARSTEWARD_WARN_INSTANCE),
             getFunc = function()
                 return BS.Vars.Controls[BS.W_ACTIVE_BAR].Warn or false
             end,
@@ -140,7 +140,7 @@ BS.widgets[BS.W_ACTIVE_BAR] = {
         },
         [6] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_WARN_INSTANCE_BACK_BAR),
+            name = GetString(BARSTEWARD_WARN_INSTANCE_BACK_BAR),
             getFunc = function()
                 return BS.Vars.Controls[BS.W_ACTIVE_BAR].WarnOnBackOnly or false
             end,
@@ -222,7 +222,7 @@ BS.widgets[BS.W_SCRYING] = {
     customSettings = {
         [1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_USE_PROGRESS),
+            name = GetString(BARSTEWARD_USE_PROGRESS),
             getFunc = function()
                 return BS.Vars.Controls[BS.W_SCRYING].Progress or false
             end,
@@ -260,7 +260,7 @@ BS.widgets[BS.W_VAMPIRISM] = {
         end
 
         local displayText
-        local text = GetString(_G.BARSTEWARD_NOT_VAMPIRE)
+        local text = GetString(BARSTEWARD_NOT_VAMPIRE)
 
         if (isVampire) then
             text = BS.LC.Format(name)
@@ -299,7 +299,7 @@ BS.widgets[BS.W_VAMPIRISM] = {
     customSettings = {
         [1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_VAMPIRE_STAGE_NUMERIC),
+            name = GetString(BARSTEWARD_VAMPIRE_STAGE_NUMERIC),
             getFunc = function()
                 return BS.Vars.Controls[BS.W_VAMPIRISM].Numeric
             end,
@@ -355,11 +355,11 @@ BS.widgets[BS.W_VAMPIRISM_TIMER] = {
             if (BS.GetVar("Numeric", this)) then
                 local s = ZO_CachedStrFormat("<<R:1>>", stage)
 
-                plainValue = zo_strformat(GetString(_G.BARSTEWARD_VAMPIRE_STAGE_NUMERALS), time, "", s, "xxxx")
-                value = zo_strformat(GetString(_G.BARSTEWARD_VAMPIRE_STAGE_NUMERALS), time, "|cf9f9f9", s, "|r")
+                plainValue = zo_strformat(GetString(BARSTEWARD_VAMPIRE_STAGE_NUMERALS), time, "", s, "xxxx")
+                value = zo_strformat(GetString(BARSTEWARD_VAMPIRE_STAGE_NUMERALS), time, "|cf9f9f9", s, "|r")
             else
-                plainValue = zo_strformat(GetString(_G.BARSTEWARD_VAMPIRE_STAGE), time, "", stage, "xxxx")
-                value = zo_strformat(GetString(_G.BARSTEWARD_VAMPIRE_STAGE), time, "|cf9f9f9", stage, "|r")
+                plainValue = zo_strformat(GetString(BARSTEWARD_VAMPIRE_STAGE), time, "", stage, "xxxx")
+                value = zo_strformat(GetString(BARSTEWARD_VAMPIRE_STAGE), time, "|cf9f9f9", stage, "|r")
             end
         else
             plainValue = time
@@ -368,7 +368,7 @@ BS.widgets[BS.W_VAMPIRISM_TIMER] = {
 
         widget:SetValue(value, plainValue)
 
-        local tt = GetString(_G.BARSTEWARD_VAMPIRE_STAGE_TIMER)
+        local tt = GetString(BARSTEWARD_VAMPIRE_STAGE_TIMER)
 
         if (isVampire) then
             tt = tt .. BS.LF .. BS.COLOURS.White:Colorize(BS.LC.Format(name))
@@ -382,12 +382,12 @@ BS.widgets[BS.W_VAMPIRISM_TIMER] = {
     event = EVENT_EFFECT_CHANGED,
     filter = { [EVENT_EFFECT_CHANGED] = { REGISTER_FILTER_UNIT_TAG, "player" } },
     icon = "icons/store_vampirebite_01",
-    tooltip = GetString(_G.BARSTEWARD_VAMPIRE_STAGE_TIMER),
+    tooltip = GetString(BARSTEWARD_VAMPIRE_STAGE_TIMER),
     hideWhenEqual = 0,
     customSettings = {
         [1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_VAMPIRE_SHOW_STAGE),
+            name = GetString(BARSTEWARD_VAMPIRE_SHOW_STAGE),
             getFunc = function()
                 return BS.Vars.Controls[BS.W_VAMPIRISM_TIMER].ShowStage or false
             end,
@@ -400,7 +400,7 @@ BS.widgets[BS.W_VAMPIRISM_TIMER] = {
         },
         [2] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_VAMPIRE_STAGE_NUMERIC),
+            name = GetString(BARSTEWARD_VAMPIRE_STAGE_NUMERIC),
             getFunc = function()
                 return BS.Vars.Controls[BS.W_VAMPIRISM_TIMER].Numeric
             end,
@@ -463,7 +463,7 @@ BS.widgets[BS.W_VAMPIRISM_FEED_TIMER] = {
         widget:SetColour(colour)
         widget:SetValue(time)
 
-        local tt = GetString(_G.BARSTEWARD_VAMPIRE_FEED_TIMER)
+        local tt = GetString(BARSTEWARD_VAMPIRE_FEED_TIMER)
 
         if (isVampireWithFeed) then
             tt = tt .. BS.LF .. BS.COLOURS.White:Colorize(BS.LC.Format(name))
@@ -481,7 +481,7 @@ BS.widgets[BS.W_VAMPIRISM_FEED_TIMER] = {
     event = EVENT_EFFECT_CHANGED,
     filter = { [EVENT_EFFECT_CHANGED] = { REGISTER_FILTER_UNIT_TAG, "player" } },
     icon = "icons/ability_u26_vampire_synergy_feed",
-    tooltip = GetString(_G.BARSTEWARD_VAMPIRE_FEED_TIMER),
+    tooltip = GetString(BARSTEWARD_VAMPIRE_FEED_TIMER),
     hideWhenEqual = 0
 }
 
@@ -545,7 +545,7 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
         local unslotted = 0
 
         if (#cp > 0) then
-            local ttt = GetString(_G.BARSTEWARD_UNSPENT)
+            local ttt = GetString(BARSTEWARD_UNSPENT)
 
             for _, c in ipairs(cp) do
                 if (ttt ~= "") then
@@ -558,7 +558,7 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
             local emptySlots, foundEmpty = getEmptySlotCount()
 
             if (foundEmpty) then
-                ttt = ttt .. BS.LF .. BS.LF .. GetString(_G.BARSTEWARD_UNSLOTTED)
+                ttt = ttt .. BS.LF .. BS.LF .. GetString(BARSTEWARD_UNSLOTTED)
                 for discipline, empty in pairs(emptySlots) do
                     ttt = ttt .. BS.LF
                     ttt = ttt .. icons[discipline] .. " " .. BS.LC.Format(discipline) .. " - " .. empty
@@ -612,8 +612,8 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
     end,
     customSettings = {
         [1] = {
-            name = GetString(_G.BARSTEWARD_UNSLOTTED_OPTION),
-            tooltip = GetString(_G.BARSTEWARD_UNSLOTTED_TOOLTIP),
+            name = GetString(BARSTEWARD_UNSLOTTED_OPTION),
+            tooltip = GetString(BARSTEWARD_UNSLOTTED_TOOLTIP),
             type = "checkbox",
             getFunc = function()
                 return BS.Vars.Controls[BS.W_CHAMPION_POINTS].ShowUnslottedCount
@@ -626,7 +626,7 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
             default = false
         },
         [2] = {
-            name = GetString(_G.BARSTEWARD_SHOW_UNSPENT),
+            name = GetString(BARSTEWARD_SHOW_UNSPENT),
             type = "checkbox",
             getFunc = function()
                 return BS.Vars.Controls[BS.W_CHAMPION_POINTS].ShowUnspent
@@ -654,7 +654,7 @@ BS.widgets[BS.W_SKILL_POINTS] = {
     end,
     event = { EVENT_PLAYER_ACTIVATED, EVENT_SKILL_POINTS_CHANGED },
     icon = "campaign/campaignbrowser_indexicon_normal_up",
-    tooltip = GetString(_G.BARSTEWARD_SKILL_POINTS),
+    tooltip = GetString(BARSTEWARD_SKILL_POINTS),
     hideWhenEqual = 0,
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
@@ -718,7 +718,7 @@ BS.widgets[BS.W_MUNDUS_STONE] = {
     customSettings = {
         [1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_SHORTEN),
+            name = GetString(BARSTEWARD_SHORTEN),
             getFunc = function()
                 return BS.Vars.Controls[BS.W_MUNDUS_STONE].Shorten or false
             end,

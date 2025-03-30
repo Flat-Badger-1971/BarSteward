@@ -5,7 +5,7 @@
     dv, dc - danger value, danger colour
 ]]
 local x, y = GuiRoot:GetCenter()
-local BS = _G.BarSteward
+local BS = BarSteward
 local cat = BS.CATNAMES
 
 BS.Defaults = {
@@ -32,22 +32,22 @@ BS.Defaults = {
     SnapToGrid = false,
     TimeFormat12 = "hh:m",
     TimeFormat24 = "HH:m",
-    TimeType = GetString(_G.BARSTEWARD_24),
+    TimeType = GetString(BARSTEWARD_24),
     VisibleGridSize = 65,
     Bars = {
         [1] = {
-            Anchor = GetString(_G.BARSTEWARD_MIDDLE),
+            Anchor = GetString(BARSTEWARD_MIDDLE),
             Backdrop = {
                 Show = true,
                 Colour = { 0.23, 0.23, 0.23, 0.7 }
             },
-            Name = GetString(_G.BARSTEWARD_MAIN_BAR),
+            Name = GetString(BARSTEWARD_MAIN_BAR),
             NudgeCompass = false,
-            Orientation = GetString(_G.BARSTEWARD_HORIZONTAL),
+            Orientation = GetString(BARSTEWARD_HORIZONTAL),
             Position = { X = x, Y = y },
             Scale = 1,
-            TooltipAnchor = GetString(_G.BARSTEWARD_BOTTOM),
-            ValueSide = GetString(_G.BARSTEWARD_RIGHT)
+            TooltipAnchor = GetString(BARSTEWARD_BOTTOM),
+            ValueSide = GetString(BARSTEWARD_RIGHT)
         }
     },
     Controls = {
@@ -177,7 +177,7 @@ BS.Defaults = {
             HideWhenFullyUsed = false,
             HideDaysWhenZero = false,
             Timer = true,
-            Units = GetString(_G.BARSTEWARD_HOURS),
+            Units = GetString(BARSTEWARD_HOURS),
             WarningValue = 72
         },
         [BS.W_WOODWORKING] = {
@@ -191,7 +191,7 @@ BS.Defaults = {
             HideWhenFullyUsed = false,
             HideDaysWhenZero = false,
             Timer = true,
-            Units = GetString(_G.BARSTEWARD_HOURS),
+            Units = GetString(BARSTEWARD_HOURS),
             WarningValue = 72
         },
         [BS.W_CLOTHING] = {
@@ -205,7 +205,7 @@ BS.Defaults = {
             HideWhenFullyUsed = false,
             HideDaysWhenZero = false,
             Timer = true,
-            Units = GetString(_G.BARSTEWARD_HOURS),
+            Units = GetString(BARSTEWARD_HOURS),
             WarningValue = 72
         },
         [BS.W_JEWELCRAFTING] = {
@@ -219,7 +219,7 @@ BS.Defaults = {
             HideWhenFullyUsed = false,
             HideDaysWhenZero = false,
             Timer = true,
-            Units = GetString(_G.BARSTEWARD_HOURS),
+            Units = GetString(BARSTEWARD_HOURS),
             WarningValue = 72
         },
         [BS.W_REPAIR_COST] = {
@@ -236,7 +236,7 @@ BS.Defaults = {
             HideSeconds = false,
             HideWhenComplete = false,
             HideWhenFullyUsed = false,
-            Units = GetString(_G.BARSTEWARD_HOURS),
+            Units = GetString(BARSTEWARD_HOURS),
             WarningValue = 6
         },
         [BS.W_RAPPORT] = {
@@ -330,7 +330,7 @@ BS.Defaults = {
             DangerValue = 24,
             HideDaysWhenZero = false,
             Timer = true,
-            Units = GetString(_G.BARSTEWARD_HOURS),
+            Units = GetString(BARSTEWARD_HOURS),
             WarningValue = 72
         },
         [BS.W_SOUL_GEMS] = {
@@ -414,7 +414,7 @@ BS.Defaults = {
             HideSeconds = false,
             HideWhenCompleted = false,
             Timer = true,
-            Units = GetString(_G.BARSTEWARD_HOURS),
+            Units = GetString(BARSTEWARD_HOURS),
             WarningValue = 6
         },
         [BS.W_WEEKLY_ENDEAVOUR_TIME] = {
@@ -425,7 +425,7 @@ BS.Defaults = {
             HideSeconds = false,
             HideWhenCompleted = false,
             Timer = true,
-            Units = GetString(_G.BARSTEWARD_HOURS),
+            Units = GetString(BARSTEWARD_HOURS),
             WarningValue = 72
         },
         [BS.W_COMPANION_LEVEL] = {
@@ -452,7 +452,7 @@ BS.Defaults = {
             HideDaysWhenZero = false,
             HideSeconds = false,
             Timer = true,
-            Units = GetString(_G.BARSTEWARD_HOURS),
+            Units = GetString(BARSTEWARD_HOURS),
             WarningValue = 6
         },
         [BS.W_SHADOWY_VENDOR_TIME] = {
@@ -474,7 +474,7 @@ BS.Defaults = {
             HideDaysWhenZero = true,
             HideSeconds = false,
             Timer = true,
-            Units = GetString(_G.BARSTEWARD_HOURS),
+            Units = GetString(BARSTEWARD_HOURS),
             WarningValue = 6
         },
         [BS.W_WATCHED_ITEMS] = {
@@ -590,7 +590,7 @@ BS.Defaults = {
             DangerValue = 5,
             HideSeconds = false,
             Timer = true,
-            Units = GetString(_G.BARSTEWARD_MINUTES),
+            Units = GetString(BARSTEWARD_MINUTES),
             WarningValue = 10
         },
         [BS.W_VAMPIRISM_FEED_TIMER] = {
@@ -601,7 +601,7 @@ BS.Defaults = {
             HideDaysWhenZero = false,
             HideSeconds = false,
             Timer = true,
-            Units = GetString(_G.BARSTEWARD_MINUTES),
+            Units = GetString(BARSTEWARD_MINUTES),
             WarningValue = 10
         },
         [BS.W_FRAGMENTS] = {
@@ -732,7 +732,7 @@ BS.Defaults = {
             DangerValue = 2,
             HideSeconds = false,
             Timer = true,
-            Units = GetString(_G.BARSTEWARD_MINUTES),
+            Units = GetString(BARSTEWARD_MINUTES),
             WarningValue = 10
         },
         [BS.W_AP_BUFF] = {
@@ -744,7 +744,7 @@ BS.Defaults = {
             HideSeconds = false,
             PvPOnly = false,
             Timer = true,
-            Units = GetString(_G.BARSTEWARD_MINUTES),
+            Units = GetString(BARSTEWARD_MINUTES),
             WarningValue = 10
         },
         [BS.W_XP_BUFF] = {
@@ -755,7 +755,7 @@ BS.Defaults = {
             DangerValue = 2,
             HideSeconds = false,
             Timer = true,
-            Units = GetString(_G.BARSTEWARD_MINUTES),
+            Units = GetString(BARSTEWARD_MINUTES),
             WarningValue = 10
         },
         [BS.W_ALL_CRAFTING] = {
@@ -766,7 +766,7 @@ BS.Defaults = {
             HideSeconds = false,
             HideDaysWhenZero = false,
             Timer = true,
-            Units = GetString(_G.BARSTEWARD_HOURS),
+            Units = GetString(BARSTEWARD_HOURS),
             WarningValue = 72
         },
         [BS.W_DAILY_COUNT] = {
@@ -843,7 +843,7 @@ BS.Defaults = {
             HideSeconds = false,
             Timer = true,
             PvPOnly = false,
-            Units = GetString(_G.BARSTEWARD_MINUTES),
+            Units = GetString(BARSTEWARD_MINUTES),
             WarningValue = 5
         },
         [BS.W_AYLEID_HEALTH] = {
@@ -855,7 +855,7 @@ BS.Defaults = {
             HideSeconds = false,
             Timer = true,
             PvPOnly = false,
-            Units = GetString(_G.BARSTEWARD_MINUTES),
+            Units = GetString(BARSTEWARD_MINUTES),
             WarningValue = 5
         },
         [BS.W_IMPERIAL_FRAGMENTS] = {

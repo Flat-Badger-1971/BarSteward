@@ -1,4 +1,4 @@
-local BS = _G.BarSteward
+local BS = BarSteward
 
 local function needsUpdate(version)
     if (not BS.Vars:GetCommon("Updates", version)) then
@@ -31,7 +31,7 @@ end
 --     end
 
 --     -- update main bar name
---     BS.Vars.Bars[1].Name = GetString(_G.BARSTEWARD_MAIN_BAR)
+--     BS.Vars.Bars[1].Name = GetString(BARSTEWARD_MAIN_BAR)
 
 --     --update widget unit settings
 --     local widgets = BS.Vars.Controls

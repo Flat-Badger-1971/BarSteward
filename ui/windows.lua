@@ -1,4 +1,4 @@
-local BS = _G.BarSteward
+local BS = BarSteward
 
 function BS.CreateAlignmentFrame(alignBars)
     local name = BS.Name .. "_alignment"
@@ -27,7 +27,7 @@ function BS.CreateAlignmentFrame(alignBars)
     frame.heading:SetFont(nameFont)
     frame.heading:SetColor(0.9, 0.9, 0.9, 1)
     frame.heading:SetAnchor(TOPLEFT, frame, TOPLEFT, 50, 80)
-    frame.heading:SetText(GetString(_G.BARSTEWARD_BAR_ALIGN))
+    frame.heading:SetText(GetString(BARSTEWARD_BAR_ALIGN))
     frame.heading:SetDimensions(350)
 
     frame.divider = WINDOW_MANAGER:CreateControl(name .. "_divider", frame, CT_TEXTURE)
@@ -39,25 +39,25 @@ function BS.CreateAlignmentFrame(alignBars)
     frame.alignBar:SetFont("ZoFontGame")
     frame.alignBar:SetColor(0.8, 0.8, 0.6, 1)
     frame.alignBar:SetAnchor(TOPLEFT, frame.divider, TOPLEFT, 50, 30)
-    frame.alignBar:SetText(GetString(_G.BARSTEWARD_ALIGN_BAR))
+    frame.alignBar:SetText(GetString(BARSTEWARD_ALIGN_BAR))
     frame.alignBar:SetDimensions(350)
 
     frame.alignBarValue = BS.CreateComboBox(name .. "_alignBarValue", frame, 200, 32, alignBars, alignBars[1])
     frame.alignBarValue:SetAnchor(TOPLEFT, frame.alignBar, BOTTOMLEFT, 0, 10)
 
     local anchorOptions = {
-        GetString(_G.BARSTEWARD_TOP),
-        GetString(_G.BARSTEWARD_BOTTOM),
-        GetString(_G.BARSTEWARD_LEFT),
-        GetString(_G.BARSTEWARD_RIGHT),
-        GetString(_G.BARSTEWARD_MIDDLE)
+        GetString(BARSTEWARD_TOP),
+        GetString(BARSTEWARD_BOTTOM),
+        GetString(BARSTEWARD_LEFT),
+        GetString(BARSTEWARD_RIGHT),
+        GetString(BARSTEWARD_MIDDLE)
     }
 
     frame.alignAnchor = WINDOW_MANAGER:CreateControl(name .. "_align_anchor", frame, CT_LABEL)
     frame.alignAnchor:SetFont("ZoFontGame")
     frame.alignAnchor:SetColor(0.8, 0.8, 0.6, 1)
     frame.alignAnchor:SetAnchor(TOPLEFT, frame.alignBarValue, BOTTOMLEFT, 0, 10)
-    frame.alignAnchor:SetText(GetString(_G.BARSTEWARD_ALIGN_BAR_ANCHOR))
+    frame.alignAnchor:SetText(GetString(BARSTEWARD_ALIGN_BAR_ANCHOR))
     frame.alignAnchor:SetDimensions(350)
 
     frame.alignBarAnchorValue =
@@ -68,7 +68,7 @@ function BS.CreateAlignmentFrame(alignBars)
     frame.alignRel:SetFont("ZoFontGame")
     frame.alignRel:SetColor(0.8, 0.8, 0.6, 1)
     frame.alignRel:SetAnchor(TOPLEFT, frame.alignBarAnchorValue, BOTTOMLEFT, 0, 10)
-    frame.alignRel:SetText(GetString(_G.BARSTEWARD_ALIGN_RELATIVE))
+    frame.alignRel:SetText(GetString(BARSTEWARD_ALIGN_RELATIVE))
     frame.alignRel:SetDimensions(350)
 
     local relOptions = {}
@@ -77,7 +77,7 @@ function BS.CreateAlignmentFrame(alignBars)
         table.insert(relOptions, bar)
     end
 
-    table.insert(relOptions, GetString(_G.BARSTEWARD_SCREEN))
+    table.insert(relOptions, GetString(BARSTEWARD_SCREEN))
 
     frame.relativeBarValue =
         BS.CreateComboBox(name .. "_relativeBarValue", frame, 200, 32, relOptions, relOptions[2] or relOptions[1])
@@ -87,7 +87,7 @@ function BS.CreateAlignmentFrame(alignBars)
     frame.relAnchor:SetFont("ZoFontGame")
     frame.relAnchor:SetColor(0.8, 0.8, 0.6, 1)
     frame.relAnchor:SetAnchor(TOPLEFT, frame.relativeBarValue, BOTTOMLEFT, 0, 10)
-    frame.relAnchor:SetText(GetString(_G.BARSTEWARD_ALIGN_BAR_ANCHOR))
+    frame.relAnchor:SetText(GetString(BARSTEWARD_ALIGN_BAR_ANCHOR))
     frame.relAnchor:SetDimensions(350)
 
     frame.relativeBarAnchorValue =
@@ -95,7 +95,7 @@ function BS.CreateAlignmentFrame(alignBars)
     frame.relativeBarAnchorValue:SetAnchor(TOPLEFT, frame.relAnchor, BOTTOMLEFT, 0, 10)
 
     frame.button = BS.CreateButton(name .. "_button", frame, 100, 32)
-    frame.button:SetText(GetString(_G.BARSTEWARD_BUTTON_ALIGN))
+    frame.button:SetText(GetString(BARSTEWARD_BUTTON_ALIGN))
     frame.button:SetAnchor(TOPLEFT, frame.relativeBarAnchorValue, BOTTOMLEFT, 0, 40)
 
     local onClick = function()
@@ -112,7 +112,7 @@ function BS.CreateAlignmentFrame(alignBars)
         local bars = BS.Vars.Bars
         local alignBar, relBar
 
-        if (relBarName == GetString(_G.BARSTEWARD_SCREEN)) then
+        if (relBarName == GetString(BARSTEWARD_SCREEN)) then
             relBar = GuiRoot
         end
 
@@ -198,7 +198,7 @@ function BS.CreateLockButton()
     BS.lock.button:SetNormalTexture("/esoui/art/buttons/button_xlarge_mouseup.dds")
     BS.lock.button:SetPressedTexture("/esoui/art/buttons/button_xlarge_mousedown.dds")
     BS.lock.button:SetMouseOverTexture("/esoui/art/buttons/button_xlarge_mouseover.dds")
-    BS.lock.button:SetClickSound(_G.SOUNDS.MENU_BAR_CLICK)
+    BS.lock.button:SetClickSound(SOUNDS.MENU_BAR_CLICK)
     BS.lock.button:SetHandler(
         "OnClicked",
         function()
@@ -223,7 +223,7 @@ function BS.CreateLockButton()
     BS.lock.label = WINDOW_MANAGER:CreateControl(name .. "_label", BS.lock, CT_LABEL)
     BS.lock.label:SetFont("${BOLD_FONT}|36|soft-shadow-thick")
     BS.lock.label:SetColor(0.8, 0.8, 0.8, 1)
-    BS.lock.label:SetText(icon .. " " .. GetString(_G.BARSTEWARD_LOCK_FRAMES))
+    BS.lock.label:SetText(icon .. " " .. GetString(BARSTEWARD_LOCK_FRAMES))
     BS.lock.label:SetDimensions(BS.lock:GetWidth(), 50)
     BS.lock.label:SetAnchor(CENTER, BS.lock, CENTER, 0, -30)
     BS.lock.label:SetHorizontalAlignment(TEXT_ALIGN_CENTER)
@@ -362,7 +362,7 @@ function BS.CreateWidgetOrderTool(bars)
     frame.heading:SetFont(nameFont)
     frame.heading:SetColor(0.9, 0.9, 0.9, 1)
     frame.heading:SetAnchor(TOPLEFT, frame, TOPLEFT, 50, 80)
-    frame.heading:SetText(GetString(_G.BARSTEWARD_WIDGET_ORDERING))
+    frame.heading:SetText(GetString(BARSTEWARD_WIDGET_ORDERING))
     frame.heading:SetDimensions(350, 24)
 
     frame.divider = WINDOW_MANAGER:CreateControl(nil, frame, CT_TEXTURE)
@@ -374,7 +374,7 @@ function BS.CreateWidgetOrderTool(bars)
     frame.bar:SetFont("ZoFontGame")
     frame.bar:SetColor(0.8, 0.8, 0.6, 1)
     frame.bar:SetAnchor(TOPLEFT, frame.divider, TOPLEFT, 50, 30)
-    frame.bar:SetText(GetString(_G.BARSTEWARD_BAR))
+    frame.bar:SetText(GetString(BARSTEWARD_BAR))
     frame.bar:SetDimensions(350)
 
     local function comboCallback(value)
@@ -418,7 +418,7 @@ function BS.CreateWidgetOrderTool(bars)
     frame.scrollList:SetAnchor(TOPLEFT, frame.divider2, BOTTOMLEFT, 50, 10)
 
     frame.button = BS.CreateButton(nil, frame, 100, 32)
-    frame.button:SetText(GetString(_G.BARSTEWARD_REORDER))
+    frame.button:SetText(GetString(BARSTEWARD_REORDER))
     frame.button:SetAnchor(TOPLEFT, frame.scrollList, BOTTOMLEFT, 0, 40)
 
     local onClick = function()
@@ -628,7 +628,7 @@ local function CreateTool(heading, toolName, varName, setupFunc, guild)
     BS[toolName .. "Update"](frame.scrollList)
 
     frame.button = BS.CreateButton(name .. "_button", frame, 100, 32)
-    frame.button:SetText(GetString(_G.BARSTEWARD_OK_COLOUR))
+    frame.button:SetText(GetString(BARSTEWARD_OK_COLOUR))
     frame.button:SetAnchor(TOPRIGHT, frame.scrollList, BOTTOMRIGHT, 0, 5)
     frame.button:SetHandler(
         "OnClicked",
@@ -644,7 +644,7 @@ local function CreateTool(heading, toolName, varName, setupFunc, guild)
     )
 
     frame.selectAll = BS.CreateButton(name .. "_select_all", frame, 100, 32)
-    frame.selectAll:SetText(GetString(_G.BARSTEWARD_SELECT_ALL))
+    frame.selectAll:SetText(GetString(BARSTEWARD_SELECT_ALL))
     frame.selectAll:SetAnchor(TOPLEFT, frame.scrollList, BOTTOMLEFT, 0, 5)
     frame.selectAll:SetHandler(
         "OnClicked",
@@ -665,7 +665,7 @@ local function CreateTool(heading, toolName, varName, setupFunc, guild)
     )
 
     frame.selectNone = BS.CreateButton(name .. "_select_none", frame, 100, 32)
-    frame.selectNone:SetText(GetString(_G.BARSTEWARD_SELECT_NONE))
+    frame.selectNone:SetText(GetString(BARSTEWARD_SELECT_NONE))
     frame.selectNone:SetAnchor(LEFT, frame.selectAll, RIGHT, 10, 0)
     frame.selectNone:SetHandler(
         "OnClicked",
@@ -693,7 +693,7 @@ local function CreateTool(heading, toolName, varName, setupFunc, guild)
 end
 
 function BS.CreateFriendsTool()
-    return CreateTool(GetString(_G.BARSTEWARD_ANNOUNCEMENT_FRIEND), "Friends", "FriendAnnounce", setupFriendsDataRow)
+    return CreateTool(GetString(BARSTEWARD_ANNOUNCEMENT_FRIEND), "Friends", "FriendAnnounce", setupFriendsDataRow)
 end
 
 -- guild friends
@@ -781,7 +781,7 @@ end
 function BS.CreateGuildFriendsTool()
     local tool =
         CreateTool(
-            GetString(_G.BARSTEWARD_GUILD_FRIENDS_MONITORING),
+            GetString(BARSTEWARD_GUILD_FRIENDS_MONITORING),
             "GuildFriends",
             "GuildFriendAnnounce",
             setupGuildFriendsDataRow,
@@ -820,7 +820,7 @@ function BS.CreateExportFrame()
     frame.heading:SetFont(nameFont)
     frame.heading:SetColor(1, 0.39, 0, 1)
     frame.heading:SetAnchor(TOPLEFT, frame, TOPLEFT, 50, 80)
-    frame.heading:SetText(GetString(_G.BARSTEWARD_EXPORT_BAR))
+    frame.heading:SetText(GetString(BARSTEWARD_EXPORT_BAR))
     frame.heading:SetDimensions(350, 24)
 
     frame.divider = WINDOW_MANAGER:CreateControl(name .. "_divider", frame, CT_TEXTURE)
@@ -831,7 +831,7 @@ function BS.CreateExportFrame()
     frame.note = WINDOW_MANAGER:CreateControl(name .. "_note", frame, CT_LABEL)
     frame.note:SetFont("ZoFontGame")
     frame.note:SetAnchor(TOPLEFT, frame.divider, BOTTOMLEFT, 30, 10)
-    frame.note:SetText(GetString(_G.BARSTEWARD_COPY))
+    frame.note:SetText(GetString(BARSTEWARD_COPY))
     frame.note:SetDimensions(430, 75)
 
     frame.background = WINDOW_MANAGER:CreateControlFromVirtual(nil, frame, "ZO_EditBackdrop")
@@ -851,7 +851,7 @@ function BS.CreateExportFrame()
     frame.error:SetHorizontalAlignment(TEXT_ALIGN_CENTER)
 
     frame.import = BS.CreateButton(name .. "_import", frame, 100, 32)
-    frame.import:SetText(GetString(_G.BARSTEWARD_IMPORT))
+    frame.import:SetText(GetString(BARSTEWARD_IMPORT))
     frame.import:SetAnchor(BOTTOMLEFT, frame, BOTTOMLEFT, 20, -200)
     frame.import:SetHandler(
         "OnClicked",
@@ -864,7 +864,7 @@ function BS.CreateExportFrame()
     frame.replace:SetDimensions(32, 32)
     frame.replace:SetAnchor(LEFT, frame.import, RIGHT, 20, -2)
 
-    ZO_CheckButton_SetLabelText(frame.replace, GetString(_G.BARSTEWARD_MAIN_BAR_REPLACE))
+    ZO_CheckButton_SetLabelText(frame.replace, GetString(BARSTEWARD_MAIN_BAR_REPLACE))
     ZO_CheckButtonLabel_SetTextColor(frame.replace, 1, 0, 0)
     ZO_CheckButtonLabel_SetDefaultColors(
         frame.replace:GetNamedChild("Label"),
@@ -994,7 +994,7 @@ function BS.CreateCopyFrame()
     frame.heading:SetFont(nameFont)
     frame.heading:SetColor(1, 0.39, 0, 1)
     frame.heading:SetAnchor(TOPLEFT, frame, TOPLEFT, 50, 80)
-    frame.heading:SetText(GetString(_G.BARSTEWARD_COPY_SETTINGS))
+    frame.heading:SetText(GetString(BARSTEWARD_COPY_SETTINGS))
     frame.heading:SetDimensions(350, 24)
 
     frame.divider = WINDOW_MANAGER:CreateControl(name .. "_divider", frame, CT_TEXTURE)
@@ -1040,7 +1040,7 @@ function BS.CreateCopyFrame()
     frame.serverlabel:SetFont("$(MEDIUM_FONT)|$(KB_18)|$(soft-shadow-fix)")
     frame.serverlabel:SetColor(0.98, 0.98, 0.98, 1)
     frame.serverlabel:SetAnchor(TOPLEFT, frame.fromlabel, BOTTOMLEFT, 10, 20)
-    frame.serverlabel:SetText(GetString(_G.BARSTEWARD_SERVER))
+    frame.serverlabel:SetText(GetString(BARSTEWARD_SERVER))
     frame.serverlabel:SetDimensions(100, 24)
 
     frame.servers = BS.CreateComboBox(name .. "_server", frame, 250, 32, servers, servers[1], serverSelected)
@@ -1083,7 +1083,7 @@ function BS.CreateCopyFrame()
     frame.thisaccount:SetDimensions(24, 24)
     frame.thisaccount:SetAnchor(TOPLEFT, frame.tolabel, LEFT, 10, 20)
 
-    ZO_CheckButton_SetLabelText(frame.thisaccount, GetString(_G.BARSTEWARD_THIS_ACCOUNT))
+    ZO_CheckButton_SetLabelText(frame.thisaccount, GetString(BARSTEWARD_THIS_ACCOUNT))
 
     local function onAccountClicked(_, checked)
         BS.selectedAccountOption = checked
@@ -1103,7 +1103,7 @@ function BS.CreateCopyFrame()
     frame.thischaracter:SetDimensions(24, 24)
     frame.thischaracter:SetAnchor(LEFT, frame.thisaccount, LEFT, 225, 0)
 
-    ZO_CheckButton_SetLabelText(frame.thischaracter, GetString(_G.BARSTEWARD_THIS_CHARACTER))
+    ZO_CheckButton_SetLabelText(frame.thischaracter, GetString(BARSTEWARD_THIS_CHARACTER))
 
     local function onCharacterClicked(_, checked)
         BS.selectedCharacterOption = checked
@@ -1128,7 +1128,7 @@ function BS.CreateCopyFrame()
     frame.warning:SetFont("$(MEDIUM_FONT)|$(KB_18)|$(soft-shadow-fix)")
     frame.warning:SetColor(1, 1, 0, 1)
     frame.warning:SetAnchor(TOPLEFT, frame.thisaccount, BOTTOMLEFT, -10, 20)
-    frame.warning:SetText(GetString(_G.BARSTEWARD_SETTINGS))
+    frame.warning:SetText(GetString(BARSTEWARD_SETTINGS))
     frame.warning:SetDimensions(390, 72)
 
     frame.close = BS.CreateButton(name .. "_close", frame, 100, 32)

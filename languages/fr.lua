@@ -1,5 +1,4 @@
 -- French localisation
--- luacheck: push ignore 631
 local L = function(t, v)
     ZO_CreateStringId("BARSTEWARD_" .. t, v)
 end
@@ -477,4 +476,3 @@ L("UNTRACK", "Désuivre avec Bar Steward")
 
 -- Search
 L("DOUBLE_CLICK", "(double-cliquez pour localiser)")
--- luacheck: pop

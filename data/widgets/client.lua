@@ -1,4 +1,4 @@
-local BS = _G.BarSteward
+local BS = BarSteward
 local startButton = BS.Icon("buttons/rightarrow_up", "00ff00", 16, 16)
 local stopButton = BS.Icon("buttons/gamepad/console-widget-checkbox", "ff0000", 16, 16)
 local timerFunctions = {}
@@ -38,7 +38,7 @@ local function getTimers()
         if (BS.Vars[string.format("Timer%dEnabled", timer)]) then
             local timerValue = BS.Vars[string.format("Timer%dTime", timer)] or "0:00"
             local index = 0
-            local defaultName = ZO_CachedStrFormat(_G.BARSTEWARD_TIMER, ZO_CachedStrFormat("<<n:1>>", timer))
+            local defaultName = ZO_CachedStrFormat(BARSTEWARD_TIMER, ZO_CachedStrFormat("<<n:1>>", timer))
             local timerName = BS.Vars[string.format("Timer%dName", timer)] or defaultName
 
             if (timerName == "") then
@@ -72,7 +72,7 @@ local function getTimers()
 
     if (added == 0) then
         AddMenuItem(
-            BS.LC.Format(_G.BARSTEWARD_TIMER_NONE),
+            BS.LC.Format(BARSTEWARD_TIMER_NONE),
             function()
                 BS.LAM:OpenToPanel(BS.OptionsPanel)
             end
@@ -81,7 +81,7 @@ local function getTimers()
 end
 
 local note =
-    "|cffff00" .. BS.LC.Format(_G.BARSTEWARD_TIMER_NOTE) .. BS.LF .. BS.LC.Format(_G.BARSTEWARD_TIMER_WARNING) .. "|r"
+    "|cffff00" .. BS.LC.Format(BARSTEWARD_TIMER_NOTE) .. BS.LF .. BS.LC.Format(BARSTEWARD_TIMER_WARNING) .. "|r"
 local timers = {
     [1] = {
         type = "description",
@@ -98,7 +98,7 @@ do
     for timer = 1, BS.MAX_TIMERS do
         timers[timer + 1] = {
             type = "submenu",
-            name = ZO_CachedStrFormat(_G.BARSTEWARD_TIMER, ZO_CachedStrFormat("<<n:1>>", timer)),
+            name = ZO_CachedStrFormat(BARSTEWARD_TIMER, ZO_CachedStrFormat("<<n:1>>", timer)),
             controls = {
                 [1] = {
                     type = "checkbox",
@@ -113,7 +113,7 @@ do
                 },
                 [2] = {
                     type = "editbox",
-                    name = ZO_CachedStrFormat(_G.BARSTEWARD_TIMER, ZO_CachedStrFormat("<<n:1>>", timer)),
+                    name = ZO_CachedStrFormat(BARSTEWARD_TIMER, ZO_CachedStrFormat("<<n:1>>", timer)),
                     getFunc = function()
                         return BS.Vars[string.format("Timer%dTime", timer)] or "0:00"
                     end,
@@ -130,7 +130,7 @@ do
                     name = BS.LC.Format(SI_ADDON_MANAGER_NAME),
                     getFunc = function()
                         return BS.Vars[string.format("Timer%dName", timer)] or
-                            ZO_CachedStrFormat(_G.BARSTEWARD_TIMER, ZO_CachedStrFormat("<<n:1>>", timer))
+                            ZO_CachedStrFormat(BARSTEWARD_TIMER, ZO_CachedStrFormat("<<n:1>>", timer))
                     end,
                     setFunc = function(value)
                         BS.Vars[string.format("Timer%dName", timer)] = value
@@ -142,7 +142,7 @@ do
                 },
                 [4] = {
                     type = "dropdown",
-                    name = GetString(_G.BARSTEWARD_SOUND),
+                    name = GetString(BARSTEWARD_SOUND),
                     choices = BS.SoundChoices,
                     getFunc = function()
                         return BS.Vars[string.format("Timer%dSound", timer)]
@@ -164,7 +164,7 @@ end
 
 local function getMoonPhaseIcon()
     if (BS.LibClock) then
-        local constants = _G.LibClockTST.CONSTANTS()
+        local constants = LibClockTST.CONSTANTS()
         local moonInfo = BS.LibClock:GetMoon()
 
         for idx, data in ipairs(constants.moon.phasesPercentage) do
@@ -190,7 +190,7 @@ BS.widgets = {
             local format = BS.GetVar("TimeFormat24")
             local this = BS.W_TIME
 
-            if (BS.GetVar("TimeType") == GetString(_G.BARSTEWARD_12)) then
+            if (BS.GetVar("TimeType") == GetString(BARSTEWARD_12)) then
                 format = BS.GetVar("TimeFormat12")
             end
 
@@ -201,7 +201,7 @@ BS.widgets = {
 
             widget:SetTooltip(
                 BS.LC.Format(SI_TRADINGHOUSELISTINGSORTTYPE0) ..
-                BS.LF .. BS.COLOURS.White:Colorize(BS.LC.Format(_G.BARSTEWARD_TIMER_TIP))
+                BS.LF .. BS.COLOURS.White:Colorize(BS.LC.Format(BARSTEWARD_TIMER_TIP))
             )
 
             return widget:GetValue()
@@ -217,7 +217,7 @@ BS.widgets = {
         customSettings = {
             [1] = {
                 type = "submenu",
-                name = "|c34cceb" .. BS.LC.Format(_G.BARSTEWARD_TIMERS) .. "|r",
+                name = "|c34cceb" .. BS.LC.Format(BARSTEWARD_TIMERS) .. "|r",
                 controls = timers
             }
         }
@@ -244,12 +244,12 @@ BS.widgets = {
                 return "champion/actionbar/champion_bar_combat_selection"
             end
         end,
-        tooltip = GetString(_G.BARSTEWARD_FPS),
+        tooltip = GetString(BARSTEWARD_FPS),
         customSettings = {
             [1] = {
                 type = "checkbox",
-                name = GetString(_G.BARSTEWARD_SHOW_TEXT),
-                tooltip = GetString(_G.BARSTEWARD_SHOW_TEXT_TOOLTIP),
+                name = GetString(BARSTEWARD_SHOW_TEXT),
+                tooltip = GetString(BARSTEWARD_SHOW_TEXT_TOOLTIP),
                 getFunc = function()
                     return BS.GetVar("ShowText", BS.W_FPS)
                 end,
@@ -262,7 +262,7 @@ BS.widgets = {
             },
             [2] = {
                 type = "checkbox",
-                name = GetString(_G.BARSTEWARD_FIXED_WIDTH),
+                name = GetString(BARSTEWARD_FIXED_WIDTH),
                 getFunc = function()
                     return BS.Vars.Controls[BS.W_FPS].FixedWidth or false
                 end,
@@ -304,11 +304,11 @@ BS.widgets = {
         end,
         timer = 1000,
         icon = "Campaign/campaignBrowser_hiPop",
-        tooltip = GetString(_G.BARSTEWARD_LATENCY),
+        tooltip = GetString(BARSTEWARD_LATENCY),
         customSettings = {
             [1] = {
                 type = "checkbox",
-                name = GetString(_G.BARSTEWARD_FIXED_WIDTH),
+                name = GetString(BARSTEWARD_FIXED_WIDTH),
                 getFunc = function()
                     return BS.Vars.Controls[BS.W_LATENCY].FixedWidth or false
                 end,
@@ -346,9 +346,9 @@ BS.widgets = {
         end,
         timer = 5000,
         icon = "enchanting/enchanting_highlight",
-        tooltip = GetString(_G.BARSTEWARD_MEMORY),
+        tooltip = GetString(BARSTEWARD_MEMORY),
         customOptions = {
-            name = GetString(_G.BARSTEWARD_DECIMAL_PLACES),
+            name = GetString(BARSTEWARD_DECIMAL_PLACES),
             choices = { 0, 1, 2, 3 },
             varName = "Precision",
             refresh = true,
@@ -363,7 +363,7 @@ BS.widgets = {
             local this = BS.W_TAMRIEL_TIME
             local format = BS.GetVar("TimeFormat24", this) or BS.Defaults.TimeFormat24
 
-            if ((BS.GetVar("TimeType", this) or BS.Defaults.TimeType) == GetString(_G.BARSTEWARD_12)) then
+            if ((BS.GetVar("TimeType", this) or BS.Defaults.TimeType) == GetString(BARSTEWARD_12)) then
                 format = BS.GetVar("TimeFormat12", this) or BS.Defaults.TimeFormat12
             end
 
@@ -383,7 +383,7 @@ BS.widgets = {
             return not BS.LibClock
         end,
         timer = 1000,
-        tooltip = GetString(_G.BARSTEWARD_TAMRIEL_TIME),
+        tooltip = GetString(BARSTEWARD_TAMRIEL_TIME),
         icon = "BarSteward/assets/moon/5.dds"
     },
     [BS.W_SERVER] = {
@@ -399,7 +399,7 @@ BS.widgets = {
             return server
         end,
         event = EVENT_PLAYER_ACTIVATED,
-        tooltip = GetString(_G.BARSTEWARD_SERVER),
+        tooltip = GetString(BARSTEWARD_SERVER),
         icon = "login/link_loginlogo_eso"
     }
 }

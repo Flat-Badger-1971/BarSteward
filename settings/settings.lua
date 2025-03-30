@@ -1,6 +1,6 @@
-local BS = _G.BarSteward
+local BS = BarSteward
 
-BS.LAM = _G.LibAddonMenu2
+BS.LAM = LibAddonMenu2
 
 BS.SoundLastPlayed = {}
 
@@ -30,7 +30,7 @@ local function initialise()
     BS.options[#BS.options + 1] = BS.Vars:AddAccountSettingsCheckbox()
     BS.options[#BS.options + 1] = {
         type = "checkbox",
-        name = GetString(_G.BARSTEWARD_MOVEFRAME),
+        name = GetString(BARSTEWARD_MOVEFRAME),
         getFunc = function()
             return BS.Vars.Movable
         end,
@@ -44,7 +44,7 @@ local function initialise()
 
     BS.options[#BS.options + 1] = {
         type = "checkbox",
-        name = GetString(_G.BARSTEWARD_SNAP),
+        name = GetString(BARSTEWARD_SNAP),
         getFunc = function()
             return BS.Vars.SnapToGrid
         end,
@@ -57,7 +57,7 @@ local function initialise()
 
     BS.options[#BS.options + 1] = {
         type = "slider",
-        name = GetString(_G.BARSTEWARD_GRID_SIZE),
+        name = GetString(BARSTEWARD_GRID_SIZE),
         min = 2,
         max = 50,
         getFunc = function()
@@ -74,7 +74,7 @@ local function initialise()
 
     BS.options[#BS.options + 1] = {
         type = "slider",
-        name = GetString(_G.BARSTEWARD_GRID_SIZE_VISIBLE),
+        name = GetString(BARSTEWARD_GRID_SIZE_VISIBLE),
         min = 30,
         max = 100,
         getFunc = function()
@@ -92,7 +92,7 @@ local function initialise()
 
     BS.options[#BS.options + 1] = {
         type = "checkbox",
-        name = GetString(_G.BARSTEWARD_SHOW_GRID),
+        name = GetString(BARSTEWARD_SHOW_GRID),
         getFunc = function()
             return BS.ShowGridSetting or false
         end,
@@ -106,7 +106,7 @@ local function initialise()
 
     BS.options[#BS.options + 1] = {
         type = "dropdown",
-        name = GetString(_G.BARSTEWARD_FONT),
+        name = GetString(BARSTEWARD_FONT),
         choices = fontNames,
         getFunc = function()
             return BS.Vars.Font
@@ -115,14 +115,14 @@ local function initialise()
             BS.Vars.Font = value
 
             BS.RegenerateAllBars()
-            _G.BarSteward_SampleText.desc:SetFont(BS.GetFont({ Font = value }))
+            BarSteward_SampleText.desc:SetFont(BS.GetFont({ Font = value }))
         end,
         default = BS.Defaults.Font
     }
 
     BS.options[#BS.options + 1] = {
         type = "dropdown",
-        name = GetString(_G.BARSTEWARD_FONT_STYLE),
+        name = GetString(BARSTEWARD_FONT_STYLE),
         choices = fontStyles,
         getFunc = function()
             return BS.Vars.FontStyle
@@ -131,14 +131,14 @@ local function initialise()
             BS.Vars.FontStyle = value
 
             BS.RegenerateAllBars()
-            _G.BarSteward_SampleText.desc:SetFont(BS.GetFont({ Style = value }))
+            BarSteward_SampleText.desc:SetFont(BS.GetFont({ Style = value }))
         end,
         default = BS.Defaults.FontStyle
     }
 
     BS.options[#BS.options + 1] = {
         type = "slider",
-        name = GetString(_G.BARSTEWARD_FONT_SIZE),
+        name = GetString(BARSTEWARD_FONT_SIZE),
         min = 8,
         max = 32,
         getFunc = function()
@@ -148,7 +148,7 @@ local function initialise()
             BS.Vars.FontSize = value
 
             BS.RegenerateAllBars()
-            _G.BarSteward_SampleText.desc:SetFont(BS.GetFont({ Size = value }))
+            BarSteward_SampleText.desc:SetFont(BS.GetFont({ Size = value }))
         end,
         default = BS.Defaults.FontSize
     }
@@ -156,9 +156,9 @@ local function initialise()
     BS.options[#BS.options + 1] = {
         type = "description",
         text = function()
-            _G.BarSteward_SampleText.desc:SetFont(BS.GetFont())
+            BarSteward_SampleText.desc:SetFont(BS.GetFont())
 
-            return "|c009933" .. GetString(_G.BARSTEWARD_SAMPLE) .. "|r"
+            return "|c009933" .. GetString(BARSTEWARD_SAMPLE) .. "|r"
         end,
         width = "full",
         reference = "BarSteward_SampleText"
@@ -166,8 +166,8 @@ local function initialise()
 
     BS.options[#BS.options + 1] = {
         type = "checkbox",
-        name = GetString(_G.BARSTEWARD_USE_FONT_CORRECTION),
-        tooltip = GetString(_G.BARSTEWARD_USE_FONT_CORRECTION_TOOLTIP),
+        name = GetString(BARSTEWARD_USE_FONT_CORRECTION),
+        tooltip = GetString(BARSTEWARD_USE_FONT_CORRECTION_TOOLTIP),
         getFunc = function()
             return BS.Vars.FontCorrection
         end,
@@ -180,7 +180,7 @@ local function initialise()
 
     BS.options[#BS.options + 1] = {
         type = "checkbox",
-        name = GetString(_G.BARSTEWARD_HIDE_MOUSE),
+        name = GetString(BARSTEWARD_HIDE_MOUSE),
         getFunc = function()
             return BS.Vars.HideMouse or false
         end,
@@ -193,8 +193,8 @@ local function initialise()
 
     BS.options[#BS.options + 1] = {
         type = "checkbox",
-        name = GetString(_G.BARSTEWARD_CRIME_ONLY_DETECTION),
-        tooltip = GetString(_G.BARSTEWARD_CRIME_ONLY_TOOLTIP),
+        name = GetString(BARSTEWARD_CRIME_ONLY_DETECTION),
+        tooltip = GetString(BARSTEWARD_CRIME_ONLY_TOOLTIP),
         getFunc = function()
             return BS.Vars.CheckCrime or false
         end,
@@ -208,7 +208,7 @@ local function initialise()
 
     BS.options[#BS.options + 1] = {
         type = "checkbox",
-        name = GetString(_G.BARSTEWARD_HIDE_DURING_COMBAT),
+        name = GetString(BARSTEWARD_HIDE_DURING_COMBAT),
         getFunc = function()
             return BS.Vars.HideDuringCombat or false
         end,
@@ -221,7 +221,7 @@ local function initialise()
 
     BS.options[#BS.options + 1] = {
         type = "checkbox",
-        name = GetString(_G.BARSTEWARD_HIDE_WHEN_DEAD),
+        name = GetString(BARSTEWARD_HIDE_WHEN_DEAD),
         getFunc = function()
             return BS.Vars.HideWhenDead or false
         end,
@@ -239,7 +239,7 @@ local function initialise()
 
     BS.options[#BS.options + 1] = {
         type = "button",
-        name = GetString(_G.BARSTEWARD_ALIGN_BARS),
+        name = GetString(BARSTEWARD_ALIGN_BARS),
         func = function()
             local frame = BS.frame or BS.CreateAlignmentFrame(BS.alignBars)
             SCENE_MANAGER:Show("hudui")
@@ -251,7 +251,7 @@ local function initialise()
 
     BS.options[#BS.options + 1] = {
         type = "button",
-        name = GetString(_G.BARSTEWARD_REORDER_WIDGETS),
+        name = GetString(BARSTEWARD_REORDER_WIDGETS),
         func = function()
             local frame = BS.w_order or BS.CreateWidgetOrderTool(BS.alignBars)
             SCENE_MANAGER:Show("hudui")
@@ -263,7 +263,7 @@ local function initialise()
 
     BS.options[#BS.options + 1] = {
         type = "button",
-        name = GetString(_G.BARSTEWARD_COPY_SETTINGS),
+        name = GetString(BARSTEWARD_COPY_SETTINGS),
         func = function()
             local frame = BS.CopyFrame or BS.CreateCopyFrame()
             SCENE_MANAGER:Show("hudui")
@@ -300,15 +300,15 @@ function BS.NewBar()
     local x, y = GuiRoot:GetCenter()
 
     BS.Vars.Bars[newBarId] = {
-        Orientation = GetString(_G.BARSTEWARD_HORIZONTAL),
+        Orientation = GetString(BARSTEWARD_HORIZONTAL),
         Position = { X = x, Y = y },
         Name = name,
         Backdrop = {
             Show = true,
             Colour = { 0.23, 0.23, 0.23, 0.7 }
         },
-        TooltipAnchor = GetString(_G.BARSTEWARD_BOTTOM),
-        ValueSide = GetString(_G.BARSTEWARD_RIGHT)
+        TooltipAnchor = GetString(BARSTEWARD_BOTTOM),
+        ValueSide = GetString(BARSTEWARD_RIGHT)
     }
 
     ZO_Dialogs_ShowDialog(BS.Name .. "Reload")
@@ -381,7 +381,7 @@ local function getBarSettings()
 
     BS.options[#BS.options + 1] = {
         type = "header",
-        name = GetString(_G.BARSTEWARD_BARS),
+        name = GetString(BARSTEWARD_BARS),
         width = "full"
     }
 
@@ -390,8 +390,8 @@ local function getBarSettings()
         local controls = {
             [1] = {
                 type = "dropdown",
-                name = GetString(_G.BARSTEWARD_ORIENTATION),
-                choices = { GetString(_G.BARSTEWARD_HORIZONTAL), GetString(_G.BARSTEWARD_VERTICAL) },
+                name = GetString(BARSTEWARD_ORIENTATION),
+                choices = { GetString(BARSTEWARD_HORIZONTAL), GetString(BARSTEWARD_VERTICAL) },
                 getFunc = function()
                     return vars.Orientation
                 end,
@@ -404,7 +404,7 @@ local function getBarSettings()
             },
             [2] = {
                 type = "checkbox",
-                name = GetString(_G.BARSTEWARD_SHOW_BACKDROP),
+                name = GetString(BARSTEWARD_SHOW_BACKDROP),
                 getFunc = function()
                     return vars.Backdrop.Show
                 end,
@@ -416,7 +416,7 @@ local function getBarSettings()
             },
             [3] = {
                 type = "colorpicker",
-                name = GetString(_G.BARSTEWARD_BACKDROP_COLOUR),
+                name = GetString(BARSTEWARD_BACKDROP_COLOUR),
                 getFunc = function()
                     return unpack(vars.Backdrop.Colour)
                 end,
@@ -432,7 +432,7 @@ local function getBarSettings()
             },
             [4] = {
                 type = "dropdown",
-                name = GetString(_G.BARSTEWARD_BACKGROUND_STYLE),
+                name = GetString(BARSTEWARD_BACKGROUND_STYLE),
                 choices = backgroundNames,
                 getFunc = function()
                     if ((vars.Background or 99) == 99) then
@@ -466,7 +466,7 @@ local function getBarSettings()
             },
             [5] = {
                 type = "dropdown",
-                name = GetString(_G.BARSTEWARD_BORDER_STYLE),
+                name = GetString(BARSTEWARD_BORDER_STYLE),
                 choices = borderNames,
                 getFunc = function()
                     if ((vars.Border or 99) == 99) then
@@ -510,12 +510,12 @@ local function getBarSettings()
             },
             [6] = {
                 type = "dropdown",
-                name = GetString(_G.BARSTEWARD_TOOLTIP_ANCHOR),
+                name = GetString(BARSTEWARD_TOOLTIP_ANCHOR),
                 choices = {
-                    GetString(_G.BARSTEWARD_LEFT),
-                    GetString(_G.BARSTEWARD_RIGHT),
-                    GetString(_G.BARSTEWARD_TOP),
-                    GetString(_G.BARSTEWARD_BOTTOM)
+                    GetString(BARSTEWARD_LEFT),
+                    GetString(BARSTEWARD_RIGHT),
+                    GetString(BARSTEWARD_TOP),
+                    GetString(BARSTEWARD_BOTTOM)
                 },
                 getFunc = function()
                     return vars.TooltipAnchor
@@ -528,10 +528,10 @@ local function getBarSettings()
             },
             [7] = {
                 type = "dropdown",
-                name = GetString(_G.BARSTEWARD_VALUE_SIDE),
+                name = GetString(BARSTEWARD_VALUE_SIDE),
                 choices = {
-                    GetString(_G.BARSTEWARD_LEFT),
-                    GetString(_G.BARSTEWARD_RIGHT)
+                    GetString(BARSTEWARD_LEFT),
+                    GetString(BARSTEWARD_RIGHT)
                 },
                 getFunc = function()
                     return vars.ValueSide
@@ -544,14 +544,14 @@ local function getBarSettings()
             },
             [8] = {
                 type = "dropdown",
-                name = GetString(_G.BARSTEWARD_BAR_ANCHOR),
+                name = GetString(BARSTEWARD_BAR_ANCHOR),
                 choices = {
-                    GetString(_G.BARSTEWARD_LEFT),
-                    GetString(_G.BARSTEWARD_RIGHT),
-                    GetString(_G.BARSTEWARD_MIDDLE)
+                    GetString(BARSTEWARD_LEFT),
+                    GetString(BARSTEWARD_RIGHT),
+                    GetString(BARSTEWARD_MIDDLE)
                 },
                 getFunc = function()
-                    return vars.Anchor or GetString(_G.BARSTEWARD_MIDDLE)
+                    return vars.Anchor or GetString(BARSTEWARD_MIDDLE)
                 end,
                 setFunc = function(value)
                     vars.Anchor = value
@@ -561,7 +561,7 @@ local function getBarSettings()
             },
             [9] = {
                 type = "slider",
-                name = GetString(_G.BARSTEWARD_SCALE),
+                name = GetString(BARSTEWARD_SCALE),
                 getFunc = function()
                     return vars.Scale or 1
                 end,
@@ -584,8 +584,8 @@ local function getBarSettings()
             },
             [10] = {
                 type = "checkbox",
-                name = GetString(_G.BARSTEWARD_EXPAND),
-                tooltip = GetString(_G.BARSTEWARD_EXPAND_TOOLTIP),
+                name = GetString(BARSTEWARD_EXPAND),
+                tooltip = GetString(BARSTEWARD_EXPAND_TOOLTIP),
                 getFunc = function()
                     return vars.Expand
                 end,
@@ -614,7 +614,7 @@ local function getBarSettings()
                 end,
                 default = false,
                 disabled = function()
-                    return vars.Orientation ~= GetString(_G.BARSTEWARD_HORIZONTAL)
+                    return vars.Orientation ~= GetString(BARSTEWARD_HORIZONTAL)
                 end
             }
         }
@@ -626,7 +626,7 @@ local function getBarSettings()
         if (idx ~= 1) then
             controls[#controls + 1] = {
                 type = "checkbox",
-                name = GetString(_G.BARSTEWARD_DISABLE),
+                name = GetString(BARSTEWARD_DISABLE),
                 getFunc = function()
                     return vars.Disable
                 end,
@@ -646,7 +646,7 @@ local function getBarSettings()
 
         controls[#controls + 1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_PVP_ONLY),
+            name = GetString(BARSTEWARD_PVP_ONLY),
             getFunc = function()
                 return vars.PvPOnly or false
             end,
@@ -663,11 +663,11 @@ local function getBarSettings()
 
         controls[#controls + 1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_CRIME_ONLY),
+            name = GetString(BARSTEWARD_CRIME_ONLY),
             tooltip = string.format(
                 "%s.%s",
-                GetString(_G.BARSTEWARD_CRIME_ONLY_TOOLTIP),
-                BS.Vars.CrimeCheck and "" or GetString(_G.BARSTEWARD_CRIME_ONLY_CONDITION)
+                GetString(BARSTEWARD_CRIME_ONLY_TOOLTIP),
+                BS.Vars.CrimeCheck and "" or GetString(BARSTEWARD_CRIME_ONLY_CONDITION)
             ),
             getFunc = function()
                 return vars.CrimeOnly or false
@@ -688,7 +688,7 @@ local function getBarSettings()
 
         controls[#controls + 1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_SHOW_EVERYWHERE),
+            name = GetString(BARSTEWARD_SHOW_EVERYWHERE),
             getFunc = function()
                 return vars.ShowEverywhere or false
             end,
@@ -744,7 +744,7 @@ local function getBarSettings()
 
         controls[#controls + 1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_COMBAT_COLOUR),
+            name = GetString(BARSTEWARD_COMBAT_COLOUR),
             getFunc = function()
                 return vars.CombatColourChange or false
             end,
@@ -757,7 +757,7 @@ local function getBarSettings()
 
         controls[#controls + 1] = {
             type = "colorpicker",
-            name = GetString(_G.BARSTEWARD_COMBAT_COLOUR_BACKDROP),
+            name = GetString(BARSTEWARD_COMBAT_COLOUR_BACKDROP),
             getFunc = function()
                 return unpack(vars.CombatColour or BS.Vars.DefaultCombatColour)
             end,
@@ -778,7 +778,7 @@ local function getBarSettings()
 
         controls[#controls + 1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_OVERRIDE),
+            name = GetString(BARSTEWARD_OVERRIDE),
             getFunc = function()
                 return vars.Override
             end,
@@ -792,7 +792,7 @@ local function getBarSettings()
 
         controls[#controls + 1] = {
             type = "slider",
-            name = GetString(_G.BARSTEWARD_WIDGET_ICON_SIZE),
+            name = GetString(BARSTEWARD_WIDGET_ICON_SIZE),
             getFunc = function()
                 return vars.IconSize or BS.Vars.IconSize
             end,
@@ -811,7 +811,7 @@ local function getBarSettings()
 
         controls[#controls + 1] = {
             type = "slider",
-            name = GetString(_G.BARSTEWARD_ICONGAP),
+            name = GetString(BARSTEWARD_ICONGAP),
             getFunc = function()
                 return vars.IconGap or 10
             end,
@@ -828,7 +828,7 @@ local function getBarSettings()
 
         controls[#controls + 1] = {
             type = "dropdown",
-            name = GetString(_G.BARSTEWARD_FONT),
+            name = GetString(BARSTEWARD_FONT),
             choices = fontNames,
             getFunc = function()
                 return vars.Font or BS.Vars.Font
@@ -846,7 +846,7 @@ local function getBarSettings()
 
         controls[#controls + 1] = {
             type = "dropdown",
-            name = GetString(_G.BARSTEWARD_FONT_STYLE),
+            name = GetString(BARSTEWARD_FONT_STYLE),
             choices = fontStyles,
             getFunc = function()
                 return vars.FontStyle or BS.Vars.FontStyle
@@ -864,7 +864,7 @@ local function getBarSettings()
 
         controls[#controls + 1] = {
             type = "slider",
-            name = GetString(_G.BARSTEWARD_FONT_SIZE),
+            name = GetString(BARSTEWARD_FONT_SIZE),
             min = 8,
             max = 32,
             getFunc = function()
@@ -885,7 +885,7 @@ local function getBarSettings()
             type = "description",
             text = function()
                 _G[ref].desc:SetFont(BS.GetFont(vars))
-                return "|c009933" .. GetString(_G.BARSTEWARD_SAMPLE) .. "|r"
+                return "|c009933" .. GetString(BARSTEWARD_SAMPLE) .. "|r"
             end,
             width = "full",
             reference = ref
@@ -893,7 +893,7 @@ local function getBarSettings()
 
         controls[#controls + 1] = {
             type = "slider",
-            name = GetString(_G.BARSTEWARD_PADDING_HORIZONTAL),
+            name = GetString(BARSTEWARD_PADDING_HORIZONTAL),
             getFunc = function()
                 return vars.HorizontalPadding or 0
             end,
@@ -912,7 +912,7 @@ local function getBarSettings()
 
         controls[#controls + 1] = {
             type = "slider",
-            name = GetString(_G.BARSTEWARD_PADDING_VERTICAL),
+            name = GetString(BARSTEWARD_PADDING_VERTICAL),
             getFunc = function()
                 return vars.VerticalPadding or 0
             end,
@@ -936,7 +936,7 @@ local function getBarSettings()
         if (idx ~= 1) then
             controls[#controls + 1] = {
                 type = "editbox",
-                name = GetString(_G.BARSTEWARD_BAR_NAME),
+                name = GetString(BARSTEWARD_BAR_NAME),
                 getFunc = function()
                     return BS.BarRename or ""
                 end,
@@ -956,7 +956,7 @@ local function getBarSettings()
                 disabled = function()
                     return (BS.BarRename or "") == ""
                 end,
-                warning = GetString(_G.BARSTEWARD_RELOAD),
+                warning = GetString(BARSTEWARD_RELOAD),
                 width = "half",
                 requiresReload = true
             }
@@ -976,7 +976,7 @@ local function getBarSettings()
         else
             controls[#controls + 1] = {
                 type = "checkbox",
-                name = GetString(_G.BARSTEWARD_NUDGE),
+                name = GetString(BARSTEWARD_NUDGE),
                 getFunc = function()
                     return vars.NudgeCompass
                 end,
@@ -991,13 +991,13 @@ local function getBarSettings()
                 end,
                 width = "full",
                 default = BS.Defaults.Bars[1].NudgeCompass,
-                warning = GetString(_G.BARSTEWARD_NUDGE_WARNING)
+                warning = GetString(BARSTEWARD_NUDGE_WARNING)
             }
         end
 
         controls[#controls + 1] = {
             type = "button",
-            name = GetString(_G.BARSTEWARD_ALIGN),
+            name = GetString(BARSTEWARD_ALIGN),
             func = function()
                 local bar = BS.BarObjectPool:GetActiveObject(BS.BarObjects[idx]).bar
                 local _, posY = bar:GetCenter()
@@ -1013,7 +1013,7 @@ local function getBarSettings()
                 bar:SetAnchor(CENTER, GuiRoot, CENTER, 0, centre)
                 local xPos, yPos = bar:GetCenter()
 
-                BS.Vars.Bars[idx].Anchor = GetString(_G.BARSTEWARD_MIDDLE)
+                BS.Vars.Bars[idx].Anchor = GetString(BARSTEWARD_MIDDLE)
                 BS.Vars.Bars[idx].Position = { X = xPos, Y = yPos }
             end,
             width = "full"
@@ -1039,13 +1039,13 @@ local function getBarSettings()
 
     BS.options[#BS.options + 1] = {
         type = "description",
-        text = "|ce60000" .. GetString(_G.BARSTEWARD_NEWBAR_WARNING) .. "|r",
+        text = "|ce60000" .. GetString(BARSTEWARD_NEWBAR_WARNING) .. "|r",
         width = "full"
     }
 
     BS.options[#BS.options + 1] = {
         type = "editbox",
-        name = GetString(_G.BARSTEWARD_NEWBAR_NAME),
+        name = GetString(BARSTEWARD_NEWBAR_NAME),
         getFunc = function()
             return BS.NewBarName or ""
         end,
@@ -1058,14 +1058,14 @@ local function getBarSettings()
 
     BS.options[#BS.options + 1] = {
         type = "button",
-        name = GetString(_G.BARSTEWARD_NEWBAR_ADD),
+        name = GetString(BARSTEWARD_NEWBAR_ADD),
         func = function()
             BS.NewBar()
         end,
         disabled = function()
             return (BS.NewBarName or "") == ""
         end,
-        warning = GetString(_G.BARSTEWARD_RELOAD),
+        warning = GetString(BARSTEWARD_RELOAD),
         width = "half"
     }
 
@@ -1080,7 +1080,7 @@ local function getBarSettings()
     table.sort(barChoices)
     BS.options[#BS.options + 1] = {
         type = "dropdown",
-        name = GetString(_G.BARSTEWARD_EXPORT_BAR),
+        name = GetString(BARSTEWARD_EXPORT_BAR),
         choices = barChoices,
         getFunc = function()
             return BS.Export
@@ -1093,7 +1093,7 @@ local function getBarSettings()
 
     BS.options[#BS.options + 1] = {
         type = "button",
-        name = GetString(_G.BARSTEWARD_EXPORT),
+        name = GetString(BARSTEWARD_EXPORT),
         func = function()
             local data = BS.ExportBar(barNumbers[BS.Export])
             local exportFrame = BS.ExportFrame or BS.CreateExportFrame()
@@ -1101,8 +1101,8 @@ local function getBarSettings()
             SCENE_MANAGER:Show("hudui")
             SetGameCameraUIMode(true)
             exportFrame.content:SetText(data)
-            exportFrame.heading:SetText(GetString(_G.BARSTEWARD_EXPORT_BAR))
-            exportFrame.note:SetText(GetString(_G.BARSTEWARD_COPY))
+            exportFrame.heading:SetText(GetString(BARSTEWARD_EXPORT_BAR))
+            exportFrame.note:SetText(GetString(BARSTEWARD_COPY))
             exportFrame.import:SetHidden(true)
             exportFrame.replace:SetHidden(true)
             exportFrame.error:SetText("")
@@ -1116,15 +1116,15 @@ local function getBarSettings()
 
     BS.options[#BS.options + 1] = {
         type = "button",
-        name = GetString(_G.BARSTEWARD_IMPORT_BAR),
+        name = GetString(BARSTEWARD_IMPORT_BAR),
         func = function()
             local importFrame = BS.ExportFrame or BS.CreateExportFrame()
 
             SCENE_MANAGER:Show("hudui")
             SetGameCameraUIMode(true)
             importFrame.content:Clear()
-            importFrame.heading:SetText(GetString(_G.BARSTEWARD_IMPORT_BAR))
-            importFrame.note:SetText(GetString(_G.BARSTEWARD_PASTE))
+            importFrame.heading:SetText(GetString(BARSTEWARD_IMPORT_BAR))
+            importFrame.note:SetText(GetString(BARSTEWARD_PASTE))
             importFrame.import:SetHidden(false)
             importFrame.replace:SetHidden(false)
             importFrame.error:SetText("")
@@ -1140,8 +1140,8 @@ local function getPerformanceSettings()
     local controls = {
         [1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_PERFORMANCE_TIMERS),
-            tooltip = GetString(_G.BARSTEWARD_PERFORMANCE_TIMERS_TOOLTIP),
+            name = GetString(BARSTEWARD_PERFORMANCE_TIMERS),
+            tooltip = GetString(BARSTEWARD_PERFORMANCE_TIMERS_TOOLTIP),
             getFunc = function()
                 return BS.Vars.DisableTimersInCombat
             end,
@@ -1155,7 +1155,7 @@ local function getPerformanceSettings()
 
     BS.options[#BS.options + 1] = {
         type = "submenu",
-        name = GetString(_G.BARSTEWARD_PERFORMANCE),
+        name = GetString(BARSTEWARD_PERFORMANCE),
         controls = controls,
         reference = "BarStewardPerformance",
         icon = "/esoui/art/ava/avacapturebar_fill_aldmeri.dds"
@@ -1181,7 +1181,7 @@ end
 local function getWidgetSettings()
     local widgets = BS.Vars.Controls
     local bars = BS.Vars.Bars
-    local noBar = GetString(_G.BARSTEWARD_NONE_BAR)
+    local noBar = GetString(BARSTEWARD_NONE_BAR)
     local barNames = { noBar }
 
     for _, v in ipairs(bars) do
@@ -1278,7 +1278,7 @@ local function getWidgetSettings()
     local controls = {
         [1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_SORT),
+            name = GetString(BARSTEWARD_SORT),
             getFunc = function()
                 return BS.Vars.WidgetSortOrder or false
             end,
@@ -1295,7 +1295,7 @@ local function getWidgetSettings()
         },
         [2] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_SORT_USED),
+            name = GetString(BARSTEWARD_SORT_USED),
             getFunc = function()
                 return BS.Vars.WidgetSortOrderUsed or false
             end,
@@ -1312,7 +1312,7 @@ local function getWidgetSettings()
         },
         [3] = {
             type = "slider",
-            name = GetString(_G.BARSTEWARD_WIDGET_ICON_SIZE),
+            name = GetString(BARSTEWARD_WIDGET_ICON_SIZE),
             getFunc = function()
                 return BS.Vars.IconSize
             end,
@@ -1327,7 +1327,7 @@ local function getWidgetSettings()
         },
         [4] = {
             type = "slider",
-            name = GetString(_G.BARSTEWARD_PADDING_HORIZONTAL),
+            name = GetString(BARSTEWARD_PADDING_HORIZONTAL),
             getFunc = function()
                 return BS.Vars.HorizontalPadding or 0
             end,
@@ -1342,7 +1342,7 @@ local function getWidgetSettings()
         },
         [5] = {
             type = "slider",
-            name = GetString(_G.BARSTEWARD_PADDING_VERTICAL),
+            name = GetString(BARSTEWARD_PADDING_VERTICAL),
             getFunc = function()
                 return BS.Vars.VerticalPadding or 0
             end,
@@ -1357,7 +1357,7 @@ local function getWidgetSettings()
         },
         [6] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_CATEGORY_INCLUDE),
+            name = GetString(BARSTEWARD_CATEGORY_INCLUDE),
             getFunc = function()
                 return BS.Vars.CategoriesCount or false
             end,
@@ -1398,9 +1398,9 @@ local function getWidgetSettings()
 
     controls[#controls + 1] = {
         type = "editbox",
-        name = GetString(_G.BARSTEWARD_NUMBER_SEPARATORS),
+        name = GetString(BARSTEWARD_NUMBER_SEPARATORS),
         getFunc = function()
-            return BS.Vars.NumberSeparator or GetString(_G.BARSTEWARD_NUMBER_SEPARATOR)
+            return BS.Vars.NumberSeparator or GetString(BARSTEWARD_NUMBER_SEPARATOR)
         end,
         setFunc = function(value)
             BS.Vars.NumberSeparator = value
@@ -1410,7 +1410,7 @@ local function getWidgetSettings()
         isExtraWide = false,
         maxChars = 3,
         width = "full",
-        default = GetString(_G.BARSTEWARD_NUMBER_SEPARATOR)
+        default = GetString(BARSTEWARD_NUMBER_SEPARATOR)
     }
 
     local categories = {}
@@ -1443,7 +1443,7 @@ local function getWidgetSettings()
         if (widgets[k].Requires and not _G[widgets[k].Requires]) then
             widgetControls[#widgetControls + 1] = {
                 type = "description",
-                text = "|cff0000" .. zo_strformat(GetString(_G.BARSTEWARD_REQUIRES), widgets[k].Requires) .. "|r",
+                text = "|cff0000" .. zo_strformat(GetString(BARSTEWARD_REQUIRES), widgets[k].Requires) .. "|r",
                 width = "full"
             }
             disabled = true
@@ -1452,7 +1452,7 @@ local function getWidgetSettings()
 
             widgetControls[#widgetControls + 1] = {
                 type = "dropdown",
-                name = GetString(_G.BARSTEWARD_BAR),
+                name = GetString(BARSTEWARD_BAR),
                 choices = barNames,
                 getFunc = function()
                     local barName = ZO_CachedStrFormat("<<C:1>>", GetString(SI_DAMAGETYPE0))
@@ -1557,7 +1557,7 @@ local function getWidgetSettings()
 
     BS.options[#BS.options + 1] = {
         type = "submenu",
-        name = GetString(_G.BARSTEWARD_WIDGETS),
+        name = GetString(BARSTEWARD_WIDGETS),
         controls = controls,
         reference = "BarStewardWidgets",
         icon = "/esoui/art/collections/collections_tabicon_collectibles_up.dds"

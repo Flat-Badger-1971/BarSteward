@@ -1,4 +1,4 @@
-local BS = _G.BarSteward
+local BS = BarSteward
 
 local function addToTooltip(friendList, textureFunctions)
     local tt = ""
@@ -75,8 +75,8 @@ BS.widgets[BS.W_FRIENDS] = {
                                 local cname = ZO_FormatUserFacingDisplayName(characterName) or characterName
 
                                 BS.Announce(
-                                    GetString(_G.BARSTEWARD_FRIEND_ONLINE),
-                                    zo_strformat(GetString(_G.BARSTEWARD_FRIEND_ONLINE_MESSAGE), cname, dname),
+                                    GetString(BARSTEWARD_FRIEND_ONLINE),
+                                    zo_strformat(GetString(BARSTEWARD_FRIEND_ONLINE_MESSAGE), cname, dname),
                                     this
                                 )
                             end
@@ -104,8 +104,8 @@ BS.widgets[BS.W_FRIENDS] = {
         end
     end,
     customOptions = {
-        name = GetString(_G.BARSTEWARD_DEBOUNCE),
-        tooltip = GetString(_G.BARSTEWARD_DEBOUNCE_DESC),
+        name = GetString(BARSTEWARD_DEBOUNCE),
+        tooltip = GetString(BARSTEWARD_DEBOUNCE_DESC),
         choices = { 0, 5, 10, 15, 20, 30, 40, 50, 60 },
         varName = "DebounceTime",
         refresh = false,
@@ -114,8 +114,8 @@ BS.widgets[BS.W_FRIENDS] = {
     customSettings = {
         [1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_ONLINE_ONLY),
-            tooltip = GetString(_G.BARSTEWARD_ONLINE_ONLY_TOOLTIP),
+            name = GetString(BARSTEWARD_ONLINE_ONLY),
+            tooltip = GetString(BARSTEWARD_ONLINE_ONLY_TOOLTIP),
             getFunc = function()
                 return BS.Vars.Controls[BS.W_FRIENDS].OnlineOnly or false
             end,
@@ -128,7 +128,7 @@ BS.widgets[BS.W_FRIENDS] = {
         },
         [2] = {
             type = "button",
-            name = GetString(_G.BARSTEWARD_ANNOUNCEMENTS),
+            name = GetString(BARSTEWARD_ANNOUNCEMENTS),
             func = function()
                 SCENE_MANAGER:Show("hudui")
                 SetGameCameraUIMode(true)
@@ -206,7 +206,7 @@ BS.widgets[BS.W_GUILD_FRIENDS] = {
         local masterList = BS.Vars:GetCommon("GuildFriendAnnounce")
         local online, offline, other = {}, {}, {}
         local oCount, tCount = 0, 0
-        local tt = BS.LC.Format(_G.BARSTEWARD_GUILD_FRIENDS)
+        local tt = BS.LC.Format(BARSTEWARD_GUILD_FRIENDS)
         local textureFunctions = ZO_SocialList_GetPlatformTextureFunctions()
 
         for member, gid in pairs(masterList) do
@@ -265,8 +265,8 @@ BS.widgets[BS.W_GUILD_FRIENDS] = {
                     local cname = ZO_FormatUserFacingDisplayName(info.characterName) or info.characterName
 
                     BS.Announce(
-                        GetString(_G.BARSTEWARD_GUILD_FRIEND_ONLINE),
-                        zo_strformat(GetString(_G.BARSTEWARD_FRIEND_ONLINE_MESSAGE), cname, dname),
+                        GetString(BARSTEWARD_GUILD_FRIEND_ONLINE),
+                        zo_strformat(GetString(BARSTEWARD_FRIEND_ONLINE_MESSAGE), cname, dname),
                         this
                     )
                 end
@@ -279,7 +279,7 @@ BS.widgets[BS.W_GUILD_FRIENDS] = {
         EVENT_PLAYER_ACTIVATED,
         EVENT_GUILD_MEMBER_PLAYER_STATUS_CHANGED
     },
-    tooltip = BS.LC.Format(_G.BARSTEWARD_GUILD_FRIENDS_ONLINE),
+    tooltip = BS.LC.Format(BARSTEWARD_GUILD_FRIENDS_ONLINE),
     icon = "guild/guildheraldry_indexicon_crest_up",
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
@@ -289,8 +289,8 @@ BS.widgets[BS.W_GUILD_FRIENDS] = {
         end
     end,
     customOptions = {
-        name = GetString(_G.BARSTEWARD_DEBOUNCE),
-        tooltip = GetString(_G.BARSTEWARD_DEBOUNCE_DESC),
+        name = GetString(BARSTEWARD_DEBOUNCE),
+        tooltip = GetString(BARSTEWARD_DEBOUNCE_DESC),
         choices = { 0, 5, 10, 15, 20, 30, 40, 50, 60 },
         varName = "DebounceTime",
         refresh = false,
@@ -299,8 +299,8 @@ BS.widgets[BS.W_GUILD_FRIENDS] = {
     customSettings = {
         [1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_ONLINE_ONLY),
-            tooltip = GetString(_G.BARSTEWARD_ONLINE_ONLY_TOOLTIP),
+            name = GetString(BARSTEWARD_ONLINE_ONLY),
+            tooltip = GetString(BARSTEWARD_ONLINE_ONLY_TOOLTIP),
             getFunc = function()
                 return BS.Vars.Controls[BS.W_GUILD_FRIENDS].OnlineOnly or false
             end,
@@ -315,7 +315,7 @@ BS.widgets[BS.W_GUILD_FRIENDS] = {
         },
         [2] = {
             type = "button",
-            name = GetString(_G.BARSTEWARD_CONFIGURE),
+            name = GetString(BARSTEWARD_CONFIGURE),
             func = function()
                 SCENE_MANAGER:Show("hudui")
                 SetGameCameraUIMode(true)

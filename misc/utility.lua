@@ -1,4 +1,4 @@
-local BS = _G.BarSteward
+local BS = BarSteward
 
 function BS.SecondsToTime(seconds, hideDays, hideHours, hideSeconds, format, hideDaysWhenZero)
     return BS.LC.SecondsToTime(
@@ -8,10 +8,10 @@ function BS.SecondsToTime(seconds, hideDays, hideHours, hideSeconds, format, hid
         hideSeconds,
         format,
         hideDaysWhenZero,
-        _G.BARSTEWARD_TIMER_FORMAT_TEXT,
-        _G.BARSTEWARD_TIMER_FORMAT_TEXT_NO_DAYS,
-        _G.BARSTEWARD_TIMER_FORMAT_TEXT_WITH_SECONDS_NO_DAYS,
-        _G.BARSTEWARD_TIMER_FORMAT_TEXT_WITH_SECONDS
+        BARSTEWARD_TIMER_FORMAT_TEXT,
+        BARSTEWARD_TIMER_FORMAT_TEXT_NO_DAYS,
+        BARSTEWARD_TIMER_FORMAT_TEXT_WITH_SECONDS_NO_DAYS,
+        BARSTEWARD_TIMER_FORMAT_TEXT_WITH_SECONDS
     )
 end
 
@@ -56,7 +56,7 @@ function BS.CheckPerformance(inCombat)
 end
 
 function BS.GetAnchorFromText(text, adjust)
-    if (text == GetString(_G.BARSTEWARD_LEFT)) then
+    if (text == GetString(BARSTEWARD_LEFT)) then
         if (adjust) then
             return TOPLEFT
         end
@@ -64,7 +64,7 @@ function BS.GetAnchorFromText(text, adjust)
         return LEFT
     end
 
-    if (text == GetString(_G.BARSTEWARD_RIGHT)) then
+    if (text == GetString(BARSTEWARD_RIGHT)) then
         if (adjust) then
             return TOPRIGHT
         end
@@ -72,11 +72,11 @@ function BS.GetAnchorFromText(text, adjust)
         return RIGHT
     end
 
-    if (text == GetString(_G.BARSTEWARD_TOP)) then
+    if (text == GetString(BARSTEWARD_TOP)) then
         return TOP
     end
 
-    if (text == GetString(_G.BARSTEWARD_BOTTOM)) then
+    if (text == GetString(BARSTEWARD_BOTTOM)) then
         return BOTTOM
     end
 
@@ -84,8 +84,8 @@ function BS.GetAnchorFromText(text, adjust)
 end
 
 function BS.AddSeparators(number)
-    local grouping = tonumber(GetString(_G.BARSTEWARD_NUMBER_GROUPING))
-    local separator = BS.Vars.NumberSeparator or GetString(_G.BARSTEWARD_NUMBER_SEPARATOR)
+    local grouping = tonumber(GetString(BARSTEWARD_NUMBER_GROUPING))
+    local separator = BS.Vars.NumberSeparator or GetString(BARSTEWARD_NUMBER_SEPARATOR)
 
     return BS.LC.AddSeparators(number, grouping, separator)
 end
@@ -93,11 +93,12 @@ end
 -- based on Wykkyd toolbar
 --- @diagnostic disable: undefined-field
 function BS.ResetNudge()
-    if (_G.ZO_CompassFrame:GetTop()) ~= 40 then
-        _G.ZO_CompassFrame:ClearAnchors()
-        _G.ZO_CompassFrame:SetAnchor(TOP, GuiRoot, TOP, 0, 40)
-        _G.ZO_TargetUnitFramereticleover:ClearAnchors()
-        _G.ZO_TargetUnitFramereticleover:SetAnchor(TOP, GuiRoot, TOP, 0, 88)
+    ---@diagnostic disable: undefined-global
+    if (ZO_CompassFrame:GetTop()) ~= 40 then
+        ZO_CompassFrame:ClearAnchors()
+        ZO_CompassFrame:SetAnchor(TOP, GuiRoot, TOP, 0, 40)
+        ZO_TargetUnitFramereticleover:ClearAnchors()
+        ZO_TargetUnitFramereticleover:SetAnchor(TOP, GuiRoot, TOP, 0, 88)
     end
 end
 
@@ -105,18 +106,19 @@ function BS.NudgeCompass()
     local bar1Top = BS.BarObjectPool:GetActiveObject(BS.BarObjects[1]).bar:GetTop()
 
     if (bar1Top <= 80) then
-        if (_G.ZO_CompassFrame:GetTop() ~= bar1Top + 70) then
-            _G.ZO_CompassFrame:ClearAnchors()
-            _G.ZO_CompassFrame:SetAnchor(TOP, GuiRoot, TOP, 0, bar1Top + 70)
-            _G.ZO_TargetUnitFramereticleover:ClearAnchors()
-            _G.ZO_TargetUnitFramereticleover:SetAnchor(TOP, GuiRoot, TOP, 0, bar1Top + 118)
+        if (ZO_CompassFrame:GetTop() ~= bar1Top + 70) then
+            ZO_CompassFrame:ClearAnchors()
+            ZO_CompassFrame:SetAnchor(TOP, GuiRoot, TOP, 0, bar1Top + 70)
+            ZO_TargetUnitFramereticleover:ClearAnchors()
+            ZO_TargetUnitFramereticleover:SetAnchor(TOP, GuiRoot, TOP, 0, bar1Top + 118)
         end
     elseif (bar1Top <= 100) then
-        _G.ZO_TargetUnitFramereticleover:ClearAnchors()
-        _G.ZO_TargetUnitFramereticleover:SetAnchor(TOP, GuiRoot, TOP, 0, bar1Top + 50)
+        ZO_TargetUnitFramereticleover:ClearAnchors()
+        ZO_TargetUnitFramereticleover:SetAnchor(TOP, GuiRoot, TOP, 0, bar1Top + 50)
     else
         BS.ResetNudge()
     end
+    ---@diagnostic disable: undefined-global
 end
 
 --- @diagnostic enable: undefined-field
@@ -365,12 +367,12 @@ local function cleanseAndEncode(input)
 
     output = output:gsub("#true%^", "#t%^")
     output = output:gsub("#false%^", "#f%^")
-    output = output:gsub("#" .. addQuotes(_G.BARSTEWARD_VERTICAL), "#v")
-    output = output:gsub("#" .. addQuotes(_G.BARSTEWARD_HORIZONTAL), "#h")
-    output = output:gsub("#" .. addQuotes(_G.BARSTEWARD_LEFT), "#l")
-    output = output:gsub("#" .. addQuotes(_G.BARSTEWARD_RIGHT), "#r")
-    output = output:gsub("#" .. addQuotes(_G.BARSTEWARD_TOP), "#to")
-    output = output:gsub("#" .. addQuotes(_G.BARSTEWARD_BOTTOM), "#b")
+    output = output:gsub("#" .. addQuotes(BARSTEWARD_VERTICAL), "#v")
+    output = output:gsub("#" .. addQuotes(BARSTEWARD_HORIZONTAL), "#h")
+    output = output:gsub("#" .. addQuotes(BARSTEWARD_LEFT), "#l")
+    output = output:gsub("#" .. addQuotes(BARSTEWARD_RIGHT), "#r")
+    output = output:gsub("#" .. addQuotes(BARSTEWARD_TOP), "#to")
+    output = output:gsub("#" .. addQuotes(BARSTEWARD_BOTTOM), "#b")
 
     for bg = 1, 14 do
         output = output:gsub("#" .. addQuotes("BARSTEWARD_BACKGROUND_STYLE_", bg), "#bg" .. tostring(bg))
@@ -387,12 +389,12 @@ local function decode(input)
     local output = input:gsub("#t%^", "#true%^")
 
     output = output:gsub("#f%^", "#false%^")
-    output = output:gsub("#v", "#" .. addQuotes(_G.BARSTEWARD_VERTICAL))
-    output = output:gsub("#h", "#" .. addQuotes(_G.BARSTEWARD_HORIZONTAL))
-    output = output:gsub("#l", "#" .. addQuotes(_G.BARSTEWARD_LEFT))
-    output = output:gsub("#r", "#" .. addQuotes(_G.BARSTEWARD_RIGHT))
-    output = output:gsub("#to", "#" .. addQuotes(_G.BARSTEWARD_TOP))
-    output = output:gsub("#b", "#" .. addQuotes(_G.BARSTEWARD_BOTTOM))
+    output = output:gsub("#v", "#" .. addQuotes(BARSTEWARD_VERTICAL))
+    output = output:gsub("#h", "#" .. addQuotes(BARSTEWARD_HORIZONTAL))
+    output = output:gsub("#l", "#" .. addQuotes(BARSTEWARD_LEFT))
+    output = output:gsub("#r", "#" .. addQuotes(BARSTEWARD_RIGHT))
+    output = output:gsub("#to", "#" .. addQuotes(BARSTEWARD_TOP))
+    output = output:gsub("#b", "#" .. addQuotes(BARSTEWARD_BOTTOM))
 
     for bg = 1, 14 do
         output = output:gsub("#bg" .. tostring(bg), "#" .. addQuotes("BARSTEWARD_BACKGROUND_STYLE_", bg))
@@ -444,9 +446,9 @@ local function convert(value)
 end
 
 local function generateTable(input)
-    assert(input:sub(1, 3) == "b::", GetString(_G.BARSTEWARD_IMPORT_ERROR_BAR))
-    assert(input:sub(-1) == "^", GetString(_G.BARSTEWARD_IMPORT_ERROR_DATA))
-    assert(input:find("w::"), GetString(_G.BARSTEWARD_IMPORT_ERROR_WIDGET))
+    assert(input:sub(1, 3) == "b::", GetString(BARSTEWARD_IMPORT_ERROR_BAR))
+    assert(input:sub(-1) == "^", GetString(BARSTEWARD_IMPORT_ERROR_DATA))
+    assert(input:find("w::"), GetString(BARSTEWARD_IMPORT_ERROR_WIDGET))
 
     local widgetStartPos = input:find("w::")
     local barData = BS.LC.Split(input:sub(4, widgetStartPos - 1), "%^")
@@ -658,7 +660,7 @@ local function validate(data)
     end
 
     if (importTable.Bar == nil or importTable.Widgets == nil) then
-        BS.ExportFrame.error:SetText(GetString(_G.BARSTEWARD_IMPORT_ERROR_WIDGET_OR_BAR))
+        BS.ExportFrame.error:SetText(GetString(BARSTEWARD_IMPORT_ERROR_WIDGET_OR_BAR))
         return
     end
 
@@ -681,7 +683,7 @@ function BS.DoImport()
     local data = BS.ImportData
     local bars = BS.Vars.Bars
     local newBarId = #bars + 1
-    local barname = data.Bar.Name or zo_strformat(GetString(_G.BARSTEWARD_NEW_BAR_DEFAULT_NAME), newBarId)
+    local barname = data.Bar.Name or zo_strformat(GetString(BARSTEWARD_NEW_BAR_DEFAULT_NAME), newBarId)
     local x, y = GuiRoot:GetCenter()
 
     barname = BS.CheckBarName(barname, bars)
@@ -702,15 +704,15 @@ function BS.DoImport()
     end
 
     BS.Vars.Bars[newBarId] = {
-        Orientation = GetString(_G.BARSTEWARD_HORIZONTAL),
+        Orientation = GetString(BARSTEWARD_HORIZONTAL),
         Position = { X = x, Y = y },
         Name = barname,
         Backdrop = {
             Show = data.Bar.Backdrop and data.Bar.Backdrop.Show or true,
             Colour = data.Bar.Backdrop and data.Bar.Backdrop.Colour or { 0.23, 0.23, 0.23, 0.7 }
         },
-        TooltipAnchor = GetString(_G.BARSTEWARD_BOTTOM),
-        ValueSide = GetString(_G.BARSTEWARD_RIGHT)
+        TooltipAnchor = GetString(BARSTEWARD_BOTTOM),
+        ValueSide = GetString(BARSTEWARD_RIGHT)
     }
 
     for key, value in pairs(data.Bar) do
@@ -824,12 +826,12 @@ local function setBinding(barIndex, barName)
 
     if (not _G[stringId]) then
         if (barIndex < BS.MAX_BINDINGS) then
-            ZO_CreateStringId(stringId, ZO_CachedStrFormat(_G.BARSTEWARD_TOGGLE, barName))
+            ZO_CreateStringId(stringId, ZO_CachedStrFormat(BARSTEWARD_TOGGLE, barName))
         end
         -- else
         --     local id = _G[stringId]
         --     _G[stringId] = nil
-        --     _G.EsoStrings[id] = nil
+        --     EsoStrings[id] = nil
     end
 end
 
@@ -843,7 +845,7 @@ function BS.GenerateBar(barIndex)
         BS.CreateBar(
             {
                 index = barIndex,
-                position = barData.Orientation == GetString(_G.BARSTEWARD_HORIZONTAL) and TOP or LEFT,
+                position = barData.Orientation == GetString(BARSTEWARD_HORIZONTAL) and TOP or LEFT,
                 scale = barData.Scale or GuiRoot:GetScale(),
                 settings = barData
             }
@@ -869,9 +871,9 @@ function BS.GenerateBar(barIndex)
         -- from Bandits UI
         -- stop the game move the compass back to its original position
         local block = { ZO_CompassFrame_Keyboard_Template = true, ZO_CompassFrame_Gamepad_Template = true }
-        local ZO_ApplyTemplateToControl = _G.ApplyTemplateToControl
+        local ZO_ApplyTemplateToControl = ApplyTemplateToControl
 
-        _G.ApplyTemplateToControl = function(control, templateName)
+        ApplyTemplateToControl = function(control, templateName)
             if block[templateName] then
                 return
             else
@@ -1145,7 +1147,7 @@ end
 
 function BS.GetLastDailyResetTime(counts, ach)
     local timeRemaining =
-        TIMED_ACTIVITIES_MANAGER:GetTimedActivityTypeTimeRemainingSeconds(_G.TIMED_ACTIVITY_TYPE_DAILY)
+        TIMED_ACTIVITIES_MANAGER:GetTimedActivityTypeTimeRemainingSeconds(TIMED_ACTIVITY_TYPE_DAILY)
     local secondsInADay = 86400
     local lastResetTime = os.time() - (secondsInADay - timeRemaining)
 
@@ -1393,12 +1395,12 @@ function BS.CheckCriminalActivity()
             end
         end
 
-        SecurePostHook(_G.HUD_INFAMY_METER, "UpdateInfamyMeterState", bountyFunc)
-        _G.SHARED_INVENTORY:RegisterCallback("SingleSlotInventoryUpdate", bagFunc)
-        _G.QUEST_JOURNAL_MANAGER:RegisterCallback("QuestListUpdated", questFunc)
+        SecurePostHook(HUD_INFAMY_METER, "UpdateInfamyMeterState", bountyFunc)
+        SHARED_INVENTORY:RegisterCallback("SingleSlotInventoryUpdate", bagFunc)
+        QUEST_JOURNAL_MANAGER:RegisterCallback("QuestListUpdated", questFunc)
 
         BS.EventManager:RegisterForEvent(
-            _G.EVENT_PLAYER_ACTIVATED,
+            EVENT_PLAYER_ACTIVATED,
             function()
                 bagFunc()
                 questFunc()
@@ -1415,7 +1417,7 @@ function BS.HasCriminalQuest()
     local journalQuests = QUEST_JOURNAL_MANAGER:GetQuestList()
 
     for _, quest in ipairs(journalQuests) do
-        if (quest.questType == _G.QUEST_TYPE_GUILD) then
+        if (quest.questType == QUEST_TYPE_GUILD) then
             if (BS.CrimeQuests[quest.name]) then
                 return true
             end
@@ -1505,7 +1507,7 @@ end
 function BS.Track(self, id, track)
     BS.SetTracked(id, track)
     self:Show(id)
-    _G.ACHIEVEMENTS:BuildCategories()
+    ACHIEVEMENTS:BuildCategories()
 end
 
 local function getTextColour(self)
@@ -1520,15 +1522,15 @@ end
 
 function BS.TrackAchievements()
     if (BS.Vars.Controls[BS.W_ACHIEVEMENT_TRACKER].Bar ~= 0) then
-        local trackedLabel = BS.LC.ZOSOrange:Colorize(BS.LC.Format(_G.SI_SCREEN_NARRATION_TRACKED_ICON_NARRATION))
+        local trackedLabel = BS.LC.ZOSOrange:Colorize(BS.LC.Format(SI_SCREEN_NARRATION_TRACKED_ICON_NARRATION))
 
         SCENE_MANAGER:GetScene("achievements"):RegisterCallback(
             "StateChange",
             function(_, newState)
-                if (newState == _G.SCENE_SHOWN) then
+                if (newState == SCENE_SHOWN) then
                     if (not BS.AchSetup) then
                         ---@diagnostic disable-next-line: undefined-field
-                        local tree = _G.ACHIEVEMENTS.categoryTree
+                        local tree = ACHIEVEMENTS.categoryTree
                         local subcat = tree.templateInfo.ZO_TreeLabelSubCategory
                         local cat = tree.templateInfo.ZO_IconHeader
 
@@ -1561,7 +1563,7 @@ function BS.TrackAchievements()
                         end
 
                         ---@diagnostic disable-next-line: undefined-field
-                        _G.ACHIEVEMENTS.refreshGroups:RefreshAll("FullUpdate")
+                        ACHIEVEMENTS.refreshGroups:RefreshAll("FullUpdate")
                     end
                 end
             end
@@ -1585,19 +1587,19 @@ function BS.TrackAchievements()
         end
 
         ---@diagnostic disable-next-line: duplicate-set-field
-        function _G.Achievement:OnClicked(button)
+        function Achievement:OnClicked(button)
             local id = self:GetId()
             local tracked = BS.IsTracked(id)
-            local text = tracked and GetString(_G.BARSTEWARD_UNTRACK) or GetString(_G.BARSTEWARD_TRACK)
+            local text = tracked and GetString(BARSTEWARD_UNTRACK) or GetString(BARSTEWARD_TRACK)
 
-            if button == _G.MOUSE_BUTTON_INDEX_LEFT then
+            if button == MOUSE_BUTTON_INDEX_LEFT then
                 self:ToggleCollapse()
                 ---@diagnostic disable-next-line: undefined-field
                 self:RefreshTooltip(self.control)
-            elseif button == _G.MOUSE_BUTTON_INDEX_RIGHT and IsChatSystemAvailableForCurrentPlatform() then
+            elseif button == MOUSE_BUTTON_INDEX_RIGHT and IsChatSystemAvailableForCurrentPlatform() then
                 ClearMenu()
                 AddMenuItem(
-                    GetString(_G.SI_ITEM_ACTION_LINK_TO_CHAT),
+                    GetString(SI_ITEM_ACTION_LINK_TO_CHAT),
                     function()
                         ZO_LinkHandler_InsertLink(ZO_LinkHandler_CreateChatLink(GetAchievementLink, self:GetId()))
                     end
@@ -1649,12 +1651,12 @@ function BS.AchievementNotifier(id, checkAnnounce)
         name = zo_strformat(name)
     end
 
-    if (announce and (status == _G.ZO_ACHIEVEMENTS_COMPLETION_STATUS.IN_PROGRESS)) then
+    if (announce and (status == ZO_ACHIEVEMENTS_COMPLETION_STATUS.IN_PROGRESS)) then
         if (stepsRemaining > 0) then
             local message =
-                ZO_CachedStrFormat(GetString(_G.BARSTEWARD_PROGRESS), BS.LC.Yellow:Colorize(name), stepsRemaining)
+                ZO_CachedStrFormat(GetString(BARSTEWARD_PROGRESS), BS.LC.Yellow:Colorize(name), stepsRemaining)
 
-            BS.LC.ScreenAnnounce(BS.LC.Format(_G.BARSTEWARD_PROGRESS_ACHIEVEMENT), message, icon)
+            BS.LC.ScreenAnnounce(BS.LC.Format(BARSTEWARD_PROGRESS_ACHIEVEMENT), message, icon)
         end
     end
 
@@ -1667,11 +1669,11 @@ function BS.HideGoldenPursuitsDefaultUI()
     if (not IsPromotionalEventSystemLocked()) then
         if (BS.GetVar("Bar", gp) > 0) then
             if (BS.GetVar("HideDefault", gp)) then
-                _G.PROMOTIONAL_EVENT_TRACKER:GetFragment():SetHiddenForReason(
+                PROMOTIONAL_EVENT_TRACKER:GetFragment():SetHiddenForReason(
                     "BarStewardHidden",
                     true,
-                    _G.DEFAULT_HUD_DURATION,
-                    _G.DEFAULT_HUD_DURATION
+                    DEFAULT_HUD_DURATION,
+                    DEFAULT_HUD_DURATION
                 )
             end
         end
@@ -1688,7 +1690,7 @@ function BS.FindItem(text)
 
                 return match ~= nil
             end,
-            _G.BAG_BACKPACK
+            BAG_BACKPACK
         )
 
     for _, item in ipairs(filteredItems) do

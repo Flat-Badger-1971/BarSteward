@@ -1,4 +1,4 @@
-local BS = _G.BarSteward
+local BS = BarSteward
 
 local assistantIcons = {}
 
@@ -17,9 +17,9 @@ for k, v in pairs(BS.ASSISTANTS) do
 
             return name
         end,
-        event = _G.EVENT_PLAYER_ACTIVATED,
+        event = EVENT_PLAYER_ACTIVATED,
         tooltip = zo_strformat(
-            GetString(_G.BARSTEWARD_ASSISTANT_WIDGET),
+            GetString(BARSTEWARD_ASSISTANT_WIDGET),
             ZO_CachedStrFormat(SI_UNIT_NAME, GetCollectibleName(v))
         ),
         icon = assistantIcons[k],
@@ -29,7 +29,7 @@ for k, v in pairs(BS.ASSISTANTS) do
         customSettings = {
             [1] = {
                 type = "checkbox",
-                name = GetString(_G.BARSTEWARD_HIDE_TEXT),
+                name = GetString(BARSTEWARD_HIDE_TEXT),
                 getFunc = function()
                     return BS.Vars.Controls[k].NoValue or false
                 end,

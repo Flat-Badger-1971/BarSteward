@@ -1,5 +1,4 @@
 -- Russian localisation by @SilverWF (EU)
--- luacheck: push ignore 631
 local L = function(t, v)
     ZO_CreateStringId("BARSTEWARD_" .. t, v)
 end
@@ -478,4 +477,3 @@ L("UNTRACK", "Перестать отслеживать в Bar Steward")
 
 -- Search
 L("DOUBLE_CLICK", "(двойной клик для перехода)")
---luacheck: pop

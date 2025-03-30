@@ -1,4 +1,4 @@
-local BS = _G.BarSteward
+local BS = BarSteward
 
 local RUNEBOX_FRAGMENTS = {
     [5887] = { cid = 5887, total = 10, fragments = { 147659 } },                                       --  Jester's Festival Joke Popper

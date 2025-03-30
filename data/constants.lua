@@ -1,8 +1,9 @@
-_G.BarSteward = {
+--- @type table
+BarSteward = {
     Name = "BarSteward",
     --too much hassle to refactor the whole addon to use classes properly, so adding a callback manager here
     CallbackManager = ZO_CallbackObject:Subclass():New(),
-    LC = _G.LibFBCommon,
+    LC = LibFBCommon,
     -- widget constants
     W_TIME = 1,
     W_ALLIANCE_POINTS = 2,
@@ -157,7 +158,7 @@ _G.BarSteward = {
     W_SERVER = 151
 }
 
-local BS = _G.BarSteward
+local BS = BarSteward
 
 function BS.RegisterCallback(...)
     ---@diagnostic disable-next-line: undefined-field
@@ -241,13 +242,13 @@ BS.CRAFTING_ACHIEVEMENT = {
 }
 
 BS.CRAFTING_DAILY = {
-    [CRAFTING_TYPE_ALCHEMY] = GetString(_G.BARSTEWARD_WRIT_ALCHEMY),
-    [CRAFTING_TYPE_BLACKSMITHING] = GetString(_G.BARSTEWARD_WRIT_BLACKSMITHING),
-    [CRAFTING_TYPE_CLOTHIER] = GetString(_G.BARSTEWARD_WRIT_CLOTHIER),
-    [CRAFTING_TYPE_ENCHANTING] = GetString(_G.BARSTEWARD_WRIT_ENCHANTING),
-    [CRAFTING_TYPE_JEWELRYCRAFTING] = GetString(_G.BARSTEWARD_WRIT_JEWELLERY),
-    [CRAFTING_TYPE_PROVISIONING] = GetString(_G.BARSTEWARD_WRIT_PROVISIONING),
-    [CRAFTING_TYPE_WOODWORKING] = GetString(_G.BARSTEWARD_WRIT_WOODWORKING)
+    [CRAFTING_TYPE_ALCHEMY] = GetString(BARSTEWARD_WRIT_ALCHEMY),
+    [CRAFTING_TYPE_BLACKSMITHING] = GetString(BARSTEWARD_WRIT_BLACKSMITHING),
+    [CRAFTING_TYPE_CLOTHIER] = GetString(BARSTEWARD_WRIT_CLOTHIER),
+    [CRAFTING_TYPE_ENCHANTING] = GetString(BARSTEWARD_WRIT_ENCHANTING),
+    [CRAFTING_TYPE_JEWELRYCRAFTING] = GetString(BARSTEWARD_WRIT_JEWELLERY),
+    [CRAFTING_TYPE_PROVISIONING] = GetString(BARSTEWARD_WRIT_PROVISIONING),
+    [CRAFTING_TYPE_WOODWORKING] = GetString(BARSTEWARD_WRIT_WOODWORKING)
 }
 
 BS.PERFECT_ROE = 64222
@@ -389,28 +390,28 @@ BS.CATNAMES = {
 }
 
 BS.CATEGORIES = {
-    [BS.CATNAMES.Abilities] = { name = _G.BARSTEWARD_CATEGORY_ABILITIES, icon = "actionbar/stateoverlay_wound" },
-    [BS.CATNAMES.Activities] = { name = _G.BARSTEWARD_CATEGORY_ACTIVITIES, icon = "crafting/designs_tabicon_up" },
+    [BS.CATNAMES.Abilities] = { name = BARSTEWARD_CATEGORY_ABILITIES, icon = "actionbar/stateoverlay_wound" },
+    [BS.CATNAMES.Activities] = { name = BARSTEWARD_CATEGORY_ACTIVITIES, icon = "crafting/designs_tabicon_up" },
     [BS.CATNAMES.Character] = {
-        name = _G.BARSTEWARD_CATEGORY_CHARACTER,
+        name = BARSTEWARD_CATEGORY_CHARACTER,
         icon = "charactercreate/charactercreate_bodyicon_up"
     },
-    [BS.CATNAMES.Client] = { name = _G.BARSTEWARD_CATEGORY_CLIENT, icon = "login/gamepad/loading-ouroboros" },
+    [BS.CATNAMES.Client] = { name = BARSTEWARD_CATEGORY_CLIENT, icon = "login/gamepad/loading-ouroboros" },
     [BS.CATNAMES.Companions] = {
-        name = _G.BARSTEWARD_CATEGORY_COMPANIONS,
+        name = BARSTEWARD_CATEGORY_COMPANIONS,
         icon = "companion/keyboard/category_u30_allies_up"
     },
-    [BS.CATNAMES.Crafting] = { name = _G.BARSTEWARD_CATEGORY_CRAFTING, icon = "crafting/reconstruct_tabicon_up" },
-    [BS.CATNAMES.Currency] = { name = _G.BARSTEWARD_CATEGORY_CURRENCY, icon = "bank/bank_purchasenormal" },
-    -- [BS.CATNAMES.Housing] =  {name=_G.BARSTEWARD_CATEGORY_HOUSING,icon="icons/poi/poi_group_house_owned"},
+    [BS.CATNAMES.Crafting] = { name = BARSTEWARD_CATEGORY_CRAFTING, icon = "crafting/reconstruct_tabicon_up" },
+    [BS.CATNAMES.Currency] = { name = BARSTEWARD_CATEGORY_CURRENCY, icon = "bank/bank_purchasenormal" },
+    -- [BS.CATNAMES.Housing] =  {name=BARSTEWARD_CATEGORY_HOUSING,icon="icons/poi/poi_group_house_owned"},
     [BS.CATNAMES.Inventory] = {
-        name = _G.BARSTEWARD_CATEGORY_INVENTORY,
+        name = BARSTEWARD_CATEGORY_INVENTORY,
         icon = "collections/collections_tabicon_outfitstyles_up"
     },
-    [BS.CATNAMES.Riding] = { name = _G.BARSTEWARD_CATEGORY_RIDING, icon = "mounts/tabicon_ridingskills_up" },
-    [BS.CATNAMES.Social] = { name = _G.BARSTEWARD_CATEGORY_SOCIAL, icon = "friends/friends_tabicon_friends" },
-    [BS.CATNAMES.Thievery] = { name = _G.BARSTEWARD_CATEGORY_THIEVERY, icon = "icons/mapkey/mapkey_fence" },
-    [BS.CATNAMES.Assistants] = { name = _G.BARSTEWARD_ASSISTANTS, icon = "icons/assistant_premiumbanker_01" },
+    [BS.CATNAMES.Riding] = { name = BARSTEWARD_CATEGORY_RIDING, icon = "mounts/tabicon_ridingskills_up" },
+    [BS.CATNAMES.Social] = { name = BARSTEWARD_CATEGORY_SOCIAL, icon = "friends/friends_tabicon_friends" },
+    [BS.CATNAMES.Thievery] = { name = BARSTEWARD_CATEGORY_THIEVERY, icon = "icons/mapkey/mapkey_fence" },
+    [BS.CATNAMES.Assistants] = { name = BARSTEWARD_ASSISTANTS, icon = "icons/assistant_premiumbanker_01" },
     [BS.CATNAMES.InfiniteArchive] = {
         name = SI_ENDLESS_DUNGEON_HUD_TRACKER_TITLE,
         icon = "icons/poi/poi_endlessdungeon_complete"

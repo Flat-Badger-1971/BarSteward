@@ -1,4 +1,4 @@
-local BS = _G.BarSteward
+local BS = BarSteward
 local lookup, results = {}, {}
 
 local function createLookup()
@@ -123,8 +123,8 @@ local function setupDataRow(rowControl, data)
     rowControl:SetHandler(
         "OnMouseDoubleClick",
         function(self)
-            ---@diagnostic disable-next-line: undefined-field
-            local container = _G.BarStewardOptionsPanel.container
+            ---@diagnostic disable-next-line: undefined-global
+            local container = BarStewardOptionsPanel.container
 
             contractSubmenus()
 
@@ -218,7 +218,7 @@ local function createSearchControl(parent)
 
     parent.hint = WINDOW_MANAGER:CreateControl(nil, parent.scrollList, CT_LABEL)
     parent.hint:SetAnchor(TOPLEFT, parent.scrollList, TOPLEFT, 0, -30)
-    parent.hint:SetText(GetString(_G.BARSTEWARD_DOUBLE_CLICK))
+    parent.hint:SetText(GetString(BARSTEWARD_DOUBLE_CLICK))
     parent.hint:SetDimensions(parent:GetWidth(), 20)
     parent.hint:SetFont("$(MEDIUM_FONT)|14")
 end

@@ -1,5 +1,4 @@
 -- Chinese localisation
--- luacheck: push ignore 631
 local L = function(t, v)
     ZO_CreateStringId("BARSTEWARD_" .. t, v)
 end
@@ -450,4 +449,3 @@ L("UNTRACK", "使用 Bar Steward 取消跟踪")
 
 -- Search
 L("DOUBLE_CLICK", "（双击定位）")
---luacheck: pop

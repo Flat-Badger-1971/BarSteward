@@ -1,4 +1,4 @@
-local BS = _G.BarSteward
+local BS = BarSteward
 
 BS.widgets[BS.W_RECALL_COOLDOWN] = {
     -- v1.0.2
@@ -13,7 +13,7 @@ BS.widgets[BS.W_RECALL_COOLDOWN] = {
     end,
     timer = 1000,
     icon = "zonestories/completiontypeicon_wayshrine",
-    tooltip = GetString(_G.BARSTEWARD_RECALL),
+    tooltip = GetString(BARSTEWARD_RECALL),
     hideWhenEqual = 0
 }
 
@@ -74,7 +74,7 @@ BS.widgets[BS.W_PLAYER_NAME] = {
     customSettings = {
         [1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_SHOW_CLASS_ICON),
+            name = GetString(BARSTEWARD_SHOW_CLASS_ICON),
             getFunc = function()
                 return BS.Vars.Controls[BS.W_PLAYER_NAME].ShowClassIcon or false
             end,
@@ -124,7 +124,7 @@ BS.widgets[BS.W_CLASS] = {
     customSettings = {
         [1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_HIDE_TEXT),
+            name = GetString(BARSTEWARD_HIDE_TEXT),
             getFunc = function()
                 return BS.Vars.Controls[BS.W_CLASS].NoValue or false
             end,
@@ -206,7 +206,7 @@ BS.widgets[BS.W_SKYSHARDS] = {
         widget:SetColour(BS.GetColour(BS.W_SKYSHARDS, true))
 
         local ttt = BS.LC.Format(SI_MAPFILTER15) .. BS.LF
-        local stext = zo_strformat(GetString(_G.BARSTEWARD_SKYSHARDS_SKILL_POINTS), skillSkyShards)
+        local stext = zo_strformat(GetString(BARSTEWARD_SKYSHARDS_SKILL_POINTS), skillSkyShards)
 
         ttt = ttt .. BS.COLOURS.White:Colorize(stext)
 
@@ -292,7 +292,7 @@ local function getSpeed(widget)
     return speed
 end
 
-local unitChoices = { GetString(_G.BARSTEWARD_MPH), GetString(_G.BARSTEWARD_KPH) }
+local unitChoices = { GetString(BARSTEWARD_MPH), GetString(BARSTEWARD_KPH) }
 
 BS.widgets[BS.W_SPEED] = {
     -- v1.2.16
@@ -302,11 +302,11 @@ BS.widgets[BS.W_SPEED] = {
     end,
     timer = 300,
     icon = "icons/emotes/keyboard/emotecategoryicon_physical_up",
-    tooltip = GetString(_G.BARSTEWARD_SPEED),
+    tooltip = GetString(BARSTEWARD_SPEED),
     customSettings = {
         [1] = {
             type = "dropdown",
-            name = GetString(_G.BARSTEWARD_SPEED_UNITS),
+            name = GetString(BARSTEWARD_SPEED_UNITS),
             choices = unitChoices,
             getFunc = function()
                 local units = BS.Vars.Controls[BS.W_SPEED].Units
@@ -505,19 +505,19 @@ local function updateWidget()
         dpsWidget:SetColour(BS.GetColour(BS.W_DPS, true))
         dpsWidget:SetIcon(icon)
 
-        local ttt = GetString(_G.BARSTEWARD_DPS) .. BS.LF
+        local ttt = GetString(BARSTEWARD_DPS) .. BS.LF
         local gold = BS.COLOURS.ZOSGold
 
-        ttt = ttt .. BS.COLOURS.White:Colorize(GetString(_G.BARSTEWARD_PREVIOUS_ENCOUNTER)) .. BS.LF
+        ttt = ttt .. BS.COLOURS.White:Colorize(GetString(BARSTEWARD_PREVIOUS_ENCOUNTER)) .. BS.LF
 
         if (name) then
             ttt = ttt .. BS.COLOURS.ZOSPurple:Colorize(BS.LC.Format(name)) .. BS.LF
         end
 
         ttt =
-            ttt .. GetString(_G.BARSTEWARD_PREVIOUS_ENCOUNTER_AVERAGE) .. " " .. gold:Colorize(getAvarageDps()) .. BS.LF
-        ttt = ttt .. GetString(_G.BARSTEWARD_PREVIOUS_ENCOUNTER_MAXIMUM) .. " " .. gold:Colorize(maxDamage) .. BS.LF
-        ttt = ttt .. GetString(_G.BARSTEWARD_PREVIOUS_ENCOUNTER_DURATION) .. " " .. gold:Colorize(getCombatTime())
+            ttt .. GetString(BARSTEWARD_PREVIOUS_ENCOUNTER_AVERAGE) .. " " .. gold:Colorize(getAvarageDps()) .. BS.LF
+        ttt = ttt .. GetString(BARSTEWARD_PREVIOUS_ENCOUNTER_MAXIMUM) .. " " .. gold:Colorize(maxDamage) .. BS.LF
+        ttt = ttt .. GetString(BARSTEWARD_PREVIOUS_ENCOUNTER_DURATION) .. " " .. gold:Colorize(getCombatTime())
 
         dpsWidget:SetTooltip(ttt)
     end
@@ -530,13 +530,13 @@ local function combatRecapCallback(_, recapData)
 end
 
 local function checkLibCombat()
-    if (_G.LibCombat) then
+    if (LibCombat) then
         if (not BS.LibCombat) then
             resetCombatInfo()
-            BS.LibCombat = _G.LibCombat
-            BS.LibCombat:RegisterCallbackType(_G.LIBCOMBAT_EVENT_UNITS, combatUnitsCallback, BS.Name .. "CombatMetrics")
+            BS.LibCombat = LibCombat
+            BS.LibCombat:RegisterCallbackType(LIBCOMBAT_EVENT_UNITS, combatUnitsCallback, BS.Name .. "CombatMetrics")
             BS.LibCombat:RegisterCallbackType(
-                _G.LIBCOMBAT_EVENT_FIGHTRECAP,
+                LIBCOMBAT_EVENT_FIGHTRECAP,
                 combatRecapCallback,
                 BS.Name .. "CombatMetrics"
             )
@@ -582,7 +582,7 @@ BS.widgets[BS.W_DPS] = {
     end,
     event = EVENT_PLAYER_ACTIVATED,
     icon = dpsIcon,
-    tooltip = GetString(_G.BARSTEWARD_DPS),
+    tooltip = GetString(BARSTEWARD_DPS),
     hideWhenTrue = function()
         return not BS.LibCombat
     end
@@ -605,7 +605,7 @@ BS.widgets[BS.W_PLAYER_LOCATION] = {
     end,
     event = { EVENT_PLAYER_ACTIVATED, EVENT_ZONE_CHANGED },
     icon = "icons/mapkey/mapkey_player",
-    tooltip = GetString(_G.BARSTEWARD_PLAYER_LOCATION),
+    tooltip = GetString(BARSTEWARD_PLAYER_LOCATION),
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("worldMap")
@@ -654,7 +654,7 @@ BS.widgets[BS.W_PLAYER_EXPERIENCE] = {
         widget:SetColour(BS.GetColour(this, true))
         widget:SetValue(out)
 
-        local ttt = GetString(_G.BARSTEWARD_PLAYER_EXPERIENCE) .. BS.LF
+        local ttt = GetString(BARSTEWARD_PLAYER_EXPERIENCE) .. BS.LF
         local ttext = xp .. " / " .. xplvl .. BS.LF .. pc .. "%"
 
         ttt = ttt .. BS.COLOURS.White:Colorize(ttext)
@@ -665,7 +665,7 @@ BS.widgets[BS.W_PLAYER_EXPERIENCE] = {
     end,
     event = EVENT_EXPERIENCE_UPDATE,
     icon = "icons/icon_experience",
-    tooltip = GetString(_G.BARSTEWARD_PLAYER_EXPERIENCE)
+    tooltip = GetString(BARSTEWARD_PLAYER_EXPERIENCE)
 }
 
 BS.widgets[BS.W_FOOD_BUFF] = {
@@ -684,8 +684,8 @@ BS.widgets[BS.W_FOOD_BUFF] = {
 
             if (BS.GetVar("Announce", this) and (BS.GetVar("WarningValue", this) * 60) == BS.LC.ToInt(buff.remaining)) then
                 local buffMessage =
-                    ZO_CachedStrFormat(GetString(_G.BARSTEWARD_WARNING_EXPIRING), GetString(_G.BARSTEWARD_FOOD_BUFF))
-                BS.Announce(GetString(_G.BARSTEWARD_WARNING), buffMessage, this)
+                    ZO_CachedStrFormat(GetString(BARSTEWARD_WARNING_EXPIRING), GetString(BARSTEWARD_FOOD_BUFF))
+                BS.Announce(GetString(BARSTEWARD_WARNING), buffMessage, this)
             end
 
             return buff.remaining
@@ -700,7 +700,7 @@ BS.widgets[BS.W_FOOD_BUFF] = {
     timer = 1000,
     hideWhenEqual = 0,
     icon = "icons/store_tricolor_food_01",
-    tooltip = BS.LC.Format(_G.BARSTEWARD_FOOD_BUFF)
+    tooltip = BS.LC.Format(BARSTEWARD_FOOD_BUFF)
 }
 
 BS.widgets[BS.W_XP_BUFF] = {
@@ -710,7 +710,7 @@ BS.widgets[BS.W_XP_BUFF] = {
         local this = BS.W_XP_BUFF
         local buffs = BS.ScanBuffs(BS.XP_BUFFS, this)
         local lowest = { remaining = 99999 }
-        local ttt = BS.LC.Format(_G.BARSTEWARD_XP_BUFF) .. BS.LF
+        local ttt = BS.LC.Format(BARSTEWARD_XP_BUFF) .. BS.LF
 
         if (#buffs > 0) then
             for _, buff in ipairs(buffs) do
@@ -735,8 +735,8 @@ BS.widgets[BS.W_XP_BUFF] = {
 
             if (BS.GetVar("Announce", this) and (BS.GetVar("WarningValue", this) * 60) == BS.LC.ToInt(lowest.remaining)) then
                 local buffMessage =
-                    ZO_CachedStrFormat(GetString(_G.BARSTEWARD_WARNING_EXPIRING), BS.LC.Format(lowest.buffName))
-                BS.Announce(GetString(_G.BARSTEWARD_WARNING), buffMessage, this)
+                    ZO_CachedStrFormat(GetString(BARSTEWARD_WARNING_EXPIRING), BS.LC.Format(lowest.buffName))
+                BS.Announce(GetString(BARSTEWARD_WARNING), buffMessage, this)
             end
 
             return lowest.remaining
@@ -752,14 +752,14 @@ BS.widgets[BS.W_XP_BUFF] = {
     hideWhenEqual = 0,
     timer = 1000,
     icon = "icons/icon_experience",
-    tooltip = BS.LC.Format(_G.BARSTEWARD_XP_BUFF)
+    tooltip = BS.LC.Format(BARSTEWARD_XP_BUFF)
 }
 
 local function changeStatus()
     local status = GetPlayerStatus()
 
     if (status == PLAYER_STATUS_OFFLINE) then
-        status = PLAYER_STATUS_ONLINE
+        status = PLAYER_STATUS_ONLINE --[[@as PlayerStatus]]
     else
         status = status + 1
     end
@@ -788,7 +788,7 @@ BS.widgets[BS.W_PLAYER_STATUS] = {
     customSettings = {
         [1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_HIDE_TEXT),
+            name = GetString(BARSTEWARD_HIDE_TEXT),
             getFunc = function()
                 return BS.Vars.Controls[BS.W_PLAYER_STATUS].NoValue or false
             end,
@@ -832,7 +832,7 @@ BS.widgets[BS.W_LFG_ROLE] = {
     customSettings = {
         [1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_HIDE_TEXT),
+            name = GetString(BARSTEWARD_HIDE_TEXT),
             getFunc = function()
                 return BS.Vars.Controls[BS.W_LFG_ROLE].NoValue or false
             end,
@@ -986,7 +986,7 @@ BS.widgets[BS.W_BOUNTY_AMOUNT] = {
         widget:SetColour(colour)
         widget:SetValue(bounty .. goldIcon)
 
-        local tt = BS.LC.Format(_G.BARSTEWARD_BOUNTY_AMOUNT) .. BS.LF .. BS.LF
+        local tt = BS.LC.Format(BARSTEWARD_BOUNTY_AMOUNT) .. BS.LF .. BS.LF
         local formatted = zo_strformat(SI_JUSTICE_INFAMY_LEVEL_CHANGED, infamyText)
 
         formatted = zo_strformat("<<zC:1>>", formatted)
@@ -1000,7 +1000,7 @@ BS.widgets[BS.W_BOUNTY_AMOUNT] = {
     timer = 1000,
     hideWhenEqual = 0,
     icon = "icons/store_bounty_expunger_medium",
-    tooltip = BS.LC.Format(_G.BARSTEWARD_BOUNTY_AMOUNT)
+    tooltip = BS.LC.Format(BARSTEWARD_BOUNTY_AMOUNT)
 }
 
 BS.widgets[BS.W_ARMOURY_BUILD] = {
@@ -1034,7 +1034,7 @@ BS.widgets[BS.W_ARMOURY_BUILD] = {
 
         local tt = BS.LC.Format(SI_ARMORY_TITLE) .. BS.LF
 
-        tt = tt .. BS.LF .. BS.LC.Format(_G.BARSTEWARD_BUILD_INFO)
+        tt = tt .. BS.LF .. BS.LC.Format(BARSTEWARD_BUILD_INFO)
 
         if (armouryInfo.index) then
             local equipped = BS.COLOURS.White:Colorize(armouryInfo.name)
@@ -1101,5 +1101,5 @@ BS.widgets[BS.W_ENLIGHTENED] = {
     hideWhenEqual = 0,
     event = { EVENT_ENLIGHTENED_STATE_LOST, EVENT_ENLIGHTENED_STATE_GAINED, EVENT_EXPERIENCE_UPDATE },
     icon = "icons/quest_elsweyr_evilcadwell_head",
-    tooltip = GetString(_G.BARSTEWARD_ENLIGHTENED)
+    tooltip = GetString(BARSTEWARD_ENLIGHTENED)
 }

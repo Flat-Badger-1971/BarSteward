@@ -1,4 +1,4 @@
-local BS = _G.BarSteward
+local BS = BarSteward
 local cindex = 1
 
 -- borrowed from Bandits UI

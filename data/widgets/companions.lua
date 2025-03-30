@@ -1,4 +1,4 @@
-local BS = _G.BarSteward
+local BS = BarSteward
 
 BS.widgets[BS.W_RAPPORT] = {
     name = "rapport",
@@ -25,13 +25,13 @@ BS.widgets[BS.W_RAPPORT] = {
         local level = GetActiveCompanionRapportLevel()
         local desc = GetActiveCompanionRapportLevelDescription(level)
 
-        widget:SetTooltip(GetString(_G.BARSTEWARD_RAPPORT) .. BS.LF .. BS.COLOURS.White:Colorize(desc))
+        widget:SetTooltip(GetString(BARSTEWARD_RAPPORT) .. BS.LF .. BS.COLOURS.White:Colorize(desc))
 
         return rapportValue
     end,
     event = { EVENT_COMPANION_RAPPORT_UPDATE, EVENT_ACTIVE_COMPANION_STATE_CHANGED },
     icon = "hud/lootHistory_icon_rapportincrease_generic",
-    tooltip = GetString(_G.BARSTEWARD_RAPPORT),
+    tooltip = GetString(BARSTEWARD_RAPPORT),
     hideWhenEqual = function()
         if (HasActiveCompanion()) then
             return GetMaximumRapport()
@@ -76,7 +76,7 @@ BS.widgets[BS.W_COMPANION_LEVEL] = {
         widget:SetValue(text)
         widget:SetColour(BS.GetColour(this, true))
 
-        local ttt = GetString(_G.BARSTEWARD_COMPANION_LEVEL) .. BS.LF
+        local ttt = GetString(BARSTEWARD_COMPANION_LEVEL) .. BS.LF
         local progress = (currentXPInLevel or 0) .. " / " .. totalXPInLevel
 
         if (progress == "0 / 0") then
@@ -91,7 +91,7 @@ BS.widgets[BS.W_COMPANION_LEVEL] = {
     end,
     event = { EVENT_ACTIVE_COMPANION_STATE_CHANGED, EVENT_COMPANION_EXPERIENCE_GAIN },
     icon = "companion/keyboard/category_u30_companions_up",
-    tooltip = GetString(_G.BARSTEWARD_COMPANION_LEVEL),
+    tooltip = GetString(BARSTEWARD_COMPANION_LEVEL),
     hideWhenEqual = 0,
     hideWhenMaxLevel = function()
         if (not BS.Vars.Controls[BS.W_COMPANION_LEVEL].HideWhenMaxLevel) then
@@ -107,7 +107,7 @@ BS.widgets[BS.W_COMPANION_LEVEL] = {
     customSettings = {
         [1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_SHOW_XP_PC),
+            name = GetString(BARSTEWARD_SHOW_XP_PC),
             getFunc = function()
                 return BS.Vars.Controls[BS.W_COMPANION_LEVEL].ShowXPPC or true
             end,
@@ -140,7 +140,7 @@ for k, v in pairs(BS.COMPANION_DEFIDS) do
         end,
         event = EVENT_PLAYER_ACTIVATED,
         tooltip = zo_strformat(
-            GetString(_G.BARSTEWARD_COMPANION_WIDGET),
+            GetString(BARSTEWARD_COMPANION_WIDGET),
             ZO_CachedStrFormat(SI_UNIT_NAME, GetCollectibleInfo(GetCompanionCollectibleId(v)))
         ),
         icon = companionIcons[k],
