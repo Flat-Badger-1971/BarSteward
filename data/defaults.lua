@@ -760,7 +760,6 @@ BS.Defaults = {
         },
         [BS.W_ALL_CRAFTING] = {
             Cat = cat.Crafting,
-            Experimental = true,
             ColourValues = "okc,wv,wc,dv,dc",
             DangerValue = 24,
             HideSeconds = false,

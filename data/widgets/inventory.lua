@@ -336,9 +336,11 @@ BS.widgets[BS.W_SOUL_GEMS] = {
     name = "soulGems",
     update = function(widget)
         local this = BS.W_SOUL_GEMS
-        local level = GetUnitEffectiveLevel("player")
-        local filledCount = select(3, GetSoulGemInfo(SOUL_GEM_TYPE_FILLED, level, false))
-        local emptyCount = select(3, GetSoulGemInfo(SOUL_GEM_TYPE_EMPTY, level, false))
+
+        ---@diagnostic disable: missing-parameter
+        local filledCount = select(3, GetSoulGemInfo(SOUL_GEM_TYPE_FILLED))
+        local emptyCount = select(3, GetSoulGemInfo(SOUL_GEM_TYPE_EMPTY))
+        ---@diagnostic enable: missing-parameter
 
         if (BS.GetVar("UseSeparators", this) == true) then
             filledCount = BS.AddSeparators(filledCount)
@@ -535,12 +537,18 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
             table.insert(writText, writType)
         end
 
+        local restrict = BS.GetVar("Restrict", BS.W_WRITS_SURVEYS)
+        local add = true
+
         if (#writText > 0) then
             table.sort(writText)
+
             ttt = ttt .. BS.LF
 
             for _, d in pairs(writText) do
+                -- if ((restrict == true and d:find(BS.BAGICON)) or restrict ~= true) then
                 ttt = ttt .. BS.LF .. d
+                -- end
             end
         end
 
@@ -549,7 +557,9 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
             ttt = ttt .. BS.LF
 
             for _, d in pairs(detail) do
-                ttt = string.format("%s%s%s", ttt, BS.LF, d)
+                if ((restrict == true and d:find(BS.BAGICON)) or restrict ~= true) then
+                    ttt = string.format("%s%s%s", ttt, BS.LF, d)
+                end
             end
         end
 
@@ -574,6 +584,17 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
             end,
             disabled = function()
                 return WritWorthy == nil
+            end
+        },
+        [2] = {
+            name = GetString(BARSTEWARD_RESTRICT_TOOLTIP),
+            type = "checkbox",
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_WRITS_SURVEYS].Restrict or false
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_WRITS_SURVEYS].Restrict = value
+                BS.RefreshWidget(BS.W_WRITS_SURVEYS)
             end
         }
     }

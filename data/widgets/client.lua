@@ -393,13 +393,31 @@ BS.widgets = {
             local this = BS.W_SERVER
             local server = BS.LC.Format(GetWorldName())
 
+            if (BS.GetVar("ServerShort", this) == true) then
+                server = server:match("%w+")
+            end
+
             widget:SetValue(server)
             widget:SetColour(BS.GetColour(this, true))
-            d(server)
+
             return server
         end,
         event = EVENT_PLAYER_ACTIVATED,
         tooltip = GetString(BARSTEWARD_SERVER),
-        icon = "login/link_loginlogo_eso"
+        icon = "login/link_loginlogo_eso",
+        customSettings = {
+            [1] = {
+                type = "checkbox",
+                name = GetString(BARSTEWARD_SHORTEN_WORLDNAME),
+                getFunc = function()
+                    return BS.Vars.Controls[BS.W_SERVER].ServerShort or false
+                end,
+                setFunc = function(value)
+                    BS.Vars.Controls[BS.W_SERVER].ServerShort = value
+                    BS.RefreshWidget(BS.W_SERVER)
+                end,
+                default = true
+            }
+        }
     }
 }

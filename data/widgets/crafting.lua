@@ -129,7 +129,7 @@ local function getMinType(timers)
     for craftingType, timer in pairs(timers) do
         minType = minType or craftingType
 
-        if (timer.timeRemaining < timers[minType].timeRemaining) then
+        if (timer.timeRemaining < timers[minType].timeRemaining and timer.inUse > 0) then
             minType = craftingType
         end
     end

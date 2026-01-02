@@ -134,6 +134,10 @@ function BS.VersionCheck()
 
         BS.Vars:SetCommon(true, "Updates", 3208)
     end
+
+    if (needsUpdate(3400)) then
+        BS.Vars.Controls[BS.W_ALL_CRAFTING].Experimental = false
+    end
 end
 
 function BS.SetVersionCheck()
