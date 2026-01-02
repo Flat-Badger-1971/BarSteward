@@ -1,4 +1,4 @@
-local BS = _G.BarSteward
+local BS = BarSteward
 
 local twelveFormats = {
     "hh:m:s",
@@ -58,7 +58,7 @@ function BS.AddSettings(defaults, controls, vars, key)
     if (defaults.NoIcon ~= nil) then
         controls[#controls + 1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_HIDE_WIDGET_ICON),
+            name = GetString(BARSTEWARD_HIDE_WIDGET_ICON),
             getFunc = function()
                 return vars.NoIcon or false
             end,
@@ -75,7 +75,7 @@ function BS.AddSettings(defaults, controls, vars, key)
     if (defaults.NoValue ~= nil) then
         controls[#controls + 1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_HIDE_TEXT),
+            name = GetString(BARSTEWARD_HIDE_TEXT),
             getFunc = function()
                 return vars.NoValue or false
             end,
@@ -92,8 +92,8 @@ function BS.AddSettings(defaults, controls, vars, key)
     if (defaults.Invert ~= nil) then
         controls[#controls + 1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_INVERT),
-            tooltip = GetString(_G.BARSTEWARD_INVERT_TOOLTIP),
+            name = GetString(BARSTEWARD_INVERT),
+            tooltip = GetString(BARSTEWARD_INVERT_TOOLTIP),
             getFunc = function()
                 return vars.Invert or false
             end,
@@ -110,8 +110,8 @@ function BS.AddSettings(defaults, controls, vars, key)
         if (defaults.Autohide ~= nil) then
             controls[#controls + 1] = {
                 type = "checkbox",
-                name = GetString(_G.BARSTEWARD_AUTOHIDE),
-                tooltip = GetString(_G.BARSTEWARD_AUTOHIDE_TOOLTIP),
+                name = GetString(BARSTEWARD_AUTOHIDE),
+                tooltip = GetString(BARSTEWARD_AUTOHIDE_TOOLTIP),
                 getFunc = function()
                     return vars.Autohide
                 end,
@@ -128,8 +128,8 @@ function BS.AddSettings(defaults, controls, vars, key)
     if (defaults.HideWhenComplete ~= nil or defaults.HideWhenCompleted ~= nil) then
         controls[#controls + 1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_HIDE_WHEN_COMPLETE),
-            tooltip = (defaults.HideWhenCompleted ~= nil) and "" or GetString(_G.BARSTEWARD_HIDE_WHEN_COMPLETE_TOOLTIP),
+            name = GetString(BARSTEWARD_HIDE_WHEN_COMPLETE),
+            tooltip = (defaults.HideWhenCompleted ~= nil) and "" or GetString(BARSTEWARD_HIDE_WHEN_COMPLETE_TOOLTIP),
             getFunc = function()
                 return vars.HideWhenComplete
             end,
@@ -145,8 +145,8 @@ function BS.AddSettings(defaults, controls, vars, key)
     if (defaults.HideWhenFullyUsed ~= nil) then
         controls[#controls + 1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_HIDE_WHEN_FULLY_USED),
-            tooltip = GetString(_G.BARSTEWARD_HIDE_WHEN_FULLY_USED_TOOLTIP),
+            name = GetString(BARSTEWARD_HIDE_WHEN_FULLY_USED),
+            tooltip = GetString(BARSTEWARD_HIDE_WHEN_FULLY_USED_TOOLTIP),
             getFunc = function()
                 return vars.HideWhenFullyUsed
             end,
@@ -162,7 +162,7 @@ function BS.AddSettings(defaults, controls, vars, key)
     if (defaults.HideWhenMaxLevel ~= nil) then
         controls[#controls + 1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_HIDE_MAX),
+            name = GetString(BARSTEWARD_HIDE_MAX),
             getFunc = function()
                 return vars.HideWhenMaxLevel
             end,
@@ -178,7 +178,7 @@ function BS.AddSettings(defaults, controls, vars, key)
     if (defaults.PvPOnly ~= nil) then
         controls[#controls + 1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_PVP_ONLY),
+            name = GetString(BARSTEWARD_PVP_ONLY),
             getFunc = function()
                 return vars.PvPOnly
             end,
@@ -194,7 +194,7 @@ function BS.AddSettings(defaults, controls, vars, key)
     if (defaults.PvPNever ~= nil) then
         controls[#controls + 1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_PVP_NEVER),
+            name = GetString(BARSTEWARD_PVP_NEVER),
             getFunc = function()
                 return vars.PvPNever
             end,
@@ -210,7 +210,7 @@ function BS.AddSettings(defaults, controls, vars, key)
     if (defaults.ShowPercent ~= nil) then
         controls[#controls + 1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_PERCENTAGE),
+            name = GetString(BARSTEWARD_PERCENTAGE),
             getFunc = function()
                 return vars.ShowPercent
             end,
@@ -226,7 +226,7 @@ function BS.AddSettings(defaults, controls, vars, key)
     if (defaults.UseSeparators ~= nil) then
         controls[#controls + 1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_ADD_SEPARATORS),
+            name = GetString(BARSTEWARD_ADD_SEPARATORS),
             getFunc = function()
                 return vars.UseSeparators
             end,
@@ -242,7 +242,7 @@ function BS.AddSettings(defaults, controls, vars, key)
     if (defaults.HideSeconds ~= nil) then
         controls[#controls + 1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_HIDE_SECONDS),
+            name = GetString(BARSTEWARD_HIDE_SECONDS),
             getFunc = function()
                 return vars.HideSeconds
             end,
@@ -258,7 +258,7 @@ function BS.AddSettings(defaults, controls, vars, key)
     if (defaults.HideDaysWhenZero ~= nil) then
         controls[#controls + 1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_HIDE_ZERO_DAYS),
+            name = GetString(BARSTEWARD_HIDE_ZERO_DAYS),
             getFunc = function()
                 return vars.HideDaysWhenZero
             end,
@@ -274,8 +274,8 @@ function BS.AddSettings(defaults, controls, vars, key)
     if (defaults.HideLimit ~= nil) then
         controls[#controls + 1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_HIDE_LIMIT),
-            tooltip = GetString(_G.BARSTEWARD_HIDE_LIMIT_TOOLTIP),
+            name = GetString(BARSTEWARD_HIDE_LIMIT),
+            tooltip = GetString(BARSTEWARD_HIDE_LIMIT_TOOLTIP),
             getFunc = function()
                 return vars.HideLimit
             end,
@@ -291,8 +291,8 @@ function BS.AddSettings(defaults, controls, vars, key)
     if (defaults.NoLimitColour ~= nil) then
         controls[#controls + 1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_NO_LIMIT_COLOUR),
-            tooltip = GetString(_G.BARSTEWARD_NO_LIMIT_COLOUR_TOOLTIP),
+            name = GetString(BARSTEWARD_NO_LIMIT_COLOUR),
+            tooltip = GetString(BARSTEWARD_NO_LIMIT_COLOUR_TOOLTIP),
             getFunc = function()
                 return vars.NoLimitColour
             end,
@@ -308,8 +308,8 @@ function BS.AddSettings(defaults, controls, vars, key)
     if (defaults.ShowFreeSpace ~= nil) then
         controls[#controls + 1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_BAG_FREE),
-            tooltip = GetString(_G.BARSTEWARD_BAG_FREE_TOOLTIP),
+            name = GetString(BARSTEWARD_BAG_FREE),
+            tooltip = GetString(BARSTEWARD_BAG_FREE_TOOLTIP),
             getFunc = function()
                 return vars.ShowFreeSpace or false
             end,
@@ -341,7 +341,7 @@ function BS.AddSettings(defaults, controls, vars, key)
 
             controls[#controls + 1] = {
                 type = "editbox",
-                name = GetString(_G.BARSTEWARD_VALUE),
+                name = GetString(BARSTEWARD_VALUE),
                 getFunc = function()
                     return vars["SoundWhen" .. varsuffix .. "Value"]
                 end,
@@ -357,7 +357,7 @@ function BS.AddSettings(defaults, controls, vars, key)
 
             controls[#controls + 1] = {
                 type = "dropdown",
-                name = GetString(_G.BARSTEWARD_SOUND),
+                name = GetString(BARSTEWARD_SOUND),
                 choices = BS.SoundChoices,
                 getFunc = function()
                     return vars["SoundWhen" .. varsuffix .. "Sound"]
@@ -376,12 +376,12 @@ function BS.AddSettings(defaults, controls, vars, key)
     end
 
     if (defaults.Announce ~= nil) then
-        local nameValue = GetString(_G.BARSTEWARD_ANNOUNCEMENT)
+        local nameValue = GetString(BARSTEWARD_ANNOUNCEMENT)
 
         if (key == BS.W_FRIENDS) then
-            nameValue = GetString(_G.BARSTEWARD_ANNOUNCEMENT_FRIEND)
+            nameValue = GetString(BARSTEWARD_ANNOUNCEMENT_FRIEND)
         elseif (key == BS.W_GUILD_FRIENDS) then
-            nameValue = GetString(_G.BARSTEWARD_ANNOUNCEMENT_FRIEND_GUILD)
+            nameValue = GetString(BARSTEWARD_ANNOUNCEMENT_FRIEND_GUILD)
         end
 
         controls[#controls + 1] = {
@@ -401,7 +401,7 @@ function BS.AddSettings(defaults, controls, vars, key)
     if (vars.Progress == true) then
         controls[#controls + 1] = {
             type = "colorpicker",
-            name = GetString(_G.BARSTEWARD_PROGRESS_VALUE),
+            name = GetString(BARSTEWARD_PROGRESS_VALUE),
             getFunc = function()
                 local colour = vars.ProgressColour or BS.Vars.DefaultWarningColour
 
@@ -422,10 +422,10 @@ function BS.AddSettings(defaults, controls, vars, key)
 
         controls[#controls + 1] = {
             type = "colorpicker",
-            name = GetString(_G.BARSTEWARD_PROGRESS_GRADIENT_START),
+            name = GetString(BARSTEWARD_PROGRESS_GRADIENT_START),
             getFunc = function()
                 local startg = {
-                    GetInterfaceColor(_G.INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_START)
+                    GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_START)
                 }
                 local colour = vars.GradientStart or startg
                 local r, g, b = unpack(colour)
@@ -451,7 +451,7 @@ function BS.AddSettings(defaults, controls, vars, key)
 
         controls[#controls + 1] = {
             type = "colorpicker",
-            name = GetString(_G.BARSTEWARD_PROGRESS_GRADIENT_END),
+            name = GetString(BARSTEWARD_PROGRESS_GRADIENT_END),
             getFunc = function()
                 local endg = {
                     GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_END)
@@ -517,8 +517,8 @@ function BS.AddSettings(defaults, controls, vars, key)
 
         controls[#controls + 1] = {
             type = "dropdown",
-            name = GetString(_G.BARSTEWARD_TWELVE_TWENTY_FOUR),
-            choices = { GetString(_G.BARSTEWARD_12), GetString(_G.BARSTEWARD_24) },
+            name = GetString(BARSTEWARD_TWELVE_TWENTY_FOUR),
+            choices = { GetString(BARSTEWARD_12), GetString(BARSTEWARD_24) },
             getFunc = function()
                 return timevars.TimeType or BS.Defaults.TimeType
             end,
@@ -530,7 +530,7 @@ function BS.AddSettings(defaults, controls, vars, key)
 
         controls[#controls + 1] = {
             type = "dropdown",
-            name = GetString(_G.BARSTEWARD_TIME_FORMAT_12),
+            name = GetString(BARSTEWARD_TIME_FORMAT_12),
             choices = timeSamples12,
             getFunc = function()
                 local format = timevars.TimeFormat12 or BS.Defaults.TimeFormat12
@@ -549,14 +549,14 @@ function BS.AddSettings(defaults, controls, vars, key)
                 timevars.TimeFormat12 = format
             end,
             disabled = function()
-                return (timevars.TimeType or BS.Defaults.TimeType) ~= GetString(_G.BARSTEWARD_12)
+                return (timevars.TimeType or BS.Defaults.TimeType) ~= GetString(BARSTEWARD_12)
             end,
             default = BS.Defaults.TimeFormat12
         }
 
         controls[#controls + 1] = {
             type = "dropdown",
-            name = GetString(_G.BARSTEWARD_TIME_FORMAT_24),
+            name = GetString(BARSTEWARD_TIME_FORMAT_24),
             choices = timeSamples24,
             getFunc = function()
                 local format = timevars.TimeFormat24 or BS.Defaults.TimeFormat24
@@ -575,7 +575,7 @@ function BS.AddSettings(defaults, controls, vars, key)
                 timevars.TimeFormat24 = format
             end,
             disabled = function()
-                return (timevars.TimeType or BS.Defaults.TimeType) == GetString(_G.BARSTEWARD_12)
+                return (timevars.TimeType or BS.Defaults.TimeType) == GetString(BARSTEWARD_12)
             end,
             default = BS.Defaults.TimeFormat24
         }
@@ -583,12 +583,12 @@ function BS.AddSettings(defaults, controls, vars, key)
 
     if (defaults.Timer == true) then
         local timerFormat =
-            key == BS.W_LEADS and ZO_CachedStrFormat(_G.BARSTEWARD_TIMER_FORMAT_TEXT, 1, 12, 4) or
-            ZO_CachedStrFormat(_G.BARSTEWARD_TIMER_FORMAT_TEXT_WITH_SECONDS, 1, 12, 4, 10)
+            key == BS.W_LEADS and ZO_CachedStrFormat(BARSTEWARD_TIMER_FORMAT_TEXT, 1, 12, 4) or
+            ZO_CachedStrFormat(BARSTEWARD_TIMER_FORMAT_TEXT_WITH_SECONDS, 1, 12, 4, 10)
 
         controls[#controls + 1] = {
             type = "dropdown",
-            name = GetString(_G.BARSTEWARD_TIMER_FORMAT),
+            name = GetString(BARSTEWARD_TIMER_FORMAT),
             choices = {
                 timerFormat,
                 "01:12:04:10"
@@ -609,196 +609,198 @@ function BS.AddSettings(defaults, controls, vars, key)
     local cv = getCV(vars)
 
     if (cv and key ~= BS.W_TAMRIEL_TIME or (key == BS.W_TAMRIEL_TIME and BS.LibClock ~= nil)) then
-        if (cv.c and not vars.Progress) then
-            controls[#controls + 1] = {
-                type = "colorpicker",
-                name = GetString(_G.BARSTEWARD_DEFAULT_COLOUR),
-                getFunc = function()
-                    return unpack(vars.Colour or BS.Vars.DefaultColour)
-                end,
-                setFunc = function(r, g, b, a)
-                    if (BS.LC.CompareColours({ r, g, b, a }, BS.Vars.DefaultColour)) then
-                        vars.Colour = nil
-                    else
-                        vars.Colour = { r, g, b, a }
-                    end
+        if (cv) then
+            if (cv.c and not vars.Progress) then
+                controls[#controls + 1] = {
+                    type = "colorpicker",
+                    name = GetString(BARSTEWARD_DEFAULT_COLOUR),
+                    getFunc = function()
+                        return unpack(vars.Colour or BS.Vars.DefaultColour)
+                    end,
+                    setFunc = function(r, g, b, a)
+                        if (BS.LC.CompareColours({ r, g, b, a }, BS.Vars.DefaultColour)) then
+                            vars.Colour = nil
+                        else
+                            vars.Colour = { r, g, b, a }
+                        end
 
-                    BS.RefreshWidget(key)
-                end,
-                width = "full",
-                default = unpack(BS.Vars.DefaultColour)
-            }
-        end
+                        BS.RefreshWidget(key)
+                    end,
+                    width = "full",
+                    default = unpack(BS.Vars.DefaultColour)
+                }
+            end
 
-        if (cv.okc) then
-            controls[#controls + 1] = {
-                type = "colorpicker",
-                name = GetString(_G.BARSTEWARD_OK_COLOUR),
-                getFunc = function()
-                    return unpack(vars.OkColour or BS.Vars.DefaultOkColour)
-                end,
-                setFunc = function(r, g, b, a)
-                    if (BS.LC.CompareColours({ r, g, b, a }, BS.Vars.DefaultOkColour)) then
-                        vars.OkColour = nil
-                    else
-                        vars.OkColour = { r, g, b, a }
-                    end
+            if (cv.okc) then
+                controls[#controls + 1] = {
+                    type = "colorpicker",
+                    name = GetString(BARSTEWARD_OK_COLOUR),
+                    getFunc = function()
+                        return unpack(vars.OkColour or BS.Vars.DefaultOkColour)
+                    end,
+                    setFunc = function(r, g, b, a)
+                        if (BS.LC.CompareColours({ r, g, b, a }, BS.Vars.DefaultOkColour)) then
+                            vars.OkColour = nil
+                        else
+                            vars.OkColour = { r, g, b, a }
+                        end
 
-                    BS.RefreshWidget(key)
-                end,
-                width = "full",
-                default = unpack(BS.Vars.DefaultOkColour)
-            }
-        end
+                        BS.RefreshWidget(key)
+                    end,
+                    width = "full",
+                    default = unpack(BS.Vars.DefaultOkColour)
+                }
+            end
 
-        if (cv.wc) then
-            controls[#controls + 1] = {
-                type = "colorpicker",
-                name = GetString(_G.BARSTEWARD_WARNING_COLOUR),
-                getFunc = function()
-                    return unpack(vars.WarningColour or BS.Vars.DefaultWarningColour)
-                end,
-                setFunc = function(r, g, b, a)
-                    if (BS.LC.CompareColours({ r, g, b, a }, BS.Vars.DefaultWarningColour)) then
-                        vars.WarningColour = nil
-                    else
-                        vars.WarningColour = { r, g, b, a }
-                    end
+            if (cv.wc) then
+                controls[#controls + 1] = {
+                    type = "colorpicker",
+                    name = GetString(BARSTEWARD_WARNING_COLOUR),
+                    getFunc = function()
+                        return unpack(vars.WarningColour or BS.Vars.DefaultWarningColour)
+                    end,
+                    setFunc = function(r, g, b, a)
+                        if (BS.LC.CompareColours({ r, g, b, a }, BS.Vars.DefaultWarningColour)) then
+                            vars.WarningColour = nil
+                        else
+                            vars.WarningColour = { r, g, b, a }
+                        end
 
-                    BS.RefreshWidget(key)
-                end,
-                width = "full",
-                default = unpack(BS.Vars.DefaultWarningColour)
-            }
-        end
+                        BS.RefreshWidget(key)
+                    end,
+                    width = "full",
+                    default = unpack(BS.Vars.DefaultWarningColour)
+                }
+            end
 
-        if (cv.dc) then
-            controls[#controls + 1] = {
-                type = "colorpicker",
-                name = GetString(_G.BARSTEWARD_DANGER_COLOUR),
-                getFunc = function()
-                    return unpack(vars.DangerColour or BS.Vars.DefaultDangerColour)
-                end,
-                setFunc = function(r, g, b, a)
-                    if (BS.LC.CompareColours({ r, g, b, a }, BS.Vars.DefaultDangerColour)) then
-                        vars.DangerColour = nil
-                    else
-                        vars.DangerColour = { r, g, b, a }
-                    end
+            if (cv.dc) then
+                controls[#controls + 1] = {
+                    type = "colorpicker",
+                    name = GetString(BARSTEWARD_DANGER_COLOUR),
+                    getFunc = function()
+                        return unpack(vars.DangerColour or BS.Vars.DefaultDangerColour)
+                    end,
+                    setFunc = function(r, g, b, a)
+                        if (BS.LC.CompareColours({ r, g, b, a }, BS.Vars.DefaultDangerColour)) then
+                            vars.DangerColour = nil
+                        else
+                            vars.DangerColour = { r, g, b, a }
+                        end
 
-                    BS.RefreshWidget(key)
-                end,
-                width = "full",
-                default = unpack(BS.Vars.DefaultDangerColour)
-            }
-        end
+                        BS.RefreshWidget(key)
+                    end,
+                    width = "full",
+                    default = unpack(BS.Vars.DefaultDangerColour)
+                }
+            end
 
-        if (cv.mc) then
-            controls[#controls + 1] = {
-                type = "colorpicker",
-                name = GetString(_G.BARSTEWARD_MAX_COLOUR),
-                getFunc = function()
-                    return unpack(vars.MaxColour or BS.Vars.DefaultMaxColour)
-                end,
-                setFunc = function(r, g, b, a)
-                    if (BS.LC.CompareColours({ r, g, b, a }, BS.Vars.DefaultMaxColour)) then
-                        vars.MaxColour = nil
-                    else
-                        vars.MaxColour = { r, g, b, a }
-                    end
+            if (cv.mc) then
+                controls[#controls + 1] = {
+                    type = "colorpicker",
+                    name = GetString(BARSTEWARD_MAX_COLOUR),
+                    getFunc = function()
+                        return unpack(vars.MaxColour or BS.Vars.DefaultMaxColour)
+                    end,
+                    setFunc = function(r, g, b, a)
+                        if (BS.LC.CompareColours({ r, g, b, a }, BS.Vars.DefaultMaxColour)) then
+                            vars.MaxColour = nil
+                        else
+                            vars.MaxColour = { r, g, b, a }
+                        end
 
-                    BS.RefreshWidget(key)
-                end,
-                width = "full",
-                default = unpack(BS.Vars.DefaultMaxColour)
-            }
-        end
+                        BS.RefreshWidget(key)
+                    end,
+                    width = "full",
+                    default = unpack(BS.Vars.DefaultMaxColour)
+                }
+            end
 
-        local units = vars.Units
+            local units = vars.Units
 
-        if (cv.okv) then
-            controls[#controls + 1] = {
-                type = "editbox",
-                name = GetString(_G.BARSTEWARD_OK_VALUE) .. (units and (" (" .. units .. ")") or ""),
-                getFunc = function()
-                    return vars.OkValue or ""
-                end,
-                setFunc = function(value)
-                    if (value == nil or value == "") then
-                        vars.OkValue = BS.Default.Controls[key].OkValue
-                    else
-                        vars.OkValue = tonumber(value)
-                    end
+            if (cv.okv) then
+                controls[#controls + 1] = {
+                    type = "editbox",
+                    name = GetString(BARSTEWARD_OK_VALUE) .. (units and (" (" .. units .. ")") or ""),
+                    getFunc = function()
+                        return vars.OkValue or ""
+                    end,
+                    setFunc = function(value)
+                        if (value == nil or value == "") then
+                            vars.OkValue = BS.Default.Controls[key].OkValue
+                        else
+                            vars.OkValue = tonumber(value)
+                        end
 
-                    BS.RefreshWidget(key)
-                end,
-                textType = TEXT_TYPE_NUMERIC,
-                isMultiLine = false,
-                width = "half",
-                default = nil
-            }
-        end
+                        BS.RefreshWidget(key)
+                    end,
+                    textType = TEXT_TYPE_NUMERIC,
+                    isMultiLine = false,
+                    width = "half",
+                    default = nil
+                }
+            end
 
-        if (cv.wv) then
-            controls[#controls + 1] = {
-                type = "editbox",
-                name = GetString(_G.BARSTEWARD_WARNING_VALUE) .. (units and (" (" .. units .. ")") or ""),
-                getFunc = function()
-                    return vars.WarningValue or ""
-                end,
-                setFunc = function(value)
-                    if (value == nil or value == "") then
-                        vars.WarningValue = BS.Default.Controls[key].WarningValue
-                    else
-                        vars.WarningValue = tonumber(value)
-                    end
+            if (cv.wv) then
+                controls[#controls + 1] = {
+                    type = "editbox",
+                    name = GetString(BARSTEWARD_WARNING_VALUE) .. (units and (" (" .. units .. ")") or ""),
+                    getFunc = function()
+                        return vars.WarningValue or ""
+                    end,
+                    setFunc = function(value)
+                        if (value == nil or value == "") then
+                            vars.WarningValue = BS.Default.Controls[key].WarningValue
+                        else
+                            vars.WarningValue = tonumber(value)
+                        end
 
-                    BS.RefreshWidget(key)
-                end,
-                textType = TEXT_TYPE_NUMERIC,
-                isMultiLine = false,
-                width = "half",
-                default = nil
-            }
-        end
+                        BS.RefreshWidget(key)
+                    end,
+                    textType = TEXT_TYPE_NUMERIC,
+                    isMultiLine = false,
+                    width = "half",
+                    default = nil
+                }
+            end
 
-        if (cv.dv) then
-            controls[#controls + 1] = {
-                type = "editbox",
-                name = GetString(_G.BARSTEWARD_DANGER_VALUE) .. (units and (" (" .. units .. ")") or ""),
-                getFunc = function()
-                    return vars.DangerValue or ""
-                end,
-                setFunc = function(value)
-                    if (value == nil or value == "") then
-                        vars.DangerValue = BS.Default.Controls[key].DangerValue
-                    else
-                        vars.DangerValue = tonumber(value)
-                    end
+            if (cv.dv) then
+                controls[#controls + 1] = {
+                    type = "editbox",
+                    name = GetString(BARSTEWARD_DANGER_VALUE) .. (units and (" (" .. units .. ")") or ""),
+                    getFunc = function()
+                        return vars.DangerValue or ""
+                    end,
+                    setFunc = function(value)
+                        if (value == nil or value == "") then
+                            vars.DangerValue = BS.Default.Controls[key].DangerValue
+                        else
+                            vars.DangerValue = tonumber(value)
+                        end
 
-                    BS.RefreshWidget(key)
-                end,
-                textType = TEXT_TYPE_NUMERIC,
-                isMultiLine = false,
-                width = "half",
-                default = nil
-            }
-        end
+                        BS.RefreshWidget(key)
+                    end,
+                    textType = TEXT_TYPE_NUMERIC,
+                    isMultiLine = false,
+                    width = "half",
+                    default = nil
+                }
+            end
 
-        if (cv.mv) then
-            controls[#controls + 1] = {
-                type = "checkbox",
-                name = GetString(_G.BARSTEWARD_MAX_VALUE),
-                getFunc = function()
-                    return vars.MaxValue or false
-                end,
-                setFunc = function(value)
-                    vars.MaxValue = value
-                    BS.RefreshWidget(key)
-                end,
-                width = "full",
-                default = false
-            }
+            if (cv.mv) then
+                controls[#controls + 1] = {
+                    type = "checkbox",
+                    name = GetString(BARSTEWARD_MAX_VALUE),
+                    getFunc = function()
+                        return vars.MaxValue or false
+                    end,
+                    setFunc = function(value)
+                        vars.MaxValue = value
+                        BS.RefreshWidget(key)
+                    end,
+                    width = "full",
+                    default = false
+                }
+            end
         end
     end
 
@@ -819,7 +821,7 @@ function BS.AddSettings(defaults, controls, vars, key)
     if (defaults.Print ~= nil) then
         controls[#controls + 1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_RANDOM_PRINT),
+            name = GetString(BARSTEWARD_RANDOM_PRINT),
             getFunc = function()
                 return vars.Print
             end,
@@ -836,8 +838,8 @@ function BS.CheckExperimental(defaults, widgetControls)
     if (defaults.Experimental) then
         widgetControls[#widgetControls + 1] = {
             type = "description",
-            text = "|cff0000" .. GetString(_G.BARSTEWARD_EXPERIMENTAL) .. "|r",
-            tooltip = GetString(_G.BARSTEWARD_EXPERIMENTAL_DESC),
+            text = "|cff0000" .. GetString(BARSTEWARD_EXPERIMENTAL) .. "|r",
+            tooltip = GetString(BARSTEWARD_EXPERIMENTAL_DESC),
             width = "full"
         }
     end

@@ -1,4 +1,4 @@
-local BS = _G.BarSteward
+local BS = BarSteward
 local goldIcon = BS.Icon("currency/currency_gold") .. " "
 
 BS.widgets[BS.W_STOLEN_ITEMS] = {
@@ -51,7 +51,7 @@ BS.widgets[BS.W_STOLEN_ITEMS] = {
         widget:SetValue(value)
         widget:SetColour(BS.GetColour(this, true))
 
-        local ttt = GetString(_G.BARSTEWARD_STOLEN) .. BS.LF
+        local ttt = GetString(BARSTEWARD_STOLEN) .. BS.LF
 
         ttt = ttt .. BS.COLOURS.White:Colorize(BS.BAGICON .. " " .. bagCounts.carrying)
 
@@ -82,7 +82,7 @@ BS.widgets[BS.W_STOLEN_ITEMS] = {
             ttt =
                 ttt ..
                 zo_strformat(
-                    GetString(_G.BARSTEWARD_TOTAL_VALUE),
+                    GetString(BARSTEWARD_TOTAL_VALUE),
                     BS.COLOURS.Yellow:Colorize(tostring(total)) .. goldIcon
                 )
 
@@ -95,7 +95,7 @@ BS.widgets[BS.W_STOLEN_ITEMS] = {
     end,
     callback = { [SHARED_INVENTORY] = { "SingleSlotInventoryUpdate" } },
     icon = "inventory/inventory_stolenitem_icon",
-    tooltip = GetString(_G.BARSTEWARD_STOLEN),
+    tooltip = GetString(BARSTEWARD_STOLEN),
     hideWhenEqual = 0,
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
@@ -107,7 +107,7 @@ BS.widgets[BS.W_STOLEN_ITEMS] = {
     customSettings = {
         [1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_SHOW_STOLEN_SLOTS),
+            name = GetString(BARSTEWARD_SHOW_STOLEN_SLOTS),
             getFunc = function()
                 return BS.Vars.Controls[BS.W_STOLEN_ITEMS].ShowSlots or false
             end,
@@ -148,7 +148,7 @@ BS.widgets[BS.W_FENCE_TRANSACTIONS] = {
     event = EVENT_CLOSE_STORE,
     hideWhenEqual = 0,
     icon = "vendor/vendor_tabicon_sell_up",
-    tooltip = GetString(_G.BARSTEWARD_FENCE)
+    tooltip = GetString(BARSTEWARD_FENCE)
 }
 
 BS.widgets[BS.W_LAUNDER_TRANSACTIONS] = {
@@ -178,7 +178,7 @@ BS.widgets[BS.W_LAUNDER_TRANSACTIONS] = {
     event = EVENT_CLOSE_STORE,
     hideWhenEqual = 0,
     icon = "vendor/vendor_tabicon_fence_up",
-    tooltip = GetString(_G.BARSTEWARD_LAUNDER)
+    tooltip = GetString(BARSTEWARD_LAUNDER)
 }
 
 BS.widgets[BS.W_FENCE_RESET] = {
@@ -198,5 +198,5 @@ BS.widgets[BS.W_FENCE_RESET] = {
     timer = 1000,
     hideWhenEqual = 0,
     icon = "vendor/vendor_tabicon_fence_over",
-    tooltip = GetString(_G.BARSTEWARD_FENCE_RESET)
+    tooltip = GetString(BARSTEWARD_FENCE_RESET)
 }

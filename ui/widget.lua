@@ -1,4 +1,4 @@
-local BS = _G.BarSteward
+local BS = BarSteward
 
 local baseWidget = ZO_Object:Subclass()
 
@@ -51,7 +51,7 @@ function baseWidget:ApplyFontCorrection()
 end
 
 function baseWidget:CreateSpacer()
-    local hideSpacer = (self.barSettings.Orientation == GetString(_G.BARSTEWARD_VERTICAL)) and self.noValue
+    local hideSpacer = (self.barSettings.Orientation == GetString(BARSTEWARD_VERTICAL)) and self.noValue
     local horizontal = hideSpacer and 0 or self.horizontalPadding
     local vertical = hideSpacer and 0 or self.verticalPadding
 
@@ -107,8 +107,8 @@ function baseWidget:CreateTooltip(tooltip)
                 local tooltiptext = getTooltip()
 
                 if (not IsInGamepadPreferredMode()) then
-                    BS.InfoTTDims = { _G.InformationTooltip:GetDimensionConstraints() }
-                    _G.InformationTooltip:SetDimensionConstraints(
+                    BS.InfoTTDims = { InformationTooltip:GetDimensionConstraints() }
+                    InformationTooltip:SetDimensionConstraints(
                         BS.InfoTTDims[1],
                         BS.InfoTTDims[2],
                         0,
@@ -127,7 +127,7 @@ function baseWidget:CreateTooltip(tooltip)
 
                 if (BS.InfoTTDims) then
                     -- reset the tooltip to its default values so as no to interfere with other users
-                    _G.InformationTooltip:SetDimensionConstraints(
+                    InformationTooltip:SetDimensionConstraints(
                         BS.InfoTTDims[1],
                         BS.InfoTTDims[2],
                         BS.InfoTTDims[3],

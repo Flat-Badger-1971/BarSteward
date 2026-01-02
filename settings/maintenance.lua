@@ -1,11 +1,11 @@
-local BS = _G.BarSteward
+local BS = BarSteward
 BS.forDeletion = {}
 
 function BS.GetMaintenanceSettings()
     local controls = {
         [1] = {
             type = "description",
-            text = "|cff0000" .. GetString(_G.BARSTEWARD_DELETE) .. "|r"
+            text = "|cff0000" .. GetString(BARSTEWARD_DELETE) .. "|r"
         }
     }
     local characters = BS.Vars:GetCommon("CharacterList") or {}
@@ -50,7 +50,7 @@ function BS.GetMaintenanceSettings()
 
     BS.options[#BS.options + 1] = {
         type = "submenu",
-        name = GetString(_G.BARSTEWARD_MAINTENANCE),
+        name = GetString(BARSTEWARD_MAINTENANCE),
         controls = controls,
         reference = "BarStewardMaintenance",
         icon = "/esoui/art/compass/ava_mine_daggerfall.dds"

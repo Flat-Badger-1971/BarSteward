@@ -1,4 +1,4 @@
-local BS = _G.BarSteward
+local BS = BarSteward
 
 -- apply logout hooks for default trimming, create a new saved vars manager and return it
 local function onLogout()
@@ -15,8 +15,8 @@ function BS.CreateSavedVariablesManager(varsFilename, defaults, commonDefaults)
             varsFilename,
             defaults,
             commonDefaults,
-            GetString(_G.BARSTEWARD_ACCOUNT_WIDE),
-            GetString(_G.BARSTEWARD_ACCOUNT_WIDE_TOOLTIP)
+            GetString(BARSTEWARD_ACCOUNT_WIDE),
+            GetString(BARSTEWARD_ACCOUNT_WIDE_TOOLTIP)
         )
 
     ZO_PreHook("Logout", onLogout)

@@ -1,4 +1,4 @@
-local BS = _G.BarSteward
+local BS = BarSteward
 local ALL_HOUSES = "icons/housing_ayl_duc_wayshrine001"
 
 local function getPTFInfo(id)
@@ -77,7 +77,7 @@ end
 
 function BS.AddHousingWidgets(idx, widgets)
     if (BS.Vars:GetCommon("HouseWidgets")) then
-        BS.PTF = _G.PortToFriend
+        BS.PTF = PortToFriend
 
         if (not BS.houses) then
             BS.houses = BS.GetHouses()
@@ -138,7 +138,7 @@ function BS.AddHousingWidgets(idx, widgets)
                     if (bindings[id] < BS.MAX_BINDINGS) then
                         ZO_CreateStringId(
                             "SI_BINDING_NAME_BARSTEWARD_KEYBIND_TOGGLE_HOUSE_" .. bindings[id],
-                            ZO_CachedStrFormat(_G.BARSTEWARD_TOGGLE, house.name)
+                            ZO_CachedStrFormat(BARSTEWARD_TOGGLE, house.name)
                         )
                     end
                 end
@@ -226,7 +226,7 @@ local function addSubmenu(barNames, vars, varId, house, id, controls)
     local submenuControls = {
         [1] = {
             type = "dropdown",
-            name = GetString(_G.BARSTEWARD_BAR),
+            name = GetString(BARSTEWARD_BAR),
             choices = barNames,
             getFunc = function()
                 local barName = BS.LC.Format(SI_DAMAGETYPE0)
@@ -258,7 +258,7 @@ local function addSubmenu(barNames, vars, varId, house, id, controls)
         },
         [2] = {
             type = "colorpicker",
-            name = GetString(_G.BARSTEWARD_DEFAULT_COLOUR),
+            name = GetString(BARSTEWARD_DEFAULT_COLOUR),
             getFunc = function()
                 return unpack(vars.Colour or BS.Vars.DefaultColour)
             end,
@@ -271,7 +271,7 @@ local function addSubmenu(barNames, vars, varId, house, id, controls)
         },
         [3] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_HIDE_WIDGET_ICON),
+            name = GetString(BARSTEWARD_HIDE_WIDGET_ICON),
             getFunc = function()
                 return vars.NoIcon or false
             end,
@@ -285,7 +285,7 @@ local function addSubmenu(barNames, vars, varId, house, id, controls)
         },
         [4] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_HIDE_TEXT),
+            name = GetString(BARSTEWARD_HIDE_TEXT),
             getFunc = function()
                 return vars.NoValue or false
             end,
@@ -322,7 +322,7 @@ local function addSubmenu(barNames, vars, varId, house, id, controls)
     if (id < 1999) then
         submenuControls[#submenuControls + 1] = {
             type = "editbox",
-            name = GetString(_G.BARSTEWARD_CHANGE),
+            name = GetString(BARSTEWARD_CHANGE),
             getFunc = function()
                 local name = vars.Name
 
@@ -349,8 +349,8 @@ local function addSubmenu(barNames, vars, varId, house, id, controls)
 
         submenuControls[#submenuControls + 1] = {
             type = "button",
-            name = GetString(_G.BARSTEWARD_GENERIC_REMOVE),
-            tooltip = GetString(_G.BARSTEWARD_GENERIC_REMOVE_WARNING),
+            name = GetString(BARSTEWARD_GENERIC_REMOVE),
+            tooltip = GetString(BARSTEWARD_GENERIC_REMOVE_WARNING),
             func = function()
                 BS.Vars.Controls[1000 + id] = nil
                 BS.Vars:SetCommon(nil, "HouseWidgets", id)
@@ -390,15 +390,15 @@ function BS.GetPortToHouseSettings()
     local controls = {
         [1] = {
             type = "description",
-            text = GetString(_G.BARSTEWARD_PORT_TO_HOUSE_DESCRIPTION) ..
-                ". " .. GetString(_G.BARSTEWARD_PORT_TO_HOUSE_PTF_INFO),
+            text = GetString(BARSTEWARD_PORT_TO_HOUSE_DESCRIPTION) ..
+                ". " .. GetString(BARSTEWARD_PORT_TO_HOUSE_PTF_INFO),
             width = "full"
         }
     }
 
-    if (_G.PortToFriend) then
+    if (PortToFriend) then
         local ptfIcon = BS.Icon(BS.FRIENDS_ICON)
-        local ptfText = BS.COLOURS.ZOSGreen:Colorize(zo_strformat(GetString(_G.BARSTEWARD_PORT_TO_HOUSE_PTF), ptfIcon))
+        local ptfText = BS.COLOURS.ZOSGreen:Colorize(zo_strformat(GetString(BARSTEWARD_PORT_TO_HOUSE_PTF), ptfIcon))
         controls[#controls + 1] = {
             type = "description",
             text = ptfText,
@@ -408,7 +408,7 @@ function BS.GetPortToHouseSettings()
 
     controls[#controls + 1] = {
         type = "dropdown",
-        name = GetString(_G.BARSTEWARD_PORT_TO_HOUSE_SELECT),
+        name = GetString(BARSTEWARD_PORT_TO_HOUSE_SELECT),
         choices = choices,
         choicesValues = choicesValues,
         scrollable = true,
@@ -423,7 +423,7 @@ function BS.GetPortToHouseSettings()
 
     controls[#controls + 1] = {
         type = "checkbox",
-        name = GetString(_G.BARSTEWARD_PORT_TO_HOUSE_LOCATION_ONLY),
+        name = GetString(BARSTEWARD_PORT_TO_HOUSE_LOCATION_ONLY),
         getFunc = function()
             return BS.House_ShowLocationOnly
         end,
@@ -439,7 +439,7 @@ function BS.GetPortToHouseSettings()
 
     controls[#controls + 1] = {
         type = "checkbox",
-        name = GetString(_G.BARSTEWARD_PORT_TO_HOUSE_LOCATION_TOO),
+        name = GetString(BARSTEWARD_PORT_TO_HOUSE_LOCATION_TOO),
         getFunc = function()
             return BS.House_ShowLocationToo
         end,
@@ -455,7 +455,7 @@ function BS.GetPortToHouseSettings()
 
     controls[#controls + 1] = {
         type = "description",
-        text = GetString(_G.BARSTEWARD_PORT_TO_HOUSE_PREVIEW),
+        text = GetString(BARSTEWARD_PORT_TO_HOUSE_PREVIEW),
         width = "full"
     }
 
@@ -479,7 +479,7 @@ function BS.GetPortToHouseSettings()
 
     controls[#controls + 1] = {
         type = "button",
-        name = GetString(_G.BARSTEWARD_ADD_WIDGET),
+        name = GetString(BARSTEWARD_ADD_WIDGET),
         func = addHouseWidget,
         width = "full",
         requiresReload = true,
@@ -492,7 +492,7 @@ function BS.GetPortToHouseSettings()
 
     if (addedHouses) then
         local bars = BS.Vars.Bars
-        local none = GetString(_G.BARSTEWARD_NONE_BAR)
+        local none = GetString(BARSTEWARD_NONE_BAR)
         local barNames = {}
 
         for _, v in ipairs(bars) do
@@ -531,7 +531,7 @@ function BS.GetPortToHouseSettings()
 
     BS.options[#BS.options + 1] = {
         type = "submenu",
-        name = GetString(_G.BARSTEWARD_PORT_TO_HOUSE),
+        name = GetString(BARSTEWARD_PORT_TO_HOUSE),
         controls = controls,
         reference = "BarStewardPortToHouse",
         icon = "/esoui/art/icons/poi/poi_group_house_glow.dds"

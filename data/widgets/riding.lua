@@ -1,4 +1,4 @@
-local BS = _G.BarSteward
+local BS = BarSteward
 local trainingActive = true
 
 EVENT_MANAGER:RegisterForEvent(
@@ -42,10 +42,11 @@ BS.widgets[BS.W_MOUNT_TRAINING] = {
         widget:SetColour(colour)
         widget:SetValue(time)
 
-        local tt = GetString(_G.BARSTEWARD_MOUNT_TRAINING) .. BS.LF .. BS.LF
-        local ttt = GetString(_G.BARSTEWARD_TRAINING_PROGRESS)
+        local tt = GetString(BARSTEWARD_MOUNT_TRAINING) .. BS.LF .. BS.LF
+        local ttt = GetString(BARSTEWARD_TRAINING_PROGRESS)
 
-        for trainingType, texture in pairs(_G.STABLE_TRAINING_TEXTURES) do
+        ---@diagnostic disable-next-line: undefined-global
+        for trainingType, texture in pairs(STABLE_TRAINING_TEXTURES) do
             local icon = string.format("%s%s ", BS.LF, BS.Icon(texture))
             local ttype = string.format("%s ", BS.LC.Format(GetString("SI_RIDINGTRAINTYPE", trainingType)))
             local val, maxVal = STABLE_MANAGER:GetStats(trainingType)
@@ -61,7 +62,7 @@ BS.widgets[BS.W_MOUNT_TRAINING] = {
     end,
     timer = 1000,
     icon = "mounts/tabicon_mounts_up",
-    tooltip = GetString(_G.BARSTEWARD_MOUNT_TRAINING),
+    tooltip = GetString(BARSTEWARD_MOUNT_TRAINING),
     hideWhenEqual = 0,
     fullyUsed = function()
         return trainingActive

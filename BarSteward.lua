@@ -1,8 +1,8 @@
-local BS = _G.BarSteward
+local BS = BarSteward
 
 -- debug helpers
 if (GetDisplayName() == "@Flat-Badger") then
-    BS.DEBUG = false --  all
+    BS.DEBUG = false  --  all
     BS.DEBUGC = false -- control
     BS.DEBUGV = false -- value
     BS.DEBUGS = false -- spacer
@@ -71,18 +71,18 @@ function BS.ContinueIntialising()
     )
 
     -- get a reference to LibClockTST if it's installed
-    if (_G.LibClockTST) then
-        BS.LibClock = _G.LibClockTST:Instance()
+    if (LibClockTST) then
+        BS.LibClock = LibClockTST:Instance()
     end
 
     -- get a reference to LibCharacterKnowledge if it's installed
-    if (_G.LibCharacterKnowledge) then
-        BS.LibCK = _G.LibCharacterKnowledge
+    if (LibCharacterKnowledge) then
+        BS.LibCK = LibCharacterKnowledge
     end
 
     -- get a reference to LibUndauntedPledges if it's installed
-    if (_G.LibUndauntedPledges) then
-        BS.LUP = _G.LibUndauntedPledges
+    if (LibUndauntedPledges) then
+        BS.LUP = LibUndauntedPledges
     end
 
     BS.RegisterSettings()
@@ -110,7 +110,7 @@ function BS.ContinueIntialising()
         end
     )
 
-    -- track character names
+    -- track character names1111
     if (BS.Vars:GetCommon("CharacterList") == nil) then
         BS.Vars:SetCommon({}, "CharacterList")
 

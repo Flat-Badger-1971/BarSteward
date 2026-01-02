@@ -1,5 +1,4 @@
 -- English localisation
--- luacheck: push ignore 631
 local L = function(t, v)
     ZO_CreateStringId("BARSTEWARD_" .. t, v)
 end
@@ -325,6 +324,7 @@ L("REORDER", "Reorder")
 L("REORDER_WIDGETS", "Reorder Widgets")
 L("REPAIR_COST", "Item Repair Cost")
 L("REQUIRES", "Requires <<1>>")
+L("RESTRICT_TOOLTIP", "Restrict tooltip to inventory items")
 L("RIGHT", "Right")
 L("RUNEBOX_FRAGMENTS", "Runebox Fragments")
 L("SAMPLE", " *** Sample text in the selected font ***")
@@ -337,6 +337,7 @@ L("SERVER", "Server")
 L("SETTINGS", "Settings may not appear correctly until a UI reload.")
 L("SHADOWY_VENDOR_RESET", "Time to Shadowy Supplier reset")
 L("SHORTEN", "Shorten Name (remove Boon:)")
+L("SHORTEN_WORLDNAME", "Remove 'Megaserver'")
 L("SHOW_BACKDROP", "Show Background")
 L("SHOW_CLASS_ICON", "Show Class Icon")
 L("SHOW_EVERYWHERE", "Show Everywhere")
@@ -476,4 +477,3 @@ L("UNTRACK", "Untrack with Bar Steward")
 
 -- Search
 L("DOUBLE_CLICK", "(double-click to locate)")
---luacheck: pop

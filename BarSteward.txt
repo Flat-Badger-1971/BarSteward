@@ -1,9 +1,9 @@
 ## Title: Bar Steward
 ## Description: Data broker style bar for easy display of in-game metrics
 ## Author: Flat Badger
-## APIVersion: 101045
-## AddOnVersion: 3302
-## Version: 3.3.2
+## APIVersion: 101048
+## AddOnVersion: 3400
+## Version: 3.4.0
 ## SavedVariables: BarStewardSavedVars
 ## DependsOn: LibFBCommon>=1006 LibAddonMenu-2.0>=35
 ## OptionalDependsOn: BanditsUserInterface WritWorthy>=70302 LibClockTST>=1 LibCombat>=62 PortToFriendsHouse>=92 LibCharacterKnowledge>=16 Taneth>=21 LibUndauntedPledges>=100000 RewardsTracker>=80

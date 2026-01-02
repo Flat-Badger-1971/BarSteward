@@ -1,4 +1,4 @@
-local BS = _G.BarSteward
+local BS = BarSteward
 
 BS.widgets[BS.W_RANDOM_BATTLEGROUND] = {
     -- v1.4.23
@@ -56,12 +56,12 @@ BS.widgets[BS.W_ALLIANCE_POINTS] =
         CURT_ALLIANCE_POINTS,
         BS.W_ALLIANCE_POINTS,
         {
-            bag = _G.BARSTEWARD_GOLD_BAG,
-            bank = _G.BARSTEWARD_GOLD_BANK,
-            combined = _G.BARSTEWARD_GOLD_COMBINED,
-            display = _G.BARSTEWARD_GOLD_DISPLAY,
-            everyWhere = _G.BARSTEWARD_GOLD_EVERYWHERE,
-            separated = _G.BARSTEWARD_GOLD_SEPARATED,
+            bag = BARSTEWARD_GOLD_BAG,
+            bank = BARSTEWARD_GOLD_BANK,
+            combined = BARSTEWARD_GOLD_COMBINED,
+            display = BARSTEWARD_GOLD_DISPLAY,
+            everyWhere = BARSTEWARD_GOLD_EVERYWHERE,
+            separated = BARSTEWARD_GOLD_SEPARATED,
             title = BS.LC.Format(SI_GAMEPAD_INVENTORY_ALLIANCE_POINTS)
         },
         { EVENT_PLAYER_ACTIVATED, EVENT_ALLIANCE_POINT_UPDATE },
@@ -79,12 +79,12 @@ BS.widgets[BS.W_TELVAR_STONES] =
         CURT_TELVAR_STONES,
         BS.W_TELVAR_STONES,
         {
-            bag = _G.BARSTEWARD_GOLD_BAG,
-            bank = _G.BARSTEWARD_GOLD_BANK,
-            combined = _G.BARSTEWARD_GOLD_COMBINED,
-            display = _G.BARSTEWARD_GOLD_DISPLAY,
-            everyWhere = _G.BARSTEWARD_GOLD_EVERYWHERE,
-            separated = _G.BARSTEWARD_GOLD_SEPARATED,
+            bag = BARSTEWARD_GOLD_BAG,
+            bank = BARSTEWARD_GOLD_BANK,
+            combined = BARSTEWARD_GOLD_COMBINED,
+            display = BARSTEWARD_GOLD_DISPLAY,
+            everyWhere = BARSTEWARD_GOLD_EVERYWHERE,
+            separated = BARSTEWARD_GOLD_SEPARATED,
             title = BS.LC.Format(SI_GAMEPAD_INVENTORY_TELVAR_STONES)
         },
         EVENT_TELVAR_STONE_UPDATE,
@@ -104,7 +104,7 @@ BS.widgets[BS.W_AP_BUFF] = {
         local this = BS.W_AP_BUFF
         local buffs = BS.ScanBuffs(BS.AP_BUFFS, this)
         local lowest = { remaining = 99999 }
-        local ttt = BS.LC.Format(_G.BARSTEWARD_AP_BUFF) .. BS.LF
+        local ttt = BS.LC.Format(BARSTEWARD_AP_BUFF) .. BS.LF
 
         if (#buffs > 0) then
             for _, buff in ipairs(buffs) do
@@ -129,8 +129,8 @@ BS.widgets[BS.W_AP_BUFF] = {
 
             if (BS.GetVar("Announce", this) and (BS.GetVar("WarningValue", this) * 60) == BS.LC.ToInt(lowest.remaining)) then
                 local buffMessage =
-                    ZO_CachedStrFormat(GetString(_G.BARSTEWARD_WARNING_EXPIRING), BS.LC.Format(lowest.buffName))
-                BS.Announce(GetString(_G.BARSTEWARD_WARNING), buffMessage, this)
+                    ZO_CachedStrFormat(GetString(BARSTEWARD_WARNING_EXPIRING), BS.LC.Format(lowest.buffName))
+                BS.Announce(GetString(BARSTEWARD_WARNING), buffMessage, this)
             end
 
             return lowest.remaining
@@ -153,16 +153,16 @@ BS.widgets[BS.W_AP_BUFF] = {
         return false
     end,
     icon = "icons/crownstore_skillline_alliancewar_assault",
-    tooltip = BS.LC.Format(_G.BARSTEWARD_AP_BUFF)
+    tooltip = BS.LC.Format(BARSTEWARD_AP_BUFF)
 }
 
 -- some code for this based is based on and reliant on
 -- RewardsTracker by Zelenin
 zo_callLater(
     function()
-        if (_G.RewardsTracker) then
+        if (RewardsTracker) then
             SecurePostHook(
-                _G.RewardsTracker.campaign,
+                RewardsTracker.campaign,
                 "refresh",
                 function()
                     BS.FireCallbacks("RewardsTrackerRefresh")
@@ -194,7 +194,7 @@ BS.widgets[BS.W_CAMPAIGN_TIER] = {
     name = "campaignTier",
     update = function(widget)
         local this = BS.W_CAMPAIGN_TIER
-        local campaign = _G.RewardsTracker.campaign
+        local campaign = RewardsTracker.campaign
         local id = GetCurrentCampaignId()
         local data, tier, progress, maxProgress = nil, GetPlayerCampaignRewardTierInfo(id)
 
@@ -215,11 +215,11 @@ BS.widgets[BS.W_CAMPAIGN_TIER] = {
             local info = GetAvARankName(BS.CHAR.gender, GetUnitAvARank("player")) .. BS.LF
 
             info = info .. GetCampaignName(id) .. BS.LF
-            info = info .. ZO_CachedStrFormat(_G.BARSTEWARD_TIER_POINTS, tier, data.points) .. BS.LF
+            info = info .. ZO_CachedStrFormat(BARSTEWARD_TIER_POINTS, tier, data.points) .. BS.LF
 
             tt = tt .. BS.COLOURS.White:Colorize(info)
 
-            for _, char in ipairs(_G.LibCharacter:GetCharacters(nil, _G.LibCharacter.SORT_NAME)) do
+            for _, char in ipairs(LibCharacter:GetCharacters(nil, LibCharacter.SORT_NAME)) do
                 if (campaign.owner.settings.data.characters[char.id]) then
                     local charData = campaign.data.characters[char.id]
                     local row = makeRow(charData, char)
@@ -258,7 +258,7 @@ BS.widgets[BS.W_CAMPAIGN_TIER] = {
     customSettings = {
         [1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_USE_PROGRESS),
+            name = GetString(BARSTEWARD_USE_PROGRESS),
             getFunc = function()
                 return BS.Vars.Controls[BS.W_CAMPAIGN_TIER].Progress or false
             end,
@@ -289,8 +289,8 @@ BS.widgets[BS.W_CONT_ATT] = {
             widget:SetTooltip(buff.ttt)
 
             if (BS.GetVar("Announce", this) and (BS.GetVar("WarningValue", this) * 60) == BS.LC.ToInt(buff.remaining)) then
-                local buffMessage = ZO_CachedStrFormat(GetString(_G.BARSTEWARD_WARNING_EXPIRING), ca)
-                BS.Announce(GetString(_G.BARSTEWARD_WARNING), buffMessage, this)
+                local buffMessage = ZO_CachedStrFormat(GetString(BARSTEWARD_WARNING_EXPIRING), ca)
+                BS.Announce(GetString(BARSTEWARD_WARNING), buffMessage, this)
             end
 
             return buff.remaining
@@ -332,8 +332,8 @@ BS.widgets[BS.W_AYLEID_HEALTH] = {
             widget:SetTooltip(buff.ttt)
 
             if (BS.GetVar("Announce", this) and (BS.GetVar("WarningValue", this) * 60) == BS.LC.ToInt(buff.remaining)) then
-                local buffMessage = ZO_CachedStrFormat(GetString(_G.BARSTEWARD_WARNING_EXPIRING), ah)
-                BS.Announce(GetString(_G.BARSTEWARD_WARNING), buffMessage, this)
+                local buffMessage = ZO_CachedStrFormat(GetString(BARSTEWARD_WARNING_EXPIRING), ah)
+                BS.Announce(GetString(BARSTEWARD_WARNING), buffMessage, this)
             end
 
             return buff.remaining

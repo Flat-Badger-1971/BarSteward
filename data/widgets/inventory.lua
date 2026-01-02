@@ -1,4 +1,4 @@
-local BS = _G.BarSteward
+local BS = BarSteward
 
 BS.widgets[BS.W_BAG_SPACE] = {
     name = "bagSpace",
@@ -26,7 +26,7 @@ BS.widgets[BS.W_BAG_SPACE] = {
 
                 if (announce == true) then
                     BS.Vars:SetCommon(os.time(), "PreviousAnnounceTime", this)
-                    BS.Announce(GetString(_G.BARSTEWARD_WARNING), GetString(_G.BARSTEWARD_WARNING_BAGS), this)
+                    BS.Announce(GetString(BARSTEWARD_WARNING), GetString(BARSTEWARD_WARNING_BAGS), this)
                 end
             end
         elseif (pcUsed >= BS.GetVar("DangerValue", this)) then
@@ -72,8 +72,8 @@ BS.widgets[BS.W_BAG_SPACE] = {
         end
     end,
     customOptions = {
-        name = GetString(_G.BARSTEWARD_DEBOUNCE),
-        tooltip = GetString(_G.BARSTEWARD_DEBOUNCE_DESC),
+        name = GetString(BARSTEWARD_DEBOUNCE),
+        tooltip = GetString(BARSTEWARD_DEBOUNCE_DESC),
         choices = { 0, 1, 5, 10, 15, 20, 30, 40, 50, 60 },
         varName = "DebounceTime",
         refresh = false,
@@ -137,7 +137,7 @@ BS.widgets[BS.W_BANK_SPACE] = {
         EVENT_INVENTORY_BANK_CAPACITY_CHANGED
     },
     callback = { [SHARED_INVENTORY] = { "SingleSlotInventoryUpdate", "FullInventoryUpdate" } },
-    tooltip = GetString(_G.BARSTEWARD_BANK),
+    tooltip = GetString(BARSTEWARD_BANK),
     icon = "tooltips/icon_bank"
 }
 
@@ -162,7 +162,7 @@ BS.widgets[BS.W_REPAIR_COST] = {
     end,
     event = EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
     icon = "ava/ava_resourcestatus_tabicon_defense_inactive",
-    tooltip = GetString(_G.BARSTEWARD_REPAIR_COST),
+    tooltip = GetString(BARSTEWARD_REPAIR_COST),
     hideWhenEqual = 0,
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
@@ -195,7 +195,7 @@ BS.widgets[BS.W_DURABILITY] = {
 
         -- find item with lowest durability
         local lowest = 100
-        local lowestType = ITEMTYPE_ARMOR
+        local lowestType = ITEMTYPE_ARMOR --[[@as ItemType]]
         local items = {}
         local this = BS.W_DURABILITY
 
@@ -247,7 +247,7 @@ BS.widgets[BS.W_DURABILITY] = {
         end
 
         if (#items > 0) then
-            local tooltipText = GetString(_G.BARSTEWARD_DURABILITY)
+            local tooltipText = GetString(BARSTEWARD_DURABILITY)
 
             for _, i in ipairs(items) do
                 tooltipText = tooltipText .. BS.LF .. i
@@ -260,7 +260,7 @@ BS.widgets[BS.W_DURABILITY] = {
     end,
     callback = { [SHARED_INVENTORY] = { "SingleSlotInventoryUpdate", "FullInventoryUpdate" } },
     icon = "inventory/inventory_tabicon_armor_up",
-    tooltip = GetString(_G.BARSTEWARD_DURABILITY),
+    tooltip = GetString(BARSTEWARD_DURABILITY),
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("inventory")
@@ -314,7 +314,7 @@ BS.widgets[BS.W_REPAIRS_KITS] = {
     customSettings = {
         [1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_USE_ALTERNATE),
+            name = GetString(BARSTEWARD_USE_ALTERNATE),
             getFunc = function()
                 return BS.GetVar("UseAlternate", BS.W_REPAIR_KITS)
             end,
@@ -336,9 +336,11 @@ BS.widgets[BS.W_SOUL_GEMS] = {
     name = "soulGems",
     update = function(widget)
         local this = BS.W_SOUL_GEMS
-        local level = GetUnitEffectiveLevel("player")
-        local filledCount = select(3, GetSoulGemInfo(SOUL_GEM_TYPE_FILLED, level, false))
-        local emptyCount = select(3, GetSoulGemInfo(SOUL_GEM_TYPE_EMPTY, level, false))
+
+        ---@diagnostic disable: missing-parameter
+        local filledCount = select(3, GetSoulGemInfo(SOUL_GEM_TYPE_FILLED))
+        local emptyCount = select(3, GetSoulGemInfo(SOUL_GEM_TYPE_EMPTY))
+        ---@diagnostic enable: missing-parameter
 
         if (BS.GetVar("UseSeparators", this) == true) then
             filledCount = BS.AddSeparators(filledCount)
@@ -350,11 +352,11 @@ BS.widgets[BS.W_SOUL_GEMS] = {
         local displayIcon = filledIcon
         local both = BS.COLOURS.Green:Colorize(filledCount) .. "/" .. emptyCount
 
-        if (BS.GetVar("GemType", this) == GetString(_G.BARSTEWARD_EMPTY)) then
+        if (BS.GetVar("GemType", this) == GetString(BARSTEWARD_EMPTY)) then
             displayValue = emptyCount
             widthValue = emptyCount
             displayIcon = emptyIcon
-        elseif (BS.GetVar("GemType", this) == GetString(_G.BARSTEWARD_BOTH)) then
+        elseif (BS.GetVar("GemType", this) == GetString(BARSTEWARD_BOTH)) then
             displayValue = both
             widthValue = filledCount .. "/" .. emptyCount
         end
@@ -364,7 +366,7 @@ BS.widgets[BS.W_SOUL_GEMS] = {
         widget:SetIcon(displayIcon)
 
         -- update the tooltip
-        local ttt = GetString(_G.BARSTEWARD_SOUL_GEMS) .. BS.LF
+        local ttt = GetString(BARSTEWARD_SOUL_GEMS) .. BS.LF
         ttt = ttt .. BS.Icon(filledIcon) .. " " .. filledCount .. BS.LF
         ttt = ttt .. BS.Icon(emptyIcon) .. " " .. emptyCount
 
@@ -374,17 +376,17 @@ BS.widgets[BS.W_SOUL_GEMS] = {
     end,
     event = EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
     icon = "icons/soulgem_006_filled",
-    tooltip = GetString(_G.BARSTEWARD_SOUL_GEMS),
+    tooltip = GetString(BARSTEWARD_SOUL_GEMS),
     customOptions = {
-        name = GetString(_G.BARSTEWARD_SOUL_GEMS_TYPE),
+        name = GetString(BARSTEWARD_SOUL_GEMS_TYPE),
         choices = {
-            GetString(_G.BARSTEWARD_FILLED),
-            GetString(_G.BARSTEWARD_EMPTY),
-            GetString(_G.BARSTEWARD_BOTH)
+            GetString(BARSTEWARD_FILLED),
+            GetString(BARSTEWARD_EMPTY),
+            GetString(BARSTEWARD_BOTH)
         },
         varName = "GemType",
         refresh = true,
-        default = GetString(_G.BARSTEWARD_FILLED)
+        default = GetString(BARSTEWARD_FILLED)
     }
 }
 
@@ -424,7 +426,7 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
         local writDetail = {}
         local canDo = {}
         local wwCache = {}
-        local useWW = (_G.WritWorthy ~= nil) and (BS.Vars.UseWritWorthy == true)
+        local useWW = (WritWorthy ~= nil) and (BS.Vars.UseWritWorthy == true)
 
         if (IsESOPlusSubscriber()) then
             table.insert(bags, BAG_SUBSCRIBER_BANK)
@@ -432,7 +434,7 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
 
         for _, bag in pairs(bags) do
             ---@diagnostic disable-next-line: undefined-field
-            for _, data in pairs(_G.SHARED_INVENTORY.bagCache[bag]) do
+            for _, data in pairs(SHARED_INVENTORY.bagCache[bag]) do
                 if (data.specializedItemType == SPECIALIZED_ITEMTYPE_MASTER_WRIT) then
                     writs = writs + 1
                     local itemId = GetItemId(bag, data.slotIndex)
@@ -458,7 +460,7 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
                                 know_list = wwCache[itemId]
                             else
                                 local link = GetItemLink(bag, data.slotIndex, LINK_STYLE_DEFAULT)
-                                _, know_list = _G.WritWorthy.ToMatKnowList(link)
+                                _, know_list = WritWorthy.ToMatKnowList(link)
                                 wwCache[itemId] = know_list
                             end
 
@@ -501,11 +503,11 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
             wwText = wwText .. cantColour:Colorize(cant) .. ")"
         end
 
-        local ttt = GetString(_G.BARSTEWARD_WRITS) .. BS.LF
-        local ttext = zo_strformat(GetString(_G.BARSTEWARD_WRITS_WRITS), writs) .. wwText .. BS.LF
+        local ttt = GetString(BARSTEWARD_WRITS) .. BS.LF
+        local ttext = zo_strformat(GetString(BARSTEWARD_WRITS_WRITS), writs) .. wwText .. BS.LF
 
-        ttext = ttext .. zo_strformat(GetString(_G.BARSTEWARD_WRITS_SURVEYS), surveys) .. BS.LF
-        ttext = ttext .. zo_strformat(GetString(_G.BARSTEWARD_WRITS_MAPS), maps)
+        ttext = ttext .. zo_strformat(GetString(BARSTEWARD_WRITS_SURVEYS), surveys) .. BS.LF
+        ttext = ttext .. zo_strformat(GetString(BARSTEWARD_WRITS_MAPS), maps)
 
         ttt = ttt .. BS.COLOURS.White:Colorize(ttext)
 
@@ -535,12 +537,18 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
             table.insert(writText, writType)
         end
 
+        local restrict = BS.GetVar("Restrict", BS.W_WRITS_SURVEYS)
+        local add = true
+
         if (#writText > 0) then
             table.sort(writText)
+
             ttt = ttt .. BS.LF
 
             for _, d in pairs(writText) do
+                -- if ((restrict == true and d:find(BS.BAGICON)) or restrict ~= true) then
                 ttt = ttt .. BS.LF .. d
+                -- end
             end
         end
 
@@ -549,7 +557,9 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
             ttt = ttt .. BS.LF
 
             for _, d in pairs(detail) do
-                ttt = string.format("%s%s%s", ttt, BS.LF, d)
+                if ((restrict == true and d:find(BS.BAGICON)) or restrict ~= true) then
+                    ttt = string.format("%s%s%s", ttt, BS.LF, d)
+                end
             end
         end
 
@@ -559,11 +569,11 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
     end,
     callback = { [SHARED_INVENTORY] = { "SingleSlotInventoryUpdate", "FullInventoryUpdate" } },
     icon = "journal/journal_tabicon_cadwell_up",
-    tooltip = GetString(_G.BARSTEWARD_WRITS),
+    tooltip = GetString(BARSTEWARD_WRITS),
     customSettings = {
         [1] = {
-            name = GetString(_G.BARSTEWARD_USE_WRITWORTHY),
-            tooltip = GetString(_G.BARSTEWARD_USE_WRITWORTHY_TOOLTIP),
+            name = GetString(BARSTEWARD_USE_WRITWORTHY),
+            tooltip = GetString(BARSTEWARD_USE_WRITWORTHY_TOOLTIP),
             type = "checkbox",
             getFunc = function()
                 return BS.Vars.UseWritWorthy or false
@@ -573,7 +583,18 @@ BS.widgets[BS.W_WRITS_SURVEYS] = {
                 BS.RefreshWidget(BS.W_WRITS_SURVEYS)
             end,
             disabled = function()
-                return _G.WritWorthy == nil
+                return WritWorthy == nil
+            end
+        },
+        [2] = {
+            name = GetString(BARSTEWARD_RESTRICT_TOOLTIP),
+            type = "checkbox",
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_WRITS_SURVEYS].Restrict or false
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_WRITS_SURVEYS].Restrict = value
+                BS.RefreshWidget(BS.W_WRITS_SURVEYS)
             end
         }
     }
@@ -641,7 +662,8 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
         end
 
         for _, bag in pairs(bags) do
-            for _, data in pairs(_G.SHARED_INVENTORY.bagCache[bag]) do
+            ---@diagnostic disable-next-line: undefined-field
+            for _, data in pairs(SHARED_INVENTORY.bagCache[bag]) do
                 if (data) then
                     local itemId = GetItemId(bag, data.slotIndex)
 
@@ -679,7 +701,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
             end
         end
 
-        local ttt = GetString(_G.BARSTEWARD_WATCHED_ITEMS) .. BS.LF
+        local ttt = GetString(BARSTEWARD_WATCHED_ITEMS) .. BS.LF
         local countText = ""
         local plainCountText = ""
         local foundIds = {}
@@ -757,7 +779,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
                         if (itemId == BS.PERFECT_ROE) then
                             BS.delayedAnnouncement = {
                                 message = zo_strformat(
-                                    GetString(_G.BARSTEWARD_WATCHED_ITEM_MESSAGE),
+                                    GetString(BARSTEWARD_WATCHED_ITEM_MESSAGE),
                                     linkCache[itemId].name
                                 ),
                                 icon = linkCache[itemId].icon
@@ -765,7 +787,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
                             zo_callLater(
                                 function()
                                     BS.Announce(
-                                        GetString(_G.BARSTEWARD_WATCHED_ITEM_ALERT),
+                                        GetString(BARSTEWARD_WATCHED_ITEM_ALERT),
                                         BS.delayedAnnouncement.message,
                                         this,
                                         nil,
@@ -777,8 +799,8 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
                             )
                         else
                             BS.Announce(
-                                GetString(_G.BARSTEWARD_WATCHED_ITEM_ALERT),
-                                zo_strformat(GetString(_G.BARSTEWARD_WATCHED_ITEM_MESSAGE), linkCache[itemId].name),
+                                GetString(BARSTEWARD_WATCHED_ITEM_ALERT),
+                                zo_strformat(GetString(BARSTEWARD_WATCHED_ITEM_MESSAGE), linkCache[itemId].name),
                                 this,
                                 nil,
                                 nil,
@@ -795,11 +817,11 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
         return count
     end,
     callback = { [SHARED_INVENTORY] = { "SingleSlotInventoryUpdate", "FullInventoryUpdate" } },
-    tooltip = GetString(_G.BARSTEWARD_WATCHED_ITEMS),
+    tooltip = GetString(BARSTEWARD_WATCHED_ITEMS),
     icon = "icons/crafting_critter_snake_eyes",
     customOptions = {
-        name = GetString(_G.BARSTEWARD_DEBOUNCE),
-        tooltip = GetString(_G.BARSTEWARD_DEBOUNCE_DESC),
+        name = GetString(BARSTEWARD_DEBOUNCE),
+        tooltip = GetString(BARSTEWARD_DEBOUNCE_DESC),
         choices = { 0, 1, 5, 10, 15, 20, 30, 40, 50, 60 },
         varName = "DebounceTime",
         refresh = false,
@@ -855,7 +877,7 @@ BS.widgets[BS.W_WATCHED_ITEMS] = {
 
         settings[#settings + 1] = {
             type = "editbox",
-            name = GetString(_G.BARSTEWARD_ITEM_ID),
+            name = GetString(BARSTEWARD_ITEM_ID),
             getFunc = function()
                 return BS.Vars.NewItemId or ""
             end,
@@ -1038,7 +1060,7 @@ local function randomOnLeftClick(collectibleTable, widgetIndex)
 
         local tt = BS.widgets[widgetIndex].tooltip .. BS.LF
 
-        tt = tt .. BS.COLOURS.White:Colorize(GetString(_G.BARSTEWARD_RANDOM_RECENT)) .. BS.LF
+        tt = tt .. BS.COLOURS.White:Colorize(GetString(BARSTEWARD_RANDOM_RECENT)) .. BS.LF
         tt = tt .. BS.COLOURS.ZOSGold:Colorize(name)
 
         widget:SetTooltip(tt)
@@ -1075,7 +1097,7 @@ BS.widgets[BS.W_RANDOM_MEMENTO] = {
         return 0
     end,
     event = EVENT_COLLECTION_UPDATED,
-    tooltip = GetString(_G.BARSTEWARD_RANDOM_MEMENTO),
+    tooltip = GetString(BARSTEWARD_RANDOM_MEMENTO),
     icon = "icons/collectible_memento_blizzard",
     cooldown = true,
     onLeftClick = function()
@@ -1096,7 +1118,7 @@ BS.widgets[BS.W_RANDOM_PET] = {
         return 0
     end,
     event = EVENT_COLLECTION_UPDATED,
-    tooltip = GetString(_G.BARSTEWARD_RANDOM_PET),
+    tooltip = GetString(BARSTEWARD_RANDOM_PET),
     icon = "icons/pet_sphynxlynx",
     cooldown = true,
     onLeftClick = function()
@@ -1117,7 +1139,7 @@ BS.widgets[BS.W_RANDOM_MOUNT] = {
         return 0
     end,
     event = EVENT_COLLECTION_UPDATED,
-    tooltip = GetString(_G.BARSTEWARD_RANDOM_MOUNT),
+    tooltip = GetString(BARSTEWARD_RANDOM_MOUNT),
     icon = "collections/random_anymount",
     onLeftClick = function()
         randomOnLeftClick(mounts, BS.W_RANDOM_MOUNT)
@@ -1137,7 +1159,7 @@ BS.widgets[BS.W_RANDOM_EMOTE] = {
         return 0
     end,
     event = EVENT_COLLECTION_UPDATED,
-    tooltip = GetString(_G.BARSTEWARD_RANDOM_EMOTE),
+    tooltip = GetString(BARSTEWARD_RANDOM_EMOTE),
     icon = "icons/emotes/emotecategoryicon_fidget_personality",
     onLeftClick = function()
         if (#emotes == 0) then
@@ -1169,7 +1191,7 @@ BS.widgets[BS.W_RANDOM_EMOTE] = {
             local widget = BS.WidgetObjectPool:GetActiveObject(BS.WidgetObjects[BS.W_RANDOM_EMOTE])
             local tt = BS.widgets[BS.W_RANDOM_EMOTE].tooltip .. BS.LF
 
-            tt = tt .. BS.COLOURS.White:Colorize(GetString(_G.BARSTEWARD_RANDOM_RECENT)) .. BS.LF
+            tt = tt .. BS.COLOURS.White:Colorize(GetString(BARSTEWARD_RANDOM_RECENT)) .. BS.LF
             tt = tt .. BS.COLOURS.ZOSGold:Colorize(displayName)
 
             widget:SetTooltip(tt)
@@ -1368,10 +1390,10 @@ BS.widgets[BS.W_MUSEUM] = {
 }
 
 local poisonBars = {
-    [BS.MAIN_BAR] = GetString(_G.BARSTEWARD_MAIN_BAR),
-    [BS.BACK_BAR] = GetString(_G.BARSTEWARD_BACK_BAR),
-    [BS.BOTH] = GetString(_G.BARSTEWARD_BOTH),
-    [BS.ACTIVE_BAR] = GetString(_G.BARSTEWARD_ACTIVE_BAR)
+    [BS.MAIN_BAR] = GetString(BARSTEWARD_MAIN_BAR),
+    [BS.BACK_BAR] = GetString(BARSTEWARD_BACK_BAR),
+    [BS.BOTH] = GetString(BARSTEWARD_BOTH),
+    [BS.ACTIVE_BAR] = GetString(BARSTEWARD_ACTIVE_BAR)
 }
 
 BS.widgets[BS.W_EQUIPPED_POISON] = {
@@ -1436,13 +1458,13 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
         widget:SetColour(colour)
         widget:SetValue(count)
 
-        local tt = GetString(_G.BARSTEWARD_EQUIPPED_POISON)
+        local tt = GetString(BARSTEWARD_EQUIPPED_POISON)
 
         if (#poisons > 0) then
             for _, poison in ipairs(poisons) do
                 local slotName =
-                    ZO_IsElementInNumericallyIndexedTable(backup, poison.slot) and GetString(_G.BARSTEWARD_BACK_BAR) or
-                    GetString(_G.BARSTEWARD_MAIN_BAR)
+                    ZO_IsElementInNumericallyIndexedTable(backup, poison.slot) and GetString(BARSTEWARD_BACK_BAR) or
+                    GetString(BARSTEWARD_MAIN_BAR)
 
                 tt = string.format("%s%s%s ", tt, BS.LF, BS.Icon(poison.icon))
                 tt = string.format("%s%s %s (%d)", tt, BS.COLOURS.White:Colorize(poison.name), slotName, poison.count)
@@ -1474,7 +1496,7 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
     end,
     callback = { [CALLBACK_MANAGER] = { "WornSlotUpdate" } },
     event = EVENT_ACTIVE_WEAPON_PAIR_CHANGED,
-    tooltip = GetString(_G.BARSTEWARD_EQUIPPED_POISON),
+    tooltip = GetString(BARSTEWARD_EQUIPPED_POISON),
     icon = "icons/crafting_poison_001_cyan_003",
     hideWhenEqual = 0,
     onLeftClick = function()
@@ -1487,7 +1509,7 @@ BS.widgets[BS.W_EQUIPPED_POISON] = {
     customSettings = {
         [1] = {
             type = "dropdown",
-            name = GetString(_G.BARSTEWARD_DISPLAY),
+            name = GetString(BARSTEWARD_DISPLAY),
             choices = poisonBars,
             getFunc = function()
                 return poisonBars[BS.Vars.Controls[BS.W_EQUIPPED_POISON].PoisonBar or BS.MAIN_BAR]
@@ -1554,7 +1576,7 @@ BS.widgets[BS.W_FRAGMENTS] = {
         widget:SetValue(text, plainText)
         widget:SetColour(BS.GetColour(this, true))
 
-        local tt = GetString(_G.BARSTEWARD_COLLECTIBLE_FRAGMENTS)
+        local tt = GetString(BARSTEWARD_COLLECTIBLE_FRAGMENTS)
         local collectedtt = ""
         local unnecessarytt = ""
         local uncollectedtt = ""
@@ -1621,12 +1643,12 @@ BS.widgets[BS.W_FRAGMENTS] = {
         tt = tt .. BS.LF .. collectedtt .. BS.LF
 
         if (unnecessarytt:len() > 0) then
-            tt = tt .. GetString(_G.BARSTEWARD_ALREADY_COLLECTED) .. BS.LF .. unnecessarytt .. "|r" .. BS.LF
+            tt = tt .. GetString(BARSTEWARD_ALREADY_COLLECTED) .. BS.LF .. unnecessarytt .. "|r" .. BS.LF
         end
 
         if (uncollectedtt:len() > 0) then
             uncollectedtt = BS.COLOURS.Grey:Colorize(uncollectedtt)
-            tt = tt .. GetString(_G.BARSTEWARD_NOT_COLLECTED) .. BS.LF .. BS.LC.Trim(uncollectedtt) .. "|r"
+            tt = tt .. GetString(BARSTEWARD_NOT_COLLECTED) .. BS.LF .. BS.LC.Trim(uncollectedtt) .. "|r"
         end
 
         widget:SetTooltip(tt)
@@ -1637,7 +1659,7 @@ BS.widgets[BS.W_FRAGMENTS] = {
         COLLECTIONS_BOOK:BrowseToCollectible(BS.CollectibleId)
     end,
     callback = { [SHARED_INVENTORY] = { "SingleSlotInventoryUpdate", "FullInventoryUpdate" } },
-    tooltip = GetString(_G.BARSTEWARD_COLLECTIBLE_FRAGMENTS),
+    tooltip = GetString(BARSTEWARD_COLLECTIBLE_FRAGMENTS),
     icon = "icons/antiquities_u30_museum_fragment07"
 }
 
@@ -1710,7 +1732,7 @@ BS.widgets[BS.W_RUNEBOXES] = {
         widget:SetValue(text, plainText)
         widget:SetColour(BS.GetColour(this, true))
 
-        local tt = GetString(_G.BARSTEWARD_RUNEBOX_FRAGMENTS)
+        local tt = GetString(BARSTEWARD_RUNEBOX_FRAGMENTS)
         local collectedtt = ""
         local unnecessarytt = ""
         local icon
@@ -1765,12 +1787,12 @@ BS.widgets[BS.W_RUNEBOXES] = {
         tt = tt .. BS.LF .. collectedtt .. "|r" .. BS.LF
 
         if (unnecessarytt:len() > 0) then
-            tt = tt .. GetString(_G.BARSTEWARD_ALREADY_COLLECTED) .. BS.LF .. unnecessarytt .. "|r"
+            tt = tt .. GetString(BARSTEWARD_ALREADY_COLLECTED) .. BS.LF .. unnecessarytt .. "|r"
         end
 
         local uncollected = BS.GetNoneCollected(fragmentInfo)
 
-        tt = tt .. BS.LF .. GetString(_G.BARSTEWARD_NOT_COLLECTED)
+        tt = tt .. BS.LF .. GetString(BARSTEWARD_NOT_COLLECTED)
 
         local ttext = ""
 
@@ -1791,12 +1813,12 @@ BS.widgets[BS.W_RUNEBOXES] = {
         end
     end,
     callback = { [SHARED_INVENTORY] = { "SingleSlotInventoryUpdate", "FullInventoryUpdate" } },
-    tooltip = GetString(_G.BARSTEWARD_RUNEBOX_FRAGMENTS),
+    tooltip = GetString(BARSTEWARD_RUNEBOX_FRAGMENTS),
     icon = "tradinghouse/tradinghouse_trophy_runebox_fragment_up"
 }
 
 local function getFoundRecipesTooltip()
-    local tt = GetString(_G.BARSTEWARD_RECIPES)
+    local tt = GetString(BARSTEWARD_RECIPES)
     local tttable = {}
 
     for _, info in pairs(BS.Vars.FoundRecipes) do
@@ -1869,8 +1891,8 @@ BS.widgets[BS.W_RECIPE_WATCH] = {
 
             BS.Vars:SetCommon(os.time(), "PreviousAnnounceTime", this)
             BS.Announce(
-                GetString(_G.BARSTEWARD_RECIPES),
-                zo_strformat(GetString(_G.BARSTEWARD_WATCHED_ITEM_MESSAGE), iname),
+                GetString(BARSTEWARD_RECIPES),
+                zo_strformat(GetString(BARSTEWARD_WATCHED_ITEM_MESSAGE), iname),
                 this
             )
         end
@@ -1883,7 +1905,7 @@ BS.widgets[BS.W_RECIPE_WATCH] = {
     end,
     event = EVENT_LOOT_RECEIVED,
     icon = "icons/event_newlifefestival_2016_recipe",
-    tooltip = GetString(_G.BARSTEWARD_RECIPES),
+    tooltip = GetString(BARSTEWARD_RECIPES),
     hideWhenEqual = 0,
     onLeftClick = function()
         if (BS.Vars.FoundRecipes) then
@@ -1911,7 +1933,7 @@ local function getMin(charges, slots, equipped)
 
     equipped =
         equipped or
-        { pc = GetString(_G.BARSTEWARD_NOT_APPLICABLE), name = BS.LC.Format(SI_GAMEPAD_INVENTORY_EMPTY_TOOLTIP) }
+        { pc = GetString(BARSTEWARD_NOT_APPLICABLE), name = BS.LC.Format(SI_GAMEPAD_INVENTORY_EMPTY_TOOLTIP) }
 
     for slot, info in pairs(charges) do
         if (ZO_IsElementInNumericallyIndexedTable(slots, slot)) then
@@ -1959,7 +1981,7 @@ BS.widgets[BS.W_WEAPON_CHARGE] = {
 
         for _, slot in ipairs(weapons) do
             local charges, maxCharges = getCharges(slot)
-            local pc = GetString(_G.BARSTEWARD_NOT_APPLICABLE)
+            local pc = GetString(BARSTEWARD_NOT_APPLICABLE)
             local raw = 101
 
             if (charges > -1) then
@@ -1991,7 +2013,7 @@ BS.widgets[BS.W_WEAPON_CHARGE] = {
         widget:SetValue(min.pc)
         widget:SetColour(colour)
 
-        local tt = GetString(_G.BARSTEWARD_WEAPON_CHARGE)
+        local tt = GetString(BARSTEWARD_WEAPON_CHARGE)
 
         for _, info in pairs(weaponCharges) do
             local slotColour = getColour(info.raw)
@@ -2005,7 +2027,7 @@ BS.widgets[BS.W_WEAPON_CHARGE] = {
     end,
     event = { EVENT_INVENTORY_SINGLE_SLOT_UPDATE, EVENT_ACTIVE_WEAPON_PAIR_CHANGED },
     icon = "icons/alchemy/crafting_alchemy_trait_weaponcrit_match",
-    tooltip = GetString(_G.BARSTEWARD_WEAPON_CHARGE),
+    tooltip = GetString(BARSTEWARD_WEAPON_CHARGE),
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("inventory")
@@ -2039,7 +2061,7 @@ BS.widgets[BS.W_SCRIBING_INK] = {
     callback = { [SHARED_INVENTORY] = { "SingleSlotInventoryUpdate", "FullInventoryUpdate" } },
     icon = "/icons/item_grimoire_ink",
     ---@diagnostic disable-next-line: undefined-field
-    tooltip = _G.ZO_Scribing_Manager.GetFormattedScribingInkName()
+    tooltip = ZO_Scribing_Manager.GetFormattedScribingInkName()
 }
 
 BS.widgets[BS.W_MYTHIC] = {

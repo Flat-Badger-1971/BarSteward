@@ -1,5 +1,4 @@
 -- German localisation
--- luacheck: push ignore 631
 local L = function(t, v)
     ZO_CreateStringId("BARSTEWARD_" .. t, v)
 end
@@ -328,6 +327,7 @@ L("REORDER", "Umordnen")
 L("REORDER_WIDGETS", "Elemente umsortieren")
 L("REPAIR_COST", "Teilereparaturkosten")
 L("REQUIRES", "Benötigt <<1>>")
+L("RESTRICT_TOOLTIP", "Tooltip auf Inventarobjekte beschränken")
 L("RIGHT", "Rechts")
 L("RUNEBOX_FRAGMENTS", "Runenkistenfragmente")
 L("SAMPLE", " *** Beispieltext in der ausgewählten Schriftart ***")
@@ -343,6 +343,7 @@ L(
 )
 L("SHADOWY_VENDOR_RESET", "Verhüllte Versorgerin - verbleibende Zeit")
 L("SHORTEN", "Kurzer Name")
+L("SHORTEN_WORLDNAME", "Entferne 'Megaserver'")
 L("SHOW_BACKDROP", "Hintergrund anzeigen")
 L("SHOW_CLASS_ICON", "Klassen Symbol anzeigen")
 L("SHOW_EVERYWHERE", "Überall anzeigen")
@@ -481,4 +482,3 @@ L("UNTRACK", "Mit Bar Steward entfolgen")
 
 -- Search
 L("DOUBLE_CLICK", "(zum Suchen doppelklicken)")
---luacheck: pop

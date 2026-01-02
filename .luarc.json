@@ -15,6 +15,10 @@
     },
     "diagnostics.libraryFiles": "Disable",
     "workspace.library": [
-        "C:/Users/antho/Documents/Elder Scrolls Online/live/AddOns/LLS_Addons/eso-api/library"
-    ]
+        "C:/Users/antho/Documents/Elder Scrolls Online/live/AddOns/LLS_Addons/eso-api/library",
+        "../LibFBCommon/LibFBCommon.lua",
+        "esoapi/local.lua",
+        "C:/Users/antho/Documents/Elder Scrolls Online/live/AddOns/LLS_Addons/eso-api-update-48/library"
+    ],
+    "workspace.preloadFileSize": 700
 }

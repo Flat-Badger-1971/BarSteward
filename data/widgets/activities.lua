@@ -1,4 +1,4 @@
-local BS = _G.BarSteward
+local BS = BarSteward
 local star = BS.Icon("targetmarkers/target_gold_star_64")
 
 local function getColourOptions(widgetIndex)
@@ -8,7 +8,7 @@ local function getColourOptions(widgetIndex)
     local settings = {
         [1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_USE_RAG),
+            name = GetString(BARSTEWARD_USE_RAG),
             getFunc = function()
                 return BS.Vars.Controls[widgetIndex].UseRag
             end,
@@ -185,12 +185,12 @@ BS.widgets[BS.W_DAILY_ENDEAVOURS] = {
             TIMED_ACTIVITY_TYPE_DAILY,
             widget,
             BS.GetVar("HideLimit", BS.W_DAILY_ENDEAVOURS),
-            GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS)
+            GetString(BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS)
         )
     end,
     event = { EVENT_PLAYER_ACTIVATED, EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED },
     icon = "journal/u26_progress_digsite_checked_incomplete",
-    tooltip = GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS),
+    tooltip = GetString(BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS),
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             GROUP_MENU_KEYBOARD:ShowCategory(TIMED_ACTIVITIES_FRAGMENT)
@@ -215,12 +215,12 @@ BS.widgets[BS.W_WEEKLY_ENDEAVOURS] = {
             TIMED_ACTIVITY_TYPE_WEEKLY,
             widget,
             BS.GetVar("HideLimit", BS.W_WEEKLY_ENDEAVOURS),
-            GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS)
+            GetString(BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS)
         )
     end,
     event = { EVENT_PLAYER_ACTIVATED, EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED },
     icon = "journal/u26_progress_digsite_checked_complete",
-    tooltip = GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS),
+    tooltip = GetString(BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS),
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             GROUP_MENU_KEYBOARD:ShowCategory(TIMED_ACTIVITIES_FRAGMENT)
@@ -252,7 +252,7 @@ BS.widgets[BS.W_ENDEAVOUR_PROGRESS] = {
                 widget:SetColour(BS.GetColour(this, true))
             end
 
-            local ttt = GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS_BEST) .. BS.LF
+            local ttt = GetString(BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS_BEST) .. BS.LF
             local taskInfo = maxTask.name .. BS.LF .. BS.LF .. maxTask.description
 
             ttt = ttt .. BS.COLOURS.White:Colorize(taskInfo)
@@ -274,7 +274,7 @@ BS.widgets[BS.W_ENDEAVOUR_PROGRESS] = {
     end,
     event = { EVENT_PLAYER_ACTIVATED, EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED },
     icon = "journal/u26_progress_digsite_marked_complete",
-    tooltip = GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS_BEST),
+    tooltip = GetString(BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS_BEST),
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             GROUP_MENU_KEYBOARD:ShowCategory(TIMED_ACTIVITIES_FRAGMENT)
@@ -288,7 +288,7 @@ BS.widgets[BS.W_ENDEAVOUR_PROGRESS] = {
     customSettings = {
         [1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_USE_PROGRESS),
+            name = GetString(BARSTEWARD_USE_PROGRESS),
             getFunc = function()
                 return BS.Vars.Controls[BS.W_ENDEAVOUR_PROGRESS].Progress or false
             end,
@@ -377,7 +377,7 @@ BS.widgets[BS.W_LEADS] = {
             local value
 
             if (#leads == 1 and leads[1].inProgress) then
-                value = GetString(_G.BARSTEWARD_IN_PROGRESS)
+                value = GetString(BARSTEWARD_IN_PROGRESS)
                 timeColour = BS.COLOURS.ZOSOrange
                 minTime = 0
             else
@@ -427,7 +427,7 @@ BS.widgets[BS.W_LEADS] = {
                     )
 
                 if (lead.inProgress) then
-                    time = GetString(_G.BARSTEWARD_IN_PROGRESS)
+                    time = GetString(BARSTEWARD_IN_PROGRESS)
                     timeColour = BS.COLOURS.ZOSOrange
                 else
                     timeColour = BS.GetTimeColour(lead.remaining, this, nil, true, true)
@@ -458,7 +458,7 @@ BS.widgets[BS.W_LEADS] = {
     customSettings = {
         [1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_SHOW_LEAD_COUNT),
+            name = GetString(BARSTEWARD_SHOW_LEAD_COUNT),
             getFunc = function()
                 return BS.Vars.Controls[BS.W_LEADS].ShowCount or false
             end,
@@ -473,7 +473,7 @@ BS.widgets[BS.W_LEADS] = {
         },
         [2] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_HIDE_TIMER),
+            name = GetString(BARSTEWARD_HIDE_TIMER),
             getFunc = function()
                 return BS.Vars.Controls[BS.W_LEADS].HideTimer or false
             end,
@@ -486,7 +486,7 @@ BS.widgets[BS.W_LEADS] = {
         },
         [3] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_SHOW_FOUND),
+            name = GetString(BARSTEWARD_SHOW_FOUND),
             getFunc = function()
                 return BS.Vars.Controls[BS.W_LEADS].ShowFound or false
             end,
@@ -497,7 +497,7 @@ BS.widgets[BS.W_LEADS] = {
         },
         [4] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_HIDE_FOUND),
+            name = GetString(BARSTEWARD_HIDE_FOUND),
             getFunc = function()
                 return BS.Vars.Controls[BS.W_LEADS].HideFound or false
             end,
@@ -515,7 +515,7 @@ local function getDisplay(timeRemaining, widgetIndex)
     local days = math.floor((hours / 24) + 0.5)
 
     if (BS.GetVar("ShowDays", widgetIndex) and days >= 1 and hours > 24) then
-        display = zo_strformat(GetString(_G.BARSTEWARD_DAYS), days)
+        display = zo_strformat(GetString(BARSTEWARD_DAYS), days)
     else
         display =
             BS.SecondsToTime(
@@ -559,7 +559,7 @@ BS.widgets[BS.W_DAILY_ENDEAVOUR_TIME] = {
         return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(TIMED_ACTIVITY_TYPE_DAILY)
     end,
     icon = "journal/u26_progress_digsite_unknown_incomplete",
-    tooltip = GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_TIME),
+    tooltip = GetString(BARSTEWARD_DAILY_ENDEAVOUR_TIME),
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             GROUP_MENU_KEYBOARD:ShowCategory(TIMED_ACTIVITIES_FRAGMENT)
@@ -578,7 +578,7 @@ BS.widgets[BS.W_WEEKLY_ENDEAVOUR_TIME] = {
     timer = 1000,
     event = EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED,
     icon = "journal/u26_progress_digsite_unknown_complete",
-    tooltip = GetString(_G.BARSTEWARD_WEEKLY_ENDEAVOUR_TIME),
+    tooltip = GetString(BARSTEWARD_WEEKLY_ENDEAVOUR_TIME),
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             GROUP_MENU_KEYBOARD:ShowCategory(TIMED_ACTIVITIES_FRAGMENT)
@@ -617,7 +617,7 @@ BS.widgets[BS.W_TRIBUTE_CLUB_RANK] = {
                 widget:SetValue(displayRank .. " (" .. percent .. "%)")
             end
 
-            local ttt = GetString(_G.BARSTEWARD_TRIBUTE_RANK) .. BS.LF
+            local ttt = GetString(BARSTEWARD_TRIBUTE_RANK) .. BS.LF
             local text = displayRank .. " - " .. rankName .. BS.LF .. BS.LF
 
             text = text .. xp .. " / " .. totalxp .. ((rank == 7) and "" or " (" .. percent .. "%)")
@@ -633,7 +633,7 @@ BS.widgets[BS.W_TRIBUTE_CLUB_RANK] = {
         EVENT_TRIBUTE_CLUB_INIT
     },
     icon = "tribute/tributeclubrank_7",
-    tooltip = GetString(_G.BARSTEWARD_TRIBUTE_RANK)
+    tooltip = GetString(BARSTEWARD_TRIBUTE_RANK)
 }
 
 BS.widgets[BS.W_ACHIEVEMENT_POINTS] = {
@@ -686,7 +686,7 @@ BS.widgets[BS.W_PLEDGES_TIME] = {
     end,
     timer = 1000,
     icon = "icons/undaunted_bigcoffer",
-    tooltip = GetString(_G.BARSTEWARD_DAILY_PLEDGES_TIME)
+    tooltip = GetString(BARSTEWARD_DAILY_PLEDGES_TIME)
 }
 
 local function setTracker(widgetIndex, resetSeconds, tooltip)
@@ -759,13 +759,13 @@ BS.widgets[BS.W_SHADOWY_VENDOR_TIME] = {
 
         widget:SetColour(BS.COLOURS.DefaultColour)
         widget:SetValue(remaining)
-        widget:SetTooltip(setTracker(this, timeToReset, GetString(_G.BARSTEWARD_SHADOWY_VENDOR_RESET)))
+        widget:SetTooltip(setTracker(this, timeToReset, GetString(BARSTEWARD_SHADOWY_VENDOR_RESET)))
 
         return timeToReset
     end,
     timer = 1000,
     icon = "icons/rep_darkbrotherhood_64",
-    tooltip = GetString(_G.BARSTEWARD_SHADOWY_VENDOR_RESET),
+    tooltip = GetString(BARSTEWARD_SHADOWY_VENDOR_RESET),
     hideWhenTrue = function()
         return not BS.isShadowyVendorUnlocked
     end
@@ -781,13 +781,13 @@ BS.widgets[BS.W_LFG_TIME] = {
 
         widget:SetColour(BS.COLOURS.DefaultColour)
         widget:SetValue(remaining)
-        widget:SetTooltip(setTracker(this, timeToReset, GetString(_G.BARSTEWARD_DUNGEON_REWARD_RESET)))
+        widget:SetTooltip(setTracker(this, timeToReset, GetString(BARSTEWARD_DUNGEON_REWARD_RESET)))
 
         return timeToReset
     end,
     timer = 1000,
     icon = "lfg/lfg_indexicon_dungeon_up",
-    tooltip = GetString(_G.BARSTEWARD_DUNGEON_REWARD_RESET),
+    tooltip = GetString(BARSTEWARD_DUNGEON_REWARD_RESET),
     onLeftClick = function()
         if (IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("gamepad_groupList")
@@ -850,7 +850,7 @@ BS.widgets[BS.W_LOREBOOKS] = {
 
         local this = BS.W_LOREBOOKS
         local value = "0/0"
-        local tt = GetString(_G.BARSTEWARD_LOREBOOKS)
+        local tt = GetString(BARSTEWARD_LOREBOOKS)
 
         for _, category in pairs(categories) do
             local metrics = string.format("%s/%s", category.numKnownBooks, category.totalBooks)
@@ -872,7 +872,7 @@ BS.widgets[BS.W_LOREBOOKS] = {
     end,
     callback = { [BS.CallbackManager] = { "LorebooksUpdated" } },
     icon = "icons/quest_book_001",
-    tooltip = GetString(_G.BARSTEWARD_LOREBOOKS),
+    tooltip = GetString(BARSTEWARD_LOREBOOKS),
     onLeftClick = function()
         if (IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("loreLibraryGamepad")
@@ -892,7 +892,7 @@ BS.widgets[BS.W_LOREBOOKS] = {
         return {
             [1] = {
                 type = "dropdown",
-                name = GetString(_G.BARSTEWARD_LOREBOOKS_CATEGORY),
+                name = GetString(BARSTEWARD_LOREBOOKS_CATEGORY),
                 choices = options,
                 getFunc = function()
                     return BS.Vars.Controls[BS.W_LOREBOOKS].ShowCategory
@@ -969,7 +969,7 @@ BS.widgets[BS.W_CRAFTING_MOTIFS] = {
     end,
     callback = { [BS.CallbackManager] = { "LorebooksUpdated" } },
     icon = "icons/u34_crafting_style_item_sybranic_marine",
-    tooltip = GetString(_G.BARSTEWARD_CRAFTING_MOTIFS),
+    tooltip = GetString(BARSTEWARD_CRAFTING_MOTIFS),
     onLeftClick = function()
         if (IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("loreLibraryGamepad")
@@ -1059,7 +1059,7 @@ BS.widgets[BS.W_RANDOM_DUNGEON] = {
             output = "",
             normalisedOutput = "",
             eligibleCount = 0,
-            tt = GetString(_G.BARSTEWARD_RANDOM_DUNGEON)
+            tt = GetString(BARSTEWARD_RANDOM_DUNGEON)
         }
         local nd = dungeonInfo[LFG_ACTIVITY_DUNGEON]
         local vd = dungeonInfo[LFG_ACTIVITY_MASTER_DUNGEON]
@@ -1086,7 +1086,7 @@ BS.widgets[BS.W_RANDOM_DUNGEON] = {
     event = EVENT_PLAYER_ACTIVATED,
     icon = "icons/achievement_update11_dungeons_019",
     hideWhenEqual = 0,
-    tooltip = GetString(_G.BARSTEWARD_RANDOM_DUNGEON),
+    tooltip = GetString(BARSTEWARD_RANDOM_DUNGEON),
     onLeftClick = function()
         if (IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("gamepadDungeonFinder")
@@ -1106,7 +1106,7 @@ BS.widgets[BS.W_RANDOM_TRIBUTE] = {
             output = "",
             normalisedOutput = "",
             eligibleCount = 0,
-            tt = GetString(_G.BARSTEWARD_RANDOM_TRIBUTE)
+            tt = GetString(BARSTEWARD_RANDOM_TRIBUTE)
         }
         local ct = bgInfo[LFG_ACTIVITY_TRIBUTE_COMPETITIVE]
         local nt = bgInfo[LFG_ACTIVITY_TRIBUTE_CASUAL]
@@ -1133,7 +1133,7 @@ BS.widgets[BS.W_RANDOM_TRIBUTE] = {
     event = EVENT_PLAYER_ACTIVATED,
     icon = "icons/u34_tribute_tutorial",
     hideWhenEqual = 0,
-    tooltip = GetString(_G.BARSTEWARD_RANDOM_TRIBUTE),
+    tooltip = GetString(BARSTEWARD_RANDOM_TRIBUTE),
     onLeftClick = function()
         if (IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("gamepadDungeonFinder")
@@ -1181,7 +1181,7 @@ BS.widgets[BS.W_CHESTS_FOUND] = {
         return not IsUnitInDungeon("player")
     end,
     icon = "icons/quest_strosmkai_open_treasure_chest",
-    tooltip = GetString(_G.BARSTEWARD_FOUND_CHESTS)
+    tooltip = GetString(BARSTEWARD_FOUND_CHESTS)
 }
 
 BS.widgets[BS.W_DAILY_PROGRESS] = {
@@ -1199,7 +1199,7 @@ BS.widgets[BS.W_DAILY_PROGRESS] = {
                 widget:SetColour(BS.GetColour(this, true))
             end
 
-            local ttt = GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS_BEST) .. BS.LF
+            local ttt = GetString(BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS_BEST) .. BS.LF
 
             ttt = ttt .. BS.COLOURS.White:Colorize(maxTask.name .. BS.LF .. BS.LF .. maxTask.description)
 
@@ -1220,7 +1220,7 @@ BS.widgets[BS.W_DAILY_PROGRESS] = {
     end,
     event = { EVENT_PLAYER_ACTIVATED, EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED },
     icon = "journal/u26_progress_digsite_marked_incomplete",
-    tooltip = GetString(_G.BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS_BEST),
+    tooltip = GetString(BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS_BEST),
     onLeftClick = function()
         if (not IsInGamepadPreferredMode()) then
             GROUP_MENU_KEYBOARD:ShowCategory(TIMED_ACTIVITIES_FRAGMENT)
@@ -1234,7 +1234,7 @@ BS.widgets[BS.W_DAILY_PROGRESS] = {
     customSettings = {
         [1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_USE_PROGRESS),
+            name = GetString(BARSTEWARD_USE_PROGRESS),
             getFunc = function()
                 return BS.Vars.Controls[BS.W_DAILY_PROGRESS].Progress or false
             end,
@@ -1346,7 +1346,7 @@ BS.widgets[BS.W_DAILY_COUNT] = {
                 widget:ForceResize()
                 BS.ResizeBar(BS.GetVar("Bar", BS.W_DAILY_COUNT))
 
-                local ttt = GetString(_G.BARSTEWARD_DAILY_QUEST_COUNT) .. BS.LF
+                local ttt = GetString(BARSTEWARD_DAILY_QUEST_COUNT) .. BS.LF
                 local ttext = BS.LC.Format(SI_DLC_BOOK_QUEST_STATUS_ACCEPTED) .. ": " .. added .. BS.LF
 
                 ttext = ttext .. zo_strformat(SI_NOTIFYTEXT_QUEST_COMPLETE, complete)
@@ -1363,7 +1363,7 @@ BS.widgets[BS.W_DAILY_COUNT] = {
         EVENT_QUEST_COMPLETE
     },
     icon = "floatingmarkers/repeatablequest_available_icon",
-    tooltip = GetString(_G.BARSTEWARD_DAILY_QUEST_COUNT)
+    tooltip = GetString(BARSTEWARD_DAILY_QUEST_COUNT)
 }
 
 SecurePostHook(
@@ -1534,17 +1534,17 @@ BS.widgets[BS.W_DAILY_PLEDGES] = {
             widget:SetValue(added .. "/" .. done .. "/" .. maxPledges)
             widget:SetColour(colour)
 
-            local ttt, tt = GetString(_G.BARSTEWARD_DAILY_PLEDGES) .. BS.LF, ""
+            local ttt, tt = GetString(BARSTEWARD_DAILY_PLEDGES) .. BS.LF, ""
             local pledgeQuests = BS.Vars:GetCommon("pledges", character)
 
             for name, status in pairs(pledgeQuests) do
                 local ttext
 
                 if (status == "done") then
-                    ttext = string.format("%s - %s", name, GetString(_G.BARSTEWARD_COMPLETED))
+                    ttext = string.format("%s - %s", name, GetString(BARSTEWARD_COMPLETED))
                     tt = string.format("%s%s%s", tt, BS.COLOURS.DefaultOkColour:Colorize(ttext), BS.LF)
                 elseif (status == "added") then
-                    ttext = string.format("%s - %s", name, GetString(_G.BARSTEWARD_PICKED_UP))
+                    ttext = string.format("%s - %s", name, GetString(BARSTEWARD_PICKED_UP))
                     tt = string.format("%s%s%s", tt, BS.COLOURS.DefaultWarningColour:Colorize(ttext), BS.LF)
                 end
             end
@@ -1596,7 +1596,7 @@ BS.widgets[BS.W_DAILY_PLEDGES] = {
         EVENT_QUEST_CONDITION_COUNTER_CHANGED
     },
     icon = "icons/event_undaunted_commendation",
-    tooltip = GetString(_G.BARSTEWARD_DAILY_PLEDGES),
+    tooltip = GetString(BARSTEWARD_DAILY_PLEDGES),
     hideWhenEqual = true
 }
 
@@ -1699,7 +1699,7 @@ BS.widgets[BS.W_ACHIEVEMENT_TRACKER] = {
         widget:SetValue(value)
         widget:SetColour(BS.GetColour(this, true))
 
-        local tt = GetString(_G.BARSTEWARD_TRACKER) .. BS.LF
+        local tt = GetString(BARSTEWARD_TRACKER) .. BS.LF
         local tttable = {}
 
         for _, ach in pairs(achievements) do
@@ -1758,7 +1758,7 @@ BS.widgets[BS.W_ACHIEVEMENT_TRACKER] = {
     end,
     event = { EVENT_ACHIEVEMENT_AWARDED, EVENT_ACHIEVEMENT_UPDATED },
     icon = "icons/housing_u42_mb_eye",
-    tooltip = GetString(_G.BARSTEWARD_TRACKER),
+    tooltip = GetString(BARSTEWARD_TRACKER),
     onLeftClick = function()
         if (IsInGamepadPreferredMode()) then
             SCENE_MANAGER:Show("achievementsGamepad")
@@ -1807,7 +1807,7 @@ BS.widgets[BS.W_ACHIEVEMENT_TRACKER] = {
         },
         [3] = {
             type = "checkbox",
-            name = BS.LC.Format(_G.BARSTEWARD_PROGRESS_SCREEN),
+            name = BS.LC.Format(BARSTEWARD_PROGRESS_SCREEN),
             getFunc = function()
                 return BS.GetVar("Announce", BS.W_ACHIEVEMENT_TRACKER)
             end,
@@ -1818,7 +1818,7 @@ BS.widgets[BS.W_ACHIEVEMENT_TRACKER] = {
         },
         [4] = {
             type = "description",
-            text = BS.LC.Yellow:Colorize(GetString(_G.BARSTEWARD_TRACKER_INFO)),
+            text = BS.LC.Yellow:Colorize(GetString(BARSTEWARD_TRACKER_INFO)),
             width = "full"
         }
     }
@@ -1961,7 +1961,7 @@ BS.widgets[BS.W_GOLDEN_PURSUITS] = {
     customSettings = {
         [1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_GOLDEN_PURSUITS_HIDE_DEFAULT),
+            name = GetString(BARSTEWARD_GOLDEN_PURSUITS_HIDE_DEFAULT),
             getFunc = function()
                 return BS.GetVar("HideDefault", BS.W_GOLDEN_PURSUITS)
             end,

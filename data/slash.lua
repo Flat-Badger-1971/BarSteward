@@ -1,18 +1,18 @@
-local BS = _G.BarSteward
+local BS = BarSteward
 
 function BS.RegisterSlashCommands()
     -- reload ui
-    if (_G.SLASH_COMMANDS["/rl"] == nil) then
-        _G.SLASH_COMMANDS["/rl"] = function()
+    if (SLASH_COMMANDS["/rl"] == nil) then
+        SLASH_COMMANDS["/rl"] = function()
             ReloadUI()
         end
     end
 
     -- reload ui and clear debug logger window
-    if (_G.SLASH_COMMANDS["/rld"] == nil) then
-        _G.SLASH_COMMANDS["/rld"] = function()
-            if (_G.LibDebugLogger) then
-                _G.LibDebugLogger:ClearLog()
+    if (SLASH_COMMANDS["/rld"] == nil) then
+        SLASH_COMMANDS["/rld"] = function()
+            if (LibDebugLogger) then
+                LibDebugLogger:ClearLog()
             end
             ReloadUI()
         end
@@ -20,7 +20,7 @@ function BS.RegisterSlashCommands()
 
     -- bs commands
     -- open options panel
-    _G.SLASH_COMMANDS["/bs"] = function(parameters)
+    SLASH_COMMANDS["/bs"] = function(parameters)
         local options = {}
         local find = { parameters:match("^(%S*)%s*(.-)$") }
 
@@ -42,20 +42,20 @@ function BS.RegisterSlashCommands()
             end
 
             -- hide the bar
-            if (cmd == GetString(_G.BARSTEWARD_SLASH_HIDE)) then
+            if (cmd == GetString(BARSTEWARD_SLASH_HIDE)) then
                 local bar = BS.FindBar(param)
 
                 if (bar) then
                     bar:Hide()
                 end
-            elseif (cmd == GetString(_G.BARSTEWARD_SLASH_SHOW)) then
+            elseif (cmd == GetString(BARSTEWARD_SLASH_SHOW)) then
                 -- unhide the bar
                 local bar = BS.FindBar(param)
 
                 if (bar) then
                     bar:Show()
                 end
-            elseif (cmd == GetString(_G.BARSTEWARD_DISABLE):lower()) then
+            elseif (cmd == GetString(BARSTEWARD_DISABLE):lower()) then
                 -- disable the bar
                 local _, id = BS.FindBar(param)
 
@@ -65,7 +65,7 @@ function BS.RegisterSlashCommands()
                         BS.DestroyBar(id)
                     end
                 end
-            elseif (cmd == GetString(_G.BARSTEWARD_SLASH_ENABLE)) then
+            elseif (cmd == GetString(BARSTEWARD_SLASH_ENABLE)) then
                 -- enable the bar
                 local _, id = BS.FindBar(param)
 
@@ -84,8 +84,8 @@ function BS.RegisterSlashCommands()
         end
     end
 
-    if (_G.SLASH_COMMANDS["/bslang"] == nil) then
-        _G.SLASH_COMMANDS["/bslang"] = function(lang)
+    if (SLASH_COMMANDS["/bslang"] == nil) then
+        SLASH_COMMANDS["/bslang"] = function(lang)
             SetCVar("language.2", lang)
         end
     end

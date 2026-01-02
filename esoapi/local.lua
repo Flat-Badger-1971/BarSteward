@@ -9,11 +9,19 @@ LibCharacterKnowledgeInternal = {}
 LibClockTST = {}
 LibCombat = {}
 LibDebugLogger = {}
-LibFBCommon = {}
 LibUndauntedPledges = {}
 PortToFriend = {}
 RewardsTracker = {}
 WritWorthy = {}
+
+--- @class  InformationTooltip:Control
+InformationTooltip = {}
+
+--- @param objectKey? any
+--- @return any
+function ZO_ObjectPool:AcquireObject(objectKey) end
+
+function ZO_ObjectPool:ReleaseAllObjects() end
 
 LIBCOMBAT_EVENT_UNITS = 0
 LIBCOMBAT_EVENT_FIGHTRECAP = 0
@@ -329,6 +337,7 @@ BARSTEWARD_REORDER = 0
 BARSTEWARD_REORDER_WIDGETS = 0
 BARSTEWARD_REPAIR_COST = 0
 BARSTEWARD_REQUIRES = 0
+BARSTEWARD_RESTRICT_TOOLTIP = 0
 BARSTEWARD_RIGHT = 0
 BARSTEWARD_RUNEBOX_FRAGMENTS = 0
 BARSTEWARD_SAMPLE = 0
@@ -341,6 +350,7 @@ BARSTEWARD_SERVER = 0
 BARSTEWARD_SETTINGS = 0
 BARSTEWARD_SHADOWY_VENDOR_RESET = 0
 BARSTEWARD_SHORTEN = 0
+BARSTEWARD_SHORTEN_WORLDNAME = 0
 BARSTEWARD_SHOW_BACKDROP = 0
 BARSTEWARD_SHOW_CLASS_ICON = 0
 BARSTEWARD_SHOW_EVERYWHERE = 0

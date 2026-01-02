@@ -1,4 +1,4 @@
-local BS = _G.BarSteward
+local BS = BarSteward
 
 BS.widgets[BS.W_ARCHIVE_PORT] = {
     -- v2.0.3
@@ -9,7 +9,7 @@ BS.widgets[BS.W_ARCHIVE_PORT] = {
         return 0
     end,
     event = EVENT_PLAYER_ACTIVATED,
-    tooltip = GetString(_G.BARSTEWARD_INFINITE_ARCHIVE_PORT),
+    tooltip = GetString(BARSTEWARD_INFINITE_ARCHIVE_PORT),
     icon = "icons/poi/poi_endlessdungeon_complete",
     cooldown = true,
     onLeftClick = function()
@@ -119,7 +119,7 @@ BS.widgets[BS.W_INFINITE_ARCHIVE_PROGRESS] = {
             widget:SetColour(BS.GetColour(this, true))
         end
 
-        local ttt = GetString(_G.BARSTEWARD_INFINITE_ARCHIVE_PROGRESS) .. BS.LF .. BS.LF
+        local ttt = GetString(BARSTEWARD_INFINITE_ARCHIVE_PROGRESS) .. BS.LF .. BS.LF
 
         local threads = ENDLESS_DUNGEON_MANAGER:GetAttemptsRemaining()
         ttt =
@@ -204,12 +204,12 @@ BS.widgets[BS.W_INFINITE_ARCHIVE_PROGRESS] = {
         }
     },
     icon = arcIcon,
-    tooltip = GetString(_G.BARSTEWARD_INFINITE_ARCHIVE_PROGRESS),
+    tooltip = GetString(BARSTEWARD_INFINITE_ARCHIVE_PROGRESS),
     hideWhenEqual = true,
     customSettings = {
         [1] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_USE_PROGRESS),
+            name = GetString(BARSTEWARD_USE_PROGRESS),
             getFunc = function()
                 return BS.Vars.Controls[BS.W_INFINITE_ARCHIVE_PROGRESS].Progress or false
             end,
@@ -222,7 +222,7 @@ BS.widgets[BS.W_INFINITE_ARCHIVE_PROGRESS] = {
         },
         [2] = {
             type = "checkbox",
-            name = GetString(_G.BARSTEWARD_USE_ICONS),
+            name = GetString(BARSTEWARD_USE_ICONS),
             getFunc = function()
                 return BS.Vars.Controls[BS.W_INFINITE_ARCHIVE_PROGRESS].UseIcons or false
             end,
@@ -237,7 +237,7 @@ BS.widgets[BS.W_INFINITE_ARCHIVE_PROGRESS] = {
             width = "full"
         },
         [3] = {
-            name = BS.LC.Format(_G.BARSTEWARD_INFINITE_ARCHIVE_SHOW),
+            name = BS.LC.Format(BARSTEWARD_INFINITE_ARCHIVE_SHOW),
             type = "checkbox",
             getFunc = function()
                 return BS.Vars.Controls[BS.W_INFINITE_ARCHIVE_PROGRESS].Autohide or false
@@ -294,10 +294,10 @@ BS.widgets[BS.W_INFINITE_ARCHIVE_SCORE] = {
         local duo = " " .. BS.LC.Format(SI_ENDLESSDUNGEONGROUPTYPE1) .. ""
         local soloScore = BS.Vars.EndlessHighest[ENDLESS_DUNGEON_GROUP_TYPE_SOLO] or 0
         local duoScore = BS.Vars.EndlessHighest[ENDLESS_DUNGEON_GROUP_TYPE_DUO] or 0
-        local ttt = GetString(_G.BARSTEWARD_INFINITE_ARCHIVE_SCORE) .. BS.LF
+        local ttt = GetString(BARSTEWARD_INFINITE_ARCHIVE_SCORE) .. BS.LF
         local yellow = BS.COLOURS.Yellow
 
-        ttt = ttt .. BS.COLOURS.White:Colorize(BS.LC.Format(_G.BARSTEWARD_HIGHEST)) .. BS.LF
+        ttt = ttt .. BS.COLOURS.White:Colorize(BS.LC.Format(BARSTEWARD_HIGHEST)) .. BS.LF
         ttt =
             string.format(
                 "%s%s: %s%s%s: %s",
@@ -321,11 +321,11 @@ BS.widgets[BS.W_INFINITE_ARCHIVE_SCORE] = {
         }
     },
     icon = "campaign/overview_indexicon_scoring_up",
-    tooltip = GetString(_G.BARSTEWARD_INFINITE_ARCHIVE_SCORE),
+    tooltip = GetString(BARSTEWARD_INFINITE_ARCHIVE_SCORE),
     hideWhenEqual = true,
     customSettings = {
         [1] = {
-            name = BS.LC.Format(_G.BARSTEWARD_INFINITE_ARCHIVE_SHOW),
+            name = BS.LC.Format(BARSTEWARD_INFINITE_ARCHIVE_SHOW),
             type = "checkbox",
             getFunc = function()
                 return BS.Vars.Controls[BS.W_INFINITE_ARCHIVE_SCORE].Autohide or false

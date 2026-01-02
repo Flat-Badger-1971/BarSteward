@@ -1,4 +1,4 @@
-local BS = _G.BarSteward
+local BS = BarSteward
 
 local baseBar = ZO_Object:Subclass()
 

@@ -1,4 +1,4 @@
-_G.BarSteward.ENCODING = {
+BarSteward.ENCODING = {
     ["Autohide"] = "a",
     ["Announce"] = "an",
     ["Anchor"] = "ar",

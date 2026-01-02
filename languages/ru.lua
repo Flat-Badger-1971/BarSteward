@@ -1,5 +1,4 @@
 -- Russian localisation by @SilverWF (EU)
--- luacheck: push ignore 631
 local L = function(t, v)
     ZO_CreateStringId("BARSTEWARD_" .. t, v)
 end
@@ -327,6 +326,7 @@ L("REORDER", "Переставить")
 L("REORDER_WIDGETS", "Переставить виджеты")
 L("REPAIR_COST", "Стоимость починки")
 L("REQUIRES", "Требует <<1>>")
+L("RESTRICT_TOOLTIP", "Ограничить подсказку предметами инвентаря")
 L("RIGHT", "Право")
 L("RUNEBOX_FRAGMENTS", "Фрагменты рунных ларцов")
 L("SAMPLE", " *** Пример текста в выбранном шрифте ***")
@@ -339,6 +339,7 @@ L("SERVER", "Сервер")
 L("SETTINGS", "Настройки могут не применяться до перезагрузки интерфейса.")
 L("SHADOWY_VENDOR_RESET", "Сброс Теневого поставщика")
 L("SHORTEN", "Сокращение имени (убирает Дар:)")
+L("SHORTEN_WORLDNAME", "Удалить 'Megaserver'")
 L("SHOW_BACKDROP", "Показ фона")
 L("SHOW_CLASS_ICON", "Показ иконки класса")
 L("SHOW_EVERYWHERE", "Показывать везде")
@@ -478,4 +479,3 @@ L("UNTRACK", "Перестать отслеживать в Bar Steward")
 
 -- Search
 L("DOUBLE_CLICK", "(двойной клик для перехода)")
---luacheck: pop

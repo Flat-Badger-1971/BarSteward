@@ -1,4 +1,4 @@
-local BS = _G.BarSteward
+local BS = BarSteward
 
 local function getcrownStoreCurrencies(invert, widgetIndex)
     local crownStoreInfo = ""
@@ -263,7 +263,7 @@ BS.widgets[BS.W_EVENT_TICKETS] = {
 
                 if (announce) then
                     BS.Vars:SetCommon(os.time(), "PreviousAnnounceTime", this)
-                    BS.Announce(GetString(_G.BARSTEWARD_WARNING), GetString(_G.BARSTEWARD_WARNING_EVENT_TICKETS), this)
+                    BS.Announce(GetString(BARSTEWARD_WARNING), GetString(BARSTEWARD_WARNING_EVENT_TICKETS), this)
                 end
             end
         end
@@ -290,8 +290,8 @@ BS.widgets[BS.W_EVENT_TICKETS] = {
     end,
     icon = GetCurrencyKeyboardIcon(CURT_EVENT_TICKETS),
     customOptions = {
-        name = GetString(_G.BARSTEWARD_DEBOUNCE),
-        tooltip = GetString(_G.BARSTEWARD_DEBOUNCE_DESC),
+        name = GetString(BARSTEWARD_DEBOUNCE),
+        tooltip = GetString(BARSTEWARD_DEBOUNCE_DESC),
         choices = { 0, 1, 5, 10, 15, 20, 30, 40, 50, 60 },
         varName = "DebounceTime",
         refresh = false,
@@ -304,12 +304,12 @@ BS.widgets[BS.W_GOLD] =
         CURT_MONEY,
         BS.W_GOLD,
         {
-            bag = _G.BARSTEWARD_GOLD_BAG,
-            bank = _G.BARSTEWARD_GOLD_BANK,
-            combined = _G.BARSTEWARD_GOLD_COMBINED,
-            display = _G.BARSTEWARD_GOLD_DISPLAY,
-            everyWhere = _G.BARSTEWARD_GOLD_EVERYWHERE,
-            separated = _G.BARSTEWARD_GOLD_SEPARATED
+            bag = BARSTEWARD_GOLD_BAG,
+            bank = BARSTEWARD_GOLD_BANK,
+            combined = BARSTEWARD_GOLD_COMBINED,
+            display = BARSTEWARD_GOLD_DISPLAY,
+            everyWhere = BARSTEWARD_GOLD_EVERYWHERE,
+            separated = BARSTEWARD_GOLD_SEPARATED
         },
         EVENT_MONEY_UPDATE
     )
@@ -428,12 +428,12 @@ BS.widgets[BS.W_WRIT_VOUCHERS] =
         CURT_WRIT_VOUCHERS,
         BS.W_WRIT_VOUCHERS,
         {
-            bag = _G.BARSTEWARD_GOLD_BAG,
-            bank = _G.BARSTEWARD_GOLD_BANK,
-            combined = _G.BARSTEWARD_GOLD_COMBINED,
-            display = _G.BARSTEWARD_GOLD_DISPLAY,
-            everyWhere = _G.BARSTEWARD_GOLD_EVERYWHERE,
-            separated = _G.BARSTEWARD_GOLD_SEPARATED
+            bag = BARSTEWARD_GOLD_BAG,
+            bank = BARSTEWARD_GOLD_BANK,
+            combined = BARSTEWARD_GOLD_COMBINED,
+            display = BARSTEWARD_GOLD_DISPLAY,
+            everyWhere = BARSTEWARD_GOLD_EVERYWHERE,
+            separated = BARSTEWARD_GOLD_SEPARATED
         },
         EVENT_WRIT_VOUCHER_UPDATE
     )
