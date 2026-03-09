@@ -1209,6 +1209,10 @@ local function getWidgetSettings()
         table.sort(
             ordered,
             function(a, b)
+                if (not (BS.widgets[a.Key] and BS.widgets[b.Key])) then
+                    return false
+                end
+
                 local tta = BS.widgets[a.key].tooltip
                 local ttb = BS.widgets[b.key].tooltip
 
@@ -1435,6 +1439,10 @@ local function getWidgetSettings()
         local disabled = false
         local vars = BS.Vars.Controls[k]
         local defaults = BS.Defaults.Controls[k]
+
+        if (not BS[k]) then
+            break
+        end
 
         if (not BS.Vars.Bars) then
             break

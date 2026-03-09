@@ -835,12 +835,14 @@ function BS.AddSettings(defaults, controls, vars, key)
 end
 
 function BS.CheckExperimental(defaults, widgetControls)
-    if (defaults.Experimental) then
-        widgetControls[#widgetControls + 1] = {
-            type = "description",
-            text = "|cff0000" .. GetString(BARSTEWARD_EXPERIMENTAL) .. "|r",
-            tooltip = GetString(BARSTEWARD_EXPERIMENTAL_DESC),
-            width = "full"
-        }
+    if (defaults) then
+        if (defaults.Experimental) then
+            widgetControls[#widgetControls + 1] = {
+                type = "description",
+                text = "|cff0000" .. GetString(BARSTEWARD_EXPERIMENTAL) .. "|r",
+                tooltip = GetString(BARSTEWARD_EXPERIMENTAL_DESC),
+                width = "full"
+            }
+        end
     end
 end

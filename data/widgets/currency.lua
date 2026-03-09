@@ -225,79 +225,79 @@ BS.widgets[BS.W_CROWNS] = {
     end
 }
 
-BS.widgets[BS.W_EVENT_TICKETS] = {
-    name = "eventTickets",
-    update = function(widget)
-        local this = BS.W_EVENT_TICKETS
-        local tickets = GetCurrencyAmount(CURT_EVENT_TICKETS, CURRENCY_LOCATION_ACCOUNT)
-        local maxTickets = GetMaxPossibleCurrency(CURT_EVENT_TICKETS, CURRENCY_LOCATION_ACCOUNT)
-        local noLimitColour = BS.GetVar("NoLimitColour", this) and BS.COLOURS.White or BS.COLOURS.Yellow
-        local value =
-            tickets .. (BS.GetVar("HideLimit", this) and "" or (noLimitColour:Colorize("/" .. tostring(maxTickets))))
-        local widthValue = tickets .. (BS.GetVar("HideLimit", this) and "" or ("/" .. tostring(maxTickets)))
-        local pc = BS.LC.ToPercent(tickets, maxTickets)
+-- BS.widgets[BS.W_EVENT_TICKETS] = {
+--     name = "eventTickets",
+--     update = function(widget)
+--         local this = BS.W_EVENT_TICKETS
+--         local tickets = GetCurrencyAmount(CURT_EVENT_TICKETS, CURRENCY_LOCATION_ACCOUNT)
+--         local maxTickets = GetMaxPossibleCurrency(CURT_EVENT_TICKETS, CURRENCY_LOCATION_ACCOUNT)
+--         local noLimitColour = BS.GetVar("NoLimitColour", this) and BS.COLOURS.White or BS.COLOURS.Yellow
+--         local value =
+--             tickets .. (BS.GetVar("HideLimit", this) and "" or (noLimitColour:Colorize("/" .. tostring(maxTickets))))
+--         local widthValue = tickets .. (BS.GetVar("HideLimit", this) and "" or ("/" .. tostring(maxTickets)))
+--         local pc = BS.LC.ToPercent(tickets, maxTickets)
 
-        if (BS.GetVar("ShowPercent", this)) then
-            value = pc .. "%"
-        end
+--         if (BS.GetVar("ShowPercent", this)) then
+--             value = pc .. "%"
+--         end
 
-        local colour = BS.GetColour(this, true)
+--         local colour = BS.GetColour(this, true)
 
-        if (tickets > BS.GetVar("DangerValue", this)) then
-            colour = BS.GetColour(this, "Danger", true)
+--         if (tickets > BS.GetVar("DangerValue", this)) then
+--             colour = BS.GetColour(this, "Danger", true)
 
-            if (BS.GetVar("Announce", this)) then
-                local announce = true
-                local previousTime = BS.Vars:GetCommon("PreviousAnnounceTime", this) or (os.time() - 100)
-                local debounceTime = (BS.GetVar("DebounceTime", this) or 5) * 60
+--             if (BS.GetVar("Announce", this)) then
+--                 local announce = true
+--                 local previousTime = BS.Vars:GetCommon("PreviousAnnounceTime", this) or (os.time() - 100)
+--                 local debounceTime = (BS.GetVar("DebounceTime", this) or 5) * 60
 
-                if (os.time() - previousTime <= debounceTime) then
-                    announce = false
-                end
+--                 if (os.time() - previousTime <= debounceTime) then
+--                     announce = false
+--                 end
 
-                -- if the number of tickets has changed then override the debounce
-                if ((BS.previousEventTicketValue or 0) ~= tickets) then
-                    announce = true
-                    BS.previousEventTicketValue = tickets
-                end
+--                 -- if the number of tickets has changed then override the debounce
+--                 if ((BS.previousEventTicketValue or 0) ~= tickets) then
+--                     announce = true
+--                     BS.previousEventTicketValue = tickets
+--                 end
 
-                if (announce) then
-                    BS.Vars:SetCommon(os.time(), "PreviousAnnounceTime", this)
-                    BS.Announce(GetString(BARSTEWARD_WARNING), GetString(BARSTEWARD_WARNING_EVENT_TICKETS), this)
-                end
-            end
-        end
+--                 if (announce) then
+--                     BS.Vars:SetCommon(os.time(), "PreviousAnnounceTime", this)
+--                     BS.Announce(GetString(BARSTEWARD_WARNING), GetString(BARSTEWARD_WARNING_EVENT_TICKETS), this)
+--                 end
+--             end
+--         end
 
-        if (BS.GetVar("MaxValue", this)) then
-            if (tickets == maxTickets) then
-                colour = BS.GetColour(this, "Max", true)
-            end
-        end
+--         if (BS.GetVar("MaxValue", this)) then
+--             if (tickets == maxTickets) then
+--                 colour = BS.GetColour(this, "Max", true)
+--             end
+--         end
 
-        widget:SetColour(colour)
-        widget:SetValue(value, widthValue)
+--         widget:SetColour(colour)
+--         widget:SetValue(value, widthValue)
 
-        local tt = BS.LC.Format(GetCurrencyName(CURT_EVENT_TICKETS, true, true)) ..
-            BS.LF .. getcrownStoreCurrencies(true, this)
+--         local tt = BS.LC.Format(GetCurrencyName(CURT_EVENT_TICKETS, true, true)) ..
+--             BS.LF .. getcrownStoreCurrencies(true, this)
 
-        widget:SetTooltip(tt)
+--         widget:SetTooltip(tt)
 
-        return value
-    end,
-    event = EVENT_CURRENCY_UPDATE,
-    tooltip = function()
-        return BS.LC.Format(GetCurrencyName(CURT_EVENT_TICKETS, true, true))
-    end,
-    icon = GetCurrencyKeyboardIcon(CURT_EVENT_TICKETS),
-    customOptions = {
-        name = GetString(BARSTEWARD_DEBOUNCE),
-        tooltip = GetString(BARSTEWARD_DEBOUNCE_DESC),
-        choices = { 0, 1, 5, 10, 15, 20, 30, 40, 50, 60 },
-        varName = "DebounceTime",
-        refresh = false,
-        default = 5
-    }
-}
+--         return value
+--     end,
+--     event = EVENT_CURRENCY_UPDATE,
+--     tooltip = function()
+--         return BS.LC.Format(GetCurrencyName(CURT_EVENT_TICKETS, true, true))
+--     end,
+--     icon = GetCurrencyKeyboardIcon(CURT_EVENT_TICKETS),
+--     customOptions = {
+--         name = GetString(BARSTEWARD_DEBOUNCE),
+--         tooltip = GetString(BARSTEWARD_DEBOUNCE_DESC),
+--         choices = { 0, 1, 5, 10, 15, 20, 30, 40, 50, 60 },
+--         varName = "DebounceTime",
+--         refresh = false,
+--         default = 5
+--     }
+-- }
 
 BS.widgets[BS.W_GOLD] =
     BS.CurrencyWidget(
