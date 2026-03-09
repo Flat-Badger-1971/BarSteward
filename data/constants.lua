@@ -340,11 +340,10 @@ BS.CURRENCIES = {
     [CURT_CROWN_GEMS] = { crownStore = true },
     [CURT_WRIT_VOUCHERS] = { crownStore = false },
     [CURT_TELVAR_STONES] = { crownStore = false },
-    [CURT_EVENT_TICKETS] = { crownStore = false },
-    [CURT_ENDEAVOR_SEALS] = { crownStore = true },
+    [CURT_SEALS] = { crownStore = true },
     [CURT_UNDAUNTED_KEYS] = { crownStore = false },
     [CURT_ALLIANCE_POINTS] = { crownStore = false },
-    [CURT_CHAOTIC_CREATIA] = { crownStore = false },
+    [CURT_TRANSMUTE_CRYSTALS] = { crownStore = false },
     [CURT_ARCHIVAL_FORTUNES] = { crownStore = true },
     [CURT_IMPERIAL_FRAGMENTS] = { crownStore = true }
 }

@@ -102,7 +102,6 @@ end
 
 local function getTimedActivityProgress(activityType, widget, hideLimit, defaultTooltip, ignoreComplete)
     local complete = 0
-    local maxComplete = GetTimedActivityTypeLimit(activityType)
     local tasks = {}
     local maxPcProgress = -1
     local maxTask = {}
@@ -121,9 +120,9 @@ local function getTimedActivityProgress(activityType, widget, hideLimit, default
             local ttext = name .. "  (" .. progress .. "/" .. max .. ")"
             local colour = BS.COLOURS.Grey
 
-            if (progress > 0 and progress < max and complete ~= maxComplete) then
+            if (progress > 0 and progress < max) then
                 colour = BS.COLOURS.Yellow
-            elseif (complete == maxComplete and max ~= progress) then
+            elseif (max ~= progress) then
                 colour = BS.COLOURS.Grey
             elseif (max == progress) then
                 complete = complete + 1
@@ -171,7 +170,7 @@ local function getTimedActivityProgress(activityType, widget, hideLimit, default
     end
 
     if (widget ~= nil) then
-        configureWidget(widget, complete, maxComplete, activityType, tasks, hideLimit, defaultTooltip)
+        configureWidget(widget, complete, complete, activityType, tasks, hideLimit, defaultTooltip)
     end
 
     return complete, maxTask
@@ -200,7 +199,7 @@ BS.widgets[BS.W_DAILY_ENDEAVOURS] = {
         end
     end,
     complete = function()
-        return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(TIMED_ACTIVITY_TYPE_DAILY)
+        -- return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(TIMED_ACTIVITY_TYPE_DAILY)
     end,
     customSettings = function()
         return getColourOptions(BS.W_DAILY_ENDEAVOURS)
@@ -230,7 +229,7 @@ BS.widgets[BS.W_WEEKLY_ENDEAVOURS] = {
         end
     end,
     complete = function()
-        return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(TIMED_ACTIVITY_TYPE_WEEKLY)
+        -- return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(TIMED_ACTIVITY_TYPE_WEEKLY)
     end,
     customSettings = function()
         return getColourOptions(BS.W_WEEKLY_ENDEAVOURS)
@@ -283,7 +282,7 @@ BS.widgets[BS.W_ENDEAVOUR_PROGRESS] = {
         end
     end,
     complete = function()
-        return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(TIMED_ACTIVITY_TYPE_WEEKLY)
+        -- return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(TIMED_ACTIVITY_TYPE_WEEKLY)
     end,
     customSettings = {
         [1] = {
@@ -556,7 +555,7 @@ BS.widgets[BS.W_DAILY_ENDEAVOUR_TIME] = {
     timer = 1000,
     event = EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED,
     complete = function()
-        return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(TIMED_ACTIVITY_TYPE_DAILY)
+        -- return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(TIMED_ACTIVITY_TYPE_DAILY)
     end,
     icon = "journal/u26_progress_digsite_unknown_incomplete",
     tooltip = GetString(BARSTEWARD_DAILY_ENDEAVOUR_TIME),
@@ -587,7 +586,7 @@ BS.widgets[BS.W_WEEKLY_ENDEAVOUR_TIME] = {
         end
     end,
     complete = function()
-        return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(TIMED_ACTIVITY_TYPE_WEEKLY)
+        -- return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(TIMED_ACTIVITY_TYPE_WEEKLY)
     end
 }
 
@@ -1229,7 +1228,7 @@ BS.widgets[BS.W_DAILY_PROGRESS] = {
         end
     end,
     complete = function()
-        return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(TIMED_ACTIVITY_TYPE_DAILY)
+        -- return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(TIMED_ACTIVITY_TYPE_DAILY)
     end,
     customSettings = {
         [1] = {

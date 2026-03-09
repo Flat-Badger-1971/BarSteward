@@ -635,74 +635,91 @@ function baseBar:AddWidgets(widgets)
 
     for idx, metadata in ipairs(widgets) do
         -- draw the widget
-        local controlDefaults = BS.Defaults.Controls[metadata.id]
+        if (BS.Defaults.Controls[metadata.id]) then
+            local controlDefaults = BS.Defaults.Controls[metadata.id]
 
-        if (controlDefaults and (controlDefaults.Progress ~= nil)) then
-            metadata.progress = controlDefaults.Progress
+            if (controlDefaults and (controlDefaults.Progress ~= nil)) then
+                metadata.progress = controlDefaults.Progress
 
-            local vars = BS.Vars.Controls[metadata.id]
+                local vars = BS.Vars.Controls[metadata.id]
 
-            if (vars and (vars.Progress ~= nil)) then
-                metadata.progress = vars.Progress
-            end
-        end
-
-        local noValue = BS.Vars.Controls[metadata.id].NoValue or false
-        local noIcon = BS.Vars.Controls[metadata.id].NoIcon or false
-
-        metadata.widget =
-            BS.CreateWidget(metadata, self.bar, tooltipAnchor, self.valueSide, noValue, self.settings, noIcon)
-
-        -- register widgets that need to watch for events
-        if (metadata.event) then
-            local events
-
-            if (type(metadata.event) == "table") then
-                events = metadata.event
-            else
-                events = { metadata.event }
+                if (vars and (vars.Progress ~= nil)) then
+                    metadata.progress = vars.Progress
+                end
             end
 
-            for _, event in ipairs(events) do
-                BS.EventManager:RegisterForEvent(
-                    event,
-                    function(...)
-                        self:DoUpdate(metadata, ...)
+            local noValue = BS.Vars.Controls[metadata.id].NoValue or false
+            local noIcon = BS.Vars.Controls[metadata.id].NoIcon or false
+
+            metadata.widget =
+                BS.CreateWidget(metadata, self.bar, tooltipAnchor, self.valueSide, noValue, self.settings, noIcon)
+
+            -- register widgets that need to watch for events
+            if (metadata.event) then
+                local events
+
+                if (type(metadata.event) == "table") then
+                    events = metadata.event
+                else
+                    events = { metadata.event }
+                end
+
+                for _, event in ipairs(events) do
+                    BS.EventManager:RegisterForEvent(
+                        event,
+                        function(...)
+                            self:DoUpdate(metadata, ...)
+                        end
+                    )
+                end
+
+                if (metadata.filter) then
+                    for event, filterInfo in pairs(metadata.filter) do
+                        EVENT_MANAGER:AddFilterForEvent(BS.Name, event, filterInfo[1], filterInfo[2])
+                    end
+                end
+            end
+
+            -- register widgets that need to update after a set interval
+            if (metadata.timer) then
+                BS.TimerManager:RegisterForUpdate(
+                    metadata.timer,
+                    function()
+                        self:DoUpdate(metadata)
                     end
                 )
             end
 
-            if (metadata.filter) then
-                for event, filterInfo in pairs(metadata.filter) do
-                    EVENT_MANAGER:AddFilterForEvent(BS.Name, event, filterInfo[1], filterInfo[2])
+            -- register widgets that need to respond to callbacks
+            if (metadata.callback) then
+                for object, events in pairs(metadata.callback) do
+                    for _, event in ipairs(events) do
+                        if (type(event) == "table") then
+                            object:RegisterCallback(
+                                event.event,
+                                function(...)
+                                    self:DoUpdate(metadata, event.label, ...)
+                                end
+                            )
+                        else
+                            object:RegisterCallback(
+                                event,
+                                function(...)
+                                    self:DoUpdate(metadata, ...)
+                                end
+                            )
+                        end
+                    end
                 end
             end
-        end
 
-        -- register widgets that need to update after a set interval
-        if (metadata.timer) then
-            BS.TimerManager:RegisterForUpdate(
-                metadata.timer,
-                function()
-                    self:DoUpdate(metadata)
-                end
-            )
-        end
-
-        -- register widgets that need to respond to callbacks
-        if (metadata.callback) then
-            for object, events in pairs(metadata.callback) do
-                for _, event in ipairs(events) do
-                    if (type(event) == "table") then
-                        object:RegisterCallback(
-                            event.event,
-                            function(...)
-                                self:DoUpdate(metadata, event.label, ...)
-                            end
-                        )
-                    else
-                        object:RegisterCallback(
-                            event,
+            -- register widgets that need to use hooks
+            if (metadata.hook) then
+                for object, methods in pairs(metadata.hook) do
+                    for _, method in ipairs(methods) do
+                        SecurePostHook(
+                            object,
+                            method,
                             function(...)
                                 self:DoUpdate(metadata, ...)
                             end
@@ -710,67 +727,52 @@ function baseBar:AddWidgets(widgets)
                     end
                 end
             end
-        end
 
-        -- register widgets that need to use hooks
-        if (metadata.hook) then
-            for object, methods in pairs(metadata.hook) do
-                for _, method in ipairs(methods) do
-                    SecurePostHook(
-                        object,
-                        method,
-                        function(...)
-                            self:DoUpdate(metadata, ...)
+            -- register LibCharacterKnowledge callback
+            if (metadata.callbackLCK) then
+                if (BS.LibCK) then
+                    BS.LibCK.RegisterForCallback(
+                        BS.Name .. metadata.name,
+                        BS.LibCK.EVENT_INITIALIZED,
+                        function()
+                            self:DoUpdate(metadata)
                         end
                     )
                 end
             end
-        end
 
-        -- register LibCharacterKnowledge callback
-        if (metadata.callbackLCK) then
-            if (BS.LibCK) then
-                BS.LibCK.RegisterForCallback(
-                    BS.Name .. metadata.name,
-                    BS.LibCK.EVENT_INITIALIZED,
-                    function()
-                        self:DoUpdate(metadata)
-                    end
-                )
-            end
-        end
+            local isProgress = metadata.widget.progress ~= nil
 
-        local isProgress = metadata.widget.progress ~= nil
-
-        if (self.orientation == "horizontal") then
-            if (firstWidget) then
-                metadata.widget:SetAnchor(LEFT, self.bar, LEFT)
+            if (self.orientation == "horizontal") then
+                if (firstWidget) then
+                    metadata.widget:SetAnchor(LEFT, self.bar, LEFT)
+                else
+                    metadata.widget:SetAnchor(LEFT, previousWidget.control, RIGHT)
+                end
             else
-                metadata.widget:SetAnchor(LEFT, previousWidget.control, RIGHT)
-            end
-        else
-            if (firstWidget) then
-                if (isProgress) then
-                    metadata.widget:SetAnchor(TOPLEFT, self.bar.placeholder, BOTTOMRIGHT)
+                if (firstWidget) then
+                    if (isProgress) then
+                        metadata.widget:SetAnchor(TOPLEFT, self.bar.placeholder, BOTTOMRIGHT)
+                    else
+                        metadata.widget:SetAnchor(
+                            self.valueSide == LEFT and TOPRIGHT or TOPLEFT,
+                            self.bar,
+                            self.valueSide == LEFT and TOPRIGHT or TOPLEFT
+                        )
+                    end
                 else
                     metadata.widget:SetAnchor(
                         self.valueSide == LEFT and TOPRIGHT or TOPLEFT,
-                        self.bar,
-                        self.valueSide == LEFT and TOPRIGHT or TOPLEFT
+                        previousWidget.control,
+                        self.valueSide == LEFT and BOTTOMRIGHT or BOTTOMLEFT
                     )
                 end
-            else
-                metadata.widget:SetAnchor(
-                    self.valueSide == LEFT and TOPRIGHT or TOPLEFT,
-                    previousWidget.control,
-                    self.valueSide == LEFT and BOTTOMRIGHT or BOTTOMLEFT
-                )
             end
-        end
 
-        previousWidget = metadata.widget
-        firstWidget = false
-        self.widgets[idx] = metadata
+            previousWidget = metadata.widget
+            firstWidget = false
+            self.widgets[idx] = metadata
+        end
     end
 
     for _, widget in ipairs(self.widgets) do
