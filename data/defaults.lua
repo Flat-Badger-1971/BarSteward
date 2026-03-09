@@ -72,20 +72,11 @@ BS.Defaults = {
             Cat = cat.Currency,
             UseSeparators = false
         },
-        -- [BS.W_EVENT_TICKETS] = {
-        --     Announce = false,
-        --     Bar = 1,
-        --     Cat = cat.Currency,
-        --     ColourValues = "c,dv,dc,mv,mc",
-        --     DangerValue = 8,
-        --     HideLimit = false,
-        --     NoLimitColour = false,
-        --     ShowPercent = false,
-        --     SoundWhenEquals = false,
-        --     SoundWhenEqualsSound = "Daily Login Reward Claim Fanfare",
-        --     SoundWhenOver = false,
-        --     SoundWhenOverSound = "Duel Forfeit"
-        -- },
+        [BS.W_EVENT_TICKETS] = {
+            Bar = 1,
+            Cat = cat.Currency,
+            ColourValues = "c,dv,dc,mv,mc"
+        },
         [BS.W_GOLD] = {
             Bar = 1,
             Cat = cat.Currency,

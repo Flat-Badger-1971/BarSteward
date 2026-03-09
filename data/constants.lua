@@ -9,7 +9,7 @@ BarSteward = {
     W_ALLIANCE_POINTS = 2,
     W_CROWN_GEMS = 3,
     W_CROWNS = 4,
-    -- W_EVENT_TICKETS = 5,
+    W_EVENT_TICKETS = 5, -- now TRADE BARS
     W_GOLD = 6,
     W_SEALS_OF_ENDEAVOUR = 7,
     W_TELVAR_STONES = 8,
@@ -345,7 +345,8 @@ BS.CURRENCIES = {
     [CURT_ALLIANCE_POINTS] = { crownStore = false },
     [CURT_TRANSMUTE_CRYSTALS] = { crownStore = false },
     [CURT_ARCHIVAL_FORTUNES] = { crownStore = true },
-    [CURT_IMPERIAL_FRAGMENTS] = { crownStore = true }
+    [CURT_IMPERIAL_FRAGMENTS] = { crownStore = true },
+    [CURT_TRADE_BARS] = { crownStore = false }
 }
 
 BS.FRAGMENT_TYPES = {
