@@ -137,6 +137,17 @@ function BS.VersionCheck()
 
     if (needsUpdate(3400)) then
         BS.Vars.Controls[BS.W_ALL_CRAFTING].Experimental = false
+        BS.Vars:SetCommon(true, "Updates", 3400)
+    end
+
+    if (needsUpdate(3500)) then
+        local deadWidgets = { 26, 27, 45, 52, 53, 93 }
+
+        for _, widget in ipairs(deadWidgets) do
+            BS.Vars.Controls[widget] = nil
+        end
+
+        BS.Vars:SetCommon(true, "Updates", 3500)
     end
 end
 

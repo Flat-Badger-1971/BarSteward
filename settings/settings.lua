@@ -1437,7 +1437,6 @@ local function getWidgetSettings()
         local defaults = BS.Defaults.Controls[k]
 
         if (defaults) then
-            d(w.key)
             local v = w.widget
             local widgetControls = {}
             local disabled = false
