@@ -1434,103 +1434,103 @@ local function getWidgetSettings()
 
     for _, w in ipairs(ordered) do
         local k = w.key
-        local v = w.widget
-        local widgetControls = {}
-        local disabled = false
-        local vars = BS.Vars.Controls[k]
         local defaults = BS.Defaults.Controls[k]
 
-        if (not BS[k]) then
-            break
-        end
+        if (defaults) then
+            d(w.key)
+            local v = w.widget
+            local widgetControls = {}
+            local disabled = false
+            local vars = BS.Vars.Controls[k]
 
-        if (not BS.Vars.Bars) then
-            break
-        end
+            if (not BS.Vars.Bars) then
+                break
+            end
 
-        if (widgets[k].Requires and not _G[widgets[k].Requires]) then
-            widgetControls[#widgetControls + 1] = {
-                type = "description",
-                text = "|cff0000" .. zo_strformat(GetString(BARSTEWARD_REQUIRES), widgets[k].Requires) .. "|r",
-                width = "full"
-            }
-            disabled = true
-        else
-            BS.CheckExperimental(defaults, widgetControls)
+            if (widgets[k].Requires and not _G[widgets[k].Requires]) then
+                widgetControls[#widgetControls + 1] = {
+                    type = "description",
+                    text = "|cff0000" .. zo_strformat(GetString(BARSTEWARD_REQUIRES), widgets[k].Requires) .. "|r",
+                    width = "full"
+                }
+                disabled = true
+            else
+                BS.CheckExperimental(defaults, widgetControls)
 
-            widgetControls[#widgetControls + 1] = {
-                type = "dropdown",
-                name = GetString(BARSTEWARD_BAR),
-                choices = barNames,
-                getFunc = function()
-                    local barName = ZO_CachedStrFormat("<<C:1>>", GetString(SI_DAMAGETYPE0))
+                widgetControls[#widgetControls + 1] = {
+                    type = "dropdown",
+                    name = GetString(BARSTEWARD_BAR),
+                    choices = barNames,
+                    getFunc = function()
+                        local barName = ZO_CachedStrFormat("<<C:1>>", GetString(SI_DAMAGETYPE0))
 
-                    if (v.Bar ~= 0) then
-                        barName = BS.Vars.Bars[v.Bar].Name
-                    end
+                        if (v.Bar ~= 0) then
+                            barName = BS.Vars.Bars[v.Bar].Name
+                        end
 
-                    return barName
-                end,
-                setFunc = function(value)
-                    local tbars = BS.Vars.Bars
-                    local barNum = 0
+                        return barName
+                    end,
+                    setFunc = function(value)
+                        local tbars = BS.Vars.Bars
+                        local barNum = 0
 
-                    for bnum, bdata in ipairs(tbars) do
-                        if (bdata.Name == value) then
-                            barNum = bnum
+                        for bnum, bdata in ipairs(tbars) do
+                            if (bdata.Name == value) then
+                                barNum = bnum
+                            end
+                        end
+
+                        local oldBarNum = BS.Vars.Controls[k].Bar
+
+                        BS.Vars.Controls[k].Bar = barNum
+                        BS.GetQuestInfo()
+                        BS.RegenerateBar(oldBarNum, k)
+                        BS.RegenerateBar(barNum)
+                    end,
+                    width = "full",
+                    default = BS.Defaults.Controls[k].Bar,
+                    disabled = function()
+                        if (k ~= BS.W_TAMRIEL_TIME) then
+                            return false
+                        end
+
+                        if (not BS.LibClock) then
+                            return true
                         end
                     end
+                }
+            end
 
-                    local oldBarNum = BS.Vars.Controls[k].Bar
+            if (not disabled) then
+                BS.AddSettings(defaults, widgetControls, vars, k)
+            end
 
-                    BS.Vars.Controls[k].Bar = barNum
-                    BS.GetQuestInfo()
-                    BS.RegenerateBar(oldBarNum, k)
-                    BS.RegenerateBar(barNum)
+            local textureCoords = nil
+
+            if (k == BS.W_ALLIANCE) then
+                textureCoords = { 0, 1, 0, 0.6 }
+            end
+
+            local iconInfo = BS.widgets[k].icon
+
+            if (type(iconInfo) == "function") then
+                iconInfo = iconInfo()
+            end
+
+            local widgetData = {
+                type = "submenu",
+                name = function()
+                    return getWidgetName(k)
                 end,
-                width = "full",
-                default = BS.Defaults.Controls[k].Bar,
-                disabled = function()
-                    if (k ~= BS.W_TAMRIEL_TIME) then
-                        return false
-                    end
-
-                    if (not BS.LibClock) then
-                        return true
-                    end
-                end
+                icon = BS.FormatIcon(iconInfo),
+                iconTextureCoords = textureCoords,
+                controls = widgetControls,
+                reference = "BarStewardWidget_" .. k
             }
+
+            categories[vars.Cat].controls[categoryIndex[vars.Cat]] = widgetData
+            categoryIndex[vars.Cat] = categoryIndex[vars.Cat] + 1
         end
-
-        if (not disabled) then
-            BS.AddSettings(defaults, widgetControls, vars, k)
-        end
-
-        local textureCoords = nil
-
-        if (k == BS.W_ALLIANCE) then
-            textureCoords = { 0, 1, 0, 0.6 }
-        end
-
-        local iconInfo = BS.widgets[k].icon
-
-        if (type(iconInfo) == "function") then
-            iconInfo = iconInfo()
-        end
-
-        local widgetData = {
-            type = "submenu",
-            name = function()
-                return getWidgetName(k)
-            end,
-            icon = BS.FormatIcon(iconInfo),
-            iconTextureCoords = textureCoords,
-            controls = widgetControls,
-            reference = "BarStewardWidget_" .. k
-        }
-
-        categories[vars.Cat].controls[categoryIndex[vars.Cat]] = widgetData
-        categoryIndex[vars.Cat] = categoryIndex[vars.Cat] + 1
     end
 
     local cats = {}

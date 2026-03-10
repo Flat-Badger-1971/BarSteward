@@ -72,7 +72,7 @@ BS.Defaults = {
             Cat = cat.Currency,
             UseSeparators = false
         },
-        [BS.W_EVENT_TICKETS] = {
+        [BS.W_TRADE_BARS] = {
             Bar = 1,
             Cat = cat.Currency,
             ColourValues = "c,dv,dc,mv,mc"
@@ -616,11 +616,11 @@ BS.Defaults = {
         [BS.W_CRAFTING_MOTIFS] = {
             Cat = cat.Activities
         },
-        [BS.W_DAILY_PROGRESS] = {
-            Cat = cat.Activities,
-            HideWhenComplete = false,
-            Progress = true
-        },
+        -- [BS.W_DAILY_PROGRESS] = {
+        --     Cat = cat.Activities,
+        --     HideWhenComplete = false,
+        --     Progress = true
+        -- },
         [BS.W_WEAPON_CHARGE] = {
             Cat = cat.Inventory,
             ColourValues = "okc,wv,wc,dv,dc",

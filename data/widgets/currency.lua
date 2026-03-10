@@ -225,10 +225,10 @@ BS.widgets[BS.W_CROWNS] = {
     end
 }
 
-BS.widgets[BS.W_EVENT_TICKETS] = {
+BS.widgets[BS.W_TRADE_BARS] = {
     name = "eventTickets",
     update = function(widget)
-        local this = BS.W_EVENT_TICKETS
+        local this = BS.W_TRADE_BARS
         local tickets = GetCurrencyAmount(CURT_TRADE_BARS, CURRENCY_LOCATION_ACCOUNT)
         local value = tickets
         local widthValue = tickets
