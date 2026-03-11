@@ -335,18 +335,19 @@ BS.BOTH = 3
 BS.ACTIVE_BAR = 4
 
 BS.CURRENCIES = {
-    [CURT_MONEY] = { crownStore = false },
+    [CURT_ALLIANCE_POINTS] = { crownStore = false },
+    [CURT_ARCHIVAL_FORTUNES] = { crownStore = true },
     [CURT_CROWNS] = { crownStore = true },
     [CURT_CROWN_GEMS] = { crownStore = true },
-    [CURT_WRIT_VOUCHERS] = { crownStore = false },
-    [CURT_TELVAR_STONES] = { crownStore = false },
-    [CURT_SEALS] = { crownStore = true },
-    [CURT_UNDAUNTED_KEYS] = { crownStore = false },
-    [CURT_ALLIANCE_POINTS] = { crownStore = false },
-    [CURT_TRANSMUTE_CRYSTALS] = { crownStore = false },
-    [CURT_ARCHIVAL_FORTUNES] = { crownStore = true },
     [CURT_IMPERIAL_FRAGMENTS] = { crownStore = true },
-    [CURT_TRADE_BARS] = { crownStore = false }
+    [CURT_MONEY] = { crownStore = false },
+    [CURT_SEALS] = { crownStore = true },
+    [CURT_TELVAR_STONES] = { crownStore = false },
+    [CURT_TOME_POINTS] = { crownStore = false },
+    [CURT_TRADE_BARS] = { crownStore = false },
+    [CURT_TRANSMUTE_CRYSTALS] = { crownStore = false },
+    [CURT_UNDAUNTED_KEYS] = { crownStore = false },
+    [CURT_WRIT_VOUCHERS] = { crownStore = false }
 }
 
 BS.FRAGMENT_TYPES = {
