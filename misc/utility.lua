@@ -772,7 +772,7 @@ local function getWidgets(barIndex)
     end
 
     -- get the widgets for this bar
-    for id, info in ipairs(BS.Vars.Controls) do
+    for id, info in pairs(BS.Vars.Controls) do
         if (id ~= BS.W_PORT) then
             if (BS.Defaults.Controls[id]) then
                 if (info.Bar == barIndex and not (BS.Defaults.Controls[id].Hidden)) then
