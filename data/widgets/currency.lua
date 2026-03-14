@@ -461,3 +461,29 @@ BS.widgets[BS.W_IMPERIAL_FRAGMENTS] = {
     tooltip = BS.LC.Format(GetCurrencyName(CURT_IMPERIAL_FRAGMENTS, true, true)),
     icon = GetCurrencyKeyboardIcon(CURT_IMPERIAL_FRAGMENTS)
 }
+
+BS.widgets[BS.W_TOME_POINTS] = {
+    name = "tomePoints",
+    update = function(widget)
+        local this = BS.W_TOME_POINTS
+        local seals = GetCurrencyAmount(CURT_TOME_POINTS, CURRENCY_LOCATION_ACCOUNT)
+
+        if (BS.GetVar("UseSeparators", this) == true) then
+            seals = BS.AddSeparators(seals)
+        end
+
+        widget:SetValue(seals)
+        widget:SetColour(BS.GetColour(this, true))
+
+        local tt = BS.LC.Format(GetCurrencyName(CURT_TOME_POINTS, true, true)) .. BS.LF
+
+        tt = tt .. getcrownStoreCurrencies(false, this)
+
+        widget:SetTooltip(tt)
+
+        return widget:GetValue()
+    end,
+    event = { EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED, EVENT_CURRENCY_UPDATE },
+    tooltip = BS.LC.Format(GetCurrencyName(CURT_TOME_POINTS, true, true)),
+    icon = GetCurrencyKeyboardIcon(CURT_TOME_POINTS)
+}

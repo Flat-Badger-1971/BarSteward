@@ -878,6 +878,23 @@ BS.Defaults = {
         [BS.W_SERVER] = {
             Cat = cat.Client
         },
+        [BS.W_TOME_POINTS] = {
+            Bar = 0,
+            Cat = cat.Currency,
+            UseSeparators = false
+        },
+        [BS.W_SILURUZ] = {
+            Cat = cat.Assistants
+        },
+        [BS.W_TERILORNE] = {
+            Cat = cat.Assistants
+        },
+        [BS.W_CELIA] = {
+            Cat = cat.Assistants
+        },
+        [BS.W_VOKO] = {
+            Cat = cat.Assistants
+        }
     }
 }
 

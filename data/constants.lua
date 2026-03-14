@@ -155,7 +155,12 @@ BarSteward = {
     W_MYTHIC = 148,
     W_ACHIEVEMENT_TRACKER = 149,
     W_GOLDEN_PURSUITS = 150,
-    W_SERVER = 151
+    W_SERVER = 151,
+    W_TOME_POINTS = 152,
+    W_SILURUZ = 153,
+    W_TERILORNE = 154,
+    W_CELIA = 155,
+    W_VOKO = 156
 }
 
 local BS = BarSteward
@@ -343,7 +348,7 @@ BS.CURRENCIES = {
     [CURT_MONEY] = { crownStore = false },
     [CURT_SEALS] = { crownStore = true },
     [CURT_TELVAR_STONES] = { crownStore = false },
-    [CURT_TOME_POINTS] = { crownStore = false },
+    [CURT_TOME_POINTS] = { crownStore = true },
     [CURT_TRADE_BARS] = { crownStore = false },
     [CURT_TRANSMUTE_CRYSTALS] = { crownStore = false },
     [CURT_UNDAUNTED_KEYS] = { crownStore = false },
@@ -441,13 +446,18 @@ BS.ASSISTANTS = {
     [BS.W_DRINWETH] = 11876,
     [BS.W_TZOZABRAR] = 11877,
     [BS.W_ERI] = 12413,
-    [BS.W_XYN] = 12414
+    [BS.W_XYN] = 12414,
+    [BS.W_SILURUZ] = 13063,
+    [BS.W_TERILORNE] = 13066,
+    [BS.W_CELIA] = 13517,
+    [BS.W_VOKO] = 13518
 }
 
 BS.ARMOURY_ASSISTANTS = {
     BS.ASSISTANTS[BS.W_DRINWETH],
     BS.ASSISTANTS[BS.W_GHRASHAROG],
-    BS.ASSISTANTS[BS.W_ZUQOTH]
+    BS.ASSISTANTS[BS.W_ZUQOTH],
+    BS.ASSISTANTS[BS.W_VOKO]
 }
 
 BS.INFINITE_ARCHIVE_NODE_INDEX = 550
