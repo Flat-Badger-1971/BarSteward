@@ -225,59 +225,19 @@ BS.widgets[BS.W_CROWNS] = {
     end
 }
 
-BS.widgets[BS.W_EVENT_TICKETS] = {
+BS.widgets[BS.W_TRADE_BARS] = {
     name = "eventTickets",
     update = function(widget)
-        local this = BS.W_EVENT_TICKETS
-        local tickets = GetCurrencyAmount(CURT_EVENT_TICKETS, CURRENCY_LOCATION_ACCOUNT)
-        local maxTickets = GetMaxPossibleCurrency(CURT_EVENT_TICKETS, CURRENCY_LOCATION_ACCOUNT)
-        local noLimitColour = BS.GetVar("NoLimitColour", this) and BS.COLOURS.White or BS.COLOURS.Yellow
-        local value =
-            tickets .. (BS.GetVar("HideLimit", this) and "" or (noLimitColour:Colorize("/" .. tostring(maxTickets))))
-        local widthValue = tickets .. (BS.GetVar("HideLimit", this) and "" or ("/" .. tostring(maxTickets)))
-        local pc = BS.LC.ToPercent(tickets, maxTickets)
-
-        if (BS.GetVar("ShowPercent", this)) then
-            value = pc .. "%"
-        end
-
+        local this = BS.W_TRADE_BARS
+        local tickets = GetCurrencyAmount(CURT_TRADE_BARS, CURRENCY_LOCATION_ACCOUNT)
+        local value = tickets
+        local widthValue = tickets
         local colour = BS.GetColour(this, true)
-
-        if (tickets > BS.GetVar("DangerValue", this)) then
-            colour = BS.GetColour(this, "Danger", true)
-
-            if (BS.GetVar("Announce", this)) then
-                local announce = true
-                local previousTime = BS.Vars:GetCommon("PreviousAnnounceTime", this) or (os.time() - 100)
-                local debounceTime = (BS.GetVar("DebounceTime", this) or 5) * 60
-
-                if (os.time() - previousTime <= debounceTime) then
-                    announce = false
-                end
-
-                -- if the number of tickets has changed then override the debounce
-                if ((BS.previousEventTicketValue or 0) ~= tickets) then
-                    announce = true
-                    BS.previousEventTicketValue = tickets
-                end
-
-                if (announce) then
-                    BS.Vars:SetCommon(os.time(), "PreviousAnnounceTime", this)
-                    BS.Announce(GetString(BARSTEWARD_WARNING), GetString(BARSTEWARD_WARNING_EVENT_TICKETS), this)
-                end
-            end
-        end
-
-        if (BS.GetVar("MaxValue", this)) then
-            if (tickets == maxTickets) then
-                colour = BS.GetColour(this, "Max", true)
-            end
-        end
 
         widget:SetColour(colour)
         widget:SetValue(value, widthValue)
 
-        local tt = BS.LC.Format(GetCurrencyName(CURT_EVENT_TICKETS, true, true)) ..
+        local tt = BS.LC.Format(GetCurrencyName(CURT_TRADE_BARS, true, true)) ..
             BS.LF .. getcrownStoreCurrencies(true, this)
 
         widget:SetTooltip(tt)
@@ -286,9 +246,9 @@ BS.widgets[BS.W_EVENT_TICKETS] = {
     end,
     event = EVENT_CURRENCY_UPDATE,
     tooltip = function()
-        return BS.LC.Format(GetCurrencyName(CURT_EVENT_TICKETS, true, true))
+        return BS.LC.Format(GetCurrencyName(CURT_TRADE_BARS, true, true))
     end,
-    icon = GetCurrencyKeyboardIcon(CURT_EVENT_TICKETS),
+    icon = GetCurrencyKeyboardIcon(CURT_TRADE_BARS),
     customOptions = {
         name = GetString(BARSTEWARD_DEBOUNCE),
         tooltip = GetString(BARSTEWARD_DEBOUNCE_DESC),
@@ -500,4 +460,30 @@ BS.widgets[BS.W_IMPERIAL_FRAGMENTS] = {
     event = EVENT_LOOT_RECEIVED,
     tooltip = BS.LC.Format(GetCurrencyName(CURT_IMPERIAL_FRAGMENTS, true, true)),
     icon = GetCurrencyKeyboardIcon(CURT_IMPERIAL_FRAGMENTS)
+}
+
+BS.widgets[BS.W_TOME_POINTS] = {
+    name = "tomePoints",
+    update = function(widget)
+        local this = BS.W_TOME_POINTS
+        local seals = GetCurrencyAmount(CURT_TOME_POINTS, CURRENCY_LOCATION_ACCOUNT)
+
+        if (BS.GetVar("UseSeparators", this) == true) then
+            seals = BS.AddSeparators(seals)
+        end
+
+        widget:SetValue(seals)
+        widget:SetColour(BS.GetColour(this, true))
+
+        local tt = BS.LC.Format(GetCurrencyName(CURT_TOME_POINTS, true, true)) .. BS.LF
+
+        tt = tt .. getcrownStoreCurrencies(false, this)
+
+        widget:SetTooltip(tt)
+
+        return widget:GetValue()
+    end,
+    event = { EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED, EVENT_CURRENCY_UPDATE },
+    tooltip = BS.LC.Format(GetCurrencyName(CURT_TOME_POINTS, true, true)),
+    icon = GetCurrencyKeyboardIcon(CURT_TOME_POINTS)
 }

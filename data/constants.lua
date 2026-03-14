@@ -9,7 +9,7 @@ BarSteward = {
     W_ALLIANCE_POINTS = 2,
     W_CROWN_GEMS = 3,
     W_CROWNS = 4,
-    W_EVENT_TICKETS = 5,
+    W_TRADE_BARS = 5, -- now TRADE BARS
     W_GOLD = 6,
     W_SEALS_OF_ENDEAVOUR = 7,
     W_TELVAR_STONES = 8,
@@ -30,8 +30,8 @@ BarSteward = {
     W_CHAMPION_POINTS = 23,
     W_MUNDUS_STONE = 24,
     W_DURABILITY = 25,
-    W_DAILY_ENDEAVOURS = 26,
-    W_WEEKLY_ENDEAVOURS = 27,
+    -- W_DAILY_ENDEAVOURS = 26,
+    -- W_WEEKLY_ENDEAVOURS = 27,
     W_REPAIRS_KITS = 28,
     W_STOLEN_ITEMS = 29,
     W_RECALL_COOLDOWN = 30,
@@ -49,15 +49,15 @@ BarSteward = {
     W_SKILL_POINTS = 42,
     W_WRITS_SURVEYS = 43,
     W_FENCE_RESET = 44,
-    W_ENDEAVOUR_PROGRESS = 45,
+    -- W_ENDEAVOUR_PROGRESS = 45,
     W_IMPERIAL_FRAGMENTS = 46,
     W_LOCKPICKS = 47,
     W_LAUNDER_TRANSACTIONS = 48,
     W_SPEED = 49,
     W_CRAFTING_DAILIES = 50,
     W_GUILD_FRIENDS = 51,
-    W_DAILY_ENDEAVOUR_TIME = 52,
-    W_WEEKLY_ENDEAVOUR_TIME = 53,
+    -- W_DAILY_ENDEAVOUR_TIME = 52,
+    -- W_WEEKLY_ENDEAVOUR_TIME = 53,
     W_COMPANION_LEVEL = 54,
     W_TRIBUTE_CLUB_RANK = 55,
     W_PLAYER_LEVEL = 56,
@@ -97,7 +97,7 @@ BarSteward = {
     W_CHESTS_FOUND = 90,
     W_SHALIDORS_LIBRARY = 91,
     W_CRAFTING_MOTIFS = 92,
-    W_DAILY_PROGRESS = 93,
+    -- W_DAILY_PROGRESS = 93,
     W_WEAPON_CHARGE = 94,
     W_BASTIAN = 95,
     W_MIRRI = 96,
@@ -155,7 +155,12 @@ BarSteward = {
     W_MYTHIC = 148,
     W_ACHIEVEMENT_TRACKER = 149,
     W_GOLDEN_PURSUITS = 150,
-    W_SERVER = 151
+    W_SERVER = 151,
+    W_TOME_POINTS = 152,
+    W_SILURUZ = 153,
+    W_TERILORNE = 154,
+    W_CELIA = 155,
+    W_VOKO = 156
 }
 
 local BS = BarSteward
@@ -335,18 +340,19 @@ BS.BOTH = 3
 BS.ACTIVE_BAR = 4
 
 BS.CURRENCIES = {
-    [CURT_MONEY] = { crownStore = false },
+    [CURT_ALLIANCE_POINTS] = { crownStore = false },
+    [CURT_ARCHIVAL_FORTUNES] = { crownStore = true },
     [CURT_CROWNS] = { crownStore = true },
     [CURT_CROWN_GEMS] = { crownStore = true },
-    [CURT_WRIT_VOUCHERS] = { crownStore = false },
+    [CURT_IMPERIAL_FRAGMENTS] = { crownStore = true },
+    [CURT_MONEY] = { crownStore = false },
+    [CURT_SEALS] = { crownStore = true },
     [CURT_TELVAR_STONES] = { crownStore = false },
-    [CURT_EVENT_TICKETS] = { crownStore = false },
-    [CURT_ENDEAVOR_SEALS] = { crownStore = true },
+    [CURT_TOME_POINTS] = { crownStore = true },
+    [CURT_TRADE_BARS] = { crownStore = false },
+    [CURT_TRANSMUTE_CRYSTALS] = { crownStore = false },
     [CURT_UNDAUNTED_KEYS] = { crownStore = false },
-    [CURT_ALLIANCE_POINTS] = { crownStore = false },
-    [CURT_CHAOTIC_CREATIA] = { crownStore = false },
-    [CURT_ARCHIVAL_FORTUNES] = { crownStore = true },
-    [CURT_IMPERIAL_FRAGMENTS] = { crownStore = true }
+    [CURT_WRIT_VOUCHERS] = { crownStore = false }
 }
 
 BS.FRAGMENT_TYPES = {
@@ -440,13 +446,18 @@ BS.ASSISTANTS = {
     [BS.W_DRINWETH] = 11876,
     [BS.W_TZOZABRAR] = 11877,
     [BS.W_ERI] = 12413,
-    [BS.W_XYN] = 12414
+    [BS.W_XYN] = 12414,
+    [BS.W_SILURUZ] = 13063,
+    [BS.W_TERILORNE] = 13066,
+    [BS.W_CELIA] = 13517,
+    [BS.W_VOKO] = 13518
 }
 
 BS.ARMOURY_ASSISTANTS = {
     BS.ASSISTANTS[BS.W_DRINWETH],
     BS.ASSISTANTS[BS.W_GHRASHAROG],
-    BS.ASSISTANTS[BS.W_ZUQOTH]
+    BS.ASSISTANTS[BS.W_ZUQOTH],
+    BS.ASSISTANTS[BS.W_VOKO]
 }
 
 BS.INFINITE_ARCHIVE_NODE_INDEX = 550

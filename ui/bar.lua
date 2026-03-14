@@ -634,7 +634,6 @@ function baseBar:AddWidgets(widgets)
     self.widgets = {}
 
     for idx, metadata in ipairs(widgets) do
-        -- draw the widget
         local controlDefaults = BS.Defaults.Controls[metadata.id]
 
         if (controlDefaults and (controlDefaults.Progress ~= nil)) then

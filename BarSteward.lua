@@ -2,7 +2,7 @@ local BS = BarSteward
 
 -- debug helpers
 if (GetDisplayName() == "@Flat-Badger") then
-    BS.DEBUG = false  --  all
+    BS.DEBUG = false  -- all
     BS.DEBUGC = false -- control
     BS.DEBUGV = false -- value
     BS.DEBUGS = false -- spacer
