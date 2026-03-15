@@ -1269,7 +1269,7 @@ end
 local function checkReset()
     local lastResetTime = BS.GetLastDailyResetTime(true)
 
-    if (lastResetTime) then
+    if (not lastResetTime) then
         updateQuests("dailyQuestCount")
 
         BS.Vars:SetCommon(lastResetTime, "lastDailyResetCounts")

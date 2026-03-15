@@ -110,7 +110,7 @@ function BS.ContinueIntialising()
         end
     )
 
-    -- track character names1111
+    -- track character names
     if (BS.Vars:GetCommon("CharacterList") == nil) then
         BS.Vars:SetCommon({}, "CharacterList")
 
