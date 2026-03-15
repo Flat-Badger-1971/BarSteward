@@ -368,6 +368,7 @@ L("SKYSHARDS_SKILL_POINTS", "<<1>>/3 Himmelsscherben für den nächsten Fertigke
 L("SNAP", "Am Gitter ausrichten, wenn Leisten bewegt werden")
 L("SOUL_GEMS_TYPE", "Seelensteintyp")
 L("SOUL_GEMS", "Seelensteine")
+L("SOUL_GEMS_CROWN", "Einschließlich Kronen-Seelensteine")
 L("SOUND", "Klang")
 L("SOUND_VALUE_BELOW", "Klang spielen, wenn der Wert kleiner ist als:")
 L("SOUND_VALUE_EQUALS", "Klang spielen, wenn der Wert genau so groß ist:")
