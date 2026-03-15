@@ -330,27 +330,54 @@ BS.widgets[BS.W_REPAIRS_KITS] = {
 
 local filledIcon = "icons/soulgem_006_filled"
 local emptyIcon = "icons/soulgem_006_empty"
+local crownIcon = "icons/store_soulgem_001"
 
 BS.widgets[BS.W_SOUL_GEMS] = {
     -- v1.2.0
     name = "soulGems",
     update = function(widget)
         local this = BS.W_SOUL_GEMS
+        local crownCount = 0
+        local includeCrown = BS.GetVar("IncludeCrown", this)
 
         ---@diagnostic disable: missing-parameter
         local filledCount = select(3, GetSoulGemInfo(SOUL_GEM_TYPE_FILLED))
         local emptyCount = select(3, GetSoulGemInfo(SOUL_GEM_TYPE_EMPTY))
         ---@diagnostic enable: missing-parameter
 
+        -- crown store soul gems
+        if (includeCrown) then
+            local filteredItems =
+                SHARED_INVENTORY:GenerateFullSlotData(
+                    function(itemdata)
+                        return IsItemSoulGem(SOUL_GEM_TYPE_FILLED, itemdata.bagId, itemdata.slotIndex)
+                    end,
+                    BAG_BACKPACK
+                )
+
+            for _, item in ipairs(filteredItems) do
+                if (item.iconFile:find(crownIcon)) then
+                    crownCount = crownCount + item.stackCount
+                end
+            end
+        end
+        --
+
         if (BS.GetVar("UseSeparators", this) == true) then
             filledCount = BS.AddSeparators(filledCount)
             emptyCount = BS.AddSeparators(emptyCount)
+            crownCount = BS.AddSeparators(crownCount)
         end
 
-        local displayValue = filledCount
-        local widthValue = filledCount
+        local displayValue = filledCount + crownCount
+        local widthValue = filledCount + crownCount
         local displayIcon = filledIcon
-        local both = BS.COLOURS.Green:Colorize(filledCount) .. "/" .. emptyCount
+        local both = BS.COLOURS.Green:Colorize(filledCount + crownCount) .. "/" .. emptyCount
+
+        if (includeCrown) then
+            both = BS.COLOURS.Blue:Colorize(crownCount) ..
+                "/" .. BS.COLOURS.Green:Colorize(filledCount) .. "/" .. emptyCount
+        end
 
         if (BS.GetVar("GemType", this) == GetString(BARSTEWARD_EMPTY)) then
             displayValue = emptyCount
@@ -358,7 +385,11 @@ BS.widgets[BS.W_SOUL_GEMS] = {
             displayIcon = emptyIcon
         elseif (BS.GetVar("GemType", this) == GetString(BARSTEWARD_BOTH)) then
             displayValue = both
-            widthValue = filledCount .. "/" .. emptyCount
+            widthValue = filledCount + crownCount .. "/" .. emptyCount
+
+            if (includeCrown) then
+                widthValue = crownCount .. "/" .. filledCount .. "/" .. emptyCount
+            end
         end
 
         widget:SetColour(BS.GetColour(this, true))
@@ -367,6 +398,11 @@ BS.widgets[BS.W_SOUL_GEMS] = {
 
         -- update the tooltip
         local ttt = GetString(BARSTEWARD_SOUL_GEMS) .. BS.LF
+
+        if (includeCrown) then
+            ttt = ttt .. BS.Icon(crownIcon) .. " " .. crownCount .. BS.LF
+        end
+
         ttt = ttt .. BS.Icon(filledIcon) .. " " .. filledCount .. BS.LF
         ttt = ttt .. BS.Icon(emptyIcon) .. " " .. emptyCount
 
@@ -387,6 +423,21 @@ BS.widgets[BS.W_SOUL_GEMS] = {
         varName = "GemType",
         refresh = true,
         default = GetString(BARSTEWARD_FILLED)
+    },
+    customSettings = {
+        [1] = {
+            name = GetString(BARSTEWARD_SOUL_GEMS_CROWN),
+            type = "checkbox",
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_SOUL_GEMS].IncludeCrown or false
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_SOUL_GEMS].IncludeCrown = value
+                BS.RefreshWidget(BS.W_SOUL_GEMS, true)
+            end,
+            width = "full",
+            default = false
+        }
     }
 }
 

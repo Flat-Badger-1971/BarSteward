@@ -5,8 +5,8 @@
 ## AddOnVersion: 3500
 ## Version: 3.5.0
 ## SavedVariables: BarStewardSavedVars
-## DependsOn: LibFBCommon>=1006 LibAddonMenu-2.0>=35
-## OptionalDependsOn: BanditsUserInterface WritWorthy>=70302 LibClockTST>=1 LibCombat>=62 PortToFriendsHouse>=92 LibCharacterKnowledge>=16 Taneth>=21 LibUndauntedPledges>=100000 RewardsTracker>=80
+## DependsOn: LibFBCommon>=1006 LibAddonMenu-2.0>=41
+## OptionalDependsOn: BanditsUserInterface WritWorthy>=70506 LibClockTST>=1 LibCombat>=86 PortToFriendsHouse>=124 LibCharacterKnowledge>=202030 LibUndauntedPledges>=102020 RewardsTracker>=84
 
 # DISCLAIMER:
 #

@@ -571,9 +571,7 @@ local function getBarSettings()
                     local barToScale = BS.BarObjectPool:GetActiveObject(BS.BarObjects[idx]).bar
 
                     barToScale:SetScale(value * GetUIGlobalScale())
-                    barToScale:SetResizeToFitDescendents(false)
-                    barToScale:SetWidth(0)
-                    barToScale:SetResizeToFitDescendents(true)
+                    BS.RegenerateBar(idx)
                 end,
                 min = 0.4,
                 max = 2,
@@ -1371,6 +1369,23 @@ local function getWidgetSettings()
             width = "full",
             default = false,
             requiresReload = true
+        },
+        [7] = {
+            type = "checkbox",
+            name = GetString(BARSTEWARD_CATEGORY_USED),
+            tooltip = GetString(BARSTEWARD_CATEGORY_USED_TT),
+            getFunc = function()
+                return BS.Vars.CategoriesUsed or false
+            end,
+            setFunc = function(value)
+                BS.Vars.CategoriesUsed = value
+            end,
+            disabled = function()
+                return not BS.Vars.CategoriesCount
+            end,
+            width = "full",
+            default = false,
+            requiresReload = true
         }
     }
 
@@ -1424,6 +1439,7 @@ local function getWidgetSettings()
         categories[k] = {
             type = "submenu",
             name = GetString(cat.name),
+            id = k,
             icon = BS.FormatIcon(cat.icon),
             controls = {},
             reference = "BarStewardCategory_" .. k
@@ -1431,6 +1447,8 @@ local function getWidgetSettings()
 
         categoryIndex[k] = 1
     end
+
+    local usedByCat = {}
 
     for _, w in ipairs(ordered) do
         local k = w.key
@@ -1527,6 +1545,7 @@ local function getWidgetSettings()
                 reference = "BarStewardWidget_" .. k
             }
 
+            usedByCat[vars.Cat] = (usedByCat[vars.Cat] or 0) + (v.Bar > 0 and 1 or 0)
             categories[vars.Cat].controls[categoryIndex[vars.Cat]] = widgetData
             categoryIndex[vars.Cat] = categoryIndex[vars.Cat] + 1
         end
@@ -1536,12 +1555,23 @@ local function getWidgetSettings()
 
     for _, cat in pairs(categories) do
         if (BS.Vars.CategoriesCount) then
-            cat.name =
-                string.format(
-                    "%s  %s",
-                    cat.name,
-                    BS.COLOURS.DefaultWarningColour:Colorize(" " .. tostring(#cat.controls))
-                )
+            if (BS.Vars.CategoriesUsed) then
+                -- won't count correctly after a widget is added to a bar until a ui reload
+                cat.name =
+                    string.format(
+                        "%s  %s/%s",
+                        cat.name,
+                        BS.COLOURS.DefaultOkColour:Colorize(" " .. tostring(usedByCat[cat.id] or 0)),
+                        BS.COLOURS.DefaultWarningColour:Colorize(" " .. tostring(#cat.controls))
+                    )
+            else
+                cat.name =
+                    string.format(
+                        "%s  %s",
+                        cat.name,
+                        BS.COLOURS.DefaultWarningColour:Colorize(" " .. tostring(#cat.controls))
+                    )
+            end
         end
 
         table.insert(cats, { name = cat.name, value = cat })

@@ -1,3 +1,10 @@
+[color=#ff9900][b]Version: 3.5.1 ---------------[/b][/color]
+Dependency updates
+Fixed daily quest counts widget
+Fixed bar scaling requiring a UI reload to apply correctly
+Option added to show number of widget in use in each category
+Option added to include crown store soul gems in the soul gem widget
+
 [color=#ff9900][b]Version: 3.5.0 ---------------[/b][/color]
 Update 49 changes
     - Bugfixes

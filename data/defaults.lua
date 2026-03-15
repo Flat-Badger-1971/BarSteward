@@ -258,16 +258,6 @@ BS.Defaults = {
             SoundWhenUnderSound = "Duel Forfeit",
             Units = "%"
         },
-        -- [BS.W_DAILY_ENDEAVOURS] = {
-        --     Cat = cat.Activities,
-        --     HideLimit = false,
-        --     HideWhenCompleted = false
-        -- },
-        -- [BS.W_WEEKLY_ENDEAVOURS] = {
-        --     Cat = cat.Activities,
-        --     HideLimit = false,
-        --     HideWhenCompleted = false
-        -- },
         [BS.W_REPAIRS_KITS] = {
             Cat = cat.Inventory,
             ColourValues = "okc,dv,dc,wv,wc",
@@ -359,11 +349,6 @@ BS.Defaults = {
             HideSeconds = false,
             Timer = true
         },
-        -- [BS.W_ENDEAVOUR_PROGRESS] = {
-        --     Cat = cat.Activities,
-        --     HideWhenComplete = false,
-        --     Progress = true
-        -- },
         [BS.W_LOCKPICKS] = {
             Cat = cat.Inventory,
             ColourValues = "okc,wv,wc,dv,dc",
@@ -397,28 +382,6 @@ BS.Defaults = {
             Cat = cat.Social,
             HideLimit = false
         },
-        -- [BS.W_DAILY_ENDEAVOUR_TIME] = {
-        --     Cat = cat.Activities,
-        --     ColourValues = "okc,wv,wc,dv,dc",
-        --     DangerValue = 2,
-        --     HideDaysWhenZero = true,
-        --     HideSeconds = false,
-        --     HideWhenCompleted = false,
-        --     Timer = true,
-        --     Units = GetString(BARSTEWARD_HOURS),
-        --     WarningValue = 6
-        -- },
-        -- [BS.W_WEEKLY_ENDEAVOUR_TIME] = {
-        --     Cat = cat.Activities,
-        --     ColourValues = "okc,wv,wc,dv,dc",
-        --     DangerValue = 48,
-        --     HideDaysWhenZero = false,
-        --     HideSeconds = false,
-        --     HideWhenCompleted = false,
-        --     Timer = true,
-        --     Units = GetString(BARSTEWARD_HOURS),
-        --     WarningValue = 72
-        -- },
         [BS.W_COMPANION_LEVEL] = {
             Autohide = true,
             Cat = cat.Companions,
@@ -616,11 +579,6 @@ BS.Defaults = {
         [BS.W_CRAFTING_MOTIFS] = {
             Cat = cat.Activities
         },
-        -- [BS.W_DAILY_PROGRESS] = {
-        --     Cat = cat.Activities,
-        --     HideWhenComplete = false,
-        --     Progress = true
-        -- },
         [BS.W_WEAPON_CHARGE] = {
             Cat = cat.Inventory,
             ColourValues = "okc,wv,wc,dv,dc",
