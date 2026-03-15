@@ -1556,21 +1556,22 @@ local function getWidgetSettings()
     for _, cat in pairs(categories) do
         if (BS.Vars.CategoriesCount) then
             if (BS.Vars.CategoriesUsed) then
-            -- won't count correctly after a widget is added to a bar until a ui reload
-            cat.name =
-                string.format(
-                    "%s  %s/%s",
-                    cat.name,
-                    BS.COLOURS.DefaultOkColour:Colorize(" " .. tostring(usedByCat[cat.id] or 0)),
-                    BS.COLOURS.DefaultWarningColour:Colorize(" " .. tostring(#cat.controls))
-                )
+                -- won't count correctly after a widget is added to a bar until a ui reload
+                cat.name =
+                    string.format(
+                        "%s  %s/%s",
+                        cat.name,
+                        BS.COLOURS.DefaultOkColour:Colorize(" " .. tostring(usedByCat[cat.id] or 0)),
+                        BS.COLOURS.DefaultWarningColour:Colorize(" " .. tostring(#cat.controls))
+                    )
             else
                 cat.name =
-                string.format(
-                    "%s  %s",
-                    cat.name,
-                    BS.COLOURS.DefaultWarningColour:Colorize(" " .. tostring(#cat.controls))
-                )
+                    string.format(
+                        "%s  %s",
+                        cat.name,
+                        BS.COLOURS.DefaultWarningColour:Colorize(" " .. tostring(#cat.controls))
+                    )
+            end
         end
 
         table.insert(cats, { name = cat.name, value = cat })
