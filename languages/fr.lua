@@ -280,6 +280,7 @@ L(
 )
 L("PLAYER_EXPERIENCE", "Experience du joueur")
 L("PLAYER_LOCATION", "Position du joueur")
+L("PORT_TO", "Se téléporter à <<1>>")
 L("PORT_TO_HOUSE", "Se téléporter à la maison")
 L("PORT_TO_HOUSE_DESCRIPTION", "Créez un nouveau widget pour se téléporter sur l'une de vos maisons.")
 L("PORT_TO_HOUSE_LOCATION_ONLY", "Afficher l'emplacement uniquement")

@@ -279,6 +279,7 @@ L(
 )
 L("PLAYER_EXPERIENCE", "Player Experience")
 L("PLAYER_LOCATION", "Player Location")
+L("PORT_TO", "Port to <<1>>")
 L("PORT_TO_HOUSE", "Port to House")
 L("PORT_TO_HOUSE_DESCRIPTION", "Create a new widget to port to one of your houses")
 L("PORT_TO_HOUSE_LOCATION_ONLY", "Show Location Only")

@@ -8,6 +8,130 @@ local function needsUpdate(version)
     return false
 end
 
+local function encodeHouseKey(houseId, ptfId)
+    if (ptfId) then
+        return tostring(houseId) .. "_" .. tostring(ptfId)
+    end
+
+    return houseId
+end
+
+local function decodeHouseKey(houseKey)
+    if (type(houseKey) == "string") then
+        local houseId, ptfId = houseKey:match("^(%d+)_(%d+)$")
+
+        if (houseId and ptfId) then
+            return tonumber(houseId), tonumber(ptfId)
+        end
+    end
+
+    return houseKey, nil
+end
+
+local function getLegacyPTFId(houseId)
+    if (not PortToFriend) then
+        return nil
+    end
+
+    local favorites = PortToFriend.GetFavorites()
+
+    for ptfId, ptfInfo in ipairs(favorites) do
+        if (ptfInfo.houseId == houseId) then
+            return ptfId
+        end
+    end
+end
+
+local function findHousingControlId(houseId, ptfId)
+    if (not ptfId) then
+        for controlId, settings in pairs(BS.Vars.Controls) do
+            if (controlId > 1000 and settings.Id == houseId and settings.PTF and not settings.PTFId) then
+                return controlId
+            end
+        end
+    end
+
+    if (not ptfId) then
+        local legacyId = 1000 + houseId
+
+        if (BS.Vars.Controls[legacyId]) then
+            return legacyId
+        end
+    end
+
+    for controlId, settings in pairs(BS.Vars.Controls) do
+        if (controlId > 1000 and settings.Id == houseId) then
+            if (ptfId) then
+                if (settings.PTF and settings.PTFId == ptfId) then
+                    return controlId
+                end
+            elseif (not settings.PTF) then
+                return controlId
+            end
+        end
+    end
+end
+
+local function migrateHousingWidgets()
+    local houseWidgets = BS.Vars:GetCommon("HouseWidgets") or {}
+    local houseBindings = BS.Vars:GetCommon("HouseBindings") or {}
+    local migratedWidgets = {}
+    local migratedBindings = {}
+
+    for houseKey, bindingIndex in pairs(houseBindings) do
+        migratedBindings[houseKey] = bindingIndex
+    end
+
+    for houseKey, storedValue in pairs(houseWidgets) do
+        local houseId, ptfId = decodeHouseKey(houseKey)
+        local controlId = type(storedValue) == "number" and storedValue or nil
+
+        if (controlId and not BS.Vars.Controls[controlId]) then
+            controlId = nil
+        end
+
+        if (not controlId) then
+            controlId = findHousingControlId(houseId, ptfId)
+        end
+
+        if (controlId) then
+            local settings = BS.Vars.Controls[controlId]
+
+            if ((not ptfId) and settings.PTF and not settings.PTFId) then
+                ptfId = getLegacyPTFId(houseId)
+            end
+
+            settings.Id = houseId
+            settings.PTF = ptfId ~= nil
+            settings.PTFId = ptfId
+
+            local migratedKey = encodeHouseKey(houseId, ptfId)
+
+            migratedWidgets[migratedKey] = controlId
+
+            if (houseBindings[houseKey] ~= nil) then
+                migratedBindings[migratedKey] = houseBindings[houseKey]
+                migratedBindings[houseKey] = nil
+            end
+        end
+    end
+
+    for controlId, settings in pairs(BS.Vars.Controls) do
+        if (controlId > 1000 and settings.Id) then
+            if (settings.PTF and not settings.PTFId) then
+                settings.PTFId = getLegacyPTFId(settings.Id)
+            end
+
+            local migratedKey = encodeHouseKey(settings.Id, settings.PTF and settings.PTFId)
+
+            migratedWidgets[migratedKey] = controlId
+        end
+    end
+
+    BS.Vars:SetCommon(migratedWidgets, "HouseWidgets")
+    BS.Vars:SetCommon(migratedBindings, "HouseBindings")
+end
+
 -- local function replace(current)
 --     local ucase = current:upper()
 
@@ -152,16 +276,7 @@ function BS.VersionCheck()
 
     local charId = GetCurrentCharacterId()
     if (needsUpdate("3502_" .. charId)) then
-        for id, settings in pairs(BS.Vars.Controls) do
-            if (id > 1000) then
-                --settings.Id = id - 1000
-
-                if (settings.Name:find("chat_friendsonline_up.dds")) then
-                    settings.PTF = true
-                end
-            end
-        end
-
+        migrateHousingWidgets()
         BS.Vars:SetCommon(true, "Updates", "3502_" .. charId)
     end
 end

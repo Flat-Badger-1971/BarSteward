@@ -279,6 +279,7 @@ L(
 )
 L("PLAYER_EXPERIENCE", "Erfahrung des Spielers")
 L("PLAYER_LOCATION", "Ort des Spielers")
+L("PORT_TO", "Zu <<1>> reisen")
 L("PORT_TO_HOUSE", "Zum Haus springen")
 L("PORT_TO_HOUSE_DESCRIPTION", "Ein neues Element erzeugen, um zu einem Eurer Häuser zu springen")
 L("PORT_TO_HOUSE_LOCATION_ONLY", "Nur die Lage anzeigen")

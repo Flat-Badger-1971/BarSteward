@@ -1,5 +1,6 @@
 [color=#ff9900][b]Version: 3.5.2 ---------------[/b][/color]
 Fixed experience widget bug (again)
+Housing widget support for multiple instances of the same house (e.g. if you have friends with the same house as you)
 [color=#990099]New dependencies for Achievement Tracker, Daily Quest Counts and Daily Pledges. Now requires LibDailyResetTime.[/color]
 
 [color=#ff9900][b]Version: 3.5.1 ---------------[/b][/color]

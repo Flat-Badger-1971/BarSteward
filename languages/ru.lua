@@ -280,6 +280,7 @@ L(
 )
 L("PLAYER_EXPERIENCE", "Опыт игрока")
 L("PLAYER_LOCATION", "Местность игрока")
+L("PORT_TO", "Отправиться в <<1>>")
 L("PORT_TO_HOUSE", "Отправиться в Дом")
 L("PORT_TO_HOUSE_DESCRIPTION", "Создаёт новый виджет для отправки в один из ваших Домов")
 L("PORT_TO_HOUSE_LOCATION_ONLY", "Показ только местности")
