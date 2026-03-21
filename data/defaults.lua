@@ -718,7 +718,8 @@ BS.Defaults = {
             WarningValue = 72
         },
         [BS.W_DAILY_COUNT] = {
-            Cat = cat.Activities
+            Cat = cat.Activities,
+            Requires = "LibDailyResetTime"
         },
         [BS.W_PLAYER_STATUS] = {
             Cat = cat.Character
@@ -761,7 +762,7 @@ BS.Defaults = {
         [BS.W_DAILY_PLEDGES] = {
             Autohide = false,
             Cat = cat.Activities,
-            Requires = "LibUndauntedPledges"
+            Requires = "LibUndauntedPledges,LibDailyResetTime"
         },
         [BS.W_BOUNTY_AMOUNT] = {
             Autohide = false,
@@ -826,6 +827,7 @@ BS.Defaults = {
         [BS.W_ACHIEVEMENT_TRACKER] = {
             Cat = cat.Activities,
             Overall = true,
+            Requires = "LibDailyResetTime",
             ShowPercent = true
         },
         [BS.W_GOLDEN_PURSUITS] = {

@@ -637,7 +637,7 @@ BS.widgets[BS.W_PLAYER_EXPERIENCE] = {
 
         if (GetUnitLevel("player") < BS.MAX_PLAYER_LEVEL) then
             xp, xplvl = GetUnitXP("player"), GetUnitXPMax("player")
-            pc = BS.LC.ToPercent(xp / xplvl)
+            pc = BS.LC.ToPercent(xp, xplvl)
         end
 
         if (BS.GetVar("ShowPercent", this)) then

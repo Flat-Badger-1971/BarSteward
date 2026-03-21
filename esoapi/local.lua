@@ -8,6 +8,7 @@ LibCharacterKnowledge = {}
 LibCharacterKnowledgeInternal = {}
 LibClockTST = {}
 LibCombat = {}
+LibDailyResetTime = {}
 LibDebugLogger = {}
 LibUndauntedPledges = {}
 PortToFriend = {}

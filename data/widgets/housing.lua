@@ -7,9 +7,9 @@ local function getPTFInfo(id)
             BS.PTFHouses = BS.PTF.GetFavorites()
         end
 
-        for _, ptfInfo in ipairs(BS.PTFHouses) do
+        for ptfId, ptfInfo in ipairs(BS.PTFHouses) do
             if (ptfInfo.houseId == id) then
-                return ptfInfo.name
+                return ptfInfo.name, ptfId
             end
         end
     end
@@ -35,25 +35,29 @@ local function fixDuplicates(bindings)
     end
 end
 
-function BS.GetHouses()
+function BS.GetHouses(ptfOnly)
     local collectibleData = ZO_COLLECTIBLE_DATA_MANAGER:GetAllCollectibleDataObjects()
     local houses = {}
 
     for _, entry in ipairs(collectibleData) do
         if (entry:IsHouse()) then
             local referenceId = entry:GetReferenceId()
-            local ptfName = getPTFInfo(referenceId)
-            local houseEntry = {
-                icon = entry:GetIcon(),
-                id = referenceId,
-                location = entry:GetFormattedHouseLocation(),
-                name = entry:GetFormattedName(),
-                owned = not entry:IsLocked(),
-                primary = entry:IsPrimaryResidence(),
-                ptfName = ptfName
-            }
+            local ptfName, ptfId = getPTFInfo(referenceId)
 
-            table.insert(houses, houseEntry)
+            if ((ptfOnly and ptfId) or (not ptfOnly)) then
+                local houseEntry = {
+                    icon = entry:GetIcon(),
+                    id = referenceId,
+                    location = entry:GetFormattedHouseLocation(),
+                    name = entry:GetFormattedName(),
+                    owned = not entry:IsLocked(),
+                    primary = entry:IsPrimaryResidence(),
+                    ptfName = ptfName,
+                    ptfId = ptfId
+                }
+
+                table.insert(houses, houseEntry)
+            end
         end
     end
 
@@ -67,10 +71,30 @@ function BS.GetHouses()
     return houses
 end
 
-function BS.GetHouseFromReferenceId(id)
+function BS.GetHouseFromReferenceId(id, ptfId)
     for _, house in ipairs(BS.houses) do
-        if (house.id == id) then
+        if (house.ptfId and house.ptfId == ptfId) then
             return house
+        end
+
+        if (house.id == id and (not ptfId)) then
+            return house
+        end
+    end
+end
+
+local function getHouseSettings(id, ptfId)
+    local settingsId = 1000
+
+    for settingId, settings in pairs(BS.Vars.Controls) do
+        if (settingId > settingsId) then
+            if (ptfId and settings.PtfId == ptfId) then
+                return settings, settingId
+            end
+
+            if (settings.Id == id and (not ptfId)) then
+                return settings, settingId
+            end
         end
     end
 end
@@ -87,7 +111,7 @@ function BS.AddHousingWidgets(idx, widgets)
 
         -- clear out unused bindings
         for id, _ in pairs(bindings) do
-            if (not BS.Vars.Controls[1000 + id]) then
+            if (not getHouseSettings(id)) then
                 bindings[id] = nil
             end
         end
@@ -96,12 +120,20 @@ function BS.AddHousingWidgets(idx, widgets)
         fixDuplicates(bindings)
 
         for id, _ in pairs(BS.Vars:GetCommon("HouseWidgets")) do
-            local varId = 1000 + id
-            local house = BS.GetHouseFromReferenceId(id)
-            local vars = BS.Vars.Controls[varId]
+            local houseId, ptfId
+
+            if (type(id) == "string") then
+                houseId, ptfId = id:match("(%d+)_(%d+)")
+                houseId, ptfId = tonumber(houseId), tonumber(ptfId)
+            else
+                houseId = id
+            end
+
+            local vars, varId = getHouseSettings(houseId, ptfId)
+            local house = BS.GetHouseFromReferenceId(houseId, ptfId)
 
             if (vars) then
-                if (BS.Vars.Controls[varId].Bar == idx) then
+                if (vars.Bar == idx) then
                     if (idx > 0) then
                         local tooltip =
                             vars.Name .. BS.LF .. BS.COLOURS.White:Colorize(house.name .. BS.LF .. house.location)
@@ -117,7 +149,7 @@ function BS.AddHousingWidgets(idx, widgets)
                             tooltip = tooltip,
                             icon = house.icon,
                             onLeftClick = function()
-                                if (house.ptfName) then
+                                if (house.ptfName and vars.PTF) then
                                     JumpToSpecificHouse(house.ptfName, id, false)
                                 else
                                     RequestJumpToHouse(id, vars.Outside)
@@ -126,7 +158,7 @@ function BS.AddHousingWidgets(idx, widgets)
                             id = varId
                         }
 
-                        table.insert(widgets, { BS.Vars.Controls[varId].Order, widget })
+                        table.insert(widgets, { vars.Order, widget })
                         BS.widgets[varId] = widget
                     end
 
@@ -159,9 +191,9 @@ function BS.PortToHouse(index)
     end
 
     local house = BS.GetHouseFromReferenceId(id)
-    local vars = BS.Vars.Controls[1000 + id]
+    local vars = getHouseSettings(id)
 
-    if (house.ptfName) then
+    if (house.ptfName and vars.PTF) then
         JumpToSpecificHouse(house.ptfName, id, false)
     else
         RequestJumpToHouse(id, vars.Outside)
@@ -190,6 +222,16 @@ local function getHouseWidgetName()
     return widgetName, rawName
 end
 
+local function getNextAvailableHouseIndex()
+    local index = 1001
+
+    while (BS.Vars.Controls[index]) do
+        index = index + 1
+    end
+
+    return index
+end
+
 local function addHouseWidget()
     if ((BS.House_SelectedHouse or "") == "") then
         ZO_Dialogs_ShowDialog(BS.Name .. "NotEmptyGeneric")
@@ -199,24 +241,31 @@ local function addHouseWidget()
     local houseWidgets = BS.Vars:GetCommon("HouseWidgets") or {}
     local house = BS.houses[BS.House_SelectedHouse]
 
-    for houseId, _ in pairs(houseWidgets) do
-        if (houseId == house.id) then
-            ZO_Dialogs_ShowDialog(BS.Name .. "ExistsGeneric")
-            return
-        end
-    end
+    -- for houseId, _ in pairs(houseWidgets) do
+    --     if (houseId == house.id) then
+    --         ZO_Dialogs_ShowDialog(BS.Name .. "ExistsGeneric")
+    --         return
+    --     end
+    -- end
 
     local name, rawName = getHouseWidgetName()
+    local nextIndex = getNextAvailableHouseIndex()
+    local ptfHouse = house.ptfName ~= nil
 
-    BS.Vars.Controls[1000 + house.id] = {
+    BS.Vars.Controls[nextIndex] = {
         Bar = 0,
         Order = 1000 + house.id,
         ColourValues = "c",
         Name = name,
-        RawName = rawName
+        RawName = rawName,
+        Id = house.id,
+        PTF = ptfHouse,
+        PTFId = house.ptfId
     }
 
-    houseWidgets[house.id] = true
+    local id = ptfHouse and tostring(house.id) .. "_" .. tostring(house.ptfId) or house.id
+
+    houseWidgets[id] = true
     BS.Vars:SetCommon(houseWidgets, "HouseWidgets")
 
     ZO_Dialogs_ShowDialog(BS.Name .. "Reload")

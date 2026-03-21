@@ -1147,18 +1147,21 @@ function BS.UpdateIconGap(barNumber)
     end
 end
 
+local SECONDS_PER_DAY = 86400
+
 function BS.GetLastDailyResetTime(counts, ach)
-    local timeRemaining =
-        TIMED_ACTIVITIES_MANAGER:GetTimedActivityTypeTimeRemainingSeconds(TIMED_ACTIVITY_TYPE_DAILY)
-    local secondsInADay = 86400
-    local lastResetTime = os.time() - (secondsInADay - timeRemaining)
+    if (not BS.LDRT) then
+        return
+    end
+
+    local lastResetTime = BS.LDRT:GetDailyResetTime(true)
 
     if (counts) then
         if (BS.Vars:GetCommon("lastDailyResetCounts") == nil) then
             BS.Vars:SetCommon(lastResetTime, "lastDailyResetCounts")
         end
 
-        if ((BS.Vars:GetCommon("lastDailyResetCounts") + secondsInADay) < os.time()) then
+        if ((BS.Vars:GetCommon("lastDailyResetCounts") + SECONDS_PER_DAY) < os.time()) then
             return lastResetTime
         end
     elseif (ach) then
@@ -1166,7 +1169,7 @@ function BS.GetLastDailyResetTime(counts, ach)
             BS.Vars:SetCommon(lastResetTime, "lastDailyResetAch")
         end
 
-        if ((BS.Vars:GetCommon("lastDailyResetAch") + secondsInADay) < os.time()) then
+        if ((BS.Vars:GetCommon("lastDailyResetAch") + SECONDS_PER_DAY) < os.time()) then
             return lastResetTime
         end
     else
@@ -1174,7 +1177,7 @@ function BS.GetLastDailyResetTime(counts, ach)
             BS.Vars:SetCommon(lastResetTime, "lastDailyReset")
         end
 
-        if ((BS.Vars:GetCommon("lastDailyReset") + secondsInADay) < os.time()) then
+        if ((BS.Vars:GetCommon("lastDailyReset") + SECONDS_PER_DAY) < os.time()) then
             return lastResetTime
         end
     end

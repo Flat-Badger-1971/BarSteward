@@ -1269,16 +1269,10 @@ end
 local function checkReset()
     local lastResetTime = BS.GetLastDailyResetTime(true)
 
-    if (not lastResetTime) then
+    if (lastResetTime) then
         updateQuests("dailyQuestCount")
 
         BS.Vars:SetCommon(lastResetTime, "lastDailyResetCounts")
-
-        local pledges = BS.Vars:GetCommon("pledges")
-
-        if (pledges) then
-            updateQuests("pledges")
-        end
     end
 end
 
@@ -1293,6 +1287,10 @@ end
 BS.widgets[BS.W_DAILY_COUNT] = {
     name = "dailyCount",
     update = function(widget, eventId, param1, param2, param3)
+        if (not BS.LDRT) then
+            return true
+        end
+
         if (BS.Vars:GetCommon("dailyQuestCount") == nil) then
             BS.Vars:SetCommon({}, "dailyQuestCount")
         end
@@ -1467,7 +1465,7 @@ BS.TimerManager:RegisterForUpdate(60000, checkReset)
 BS.widgets[BS.W_DAILY_PLEDGES] = {
     name = "dailyPledges",
     update = function(widget, event, completeName, addedName, removedName)
-        if (not BS.LUP) then
+        if (not BS.LUP or not BS.LDRT) then
             return true
         end
 
@@ -1624,6 +1622,10 @@ BS.widgets[BS.W_ACHIEVEMENT_TRACKER] = {
     -- v3.2.17
     name = "achTracker",
     update = function(widget, event, updatedId, _, awardedId)
+        if (not BS.LDRT) then
+            return true
+        end
+
         if (not BS.Tracking) then
             BS.TrackAchievements()
         end

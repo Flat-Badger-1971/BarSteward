@@ -149,6 +149,21 @@ function BS.VersionCheck()
 
         BS.Vars:SetCommon(true, "Updates", 3500)
     end
+
+    local charId = GetCurrentCharacterId()
+    if (needsUpdate("3502_" .. charId)) then
+        for id, settings in pairs(BS.Vars.Controls) do
+            if (id > 1000) then
+                --settings.Id = id - 1000
+
+                if (settings.Name:find("chat_friendsonline_up.dds")) then
+                    settings.PTF = true
+                end
+            end
+        end
+
+        BS.Vars:SetCommon(true, "Updates", "3502_" .. charId)
+    end
 end
 
 function BS.SetVersionCheck()
