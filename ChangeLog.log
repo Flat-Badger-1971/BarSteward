@@ -1,3 +1,6 @@
+[color=#ff9900][b]Version: 3.5.3 ---------------[/b][/color]
+Bugfix for the issue preventing widgets requiring additional libraries from being added to a bar
+
 [color=#ff9900][b]Version: 3.5.2 ---------------[/b][/color]
 Fixed experience widget bug (again)
 Housing widget support for multiple instances of the same house (e.g. if you have friends with the same house as you)

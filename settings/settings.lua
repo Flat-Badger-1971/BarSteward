@@ -1482,7 +1482,9 @@ local function getWidgetSettings()
                     }
                     disabled = true
                 end
-            else
+            end
+
+            if (not disabled) then
                 BS.CheckExperimental(defaults, widgetControls)
 
                 widgetControls[#widgetControls + 1] = {
