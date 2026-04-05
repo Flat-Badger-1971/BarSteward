@@ -854,6 +854,18 @@ BS.Defaults = {
         },
         [BS.W_VOKO] = {
             Cat = cat.Assistants
+        },
+        [BS.W_INV_RECIPES] = {
+            Cat = cat.Inventory,
+            Autohide = false
+        },
+        [BS.W_INV_MOTIFS] = {
+            Cat = cat.Inventory,
+            Autohide = false
+        },
+        [BS.W_INV_STYLES] = {
+            Cat = cat.Inventory,
+            Autohide = false
         }
     }
 }

@@ -2158,3 +2158,145 @@ BS.widgets[BS.W_MYTHIC] = {
         end
     end
 }
+
+local lastRecipeUpdate = 0
+local stylett = ZO_CachedStrFormat(GetString(SI_GAMEPAD_BANK_CURRENCY_AMOUNT_CARRIED_HEADER_FORMAT),
+    ZO_CachedStrFormat("<<m:2>>", 2, GetString(SI_SPECIALIZEDITEMTYPE82)))
+local motiftt = ZO_CachedStrFormat(GetString(SI_GAMEPAD_BANK_CURRENCY_AMOUNT_CARRIED_HEADER_FORMAT),
+    GetString(SI_ITEMTYPEDISPLAYCATEGORY24))
+local recipett = ZO_CachedStrFormat(GetString(SI_GAMEPAD_BANK_CURRENCY_AMOUNT_CARRIED_HEADER_FORMAT),
+    GetString(SI_ITEMTYPEDISPLAYCATEGORY21))
+
+BS.widgets[BS.W_INV_RECIPES] = {
+    -- v3.5.4
+    name = "inventoryRecipes",
+    update = function(widget)
+        if (os.time() - lastRecipeUpdate < 2) then
+            return
+        end
+
+        local filteredItems =
+            SHARED_INVENTORY:GenerateFullSlotData(
+                function(itemdata)
+                    return GetItemType(itemdata.bagId, itemdata.slotIndex) == ITEMTYPE_RECIPE
+                end,
+                BAG_BACKPACK
+            )
+
+        local foodRecipes = 0
+        local noneFood = {}
+
+        for _, item in ipairs(filteredItems) do
+            local _, specialisedItemType = GetItemType(item.bagId, item.slotIndex)
+
+            if (ZO_IsElementInNumericallyIndexedTable(BS.RecipeTypes.food, specialisedItemType)) then
+                foodRecipes = foodRecipes + item.stackCount
+            else
+                for _, nonFood in ipairs(BS.RecipeTypes.nonFood) do
+                    if (specialisedItemType == nonFood.type) then
+                        if (not noneFood[nonFood.name]) then
+                            noneFood[nonFood.name] = 0
+                        end
+
+                        noneFood[nonFood.name] = noneFood[nonFood.name] + item.stackCount
+                    end
+                end
+            end
+        end
+
+        local nonFoodRecipeCount = 0
+        local nfttt = ""
+
+        for name, count in pairs(noneFood) do
+            nonFoodRecipeCount = nonFoodRecipeCount + count
+
+            if (count > 0) then
+                nfttt = string.format("%s%s: %d%s", nfttt, BS.LC.White:Colorize(BS.LC.Format(name)),
+                    count, BS.LF)
+            end
+        end
+
+        widget:SetValue(foodRecipes + nonFoodRecipeCount)
+
+        local ttt = recipett .. BS.LF
+        ttt = ttt ..
+            ((foodRecipes > 0) and BS.LC.White:Colorize(BS.LC.Format(SI_EMOTECATEGORY6) .. ": " .. foodRecipes) .. BS.LF or "")
+        ttt = ttt .. ((nfttt ~= "") and nfttt or "")
+
+        widget:SetTooltip(BS.LC.Trim(ttt))
+
+        lastRecipeUpdate = os.time()
+        return foodRecipes + nonFoodRecipeCount
+    end,
+    callback = { [SHARED_INVENTORY] = { "SingleSlotInventoryUpdate", "FullInventoryUpdate" } },
+    icon = "icons/quest_murkmire_dossier",
+    tooltip = recipett,
+    hideWhenEqual = 0,
+    onLeftClick = function()
+        if (not IsInGamepadPreferredMode()) then
+            SCENE_MANAGER:Show("inventory")
+        else
+            SCENE_MANAGER:Show("gamepad_inventory_root")
+        end
+    end
+}
+
+BS.widgets[BS.W_INV_MOTIFS] = {
+    -- v3.5.4
+    name = "inventoryMotifs",
+    update = function(widget)
+        local filteredItems =
+            SHARED_INVENTORY:GenerateFullSlotData(
+                function(itemdata)
+                    local _, specialisedItemType = GetItemType(itemdata.bagId, itemdata.slotIndex)
+                    return specialisedItemType == SPECIALIZED_ITEMTYPE_RACIAL_STYLE_MOTIF_BOOK or
+                        specialisedItemType == SPECIALIZED_ITEMTYPE_RACIAL_STYLE_MOTIF_CHAPTER
+                end,
+                BAG_BACKPACK
+            )
+
+        return itemScan(widget, filteredItems, BS.W_INV_MOTIFS, motiftt)
+    end,
+    event = EVENT_PLAYER_ACTIVATED,
+    callback = { [SHARED_INVENTORY] = { "SingleSlotInventoryUpdate" } },
+    icon = "icons/crafting_motif_binding_welkynar",
+    tooltip = motiftt,
+    hideWhenEqual = 0,
+    onLeftClick = function()
+        if (not IsInGamepadPreferredMode()) then
+            SCENE_MANAGER:Show("inventory")
+        else
+            SCENE_MANAGER:Show("gamepad_inventory_root")
+        end
+    end
+}
+
+BS.widgets[BS.W_INV_STYLES] = {
+    -- v3.5.4
+    name = "inventoryStyles",
+    update = function(widget)
+        local filteredItems =
+            SHARED_INVENTORY:GenerateFullSlotData(
+                function(itemdata)
+                    local _, specialisedItemType = GetItemType(itemdata.bagId, itemdata.slotIndex)
+                    return specialisedItemType == SPECIALIZED_ITEMTYPE_COLLECTIBLE_STYLE_PAGE
+                end,
+                BAG_BACKPACK
+            )
+
+        local name
+        return itemScan(widget, filteredItems, BS.W_INV_STYLES, stylett)
+    end,
+    event = EVENT_PLAYER_ACTIVATED,
+    callback = { [SHARED_INVENTORY] = { "SingleSlotInventoryUpdate" } },
+    icon = "icons/crafting_style_item_welkynar_r2",
+    tooltip = stylett,
+    hideWhenEqual = 0,
+    onLeftClick = function()
+        if (not IsInGamepadPreferredMode()) then
+            SCENE_MANAGER:Show("inventory")
+        else
+            SCENE_MANAGER:Show("gamepad_inventory_root")
+        end
+    end
+}

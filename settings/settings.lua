@@ -1194,7 +1194,7 @@ local function getWidgetSettings()
         end
     end
 
-    if (BS.Vars.WidgetSortOrder) then
+    if (BS.Vars.WidgetSortOrder ~= false) then
         -- sort the widget settings by index number
         table.sort(
             ordered,
