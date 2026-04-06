@@ -1147,39 +1147,32 @@ function BS.UpdateIconGap(barNumber)
     end
 end
 
-local SECONDS_PER_DAY = 86400
+local function getDailyResetStorageKey(counts, ach)
+    if (counts) then
+        return "lastDailyResetCounts"
+    elseif (ach) then
+        return "lastDailyResetAch"
+    else
+        return "lastDailyReset"
+    end
+end
 
 function BS.GetLastDailyResetTime(counts, ach)
-    if (not BS.LDRT) then
+    if (not BS.LDRT or not BS.Vars) then
         return
     end
 
-    local lastResetTime = BS.LDRT:GetDailyResetTime(true)
+    local currentResetTime = BS.LDRT:GetDailyResetTime(true)
+    local storageKey = getDailyResetStorageKey(counts, ach)
+    local storedResetTime = BS.Vars:GetCommon(storageKey)
 
-    if (counts) then
-        if (BS.Vars:GetCommon("lastDailyResetCounts") == nil) then
-            BS.Vars:SetCommon(lastResetTime, "lastDailyResetCounts")
-        end
+    if (storedResetTime == nil) then
+        BS.Vars:SetCommon(currentResetTime, storageKey)
+        return
+    end
 
-        if ((BS.Vars:GetCommon("lastDailyResetCounts") + SECONDS_PER_DAY) < os.time()) then
-            return lastResetTime
-        end
-    elseif (ach) then
-        if (BS.Vars:GetCommon("lastDailyResetAch") == nil) then
-            BS.Vars:SetCommon(lastResetTime, "lastDailyResetAch")
-        end
-
-        if ((BS.Vars:GetCommon("lastDailyResetAch") + SECONDS_PER_DAY) < os.time()) then
-            return lastResetTime
-        end
-    else
-        if (BS.Vars:GetCommon("lastDailyReset") == nil) then
-            BS.Vars:SetCommon(lastResetTime, "lastDailyReset")
-        end
-
-        if ((BS.Vars:GetCommon("lastDailyReset") + SECONDS_PER_DAY) < os.time()) then
-            return lastResetTime
-        end
+    if (storedResetTime ~= currentResetTime) then
+        return currentResetTime
     end
 end
 

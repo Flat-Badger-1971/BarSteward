@@ -1271,9 +1271,11 @@ local function checkReset()
 
     if (lastResetTime) then
         updateQuests("dailyQuestCount")
-
         BS.Vars:SetCommon(lastResetTime, "lastDailyResetCounts")
+        return true
     end
+
+    return false
 end
 
 local function findQuest(index)
@@ -1459,8 +1461,40 @@ local function getPledgeIds()
     return pledges
 end
 
+local function checkPledgesReset()
+    local currentResetTime = BS.LDRT:GetDailyResetTime(true)
+    local storedResetTime = BS.Vars:GetCommon("lastDailyResetPledges")
+
+    if (storedResetTime == nil) then
+        BS.Vars:SetCommon(currentResetTime, "lastDailyResetPledges")
+        return false
+    end
+
+    if (storedResetTime ~= currentResetTime) then
+        updateQuests("pledges")
+        BS.Vars:SetCommon(currentResetTime, "lastDailyResetPledges")
+        return true
+    end
+
+    return false
+end
+
+local checkAchReset
+
 -- check once a minute for daily reset
-BS.TimerManager:RegisterForUpdate(60000, checkReset)
+BS.TimerManager:RegisterForUpdate(60000, function()
+    if (checkReset()) then
+        BS.RefreshWidget(BS.W_DAILY_COUNT)
+    end
+
+    if (checkPledgesReset()) then
+        BS.RefreshWidget(BS.W_DAILY_PLEDGES)
+    end
+
+    if (BS.GetVar("Daily", BS.W_ACHIEVEMENT_TRACKER) and checkAchReset()) then
+        BS.RefreshWidget(BS.W_ACHIEVEMENT_TRACKER)
+    end
+end)
 
 BS.widgets[BS.W_DAILY_PLEDGES] = {
     name = "dailyPledges",
@@ -1478,7 +1512,7 @@ BS.widgets[BS.W_DAILY_PLEDGES] = {
         local character = BS.CHAR.name
         local maxPledges = 3
 
-        checkReset()
+        checkPledgesReset()
 
         if (BS.Vars:GetCommon("pledges") == nil) then
             BS.Vars:SetCommon({}, "pledges")
@@ -1607,16 +1641,26 @@ local function resetAchTracker()
     BS.Vars:SetCommon(achs, "AchievementTracking")
 end
 
-local function checkAchReset()
+local achievements = {}
+
+local function clearAchievementDailyState()
+    for _, achievement in pairs(achievements) do
+        achievement.updated = nil
+    end
+end
+
+checkAchReset = function()
     local lastResetTime = BS.GetLastDailyResetTime(nil, true)
 
     if (lastResetTime) then
         resetAchTracker()
         BS.Vars:SetCommon(lastResetTime, "lastDailyResetAch")
+        clearAchievementDailyState()
+        return true
     end
-end
 
-local achievements = {}
+    return false
+end
 
 BS.widgets[BS.W_ACHIEVEMENT_TRACKER] = {
     -- v3.2.17
@@ -1632,14 +1676,18 @@ BS.widgets[BS.W_ACHIEVEMENT_TRACKER] = {
 
         local id = event == EVENT_ACHIEVEMENT_UPDATED and updatedId or awardedId
         local this = BS.W_ACHIEVEMENT_TRACKER
-        local tracked = BS.IsTracked()
-        local completed, achCount = 0, BS.LC.CountElements(tracked)
         local daily = BS.GetVar("Daily", this)
 
+        -- Reset first so tracked state and cached achievement data are current
+        if (daily) then
+            checkAchReset()
+        end
+
+        local tracked = BS.IsTracked()
+        local completed = 0
+        local achCount = BS.LC.CountElements(tracked)
+
         if (BS.IsTracked(id) and event ~= "initial") then
-            -- TODO: update achievementId for staged achievements
-            -- TODO: option to remove completed achievements
-            -- TODO: sort out daily reset
             local name, icon, stepsRemaining, stepsRequired = BS.AchievementNotifier(id, true)
 
             achievements[id] = {
@@ -1648,7 +1696,7 @@ BS.widgets[BS.W_ACHIEVEMENT_TRACKER] = {
                 name = name,
                 remaining = stepsRemaining,
                 required = stepsRequired,
-                updated = true
+                updated = daily and true or nil
             }
 
             if (daily) then
@@ -1680,7 +1728,6 @@ BS.widgets[BS.W_ACHIEVEMENT_TRACKER] = {
         end
 
         if (daily) then
-            checkAchReset()
             completed =
                 BS.LC.CountElements(
                     BS.LC.Filter(
