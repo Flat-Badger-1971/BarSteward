@@ -163,7 +163,8 @@ BarSteward = {
     W_VOKO = 156,
     W_INV_RECIPES = 157,
     W_INV_MOTIFS = 158,
-    W_INV_STYLES = 159
+    W_INV_STYLES = 159,
+    W_TOME_POINT_CACHES = 160
 }
 
 local BS = BarSteward
@@ -352,6 +353,7 @@ BS.CURRENCIES = {
     [CURT_SEALS] = { crownStore = true },
     [CURT_TELVAR_STONES] = { crownStore = false },
     [CURT_TOME_POINTS] = { crownStore = true },
+    [CURT_TOME_POINT_CACHES] = { crownStore = true },
     [CURT_TRADE_BARS] = { crownStore = false },
     [CURT_TRANSMUTE_CRYSTALS] = { crownStore = false },
     [CURT_UNDAUNTED_KEYS] = { crownStore = false },

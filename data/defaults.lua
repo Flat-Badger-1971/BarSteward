@@ -903,6 +903,11 @@ BS.Defaults = {
             Units = GetString(BARSTEWARD_HOURS),
             WarningValue = 72
         },
+        [BS.W_TOME_POINT_CACHES] = {
+            Bar = 0,
+            Cat = cat.Currency,
+            UseSeparators = false
+        },
     }
 }
 
