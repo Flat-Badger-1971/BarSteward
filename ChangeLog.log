@@ -1,3 +1,29 @@
+[color=#ff9900][b]Version: 3.5.7 ---------------[/b][/color]
+Widget reordering bugfixes
+Carried recipes autohide fix
+Endeavour widgets repurposed for Tamriel Tomes
+Added widget for Tome Point Caches
+.
+[color=#ff9900][b]Version: 3.5.6 ---------------[/b][/color]
+Add exception for missing LibDailyResetTime
+
+[color=#ff9900][b]Version: 3.5.5 ---------------[/b][/color]
+Daily reset reworked
+
+[color=#ff9900][b]Version: 3.5.4 ---------------[/b][/color]
+New widgets added:
+    - Carried Recipes
+    - Carried Motifs
+    - Carried Style Pages
+
+[color=#ff9900][b]Version: 3.5.3 ---------------[/b][/color]
+Bugfix for the issue preventing widgets requiring additional libraries from being added to a bar
+
+[color=#ff9900][b]Version: 3.5.2 ---------------[/b][/color]
+Fixed experience widget bug (again)
+Housing widget support for multiple instances of the same house (e.g. if you have friends with the same house as you)
+[color=#990099]New dependencies for Achievement Tracker, Daily Quest Counts and Daily Pledges. Now requires LibDailyResetTime.[/color]
+
 [color=#ff9900][b]Version: 3.5.1 ---------------[/b][/color]
 Dependency updates
 Fixed daily quest counts widget

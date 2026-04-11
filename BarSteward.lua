@@ -85,6 +85,11 @@ function BS.ContinueIntialising()
         BS.LUP = LibUndauntedPledges
     end
 
+    -- get a reference to LibDailyResetTime if it's installed
+    if (LibDailyResetTime) then
+        BS.LDRT = LibDailyResetTime
+    end
+    
     BS.RegisterSettings()
 
     -- create bars

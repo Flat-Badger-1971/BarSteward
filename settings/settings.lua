@@ -1194,7 +1194,7 @@ local function getWidgetSettings()
         end
     end
 
-    if (BS.Vars.WidgetSortOrder) then
+    if (BS.Vars.WidgetSortOrder ~= false) then
         -- sort the widget settings by index number
         table.sort(
             ordered,
@@ -1464,14 +1464,27 @@ local function getWidgetSettings()
                 break
             end
 
-            if (widgets[k].Requires and not _G[widgets[k].Requires]) then
-                widgetControls[#widgetControls + 1] = {
-                    type = "description",
-                    text = "|cff0000" .. zo_strformat(GetString(BARSTEWARD_REQUIRES), widgets[k].Requires) .. "|r",
-                    width = "full"
-                }
-                disabled = true
-            else
+            if (widgets[k].Requires) then
+                local dependencies = BS.LC.Split(widgets[k].Requires)
+                local needs = ""
+
+                for _, dependency in ipairs(dependencies) do
+                    if (not _G[dependency]) then
+                        needs = needs .. dependency .. " "
+                    end
+                end
+
+                if (needs ~= "") then
+                    widgetControls[#widgetControls + 1] = {
+                        type = "description",
+                        text = "|cff0000" .. zo_strformat(GetString(BARSTEWARD_REQUIRES), needs) .. "|r",
+                        width = "full"
+                    }
+                    disabled = true
+                end
+            end
+
+            if (not disabled) then
                 BS.CheckExperimental(defaults, widgetControls)
 
                 widgetControls[#widgetControls + 1] = {

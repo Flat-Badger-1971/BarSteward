@@ -304,14 +304,16 @@ local function updateList(barName)
         for key, control in pairs(controls) do
             if (control.Bar == barIndex) then
                 local widget = BS.widgets[key]
-                BS.dataItems[itemKey] = {
-                    name = widget.tooltip,
-                    icon = widget.icon,
-                    key = key,
-                    order = control.Order,
-                    selected = key == selected
-                }
-                itemKey = itemKey + 1
+                if (widget) then
+                    BS.dataItems[itemKey] = {
+                        name = widget.tooltip,
+                        icon = widget.icon,
+                        key = key,
+                        order = control.Order,
+                        selected = key == selected
+                    }
+                    itemKey = itemKey + 1
+                end
             end
         end
     end
@@ -473,8 +475,10 @@ local function setOrder(old, new)
     local item1 = findByOrder(old)
     local item2 = findByOrder(new)
 
-    BS.dataItems[item1].order = new
-    BS.dataItems[item2].order = old
+    if (BS.dataItems[item1] and BS.dataItems[item2]) then
+        BS.dataItems[item1].order = new
+        BS.dataItems[item2].order = old
+    end
 end
 
 function BS.OrderDown()

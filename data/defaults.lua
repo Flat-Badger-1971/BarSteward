@@ -718,7 +718,8 @@ BS.Defaults = {
             WarningValue = 72
         },
         [BS.W_DAILY_COUNT] = {
-            Cat = cat.Activities
+            Cat = cat.Activities,
+            Requires = "LibDailyResetTime"
         },
         [BS.W_PLAYER_STATUS] = {
             Cat = cat.Character
@@ -761,7 +762,7 @@ BS.Defaults = {
         [BS.W_DAILY_PLEDGES] = {
             Autohide = false,
             Cat = cat.Activities,
-            Requires = "LibUndauntedPledges"
+            Requires = "LibUndauntedPledges,LibDailyResetTime"
         },
         [BS.W_BOUNTY_AMOUNT] = {
             Autohide = false,
@@ -826,6 +827,7 @@ BS.Defaults = {
         [BS.W_ACHIEVEMENT_TRACKER] = {
             Cat = cat.Activities,
             Overall = true,
+            Requires = "LibDailyResetTime",
             ShowPercent = true
         },
         [BS.W_GOLDEN_PURSUITS] = {
@@ -852,7 +854,60 @@ BS.Defaults = {
         },
         [BS.W_VOKO] = {
             Cat = cat.Assistants
-        }
+        },
+        [BS.W_INV_RECIPES] = {
+            Cat = cat.Inventory,
+            Autohide = false
+        },
+        [BS.W_INV_MOTIFS] = {
+            Cat = cat.Inventory,
+            Autohide = false
+        },
+        [BS.W_INV_STYLES] = {
+            Cat = cat.Inventory,
+            Autohide = false
+        },
+        [BS.W_WEEKLY_TOMES] = {
+            Cat = cat.Activities,
+            HideLimit = false,
+        },
+        [BS.W_TOME_PROGRESS] = {
+            Cat = cat.Activities,
+            Progress = true
+        },
+        [BS.W_TOMES_SEASONAL] = {
+            Cat = cat.Activities,
+            HideLimit = false,
+        },
+        [BS.W_TOMES_SEASONAL_PROGRESS] = {
+            Cat = cat.Activities,
+            Progress = true
+        },
+        [BS.W_TOMES_SEASONAL_TIME] = {
+            Cat = cat.Activities,
+            ColourValues = "okc,wv,wc,dv,dc",
+            DangerValue = 2,
+            HideDaysWhenZero = true,
+            HideSeconds = false,
+            Timer = true,
+            Units = GetString(BARSTEWARD_HOURS),
+            WarningValue = 6
+        },
+        [BS.W_WEEKLY_TOMES_TIME] = {
+            Cat = cat.Activities,
+            ColourValues = "okc,wv,wc,dv,dc",
+            DangerValue = 48,
+            HideDaysWhenZero = false,
+            HideSeconds = false,
+            Timer = true,
+            Units = GetString(BARSTEWARD_HOURS),
+            WarningValue = 72
+        },
+        [BS.W_TOME_POINT_CACHES] = {
+            Bar = 0,
+            Cat = cat.Currency,
+            UseSeparators = false
+        },
     }
 }
 

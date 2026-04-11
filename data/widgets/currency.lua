@@ -485,5 +485,37 @@ BS.widgets[BS.W_TOME_POINTS] = {
     end,
     event = { EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED, EVENT_CURRENCY_UPDATE },
     tooltip = BS.LC.Format(GetCurrencyName(CURT_TOME_POINTS, true, true)),
-    icon = GetCurrencyKeyboardIcon(CURT_TOME_POINTS)
+    icon = GetCurrencyKeyboardIcon(CURT_TOME_POINTS),
+    onLeftClick = function()
+        RequestOpenTamrielTome()
+    end
+}
+
+BS.widgets[BS.W_TOME_POINT_CACHES] = {
+    name = "tomePointCaches",
+    update = function(widget)
+        local this = BS.W_TOME_POINT_CACHES
+        local seals = GetCurrencyAmount(CURT_TOME_POINT_CACHES, CURRENCY_LOCATION_ACCOUNT)
+
+        if (BS.GetVar("UseSeparators", this) == true) then
+            seals = BS.AddSeparators(seals)
+        end
+
+        widget:SetValue(seals)
+        widget:SetColour(BS.GetColour(this, true))
+
+        local tt = BS.LC.Format(GetCurrencyName(CURT_TOME_POINT_CACHES, true, true)) .. BS.LF
+
+        tt = tt .. getcrownStoreCurrencies(false, this)
+
+        widget:SetTooltip(tt)
+
+        return widget:GetValue()
+    end,
+    event = { EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED, EVENT_CURRENCY_UPDATE },
+    tooltip = BS.LC.Format(GetCurrencyName(CURT_TOME_POINT_CACHES, true, true)),
+    icon = GetCurrencyKeyboardIcon(CURT_TOME_POINT_CACHES),
+    onLeftClick = function()
+        RequestOpenTamrielTome()
+    end
 }
