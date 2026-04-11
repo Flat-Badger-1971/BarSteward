@@ -2159,7 +2159,6 @@ BS.widgets[BS.W_MYTHIC] = {
     end
 }
 
-local lastRecipeUpdate = 0
 local stylett = ZO_CachedStrFormat(GetString(SI_GAMEPAD_BANK_CURRENCY_AMOUNT_CARRIED_HEADER_FORMAT),
     ZO_CachedStrFormat("<<m:2>>", 2, GetString(SI_SPECIALIZEDITEMTYPE82)))
 local motiftt = ZO_CachedStrFormat(GetString(SI_GAMEPAD_BANK_CURRENCY_AMOUNT_CARRIED_HEADER_FORMAT),
@@ -2171,10 +2170,6 @@ BS.widgets[BS.W_INV_RECIPES] = {
     -- v3.5.4
     name = "inventoryRecipes",
     update = function(widget)
-        if (os.time() - lastRecipeUpdate < 2) then
-            return
-        end
-
         local filteredItems =
             SHARED_INVENTORY:GenerateFullSlotData(
                 function(itemdata)
@@ -2225,8 +2220,9 @@ BS.widgets[BS.W_INV_RECIPES] = {
 
         widget:SetTooltip(BS.LC.Trim(ttt))
 
-        lastRecipeUpdate = os.time()
-        return foodRecipes + nonFoodRecipeCount
+        local total = foodRecipes + nonFoodRecipeCount
+
+        return tonumber(total)
     end,
     callback = { [SHARED_INVENTORY] = { "SingleSlotInventoryUpdate", "FullInventoryUpdate" } },
     icon = "icons/quest_murkmire_dossier",

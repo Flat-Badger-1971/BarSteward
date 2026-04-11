@@ -866,7 +866,43 @@ BS.Defaults = {
         [BS.W_INV_STYLES] = {
             Cat = cat.Inventory,
             Autohide = false
-        }
+        },
+        [BS.W_WEEKLY_TOMES] = {
+            Cat = cat.Activities,
+            HideLimit = false,
+        },
+        [BS.W_TOME_PROGRESS] = {
+            Cat = cat.Activities,
+            Progress = true
+        },
+        [BS.W_TOMES_SEASONAL] = {
+            Cat = cat.Activities,
+            HideLimit = false,
+        },
+        [BS.W_TOMES_SEASONAL_PROGRESS] = {
+            Cat = cat.Activities,
+            Progress = true
+        },
+        [BS.W_TOMES_SEASONAL_TIME] = {
+            Cat = cat.Activities,
+            ColourValues = "okc,wv,wc,dv,dc",
+            DangerValue = 2,
+            HideDaysWhenZero = true,
+            HideSeconds = false,
+            Timer = true,
+            Units = GetString(BARSTEWARD_HOURS),
+            WarningValue = 6
+        },
+        [BS.W_WEEKLY_TOMES_TIME] = {
+            Cat = cat.Activities,
+            ColourValues = "okc,wv,wc,dv,dc",
+            DangerValue = 48,
+            HideDaysWhenZero = false,
+            HideSeconds = false,
+            Timer = true,
+            Units = GetString(BARSTEWARD_HOURS),
+            WarningValue = 72
+        },
     }
 }
 

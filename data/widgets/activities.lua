@@ -53,7 +53,7 @@ local function getColourOptions(widgetIndex)
 end
 
 local function configureWidget(widget, complete, maxComplete, activityType, tasks, hideLimit, defaultTooltip)
-    local widgetIndex = activityType == TIMED_ACTIVITY_TYPE_DAILY and BS.W_DAILY_ENDEAVOURS or BS.W_WEEKLY_ENDEAVOURS
+    local widgetIndex = activityType == TIMED_ACTIVITY_TYPE_SEASONAL and BS.W_TOMES_SEASONAL or BS.W_WEEKLY_TOMES
     local colour = BS.GetColour(widgetIndex, true)
 
     if (BS.GetVar("UseRag", widgetIndex)) then
@@ -86,13 +86,6 @@ local function configureWidget(widget, complete, maxComplete, activityType, task
         end
 
         for _, t in ipairs(tasks) do
-            if (activityType == TIMED_ACTIVITY_TYPE_DAILY) then
-                if (not allEqual) then
-                    if (t.index == maxIndex) then
-                        t.text = string.format("%s%s %s %s%s", star, star, t.text, star, star)
-                    end
-                end
-            end
             tooltipText = tooltipText .. BS.LF .. t.text
         end
 
@@ -105,8 +98,9 @@ local function getTimedActivityProgress(activityType, widget, hideLimit, default
     local tasks = {}
     local maxPcProgress = -1
     local maxTask = {}
+    local count = 0
 
-    for idx = 1, 30 do
+    for idx = 1, GetNumTimedActivities() do
         local name = GetTimedActivityName(idx)
 
         if (name == "") then
@@ -114,19 +108,26 @@ local function getTimedActivityProgress(activityType, widget, hideLimit, default
         end
 
         if (GetTimedActivityType(idx) == activityType) then
+            local timesClaimable = GetTimedActivityTotalNumTimesClaimable(idx)
+            local timesClaimed = GetTimedActivityNumTimesClaimed(idx)
             local max = GetTimedActivityMaxProgress(idx)
             local progress = GetTimedActivityProgress(idx)
             local pcProgress = progress / max
             local ttext = name .. "  (" .. progress .. "/" .. max .. ")"
             local colour = BS.COLOURS.Grey
+            local adjProgress = progress + (timesClaimed * max)
+            local adjMax = max * timesClaimable
 
-            if (progress > 0 and progress < max) then
+            count = count + 1
+
+            if (adjProgress > 0 and adjProgress < adjMax) then
                 colour = BS.COLOURS.Yellow
-            elseif (max ~= progress) then
+            elseif (adjMax ~= adjProgress) then
                 colour = BS.COLOURS.Grey
-            elseif (max == progress) then
+            elseif (adjMax == adjProgress) then
                 complete = complete + 1
                 colour = BS.COLOURS.Green
+                ttext = name
             end
 
             -- get reward info
@@ -147,6 +148,7 @@ local function getTimedActivityProgress(activityType, widget, hideLimit, default
             end
 
             ttext = colour:Colorize(ttext) .. " " .. reward
+            ttext = ttext .. BS.LC.OrangeHighlight:Colorize(" (" .. timesClaimed .. "/" .. timesClaimable .. ")")
 
             table.insert(tasks, { text = ttext, value = rewardValue, index = idx })
 
@@ -161,7 +163,7 @@ local function getTimedActivityProgress(activityType, widget, hideLimit, default
                     name = name,
                     description = GetTimedActivityDescription(idx),
                     progress = progress,
-                    maxProgress = max
+                    maxProgress = activityType == TIMED_ACTIVITY_TYPE_WEEKLY and count or max
                 }
 
                 maxPcProgress = pcProgress
@@ -170,136 +172,113 @@ local function getTimedActivityProgress(activityType, widget, hideLimit, default
     end
 
     if (widget ~= nil) then
-        configureWidget(widget, complete, complete, activityType, tasks, hideLimit, defaultTooltip)
+        configureWidget(widget, complete, count, activityType, tasks, hideLimit, defaultTooltip)
     end
 
-    return complete, maxTask
+    return count, maxTask
 end
 
--- BS.widgets[BS.W_DAILY_ENDEAVOURS] = {
---     -- v1.0.1
---     name = "dailyEndeavourProgress",
---     update = function(widget)
---         return getTimedActivityProgress(
---             TIMED_ACTIVITY_TYPE_DAILY,
---             widget,
---             BS.GetVar("HideLimit", BS.W_DAILY_ENDEAVOURS),
---             GetString(BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS)
---         )
---     end,
---     event = { EVENT_PLAYER_ACTIVATED, EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED },
---     icon = "journal/u26_progress_digsite_checked_incomplete",
---     tooltip = GetString(BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS),
---     onLeftClick = function()
---         if (not IsInGamepadPreferredMode()) then
---             GROUP_MENU_KEYBOARD:ShowCategory(TIMED_ACTIVITIES_FRAGMENT)
---             TIMED_ACTIVITIES_KEYBOARD:SetCurrentActivityType(TIMED_ACTIVITY_TYPE_DAILY)
---         else
---             ZO_ACTIVITY_FINDER_ROOT_GAMEPAD:ShowCategory(TIMED_ACTIVITIES_GAMEPAD:GetCategoryData())
---         end
---     end,
---     complete = function()
---         -- return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(TIMED_ACTIVITY_TYPE_DAILY)
---     end,
---     customSettings = function()
---         return getColourOptions(BS.W_DAILY_ENDEAVOURS)
---     end
--- }
+BS.widgets[BS.W_TOMES_SEASONAL] = {
+    -- v1.0.1
+    name = "tomesSeasonal",
+    update = function(widget)
+        return getTimedActivityProgress(
+            TIMED_ACTIVITY_TYPE_SEASONAL,
+            widget,
+            BS.GetVar("HideLimit", BS.W_TOMES_SEASONAL),
+            GetString(BARSTEWARD_TOMES_SEASONAL_PROGRESS)
+        )
+    end,
+    event = { EVENT_PLAYER_ACTIVATED, EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED },
+    icon = "tamrieltomes/timedactivitycategory_seasonal_up",
+    tooltip = GetString(BARSTEWARD_TOMES_SEASONAL_PROGRESS),
+    onLeftClick = function()
+        RequestOpenTamrielTome()
+    end,
+    customSettings = function()
+        return getColourOptions(BS.W_TOMES_SEASONAL)
+    end
+}
 
--- BS.widgets[BS.W_WEEKLY_ENDEAVOURS] = {
---     -- v1.0.1
---     name = "weeklyEndeavourProgress",
---     update = function(widget)
---         return getTimedActivityProgress(
---             TIMED_ACTIVITY_TYPE_WEEKLY,
---             widget,
---             BS.GetVar("HideLimit", BS.W_WEEKLY_ENDEAVOURS),
---             GetString(BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS)
---         )
---     end,
---     event = { EVENT_PLAYER_ACTIVATED, EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED },
---     icon = "journal/u26_progress_digsite_checked_complete",
---     tooltip = GetString(BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS),
---     onLeftClick = function()
---         if (not IsInGamepadPreferredMode()) then
---             GROUP_MENU_KEYBOARD:ShowCategory(TIMED_ACTIVITIES_FRAGMENT)
---             TIMED_ACTIVITIES_KEYBOARD:SetCurrentActivityType(TIMED_ACTIVITY_TYPE_WEEKLY)
---         else
---             ZO_ACTIVITY_FINDER_ROOT_GAMEPAD:ShowCategory(TIMED_ACTIVITIES_GAMEPAD:GetCategoryData())
---         end
---     end,
---     complete = function()
---         -- return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(TIMED_ACTIVITY_TYPE_WEEKLY)
---     end,
---     customSettings = function()
---         return getColourOptions(BS.W_WEEKLY_ENDEAVOURS)
---     end
--- }
+BS.widgets[BS.W_WEEKLY_TOMES] = {
+    -- v1.0.1
+    name = "weeklyTomeProgress",
+    update = function(widget)
+        return getTimedActivityProgress(
+            TIMED_ACTIVITY_TYPE_WEEKLY,
+            widget,
+            BS.GetVar("HideLimit", BS.W_WEEKLY_TOMES),
+            GetString(BARSTEWARD_TOMES_WEEKLY_PROGRESS)
+        )
+    end,
+    event = { EVENT_PLAYER_ACTIVATED, EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED },
+    icon = "tamrieltomes/timedactivitycategory_weekly_up",
+    tooltip = GetString(BARSTEWARD_TOMES_WEEKLY_PROGRESS),
+    onLeftClick = function()
+        RequestOpenTamrielTome()
+    end,
+    customSettings = function()
+        return getColourOptions(BS.W_WEEKLY_TOMES)
+    end
+}
 
--- BS.widgets[BS.W_ENDEAVOUR_PROGRESS] = {
---     -- v1.2.14
---     name = "weeklyEndeavourBar",
---     update = function(widget)
---         local this = BS.W_ENDEAVOUR_PROGRESS
---         local _, maxTask = getTimedActivityProgress(TIMED_ACTIVITY_TYPE_WEEKLY, nil)
+BS.widgets[BS.W_TOME_PROGRESS] = {
+    -- v1.2.14
+    name = "weeklyTomeBar",
+    update = function(widget)
+        local this = BS.W_TOME_PROGRESS
+        local _, maxTask = getTimedActivityProgress(TIMED_ACTIVITY_TYPE_WEEKLY, nil)
 
---         if (maxTask.name and maxTask.maxProgress) then
---             if (BS.GetVar("Progress", this)) then
---                 widget:SetProgress(maxTask.progress, 0, maxTask.maxProgress)
---             else
---                 widget:SetValue(maxTask.progress .. "/" .. maxTask.maxProgress)
---                 widget:SetColour(BS.GetColour(this, true))
---             end
+        if (maxTask.name and maxTask.maxProgress) then
+            if (BS.GetVar("Progress", this)) then
+                widget:SetProgress(maxTask.progress, 0, maxTask.maxProgress)
+            else
+                widget:SetValue(maxTask.progress .. "/" .. maxTask.maxProgress)
+                widget:SetColour(BS.GetColour(this, true))
+            end
 
---             local ttt = GetString(BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS_BEST) .. BS.LF
---             local taskInfo = maxTask.name .. BS.LF .. BS.LF .. maxTask.description
+            local ttt = GetString(BARSTEWARD_TOMES_WEEKLY_PROGRESS_BEST) .. BS.LF
+            local taskInfo = maxTask.name .. BS.LF .. BS.LF .. maxTask.description
 
---             ttt = ttt .. BS.COLOURS.White:Colorize(taskInfo)
+            ttt = ttt .. BS.COLOURS.White:Colorize(taskInfo)
 
---             widget:SetTooltip(ttt)
+            widget:SetTooltip(ttt)
 
---             return maxTask.progress == maxTask.maxProgress
---         else
---             return 0
---         end
---     end,
---     gradient = function()
---         local startg = { GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_START) }
---         local endg = { GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_END) }
---         local s = BS.Vars.Controls[BS.W_ENDEAVOUR_PROGRESS].GradientStart or startg
---         local e = BS.Vars.Controls[BS.W_ENDEAVOUR_PROGRESS].GradientEnd or endg
+            return maxTask.progress == maxTask.maxProgress
+        else
+            return 0
+        end
+    end,
+    gradient = function()
+        local startg = { GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_START) }
+        local endg = { GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_END) }
+        local s = BS.Vars.Controls[BS.W_TOME_PROGRESS].GradientStart or startg
+        local e = BS.Vars.Controls[BS.W_TOME_PROGRESS].GradientEnd or endg
 
---         return s, e
---     end,
---     event = { EVENT_PLAYER_ACTIVATED, EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED },
---     icon = "journal/u26_progress_digsite_marked_complete",
---     tooltip = GetString(BARSTEWARD_WEEKLY_ENDEAVOUR_PROGRESS_BEST),
---     onLeftClick = function()
---         if (not IsInGamepadPreferredMode()) then
---             GROUP_MENU_KEYBOARD:ShowCategory(TIMED_ACTIVITIES_FRAGMENT)
---         else
---             ZO_ACTIVITY_FINDER_ROOT_GAMEPAD:ShowCategory(TIMED_ACTIVITIES_GAMEPAD:GetCategoryData())
---         end
---     end,
---     complete = function()
---         -- return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(TIMED_ACTIVITY_TYPE_WEEKLY)
---     end,
---     customSettings = {
---         [1] = {
---             type = "checkbox",
---             name = GetString(BARSTEWARD_USE_PROGRESS),
---             getFunc = function()
---                 return BS.Vars.Controls[BS.W_ENDEAVOUR_PROGRESS].Progress or false
---             end,
---             setFunc = function(value)
---                 BS.Vars.Controls[BS.W_ENDEAVOUR_PROGRESS].Progress = value
---             end,
---             requiresReload = true,
---             default = false,
---             width = "full"
---         }
---     }
--- }
+        return s, e
+    end,
+    event = { EVENT_PLAYER_ACTIVATED, EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED },
+    icon = "mainmenu/menubar_tamrieltomes_up",
+    tooltip = GetString(BARSTEWARD_TOMES_WEEKLY_PROGRESS_BEST),
+    onLeftClick = function()
+        RequestOpenTamrielTome()
+    end,
+    customSettings = {
+        [1] = {
+            type = "checkbox",
+            name = GetString(BARSTEWARD_USE_PROGRESS),
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_TOME_PROGRESS].Progress or false
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_TOME_PROGRESS].Progress = value
+            end,
+            requiresReload = true,
+            default = false,
+            width = "full"
+        }
+    }
+}
 
 local function getLeadColour(lead)
     local difficultyColours = {
@@ -546,49 +525,35 @@ function BS.GetTimedActivityTimeRemaining(...)
     return getTimedActivityTimeRemaining(...)
 end
 
--- BS.widgets[BS.W_DAILY_ENDEAVOUR_TIME] = {
---     -- v1.2.18
---     name = "dailyEndeavourTime",
---     update = function(widget)
---         return getTimedActivityTimeRemaining(TIMED_ACTIVITY_TYPE_DAILY, BS.W_DAILY_ENDEAVOUR_TIME, widget)
---     end,
---     timer = 1000,
---     event = EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED,
---     complete = function()
---         -- return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(TIMED_ACTIVITY_TYPE_DAILY)
---     end,
---     icon = "journal/u26_progress_digsite_unknown_incomplete",
---     tooltip = GetString(BARSTEWARD_DAILY_ENDEAVOUR_TIME),
---     onLeftClick = function()
---         if (not IsInGamepadPreferredMode()) then
---             GROUP_MENU_KEYBOARD:ShowCategory(TIMED_ACTIVITIES_FRAGMENT)
---         else
---             ZO_ACTIVITY_FINDER_ROOT_GAMEPAD:ShowCategory(TIMED_ACTIVITIES_GAMEPAD:GetCategoryData())
---         end
---     end
--- }
+BS.widgets[BS.W_TOMES_SEASONAL_TIME] = {
+    -- v1.2.18
+    name = "tomesSeasonalTime",
+    update = function(widget)
+        return getTimedActivityTimeRemaining(TIMED_ACTIVITY_TYPE_SEASONAL, BS.W_TOMES_SEASONAL_TIME, widget)
+    end,
+    timer = 1000,
+    event = EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED,
+    icon = "journal/u26_progress_digsite_unknown_incomplete",
+    tooltip = GetString(BARSTEWARD_TOMES_SEASON_TIME_REMAINING),
+    onLeftClick = function()
+        RequestOpenTamrielTome()
+    end
+}
 
--- BS.widgets[BS.W_WEEKLY_ENDEAVOUR_TIME] = {
---     -- v1.2.18
---     name = "weeklyEndeavourTime",
---     update = function(widget)
---         return getTimedActivityTimeRemaining(TIMED_ACTIVITY_TYPE_WEEKLY, BS.W_WEEKLY_ENDEAVOUR_TIME, widget)
---     end,
---     timer = 1000,
---     event = EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED,
---     icon = "journal/u26_progress_digsite_unknown_complete",.
---     tooltip = GetString(BARSTEWARD_WEEKLY_ENDEAVOUR_TIME),
---     onLeftClick = function()
---         if (not IsInGamepadPreferredMode()) then
---             GROUP_MENU_KEYBOARD:ShowCategory(TIMED_ACTIVITIES_FRAGMENT)
---         else
---             ZO_ACTIVITY_FINDER_ROOT_GAMEPAD:ShowCategory(TIMED_ACTIVITIES_GAMEPAD:GetCategoryData())
---         end
---     end,
---     complete = function()
---         -- return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(TIMED_ACTIVITY_TYPE_WEEKLY)
---     end
--- }
+BS.widgets[BS.W_WEEKLY_TOMES_TIME] = {
+    -- v1.2.18
+    name = "weeklyTomesTime",
+    update = function(widget)
+        return getTimedActivityTimeRemaining(TIMED_ACTIVITY_TYPE_WEEKLY, BS.W_WEEKLY_TOMES_TIME, widget)
+    end,
+    timer = 1000,
+    event = EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED,
+    icon = "journal/u26_progress_digsite_unknown_complete",
+    tooltip = GetString(BARSTEWARD_TOMES_WEEKLY_TIME_REMAINING),
+    onLeftClick = function()
+        RequestOpenTamrielTome()
+    end
+}
 
 BS.widgets[BS.W_TRIBUTE_CLUB_RANK] = {
     name = "tributeRank",
@@ -1183,69 +1148,62 @@ BS.widgets[BS.W_CHESTS_FOUND] = {
     tooltip = GetString(BARSTEWARD_FOUND_CHESTS)
 }
 
--- BS.widgets[BS.W_DAILY_PROGRESS] = {
---     -- v1.5.4
---     name = "dailyEndeavourBar",
---     update = function(widget)
---         local _, maxTask = getTimedActivityProgress(TIMED_ACTIVITY_TYPE_DAILY, nil, nil, nil, true)
---         local this = BS.W_DAILY_PROGRESS
+BS.widgets[BS.W_TOMES_SEASONAL_PROGRESS] = {
+    -- v1.5.4
+    name = "seasonalProgress",
+    update = function(widget)
+        local _, maxTask = getTimedActivityProgress(TIMED_ACTIVITY_TYPE_SEASONAL, nil, nil, nil, true)
+        local this = BS.W_TOMES_SEASONAL_PROGRESS
 
---         if (maxTask.name and maxTask.maxProgress) then
---             if (BS.GetVar("Progress", this)) then
---                 widget:SetProgress(maxTask.progress, 0, maxTask.maxProgress)
---             else
---                 widget:SetValue(maxTask.progress .. "/" .. maxTask.maxProgress)
---                 widget:SetColour(BS.GetColour(this, true))
---             end
+        if (maxTask.name and maxTask.maxProgress) then
+            if (BS.GetVar("Progress", this)) then
+                widget:SetProgress(maxTask.progress, 0, maxTask.maxProgress)
+            else
+                widget:SetValue(maxTask.progress .. "/" .. maxTask.maxProgress)
+                widget:SetColour(BS.GetColour(this, true))
+            end
 
---             local ttt = GetString(BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS_BEST) .. BS.LF
+            local ttt = GetString(BARSTEWARD_TOMES_SEASONAL_PROGRESS_BEST) .. BS.LF
 
---             ttt = ttt .. BS.COLOURS.White:Colorize(maxTask.name .. BS.LF .. BS.LF .. maxTask.description)
+            ttt = ttt .. BS.COLOURS.White:Colorize(maxTask.name .. BS.LF .. BS.LF .. maxTask.description)
 
---             widget:SetTooltip(ttt)
+            widget:SetTooltip(ttt)
 
---             return maxTask.progress == maxTask.maxProgress
---         else
---             return 0
---         end
---     end,
---     gradient = function()
---         local startg = { GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_START) }
---         local endg = { GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_END) }
---         local s = BS.Vars.Controls[BS.W_DAILY_PROGRESS].GradientStart or startg
---         local e = BS.Vars.Controls[BS.W_DAILY_PROGRESS].GradientEnd or endg
+            return maxTask.progress == maxTask.maxProgress
+        else
+            return 0
+        end
+    end,
+    gradient = function()
+        local startg = { GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_START) }
+        local endg = { GetInterfaceColor(INTERFACE_COLOR_TYPE_GENERAL, INTERFACE_GENERAL_COLOR_STATUS_BAR_END) }
+        local s = BS.Vars.Controls[BS.W_TOMES_SEASONAL_PROGRESS].GradientStart or startg
+        local e = BS.Vars.Controls[BS.W_TOMES_SEASONAL_PROGRESS].GradientEnd or endg
 
---         return s, e
---     end,
---     event = { EVENT_PLAYER_ACTIVATED, EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED },
---     icon = "journal/u26_progress_digsite_marked_incomplete",
---     tooltip = GetString(BARSTEWARD_DAILY_ENDEAVOUR_PROGRESS_BEST),
---     onLeftClick = function()
---         if (not IsInGamepadPreferredMode()) then
---             GROUP_MENU_KEYBOARD:ShowCategory(TIMED_ACTIVITIES_FRAGMENT)
---         else
---             ZO_ACTIVITY_FINDER_ROOT_GAMEPAD:ShowCategory(TIMED_ACTIVITIES_GAMEPAD:GetCategoryData())
---         end
---     end,
---     complete = function()
---         -- return TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(TIMED_ACTIVITY_TYPE_DAILY)
---     end,
---     customSettings = {
---         [1] = {
---             type = "checkbox",
---             name = GetString(BARSTEWARD_USE_PROGRESS),
---             getFunc = function()
---                 return BS.Vars.Controls[BS.W_DAILY_PROGRESS].Progress or false
---             end,
---             setFunc = function(value)
---                 BS.Vars.Controls[BS.W_DAILY_PROGRESS].Progress = value
---             end,
---             requiresReload = true,
---             default = false,
---             width = "full"
---         }
---     }
--- }
+        return s, e
+    end,
+    event = { EVENT_PLAYER_ACTIVATED, EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED },
+    icon = "campaign/campaign_tabicon_leaderboard_up",
+    tooltip = GetString(BARSTEWARD_TOMES_SEASONAL_PROGRESS_BEST),
+    onLeftClick = function()
+        RequestOpenTamrielTome()
+    end,
+    customSettings = {
+        [1] = {
+            type = "checkbox",
+            name = GetString(BARSTEWARD_USE_PROGRESS),
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_TOMES_SEASONAL_PROGRESS].Progress or false
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_TOMES_SEASONAL_PROGRESS].Progress = value
+            end,
+            requiresReload = true,
+            default = false,
+            width = "full"
+        }
+    }
+}
 
 local function updateQuests(questListType)
     local list = BS.Vars:GetCommon(questListType)
@@ -1462,6 +1420,10 @@ local function getPledgeIds()
 end
 
 local function checkPledgesReset()
+    if (not BS.LDRT) then
+        return false
+    end
+
     local currentResetTime = BS.LDRT:GetDailyResetTime(true)
     local storedResetTime = BS.Vars:GetCommon("lastDailyResetPledges")
 
