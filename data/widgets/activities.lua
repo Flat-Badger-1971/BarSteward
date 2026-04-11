@@ -534,7 +534,7 @@ BS.widgets[BS.W_TOMES_SEASONAL_TIME] = {
     timer = 1000,
     event = EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED,
     icon = "journal/u26_progress_digsite_unknown_incomplete",
-    tooltip = GetString(BARSTEWARD_TOMES_SEASON_TIME_REMAINING),
+    tooltip = GetString(BARSTEWARD_TOMES_SEASONAL_TIME_REMAINING),
     onLeftClick = function()
         RequestOpenTamrielTome()
     end
