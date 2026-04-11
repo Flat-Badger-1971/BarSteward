@@ -66,21 +66,17 @@ local function configureWidget(widget, complete, maxComplete, activityType, task
         end
     end
 
-    widget:SetValue(complete .. (hideLimit and "" or ("/" .. maxComplete)))
+    widget:SetValue((complete or 0) .. (hideLimit and "" or ("/" .. (maxComplete or 0))))
     widget:SetColour(colour)
 
     if (#tasks > 0) then
         local tooltipText = defaultTooltip or ""
-        local maxValue, maxIndex, allEqual = 0, 0, true
+        local maxValue = 0
 
         if (activityType == TIMED_ACTIVITY_TYPE_DAILY) then
             for _, t in ipairs(tasks) do
                 if (t.value > maxValue) then
-                    if (maxValue > 0) then
-                        allEqual = false
-                    end
                     maxValue = t.value
-                    maxIndex = t.index
                 end
             end
         end
@@ -98,78 +94,77 @@ local function getTimedActivityProgress(activityType, widget, hideLimit, default
     local tasks = {}
     local maxPcProgress = -1
     local maxTask = {}
-    local count = 0
+    local filterFunction = function(data) return data:GetType() == activityType end
+    local timedActivities = TIMED_ACTIVITIES_MANAGER:ActivitiesIterator({ filterFunction })
 
-    for idx = 1, GetNumTimedActivities() do
-        local name = GetTimedActivityName(idx)
+    for _, timedActivity in timedActivities do
+        local name = timedActivity:GetName()
 
         if (name == "") then
             break
         end
 
-        if (GetTimedActivityType(idx) == activityType) then
-            local timesClaimable = GetTimedActivityTotalNumTimesClaimable(idx)
-            local timesClaimed = GetTimedActivityNumTimesClaimed(idx)
-            local max = GetTimedActivityMaxProgress(idx)
-            local progress = GetTimedActivityProgress(idx)
-            local pcProgress = progress / max
-            local ttext = name .. "  (" .. progress .. "/" .. max .. ")"
-            local colour = BS.COLOURS.Grey
-            local adjProgress = progress + (timesClaimed * max)
-            local adjMax = max * timesClaimable
+        local timesClaimable = timedActivity:GetTotalNumTimesClaimable()
+        local timesClaimed = timedActivity:GetNumTimesClaimed()
+        local progress = timedActivity:GetProgress()
+        local max = timedActivity:GetMaxProgress()
+        local pcProgress = progress / max
+        local ttext = name .. "  (" .. progress .. "/" .. max .. ")"
+        local colour = BS.COLOURS.Grey
+        local adjProgress = progress + (timesClaimed * max)
+        local adjMax = max * timesClaimable
 
-            count = count + 1
+        if (adjProgress > 0 and adjProgress < adjMax) then
+            colour = BS.COLOURS.Yellow
+        elseif (adjMax ~= adjProgress) then
+            colour = BS.COLOURS.Grey
+        elseif (adjMax == adjProgress) then
+            complete = complete + 1
+            colour = BS.COLOURS.Green
+            ttext = name
+        end
 
-            if (adjProgress > 0 and adjProgress < adjMax) then
-                colour = BS.COLOURS.Yellow
-            elseif (adjMax ~= adjProgress) then
-                colour = BS.COLOURS.Grey
-            elseif (adjMax == adjProgress) then
-                complete = complete + 1
-                colour = BS.COLOURS.Green
-                ttext = name
+        -- get reward info
+        local numRewards = timedActivity:GetNumRewards()
+        local reward = ""
+        local rewardValue = 0
+
+        for rewardIndex = 1, numRewards do
+            local rewardId, quantity = timedActivity:GetRewardInfo(rewardIndex)
+            local rewardData = REWARDS_MANAGER:GetInfoForReward(rewardId, quantity)
+
+            if (reward ~= "") then
+                reward = reward .. ", "
             end
 
-            -- get reward info
-            local numRewards = GetNumTimedActivityRewards(idx)
-            local reward = ""
-            local rewardValue = 0
+            reward = reward .. BS.Icon(rewardData.lootIcon or rewardData.icon) .. quantity
+            rewardValue = rewardValue + quantity
+        end
 
-            for rewardIndex = 1, numRewards do
-                local rewardId, quantity = GetTimedActivityRewardInfo(idx, rewardIndex)
-                local rewardData = REWARDS_MANAGER:GetInfoForReward(rewardId, quantity)
+        ttext = colour:Colorize(ttext) .. " " .. reward
+        ttext = ttext .. BS.LC.OrangeHighlight:Colorize(" (" .. timesClaimed .. "/" .. timesClaimable .. ")")
 
-                if (reward ~= "") then
-                    reward = reward .. ", "
-                end
+        table.insert(tasks, { text = ttext, value = rewardValue })
 
-                reward = reward .. BS.Icon(rewardData.lootIcon or rewardData.icon) .. quantity
-                rewardValue = rewardValue + quantity
-            end
+        local add = pcProgress > maxPcProgress
 
-            ttext = colour:Colorize(ttext) .. " " .. reward
-            ttext = ttext .. BS.LC.OrangeHighlight:Colorize(" (" .. timesClaimed .. "/" .. timesClaimable .. ")")
+        if (ignoreComplete and (progress == max)) then
+            add = false
+        end
 
-            table.insert(tasks, { text = ttext, value = rewardValue, index = idx })
+        if (add) then
+            maxTask = {
+                name = name,
+                description = timedActivity:GetDescription(),
+                progress = progress,
+                maxProgress = max --activityType == TIMED_ACTIVITY_TYPE_WEEKLY and max or count
+            }
 
-            local add = pcProgress > maxPcProgress
-
-            if (ignoreComplete and (progress == max)) then
-                add = false
-            end
-
-            if (add) then
-                maxTask = {
-                    name = name,
-                    description = GetTimedActivityDescription(idx),
-                    progress = progress,
-                    maxProgress = activityType == TIMED_ACTIVITY_TYPE_WEEKLY and count or max
-                }
-
-                maxPcProgress = pcProgress
-            end
+            maxPcProgress = pcProgress
         end
     end
+
+    local count = TIMED_ACTIVITIES_MANAGER:GetNumTimedActivities(activityType)
 
     if (widget ~= nil) then
         configureWidget(widget, complete, count, activityType, tasks, hideLimit, defaultTooltip)
