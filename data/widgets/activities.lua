@@ -185,6 +185,7 @@ BS.widgets[BS.W_TOMES_SEASONAL] = {
         )
     end,
     event = { EVENT_PLAYER_ACTIVATED, EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED },
+    callback = { [TIMED_ACTIVITIES_MANAGER] = { "OnActivitiesUpdated" } },
     icon = "tamrieltomes/timedactivitycategory_seasonal_up",
     tooltip = GetString(BARSTEWARD_TOMES_SEASONAL_PROGRESS),
     onLeftClick = function()
@@ -207,6 +208,7 @@ BS.widgets[BS.W_WEEKLY_TOMES] = {
         )
     end,
     event = { EVENT_PLAYER_ACTIVATED, EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED },
+    callback = { [TIMED_ACTIVITIES_MANAGER] = { "OnActivitiesUpdated" } },
     icon = "tamrieltomes/timedactivitycategory_weekly_up",
     tooltip = GetString(BARSTEWARD_TOMES_WEEKLY_PROGRESS),
     onLeftClick = function()
@@ -253,6 +255,7 @@ BS.widgets[BS.W_TOME_PROGRESS] = {
         return s, e
     end,
     event = { EVENT_PLAYER_ACTIVATED, EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED },
+    callback = { [TIMED_ACTIVITIES_MANAGER] = { "OnActivitiesUpdated" } },
     icon = "mainmenu/menubar_tamrieltomes_up",
     tooltip = GetString(BARSTEWARD_TOMES_WEEKLY_PROGRESS_BEST),
     onLeftClick = function()
@@ -1178,6 +1181,7 @@ BS.widgets[BS.W_TOMES_SEASONAL_PROGRESS] = {
         return s, e
     end,
     event = { EVENT_PLAYER_ACTIVATED, EVENT_TIMED_ACTIVITY_PROGRESS_UPDATED },
+    callback = { [TIMED_ACTIVITIES_MANAGER] = { "OnActivitiesUpdated" } },
     icon = "campaign/campaign_tabicon_leaderboard_up",
     tooltip = GetString(BARSTEWARD_TOMES_SEASONAL_PROGRESS_BEST),
     onLeftClick = function()
