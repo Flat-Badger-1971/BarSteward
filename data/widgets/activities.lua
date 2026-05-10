@@ -1984,3 +1984,138 @@ BS.widgets[BS.W_GOLDEN_PURSUITS] = {
         }
     }
 }
+
+BS.widgets[BS.W_NM_REP] = {
+    -- v3.5.8
+    name = "nightMarketReputation",
+    update = function(widget, event)
+        local inTheZone = IsInAdventureZone()
+
+        zo_callLater(
+            function()
+                local this = BS.W_NM_REP
+                local useSeparators = BS.GetVar("UseSeparators", this)
+                local faction = GetUnitAdventureZoneFaction("player")
+                local score = GetAdventureZonePlayerReputation()
+                local display = tostring(useSeparators and BS.AddSeparators(score) or score)
+                widget:SetValue(display)
+                widget:SetColour(BS.GetColour(this, true))
+
+                if (event == "initial") then
+                    local icon = ZO_ADVENTURE_ZONE_FACTION_ICONS[faction]
+                    widget:SetIcon(icon)
+                end
+            end, 1200)
+
+        return not inTheZone
+    end,
+    hideWhenEqual = true,
+    event = { EVENT_ADVENTURE_ZONE_FACTION_REPUTATION_CHANGED, EVENT_PLAYER_ACTIVATED },
+    icon = function() return ZO_ADVENTURE_ZONE_FACTION_ICONS[GetUnitAdventureZoneFaction("player")] end,
+    tooltip = BS.LC.Format(SI_LOOT_HISTORY_ADVENTURE_ZONE_FACTION_REPUTATION) ..
+        " (" .. GetAdventureZoneDisplayName() .. ")",
+    customSettings = {
+        [1] = {
+            type = "checkbox",
+            name = ZO_CachedStrFormat(GetString(BARSTEWARD_NIGHT_MARKET_HIDE), GetAdventureZoneDisplayName()),
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_NM_REP].Autohide or false
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_NM_REP].Autohide = value
+                BS.RefreshBar(BS.W_NM_REP)
+            end,
+            default = false,
+            width = "full"
+        }
+    }
+}
+
+local iconLookup = {
+    [1] = "icons/u49_adventurezone_achievement_side_skittering",
+    [2] = "icons/u49_adventurezone_achievement_side_parch",
+    [3] = "icons/u49_adventurezone_achievement_side_sorrowsfriend",
+    [4] = "ava/ava_ram_slot_red"
+}
+
+BS.widgets[BS.W_NM_NEXT_EVENT] = {
+    -- v3.5.8
+    name = "nightMarketNextEvent",
+    update = function(widget)
+        local this = BS.W_NM_NEXT_EVENT
+        local intheZone = IsInAdventureZone()
+        local value, icon, location, title = BS.LC.Format(BARSTEWARD_NIGHT_MARKET_INACTIVE)
+        local ttt = BS.LC.Format(SI_ZONEDISPLAYTYPE13) .. " (" .. GetAdventureZoneDisplayName() .. ")"
+
+        if (intheZone) then
+            local eventTiles = BS.LC:CountElements(ADVENTURE_ZONE_OVERVIEW_KEYBOARD.eventTileControls)
+
+            for index = 1, eventTiles do
+                local eventState = GetAdventureZoneEventLocationState(index)
+
+                location = zo_strformat(SI_ADVENTURE_ZONE_EVENT_FORMATTER, GetAdventureZoneEventLocationName(index))
+                title = zo_strformat(SI_ADVENTURE_ZONE_EVENT_FORMATTER, GetAdventureZoneEventDisplayName(index))
+
+                if (eventState == ADVENTURE_ZONE_WORLD_EVENT_LOCATION_STATE_STARTS_SOON) then
+                    icon = iconLookup[index]
+                    local startTime = GetAdventureZoneEventLocationStartTimestampMs(index)
+                    local secondsRemaining = zo_max((startTime / ZO_ONE_SECOND_IN_MILLISECONDS) - GetTimeStamp(), 0)
+                    local time = BS.SecondsToTime(secondsRemaining, false, false, true, BS.GetVar("Format", this))
+                    value = time
+                    ttt = BS.COLOURS.Yellow:Colorize(ttt .. BS.LF .. BS.COLOURS.White:Colorize(location))
+                    ttt = ttt .. BS.LF .. BS.COLOURS.White:Colorize(title)
+                    break
+                elseif eventState == ADVENTURE_ZONE_WORLD_EVENT_LOCATION_STATE_ACTIVE then
+                    value = BS.COLOURS.Green:Colorize(BS.LC.Format(BARSTEWARD_NIGHT_MARKET_ACTIVE))
+                    icon = iconLookup[index]
+                    ttt = ttt .. BS.LF .. BS.COLOURS.White:Colorize(location)
+                    ttt = ttt .. BS.LF .. BS.COLOURS.White:Colorize(title)
+                    break
+                end
+            end
+        end
+
+        widget:SetValue(value)
+        widget:SetIcon(icon)
+        widget:SetTooltip(ttt)
+
+        return not intheZone
+    end,
+    hideWhenEqual = true,
+    timer = 1000,
+    event = { EVENT_PLAYER_ACTIVATED },
+    icon = iconLookup[4],
+    tooltip = BS.LC.Format(SI_ZONEDISPLAYTYPE13) .. " (" .. GetAdventureZoneDisplayName() .. ")",
+    customSettings = {
+        [1] = {
+            type = "checkbox",
+            name = ZO_CachedStrFormat(GetString(BARSTEWARD_NIGHT_MARKET_HIDE), GetAdventureZoneDisplayName()),
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_NM_NEXT_EVENT].Autohide or false
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_NM_NEXT_EVENT].Autohide = value
+                BS.RefreshBar(BS.W_NM_NEXT_EVENT)
+            end,
+            default = false,
+            width = "full"
+        }
+    }
+}
+
+BS.widgets[BS.W_NM_PORT] = {
+    -- v2.0.3
+    name = "archivePort",
+    update = function(widget)
+        widget:SetValue(BS.Icon("ava/ava_ram_slot_green"), "___")
+
+        return 0
+    end,
+    event = EVENT_PLAYER_ACTIVATED,
+    tooltip = zo_strformat(GetString(BARSTEWARD_NIGHT_MARKET_PORT), GetAdventureZoneDisplayName()),
+    icon = "icons/servicemappins/u49_poi_adventurezone_contentgrouptimed",
+    cooldown = true,
+    onLeftClick = function()
+        FastTravelToNode(BS.NIGHT_MARKET_NODE_INDEX)
+    end
+}

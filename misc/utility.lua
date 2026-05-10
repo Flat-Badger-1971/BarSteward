@@ -1710,4 +1710,13 @@ function BS.FindAbility(text, start, finish)
     end
 end
 
+function BS.ShowNormalScreen()
+    SCENE_MANAGER:Show("hudui")
+    SetGameCameraUIMode(false)
+end
+
+-- function BS.HideNightMarketHUD()
+--     ADVENTURE_ZONE_HUD_TRACKER_FRAGMENT:SetHiddenForReason("Disabled")
+-- end
+
 -- luacheck: pop

@@ -106,7 +106,14 @@ function BS.AddSettings(defaults, controls, vars, key)
         }
     end
 
-    if (key ~= BS.W_INFINITE_ARCHIVE_SCORE and key ~= BS.W_INFINITE_ARCHIVE_PROGRESS) then
+    local customHidden = {
+        [BS.W_INFINITE_ARCHIVE_SCORE] = true,
+        [BS.W_INFINITE_ARCHIVE_PROGRESS] = true,
+        [BS.W_NM_REP] = true,
+        [BS.W_NM_NEXT_EVENT] = true
+    }
+
+    if (not customHidden[key]) then
         if (defaults.Autohide ~= nil) then
             controls[#controls + 1] = {
                 type = "checkbox",

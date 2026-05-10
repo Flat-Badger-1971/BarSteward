@@ -719,7 +719,7 @@ BS.Defaults = {
         },
         [BS.W_DAILY_COUNT] = {
             Cat = cat.Activities,
-            Requires = "LibDailyResetTime"
+            Requires = "LibServerResetTime"
         },
         [BS.W_PLAYER_STATUS] = {
             Cat = cat.Character
@@ -762,7 +762,7 @@ BS.Defaults = {
         [BS.W_DAILY_PLEDGES] = {
             Autohide = false,
             Cat = cat.Activities,
-            Requires = "LibUndauntedPledges,LibDailyResetTime"
+            Requires = "LibUndauntedPledges,LibServerResetTime"
         },
         [BS.W_BOUNTY_AMOUNT] = {
             Autohide = false,
@@ -827,7 +827,7 @@ BS.Defaults = {
         [BS.W_ACHIEVEMENT_TRACKER] = {
             Cat = cat.Activities,
             Overall = true,
-            Requires = "LibDailyResetTime",
+            Requires = "LibServerResetTime",
             ShowPercent = true
         },
         [BS.W_GOLDEN_PURSUITS] = {
@@ -868,23 +868,23 @@ BS.Defaults = {
             Autohide = false
         },
         [BS.W_WEEKLY_TOMES] = {
-            Cat = cat.Activities,
+            Cat = cat.Tomes,
             HideLimit = false,
         },
         [BS.W_TOME_PROGRESS] = {
-            Cat = cat.Activities,
+            Cat = cat.Tomes,
             Progress = true
         },
         [BS.W_TOMES_SEASONAL] = {
-            Cat = cat.Activities,
+            Cat = cat.Tomes,
             HideLimit = false,
         },
         [BS.W_TOMES_SEASONAL_PROGRESS] = {
-            Cat = cat.Activities,
+            Cat = cat.Tomes,
             Progress = true
         },
         [BS.W_TOMES_SEASONAL_TIME] = {
-            Cat = cat.Activities,
+            Cat = cat.Tomes,
             ColourValues = "okc,wv,wc,dv,dc",
             DangerValue = 2,
             HideDaysWhenZero = true,
@@ -894,7 +894,7 @@ BS.Defaults = {
             WarningValue = 6
         },
         [BS.W_WEEKLY_TOMES_TIME] = {
-            Cat = cat.Activities,
+            Cat = cat.Tomes,
             ColourValues = "okc,wv,wc,dv,dc",
             DangerValue = 48,
             HideDaysWhenZero = false,
@@ -908,6 +908,17 @@ BS.Defaults = {
             Cat = cat.Currency,
             UseSeparators = false
         },
+        [BS.W_NM_REP] = {
+            Cat = cat.Activities,
+            UseSeparators = false
+        },
+        [BS.W_NM_NEXT_EVENT] = {
+            Cat = cat.Activities,
+            Timer = true
+        },
+        [BS.W_NM_PORT] = {
+            Cat = cat.Activities
+        }
     }
 }
 

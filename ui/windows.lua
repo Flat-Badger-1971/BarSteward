@@ -443,6 +443,7 @@ function BS.CreateWidgetOrderTool(bars)
         "OnClicked",
         function()
             frame.fragment:SetHiddenForReason("disabled", true)
+            BS.ShowNormalScreen()
         end
     )
 

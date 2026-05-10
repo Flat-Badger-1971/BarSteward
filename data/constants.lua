@@ -164,7 +164,10 @@ BarSteward = {
     W_INV_RECIPES = 157,
     W_INV_MOTIFS = 158,
     W_INV_STYLES = 159,
-    W_TOME_POINT_CACHES = 160
+    W_TOME_POINT_CACHES = 160,
+    W_NM_REP = 161,
+    W_NM_NEXT_EVENT = 162,
+    W_NM_PORT = 163
 }
 
 local BS = BarSteward
@@ -397,7 +400,8 @@ BS.CATNAMES = {
     Thievery = 12,
     Assistants = 13,
     InfiniteArchive = 14,
-    PvP = 15
+    PvP = 15,
+    Tomes = 16
 }
 
 BS.CATEGORIES = {
@@ -427,7 +431,8 @@ BS.CATEGORIES = {
         name = SI_ENDLESS_DUNGEON_HUD_TRACKER_TITLE,
         icon = "icons/poi/poi_endlessdungeon_complete"
     },
-    [BS.CATNAMES.PvP] = { name = SI_GROUPFINDERCATEGORY4, icon = "icons/u41_pvp_reward_container" }
+    [BS.CATNAMES.PvP] = { name = SI_GROUPFINDERCATEGORY4, icon = "icons/u41_pvp_reward_container" },
+    [BS.CATNAMES.Tomes] = { name = SI_MAIN_MENU_TAMRIEL_TOMES, icon = "tamrieltomes/timedactivitycategory_weekly_up" }
 }
 
 BS.ASSISTANTS = {
@@ -466,6 +471,7 @@ BS.ARMOURY_ASSISTANTS = {
 }
 
 BS.INFINITE_ARCHIVE_NODE_INDEX = 550
+BS.NIGHT_MARKET_NODE_INDEX = 616
 
 BS.INFINITE_ARCHIVE_MAX_COUNTS = {
     [ENDLESS_DUNGEON_COUNTER_TYPE_STAGE] = 3,

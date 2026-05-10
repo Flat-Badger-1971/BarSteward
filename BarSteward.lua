@@ -86,10 +86,11 @@ function BS.ContinueIntialising()
     end
 
     -- get a reference to LibDailyResetTime if it's installed
+    -- note this has been renamed to LibServerResetTime
     if (LibDailyResetTime) then
         BS.LDRT = LibDailyResetTime
     end
-    
+
     BS.RegisterSettings()
 
     -- create bars
