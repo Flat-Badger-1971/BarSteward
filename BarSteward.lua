@@ -147,6 +147,10 @@ function BS.ContinueIntialising()
                 BS.Vars.DungeonInfo.IsInDungeon = isInDungeon
                 BS.Vars.DungeonInfo.ChestCount = 0
             end
+
+            if (BS.NightMarket or "" == "") then
+                BS.NightMarket = GetAdventureZoneDisplayName()
+            end
         end
     )
 

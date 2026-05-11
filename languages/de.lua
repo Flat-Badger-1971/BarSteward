@@ -397,6 +397,7 @@ L("TIMER_WARNING", "Timer bleiben nach dem Abmelden oder Neuladen der Benutzerob
 L("TIMERS", "Countdown-Timer")
 L("TIMER_FORMAT", "Format Laufzeit")
 L("TIMER_FORMAT_TEXT", "<<1>> T <<2>> Std <<3>> Min")
+L("TIMER_FORMAT_TEXT_MINUTES_SECONDS", "<<1>> Min <<2>> Sek")
 L("TIMER_FORMAT_TEXT_NO_DAYS", "<<1>> Std <<2>> Min")
 L("TIMER_FORMAT_TEXT_WITH_SECONDS", "<<1>> T <<2>> Std <<3>> Min <<4>> Sek")
 L("TIMER_FORMAT_TEXT_WITH_SECONDS_NO_DAYS", "<<1>> Std <<2>> Min <<3>> Sek")

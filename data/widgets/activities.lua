@@ -1995,23 +1995,21 @@ BS.widgets[BS.W_NM_REP] = {
             function()
                 local this = BS.W_NM_REP
                 local useSeparators = BS.GetVar("UseSeparators", this)
-                local faction = GetUnitAdventureZoneFaction("player")
-                local score = GetAdventureZonePlayerReputation()
+                local faction = GetUnitAdventureZoneFaction("player") or 1
+                local score = GetAdventureZonePlayerReputation() or 0
                 local display = tostring(useSeparators and BS.AddSeparators(score) or score)
+                local icon = ZO_ADVENTURE_ZONE_FACTION_ICONS[faction]
+
                 widget:SetValue(display)
                 widget:SetColour(BS.GetColour(this, true))
-
-                if (event == "initial") then
-                    local icon = ZO_ADVENTURE_ZONE_FACTION_ICONS[faction]
-                    widget:SetIcon(icon)
-                end
+                widget:SetIcon(icon)
             end, 1200)
 
         return not inTheZone
     end,
     hideWhenEqual = true,
     event = { EVENT_ADVENTURE_ZONE_FACTION_REPUTATION_CHANGED, EVENT_PLAYER_ACTIVATED },
-    icon = function() return ZO_ADVENTURE_ZONE_FACTION_ICONS[GetUnitAdventureZoneFaction("player")] end,
+    icon = "Stats/u49_faction_ruckus_64",
     tooltip = BS.LC.Format(SI_LOOT_HISTORY_ADVENTURE_ZONE_FACTION_REPUTATION) ..
         " (" .. GetAdventureZoneDisplayName() .. ")",
     customSettings = {
@@ -2038,6 +2036,10 @@ local iconLookup = {
     [4] = "ava/ava_ram_slot_red"
 }
 
+function ttttt()
+    d(BS.SecondsToTime(78, true, true, false, BS.GetVar("Format", BS.W_NM_NEXT_EVENT), nil, true))
+end
+
 BS.widgets[BS.W_NM_NEXT_EVENT] = {
     -- v3.5.8
     name = "nightMarketNextEvent",
@@ -2047,7 +2049,11 @@ BS.widgets[BS.W_NM_NEXT_EVENT] = {
         local value, icon, location, title = BS.LC.Format(BARSTEWARD_NIGHT_MARKET_INACTIVE)
         local ttt = BS.LC.Format(SI_ZONEDISPLAYTYPE13) .. " (" .. GetAdventureZoneDisplayName() .. ")"
 
-        if (intheZone) then
+        if (BS.NightMarket or "" == "") then
+            BS.NightMarket = GetAdventureZoneDisplayName()
+        end
+
+        if (IsAdventureZoneActive() and intheZone) then
             local eventTiles = BS.LC:CountElements(ADVENTURE_ZONE_OVERVIEW_KEYBOARD.eventTileControls)
 
             for index = 1, eventTiles do
@@ -2060,7 +2066,9 @@ BS.widgets[BS.W_NM_NEXT_EVENT] = {
                     icon = iconLookup[index]
                     local startTime = GetAdventureZoneEventLocationStartTimestampMs(index)
                     local secondsRemaining = zo_max((startTime / ZO_ONE_SECOND_IN_MILLISECONDS) - GetTimeStamp(), 0)
-                    local time = BS.SecondsToTime(secondsRemaining, false, false, true, BS.GetVar("Format", this))
+                    local time = BS.SecondsToTime(secondsRemaining, true, true, false, BS.GetVar("Format", this), nil,
+                        true)
+
                     value = time
                     ttt = BS.COLOURS.Yellow:Colorize(ttt .. BS.LF .. BS.COLOURS.White:Colorize(location))
                     ttt = ttt .. BS.LF .. BS.COLOURS.White:Colorize(title)
@@ -2075,8 +2083,11 @@ BS.widgets[BS.W_NM_NEXT_EVENT] = {
             end
         end
 
+        if (icon) then
+            widget:SetIcon(icon)
+        end
+
         widget:SetValue(value)
-        widget:SetIcon(icon)
         widget:SetTooltip(ttt)
 
         return not intheZone

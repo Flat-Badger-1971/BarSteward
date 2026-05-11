@@ -656,3 +656,5 @@ BS.RecipeTypes = {
         { type = SPECIALIZED_ITEMTYPE_RECIPE_JEWELRYCRAFTING_SKETCH_FURNISHING, name = SI_SPECIALIZEDITEMTYPE178 }
     }
 }
+
+BS.NightMarket = GetAdventureZoneDisplayName()

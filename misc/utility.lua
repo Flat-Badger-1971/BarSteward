@@ -1,6 +1,6 @@
 local BS = BarSteward
 
-function BS.SecondsToTime(seconds, hideDays, hideHours, hideSeconds, format, hideDaysWhenZero)
+function BS.SecondsToTime(seconds, hideDays, hideHours, hideSeconds, format, hideDaysWhenZero, minSecOnly)
     return BS.LC.SecondsToTime(
         seconds,
         hideDays,
@@ -11,7 +11,8 @@ function BS.SecondsToTime(seconds, hideDays, hideHours, hideSeconds, format, hid
         BARSTEWARD_TIMER_FORMAT_TEXT,
         BARSTEWARD_TIMER_FORMAT_TEXT_NO_DAYS,
         BARSTEWARD_TIMER_FORMAT_TEXT_WITH_SECONDS_NO_DAYS,
-        BARSTEWARD_TIMER_FORMAT_TEXT_WITH_SECONDS
+        BARSTEWARD_TIMER_FORMAT_TEXT_WITH_SECONDS,
+        minSecOnly and BARSTEWARD_TIMER_FORMAT_TEXT_MINUTES_SECONDS or nil
     )
 end
 
