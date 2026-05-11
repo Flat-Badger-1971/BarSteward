@@ -2000,6 +2000,10 @@ BS.widgets[BS.W_NM_REP] = {
                 local display = tostring(useSeparators and BS.AddSeparators(score) or score)
                 local icon = ZO_ADVENTURE_ZONE_FACTION_ICONS[faction]
 
+                if (BS.NightMarket or "" == "") then
+                    BS.NightMarket = BS.NightMarket
+                end
+
                 widget:SetValue(display)
                 widget:SetColour(BS.GetColour(this, true))
                 widget:SetIcon(icon)
@@ -2011,11 +2015,11 @@ BS.widgets[BS.W_NM_REP] = {
     event = { EVENT_ADVENTURE_ZONE_FACTION_REPUTATION_CHANGED, EVENT_PLAYER_ACTIVATED },
     icon = "Stats/u49_faction_ruckus_64",
     tooltip = BS.LC.Format(SI_LOOT_HISTORY_ADVENTURE_ZONE_FACTION_REPUTATION) ..
-        " (" .. GetAdventureZoneDisplayName() .. ")",
+        " (" .. BS.NightMarket .. ")",
     customSettings = {
         [1] = {
             type = "checkbox",
-            name = ZO_CachedStrFormat(GetString(BARSTEWARD_NIGHT_MARKET_HIDE), GetAdventureZoneDisplayName()),
+            name = ZO_CachedStrFormat(GetString(BARSTEWARD_NIGHT_MARKET_HIDE), BS.NightMarket),
             getFunc = function()
                 return BS.Vars.Controls[BS.W_NM_REP].Autohide or false
             end,
@@ -2036,10 +2040,6 @@ local iconLookup = {
     [4] = "ava/ava_ram_slot_red"
 }
 
-function ttttt()
-    d(BS.SecondsToTime(78, true, true, false, BS.GetVar("Format", BS.W_NM_NEXT_EVENT), nil, true))
-end
-
 BS.widgets[BS.W_NM_NEXT_EVENT] = {
     -- v3.5.8
     name = "nightMarketNextEvent",
@@ -2047,10 +2047,10 @@ BS.widgets[BS.W_NM_NEXT_EVENT] = {
         local this = BS.W_NM_NEXT_EVENT
         local intheZone = IsInAdventureZone()
         local value, icon, location, title = BS.LC.Format(BARSTEWARD_NIGHT_MARKET_INACTIVE)
-        local ttt = BS.LC.Format(SI_ZONEDISPLAYTYPE13) .. " (" .. GetAdventureZoneDisplayName() .. ")"
+        local ttt = BS.LC.Format(SI_ZONEDISPLAYTYPE13) .. " (" .. BS.NightMarket1 .. ")"
 
         if (BS.NightMarket or "" == "") then
-            BS.NightMarket = GetAdventureZoneDisplayName()
+            BS.NightMarket = BS.NightMarket
         end
 
         if (IsAdventureZoneActive() and intheZone) then
@@ -2096,11 +2096,11 @@ BS.widgets[BS.W_NM_NEXT_EVENT] = {
     timer = 1000,
     event = { EVENT_PLAYER_ACTIVATED },
     icon = iconLookup[4],
-    tooltip = BS.LC.Format(SI_ZONEDISPLAYTYPE13) .. " (" .. GetAdventureZoneDisplayName() .. ")",
+    tooltip = BS.LC.Format(SI_ZONEDISPLAYTYPE13) .. " (" .. BS.NightMarket .. ")",
     customSettings = {
         [1] = {
             type = "checkbox",
-            name = ZO_CachedStrFormat(GetString(BARSTEWARD_NIGHT_MARKET_HIDE), GetAdventureZoneDisplayName()),
+            name = ZO_CachedStrFormat(GetString(BARSTEWARD_NIGHT_MARKET_HIDE), BS.NightMarket),
             getFunc = function()
                 return BS.Vars.Controls[BS.W_NM_NEXT_EVENT].Autohide or false
             end,
@@ -2123,7 +2123,7 @@ BS.widgets[BS.W_NM_PORT] = {
         return 0
     end,
     event = EVENT_PLAYER_ACTIVATED,
-    tooltip = zo_strformat(GetString(BARSTEWARD_NIGHT_MARKET_PORT), GetAdventureZoneDisplayName()),
+    tooltip = zo_strformat(GetString(BARSTEWARD_NIGHT_MARKET_PORT), BS.NightMarket),
     icon = "icons/servicemappins/u49_poi_adventurezone_contentgrouptimed",
     cooldown = true,
     onLeftClick = function()
