@@ -2047,10 +2047,10 @@ BS.widgets[BS.W_NM_NEXT_EVENT] = {
         local this = BS.W_NM_NEXT_EVENT
         local intheZone = IsInAdventureZone()
         local value, icon, location, title = BS.LC.Format(BARSTEWARD_NIGHT_MARKET_INACTIVE)
-        local ttt = BS.LC.Format(SI_ZONEDISPLAYTYPE13) .. " (" .. BS.NightMarket1 .. ")"
+        local ttt = BS.LC.Format(SI_ZONEDISPLAYTYPE13) .. " (" .. BS.NightMarket .. ")"
 
         if (BS.NightMarket or "" == "") then
-            BS.NightMarket = BS.NightMarket
+            BS.NightMarket = GetAdventureZoneDisplayName()
         end
 
         if (IsAdventureZoneActive() and intheZone) then
