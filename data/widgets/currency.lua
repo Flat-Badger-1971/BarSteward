@@ -372,7 +372,13 @@ BS.widgets[BS.W_TRANSMUTE_CRYSTALS] = {
 BS.widgets[BS.W_UNDAUNTED_KEYS] = {
     name = "undauntedKeys",
     update = function(widget)
-        widget:SetValue(GetCurrencyAmount(CURT_UNDAUNTED_KEYS, CURRENCY_LOCATION_ACCOUNT))
+        local value = GetCurrencyAmount(CURT_UNDAUNTED_KEYS, CURRENCY_LOCATION_ACCOUNT)
+
+        if (BS.GetVar("UseSeparators", BS.W_UNDAUNTED_KEYS) == true) then
+            value = BS.AddSeparators(value)
+        end
+
+        widget:SetValue(value)
         widget:SetColour(BS.GetColour(BS.W_UNDAUNTED_KEYS, true))
 
         local tt =
@@ -450,7 +456,13 @@ BS.widgets[BS.W_IMPERIAL_FRAGMENTS] = {
         end
 
         if (update) then
-            widget:SetValue(GetCurrencyAmount(CURT_IMPERIAL_FRAGMENTS, CURRENCY_LOCATION_ACCOUNT))
+            local value = GetCurrencyAmount(CURT_IMPERIAL_FRAGMENTS, CURRENCY_LOCATION_ACCOUNT)
+
+            if (BS.GetVar("UseSeparators", BS.W_IMPERIAL_FRAGMENTS) == true) then
+                value = BS.AddSeparators(value)
+            end
+
+            widget:SetValue(value)
             widget:SetColour(BS.GetColour(BS.W_IMPERIAL_FRAGMENTS, true))
 
             local tt =

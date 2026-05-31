@@ -112,7 +112,8 @@ BS.Defaults = {
             Bar = 1,
             Cat = cat.Currency,
             SoundWhenEquals = false,
-            SoundWhenEqualsSound = "Daily Login Reward Claim Fanfare"
+            SoundWhenEqualsSound = "Daily Login Reward Claim Fanfare",
+            UseSeparators = false
         },
         [BS.W_WRIT_VOUCHERS] = {
             Bar = 1,
