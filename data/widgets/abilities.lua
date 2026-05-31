@@ -25,15 +25,12 @@ BS.widgets[BS.W_ACTIVE_BAR] = {
         local mainIcon = BS.GetVar("MainIcon", this) or BS.Defaults.MainBarIcon
         local backIcon = BS.GetVar("BackIcon", this) or BS.Defaults.BackBarIcon
         local icon = activeWeaponPair == ACTIVE_WEAPON_PAIR_BACKUP and backIcon or mainIcon
-        local text =
-            activeWeaponPair == ACTIVE_WEAPON_PAIR_BACKUP and GetString(BARSTEWARD_BACK_BAR) or
-            GetString(BARSTEWARD_MAIN_BAR)
+        local text = activeWeaponPair == ACTIVE_WEAPON_PAIR_BACKUP and GetString(BARSTEWARD_BACK_BAR) or GetString(BARSTEWARD_MAIN_BAR)
 
         if (event == EVENT_PREPARE_FOR_JUMP and BS.GetVar("Warn", this)) then
             if (not ignoreTypes[instanceDisplayType]) then
                 if
-                    (activeWeaponPair == ACTIVE_WEAPON_PAIR_BACKUP or
-                        (activeWeaponPair == ACTIVE_WEAPON_PAIR_MAIN and not BS.GetVar("WarnOnBackOnly", this)))
+                    (activeWeaponPair == ACTIVE_WEAPON_PAIR_BACKUP or (activeWeaponPair == ACTIVE_WEAPON_PAIR_MAIN and not BS.GetVar("WarnOnBackOnly", this)))
                 then
                     zo_callLater(
                         function()
@@ -559,6 +556,7 @@ BS.widgets[BS.W_CHAMPION_POINTS] = {
 
             if (foundEmpty) then
                 ttt = ttt .. BS.LF .. BS.LF .. GetString(BARSTEWARD_UNSLOTTED)
+
                 for discipline, empty in pairs(emptySlots) do
                     ttt = ttt .. BS.LF
                     ttt = ttt .. icons[discipline] .. " " .. BS.LC.Format(discipline) .. " - " .. empty

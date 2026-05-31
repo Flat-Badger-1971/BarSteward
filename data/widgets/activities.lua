@@ -605,10 +605,14 @@ BS.widgets[BS.W_ACHIEVEMENT_POINTS] = {
         local this = BS.W_ACHIEVEMENT_POINTS
         local totalPoints = GetTotalAchievementPoints()
         local earnedPoints = GetEarnedAchievementPoints()
-        local value = earnedPoints
+        local value
 
         if (BS.GetVar("ShowPercent", this)) then
             value = BS.LC.ToPercent(earnedPoints, totalPoints, true)
+        elseif (BS.Vars.Controls[this].UseSeparators == true) then
+            value = BS.AddSeparators(earnedPoints)
+        else
+            value = earnedPoints
         end
 
         widget:SetValue(value)

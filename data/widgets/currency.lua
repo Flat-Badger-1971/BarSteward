@@ -226,16 +226,19 @@ BS.widgets[BS.W_CROWNS] = {
 }
 
 BS.widgets[BS.W_TRADE_BARS] = {
-    name = "eventTickets",
+    name = "tradeBars",
     update = function(widget)
         local this = BS.W_TRADE_BARS
-        local tickets = GetCurrencyAmount(CURT_TRADE_BARS, CURRENCY_LOCATION_ACCOUNT)
-        local value = tickets
-        local widthValue = tickets
+        local bars = GetCurrencyAmount(CURT_TRADE_BARS, CURRENCY_LOCATION_ACCOUNT)
+        local value = bars
         local colour = BS.GetColour(this, true)
 
+        if (BS.Vars.Controls[this].UseSeparators == true) then
+            bars = BS.AddSeparators(bars)
+        end
+
         widget:SetColour(colour)
-        widget:SetValue(value, widthValue)
+        widget:SetValue(value)
 
         local tt = BS.LC.Format(GetCurrencyName(CURT_TRADE_BARS, true, true)) ..
             BS.LF .. getcrownStoreCurrencies(true, this)
@@ -309,8 +312,10 @@ BS.widgets[BS.W_TRANSMUTE_CRYSTALS] = {
     update = function(widget)
         local this = BS.W_TRANSMUTE_CRYSTALS
         local crystals = GetCurrencyAmount(CURT_CHAOTIC_CREATIA, CURRENCY_LOCATION_ACCOUNT)
+        local crystalsText = BS.Vars.Controls[this].UseSeparators == true and BS.AddSeparators(crystals) or tostring(crystals)
         local maxCrystals = GetMaxPossibleCurrency(CURT_CHAOTIC_CREATIA, CURRENCY_LOCATION_ACCOUNT)
-        local value = crystals .. (BS.GetVar("HideLimit", this) and "" or ("/" .. tostring(maxCrystals)))
+        local maxCrystalsText = BS.Vars.Controls[this].UseSeparators == true and BS.AddSeparators(maxCrystals) or tostring(maxCrystals)
+        local value = crystalsText .. (BS.GetVar("HideLimit", this) and "" or ("/" .. maxCrystalsText))
         local pc = BS.LC.ToPercent(crystals, 1000)
         local colour = BS.GetColour(this, true)
         local warningValue, dangerValue = BS.GetVar("WarningValue", this), BS.GetVar("DangerValue", this)

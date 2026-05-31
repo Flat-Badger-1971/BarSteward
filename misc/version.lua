@@ -283,12 +283,12 @@ function BS.VersionCheck()
     if (needsUpdate(3508)) then
         local cat = BS.CATNAMES
 
-        BS.Vars.Controls[BS.W_WEEKLY_TOMES].Cat = cat.Tomes
-        BS.Vars.Controls[BS.W_TOME_PROGRESS].Cat = cat.Tomes
-        BS.Vars.Controls[BS.W_TOMES_SEASONAL].Cat = cat.Tomes
-        BS.Vars.Controls[BS.W_TOMES_SEASONAL_PROGRESS].Cat = cat.Tomes
-        BS.Vars.Controls[BS.W_TOMES_SEASONAL_TIME].Cat = cat.Tomes
-        BS.Vars.Controls[BS.W_WEEKLY_TOMES_TIME].Cat = cat.Tomes
+        if (BS.Vars.Controls[BS.W_WEEKLY_TOMES]) then BS.Vars.Controls[BS.W_WEEKLY_TOMES].Cat = cat.Tomes end
+        if (BS.Vars.Controls[BS.W_TOME_PROGRESS]) then BS.Vars.Controls[BS.W_TOME_PROGRESS].Cat = cat.Tomes end
+        if (BS.Vars.Controls[BS.W_TOMES_SEASONAL]) then BS.Vars.Controls[BS.W_TOMES_SEASONAL].Cat = cat.Tomes end
+        if (BS.Vars.Controls[BS.W_TOMES_SEASONAL_PROGRESS]) then BS.Vars.Controls[BS.W_TOMES_SEASONAL_PROGRESS].Cat = cat.Tomes end
+        if (BS.Vars.Controls[BS.W_TOMES_SEASONAL_TIME]) then BS.Vars.Controls[BS.W_TOMES_SEASONAL_TIME].Cat = cat.Tomes end
+        if (BS.Vars.Controls[BS.W_WEEKLY_TOMES_TIME]) then BS.Vars.Controls[BS.W_WEEKLY_TOMES_TIME].Cat = cat.Tomes end
     end
 end
 

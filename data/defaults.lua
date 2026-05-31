@@ -75,7 +75,8 @@ BS.Defaults = {
         [BS.W_TRADE_BARS] = {
             Bar = 1,
             Cat = cat.Currency,
-            ColourValues = "c,dv,dc,mv,mc"
+            ColourValues = "c,dv,dc,mv,mc",
+            UseSeparators = false
         },
         [BS.W_GOLD] = {
             Bar = 1,
@@ -104,7 +105,8 @@ BS.Defaults = {
             HideLimit = false,
             Invert = false,
             ShowPercent = false,
-            WarningValue = 200
+            WarningValue = 200,
+            UseSeparators = false
         },
         [BS.W_UNDAUNTED_KEYS] = {
             Bar = 1,
@@ -397,7 +399,8 @@ BS.Defaults = {
         },
         [BS.W_ACHIEVEMENT_POINTS] = {
             Cat = cat.Activities,
-            ShowPercent = false
+            ShowPercent = false,
+            UseSeparators = false
         },
         [BS.W_PLEDGES_TIME] = {
             Cat = cat.Activities,
