@@ -824,10 +824,9 @@ BS.widgets[BS.W_UNKNOWN_WRIT_MOTIFS] = {
                             local motifName = zo_strformat("<<C:1>> <<m:2>>", styleName, chapterName)
                             local colour = GetItemQualityColor(writData.itemQuality)
                             local name = colour:Colorize(motifName)
-                            local motifInfo = LibCharacterKnowledgeInternal.GetStyleMotifItems(writData.motifNumber)
 
-                            if (motifInfo) then
-                                name = (motifInfo.number) .. ". " .. name
+                            if (writData.motifNumber) then
+                                name = (writData.motifNumber) .. ". " .. name
                             else
                                 name = "**. " .. name
                             end

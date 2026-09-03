@@ -361,23 +361,27 @@ BS.widgets[BS.W_SOUL_GEMS] = {
                 end
             end
         end
-        --
+
+
+        local all = filledCount + crownCount
+        local widthValue = filledCount + crownCount
+        local displayIcon = filledIcon
 
         if (BS.GetVar("UseSeparators", this) == true) then
             filledCount = BS.AddSeparators(filledCount)
             emptyCount = BS.AddSeparators(emptyCount)
             crownCount = BS.AddSeparators(crownCount)
+            all = BS.AddSeparators(all)
         end
 
-        local displayValue = filledCount + crownCount
-        local widthValue = filledCount + crownCount
-        local displayIcon = filledIcon
-        local both = BS.COLOURS.Green:Colorize(filledCount + crownCount) .. "/" .. emptyCount
+        local both = BS.COLOURS.Green:Colorize(all) .. "/" .. emptyCount
 
         if (includeCrown) then
             both = BS.COLOURS.Blue:Colorize(crownCount) ..
                 "/" .. BS.COLOURS.Green:Colorize(filledCount) .. "/" .. emptyCount
         end
+
+        local displayValue
 
         if (BS.GetVar("GemType", this) == GetString(BARSTEWARD_EMPTY)) then
             displayValue = emptyCount
@@ -385,10 +389,11 @@ BS.widgets[BS.W_SOUL_GEMS] = {
             displayIcon = emptyIcon
         elseif (BS.GetVar("GemType", this) == GetString(BARSTEWARD_BOTH)) then
             displayValue = both
-            widthValue = filledCount + crownCount .. "/" .. emptyCount
 
             if (includeCrown) then
                 widthValue = crownCount .. "/" .. filledCount .. "/" .. emptyCount
+            else
+                widthValue = filledCount .. "/" .. emptyCount
             end
         end
 
