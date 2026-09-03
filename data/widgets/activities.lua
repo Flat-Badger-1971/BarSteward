@@ -2002,7 +2002,7 @@ BS.widgets[BS.W_NM_REP] = {
                 local faction = GetUnitAdventureZoneFaction("player") or 1
                 local score = GetAdventureZonePlayerReputation() or 0
                 local display = tostring(useSeparators and BS.AddSeparators(score) or score)
-                local icon = ZO_ADVENTURE_ZONE_FACTION_ICONS[faction]
+                local icon = (faction > 0) and ZO_ADVENTURE_ZONE_FACTION_ICONS[faction] or "icons/ava/ava_faction_undecided_32.dds"
 
                 if (BS.NightMarket or "" == "") then
                     BS.NightMarket = BS.NightMarket
@@ -2010,6 +2010,7 @@ BS.widgets[BS.W_NM_REP] = {
 
                 widget:SetValue(display)
                 widget:SetColour(BS.GetColour(this, true))
+                d(icon)
                 widget:SetIcon(icon)
             end, 1200)
 
@@ -2018,8 +2019,7 @@ BS.widgets[BS.W_NM_REP] = {
     hideWhenEqual = true,
     event = { EVENT_ADVENTURE_ZONE_FACTION_REPUTATION_CHANGED, EVENT_PLAYER_ACTIVATED },
     icon = "Stats/u49_faction_ruckus_64",
-    tooltip = BS.LC.Format(SI_LOOT_HISTORY_ADVENTURE_ZONE_FACTION_REPUTATION) ..
-        " (" .. BS.NightMarket .. ")",
+    tooltip = BS.LC.Format(SI_LOOT_HISTORY_ADVENTURE_ZONE_FACTION_REPUTATION),
     customSettings = {
         [1] = {
             type = "checkbox",
@@ -2100,7 +2100,7 @@ BS.widgets[BS.W_NM_NEXT_EVENT] = {
     timer = 1000,
     event = { EVENT_PLAYER_ACTIVATED },
     icon = iconLookup[4],
-    tooltip = BS.LC.Format(SI_ZONEDISPLAYTYPE13) .. " (" .. BS.NightMarket .. ")",
+    tooltip = BS.LC.Format(SI_ZONEDISPLAYTYPE13),
     customSettings = {
         [1] = {
             type = "checkbox",

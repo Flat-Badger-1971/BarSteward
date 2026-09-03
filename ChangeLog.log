@@ -1,6 +1,12 @@
+[color=#ff9900][b]Version: 3.5.11 ---------------[/b][/color]
+Update 50 changes
+Night market widget bugfix
+New character difficulty widget added courtesy of Shadowmight
+
 [color=#ff9900][b]Version: 3.5.10 ---------------[/b][/color]
 Seperator option added to other currency widgets
 Add error handling for version update
+Fix for night market text missing
 
 [color=#ff9900][b]Version: 3.5.9 ---------------[/b][/color]
 Night market widget bugfixes

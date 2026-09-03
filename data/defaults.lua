@@ -922,7 +922,10 @@ BS.Defaults = {
         },
         [BS.W_NM_PORT] = {
             Cat = cat.Activities
-        }
+        },
+        [BS.W_CHARACTER_DIFF] = {
+            Cat = cat.Character
+        },
     }
 }
 

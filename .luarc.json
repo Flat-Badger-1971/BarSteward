@@ -19,7 +19,8 @@
         "esoapi/local.lua",
         "C:/Users/antho/Documents/Elder Scrolls Online/live/AddOns/LLS_Addons/eso-api-update-49/library",
         "C:/Users/antho/Documents/Elder Scrolls Online/live/AddOns/LLS_Addons/eso-api/library",
-        "C:/Users/antho/Documents/Elder Scrolls Online/live/AddOns/LLS_Addons/eso-api-update-48/library"
+        "C:/Users/antho/Documents/Elder Scrolls Online/live/AddOns/LLS_Addons/eso-api-update-48/library",
+        "C:/Users/antho/Documents/Elder Scrolls Online/live/AddOns/LLS_Addons/eso-api-update-50/library"
     ],
-    "workspace.preloadFileSize": 700
+    "workspace.preloadFileSize": 600
 }

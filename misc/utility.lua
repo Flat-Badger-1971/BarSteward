@@ -988,7 +988,13 @@ function BS.RegenerateAllBars(barsToRegenerate)
     end
 end
 
+local unknownIcon = "/esoui/art/antiquities/digsite_unknown.dds"
+
 function BS.FormatIcon(path)
+    if (not path) then
+        return unknownIcon
+    end
+    
     if (path:find("BarSteward")) then
         return path
     end

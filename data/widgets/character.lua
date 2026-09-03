@@ -1103,3 +1103,47 @@ BS.widgets[BS.W_ENLIGHTENED] = {
     icon = "icons/quest_elsweyr_evilcadwell_head",
     tooltip = GetString(BARSTEWARD_ENLIGHTENED)
 }
+
+local function getChallengeDifficultyIcon(challengeDifficultyLevel)
+    local DIFFICULTY_NAME_LOOKUP =
+    {
+        [OVERLAND_DIFFICULTY_TYPE_BASEGAME] = "basegame",
+        [OVERLAND_DIFFICULTY_TYPE_JOURNEYMAN] = "journeyman",
+        [OVERLAND_DIFFICULTY_TYPE_ADVENTURER] = "adventurer",
+        [OVERLAND_DIFFICULTY_TYPE_VETERAN] = "veteran",
+    }
+    local difficultyName = DIFFICULTY_NAME_LOOKUP[challengeDifficultyLevel]
+
+    return string.format("ChallengeDifficulty/challengeDifficulty_%s_down_disabled.dds", difficultyName)
+end
+
+BS.widgets[BS.W_CHARACTER_DIFF] = {
+    name = "characterDifficulty",
+    update = function(widget)
+        local characterDifficultyLevel = GetUnitOverlandDifficulty("player") or 0
+        local characterDifficultyName = GetString("SI_OVERLANDDIFFICULTYTYPE", characterDifficultyLevel)
+        local icon = getChallengeDifficultyIcon(characterDifficultyLevel)
+        local characterDifficultyTooltip = GetOverlandDifficultyEffects(characterDifficultyLevel)
+        local tooltip = BS.LC.Format(SI_CHALLENGE_DIFFICULTY_REQUEST_CHANGE_LABEL) .. BS.LF
+
+        tooltip = tooltip .. characterDifficultyTooltip
+
+        widget:SetValue(characterDifficultyName)
+        widget:SetIcon(icon)
+        widget:SetTooltip(tooltip)
+
+        return characterDifficultyName
+    end,
+    event = { EVENT_OVERLAND_DIFFICULTY_CHANGED },
+    icon = "ChallengeDifficulty/challengeDifficulty_basegame_down_disabled.dds",
+    tooltip = BS.LC.Format(SI_CHALLENGE_DIFFICULTY_TOOLTIP_DIFFICULTY_TAB),
+    hideWhenEqual = 0,
+    onLeftClick = function()
+        if (not IsInGamepadPreferredMode()) then
+            SYSTEMS:GetObject("mainMenu"):ToggleCategory(MENU_CATEGORY_CHARACTER)
+            ZO_KEYBOARD_UPCOMING_LEVEL_UP_REWARDS.OnGoToDifficultyButtonClicked()
+        else
+            SCENE_MANAGER:Show("LevelUpRewardsClaimGamepad")
+        end
+    end,
+}
