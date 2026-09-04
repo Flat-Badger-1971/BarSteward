@@ -425,6 +425,7 @@ L(
 L("USE_ICONS", "Use Icons")
 L("USE_PROGRESS", "Use progress bar")
 L("USE_RAG", "Use red/amber/green progress colours")
+L("USE_WHITE", "Use white icons")
 L("USE_WRITWORTHY", "Use WritWorthy for writ summaries")
 L(
     "USE_WRITWORTHY_TOOLTIP",

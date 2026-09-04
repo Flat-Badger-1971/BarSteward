@@ -423,14 +423,15 @@ L("UNSLOTTED_OPTION", "Anzahl unbenutzter Plätze anzeigen")
 L("UNSLOTTED_TOOLTIP", "Anzahl der leeren Championpunktslätze anzeigen")
 L("UNSPENT", "nicht verwendet")
 L("USE_ALTERNATE", "Alternatives Symbol verwenden")
-L("USE_ICONS", "Symbole benutzen")
-L("USE_PROGRESS", "Fortschrittsanzeige benutzen")
-L("USE_RAG", "Fortschrittsfarben rot/gelb/grün benutzen")
 L("USE_FONT_CORRECTION", "Schriftgrößenkorrektur benutzen(experimentell)")
 L(
     "USE_FONT_CORRECTION_TOOLTIP",
     "Bei kleinerer Schriftgröße können Werte der Elemente abgeschnitten werden. Mit dieser Einstellung wird versucht das zu kompensieren."
 )
+L("USE_ICONS", "Symbole benutzen")
+L("USE_PROGRESS", "Fortschrittsanzeige benutzen")
+L("USE_RAG", "Fortschrittsfarben rot/gelb/grün benutzen")
+L("USE_WHITE", "Weiße Symbole benutzen")
 L("USE_WRITWORTHY", "WritWorthy für Schrieb-Zusammenfassungen benutzen")
 L(
     "USE_WRITWORTHY_TOOLTIP",

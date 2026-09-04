@@ -423,12 +423,13 @@ L("UNSLOTTED_OPTION", "Afficher le nombre sans emplacement")
 L("UNSLOTTED_TOOLTIP", "Affiche le nombre d'emplacements de la barre de points de champion vides.")
 L("UNSPENT", "Non dépensé")
 L("USE_ALTERNATE", "Utiliser une icône alternative")
-L("USE_ICONS", "Use Icons")
 L("USE_FONT_CORRECTION", "Corriger la taille de la police (expérimental)")
 L(
     "USE_FONT_CORRECTION_TOOLTIP",
     "Lorsque la taille de la police est inférieure à la valeur par défaut, certains widgets peuvent voir leurs valeurs tronquées. Ce paramètre tente de compenser cela."
 )
+L("USE_ICONS", "Utiliser des icônes")
+L("USE_WHITE", "Utiliser des icônes blanches")
 L("USE_WRITWORTHY", "Utiliser WritWorthy pour les commandes")
 L(
     "USE_WRITWORTHY_TOOLTIP",

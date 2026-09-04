@@ -1104,7 +1104,7 @@ BS.widgets[BS.W_ENLIGHTENED] = {
     tooltip = GetString(BARSTEWARD_ENLIGHTENED)
 }
 
-local function getChallengeDifficultyIcon(challengeDifficultyLevel)
+local function getChallengeDifficultyIcon(challengeDifficultyLevel, useWhite)
     local DIFFICULTY_NAME_LOOKUP =
     {
         [OVERLAND_DIFFICULTY_TYPE_BASEGAME] = "basegame",
@@ -1113,8 +1113,9 @@ local function getChallengeDifficultyIcon(challengeDifficultyLevel)
         [OVERLAND_DIFFICULTY_TYPE_VETERAN] = "veteran",
     }
     local difficultyName = DIFFICULTY_NAME_LOOKUP[challengeDifficultyLevel]
+    local iconString = useWhite and "ChallengeDifficulty/gamepad/gp_challengeDifficulty_%s.dds" or "ChallengeDifficulty/challengeDifficulty_%s_down.dds"
 
-    return string.format("ChallengeDifficulty/challengeDifficulty_%s_down_disabled.dds", difficultyName)
+    return string.format(iconString, difficultyName)
 end
 
 BS.widgets[BS.W_CHARACTER_DIFF] = {
@@ -1122,7 +1123,8 @@ BS.widgets[BS.W_CHARACTER_DIFF] = {
     update = function(widget)
         local characterDifficultyLevel = GetUnitOverlandDifficulty("player") or 0
         local characterDifficultyName = GetString("SI_OVERLANDDIFFICULTYTYPE", characterDifficultyLevel)
-        local icon = getChallengeDifficultyIcon(characterDifficultyLevel)
+        local useWhite = BS.GetVar("UseWhite", BS.W_CHARACTER_DIFF)
+        local icon = getChallengeDifficultyIcon(characterDifficultyLevel, useWhite)
         local characterDifficultyTooltip = GetOverlandDifficultyEffects(characterDifficultyLevel)
         local tooltip = BS.LC.Format(SI_CHALLENGE_DIFFICULTY_REQUEST_CHANGE_LABEL) .. BS.LF
 
@@ -1135,7 +1137,7 @@ BS.widgets[BS.W_CHARACTER_DIFF] = {
         return characterDifficultyName
     end,
     event = { EVENT_OVERLAND_DIFFICULTY_CHANGED },
-    icon = "ChallengeDifficulty/challengeDifficulty_basegame_down_disabled.dds",
+    icon = "ChallengeDifficulty/challengeDifficulty_basegame_up.dds",
     tooltip = BS.LC.Format(SI_CHALLENGE_DIFFICULTY_TOOLTIP_DIFFICULTY_TAB),
     hideWhenEqual = 0,
     onLeftClick = function()
@@ -1146,4 +1148,19 @@ BS.widgets[BS.W_CHARACTER_DIFF] = {
             SCENE_MANAGER:Show("LevelUpRewardsClaimGamepad")
         end
     end,
+    customSettings = {
+        [1] = {
+            type = "checkbox",
+            name = GetString(BARSTEWARD_USE_WHITE),
+            getFunc = function()
+                return BS.Vars.Controls[BS.W_CHARACTER_DIFF].UseWhite or false
+            end,
+            setFunc = function(value)
+                BS.Vars.Controls[BS.W_CHARACTER_DIFF].UseWhite = value
+                BS.RefreshWidget(BS.W_CHARACTER_DIFF)
+            end,
+            width = "full",
+            default = false
+        }
+    }
 }
