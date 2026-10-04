@@ -91,11 +91,6 @@ function BS.ContinueIntialising()
         BS.LDRT = LibDailyResetTime
     end
 
-    -- get a reference to LibGPS
-    if (LibGPS3) then
-        BS.LGPS = LibGPS3
-    end
-
     BS.RegisterSettings()
 
     -- create bars
@@ -153,7 +148,9 @@ function BS.ContinueIntialising()
                 BS.Vars.DungeonInfo.ChestCount = 0
             end
 
-            BS.NightMarket = BS.GetEventZoneName()
+            if (BS.NightMarket or "" == "") then
+                BS.NightMarket = GetAdventureZoneDisplayName()
+            end
         end
     )
 

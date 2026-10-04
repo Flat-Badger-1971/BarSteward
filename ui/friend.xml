@@ -5,6 +5,10 @@
                 <Button name="$(parent)Check" inherits="ZO_CheckButton">
                     <Anchor point="LEFT"/>
                 </Button>
+                <Button name="$(parent)Name" mouseEnabled="true" text="">
+                    <Anchor point="LEFT" offsetX="36"/>
+                    <Dimensions x="540" y="32"/>
+                </Button>
             </Controls>
         </Control>
     </Controls>

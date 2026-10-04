@@ -1119,7 +1119,6 @@ local function getChallengeDifficultyIcon(challengeDifficultyLevel, useWhite)
 end
 
 BS.widgets[BS.W_CHARACTER_DIFF] = {
-    -- v3.5.11
     name = "characterDifficulty",
     update = function(widget)
         local characterDifficultyLevel = GetUnitOverlandDifficulty("player") or 0
@@ -1138,7 +1137,7 @@ BS.widgets[BS.W_CHARACTER_DIFF] = {
         return characterDifficultyName
     end,
     event = { EVENT_OVERLAND_DIFFICULTY_CHANGED },
-    icon = "ChallengeDifficulty/challengeDifficulty_basegame_up",
+    icon = "ChallengeDifficulty/challengeDifficulty_basegame_up.dds",
     tooltip = BS.LC.Format(SI_CHALLENGE_DIFFICULTY_TOOLTIP_DIFFICULTY_TAB),
     hideWhenEqual = 0,
     onLeftClick = function()
@@ -1159,79 +1158,6 @@ BS.widgets[BS.W_CHARACTER_DIFF] = {
             setFunc = function(value)
                 BS.Vars.Controls[BS.W_CHARACTER_DIFF].UseWhite = value
                 BS.RefreshWidget(BS.W_CHARACTER_DIFF)
-            end,
-            width = "full",
-            default = false
-        }
-    }
-}
-
-local function formatCoords(coord)
-    local n = zo_round(coord * 10000) / 100
-
-    return BS.COLOURS.White:Colorize(("%05.02f"):format(n))
-end
-
-local coordsFormat = "<<1>><<2>>  <<3>><<4>>"
-
-BS.widgets[BS.W_CHAR_COORDS] = {
-    name = "characterCoords",
-    update = function(widget)
-        local xText = BS.COLOURS.Green:Colorize("x: ")
-        local yText = BS.COLOURS.Green:Colorize("y: ")
-        local globalX, globalY = 0, 0
-        local currentMapX, currentMapY = 0, 0
-
-        if (BS.LGPS) then
-            local measurement = BS.LGPS:GetCurrentMapMeasurement()
-
-            if (measurement:IsValid()) then
-                globalX, globalY = measurement:ToGlobal(GetMapPlayerPosition("player"))
-                currentMapX, currentMapY = measurement:ToLocal(globalX, globalY)
-            end
-        end
-
-        local globalFormatted = ZO_CachedStrFormat(coordsFormat, xText, formatCoords(globalX), yText, formatCoords(globalY))
-        local currentMapFormatted = ZO_CachedStrFormat(coordsFormat, xText, formatCoords(currentMapX), yText, formatCoords(currentMapY))
-
-        widget:SetValue(BS.GetVar("CurrentMap", BS.W_CHAR_COORDS) and currentMapFormatted or globalFormatted)
-
-        local ttt = BS.LC.Format(BARSTEWARD_COORDS_PLAYER) .. BS.LF
-        ttt = ttt .. BS.COLOURS.White:Colorize(BS.LC.Format(BARSTEWARD_COORDS_WORLD_MAP) .. ": " .. globalFormatted) .. BS.LF
-        ttt = ttt .. BS.COLOURS.White:Colorize(BS.LC.Format(BARSTEWARD_COORDS_CURRENT_MAP) .. ": " .. currentMapFormatted)
-
-        widget:SetTooltip(ttt)
-
-        return globalFormatted
-    end,
-    timer = 500,
-    icon = "icons/quest_shadowfen_compass",
-    tooltip = BS.LC.Format(BARSTEWARD_COORDS_PLAYER),
-    customSettings = {
-        [1] = {
-            type = "checkbox",
-            name = GetString(BARSTEWARD_COORDS_CURRENT_MAP_SHOW),
-            getFunc = function()
-                return BS.Vars.Controls[BS.W_CHAR_COORDS].CurrentMap or false
-            end,
-            setFunc = function(value)
-                BS.Vars.Controls[BS.W_CHAR_COORDS].CurrentMap = value
-                BS.Vars.Controls[BS.W_CHAR_COORDS].UseGlobal = not value
-                BS.RefreshWidget(BS.W_CHAR_COORDS)
-            end,
-            width = "full",
-            default = false
-        },
-        [2] = {
-            type = "checkbox",
-            name = GetString(BARSTEWARD_COORDS_WORLD_MAP_SHOW),
-            getFunc = function()
-                return BS.Vars.Controls[BS.W_CHAR_COORDS].UseGlobal or false
-            end,
-            setFunc = function(value)
-                BS.Vars.Controls[BS.W_CHAR_COORDS].UseGlobal = value
-                BS.Vars.Controls[BS.W_CHAR_COORDS].CurrentMap = not value
-                BS.RefreshWidget(BS.W_CHAR_COORDS)
             end,
             width = "full",
             default = false

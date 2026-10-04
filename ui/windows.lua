@@ -697,6 +697,168 @@ local function CreateTool(heading, toolName, varName, setupFunc, guild)
     return frame
 end
 
+function BS.ShowAchievementTrackerManager()
+    if (not BS.achievementTrackerManager) then
+        local name = BS.Name .. "_AchievementTrackerManager"
+        local frame = WINDOW_MANAGER:CreateTopLevelWindow(name)
+        frame:SetDimensions(700, 720)
+        frame:SetAnchor(CENTER, GuiRoot, CENTER)
+        frame:SetHidden(true)
+        frame:SetMouseEnabled(true)
+        frame:SetKeyboardEnabled(true)
+
+        frame.bgc = WINDOW_MANAGER:CreateControl(name .. "_background", frame, CT_TEXTURE)
+        frame.bgc:SetAnchorFill(frame)
+        frame.bgc:SetTexture("/esoui/art/miscellaneous/centerscreen_left.dds")
+
+        frame.bge = WINDOW_MANAGER:CreateControl(name .. "_edges", frame, CT_TEXTURE)
+        frame.bge:SetDimensions(24, frame:GetHeight())
+        frame.bge:SetAnchor(TOPLEFT, frame.bgc, TOPRIGHT)
+        frame.bge:SetTexture("/esoui/art/miscellaneous/centerscreen_right.dds")
+
+        frame.heading = WINDOW_MANAGER:CreateControl(name .. "_heading", frame, CT_LABEL)
+        frame.heading:SetFont("${BOLD_FONT}|24|soft-shadow-thick")
+        frame.heading:SetColor(0.9, 0.9, 0.9, 1)
+        frame.heading:SetAnchor(TOPLEFT, frame, TOPLEFT, 50, 45)
+        frame.heading:SetDimensions(600, 32)
+        frame.heading:SetText(GetString(BARSTEWARD_ACHIEVEMENT_TRACKER_MANAGE))
+
+        frame.divider = WINDOW_MANAGER:CreateControl(name .. "_divider", frame, CT_TEXTURE)
+        frame.divider:SetDimensions(700, 4)
+        frame.divider:SetAnchor(TOPLEFT, frame.heading, BOTTOMLEFT, -50, 10)
+        frame.divider:SetTexture("/esoui/art/campaign/campaignbrowser_divider_short.dds")
+
+        local function setupAchievementRow(rowControl, data)
+            local checkBox = rowControl:GetNamedChild("Check")
+            local nameButton = rowControl:GetNamedChild("Name")
+            local label = data.name
+
+            if (data.category and data.category ~= "") then
+                label = string.format("%s - %s", data.category, data.name)
+            end
+
+            if (data.progress) then
+                label = string.format("%s  (%s)", label, data.progress)
+            end
+
+            -- Keep the row visible after untracking it. This is intentional:
+            -- it allows the user to open the achievement and select the next
+            -- step of a multi-stage achievement before closing this window.
+            nameButton:SetText(label)
+            nameButton:SetFont("$(MEDIUM_FONT)|16|soft-shadow-thin")
+            nameButton:SetHorizontalAlignment(TEXT_ALIGN_LEFT)
+            nameButton:SetHandler(
+                "OnClicked",
+                function()
+                    frame.fragment:SetHiddenForReason("disabled", true)
+                    SCENE_MANAGER:Show("achievements")
+                    ACHIEVEMENTS:ShowAchievement(data.id)
+                end
+            )
+
+            ZO_CheckButton_SetToggleFunction(
+                checkBox,
+                function(_, checked)
+                    BS.SetTracked(data.id, checked and true or false)
+                    BS.RefreshWidget(BS.W_ACHIEVEMENT_TRACKER)
+                    -- Do not rebuild the list here. The unchecked achievement
+                    -- remains visible until the manager is closed/reopened.
+                end
+            )
+            ZO_CheckButton_SetCheckState(checkBox, BS.IsTracked(data.id) ~= nil)
+        end
+
+        frame.scrollList = BS.CreateScrollList(
+            {
+                name = name .. "_List",
+                parent = frame,
+                width = 600,
+                height = 570,
+                rowHeight = 36,
+                rowTemplate = "BarSteward_Friends_Template",
+                setupCallback = setupAchievementRow,
+                sortFunction = function(a, b)
+                    local categoryA = a.category or ""
+                    local categoryB = b.category or ""
+                    if (categoryA == categoryB) then
+                        return (a.name or "") < (b.name or "")
+                    end
+                    return categoryA < categoryB
+                end
+            }
+        )
+        frame.scrollList:SetAnchor(TOPLEFT, frame.divider, BOTTOMLEFT, 50, 20)
+
+        local function closeAchievementTrackerManager()
+            frame.fragment:SetHiddenForReason("disabled", true)
+        end
+
+        frame.close = BS.CreateButton(name .. "_close", frame, 120, 32)
+        frame.close:SetText(BS.LC.Format(SI_DIALOG_CLOSE))
+        frame.close:SetAnchor(TOPLEFT, frame.scrollList, BOTTOMLEFT, 0, 20)
+        frame.close:SetHandler("OnClicked", closeAchievementTrackerManager)
+
+        frame.closeX = WINDOW_MANAGER:CreateControl(name .. "_CloseX", frame, CT_BUTTON)
+        frame.closeX:SetDimensions(32, 32)
+        frame.closeX:SetAnchor(TOPRIGHT, frame, TOPRIGHT, -24, 28)
+        frame.closeX:SetText("X")
+        frame.closeX:SetFont("$(BOLD_FONT)|22|soft-shadow-thick")
+        frame.closeX:SetHandler("OnClicked", closeAchievementTrackerManager)
+
+        frame:SetHandler("OnKeyUp", function(_, key)
+            if (key == KEY_ESCAPE) then
+                closeAchievementTrackerManager()
+            end
+        end)
+
+        frame.fragment = ZO_HUDFadeSceneFragment:New(frame)
+        frame.fragment:SetHiddenForReason("disabled", true)
+        SCENE_MANAGER:GetScene("hud"):AddFragment(frame.fragment)
+        SCENE_MANAGER:GetScene("hudui"):AddFragment(frame.fragment)
+
+        BS.achievementTrackerManager = frame
+    end
+
+    BS.achievementTrackerManager.scrollList:Update(BS.BuildAchievementTrackerList())
+    BS.achievementTrackerManager.fragment:SetHiddenForReason("disabled", false)
+end
+
+function BS.BuildAchievementTrackerList()
+    local dataItems = {}
+    local tracked = BS.IsTracked()
+
+    for id, track in pairs(tracked) do
+        if (track) then
+            local name, _, remaining, required = BS.AchievementNotifier(id, false)
+            local topLevelIndex = GetCategoryInfoFromAchievementId(id)
+            local category = topLevelIndex and GetAchievementCategoryInfo(topLevelIndex) or ""
+
+            if (name) then
+                name = zo_strformat(name)
+            end
+
+            if (category) then
+                category = zo_strformat(category)
+            end
+
+            local done = required - remaining
+            local progress = string.format("%s/%s", tostring(done), tostring(required))
+
+            table.insert(
+                dataItems,
+                {
+                    id = id,
+                    category = category,
+                    name = name or tostring(id),
+                    progress = progress
+                }
+            )
+        end
+    end
+
+    return dataItems
+end
+
 function BS.CreateFriendsTool()
     return CreateTool(GetString(BARSTEWARD_ANNOUNCEMENT_FRIEND), "Friends", "FriendAnnounce", setupFriendsDataRow)
 end

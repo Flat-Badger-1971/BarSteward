@@ -168,8 +168,7 @@ BarSteward = {
     W_NM_REP = 161,
     W_NM_NEXT_EVENT = 162,
     W_NM_PORT = 163,
-    W_CHARACTER_DIFF = 164,
-    W_CHAR_COORDS = 165
+    W_CHARACTER_DIFF = 164
 }
 
 local BS = BarSteward

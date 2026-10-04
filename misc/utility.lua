@@ -994,7 +994,7 @@ function BS.FormatIcon(path)
     if (not path) then
         return unknownIcon
     end
-
+    
     if (path:find("BarSteward")) then
         return path
     end
@@ -1536,34 +1536,55 @@ function BS.TrackAchievements()
                     if (not BS.AchSetup) then
                         ---@diagnostic disable-next-line: undefined-field
                         local tree = ACHIEVEMENTS.categoryTree
-                        local subcat = tree.templateInfo.ZO_TreeLabelSubCategory
-                        local cat = tree.templateInfo.ZO_IconHeader
+                        local subcat = tree.templateInfo["ZO_Achievements_SubCategory"]
+                            or tree.templateInfo.ZO_TreeLabelSubCategory
+                        local cat = tree.templateInfo["ZO_Achievements_StatusIconHeader"]
+                            or tree.templateInfo.ZO_IconHeader
+                        local childlessCat = tree.templateInfo["ZO_Achievements_StatusIconChildlessHeader"]
 
-                        BS.AchCatSetup = cat.setupFunction
-                        cat.setupFunction = function(node, control, data, ...)
-                            BS.AchCatSetup(node, control, data, ...)
-
-                            if (BS.IsTrackedCategory(data.categoryIndex)) then
+                        -- Update 51 renamed the achievement tree templates. Keep the
+                        -- old names as fallbacks for older game versions.
+                        local function setupCategory(node, control, data, ...)
+                            if (data and BS.IsTrackedCategory(data.categoryIndex)) then
                                 control.text.GetTextColor = getTextColour
 
                                 ZO_SelectableLabel_SetNormalColor(control.text, BS.LC.ZOSOrange)
                             end
                         end
 
-                        BS.AchSetup = subcat.setupFunction
-                        subcat.setupFunction = function(node, control, data, ...)
-                            BS.AchSetup(node, control, data, ...)
-
-                            local tracked
-
-                            if (not data.isFakedSubcategory and data.parentData) then
-                                tracked = BS.IsTrackedCategory(data.parentData.categoryIndex, data.categoryIndex)
+                        if (cat and cat.setupFunction) then
+                            BS.AchCatSetup = cat.setupFunction
+                            cat.setupFunction = function(node, control, data, ...)
+                                BS.AchCatSetup(node, control, data, ...)
+                                setupCategory(node, control, data, ...)
                             end
+                        end
 
-                            if (tracked) then
-                                control.GetTextColor = getTextColour
+                        -- U51 uses a separate template for headers without children.
+                        if (childlessCat and childlessCat.setupFunction) then
+                            BS.AchChildlessCatSetup = childlessCat.setupFunction
+                            childlessCat.setupFunction = function(node, control, data, ...)
+                                BS.AchChildlessCatSetup(node, control, data, ...)
+                                setupCategory(node, control, data, ...)
+                            end
+                        end
 
-                                ZO_SelectableLabel_SetNormalColor(control, BS.LC.ZOSOrange)
+                        if (subcat and subcat.setupFunction) then
+                            BS.AchSetup = subcat.setupFunction
+                            subcat.setupFunction = function(node, control, data, ...)
+                                BS.AchSetup(node, control, data, ...)
+
+                                local tracked
+
+                                if (not data.isFakedSubcategory and data.parentData) then
+                                    tracked = BS.IsTrackedCategory(data.parentData.categoryIndex, data.categoryIndex)
+                                end
+
+                                if (tracked) then
+                                    control.GetTextColor = getTextColour
+
+                                    ZO_SelectableLabel_SetNormalColor(control, BS.LC.ZOSOrange)
+                                end
                             end
                         end
 
@@ -1683,16 +1704,6 @@ function BS.HideGoldenPursuitsDefaultUI()
             end
         end
     end
-end
-
-function BS.GetEventZoneName()
-    local zoneName = GetAdventureZoneDisplayName()
-
-    if ((zoneName or "") == "") then
-        zoneName = BS.LC.Format(SI_MARKET_SUBSCRIPTION_PAGE_SUBSCRIPTION_STATUS_NOT_ACTIVE)
-    end
-
-    return zoneName
 end
 
 -- developer utility functions

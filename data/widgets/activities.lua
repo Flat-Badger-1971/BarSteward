@@ -1668,6 +1668,11 @@ BS.widgets[BS.W_ACHIEVEMENT_TRACKER] = {
                 BS.SetTracked(id, "done")
             end
         elseif (event == "initial") then
+            -- Rebuild the cached achievement list from the current tracked IDs.
+            -- This also removes achievements that were just untracked through the
+            -- Bar Steward tracker management window.
+            BS.LC.Clear(achievements)
+
             for achId, track in pairs(tracked) do
                 if (track) then
                     local name, icon, stepsRemaining, stepsRequired = BS.AchievementNotifier(achId, false)
@@ -1712,7 +1717,10 @@ BS.widgets[BS.W_ACHIEVEMENT_TRACKER] = {
         widget:SetValue(value)
         widget:SetColour(BS.GetColour(this, true))
 
-        local tt = GetString(BARSTEWARD_TRACKER) .. BS.LF
+        local tt =
+            BS.Icon(BS.CLICK, nil, 32, 32) .. " " .. GetString(BARSTEWARD_TRACKER) .. BS.LF ..
+            BS.Icon("miscellaneous/icon_rmb", nil, 32, 32) .. " " ..
+            GetString(BARSTEWARD_ACHIEVEMENT_TRACKER_MANAGE) .. BS.LF
         local tttable = {}
 
         for _, ach in pairs(achievements) do
@@ -1778,6 +1786,9 @@ BS.widgets[BS.W_ACHIEVEMENT_TRACKER] = {
         else
             SCENE_MANAGER:Show("achievements")
         end
+    end,
+    onRightClick = function()
+        BS.ShowAchievementTrackerManager()
     end,
     customSettings = {
         [1] = {
@@ -2005,7 +2016,7 @@ BS.widgets[BS.W_NM_REP] = {
                 local icon = (faction > 0) and ZO_ADVENTURE_ZONE_FACTION_ICONS[faction] or "icons/ava/ava_faction_undecided_32.dds"
 
                 if (BS.NightMarket or "" == "") then
-                    BS.NightMarket = BS.GetEventZoneName()
+                    BS.NightMarket = BS.NightMarket
                 end
 
                 widget:SetValue(display)
@@ -2019,10 +2030,7 @@ BS.widgets[BS.W_NM_REP] = {
     hideWhenEqual = true,
     event = { EVENT_ADVENTURE_ZONE_FACTION_REPUTATION_CHANGED, EVENT_PLAYER_ACTIVATED },
     icon = "Stats/u49_faction_ruckus_64",
-    tooltip = function()
-        BS.NightMarket = BS.GetEventZoneName()
-        return BS.LC.Format(SI_LOOT_HISTORY_ADVENTURE_ZONE_FACTION_REPUTATION) .. " (" .. BS.NightMarket .. ")"
-    end,
+    tooltip = BS.LC.Format(SI_LOOT_HISTORY_ADVENTURE_ZONE_FACTION_REPUTATION),
     customSettings = {
         [1] = {
             type = "checkbox",
@@ -2057,7 +2065,7 @@ BS.widgets[BS.W_NM_NEXT_EVENT] = {
         local ttt = BS.LC.Format(SI_ZONEDISPLAYTYPE13) .. " (" .. BS.NightMarket .. ")"
 
         if (BS.NightMarket or "" == "") then
-            BS.NightMarket = BS.GetEventZoneName()
+            BS.NightMarket = GetAdventureZoneDisplayName()
         end
 
         if (IsAdventureZoneActive() and intheZone) then
@@ -2103,10 +2111,7 @@ BS.widgets[BS.W_NM_NEXT_EVENT] = {
     timer = 1000,
     event = { EVENT_PLAYER_ACTIVATED },
     icon = iconLookup[4],
-    tooltip = function()
-        BS.NightMarket = BS.GetEventZoneName()
-        return BS.LC.Format(SI_ZONEDISPLAYTYPE13) .. " (" .. BS.NightMarket .. ")"
-    end,
+    tooltip = BS.LC.Format(SI_ZONEDISPLAYTYPE13),
     customSettings = {
         [1] = {
             type = "checkbox",
