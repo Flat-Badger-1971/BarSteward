@@ -1526,6 +1526,10 @@ local function getTextColour(self)
 end
 
 function BS.TrackAchievements()
+    if (BS.Tracking) then
+        return
+    end
+
     if (BS.Vars.Controls[BS.W_ACHIEVEMENT_TRACKER].Bar ~= 0) then
         local trackedLabel = BS.LC.ZOSOrange:Colorize(BS.LC.Format(SI_SCREEN_NARRATION_TRACKED_ICON_NARRATION))
 
@@ -1534,9 +1538,8 @@ function BS.TrackAchievements()
             function(_, newState)
                 if (newState == SCENE_SHOWN) then
                     if (not BS.AchSetup) then
-                        ----@diagnostic disable-next-line: undefined-field
+                        ---@diagnostic disable-next-line: undefined-field
                         local tree = ACHIEVEMENTS.categoryTree
-                        local subcat = tree.templateInfo["ZO_Achievements_SubCategory"]
                         local cat = tree.templateInfo["ZO_Achievements_StatusIconHeader"]
                         local childlessCat = tree.templateInfo["ZO_Achievements_StatusIconChildlessHeader"]
 
@@ -1551,19 +1554,23 @@ function BS.TrackAchievements()
                         end
 
                         if (cat and cat.setupFunction) then
-                            BS.AchCatSetup = cat.setupFunction
-                            cat.setupFunction = function(node, control, data, ...)
-                                BS.AchCatSetup(node, control, data, ...)
-                                setupCategory(node, control, data, ...)
+                            local originalSetup = cat.setupFunction
+
+                            BS.AchCatSetup = originalSetup
+                            cat.setupFunction = function(...)
+                                originalSetup(...)
+                                setupCategory(...)
                             end
                         end
 
                         -- U51 uses a separate template for headers without children.
                         if (childlessCat and childlessCat.setupFunction) then
-                            BS.AchChildlessCatSetup = childlessCat.setupFunction
-                            childlessCat.setupFunction = function(node, control, data, ...)
-                                BS.AchChildlessCatSetup(node, control, data, ...)
-                                setupCategory(node, control, data, ...)
+                            local originalSetup = childlessCat.setupFunction
+
+                            BS.AchChildlessCatSetup = originalSetup
+                            childlessCat.setupFunction = function(...)
+                                originalSetup(...)
+                                setupCategory(...)
                             end
 
                             local tracked
@@ -1578,6 +1585,8 @@ function BS.TrackAchievements()
                                 ZO_SelectableLabel_SetNormalColor(control, BS.LC.ZOSOrange)
                             end
                         end
+
+                        BS.AchSetup = true
 
                         ---@diagnostic disable-next-line: undefined-field
                         ACHIEVEMENTS.refreshGroups:RefreshAll("FullUpdate")
@@ -1638,9 +1647,9 @@ function BS.TrackAchievements()
                 ---@diagnostic disable-next-line: undefined-field
                 ShowMenu(self.control)
             end
-
-            BS.Tracking = true
         end
+
+        BS.Tracking = true
     end
 end
 
