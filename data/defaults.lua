@@ -926,6 +926,11 @@ BS.Defaults = {
         [BS.W_CHARACTER_DIFF] = {
             Cat = cat.Character
         },
+        [BS.W_CHAR_COORDS] = {
+            Cat = cat.Character,
+            Requires = "LibGPS3",
+            CurrentMap = true
+        }
     }
 }
 

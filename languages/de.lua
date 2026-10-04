@@ -92,6 +92,11 @@ L("COMPANION_LEVEL", "Level des aktiven Gefährten")
 L("COMPANION_WIDGET", "Gefährten - <<1>>")
 L("CONDITION", "Zustand")
 L("CONFIGURE", "Einrichten")
+L("COORDS_CURRENT_MAP_SHOW", "Zeige aktuelle Kartenkoordinaten")
+L("COORDS_CURRENT_MAP", "Aktuelle Karte")
+L("COORDS_PLAYER", "Spielerkoordinaten")
+L("COORDS_WORLD_MAP_SHOW", "Zeige Weltkartenkoordinaten")
+L("COORDS_WORLD_MAP", "Weltkarte")
 L(
     "COPY",
     "Wähle den unten stehenden Text aus und drücke strg-c um ihn zu kopieren. Der Text kann dann in die Bar Steward's 'Import Leiste' für einen anderen Benutzer eingefügt werden."

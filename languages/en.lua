@@ -96,6 +96,11 @@ L(
     "COPY",
     "Select the text below, then use ctrl-c to copy it. The text can then be pasted into Bar Steward's 'Import Bar' box for another user."
 )
+L("COORDS_CURRENT_MAP_SHOW", "Show Current Map Coordinates")
+L("COORDS_CURRENT_MAP", "Current Map")
+L("COORDS_PLAYER", "Player Map Coordinates")
+L("COORDS_WORLD_MAP_SHOW", "Show World Map Coordinates")
+L("COORDS_WORLD_MAP", "World Map")
 L("COPY_SETTINGS", "Copy Settings")
 L("CRAFTING_MOTIFS", "Crafting Motifs")
 L("CRIME_ONLY", "Only show when crime detected")

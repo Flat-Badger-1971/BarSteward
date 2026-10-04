@@ -98,6 +98,11 @@ L("COMPANION_LEVEL", "Niveau du compagnon actif")
 L("COMPANION_WIDGET", "Compagnon - <<1>>")
 L("CONDITION", "Condition")
 L("CONFIGURE", "Configurer")
+L("COORDS_CURRENT_MAP_SHOW", "Afficher les coordonnées de la carte actuelle")
+L("COORDS_CURRENT_MAP", "Carte actuelle")
+L("COORDS_PLAYER", "Coordonnées de la carte du joueur")
+L("COORDS_WORLD_MAP_SHOW", "Afficher les coordonnées de la carte du monde")
+L("COORDS_WORLD_MAP", "Carte du monde")
 L(
     "COPY",
     "Sélectionnez le texte ci-dessous, puis utilisez ctrl-c pour le copier. Le texte peut ensuite être collé dans la case 'Importer la barre' de Bar Steward pour un autre utilisateur."

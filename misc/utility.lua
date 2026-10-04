@@ -994,7 +994,7 @@ function BS.FormatIcon(path)
     if (not path) then
         return unknownIcon
     end
-    
+
     if (path:find("BarSteward")) then
         return path
     end
@@ -1683,6 +1683,16 @@ function BS.HideGoldenPursuitsDefaultUI()
             end
         end
     end
+end
+
+function BS.GetEventZoneName()
+    local zoneName = GetAdventureZoneDisplayName()
+
+    if ((zoneName or "") == "") then
+        zoneName = BS.LC.Format(SI_MARKET_SUBSCRIPTION_PAGE_SUBSCRIPTION_STATUS_NOT_ACTIVE)
+    end
+
+    return zoneName
 end
 
 -- developer utility functions

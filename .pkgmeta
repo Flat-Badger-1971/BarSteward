@@ -1,0 +1,4 @@
+ignore:
+  - esoapi
+  - ChangeLog.log
+  - VERSION
