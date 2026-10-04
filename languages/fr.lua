@@ -5,6 +5,7 @@ end
 
 L("12", "12 Heures")
 L("24", "24 Heures")
+L("ACHIEVEMENT_TRACKER_MANAGE", "Succès suivis")
 L("ACTIVE_BAR", "Barre active")
 L("ADD_SEPARATORS", "Ajouter des séparateurs de nombres")
 L("ADD_WIDGET", "Ajouter un Widget")

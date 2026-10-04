@@ -5,6 +5,7 @@ end
 
 L("12", "12小时制")
 L("24", "24小时制")
+L("ACHIEVEMENT_TRACKER_MANAGE", "成就追踪管理")
 L("ACTIVE_BAR", "当前装备的武器栏位")
 L("ADD_SEPARATORS", "增加数字分隔符")
 L("ADD_WIDGET", "添加小组件")

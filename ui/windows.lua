@@ -697,6 +697,77 @@ local function CreateTool(heading, toolName, varName, setupFunc, guild)
     return frame
 end
 
+function BS.BuildAchievementTrackerList()
+    local dataItems = {}
+    local tracked = BS.IsTracked()
+
+    for id, track in pairs(tracked) do
+        if (track) then
+            local name, _, remaining, required = BS.AchievementNotifier(id, false)
+            local topLevelIndex = GetCategoryInfoFromAchievementId(id)
+            local category = topLevelIndex and GetAchievementCategoryInfo(topLevelIndex) or ""
+
+            if (name) then
+                name = zo_strformat(name)
+            end
+
+            if (category) then
+                category = zo_strformat(category)
+            end
+
+            local done = required - remaining
+            local progress = string.format("%s/%s", tostring(done), tostring(required))
+
+            table.insert(
+                dataItems,
+                {
+                    id = id,
+                    category = category,
+                    name = name or tostring(id),
+                    progress = progress
+                }
+            )
+        end
+    end
+
+    return dataItems
+end
+
+local function setupAchievementTrackerDataRow(rowControl, data)
+    local checkBox = rowControl:GetNamedChild("Check")
+    local name
+
+    if (data.category or "" ~= "") then
+        local cat = BS.COLOURS.Green:Colorize(data.category)
+        name = string.format("%s - %s", cat, data.name)
+    end
+
+    if (data.progress) then
+        name = string.format("%s  (%s)", name, data.progress)
+    end
+
+    ZO_CheckButton_SetLabelText(checkBox, name)
+
+    local function onCheckClicked(checkButton, checked)
+        BS.SetTracked(data.id, checked and true or false)
+        BS.RefreshWidget(BS.W_ACHIEVEMENT_TRACKER)
+    end
+
+    ZO_CheckButton_SetToggleFunction(checkBox, onCheckClicked)
+    ZO_CheckButton_SetCheckState(checkBox, BS.IsTracked(data.id) ~= nil)
+end
+
+function BS.AchievementTrackerUpdate(scrollList)
+    local dataitems = BS.BuildAchievementTrackerList()
+
+    local list = scrollList or BS.w_achievementtracker_list.scrollList
+    list:Update(dataitems)
+end
+
+function BS.CreateAchievementTrackerTool()
+    return CreateTool(GetString(BARSTEWARD_ACHIEVEMENT_TRACKER_MANAGE), "AchievementTracker", "AchievementTrackerAnnounce", setupAchievementTrackerDataRow)
+end
+
 function BS.CreateFriendsTool()
     return CreateTool(GetString(BARSTEWARD_ANNOUNCEMENT_FRIEND), "Friends", "FriendAnnounce", setupFriendsDataRow)
 end

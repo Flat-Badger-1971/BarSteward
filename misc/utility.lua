@@ -1534,29 +1534,41 @@ function BS.TrackAchievements()
             function(_, newState)
                 if (newState == SCENE_SHOWN) then
                     if (not BS.AchSetup) then
-                        ---@diagnostic disable-next-line: undefined-field
+                        ----@diagnostic disable-next-line: undefined-field
                         local tree = ACHIEVEMENTS.categoryTree
-                        local subcat = tree.templateInfo.ZO_TreeLabelSubCategory
-                        local cat = tree.templateInfo.ZO_IconHeader
+                        local subcat = tree.templateInfo["ZO_Achievements_SubCategory"]
+                        local cat = tree.templateInfo["ZO_Achievements_StatusIconHeader"]
+                        local childlessCat = tree.templateInfo["ZO_Achievements_StatusIconChildlessHeader"]
 
-                        BS.AchCatSetup = cat.setupFunction
-                        cat.setupFunction = function(node, control, data, ...)
-                            BS.AchCatSetup(node, control, data, ...)
-
-                            if (BS.IsTrackedCategory(data.categoryIndex)) then
+                        -- Update 51 renamed the achievement tree templates. Keep the
+                        -- old names as fallbacks for older game versions.
+                        local function setupCategory(node, control, data, ...)
+                            if (data and BS.IsTrackedCategory(data.categoryIndex)) then
                                 control.text.GetTextColor = getTextColour
 
                                 ZO_SelectableLabel_SetNormalColor(control.text, BS.LC.ZOSOrange)
                             end
                         end
 
-                        BS.AchSetup = subcat.setupFunction
-                        subcat.setupFunction = function(node, control, data, ...)
-                            BS.AchSetup(node, control, data, ...)
+                        if (cat and cat.setupFunction) then
+                            BS.AchCatSetup = cat.setupFunction
+                            cat.setupFunction = function(node, control, data, ...)
+                                BS.AchCatSetup(node, control, data, ...)
+                                setupCategory(node, control, data, ...)
+                            end
+                        end
+
+                        -- U51 uses a separate template for headers without children.
+                        if (childlessCat and childlessCat.setupFunction) then
+                            BS.AchChildlessCatSetup = childlessCat.setupFunction
+                            childlessCat.setupFunction = function(node, control, data, ...)
+                                BS.AchChildlessCatSetup(node, control, data, ...)
+                                setupCategory(node, control, data, ...)
+                            end
 
                             local tracked
 
-                            if (not data.isFakedSubcategory and data.parentData) then
+                            if (data and not data.isFakedSubcategory and data.parentData) then
                                 tracked = BS.IsTrackedCategory(data.parentData.categoryIndex, data.categoryIndex)
                             end
 

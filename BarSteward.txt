@@ -3,7 +3,7 @@
 ## Author: Flat Badger
 ## APIVersion: 101051
 ## AddOnVersion: 3514
-## Version: 3.5.13
+## Version: 3.5.14
 ## SavedVariables: BarStewardSavedVars
 ## DependsOn: LibFBCommon>=1007 LibAddonMenu-2.0>=43
 ## OptionalDependsOn: BanditsUserInterface WritWorthy>=70508 LibClockTST>=1 LibCombat>=89 PortToFriendsHouse>=124 LibCharacterKnowledge>=31020 LibUndauntedPledges>=102020 RewardsTracker>=84 LibDailyResetTime>=100010 LibServerResetTime>=200000

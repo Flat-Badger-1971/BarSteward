@@ -1668,6 +1668,11 @@ BS.widgets[BS.W_ACHIEVEMENT_TRACKER] = {
                 BS.SetTracked(id, "done")
             end
         elseif (event == "initial") then
+            -- Rebuild the cached achievement list from the current tracked IDs.
+            -- This also removes achievements that were just untracked through the
+            -- Bar Steward tracker management window.
+            BS.LC.Clear(achievements)
+
             for achId, track in pairs(tracked) do
                 if (track) then
                     local name, icon, stepsRemaining, stepsRequired = BS.AchievementNotifier(achId, false)
@@ -1712,7 +1717,10 @@ BS.widgets[BS.W_ACHIEVEMENT_TRACKER] = {
         widget:SetValue(value)
         widget:SetColour(BS.GetColour(this, true))
 
-        local tt = GetString(BARSTEWARD_TRACKER) .. BS.LF
+        local tt =
+            BS.Icon(BS.CLICK, nil, 32, 32) .. " " .. GetString(BARSTEWARD_TRACKER) .. BS.LF ..
+            BS.Icon("miscellaneous/icon_rmb", nil, 32, 32) .. " " ..
+            GetString(BARSTEWARD_ACHIEVEMENT_TRACKER_MANAGE) .. BS.LF
         local tttable = {}
 
         for _, ach in pairs(achievements) do
@@ -1778,6 +1786,13 @@ BS.widgets[BS.W_ACHIEVEMENT_TRACKER] = {
         else
             SCENE_MANAGER:Show("achievements")
         end
+    end,
+    onRightClick = function()
+        SCENE_MANAGER:Show("hudui")
+        SetGameCameraUIMode(true)
+        local achTracker = BS.w_achievementtracker_list or BS.CreateAchievementTrackerTool()
+        achTracker.fragment:SetHiddenForReason("disabled", false)
+        --BS.ShowAchievementTrackerManager()
     end,
     customSettings = {
         [1] = {

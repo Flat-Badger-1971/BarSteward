@@ -5,6 +5,7 @@ end
 
 L("12", "12 ч")
 L("24", "24 ч")
+L("ACHIEVEMENT_TRACKER_MANAGE", "Отслеживаемые достижения")
 L("ACTIVE_BAR", "Активная панель")
 L("ADD_SEPARATORS", "Разделители тысяч")
 L("ADD_WIDGET", "Добавить виджет")
