@@ -2025,7 +2025,6 @@ BS.widgets[BS.W_NM_REP] = {
 
                 widget:SetValue(display)
                 widget:SetColour(BS.GetColour(this, true))
-                d(icon)
                 widget:SetIcon(icon)
             end, 1200)
 

@@ -550,15 +550,16 @@ local function getGuilds()
     return guilds
 end
 
-local function CreateTool(heading, toolName, varName, setupFunc, guild)
+local function CreateTool(heading, toolName, varName, setupFunc, guild, ach)
     local name = BS.Name .. "_" .. toolName .. "_Tool"
     local lowerName = toolName:lower()
     local frameName = "w_" .. lowerName .. "_list"
+    local frameWidth = 470 + (ach and 470 or 0)
 
     BS[frameName] = WINDOW_MANAGER:CreateTopLevelWindow(name)
     local frame = BS[frameName]
 
-    frame:SetDimensions(470, 900 + (guild and 50 or 0))
+    frame:SetDimensions(frameWidth, 900 + (guild and 50 or 0))
     frame:SetAnchor(CENTER, GuiRoot, CENTER)
     frame:SetHidden(true)
 
@@ -581,10 +582,10 @@ local function CreateTool(heading, toolName, varName, setupFunc, guild)
     frame.heading:SetColor(0.9, 0.9, 0.9, 1)
     frame.heading:SetAnchor(TOPLEFT, frame, TOPLEFT, 50, 80)
     frame.heading:SetText(heading)
-    frame.heading:SetDimensions(350, 24)
+    frame.heading:SetDimensions(frameWidth - 120, 24)
 
     frame.divider = WINDOW_MANAGER:CreateControl(name .. "_divider", frame, CT_TEXTURE)
-    frame.divider:SetDimensions(470, 4)
+    frame.divider:SetDimensions(frameWidth, 4)
     frame.divider:SetAnchor(TOPLEFT, frame.heading, BOTTOMLEFT, -50, 10)
     frame.divider:SetTexture("/esoui/art/campaign/campaignbrowser_divider_short.dds")
 
@@ -618,7 +619,7 @@ local function CreateTool(heading, toolName, varName, setupFunc, guild)
     local scrollData = {
         name = "BarSteward" .. toolName .. "List",
         parent = frame,
-        width = 400,
+        width = frameWidth - 70,
         height = 500,
         rowHeight = 36,
         rowTemplate = "BarSteward_Friends_Template",
@@ -765,7 +766,8 @@ function BS.AchievementTrackerUpdate(scrollList)
 end
 
 function BS.CreateAchievementTrackerTool()
-    return CreateTool(GetString(BARSTEWARD_ACHIEVEMENT_TRACKER_MANAGE), "AchievementTracker", "AchievementTrackerAnnounce", setupAchievementTrackerDataRow)
+    return CreateTool(GetString(BARSTEWARD_ACHIEVEMENT_TRACKER_MANAGE), "AchievementTracker", "AchievementTrackerAnnounce", setupAchievementTrackerDataRow, nil,
+        true)
 end
 
 function BS.CreateFriendsTool()
